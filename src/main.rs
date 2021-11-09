@@ -1,9 +1,16 @@
 use chrono::{DateTime, Utc};
-use zinzen_scheduler;
+use std::str::FromStr;
+use zinzen_scheduler::{self};
 
 fn main() {
     let test_goal = zinzen_scheduler::Goal::new();
     print!("title:{}\n", test_goal.title);
+
+    let test_goal2 = zinzen_scheduler::Goal::from_str("test from string");
+    match test_goal2 {
+        Ok(goal) => print!("title:{}\n", goal.title),
+        Err(_error) => return (),
+    }
 
     let now: DateTime<Utc> = Utc::now();
 

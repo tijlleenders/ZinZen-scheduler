@@ -1,8 +1,12 @@
+use std::str::FromStr;
 use uuid::Uuid;
 
 const MAX_CALENDAR_UNITS: i32 = 168;
 const CALENDAR_UNIT: &str = "h";
 
+pub struct ParseGoalError;
+
+#[derive(Debug, PartialEq)]
 pub struct Goal {
     id: Uuid,
     pub title: String,
@@ -45,6 +49,16 @@ impl Goal {
             id: Uuid::new_v4(),
             title: String::from(s),
         }
+    }
+}
+
+impl FromStr for Goal {
+    type Err = ParseGoalError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Goal {
+            id: Uuid::new_v4(),
+            title: String::from(s),
+        })
     }
 }
 
