@@ -6,10 +6,16 @@ fn main() {
     let test_goal = zinzen_scheduler::Goal::new();
     print!("title:{}\n", test_goal.title);
 
-    let test_goal2 = zinzen_scheduler::Goal::from_str("test from string");
+    let test_goal2 = zinzen_scheduler::Goal::from_str("");
     match test_goal2 {
         Ok(goal) => print!("title:{}\n", goal.title),
-        Err(_error) => return (),
+        Err(error) => print!("title:{}", error),
+    }
+
+    let test_goal3 = zinzen_scheduler::Goal::from_str("goal 3");
+    match test_goal3 {
+        Ok(goal) => print!("title:{}\n", goal.title),
+        Err(error) => print!("title:{}", error),
     }
 
     let now: DateTime<Utc> = Utc::now();

@@ -1,3 +1,4 @@
+use std::fmt;
 use std::str::FromStr;
 use uuid::Uuid;
 
@@ -5,6 +6,12 @@ const MAX_CALENDAR_UNITS: i32 = 168;
 const CALENDAR_UNIT: &str = "h";
 
 pub struct ParseGoalError;
+
+impl fmt::Display for ParseGoalError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Not a valid string to construct a Goal from\n")
+    }
+}
 
 #[derive(Debug, PartialEq)]
 pub struct Goal {
@@ -55,10 +62,13 @@ impl Goal {
 impl FromStr for Goal {
     type Err = ParseGoalError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Goal {
-            id: Uuid::new_v4(),
-            title: String::from(s),
-        })
+        match s {
+            "" => Err(ParseGoalError),
+            _ => Ok(Goal {
+                id: Uuid::new_v4(),
+                title: String::from(s),
+            }),
+        }
     }
 }
 
