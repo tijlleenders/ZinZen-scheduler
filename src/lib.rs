@@ -1,5 +1,8 @@
 use uuid::Uuid;
 
+const MAX_CALENDAR_UNITS: i32 = 168;
+const CALENDAR_UNIT: &str = "h";
+
 pub struct Goal {
     id: Uuid,
     pub title: String,
