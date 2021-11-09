@@ -27,6 +27,25 @@ impl Goal {
             title: String::from("test"),
         }
     }
+
+    /// Construct a new Goal from str
+    ///
+    /// # Example
+    /// ```
+    /// # use zinzen_scheduler::Goal;
+    /// let goal : Goal = Goal::parse_from_str("test from str");
+    ///
+    /// assert_eq!(
+    ///     goal.title,
+    ///     String::from("test from str")
+    /// );
+    /// ```
+    pub fn parse_from_str(s: &str) -> Goal {
+        Goal {
+            id: Uuid::new_v4(),
+            title: String::from(s),
+        }
+    }
 }
 
 #[cfg(test)]
