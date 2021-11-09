@@ -14,4 +14,7 @@ fn main() {
         "UTC now in a custom format is: {}",
         now.format("%a %b %e %T %Y")
     );
+
+    let rfc3339 = DateTime::parse_from_rfc3339("2021-12-13T13:37:00+01:00").expect("oops!");
+    println!("Parsed ISO String is:{}", rfc3339);
 }
