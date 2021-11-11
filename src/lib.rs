@@ -28,6 +28,7 @@ pub struct Slot {
 pub struct Task {
     task_id: usize,
     goal_id: Uuid,
+    duration_to_schedule: usize,
     task_status: TaskStatus,
 }
 
@@ -38,6 +39,19 @@ pub struct Calendar {
     pub goals: Vec<Goal>,
     pub tasks: Vec<Task>,
     pub slots: Vec<Slot>,
+}
+
+#[derive(Debug)]
+pub struct Goal {
+    id: Uuid,
+    pub title: String,
+    estimated_duration: usize,
+    effort_invested: usize,
+    start: usize,
+    finish: usize,
+    start_time: u8,
+    finish_time: u8,
+    goal_type: GoalType,
 }
 
 impl Calendar {
@@ -157,18 +171,6 @@ impl fmt::Display for Calendar {
     }
 }
 
-#[derive(Debug)]
-pub struct Goal {
-    id: Uuid,
-    pub title: String,
-    duration: usize,
-    start: usize,
-    finish: usize,
-    start_time: u8,
-    finish_time: u8,
-    goal_type: GoalType,
-}
-
 impl Goal {
     /// Construct a new default Goal
     ///
@@ -186,7 +188,8 @@ impl Goal {
         Goal {
             id: Uuid::new_v4(),
             title: String::from("test"),
-            duration: 1,
+            estimated_duration: 1,
+            effort_invested: 0,
             start: 0,
             finish: 24,
             start_time: 12,
@@ -211,7 +214,8 @@ impl Goal {
         Goal {
             id: Uuid::new_v4(),
             title: String::from(s),
-            duration: 1,
+            estimated_duration: 1,
+            effort_invested: 0,
             start: 0,
             finish: 24,
             start_time: 12,
@@ -304,7 +308,8 @@ mod tests {
         let goal = Goal {
             id: Uuid::new_v4(),
             title: String::from("daily goal"),
-            duration: 1,
+            estimated_duration: 1,
+            effort_invested: 0,
             start: 0,
             finish: 168,
             start_time: 12,
