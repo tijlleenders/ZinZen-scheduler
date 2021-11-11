@@ -85,6 +85,15 @@ impl Calendar {
             least_overlap_interval.0,
             least_overlap_interval.1
         );
+        self.schedule_task(
+            task_id_with_highest_scheduling_possibilities,
+            least_overlap_interval.0,
+            least_overlap_interval.1,
+        );
+    }
+
+    fn schedule_task(&self, task_id: usize, begin: usize, end: usize) -> () {
+        ()
     }
 
     pub fn print_slots_for_range(self, start: usize, finish: usize) -> () {
