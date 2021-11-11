@@ -105,6 +105,12 @@ impl Calendar {
             let mut task_id_highest_freedom_prio: Option<u32> = None;
             for task in self.tasks.iter() {
                 let mut slot_id_highest_freedom: Option<u32> = None;
+                for slot in self.slots.iter() {
+                    if slot.task_id == task.task_id {
+                        let range: u32 = slot.end - slot.begin;
+                        let freedom: u32 = range - self.goals[task.task_id];
+                    }
+                }
             }
 
             // find least overlap for task with highest freedom
