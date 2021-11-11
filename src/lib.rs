@@ -510,7 +510,7 @@ mod tests {
             estimated_duration: 1,
             effort_invested: 0,
             start: 0,
-            finish: 168,
+            finish: 8760, //one year
             start_time: 12,
             finish_time: 18,
             goal_type: GoalType::DAILY,
