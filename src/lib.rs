@@ -235,7 +235,7 @@ impl Calendar {
         let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
         for (task_index, task) in self.tasks.iter().enumerate() {
-            match self.tasks[task_index].task_status {
+            match task.task_status {
                 TaskStatus::SCHEDULED => {
                     continue;
                 }
