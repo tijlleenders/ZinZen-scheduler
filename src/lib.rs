@@ -72,7 +72,7 @@ impl Calendar {
     pub fn schedule(&mut self) -> () {
         self.load_tasks_and_slots_from_goals();
 
-        print!("Calendar after loading:{:#?}", self);
+        print!("Calendar after loading:{:#?}\n", self);
 
         let task_id_with_highest_scheduling_possibilities: usize =
             self.find_task_id_with_highest_scheduling_possibilities();
@@ -98,7 +98,7 @@ impl Calendar {
     fn find_least_overlap_interval_for_task(&self, task_id: usize) -> (usize, usize) {
         for slot in self.slots.iter() {
             if slot.task_id == task_id {
-                let mut lowest_overlap_so_far: usize = usize::MAX;
+                let mut lowest_overlap_so_far: usize = usize::MAX - 1;
                 let mut offset_with_lowest_overlap: usize = 0;
                 for slot_offset in
                     0..slot.end - slot.begin - self.tasks[task_id].duration_to_schedule + 1
@@ -170,12 +170,12 @@ impl Calendar {
                         task_id: current_task_counter as usize,
                         task_status: TaskStatus::UNSCHEDULED,
                     };
-                    print!("Task:{:#?}", task);
+                    print!("Task:{:#?}\n", task);
                     self.tasks.push(task);
                     let slot = Slot {
                         begin: goal.start as usize + goal.start_time as usize,
                         end: goal.start as usize + goal.finish_time as usize,
-                        task_id: goal_index as usize,
+                        task_id: current_task_counter as usize,
                     };
                     self.slots.push(slot);
                 }
@@ -187,7 +187,7 @@ impl Calendar {
                         let task = Task {
                             goal_id: goal.id,
                             duration_to_schedule: goal.estimated_duration - goal.effort_invested,
-                            task_id: (current_task_counter as usize),
+                            task_id: current_task_counter as usize,
                             task_status: TaskStatus::UNSCHEDULED,
                         };
                         self.tasks.push(task);
