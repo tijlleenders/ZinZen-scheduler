@@ -56,6 +56,40 @@ impl Calendar {
     }
 
     pub fn schedule(&mut self) -> () {
+        self.load_tasks_and_slots_from_goals();
+
+        // find highest scheduling_possibilities
+        let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
+        let mut highest_scheduling_possibilities_so_far: usize = 0;
+        for (task_index, task) in self.tasks.iter().enumerate() {
+            let mut scheduling_possibilities: usize = 0;
+            for slot in self.slots.iter() {
+                if slot.task_id == task.task_id {
+                    let range: usize = slot.end - slot.begin;
+                    scheduling_possibilities += range - goal.duration + 1;
+                }
+            }
+            if scheduling_possibilities > highest_scheduling_possibilities_so_far {
+                print![
+                                "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
+                                task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
+                            ];
+                task_id_highest_scheduling_possibilities_prio = task_index;
+            }
+        }
+
+        // find least overlap for task with highest scheduling_possibilities
+    }
+
+    pub fn query(self, start: usize, finish: usize) -> () {
+        for slot in self.slots.iter() {
+            if slot.begin >= start && slot.end < finish {
+                print!["found for {}..{}: {:#?}\n", start, finish, slot];
+            }
+        }
+    }
+
+    fn load_tasks_and_slots_from_goals(&mut self) -> () {
         for (goal_index, goal) in self.goals.iter().enumerate() {
             print!("Goal:{:#?}\n", goal);
             match goal.goal_type {
@@ -99,36 +133,6 @@ impl Calendar {
                 _ => {
                     print!("Ignoring all but fixed + daily goal types.");
                 }
-            }
-
-            // find highest scheduling_possibilities
-            let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
-            let mut highest_scheduling_possibilities_so_far: usize = 0;
-            for (task_index, task) in self.tasks.iter().enumerate() {
-                let mut scheduling_possibilities: usize = 0;
-                for slot in self.slots.iter() {
-                    if slot.task_id == task.task_id {
-                        let range: usize = slot.end - slot.begin;
-                        scheduling_possibilities += range - goal.duration + 1;
-                    }
-                }
-                if scheduling_possibilities > highest_scheduling_possibilities_so_far {
-                    print![
-                        "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
-                        task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
-                    ];
-                    task_id_highest_scheduling_possibilities_prio = task_index;
-                }
-            }
-
-            // find least overlap for task with highest scheduling_possibilities
-        }
-    }
-
-    pub fn query(self, start: usize, finish: usize) -> () {
-        for slot in self.slots.iter() {
-            if slot.begin >= start && slot.end < finish {
-                print!["found for {}..{}: {:#?}\n", start, finish, slot];
             }
         }
     }
