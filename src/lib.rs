@@ -375,4 +375,40 @@ mod tests {
         print!("Calendar:{:#?}\n", calendar);
         calendar.query(0, 42);
     }
+
+    #[test]
+    fn fixed_and_daily_goal_combined() {
+        let mut calendar = Calendar::new(168, String::from("h"));
+
+        let goal = Goal {
+            id: Uuid::new_v4(),
+            title: String::from("daily goal"),
+            estimated_duration: 1,
+            effort_invested: 0,
+            start: 0,
+            finish: 168,
+            start_time: 12,
+            finish_time: 18,
+            goal_type: GoalType::DAILY,
+        };
+
+        let goal2 = Goal {
+            id: Uuid::new_v4(),
+            title: String::from("lunch meeting any day"),
+            estimated_duration: 1,
+            effort_invested: 0,
+            start: 0,
+            finish: 168,
+            start_time: 12,
+            finish_time: 13,
+            goal_type: GoalType::FIXED,
+        };
+        calendar.add(goal);
+        calendar.add(goal2);
+
+        print!("\nexpect Calendar with two goals not overlapping\n");
+        calendar.schedule();
+        print!("Calendar:{:#?}\n", calendar);
+        calendar.query(12, 14);
+    }
 }
