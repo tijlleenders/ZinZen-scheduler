@@ -57,7 +57,7 @@ impl Calendar {
 
     pub fn schedule(&mut self) -> () {
         for (goal_index, goal) in self.goals.iter().enumerate() {
-            print!("Goal:{:#?}", goal);
+            print!("Goal:{:#?}\n", goal);
             match goal.goal_type {
                 GoalType::FIXED => {
                     let current_task_counter = self.tasks.len() + 1;
@@ -101,19 +101,23 @@ impl Calendar {
                 }
             }
 
-            // find highest freedom
-            let mut task_id_highest_freedom_prio: Option<usize> = None;
+            // find highest scheduling_possibilities
+            let mut task_id_highest_scheduling_possibilities_prio: Option<usize> = None;
             for task in self.tasks.iter() {
-                let mut slot_id_highest_freedom: Option<usize> = None;
+                let mut slot_id_highest_scheduling_possibilities: Option<usize> = None;
                 for slot in self.slots.iter() {
                     if slot.task_id == task.task_id {
                         let range: usize = slot.end - slot.begin;
-                        let freedom: usize = range - self.goals[task.task_id].duration;
+                        let scheduling_possibilities: usize = range - goal.duration + 1;
+                        print![
+                            "Found {} scheduling_possibilities for task id {}.\n",
+                            scheduling_possibilities, task.task_id
+                        ];
                     }
                 }
             }
 
-            // find least overlap for task with highest freedom
+            // find least overlap for task with highest scheduling_possibilities
         }
     }
 
