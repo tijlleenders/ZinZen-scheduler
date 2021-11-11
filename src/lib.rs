@@ -19,21 +19,21 @@ pub enum GoalType {
 
 #[derive(Debug)]
 pub struct Slot {
-    task_id: u32,
-    begin: u32,
-    end: u32,
+    task_id: usize,
+    begin: usize,
+    end: usize,
 }
 
 #[derive(Debug)]
 pub struct Task {
-    task_id: u32,
+    task_id: usize,
     goal_id: Uuid,
     task_status: TaskStatus,
 }
 
 #[derive(Debug)]
 pub struct Calendar {
-    pub max_time_units: u32,
+    pub max_time_units: usize,
     pub time_unit_qualifier: String,
     pub goals: Vec<Goal>,
     pub tasks: Vec<Task>,
@@ -41,7 +41,7 @@ pub struct Calendar {
 }
 
 impl Calendar {
-    pub fn new(max_time_units: u32, time_unit_qualifier: String) -> Calendar {
+    pub fn new(max_time_units: usize, time_unit_qualifier: String) -> Calendar {
         Calendar {
             max_time_units,
             time_unit_qualifier,
@@ -63,15 +63,15 @@ impl Calendar {
                     let current_task_counter = self.tasks.len() + 1;
                     let task = Task {
                         goal_id: goal.id,
-                        task_id: current_task_counter as u32,
+                        task_id: current_task_counter as usize,
                         task_status: TaskStatus::UNSCHEDULED,
                     };
                     print!("Task:{:#?}", task);
                     self.tasks.push(task);
                     let slot = Slot {
-                        begin: goal.start as u32 + goal.start_time as u32,
-                        end: goal.start as u32 + goal.finish_time as u32,
-                        task_id: goal_index as u32,
+                        begin: goal.start as usize + goal.start_time as usize,
+                        end: goal.start as usize + goal.finish_time as usize,
+                        task_id: goal_index as usize,
                     };
                     self.slots.push(slot);
                 }
@@ -82,14 +82,14 @@ impl Calendar {
                         let current_task_counter = self.tasks.len();
                         let task = Task {
                             goal_id: goal.id,
-                            task_id: (current_task_counter as u32),
+                            task_id: (current_task_counter as usize),
                             task_status: TaskStatus::UNSCHEDULED,
                         };
                         self.tasks.push(task);
                         let slot = Slot {
-                            begin: day_count * 24 + goal.start_time as u32,
-                            end: day_count * 24 + goal.finish_time as u32,
-                            task_id: current_task_counter as u32,
+                            begin: day_count * 24 + goal.start_time as usize,
+                            end: day_count * 24 + goal.finish_time as usize,
+                            task_id: current_task_counter as usize,
                         };
                         self.slots.push(slot);
                         day_count += 1;
@@ -102,13 +102,13 @@ impl Calendar {
             }
 
             // find highest freedom
-            let mut task_id_highest_freedom_prio: Option<u32> = None;
+            let mut task_id_highest_freedom_prio: Option<usize> = None;
             for task in self.tasks.iter() {
-                let mut slot_id_highest_freedom: Option<u32> = None;
+                let mut slot_id_highest_freedom: Option<usize> = None;
                 for slot in self.slots.iter() {
                     if slot.task_id == task.task_id {
-                        let range: u32 = slot.end - slot.begin;
-                        let freedom: u32 = range - self.goals[task.task_id];
+                        let range: usize = slot.end - slot.begin;
+                        let freedom: usize = range - self.goals[task.task_id].duration;
                     }
                 }
             }
@@ -117,7 +117,7 @@ impl Calendar {
         }
     }
 
-    pub fn query(self, start: u32, finish: u32) -> () {
+    pub fn query(self, start: usize, finish: usize) -> () {
         for slot in self.slots.iter() {
             if slot.begin >= start && slot.end < finish {
                 print!["found for {}..{}: {:#?}\n", start, finish, slot];
@@ -144,9 +144,9 @@ impl fmt::Display for Calendar {
 pub struct Goal {
     id: Uuid,
     pub title: String,
-    duration: u32,
-    start: u32,
-    finish: u32,
+    duration: usize,
+    start: usize,
+    finish: usize,
     start_time: u8,
     finish_time: u8,
     goal_type: GoalType,
