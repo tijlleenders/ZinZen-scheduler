@@ -99,13 +99,14 @@ impl Calendar {
             }
             if scheduling_possibilities > highest_scheduling_possibilities_so_far {
                 print![
-                                "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
-                                task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
-                            ];
+                    "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
+                    task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
+                    ];
                 task_id_highest_scheduling_possibilities_prio = task_index;
+                highest_scheduling_possibilities_so_far = scheduling_possibilities;
             }
         }
-        0
+        task_id_highest_scheduling_possibilities_prio
     }
 
     fn load_tasks_and_slots_from_goals(&mut self) -> () {
