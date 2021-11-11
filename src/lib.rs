@@ -94,6 +94,12 @@ impl Calendar {
     }
 
     fn find_least_overlap_interval_for_task(&self, task_id: usize) -> (usize, usize) {
+        //for every slot of task_id
+        //  for every position of range [start + size - duration]
+        //    for every slot
+        //      if overlaps add to counter for this position
+        //    if counter for this position < lowest so far keep that one
+
         let _task_id = task_id;
         (0, 0)
     }
