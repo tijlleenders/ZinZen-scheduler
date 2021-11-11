@@ -75,7 +75,19 @@ impl Calendar {
         let task_id_with_highest_scheduling_possibilities: usize =
             self.find_task_id_with_highest_scheduling_possibilities();
 
-        // find least overlap for task with highest scheduling_possibilities
+        let least_overlap_interval =
+            find_least_overlap_interval_for_task(task_id_with_highest_scheduling_possibilities);
+        print!(
+            "least overlap for task_id {}:{}-{}\n",
+            task_id_with_highest_scheduling_possibilities,
+            least_overlap_interval.0,
+            least_overlap_interval.1
+        );
+
+        fn find_least_overlap_interval_for_task(task_id: usize) -> (usize, usize) {
+            let _task_id = task_id;
+            (0, 0)
+        }
     }
 
     pub fn query(self, start: usize, finish: usize) -> () {
