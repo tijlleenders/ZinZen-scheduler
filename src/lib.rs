@@ -9,6 +9,15 @@ enum TaskStatus {
 }
 
 #[derive(Debug)]
+enum CutOffType {
+    NOCUT,
+    CUTSTART,
+    CUTEND,
+    CUTMIDDLE,
+    CUTWHOLE,
+}
+
+#[derive(Debug)]
 pub enum GoalType {
     FIXED,
     DAILY,
@@ -106,9 +115,35 @@ impl Calendar {
             begin,
             end,
         };
+        for slot in self.slots.iter() {
+            //poke holes in all slots overlapping with begin-end
+            let cut_off_type = self.find_cut_off_type(slot, begin, end);
+            match cut_off_type {
+                CutOffType::CUTSTART => {}
+                CutOffType::CUTMIDDLE => {}
+                CutOffType::CUTEND => {}
+                CutOffType::NOCUT => {}
+                CutOffType::CUTWHOLE => {}
+            }
+        }
         self.slots.push(scheduled_slot);
-        //poke holes in all slots overlapping with begin-end
         ()
+    }
+
+    fn find_cut_off_type(&self, slot: &Slot, begin: usize, end: usize) -> CutOffType {
+        if slot.begin >= begin && slot.end > end {
+            return CutOffType::CUTSTART;
+        }
+        if slot.begin < begin && slot.end > end {
+            return CutOffType::CUTMIDDLE;
+        }
+        if slot.begin < begin && slot.end <= end {
+            return CutOffType::CUTEND;
+        }
+        if slot.begin >= begin && slot.end <= end {
+            return CutOffType::CUTWHOLE;
+        }
+        CutOffType::NOCUT
     }
 
     pub fn print_slots_for_range(self, start: usize, finish: usize) -> () {
