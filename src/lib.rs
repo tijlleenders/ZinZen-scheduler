@@ -1,5 +1,5 @@
-use std::fmt;
 use std::str::FromStr;
+use std::{fmt, usize};
 use uuid::Uuid;
 
 #[derive(Debug)]
@@ -83,22 +83,27 @@ impl Calendar {
 
         print!("Calendar after loading:{:#?}\n", self);
 
-        let task_id_with_highest_scheduling_possibilities: usize =
-            self.find_task_id_with_highest_scheduling_possibilities();
+        loop {
+            let unscheduled_task_id_with_highest_scheduling_possibilities: Option<usize> =
+                self.find_unscheduled_task_id_with_highest_scheduling_possibilities();
 
-        let least_overlap_interval: (usize, usize) = self
-            .find_least_overlap_interval_for_task(task_id_with_highest_scheduling_possibilities);
-        print!(
-            "least overlap for task_id {}:{}-{}\n",
-            task_id_with_highest_scheduling_possibilities,
-            least_overlap_interval.0,
-            least_overlap_interval.1
-        );
-        self.schedule_task(
-            task_id_with_highest_scheduling_possibilities,
-            least_overlap_interval.0,
-            least_overlap_interval.1,
-        );
+            match unscheduled_task_id_with_highest_scheduling_possibilities {
+                Some(task_id_to_schedule) => {
+                    let least_overlap_interval: (usize, usize) =
+                        self.find_least_overlap_interval_for_task(task_id_to_schedule);
+                    print!(
+                        "least overlap for task_id {}:{}-{}\n",
+                        task_id_to_schedule, least_overlap_interval.0, least_overlap_interval.1
+                    );
+                    self.schedule_task(
+                        task_id_to_schedule,
+                        least_overlap_interval.0,
+                        least_overlap_interval.1,
+                    );
+                }
+                None => break,
+            }
+        }
     }
 
     fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
@@ -157,6 +162,7 @@ impl Calendar {
         }
         self.slots = new_slots;
         self.slots.push(scheduled_slot);
+        self.tasks[task_id].task_status = TaskStatus::SCHEDULED;
         ()
     }
 
@@ -226,10 +232,17 @@ impl Calendar {
         result
     }
 
-    fn find_task_id_with_highest_scheduling_possibilities(&self) -> usize {
+    fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
+        let mut result: Option<usize> = None;
         let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
         for (task_index, task) in self.tasks.iter().enumerate() {
+            match self.tasks[task_index].task_status {
+                TaskStatus::SCHEDULED => {
+                    continue;
+                }
+                TaskStatus::UNSCHEDULED => {}
+            }
             let mut scheduling_possibilities: usize = 0;
             for slot in self.slots.iter() {
                 if slot.task_id == task.task_id {
@@ -244,9 +257,10 @@ impl Calendar {
                     ];
                 task_id_highest_scheduling_possibilities_prio = task_index;
                 highest_scheduling_possibilities_so_far = scheduling_possibilities;
+                result = Some(task_id_highest_scheduling_possibilities_prio)
             }
         }
-        task_id_highest_scheduling_possibilities_prio
+        result
     }
 
     fn load_tasks_and_slots_from_goals(&mut self) -> () {
