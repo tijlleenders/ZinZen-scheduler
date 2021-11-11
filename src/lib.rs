@@ -94,7 +94,7 @@ impl Calendar {
             for slot in self.slots.iter() {
                 if slot.task_id == task.task_id {
                     let range: usize = slot.end - slot.begin;
-                    scheduling_possibilities += range - goal.duration + 1;
+                    scheduling_possibilities += range - task.duration_to_schedule + 1;
                 }
             }
             if scheduling_possibilities > highest_scheduling_possibilities_so_far {
@@ -116,6 +116,7 @@ impl Calendar {
                     let current_task_counter = self.tasks.len() + 1;
                     let task = Task {
                         goal_id: goal.id,
+                        duration_to_schedule: goal.estimated_duration - goal.effort_invested,
                         task_id: current_task_counter as usize,
                         task_status: TaskStatus::UNSCHEDULED,
                     };
@@ -135,6 +136,7 @@ impl Calendar {
                         let current_task_counter = self.tasks.len();
                         let task = Task {
                             goal_id: goal.id,
+                            duration_to_schedule: goal.estimated_duration - goal.effort_invested,
                             task_id: (current_task_counter as usize),
                             task_status: TaskStatus::UNSCHEDULED,
                         };
@@ -233,7 +235,8 @@ impl FromStr for Goal {
             _ => Ok(Goal {
                 id: Uuid::new_v4(),
                 title: String::from(s),
-                duration: 1,
+                estimated_duration: 1,
+                effort_invested: 0,
                 start: 0,
                 finish: 24,
                 start_time: 12,
@@ -289,7 +292,8 @@ mod tests {
         let goal = Goal {
             id: Uuid::new_v4(),
             title: String::from("daily goal"),
-            duration: 1,
+            estimated_duration: 1,
+            effort_invested: 0,
             start: 0,
             finish: 168,
             start_time: 12,
