@@ -8,8 +8,8 @@ enum TaskStatus {
     SCHEDULED,
 }
 
-#[derive(Debug)]
-enum CutOffType {
+#[derive(Debug, PartialEq)]
+pub enum CutOffType {
     NOCUT,
     CUTSTART,
     CUTEND,
@@ -119,7 +119,7 @@ impl Calendar {
         };
         let mut new_slots: Vec<Slot> = Vec::with_capacity(self.slots.capacity());
         for slot in self.slots.iter() {
-            let cut_off_type = self.find_cut_off_type(&slot, begin, end);
+            let cut_off_type = Calendar::find_cut_off_type(&slot, begin, end);
             match cut_off_type {
                 CutOffType::CUTSTART => {
                     new_slots.push(Slot {
@@ -160,17 +160,21 @@ impl Calendar {
         self.slots = new_slots;
         self.slots.push(scheduled_slot);
         self.tasks[task_id].task_status = TaskStatus::SCHEDULED;
+        print!(
+            "Calendar right after scheduling task_id {}:{:#?}\n",
+            task_id, self
+        );
         ()
     }
 
-    fn find_cut_off_type(&self, slot: &Slot, begin: usize, end: usize) -> CutOffType {
-        if slot.begin >= begin && slot.end > end {
+    pub fn find_cut_off_type(slot: &Slot, begin: usize, end: usize) -> CutOffType {
+        if slot.begin >= begin && slot.begin < end {
             return CutOffType::CUTSTART;
         }
         if slot.begin < begin && slot.end > end {
             return CutOffType::CUTMIDDLE;
         }
-        if slot.begin < begin && slot.end <= end {
+        if slot.begin < begin && slot.end > begin {
             return CutOffType::CUTEND;
         }
         if slot.begin >= begin && slot.end <= end {
@@ -245,7 +249,16 @@ impl Calendar {
             for slot in self.slots.iter() {
                 if slot.task_id == task.task_id {
                     let range: usize = slot.end - slot.begin;
+                    print!("range:{}\n", range);
+                    print!(
+                        "scheduling_possibilities before:{}\n",
+                        scheduling_possibilities
+                    );
                     scheduling_possibilities += range - task.duration_to_schedule + 1;
+                    print!(
+                        "scheduling_possibilities after:{}\n",
+                        scheduling_possibilities
+                    );
                 }
             }
             if scheduling_possibilities > highest_scheduling_possibilities_so_far {
@@ -407,8 +420,10 @@ impl FromStr for Goal {
 #[cfg(test)]
 mod tests {
     use crate::Calendar;
+    use crate::CutOffType;
     use crate::Goal;
     use crate::GoalType;
+    use crate::Slot;
     use crate::Uuid;
 
     #[test]
@@ -522,5 +537,31 @@ mod tests {
 
         calendar.print_slots_for_range(12, 14);
         print!("Calendar:{:#?}\n", calendar);
+    }
+
+    #[test]
+    fn test_find_cut_off_type() {
+        let slot = Slot {
+            task_id: 0,
+            begin: 10,
+            end: 15,
+        };
+        let cut_off = Calendar::find_cut_off_type(&slot, 0, 12);
+        assert_eq!(cut_off, CutOffType::CUTSTART);
+
+        let cut_off = Calendar::find_cut_off_type(&slot, 10, 12);
+        assert_eq!(cut_off, CutOffType::CUTSTART);
+
+        let cut_off = Calendar::find_cut_off_type(&slot, 11, 12);
+        assert_eq!(cut_off, CutOffType::CUTMIDDLE);
+
+        let cut_off = Calendar::find_cut_off_type(&slot, 11, 15);
+        assert_eq!(cut_off, CutOffType::CUTEND);
+
+        let cut_off = Calendar::find_cut_off_type(&slot, 11, 20);
+        assert_eq!(cut_off, CutOffType::CUTEND);
+
+        let cut_off = Calendar::find_cut_off_type(&slot, 20, 22);
+        assert_eq!(cut_off, CutOffType::NOCUT);
     }
 }
