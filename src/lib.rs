@@ -88,6 +88,12 @@ impl Calendar {
             let _task_id = task_id;
             (0, 0)
         }
+
+        #[test]
+        fn test_ind_least_overlap_interval_for_task() {
+            1 + 1;
+            ()
+        }
     }
 
     pub fn query(self, start: usize, finish: usize) -> () {
