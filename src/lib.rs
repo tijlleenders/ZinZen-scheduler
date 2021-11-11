@@ -115,17 +115,47 @@ impl Calendar {
             begin,
             end,
         };
+        let mut new_slots: Vec<Slot> = Vec::with_capacity(self.slots.capacity());
         for slot in self.slots.iter() {
-            //poke holes in all slots overlapping with begin-end
-            let cut_off_type = self.find_cut_off_type(slot, begin, end);
+            let cut_off_type = self.find_cut_off_type(&slot, begin, end);
             match cut_off_type {
-                CutOffType::CUTSTART => {}
-                CutOffType::CUTMIDDLE => {}
-                CutOffType::CUTEND => {}
-                CutOffType::NOCUT => {}
+                CutOffType::CUTSTART => {
+                    new_slots.push(Slot {
+                        task_id: slot.task_id,
+                        begin: end,
+                        end: slot.end,
+                    });
+                }
+                CutOffType::CUTMIDDLE => {
+                    new_slots.push(Slot {
+                        task_id: slot.task_id,
+                        begin: slot.begin,
+                        end: begin,
+                    });
+                    new_slots.push(Slot {
+                        task_id: slot.task_id,
+                        begin: end,
+                        end: slot.end,
+                    });
+                }
+                CutOffType::CUTEND => {
+                    new_slots.push(Slot {
+                        task_id: slot.task_id,
+                        begin: slot.begin,
+                        end: begin,
+                    });
+                }
+                CutOffType::NOCUT => {
+                    new_slots.push(Slot {
+                        task_id: slot.task_id,
+                        begin: slot.begin,
+                        end: slot.end,
+                    });
+                }
                 CutOffType::CUTWHOLE => {}
             }
         }
+        self.slots = new_slots;
         self.slots.push(scheduled_slot);
         ()
     }
@@ -146,7 +176,7 @@ impl Calendar {
         CutOffType::NOCUT
     }
 
-    pub fn print_slots_for_range(self, start: usize, finish: usize) -> () {
+    pub fn print_slots_for_range(&self, start: usize, finish: usize) -> () {
         for slot in self.slots.iter() {
             if slot.end > start && slot.begin < finish {
                 print!["found for {}..{}: {:#?}\n", start, finish, slot];
@@ -479,5 +509,6 @@ mod tests {
         calendar.schedule();
 
         calendar.print_slots_for_range(12, 14);
+        print!("Calendar:{:#?}\n", calendar);
     }
 }
