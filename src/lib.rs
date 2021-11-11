@@ -112,10 +112,6 @@ impl Calendar {
                         scheduling_possibilities += range - goal.duration + 1;
                     }
                 }
-                print![
-                    "Found {} scheduling_possibilities for task id {}.\n",
-                    scheduling_possibilities, task.task_id
-                ];
                 if scheduling_possibilities > highest_scheduling_possibilities_so_far {
                     print![
                         "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
