@@ -89,7 +89,7 @@ impl Calendar {
 
     pub fn query(self, start: usize, finish: usize) -> () {
         for slot in self.slots.iter() {
-            if slot.begin >= start && slot.end < finish {
+            if slot.end > start && slot.begin < finish {
                 print!["found for {}..{}: {:#?}\n", start, finish, slot];
             }
         }
