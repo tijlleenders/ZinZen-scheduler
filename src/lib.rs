@@ -9,7 +9,7 @@ enum TaskStatus {
 }
 
 #[derive(Debug)]
-enum GoalType {
+pub enum GoalType {
     FIXED,
     DAILY,
     WEEKLY,
@@ -56,27 +56,65 @@ impl Calendar {
     }
 
     pub fn schedule(&mut self) -> () {
-        for (index, goal) in self.goals.iter().enumerate() {
+        for (goal_index, goal) in self.goals.iter().enumerate() {
             print!("Goal:{:#?}", goal);
             match goal.goal_type {
                 GoalType::FIXED => {
+                    let current_task_counter = self.tasks.len() + 1;
                     let task = Task {
                         goal_id: goal.id,
-                        task_id: index as u32,
+                        task_id: current_task_counter as u32,
                         task_status: TaskStatus::UNSCHEDULED,
                     };
                     print!("Task:{:#?}", task);
                     self.tasks.push(task);
                     let slot = Slot {
-                        begin: goal.start_time as u32, //Need to use goal.start modulo +
-                        end: goal.finish_time as u32,  //Need to use goal.start modulo +
-                        task_id: index as u32,
+                        begin: goal.start as u32 + goal.start_time as u32,
+                        end: goal.start as u32 + goal.finish_time as u32,
+                        task_id: goal_index as u32,
                     };
                     self.slots.push(slot);
                 }
-                _ => {
-                    print!("Ignoring task for non-fixed goal type.");
+
+                GoalType::DAILY => {
+                    let mut day_count = 0;
+                    while day_count < (self.max_time_units / 24) {
+                        let current_task_counter = self.tasks.len();
+                        let task = Task {
+                            goal_id: goal.id,
+                            task_id: (current_task_counter as u32),
+                            task_status: TaskStatus::UNSCHEDULED,
+                        };
+                        self.tasks.push(task);
+                        let slot = Slot {
+                            begin: day_count * 24 + goal.start_time as u32,
+                            end: day_count * 24 + goal.finish_time as u32,
+                            task_id: current_task_counter as u32,
+                        };
+                        self.slots.push(slot);
+                        day_count += 1;
+                    }
                 }
+
+                _ => {
+                    print!("Ignoring all but fixed + daily goal types.");
+                }
+            }
+
+            // find highest freedom
+            let mut task_id_highest_freedom_prio: Option<u32> = None;
+            for task in self.tasks.iter() {
+                let mut slot_id_highest_freedom: Option<u32> = None;
+            }
+
+            // find least overlap for task with highest freedom
+        }
+    }
+
+    pub fn query(self, start: u32, finish: u32) -> () {
+        for slot in self.slots.iter() {
+            if slot.begin >= start && slot.end < finish {
+                print!["found for {}..{}: {:#?}\n", start, finish, slot];
             }
         }
     }
@@ -183,6 +221,8 @@ impl FromStr for Goal {
 mod tests {
     use crate::Calendar;
     use crate::Goal;
+    use crate::GoalType;
+    use crate::Uuid;
 
     #[test]
     fn create_and_print_calendar() {
@@ -215,5 +255,44 @@ mod tests {
         print!("Calendar:{:#?}\n", calendar);
         calendar.schedule();
         print!("Calendar:{:#?}\n", calendar);
+    }
+
+    #[test]
+    fn add_daily_goal_to_empty_calendar_and_schedule() {
+        let goal = Goal {
+            id: Uuid::new_v4(),
+            title: String::from("daily goal"),
+            duration: 1,
+            start: 0,
+            finish: 168,
+            start_time: 12,
+            finish_time: 18,
+            goal_type: GoalType::DAILY,
+        };
+        let mut calendar = Calendar::new(168, String::from("h"));
+        calendar.add(goal);
+        print!("\nexpect Calendar with a goal\n");
+        calendar.schedule();
+        print!("Calendar:{:#?}\n", calendar);
+    }
+
+    #[test]
+    fn add_daily_goal_to_empty_calendar_and_schedule_and_query() {
+        let goal = Goal {
+            id: Uuid::new_v4(),
+            title: String::from("daily goal"),
+            duration: 1,
+            start: 0,
+            finish: 168,
+            start_time: 12,
+            finish_time: 18,
+            goal_type: GoalType::DAILY,
+        };
+        let mut calendar = Calendar::new(168, String::from("h"));
+        calendar.add(goal);
+        print!("\nexpect Calendar with a goal\n");
+        calendar.schedule();
+        print!("Calendar:{:#?}\n", calendar);
+        calendar.query(0, 42);
     }
 }
