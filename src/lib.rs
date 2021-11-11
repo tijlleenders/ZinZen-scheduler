@@ -87,7 +87,7 @@ impl Calendar {
         );
     }
 
-    pub fn query(self, start: usize, finish: usize) -> () {
+    pub fn print_slots_for_range(self, start: usize, finish: usize) -> () {
         for slot in self.slots.iter() {
             if slot.end > start && slot.begin < finish {
                 print!["found for {}..{}: {:#?}\n", start, finish, slot];
@@ -96,10 +96,11 @@ impl Calendar {
     }
 
     fn find_least_overlap_interval_for_task(&self, task_id: usize) -> (usize, usize) {
+        print!("Finding least overlap interval for task_id:{}\n", task_id);
+        let mut lowest_overlap_so_far: usize = usize::MAX - 1;
+        let mut slot_begin_with_lowest_overlap: usize = 0;
         for slot in self.slots.iter() {
             if slot.task_id == task_id {
-                let mut lowest_overlap_so_far: usize = usize::MAX - 1;
-                let mut offset_with_lowest_overlap: usize = 0;
                 for slot_offset in
                     0..slot.end - slot.begin - self.tasks[task_id].duration_to_schedule + 1
                 {
@@ -113,16 +114,17 @@ impl Calendar {
                         slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
                         overlap
                     );
-                    if overlap <= lowest_overlap_so_far + 1 {
+                    if overlap < lowest_overlap_so_far {
                         lowest_overlap_so_far = overlap;
-                        offset_with_lowest_overlap = slot_offset;
+                        slot_begin_with_lowest_overlap = slot.begin + slot_offset;
                     }
                 }
             }
         }
-
-        let _task_id = task_id;
-        (0, 0)
+        (
+            slot_begin_with_lowest_overlap,
+            slot_begin_with_lowest_overlap + self.tasks[task_id].duration_to_schedule,
+        )
     }
 
     fn find_overlap_number_for(&self, begin: usize, end: usize) -> usize {
@@ -379,7 +381,7 @@ mod tests {
         print!("\nexpect Calendar with a goal\n");
         calendar.schedule();
         print!("Calendar:{:#?}\n", calendar);
-        calendar.query(0, 42);
+        calendar.print_slots_for_range(0, 42);
     }
 
     #[test]
@@ -417,6 +419,6 @@ mod tests {
         print!("\nexpect Calendar with two goals not overlapping\n");
         calendar.schedule();
 
-        calendar.query(12, 14);
+        calendar.print_slots_for_range(12, 14);
     }
 }
