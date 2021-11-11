@@ -92,7 +92,22 @@ impl Calendar {
         );
     }
 
-    fn schedule_task(&self, task_id: usize, begin: usize, end: usize) -> () {
+    fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
+        self.slots.retain(|slot| {
+            let delete = { slot.task_id == task_id };
+            !delete
+        });
+        print!(
+            "Calendar after removings slots for task_id {}:{:#?}\n",
+            task_id, self
+        );
+        let scheduled_slot = Slot {
+            task_id,
+            begin,
+            end,
+        };
+        self.slots.push(scheduled_slot);
+        //poke holes in all slots overlapping with begin-end
         ()
     }
 
