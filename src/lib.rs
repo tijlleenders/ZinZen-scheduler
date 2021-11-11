@@ -72,6 +72,8 @@ impl Calendar {
     pub fn schedule(&mut self) -> () {
         self.load_tasks_and_slots_from_goals();
 
+        print!("Calendar after loading:{:#?}", self);
+
         let task_id_with_highest_scheduling_possibilities: usize =
             self.find_task_id_with_highest_scheduling_possibilities();
 
@@ -161,7 +163,7 @@ impl Calendar {
             print!("Goal:{:#?}\n", goal);
             match goal.goal_type {
                 GoalType::FIXED => {
-                    let current_task_counter = self.tasks.len() + 1;
+                    let current_task_counter = self.tasks.len();
                     let task = Task {
                         goal_id: goal.id,
                         duration_to_schedule: goal.estimated_duration - goal.effort_invested,
@@ -217,7 +219,11 @@ impl fmt::Display for ParseGoalError {
 
 impl fmt::Display for Calendar {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Calendar goals:{:#?}\n", self.goals)
+        write!(
+            f,
+            "Calendar:\nGoals:{:#?}\nTasks:{:#?}\nSlots:{:#?}\n",
+            self.goals, self.tasks, self.slots
+        )
     }
 }
 
@@ -406,9 +412,11 @@ mod tests {
         calendar.add(goal);
         calendar.add(goal2);
 
+        print!("Calendar:{:#?}\n", calendar);
+
         print!("\nexpect Calendar with two goals not overlapping\n");
         calendar.schedule();
-        print!("Calendar:{:#?}\n", calendar);
+
         calendar.query(12, 14);
     }
 }
