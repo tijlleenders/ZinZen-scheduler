@@ -107,14 +107,11 @@ impl Calendar {
     }
 
     fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
+        print!("Scheduling task_id {}.\n", task_id);
         self.slots.retain(|slot| {
             let delete = { slot.task_id == task_id };
             !delete
         });
-        print!(
-            "Calendar after removings slots for task_id {}:{:#?}\n",
-            task_id, self
-        );
         let scheduled_slot = Slot {
             task_id,
             begin,
@@ -233,6 +230,7 @@ impl Calendar {
     }
 
     fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
+        print!("Searching for new task to process...\n");
         let mut result: Option<usize> = None;
         let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
