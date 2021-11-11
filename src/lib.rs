@@ -102,10 +102,10 @@ impl Calendar {
             }
 
             // find highest scheduling_possibilities
-            let mut task_id_highest_scheduling_possibilities_prio: Option<usize> = None;
+            let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
             let mut highest_scheduling_possibilities_so_far: usize = 0;
             for (task_index, task) in self.tasks.iter().enumerate() {
-                let scheduling_possibilities: usize = 0;
+                let mut scheduling_possibilities: usize = 0;
                 for slot in self.slots.iter() {
                     if slot.task_id == task.task_id {
                         let range: usize = slot.end - slot.begin;
@@ -121,7 +121,7 @@ impl Calendar {
                         "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
                         task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
                     ];
-                    task_id_highest_scheduling_possibilities_prio = Some(task_index);
+                    task_id_highest_scheduling_possibilities_prio = task_index;
                 }
             }
 
