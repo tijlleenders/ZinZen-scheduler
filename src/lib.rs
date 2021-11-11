@@ -96,17 +96,21 @@ impl Calendar {
     fn find_least_overlap_interval_for_task(&self, task_id: usize) -> (usize, usize) {
         for slot in self.slots.iter() {
             if slot.task_id == task_id {
-                let mut lowest_overlap_so_far: usize = 0;
+                let mut lowest_overlap_so_far: usize = usize::MAX;
                 let mut offset_with_lowest_overlap: usize = 0;
                 for slot_offset in
                     0..slot.end - slot.begin - self.tasks[task_id].duration_to_schedule + 1
                 {
-                    print!(
-                        "Query overlap for:{}-{}\n",
+                    let overlap = self.find_overlap_number_for(
                         slot.begin + slot_offset,
-                        slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule
+                        slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
                     );
-                    let overlap = 0; //use function
+                    print!(
+                        "# overlaps for:{}-{}:{}\n",
+                        slot.begin + slot_offset,
+                        slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
+                        overlap
+                    );
                     if overlap <= lowest_overlap_so_far + 1 {
                         lowest_overlap_so_far = overlap;
                         offset_with_lowest_overlap = slot_offset;
@@ -117,6 +121,16 @@ impl Calendar {
 
         let _task_id = task_id;
         (0, 0)
+    }
+
+    fn find_overlap_number_for(&self, begin: usize, end: usize) -> usize {
+        let mut result: usize = 0;
+        for slot in self.slots.iter() {
+            if slot.begin < end && slot.end > begin {
+                result += 1;
+            }
+        }
+        result
     }
 
     fn find_task_id_with_highest_scheduling_possibilities(&self) -> usize {
