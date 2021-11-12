@@ -1,8 +1,11 @@
+use env_logger::Env;
 use uuid::Uuid;
 use zinzen_scheduler::*;
 
 fn main() {
-    let mut calendar = Calendar::new(8760, String::from("h"));
+    env_logger::Builder::from_env(Env::default().default_filter_or("warn")).init();
+
+    let mut calendar = Calendar::new(168, String::from("h"));
 
     let goal = Goal {
         id: Uuid::new_v4(),
