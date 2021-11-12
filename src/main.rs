@@ -1,33 +1,40 @@
-use chrono::{DateTime, Utc};
-use std::str::FromStr;
-use zinzen_scheduler::{self};
+use uuid::Uuid;
+use zinzen_scheduler::*;
 
 fn main() {
-    let test_goal = zinzen_scheduler::Goal::new();
-    print!("title:{}\n", test_goal.title);
+    let mut calendar = Calendar::new(8760, String::from("h"));
 
-    let test_goal2 = zinzen_scheduler::Goal::from_str("");
-    match test_goal2 {
-        Ok(goal) => print!("title:{}\n", goal.title),
-        Err(error) => print!("title:{}", error),
-    }
+    let goal = Goal {
+        id: Uuid::new_v4(),
+        title: String::from("daily goal"),
+        estimated_duration: 1,
+        effort_invested: 0,
+        start: 0,
+        finish: 8760, //one year
+        start_time: 12,
+        finish_time: 18,
+        goal_type: GoalType::DAILY,
+    };
 
-    let test_goal3 = zinzen_scheduler::Goal::from_str("goal 3");
-    match test_goal3 {
-        Ok(goal) => print!("title:{}\n", goal.title),
-        Err(error) => print!("title:{}", error),
-    }
+    let goal2 = Goal {
+        id: Uuid::new_v4(),
+        title: String::from("lunch meeting any day"),
+        estimated_duration: 1,
+        effort_invested: 0,
+        start: 0,
+        finish: 168,
+        start_time: 12,
+        finish_time: 13,
+        goal_type: GoalType::FIXED,
+    };
+    calendar.add(goal);
+    calendar.add(goal2);
 
-    let now: DateTime<Utc> = Utc::now();
+    // print!("Calendar:{:#?}\n", calendar);
 
-    println!("UTC now is: {}", now);
-    println!("UTC now in RFC 2822 is: {}", now.to_rfc2822());
-    println!("UTC now in RFC 3339 is: {}", now.to_rfc3339());
-    println!(
-        "UTC now in a custom format is: {}",
-        now.format("%a %b %e %T %Y")
-    );
+    // print!("\nexpect Calendar with two goals not overlapping\n");
+    calendar.schedule();
 
-    let rfc3339 = DateTime::parse_from_rfc3339("2021-12-13T13:37:00+01:00").expect("oops!");
-    println!("Parsed ISO String is:{}", rfc3339);
+    // calendar.print_slots_for_range(12, 14);
+    // print!("Calendar:{:#?}\n", calendar);
 }

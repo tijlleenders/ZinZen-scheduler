@@ -1,3 +1,4 @@
+use log::{info, warn};
 use std::str::FromStr;
 use std::{fmt, usize};
 use uuid::Uuid;
@@ -52,15 +53,15 @@ pub struct Calendar {
 
 #[derive(Debug)]
 pub struct Goal {
-    id: Uuid,
+    pub id: Uuid,
     pub title: String,
-    estimated_duration: usize,
-    effort_invested: usize,
-    start: usize,
-    finish: usize,
-    start_time: u8,
-    finish_time: u8,
-    goal_type: GoalType,
+    pub estimated_duration: usize,
+    pub effort_invested: usize,
+    pub start: usize,
+    pub finish: usize,
+    pub start_time: u8,
+    pub finish_time: u8,
+    pub goal_type: GoalType,
 }
 
 impl Calendar {
@@ -81,7 +82,7 @@ impl Calendar {
     pub fn schedule(&mut self) -> () {
         self.load_tasks_and_slots_from_goals();
 
-        print!("Calendar after loading:{:#?}\n", self);
+        log::info!("Calendar after loading:{:#?}\n", self);
 
         loop {
             let unscheduled_task_id_with_highest_scheduling_possibilities: Option<usize> =
@@ -91,9 +92,11 @@ impl Calendar {
                 Some(task_id_to_schedule) => {
                     let least_overlap_interval: (usize, usize) =
                         self.find_least_overlap_interval_for_task(task_id_to_schedule);
-                    print!(
+                    log::info!(
                         "least overlap for task_id {}:{}-{}\n",
-                        task_id_to_schedule, least_overlap_interval.0, least_overlap_interval.1
+                        task_id_to_schedule,
+                        least_overlap_interval.0,
+                        least_overlap_interval.1
                     );
                     self.schedule_task(
                         task_id_to_schedule,
@@ -107,7 +110,7 @@ impl Calendar {
     }
 
     fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
-        print!("Scheduling task_id {}.\n", task_id);
+        log::info!("Scheduling task_id {}.\n", task_id);
         self.slots.retain(|slot| {
             let delete = { slot.task_id == task_id };
             !delete
@@ -160,9 +163,10 @@ impl Calendar {
         self.slots = new_slots;
         self.slots.push(scheduled_slot);
         self.tasks[task_id].task_status = TaskStatus::SCHEDULED;
-        print!(
+        log::info!(
             "Calendar right after scheduling task_id {}:{:#?}\n",
-            task_id, self
+            task_id,
+            self
         );
         ()
     }
@@ -186,13 +190,13 @@ impl Calendar {
     pub fn print_slots_for_range(&self, start: usize, finish: usize) -> () {
         for slot in self.slots.iter() {
             if slot.end > start && slot.begin < finish {
-                print!["found for {}..{}: {:#?}\n", start, finish, slot];
+                log::info!["found for {}..{}: {:#?}\n", start, finish, slot];
             }
         }
     }
 
     fn find_least_overlap_interval_for_task(&self, task_id: usize) -> (usize, usize) {
-        print!("Finding least overlap interval for task_id:{}\n", task_id);
+        log::info!("Finding least overlap interval for task_id:{}\n", task_id);
         let mut lowest_overlap_so_far: usize = usize::MAX - 1;
         let mut slot_begin_with_lowest_overlap: usize = 0;
         for slot in self.slots.iter() {
@@ -204,7 +208,7 @@ impl Calendar {
                         slot.begin + slot_offset,
                         slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
                     );
-                    print!(
+                    log::info!(
                         "# overlaps for:{}-{}:{}\n",
                         slot.begin + slot_offset,
                         slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
@@ -239,7 +243,7 @@ impl Calendar {
     }
 
     fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
-        print!("Searching for new task to process...\n");
+        log::info!("Searching for new task to process...\n");
         let mut result: Option<usize> = None;
         let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
@@ -254,20 +258,20 @@ impl Calendar {
             for slot in self.slots.iter() {
                 if slot.task_id == task.task_id {
                     let range: usize = slot.end - slot.begin;
-                    print!("range:{}\n", range);
-                    print!(
+                    log::info!("range:{}\n", range);
+                    log::info!(
                         "scheduling_possibilities before:{}\n",
                         scheduling_possibilities
                     );
                     scheduling_possibilities += range - task.duration_to_schedule + 1;
-                    print!(
+                    log::info!(
                         "scheduling_possibilities after:{}\n",
                         scheduling_possibilities
                     );
                 }
             }
             if scheduling_possibilities > highest_scheduling_possibilities_so_far {
-                print![
+                log::info![
                     "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
                     task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
                     ];
@@ -281,7 +285,7 @@ impl Calendar {
 
     fn load_tasks_and_slots_from_goals(&mut self) -> () {
         for (goal_index, goal) in self.goals.iter().enumerate() {
-            print!("Goal:{:#?}\n", goal);
+            log::info!("Goal:{:#?}\n", goal);
             match goal.goal_type {
                 GoalType::FIXED => {
                     let current_task_counter = self.tasks.len();
@@ -291,7 +295,7 @@ impl Calendar {
                         task_id: current_task_counter as usize,
                         task_status: TaskStatus::UNSCHEDULED,
                     };
-                    print!("Task:{:#?}\n", task);
+                    log::info!("Task:{:#?}\n", task);
                     self.tasks.push(task);
                     let slot = Slot {
                         begin: goal.start as usize + goal.start_time as usize,
@@ -323,7 +327,7 @@ impl Calendar {
                 }
 
                 _ => {
-                    print!("Ignoring all but fixed + daily goal types.");
+                    log::info!("Ignoring all but fixed + daily goal types.");
                 }
             }
         }
@@ -440,8 +444,8 @@ mod tests {
             tasks: Vec::new(),
             slots: Vec::new(),
         };
-        print!("\nexpect Calendar with a goal\n");
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("\nexpect Calendar with a goal\n");
+        log::info!("Calendar:{:#?}\n", calendar);
     }
 
     #[test]
@@ -449,8 +453,8 @@ mod tests {
         let goal = Goal::new();
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
-        print!("\nexpect Calendar with a goal\n");
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("\nexpect Calendar with a goal\n");
+        log::info!("Calendar:{:#?}\n", calendar);
     }
 
     #[test]
@@ -458,10 +462,10 @@ mod tests {
         let goal = Goal::new();
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
-        print!("\nexpect Calendar with a goal\n");
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("\nexpect Calendar with a goal\n");
+        log::info!("Calendar:{:#?}\n", calendar);
         calendar.schedule();
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("Calendar:{:#?}\n", calendar);
     }
 
     #[test]
@@ -479,9 +483,9 @@ mod tests {
         };
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
-        print!("\nexpect Calendar with a goal\n");
+        log::info!("\nexpect Calendar with a goal\n");
         calendar.schedule();
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("Calendar:{:#?}\n", calendar);
     }
 
     #[test]
@@ -499,9 +503,9 @@ mod tests {
         };
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
-        print!("\nexpect Calendar with a goal\n");
+        log::info!("\nexpect Calendar with a goal\n");
         calendar.schedule();
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("Calendar:{:#?}\n", calendar);
         calendar.print_slots_for_range(0, 42);
     }
 
@@ -535,13 +539,13 @@ mod tests {
         calendar.add(goal);
         calendar.add(goal2);
 
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("Calendar:{:#?}\n", calendar);
 
-        print!("\nexpect Calendar with two goals not overlapping\n");
+        log::info!("\nexpect Calendar with two goals not overlapping\n");
         calendar.schedule();
 
         calendar.print_slots_for_range(12, 14);
-        print!("Calendar:{:#?}\n", calendar);
+        log::info!("Calendar:{:#?}\n", calendar);
     }
 
     #[test]

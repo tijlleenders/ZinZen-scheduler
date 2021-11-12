@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 uuid = { version = "0.8.2", features = ["v4"] }
 chrono = "0.4.19"
+log = "0.4.14"
