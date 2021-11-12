@@ -210,6 +210,11 @@ impl Calendar {
                         slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
                         overlap
                     );
+                    if overlap == 1 {
+                        lowest_overlap_so_far = overlap;
+                        slot_begin_with_lowest_overlap = slot.begin + slot_offset;
+                        break;
+                    }
                     if overlap < lowest_overlap_so_far {
                         lowest_overlap_so_far = overlap;
                         slot_begin_with_lowest_overlap = slot.begin + slot_offset;
