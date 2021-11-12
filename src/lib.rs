@@ -1,4 +1,4 @@
-use log::{info, warn};
+use log;
 use std::str::FromStr;
 use std::{fmt, usize};
 use uuid::Uuid;
@@ -435,6 +435,10 @@ mod tests {
     use crate::Slot;
     use crate::Uuid;
 
+    fn init() {
+        let _ = env_logger::builder().is_test(true).try_init();
+    }
+
     #[test]
     fn create_and_print_calendar() {
         let calendar = Calendar {
@@ -511,7 +515,12 @@ mod tests {
 
     #[test]
     fn fixed_and_daily_goal_combined() {
-        let mut calendar = Calendar::new(168, String::from("h"));
+        // RUST_LOG=info cargo test --package zinzen_scheduler --lib -- tests::fixed_and_daily_goal_combined --exact --nocapture
+        // RUST_LOG=error cargo test --package zinzen_scheduler --lib -- tests::fixed_and_daily_goal_combined --exact --nocapture
+
+        init(); //init logging
+
+        let mut calendar = Calendar::new(720, String::from("h"));
 
         let goal = Goal {
             id: Uuid::new_v4(),
