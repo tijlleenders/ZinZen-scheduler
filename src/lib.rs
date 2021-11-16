@@ -1,7 +1,6 @@
 use log;
 use std::str::FromStr;
 use std::{fmt, usize};
-use uuid::Uuid;
 
 #[derive(Debug)]
 enum TaskStatus {
@@ -37,7 +36,7 @@ pub struct Slot {
 #[derive(Debug)]
 pub struct Task {
     task_id: usize,
-    goal_id: Uuid,
+    goal_id: usize,
     duration_to_schedule: usize,
     task_status: TaskStatus,
 }
@@ -53,7 +52,7 @@ pub struct Calendar {
 
 #[derive(Debug)]
 pub struct Goal {
-    pub id: Uuid,
+    pub id: usize,
     pub title: String,
     pub estimated_duration: usize,
     pub effort_invested: usize,
@@ -367,7 +366,7 @@ impl Goal {
     /// ```
     pub fn new() -> Goal {
         Goal {
-            id: Uuid::new_v4(),
+            id: 1,
             title: String::from("test"),
             estimated_duration: 1,
             effort_invested: 0,
@@ -393,7 +392,7 @@ impl Goal {
     /// ```
     pub fn parse_from_str(s: &str) -> Goal {
         Goal {
-            id: Uuid::new_v4(),
+            id: 1,
             title: String::from(s),
             estimated_duration: 1,
             effort_invested: 0,
@@ -412,7 +411,7 @@ impl FromStr for Goal {
         match s {
             "" => Err(ParseGoalError),
             _ => Ok(Goal {
-                id: Uuid::new_v4(),
+                id: 1,
                 title: String::from(s),
                 estimated_duration: 1,
                 effort_invested: 0,
@@ -433,7 +432,6 @@ mod tests {
     use crate::Goal;
     use crate::GoalType;
     use crate::Slot;
-    use crate::Uuid;
 
     fn init() {
         let _ = env_logger::builder().is_test(true).try_init();
@@ -475,7 +473,7 @@ mod tests {
     #[test]
     fn add_daily_goal_to_empty_calendar_and_schedule() {
         let goal = Goal {
-            id: Uuid::new_v4(),
+            id: 1,
             title: String::from("daily goal"),
             estimated_duration: 1,
             effort_invested: 0,
@@ -495,7 +493,7 @@ mod tests {
     #[test]
     fn add_daily_goal_to_empty_calendar_and_schedule_and_query() {
         let goal = Goal {
-            id: Uuid::new_v4(),
+            id: 1,
             title: String::from("daily goal"),
             estimated_duration: 1,
             effort_invested: 0,
@@ -523,7 +521,7 @@ mod tests {
         let mut calendar = Calendar::new(720, String::from("h"));
 
         let goal = Goal {
-            id: Uuid::new_v4(),
+            id: 1,
             title: String::from("daily goal"),
             estimated_duration: 1,
             effort_invested: 0,
@@ -535,7 +533,7 @@ mod tests {
         };
 
         let goal2 = Goal {
-            id: Uuid::new_v4(),
+            id: 2,
             title: String::from("lunch meeting any day"),
             estimated_duration: 1,
             effort_invested: 0,

@@ -1,5 +1,4 @@
 use env_logger::Env;
-use uuid::Uuid;
 use zinzen_scheduler::*;
 
 fn main() {
@@ -8,7 +7,7 @@ fn main() {
     let mut calendar = Calendar::new(168, String::from("h"));
 
     let goal = Goal {
-        id: Uuid::new_v4(),
+        id: 1,
         title: String::from("daily goal"),
         estimated_duration: 1,
         effort_invested: 0,
@@ -20,7 +19,7 @@ fn main() {
     };
 
     let goal2 = Goal {
-        id: Uuid::new_v4(),
+        id: 2,
         title: String::from("lunch meeting any day"),
         estimated_duration: 1,
         effort_invested: 0,
@@ -39,5 +38,5 @@ fn main() {
     calendar.schedule();
 
     // calendar.print_slots_for_range(12, 14);
-    // print!("Calendar:{:#?}\n", calendar);
+    print!("Calendar:{:#?}\n", calendar);
 }
