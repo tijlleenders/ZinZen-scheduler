@@ -40,6 +40,10 @@ pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
 #[wasm_bindgen]
 pub fn fixed_and_daily_goal_combined() {
     console::log_1(&"Hello using web-sys".into());
+
+    let js: JsValue = 4.into();
+    console::log_2(&"Logging arbitrary values looks like".into(), &js);
+
     let mut calendar = Calendar::new(720, String::from("h"));
 
     let goal = Goal {
