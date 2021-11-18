@@ -1,6 +1,8 @@
 use log;
 use std::str::FromStr;
 use std::{fmt, usize};
+
+#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
 // Import the `window.alert` function from the Web.
