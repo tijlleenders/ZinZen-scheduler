@@ -4,6 +4,7 @@ use std::{fmt, usize};
 use wasm_bindgen::prelude::*;
 
 // Import the `window.alert` function from the Web.
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
@@ -11,6 +12,7 @@ extern "C" {
 
 // Export a `greet` function from Rust to JavaScript, that alerts a
 // hello message.
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub fn greet(name: &str) {
     alert(&format!("Hello, {}!", name));
