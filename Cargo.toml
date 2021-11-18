@@ -18,4 +18,5 @@ tracing-wasm = "0.2.1"
 console_error_panic_hook = "0.1.7"
 
 [dev-dependencies]
+# https://rustwasm.github.io/docs/wasm-bindgen/wasm-bindgen-test/usage.html?highlight=wasm-bindgen-test#appendix-using-wasm-bindgen-test-without-wasm-pack
 wasm-bindgen-test = "0.3.28"
