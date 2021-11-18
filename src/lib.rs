@@ -36,6 +36,47 @@ pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
     Ok(())
 }
 
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+pub fn fixed_and_daily_goal_combined() {
+    console::log_1(&"Hello using web-sys".into());
+    let mut calendar = Calendar::new(720, String::from("h"));
+
+    let goal = Goal {
+        id: 1,
+        title: String::from("daily goal"),
+        estimated_duration: 1,
+        effort_invested: 0,
+        start: 0,
+        finish: 8760, //one year
+        start_time: 12,
+        finish_time: 18,
+        goal_type: GoalType::DAILY,
+    };
+
+    let goal2 = Goal {
+        id: 2,
+        title: String::from("lunch meeting any day"),
+        estimated_duration: 1,
+        effort_invested: 0,
+        start: 0,
+        finish: 168,
+        start_time: 12,
+        finish_time: 13,
+        goal_type: GoalType::FIXED,
+    };
+    calendar.add(goal);
+    calendar.add(goal2);
+
+    // log::info!("Calendar:{:#?}\n", calendar);
+
+    // log::info!("\nexpect Calendar with two goals not overlapping\n");
+    calendar.schedule();
+
+    calendar.print_slots_for_range(12, 14);
+    // log::info!("Calendar:{:#?}\n", calendar);
+}
+
 #[derive(Debug)]
 enum TaskStatus {
     UNSCHEDULED,
