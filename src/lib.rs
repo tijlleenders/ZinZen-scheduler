@@ -6,25 +6,6 @@ use wasm_bindgen::prelude::*;
 #[cfg(target_arch = "wasm32")]
 use web_sys::console;
 
-// Import the `window.alert` function from the Web.
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
-
-// Export a `greet` function from Rust to JavaScript, that alerts a
-// hello message.
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen]
-pub fn greet(name: &str) {
-    alert(&format!("Hello, {}!", name));
-    console::log_1(&"Hello using web-sys".into());
-
-    let js: JsValue = 4.into();
-    console::log_2(&"Logging arbitrary values looks like".into(), &js);
-}
-
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(start)]
 pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
