@@ -1,5 +1,6 @@
 use std::str::FromStr;
 use std::{fmt, usize};
+use web_sys::console;
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
@@ -17,6 +18,22 @@ extern "C" {
 #[wasm_bindgen]
 pub fn greet(name: &str) {
     alert(&format!("Hello, {}!", name));
+    console::log_1(&"Hello using web-sys".into());
+
+    let js: JsValue = 4.into();
+    console::log_2(&"Logging arbitrary values looks like".into(), &js);
+}
+
+#[wasm_bindgen(start)]
+pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
+    // print pretty errors in wasm https://github.com/rustwasm/console_error_panic_hook
+    // This is not needed for tracing_wasm to work, but it is a common tool for getting proper error line numbers for panics.
+    console_error_panic_hook::set_once();
+
+    // Add this line:
+    tracing_wasm::set_as_global_default();
+
+    Ok(())
 }
 
 #[derive(Debug)]
