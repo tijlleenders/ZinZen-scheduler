@@ -15,6 +15,7 @@ extern "C" {
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub fn greet(name: &str) {
+    tracing_wasm::set_as_global_default();
     alert(&format!("Hello, {}!", name));
 }
 
