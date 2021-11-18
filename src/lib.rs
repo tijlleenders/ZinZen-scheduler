@@ -1,9 +1,10 @@
 use std::str::FromStr;
 use std::{fmt, usize};
-use web_sys::console;
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
+#[cfg(target_arch = "wasm32")]
+use web_sys::console;
 
 // Import the `window.alert` function from the Web.
 #[cfg(target_arch = "wasm32")]
@@ -24,6 +25,7 @@ pub fn greet(name: &str) {
     console::log_2(&"Logging arbitrary values looks like".into(), &js);
 }
 
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(start)]
 pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
     // print pretty errors in wasm https://github.com/rustwasm/console_error_panic_hook
