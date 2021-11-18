@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize}; // consider https://crates.io/crates/serde-wasm-bindgen
 use std::str::FromStr;
 use std::{fmt, usize};
 
