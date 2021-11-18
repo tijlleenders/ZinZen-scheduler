@@ -16,6 +16,8 @@ js-sys = "0.3"
 web-sys = { version = "0.3", features = [ "console" ] }
 tracing-wasm = "0.2.1"
 console_error_panic_hook = "0.1.7"
+serde = { version = "1.0.130", features = ["derive"]}
+serde_json = "1.0.71"
 
 [dev-dependencies]
 # https://rustwasm.github.io/docs/wasm-bindgen/wasm-bindgen-test/usage.html?highlight=wasm-bindgen-test#appendix-using-wasm-bindgen-test-without-wasm-pack

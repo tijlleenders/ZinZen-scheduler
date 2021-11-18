@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use std::{fmt, usize};
 
@@ -61,11 +62,14 @@ pub fn fixed_and_daily_goal_combined() {
     // log::info!("\nexpect Calendar with two goals not overlapping\n");
     calendar.schedule();
 
-    calendar.print_slots_for_range(12, 14);
+    let serialized_calendar = serde_json::to_string(&calendar).unwrap();
+    console::log_1(&serialized_calendar.into());
+    // calendar.print_slots_for_range(12, 14);
+
     // log::info!("Calendar:{:#?}\n", calendar);
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 enum TaskStatus {
     UNSCHEDULED,
     SCHEDULED,
@@ -80,7 +84,7 @@ pub enum CutOffType {
     CUTWHOLE,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum GoalType {
     FIXED,
     DAILY,
@@ -89,14 +93,14 @@ pub enum GoalType {
     YEARLY,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Slot {
     task_id: usize,
     begin: usize,
     end: usize,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Task {
     task_id: usize,
     goal_id: usize,
@@ -104,7 +108,7 @@ pub struct Task {
     task_status: TaskStatus,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Calendar {
     pub max_time_units: usize,
     pub time_unit_qualifier: String,
@@ -113,7 +117,7 @@ pub struct Calendar {
     pub slots: Vec<Slot>,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Goal {
     pub id: usize,
     pub title: String,
