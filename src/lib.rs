@@ -313,7 +313,7 @@ impl Calendar {
         // log::info!("Searching for new task to process...\n");
         let mut result: Option<usize> = None;
         let mut task_id_highest_scheduling_possibilities_prio: usize;
-        let mut highest_scheduling_possibilities_so_far: usize = 0;
+        let mut highest_scheduling_possibilities_so_far: usize;
         for (task_index, task) in self.tasks.iter().enumerate() {
             match task.task_status {
                 TaskStatus::SCHEDULED => {
