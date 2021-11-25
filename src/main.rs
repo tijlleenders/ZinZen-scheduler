@@ -17,7 +17,7 @@ fn main() {
 
     let goal2 = Goal {
         id: 2,
-        title: String::from("lunch meeting any day"),
+        title: String::from("imp daily goal"),
         estimated_duration: 1,
         effort_invested: 0,
         start: 0,
