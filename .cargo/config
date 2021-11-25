@@ -3,6 +3,3 @@ runner = 'wasm-bindgen-test-runner'
 
 [build]
 target = "x86_64-unknown-linux-gnu"
-
-[profile.dev]
-overflow-checks = false

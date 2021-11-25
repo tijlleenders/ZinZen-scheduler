@@ -332,7 +332,18 @@ impl Calendar {
                         "scheduling_possibilities before:{}\n",
                         scheduling_possibilities
                     );
-                    scheduling_possibilities += range - task.duration_to_schedule + 1;
+
+                    let num_to_add_option = range.checked_sub(task.duration_to_schedule + 1);
+                    match num_to_add_option {
+                        Some(num) => scheduling_possibilities += num,
+                        None => {
+                            #[cfg(not(target_arch = "wasm32"))]
+                            log::info!(
+                                "task duration cannot be subtracted from slot.end-slot.begin"
+                            )
+                        }
+                    }
+
                     #[cfg(not(target_arch = "wasm32"))]
                     log::info!(
                         "scheduling_possibilities after:{}\n",
