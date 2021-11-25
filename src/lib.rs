@@ -502,7 +502,7 @@ mod tests {
     use crate::Slot;
 
     fn init() {
-        // let _ = env_logger::builder().is_test(true).try_init();
+        let _ = env_logger::builder().is_test(true).try_init();
     }
 
     #[test]
@@ -620,7 +620,7 @@ mod tests {
         calendar.schedule();
 
         calendar.print_slots_for_range(12, 14);
-        // log::info!("Calendar:{:#?}\n", calendar);
+        log::info!("Calendar:{:#?}\n", calendar);
     }
 
     #[test]
