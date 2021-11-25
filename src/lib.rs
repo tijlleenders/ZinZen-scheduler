@@ -312,7 +312,7 @@ impl Calendar {
     fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
         // log::info!("Searching for new task to process...\n");
         let mut result: Option<usize> = None;
-        let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
+        let mut task_id_highest_scheduling_possibilities_prio: usize;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
         for (task_index, task) in self.tasks.iter().enumerate() {
             match task.task_status {
@@ -325,16 +325,19 @@ impl Calendar {
             for slot in self.slots.iter() {
                 if slot.task_id == task.task_id {
                     let range: usize = slot.end - slot.begin;
-                    // log::info!("range:{}\n", range);
-                    // log::info!(
-                    //     "scheduling_possibilities before:{}\n",
-                    //     scheduling_possibilities
-                    // );
+                    #[cfg(not(target_arch = "wasm32"))]
+                    log::info!("range:{}\n", range);
+                    #[cfg(not(target_arch = "wasm32"))]
+                    log::info!(
+                        "scheduling_possibilities before:{}\n",
+                        scheduling_possibilities
+                    );
                     scheduling_possibilities += range - task.duration_to_schedule + 1;
-                    // log::info!(
-                    //     "scheduling_possibilities after:{}\n",
-                    //     scheduling_possibilities
-                    // );
+                    #[cfg(not(target_arch = "wasm32"))]
+                    log::info!(
+                        "scheduling_possibilities after:{}\n",
+                        scheduling_possibilities
+                    );
                 }
             }
             if scheduling_possibilities > highest_scheduling_possibilities_so_far {
@@ -502,6 +505,7 @@ mod tests {
     use crate::Slot;
 
     fn init() {
+        #[cfg(not(target_arch = "wasm32"))]
         let _ = env_logger::builder().is_test(true).try_init();
     }
 
