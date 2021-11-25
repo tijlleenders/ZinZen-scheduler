@@ -149,7 +149,8 @@ impl Calendar {
     pub fn schedule(&mut self) -> () {
         self.load_tasks_and_slots_from_goals();
 
-        //log::info!("Calendar after loading:{:#?}\n", self);
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar after loading:{:#?}\n", self);
 
         loop {
             let unscheduled_task_id_with_highest_scheduling_possibilities: Option<usize> =
@@ -310,9 +311,10 @@ impl Calendar {
     }
 
     fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
-        // log::info!("Searching for new task to process...\n");
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Searching for new task to process...\n");
         let mut result: Option<usize> = None;
-        let mut task_id_highest_scheduling_possibilities_prio: usize;
+        let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
         for (task_index, task) in self.tasks.iter().enumerate() {
             match task.task_status {
@@ -352,10 +354,11 @@ impl Calendar {
                 }
             }
             if scheduling_possibilities > highest_scheduling_possibilities_so_far {
-                // log::info![
-                //     "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
-                //     task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
-                //     ];
+                #[cfg(not(target_arch = "wasm32"))]
+                log::info![
+                    "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
+                    task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
+                    ];
                 task_id_highest_scheduling_possibilities_prio = task_index;
                 highest_scheduling_possibilities_so_far = scheduling_possibilities;
                 result = Some(task_id_highest_scheduling_possibilities_prio)
@@ -669,6 +672,7 @@ mod tests {
         calendar.schedule();
 
         calendar.print_slots_for_range(12, 14);
+        #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar:{:#?}\n", calendar);
     }
 
