@@ -599,6 +599,8 @@ mod tests {
 
     #[test]
     fn possible_and_impossible_goal() {
+        init(); //init logging
+
         let goal = Goal {
             id: 1,
             title: String::from("daily goal"),
@@ -625,7 +627,7 @@ mod tests {
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
         calendar.add(goal2);
-        // log::info!("\nexpect Calendar with a goal\n");
+        log::info!("\nexpect Calendar with a goal\n");
         calendar.schedule();
         // log::info!("Calendar:{:#?}\n", calendar);
         calendar.print_slots_for_range(0, 42);
