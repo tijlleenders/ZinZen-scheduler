@@ -533,6 +533,43 @@ mod tests {
     }
 
     #[test]
+    fn find_unscheduled_task_id_with_highest_scheduling_possibilities() {
+        init(); //init logging
+
+        let goal = Goal {
+            id: 1,
+            title: String::from("daily goal"),
+            estimated_duration: 1,
+            effort_invested: 0,
+            start: 0,
+            finish: 168,
+            start_time: 12,
+            finish_time: 13,
+            goal_type: GoalType::DAILY,
+        };
+        let goal2 = Goal {
+            id: 2,
+            title: String::from("daily imp goal"),
+            estimated_duration: 1,
+            effort_invested: 0,
+            start: 0,
+            finish: 168,
+            start_time: 12,
+            finish_time: 13,
+            goal_type: GoalType::DAILY,
+        };
+
+        let mut calendar = Calendar::new(168, String::from("h"));
+        calendar.add(goal);
+        calendar.add(goal2);
+
+        assert_eq!(
+            Some(0),
+            calendar.find_unscheduled_task_id_with_highest_scheduling_possibilities()
+        );
+    }
+
+    #[test]
     fn add_goal_to_empty_calendar() {
         let goal = Goal::new();
         let mut calendar = Calendar::new(168, String::from("h"));
