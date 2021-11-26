@@ -158,7 +158,7 @@ impl Calendar {
 
             match unscheduled_task_id_with_highest_scheduling_possibilities {
                 Some(task_id_to_schedule) => {
-                    let least_overlap_interval: (usize, usize) =
+                    let least_overlap_interval: Option<(usize, usize)> =
                         self.find_least_overlap_interval_for_task(task_id_to_schedule);
                     //log::info!(
                     //     "least overlap for task_id {}:{}-{}\n",
@@ -166,11 +166,15 @@ impl Calendar {
                     //     least_overlap_interval.0,
                     //     least_overlap_interval.1
                     // );
-                    self.schedule_task(
-                        task_id_to_schedule,
-                        least_overlap_interval.0,
-                        least_overlap_interval.1,
-                    );
+                    match least_overlap_interval {
+                        None => {
+                            // remove all slots for task
+                            // set task as impossible
+                        }
+                        Some(interval) => {
+                            self.schedule_task(task_id_to_schedule, interval.0, interval.1);
+                        }
+                    }
                 }
                 None => break,
             }
@@ -263,10 +267,10 @@ impl Calendar {
         }
     }
 
-    fn find_least_overlap_interval_for_task(&self, task_id: usize) -> (usize, usize) {
+    fn find_least_overlap_interval_for_task(&self, task_id: usize) -> Option<(usize, usize)> {
         // log::info!("Finding least overlap interval for task_id:{}\n", task_id);
-        let mut lowest_overlap_so_far: usize = usize::MAX - 1;
-        let mut slot_begin_with_lowest_overlap: usize = 0;
+        let mut slot_with_lowest_overlap: Option<(usize, usize)> = None;
+        let mut lowest_overlap_so_far: Option<usize> = None;
         for slot in self.slots.iter() {
             if slot.task_id == task_id {
                 for slot_offset in
@@ -282,22 +286,30 @@ impl Calendar {
                     //     slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
                     //     overlap
                     // );
-                    if overlap == 1 {
-                        lowest_overlap_so_far = overlap;
-                        slot_begin_with_lowest_overlap = slot.begin + slot_offset;
-                        break;
-                    }
-                    if overlap < lowest_overlap_so_far {
-                        lowest_overlap_so_far = overlap;
-                        slot_begin_with_lowest_overlap = slot.begin + slot_offset;
+                    match lowest_overlap_so_far {
+                        None => {
+                            lowest_overlap_so_far = Some(overlap);
+                            slot_with_lowest_overlap = Some((
+                                slot.begin + slot_offset,
+                                slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
+                            ))
+                        }
+                        Some(lowest_overlap) => {
+                            if overlap > lowest_overlap {
+                                slot_with_lowest_overlap = Some((
+                                    slot.begin + slot_offset,
+                                    slot.begin
+                                        + slot_offset
+                                        + self.tasks[task_id].duration_to_schedule,
+                                ));
+                                lowest_overlap_so_far = Some(overlap);
+                            }
+                        }
                     }
                 }
             }
         }
-        (
-            slot_begin_with_lowest_overlap,
-            slot_begin_with_lowest_overlap + self.tasks[task_id].duration_to_schedule,
-        )
+        slot_with_lowest_overlap
     }
 
     fn find_overlap_number_for(&self, begin: usize, end: usize) -> usize {
@@ -665,7 +677,7 @@ mod tests {
             goal_type: GoalType::DAILY,
         };
         let goal2 = Goal {
-            id: 1,
+            id: 2,
             title: String::from("daily imp goal"),
             estimated_duration: 1,
             effort_invested: 0,
