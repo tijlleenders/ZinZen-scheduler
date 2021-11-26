@@ -313,8 +313,7 @@ impl Calendar {
     fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Searching for new task to process...\n");
-        let mut result: Option<usize> = None;
-        let mut task_id_highest_scheduling_possibilities_prio: usize = 0;
+        let mut task_id_highest_scheduling_possibilities_prio: Option<usize> = None;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
         for (task_index, task) in self.tasks.iter().enumerate() {
             match task.task_status {
@@ -356,15 +355,14 @@ impl Calendar {
             if scheduling_possibilities > highest_scheduling_possibilities_so_far {
                 #[cfg(not(target_arch = "wasm32"))]
                 log::info![
-                    "Found task {} with scheduling_possibilities {}...higher than previous task {} with {}\n",
+                    "Found task {} with scheduling_possibilities {}...higher than previous task {:#?} with {:#?}\n",
                     task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
                     ];
-                task_id_highest_scheduling_possibilities_prio = task_index;
+                task_id_highest_scheduling_possibilities_prio = Some(task_index);
                 highest_scheduling_possibilities_so_far = scheduling_possibilities;
-                result = Some(task_id_highest_scheduling_possibilities_prio)
             }
         }
-        result
+        task_id_highest_scheduling_possibilities_prio
     }
 
     fn load_tasks_and_slots_from_goals(&mut self) -> () {
@@ -562,6 +560,18 @@ mod tests {
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
         calendar.add(goal2);
+        calendar.load_tasks_and_slots_from_goals();
+
+        assert_eq!(0, calendar.slots[0].task_id);
+        assert_eq!(12, calendar.slots[0].begin);
+        assert_eq!(13, calendar.slots[0].end);
+
+        assert_eq!(13, calendar.slots[13].task_id);
+        assert_eq!(156, calendar.slots[13].begin);
+        assert_eq!(157, calendar.slots[13].end);
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
 
         assert_eq!(
             Some(0),
