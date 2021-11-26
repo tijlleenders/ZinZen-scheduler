@@ -1,0 +1,83 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'zinzen_scheduler'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=zinzen_scheduler"
+                ],
+                "filter": {
+                    "name": "zinzen_scheduler",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'zinzen_scheduler'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=zinzen_scheduler",
+                    "--package=zinzen_scheduler"
+                ],
+                "filter": {
+                    "name": "zinzen_scheduler",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'zinzen_scheduler'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=zinzen_scheduler",
+                    "--package=zinzen_scheduler"
+                ],
+                "filter": {
+                    "name": "zinzen_scheduler",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'wasm'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=wasm",
+                    "--package=zinzen_scheduler"
+                ],
+                "filter": {
+                    "name": "wasm",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
