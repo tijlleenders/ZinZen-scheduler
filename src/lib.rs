@@ -320,46 +320,55 @@ impl Calendar {
                 TaskStatus::SCHEDULED => {
                     continue;
                 }
-                TaskStatus::UNSCHEDULED => {}
-            }
-            let mut scheduling_possibilities: usize = 0;
-            for slot in self.slots.iter() {
-                if slot.task_id == task.task_id {
-                    let range: usize = slot.end - slot.begin;
-                    #[cfg(not(target_arch = "wasm32"))]
-                    log::info!("range:{}\n", range);
-                    #[cfg(not(target_arch = "wasm32"))]
-                    log::info!(
-                        "scheduling_possibilities before:{}\n",
-                        scheduling_possibilities
-                    );
+                TaskStatus::UNSCHEDULED => {
+                    let mut scheduling_possibilities: usize = 0;
+                    for slot in self.slots.iter() {
+                        if slot.task_id == task.task_id {
+                            let range: usize = slot.end - slot.begin;
 
-                    let num_to_add_option = range.checked_sub(task.duration_to_schedule + 1);
-                    match num_to_add_option {
-                        Some(num) => scheduling_possibilities += num,
-                        None => {
                             #[cfg(not(target_arch = "wasm32"))]
                             log::info!(
-                                "task duration cannot be subtracted from slot.end-slot.begin"
-                            )
+                                "scheduling_possibilities before:{}\n",
+                                scheduling_possibilities
+                            );
+
+                            let num_to_add_option = range.checked_sub(task.duration_to_schedule);
+                            match num_to_add_option {
+                                Some(num) => scheduling_possibilities += num,
+                                None => {
+                                    #[cfg(not(target_arch = "wasm32"))]
+                                    log::info!(
+                                        "task duration cannot be subtracted from slot.end-slot.begin"
+                                    )
+                                }
+                            }
+
+                            #[cfg(not(target_arch = "wasm32"))]
+                            log::info!(
+                                "scheduling_possibilities after:{}\n",
+                                scheduling_possibilities
+                            );
                         }
                     }
 
-                    #[cfg(not(target_arch = "wasm32"))]
-                    log::info!(
-                        "scheduling_possibilities after:{}\n",
-                        scheduling_possibilities
-                    );
+                    match task_id_highest_scheduling_possibilities_prio {
+                        Some(highest_num) => {
+                            if scheduling_possibilities > highest_num {
+                                #[cfg(not(target_arch = "wasm32"))]
+                                log::info![
+                                "Found task {} with scheduling_possibilities {}...higher than previous task {:#?} with {:#?}\n",
+                                task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
+                                ];
+                                task_id_highest_scheduling_possibilities_prio = Some(task_index);
+                                highest_scheduling_possibilities_so_far = scheduling_possibilities;
+                            }
+                        }
+                        None => {
+                            task_id_highest_scheduling_possibilities_prio = Some(task_index);
+                            highest_scheduling_possibilities_so_far = scheduling_possibilities;
+                        }
+                    }
                 }
-            }
-            if scheduling_possibilities > highest_scheduling_possibilities_so_far {
-                #[cfg(not(target_arch = "wasm32"))]
-                log::info![
-                    "Found task {} with scheduling_possibilities {}...higher than previous task {:#?} with {:#?}\n",
-                    task_index, scheduling_possibilities, task_id_highest_scheduling_possibilities_prio, highest_scheduling_possibilities_so_far
-                    ];
-                task_id_highest_scheduling_possibilities_prio = Some(task_index);
-                highest_scheduling_possibilities_so_far = scheduling_possibilities;
             }
         }
         task_id_highest_scheduling_possibilities_prio
