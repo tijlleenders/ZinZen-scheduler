@@ -512,11 +512,7 @@ impl FromStr for Goal {
 
 #[cfg(test)]
 mod tests {
-    use crate::Calendar;
-    use crate::CutOffType;
-    use crate::Goal;
-    use crate::GoalType;
-    use crate::Slot;
+    use super::*;
 
     fn init() {
         #[cfg(not(target_arch = "wasm32"))]
