@@ -74,6 +74,7 @@ pub fn fixed_and_daily_goal_combined() -> String {
 enum TaskStatus {
     UNSCHEDULED,
     SCHEDULED,
+    IMPOSSIBLE,
 }
 
 #[derive(Debug, PartialEq)]
@@ -168,8 +169,11 @@ impl Calendar {
                     // );
                     match least_overlap_interval {
                         None => {
-                            // remove all slots for task
-                            // set task as impossible
+                            self.slots.retain(|slot| {
+                                let delete = { slot.task_id == task_id_to_schedule };
+                                !delete
+                            });
+                            self.tasks[task_id_to_schedule].task_status = TaskStatus::IMPOSSIBLE;
                         }
                         Some(interval) => {
                             self.schedule_task(task_id_to_schedule, interval.0, interval.1);
@@ -197,30 +201,38 @@ impl Calendar {
             let cut_off_type = Calendar::find_cut_off_type(&slot, begin, end);
             match cut_off_type {
                 CutOffType::CUTSTART => {
-                    new_slots.push(Slot {
-                        task_id: slot.task_id,
-                        begin: end,
-                        end: slot.end,
-                    });
+                    if end != slot.end {
+                        new_slots.push(Slot {
+                            task_id: slot.task_id,
+                            begin: end,
+                            end: slot.end,
+                        });
+                    }
                 }
                 CutOffType::CUTMIDDLE => {
-                    new_slots.push(Slot {
-                        task_id: slot.task_id,
-                        begin: slot.begin,
-                        end: begin,
-                    });
-                    new_slots.push(Slot {
-                        task_id: slot.task_id,
-                        begin: end,
-                        end: slot.end,
-                    });
+                    if slot.begin != begin {
+                        new_slots.push(Slot {
+                            task_id: slot.task_id,
+                            begin: slot.begin,
+                            end: begin,
+                        });
+                    }
+                    if end != slot.end {
+                        new_slots.push(Slot {
+                            task_id: slot.task_id,
+                            begin: end,
+                            end: slot.end,
+                        });
+                    }
                 }
                 CutOffType::CUTEND => {
-                    new_slots.push(Slot {
-                        task_id: slot.task_id,
-                        begin: slot.begin,
-                        end: begin,
-                    });
+                    if slot.begin != begin {
+                        new_slots.push(Slot {
+                            task_id: slot.task_id,
+                            begin: slot.begin,
+                            end: begin,
+                        });
+                    }
                 }
                 CutOffType::NOCUT => {
                     new_slots.push(Slot {
@@ -268,24 +280,34 @@ impl Calendar {
     }
 
     fn find_least_overlap_interval_for_task(&self, task_id: usize) -> Option<(usize, usize)> {
-        // log::info!("Finding least overlap interval for task_id:{}\n", task_id);
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Finding least overlap interval for task_id:{}\n", task_id);
         let mut slot_with_lowest_overlap: Option<(usize, usize)> = None;
         let mut lowest_overlap_so_far: Option<usize> = None;
         for slot in self.slots.iter() {
             if slot.task_id == task_id {
-                for slot_offset in
-                    0..slot.end - slot.begin - self.tasks[task_id].duration_to_schedule + 1
-                {
+                let num_windows_in_slot = slot
+                    .end
+                    .checked_sub(slot.begin - self.tasks[task_id].duration_to_schedule + 1);
+                #[cfg(not(target_arch = "wasm32"))]
+                log::info!("num_windows_in_slot:{:#?}\n", num_windows_in_slot);
+                match num_windows_in_slot {
+                    None => continue,
+                    Some(_) => {}
+                }
+
+                for slot_offset in 0..num_windows_in_slot.unwrap() {
                     let overlap = self.find_overlap_number_for(
                         slot.begin + slot_offset,
                         slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
                     );
-                    // log::info!(
-                    //     "# overlaps for:{}-{}:{}\n",
-                    //     slot.begin + slot_offset,
-                    //     slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
-                    //     overlap
-                    // );
+                    #[cfg(not(target_arch = "wasm32"))]
+                    log::info!(
+                        "# overlaps for:{}-{}:{}\n",
+                        slot.begin + slot_offset,
+                        slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
+                        overlap
+                    );
                     match lowest_overlap_so_far {
                         None => {
                             lowest_overlap_so_far = Some(overlap);
@@ -329,6 +351,9 @@ impl Calendar {
         let mut highest_scheduling_possibilities_so_far: usize = 0;
         for (task_index, task) in self.tasks.iter().enumerate() {
             match task.task_status {
+                TaskStatus::IMPOSSIBLE => {
+                    continue;
+                }
                 TaskStatus::SCHEDULED => {
                     continue;
                 }
@@ -691,9 +716,11 @@ mod tests {
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
         calendar.add(goal2);
-        log::info!("\nexpect Calendar with a goal\n");
         calendar.schedule();
-        // log::info!("Calendar:{:#?}\n", calendar);
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
+
         calendar.print_slots_for_range(0, 42);
     }
 
