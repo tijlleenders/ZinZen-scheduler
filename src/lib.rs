@@ -558,13 +558,14 @@ impl FromStr for Goal {
 mod tests {
     use super::*;
 
-    fn init() {
+    fn init_env_logger() {
         #[cfg(not(target_arch = "wasm32"))]
         let _ = env_logger::builder().is_test(true).try_init();
     }
 
     #[test]
     fn create_and_print_calendar() {
+        init_env_logger();
         let calendar = Calendar {
             max_time_units: 168,
             time_unit_qualifier: String::from("h"),
@@ -572,13 +573,13 @@ mod tests {
             tasks: Vec::new(),
             slots: Vec::new(),
         };
-        // log::info!("\nexpect Calendar with a goal\n");
-        // log::info!("Calendar:{:#?}\n", calendar);
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
     }
 
     #[test]
     fn find_unscheduled_task_id_with_highest_scheduling_possibilities() {
-        init(); //init logging
+        init_env_logger();
 
         let goal = Goal {
             id: 1,
@@ -627,6 +628,7 @@ mod tests {
 
     #[test]
     fn add_goal_to_empty_calendar() {
+        init_env_logger();
         let goal = Goal::new();
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
@@ -636,6 +638,7 @@ mod tests {
 
     #[test]
     fn add_goal_to_empty_calendar_and_schedule() {
+        init_env_logger();
         let goal = Goal::new();
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
@@ -647,6 +650,7 @@ mod tests {
 
     #[test]
     fn add_daily_goal_to_empty_calendar_and_schedule() {
+        init_env_logger();
         let goal = Goal {
             id: 1,
             title: String::from("daily goal"),
@@ -667,6 +671,7 @@ mod tests {
 
     #[test]
     fn add_daily_goal_to_empty_calendar_and_schedule_and_query() {
+        init_env_logger();
         let goal = Goal {
             id: 1,
             title: String::from("daily goal"),
@@ -688,7 +693,7 @@ mod tests {
 
     #[test]
     fn possible_and_impossible_goal() {
-        init(); //init logging
+        init_env_logger();
 
         let goal = Goal {
             id: 1,
@@ -726,10 +731,11 @@ mod tests {
 
     #[test]
     fn fixed_and_daily_goal_combined() {
+        init_env_logger();
         // RUST_LOG=info cargo test --package zinzen_scheduler --lib -- tests::fixed_and_daily_goal_combined --exact --nocapture
         // RUST_LOG=error cargo test --package zinzen_scheduler --lib -- tests::fixed_and_daily_goal_combined --exact --nocapture
 
-        init(); //init logging
+        init_env_logger();
 
         let mut calendar = Calendar::new(720, String::from("h"));
 
@@ -771,6 +777,7 @@ mod tests {
 
     #[test]
     fn test_find_cut_off_type() {
+        init_env_logger();
         let slot = Slot {
             task_id: 0,
             begin: 10,
