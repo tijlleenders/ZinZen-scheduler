@@ -183,6 +183,8 @@ impl Calendar {
                 None => break,
             }
         }
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar after scheduling:{:#?}\n", self);
     }
 
     fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
@@ -564,7 +566,7 @@ mod tests {
     }
 
     #[test]
-    fn calendar_with_default_goal() {
+    fn calendar_with_default_goal_unscheduled() {
         init_env_logger();
 
         let calendar = Calendar {
@@ -649,15 +651,37 @@ mod tests {
     }
 
     #[test]
-    fn add_goal_to_empty_calendar_and_schedule() {
+    fn calendar_with_default_goal_scheduled() {
         init_env_logger();
         let goal = Goal::new();
         let mut calendar = Calendar::new(168, String::from("h"));
         calendar.add(goal);
-        // log::info!("\nexpect Calendar with a goal\n");
-        // log::info!("Calendar:{:#?}\n", calendar);
         calendar.schedule();
-        // log::info!("Calendar:{:#?}\n", calendar);
+
+        assert_eq!(168, calendar.max_time_units);
+        assert_eq!("h", calendar.time_unit_qualifier);
+        assert_eq!(1, calendar.goals[0].id);
+        assert_eq!("test", calendar.goals[0].title);
+        assert_eq!(1, calendar.goals[0].estimated_duration);
+        assert_eq!(0, calendar.goals[0].effort_invested);
+        assert_eq!(0, calendar.goals[0].start);
+        assert_eq!(usize::MAX, calendar.goals[0].finish);
+        assert_eq!(0, calendar.goals[0].start_time);
+        assert_eq!(24, calendar.goals[0].finish_time);
+        assert_eq!(GoalType::FIXED, calendar.goals[0].goal_type);
+        let t_vec = vec![Task {
+            task_id: 0,
+            goal_id: 1,
+            duration_to_schedule: 1,
+            task_status: TaskStatus::SCHEDULED,
+        }];
+        assert_eq!(t_vec, calendar.tasks);
+        let s_vec: Vec<Slot> = vec![Slot {
+            task_id: 0,
+            begin: 0,
+            end: 1,
+        }];
+        assert_eq!(s_vec, calendar.slots);
     }
 
     #[test]
