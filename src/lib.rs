@@ -288,7 +288,7 @@ impl Calendar {
             if slot.task_id == task_id {
                 let num_windows_in_slot = slot
                     .end
-                    .checked_sub(slot.begin - self.tasks[task_id].duration_to_schedule + 1);
+                    .checked_sub(slot.begin + 1 - self.tasks[task_id].duration_to_schedule);
                 #[cfg(not(target_arch = "wasm32"))]
                 log::info!("num_windows_in_slot:{:#?}\n", num_windows_in_slot);
                 match num_windows_in_slot {
@@ -641,16 +641,11 @@ mod tests {
             Some(0),
             calendar.find_unscheduled_task_id_with_highest_scheduling_possibilities()
         );
-    }
-
-    #[test]
-    fn add_goal_to_empty_calendar() {
-        init_env_logger();
-        let goal = Goal::new();
-        let mut calendar = Calendar::new(168, String::from("h"));
-        calendar.add(goal);
-        // log::info!("\nexpect Calendar with a goal\n");
-        // log::info!("Calendar:{:#?}\n", calendar);
+        calendar.schedule();
+        assert_eq!(
+            None,
+            calendar.find_unscheduled_task_id_with_highest_scheduling_possibilities()
+        );
     }
 
     #[test]
