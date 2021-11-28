@@ -70,7 +70,7 @@ pub fn fixed_and_daily_goal_combined() -> String {
     serialized_calendar
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 enum TaskStatus {
     UNSCHEDULED,
     SCHEDULED,
@@ -86,7 +86,7 @@ pub enum CutOffType {
     CUTWHOLE,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum GoalType {
     FIXED,
     DAILY,
@@ -95,14 +95,14 @@ pub enum GoalType {
     YEARLY,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Slot {
     task_id: usize,
     begin: usize,
     end: usize,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Task {
     task_id: usize,
     goal_id: usize,
@@ -110,7 +110,7 @@ pub struct Task {
     task_status: TaskStatus,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Calendar {
     pub max_time_units: usize,
     pub time_unit_qualifier: String,
@@ -119,7 +119,7 @@ pub struct Calendar {
     pub slots: Vec<Slot>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Goal {
     pub id: usize,
     pub title: String,
@@ -500,9 +500,9 @@ impl Goal {
             estimated_duration: 1,
             effort_invested: 0,
             start: 0,
-            finish: 24,
-            start_time: 12,
-            finish_time: 18,
+            finish: usize::MAX,
+            start_time: 0,
+            finish_time: 24,
             goal_type: GoalType::FIXED,
         }
     }
@@ -564,8 +564,9 @@ mod tests {
     }
 
     #[test]
-    fn create_and_print_calendar() {
+    fn calendar_with_default_goal() {
         init_env_logger();
+
         let calendar = Calendar {
             max_time_units: 168,
             time_unit_qualifier: String::from("h"),
@@ -575,6 +576,22 @@ mod tests {
         };
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar:{:#?}\n", calendar);
+
+        assert_eq!(168, calendar.max_time_units);
+        assert_eq!("h", calendar.time_unit_qualifier);
+        assert_eq!(1, calendar.goals[0].id);
+        assert_eq!("test", calendar.goals[0].title);
+        assert_eq!(1, calendar.goals[0].estimated_duration);
+        assert_eq!(0, calendar.goals[0].effort_invested);
+        assert_eq!(0, calendar.goals[0].start);
+        assert_eq!(usize::MAX, calendar.goals[0].finish);
+        assert_eq!(0, calendar.goals[0].start_time);
+        assert_eq!(24, calendar.goals[0].finish_time);
+        assert_eq!(GoalType::FIXED, calendar.goals[0].goal_type);
+        let t_vec: Vec<Task> = Vec::new();
+        assert_eq!(t_vec, calendar.tasks);
+        let s_vec: Vec<Slot> = Vec::new();
+        assert_eq!(s_vec, calendar.slots);
     }
 
     #[test]
