@@ -23,6 +23,18 @@ pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
+pub fn load_calendar(val: &JsValue) -> String {
+    let goal: Goal = val.into_serde().unwrap();
+    console::log_2(&"Called load_calendar with:".into(), &val);
+    let mut calendar = Calendar::new(24, String::from("h"));
+    calendar.add(goal);
+    calendar.schedule();
+    let serialized_calendar = serde_json::to_string(&calendar.slots).unwrap();
+    serialized_calendar
+}
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
 pub fn fixed_and_daily_goal_combined() -> String {
     console::log_1(&"Hello using web-sys".into());
 
