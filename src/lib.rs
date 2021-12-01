@@ -30,55 +30,6 @@ pub fn load_calendar(val: &JsValue) -> JsValue {
     JsValue::from_serde(&calendar).unwrap()
 }
 
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen]
-pub fn fixed_and_daily_goal_combined() -> String {
-    console::log_1(&"Hello using web-sys".into());
-
-    let js: JsValue = 4.into();
-    console::log_2(&"Logging arbitrary values looks like".into(), &js);
-
-    let mut calendar = Calendar::new(720, String::from("h"));
-
-    let goal = Goal {
-        id: 1,
-        title: String::from("daily goal"),
-        estimated_duration: 1,
-        effort_invested: 0,
-        start: 0,
-        finish: 8760, //one year
-        start_time: 12,
-        finish_time: 18,
-        goal_type: GoalType::DAILY,
-    };
-
-    let goal2 = Goal {
-        id: 2,
-        title: String::from("lunch meeting any day"),
-        estimated_duration: 1,
-        effort_invested: 0,
-        start: 0,
-        finish: 168,
-        start_time: 12,
-        finish_time: 13,
-        goal_type: GoalType::FIXED,
-    };
-    calendar.add(goal);
-    calendar.add(goal2);
-
-    // log::info!("Calendar:{:#?}\n", calendar);
-
-    // log::info!("\nexpect Calendar with two goals not overlapping\n");
-    calendar.schedule();
-
-    let serialized_calendar = serde_json::to_string(&calendar).unwrap();
-    // console::log_1(&serialized_calendar.into());
-    // calendar.print_slots_for_range(12, 14);
-
-    // log::info!("Calendar:{:#?}\n", calendar);
-    serialized_calendar
-}
-
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 enum TaskStatus {
     UNSCHEDULED,
