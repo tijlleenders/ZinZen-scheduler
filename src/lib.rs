@@ -24,12 +24,10 @@ pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub fn load_calendar(val: &JsValue) -> String {
-    let mut goals: Goals = val.into_serde().unwrap();
+    let mut calendar: Calendar = val.into_serde().unwrap();
     console::log_2(&"Called load_calendar with:".into(), &val);
-    let mut calendar = Calendar::new(24, String::from("h"));
-    calendar.add(goals.goals.remove(0));
     calendar.schedule();
-    let serialized_calendar = serde_json::to_string(&calendar.slots).unwrap();
+    let serialized_calendar = serde_json::to_string(&calendar.slots[0..30]).unwrap();
     serialized_calendar
 }
 
@@ -142,11 +140,6 @@ pub struct Goal {
     pub start_time: u8,
     pub finish_time: u8,
     pub goal_type: GoalType,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub struct Goals {
-    goals: Vec<Goal>,
 }
 
 impl Calendar {
