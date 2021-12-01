@@ -23,12 +23,11 @@ pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub fn load_calendar(val: &JsValue) -> String {
+pub fn load_calendar(val: &JsValue) -> JsValue {
     let mut calendar: Calendar = val.into_serde().unwrap();
     console::log_2(&"Called load_calendar with:".into(), &val);
     calendar.schedule();
-    let serialized_calendar = serde_json::to_string(&calendar.slots[0..30]).unwrap();
-    serialized_calendar
+    JsValue::from_serde(&calendar).unwrap()
 }
 
 #[cfg(target_arch = "wasm32")]
