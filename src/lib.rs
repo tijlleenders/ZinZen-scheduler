@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize}; // consider https://crates.io/crates/serde-wasm-bindgen
+use std::cmp;
 use std::str::FromStr;
 use std::{fmt, usize};
 
@@ -87,8 +88,8 @@ pub struct Goal {
     pub effort_invested: usize,
     pub start: usize,
     pub finish: usize,
-    pub start_time: u8,
-    pub finish_time: u8,
+    pub start_time: usize,
+    pub finish_time: usize,
     pub goal_type: GoalType,
 }
 
@@ -148,9 +149,27 @@ impl Calendar {
     }
 
     fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
-        //log::info!("Scheduling task_id {}.\n", task_id);
+        log::info!("Scheduling task_id {}.\n", task_id);
 
         //Todo: if end > max(0, goal finish - 24) + finish_time remove all and mark impossible
+        let task_option = self.tasks.iter().find(|&task| task.task_id == task_id);
+        let task = task_option.expect("task not found");
+
+        let goal_option = self.goals.iter().find(|&goal| goal.id == task.goal_id);
+        let goal = goal_option.expect("goal not found");
+        log::info!("goal {:#?}.\n", goal);
+
+        let due = cmp::max(0, goal.finish - 24 + goal.finish_time);
+        log::info!("due {}.\n", due);
+        log::info!("end {}.\n", end);
+        if due < end {
+            self.slots.retain(|slot| {
+                let delete = { slot.task_id == task_id };
+                !delete
+            });
+            self.tasks[task_id].task_status = TaskStatus::IMPOSSIBLE;
+            return;
+        }
 
         //Todo: only remove all slots if duration to be scheduled has been exhausted
         self.slots.retain(|slot| {
