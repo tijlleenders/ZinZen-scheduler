@@ -149,6 +149,7 @@ impl Calendar {
     }
 
     fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
+        #[cfg(not(target_arch = "wasm32"))]
         log::info!("Scheduling task_id {}.\n", task_id);
 
         //Todo: if end > max(0, goal finish - 24) + finish_time remove all and mark impossible
@@ -157,11 +158,15 @@ impl Calendar {
 
         let goal_option = self.goals.iter().find(|&goal| goal.id == task.goal_id);
         let goal = goal_option.expect("goal not found");
+        #[cfg(not(target_arch = "wasm32"))]
         log::info!("goal {:#?}.\n", goal);
 
         let due = cmp::max(0, goal.finish - 24 + goal.finish_time);
-        log::info!("due {}.\n", due);
-        log::info!("end {}.\n", end);
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            log::info!("due {}.\n", due);
+            log::info!("end {}.\n", end);
+        }
         if due < end {
             self.slots.retain(|slot| {
                 let delete = { slot.task_id == task_id };
