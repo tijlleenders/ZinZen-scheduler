@@ -152,7 +152,7 @@ impl Calendar {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Scheduling task_id {}.\n", task_id);
 
-        //Todo: if end > max(0, goal finish - 24) + finish_time remove all and mark impossible
+        //Todo: check if initial slot generation respects due date_time
         let task_option = self.tasks.iter().find(|&task| task.task_id == task_id);
         let task = task_option.expect("task not found");
 
