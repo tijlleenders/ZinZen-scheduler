@@ -711,7 +711,7 @@ mod tests {
             finish: 168,
             start_time: 12,
             finish_time: 13,
-            goal_type: GoalType::DAILY,
+            goal_type: GoalType::FIXED,
         };
 
         let mut calendar = Calendar::new(168, String::from("h"));
@@ -723,6 +723,44 @@ mod tests {
         log::info!("Calendar:{:#?}\n", calendar);
 
         calendar.print_slots_for_range(0, 42);
+    }
+
+    #[test]
+    fn possible_and_impossible_goal2() {
+        init_env_logger();
+
+        let goal = Goal {
+            id: 1,
+            title: String::from("daily goal"),
+            estimated_duration: 1,
+            effort_invested: 0,
+            start: 0,
+            finish: 168,
+            start_time: 12,
+            finish_time: 13,
+            goal_type: GoalType::DAILY,
+        };
+        let goal2 = Goal {
+            id: 2,
+            title: String::from("daily imp goal"),
+            estimated_duration: 3,
+            effort_invested: 0,
+            start: 0,
+            finish: 24,
+            start_time: 12,
+            finish_time: 15,
+            goal_type: GoalType::FIXED,
+        };
+
+        let mut calendar = Calendar::new(168, String::from("h"));
+        calendar.add(goal);
+        calendar.add(goal2);
+        calendar.schedule();
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
+
+        assert_eq!(TaskStatus::IMPOSSIBLE, calendar.tasks[7].task_status);
     }
 
     #[test]
