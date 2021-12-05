@@ -150,6 +150,8 @@ impl Calendar {
     fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
         //log::info!("Scheduling task_id {}.\n", task_id);
 
+        //Todo: if end > max(0, goal finish - 24) + finish_time remove all and mark impossible
+
         //Todo: only remove all slots if duration to be scheduled has been exhausted
         self.slots.retain(|slot| {
             let delete = { slot.task_id == task_id };
