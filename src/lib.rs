@@ -89,7 +89,7 @@ pub struct Goal {
     pub start: usize,
     pub finish: usize,
     pub start_time: usize,
-    pub finish_time: usize,
+    pub finish_time: Option<usize>,
     pub goal_type: GoalType,
 }
 
@@ -166,7 +166,15 @@ impl Calendar {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("goal {:#?}.\n", goal);
 
-        let due = cmp::max(0, goal.finish - 24 + goal.finish_time);
+        let mut due: usize = 0;
+        match goal.finish_time {
+            Some(finish_time) => {
+                due = cmp::max(0, goal.finish - 24 + finish_time);
+            }
+            None => {
+                due = goal.finish;
+            }
+        }
         #[cfg(not(target_arch = "wasm32"))]
         {
             log::info!("due {}.\n", due);
@@ -419,12 +427,24 @@ impl Calendar {
                     };
                     // log::info!("Task:{:#?}\n", task);
                     self.tasks.push(task);
-                    let slot = Slot {
-                        begin: goal.start + goal.start_time,
-                        end: goal.start + goal.finish_time,
-                        task_id: current_task_counter,
-                    };
-                    self.slots.push(slot);
+                    match goal.finish_time {
+                        Some(finish_time) => {
+                            let slot = Slot {
+                                begin: goal.start + goal.start_time,
+                                end: goal.start + finish_time,
+                                task_id: current_task_counter,
+                            };
+                            self.slots.push(slot);
+                        }
+                        None => {
+                            let slot = Slot {
+                                begin: goal.start + goal.start_time,
+                                end: goal.finish,
+                                task_id: current_task_counter,
+                            };
+                            self.slots.push(slot);
+                        }
+                    }
                 }
 
                 GoalType::DAILY => {
@@ -437,13 +457,25 @@ impl Calendar {
                             task_id: current_task_counter,
                             task_status: TaskStatus::UNSCHEDULED,
                         };
+                        match goal.finish_time {
+                            Some(finish_time) => {
+                                let slot = Slot {
+                                    begin: day_count * 24 + goal.start_time,
+                                    end: day_count * 24 + finish_time,
+                                    task_id: current_task_counter,
+                                };
+                                self.slots.push(slot);
+                            }
+                            None => {
+                                let slot = Slot {
+                                    begin: day_count * 24 + goal.start_time,
+                                    end: day_count * 24 + 23 + &task.duration_to_schedule,
+                                    task_id: current_task_counter,
+                                };
+                                self.slots.push(slot);
+                            }
+                        }
                         self.tasks.push(task);
-                        let slot = Slot {
-                            begin: day_count * 24 + goal.start_time,
-                            end: day_count * 24 + goal.finish_time,
-                            task_id: current_task_counter,
-                        };
-                        self.slots.push(slot);
                         day_count += 1;
                     }
                 }
@@ -496,7 +528,7 @@ impl Goal {
             start: 0,
             finish: usize::MAX,
             start_time: 0,
-            finish_time: 24,
+            finish_time: Some(24),
             goal_type: GoalType::FIXED,
         }
     }
@@ -522,7 +554,7 @@ impl Goal {
             start: 0,
             finish: 24,
             start_time: 12,
-            finish_time: 18,
+            finish_time: Some(18),
             goal_type: GoalType::FIXED,
         }
     }
@@ -541,7 +573,7 @@ impl FromStr for Goal {
                 start: 0,
                 finish: 24,
                 start_time: 12,
-                finish_time: 18,
+                finish_time: Some(18),
                 goal_type: GoalType::FIXED,
             }),
         }
@@ -580,7 +612,7 @@ mod tests {
         assert_eq!(0, calendar.goals[0].start);
         assert_eq!(usize::MAX, calendar.goals[0].finish);
         assert_eq!(0, calendar.goals[0].start_time);
-        assert_eq!(24, calendar.goals[0].finish_time);
+        assert_eq!(24, calendar.goals[0].finish_time.unwrap());
         assert_eq!(GoalType::FIXED, calendar.goals[0].goal_type);
         let t_vec: Vec<Task> = Vec::new();
         assert_eq!(t_vec, calendar.tasks);
@@ -600,7 +632,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 13,
+            finish_time: Some(13),
             goal_type: GoalType::DAILY,
         };
         let goal2 = Goal {
@@ -611,7 +643,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 13,
+            finish_time: Some(13),
             goal_type: GoalType::DAILY,
         };
 
@@ -654,7 +686,7 @@ mod tests {
             start: 0,
             finish: 24,
             start_time: 0,
-            finish_time: 23,
+            finish_time: Some(23),
             goal_type: GoalType::FIXED,
         };
 
@@ -677,7 +709,8 @@ mod tests {
             effort_invested: 0,
             start: 0,
             finish: 720,
-            start_time: 0,
+            finish_time: None,
+            start_time: 21,
             goal_type: GoalType::DAILY,
         };
 
@@ -701,7 +734,7 @@ mod tests {
             start: 0,
             finish: 24,
             start_time: 0,
-            finish_time: 23,
+            finish_time: Some(23),
             goal_type: GoalType::FIXED,
         };
         let goal2 = Goal {
@@ -712,7 +745,7 @@ mod tests {
             start: 0,
             finish: 24,
             start_time: 2,
-            finish_time: 5,
+            finish_time: Some(5),
             goal_type: GoalType::FIXED,
         };
 
@@ -756,7 +789,7 @@ mod tests {
         assert_eq!(0, calendar.goals[0].start);
         assert_eq!(usize::MAX, calendar.goals[0].finish);
         assert_eq!(0, calendar.goals[0].start_time);
-        assert_eq!(24, calendar.goals[0].finish_time);
+        assert_eq!(24, calendar.goals[0].finish_time.unwrap());
         assert_eq!(GoalType::FIXED, calendar.goals[0].goal_type);
         let t_vec = vec![Task {
             task_id: 0,
@@ -784,7 +817,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 18,
+            finish_time: Some(18),
             goal_type: GoalType::DAILY,
         };
         let mut calendar = Calendar::new(168, String::from("h"));
@@ -805,7 +838,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 18,
+            finish_time: Some(18),
             goal_type: GoalType::DAILY,
         };
         let mut calendar = Calendar::new(168, String::from("h"));
@@ -828,7 +861,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 13,
+            finish_time: Some(13),
             goal_type: GoalType::DAILY,
         };
         let goal2 = Goal {
@@ -839,7 +872,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 13,
+            finish_time: Some(13),
             goal_type: GoalType::FIXED,
         };
 
@@ -866,7 +899,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 13,
+            finish_time: Some(13),
             goal_type: GoalType::DAILY,
         };
         let goal2 = Goal {
@@ -877,7 +910,7 @@ mod tests {
             start: 0,
             finish: 24,
             start_time: 12,
-            finish_time: 15,
+            finish_time: Some(15),
             goal_type: GoalType::FIXED,
         };
 
@@ -910,7 +943,7 @@ mod tests {
             start: 0,
             finish: 8760, //one year
             start_time: 12,
-            finish_time: 18,
+            finish_time: Some(18),
             goal_type: GoalType::DAILY,
         };
 
@@ -922,7 +955,7 @@ mod tests {
             start: 0,
             finish: 168,
             start_time: 12,
-            finish_time: 13,
+            finish_time: Some(13),
             goal_type: GoalType::FIXED,
         };
         calendar.add(goal);

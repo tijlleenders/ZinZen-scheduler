@@ -11,7 +11,7 @@ fn main() {
         start: 0,
         finish: 8760, //one year
         start_time: 12,
-        finish_time: 13,
+        finish_time: Some(13),
         goal_type: GoalType::DAILY,
     };
 
@@ -23,7 +23,7 @@ fn main() {
         start: 0,
         finish: 168,
         start_time: 12,
-        finish_time: 13,
+        finish_time: Some(13),
         goal_type: GoalType::DAILY,
     };
     calendar.add(goal);
