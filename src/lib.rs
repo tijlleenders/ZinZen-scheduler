@@ -114,6 +114,11 @@ impl Calendar {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar after loading:{:#?}\n", self);
 
+        #[cfg(target_arch = "wasm32")]
+        let temp = JsValue::from_serde(&self).unwrap();
+        #[cfg(target_arch = "wasm32")]
+        console::log_2(&"Calendar after load:".into(), &temp);
+
         loop {
             let unscheduled_task_id_with_highest_scheduling_possibilities: Option<usize> =
                 self.find_unscheduled_task_id_with_highest_scheduling_possibilities();
@@ -409,15 +414,15 @@ impl Calendar {
                     let task = Task {
                         goal_id: goal.id,
                         duration_to_schedule: goal.estimated_duration - goal.effort_invested,
-                        task_id: current_task_counter as usize,
+                        task_id: current_task_counter,
                         task_status: TaskStatus::UNSCHEDULED,
                     };
                     // log::info!("Task:{:#?}\n", task);
                     self.tasks.push(task);
                     let slot = Slot {
-                        begin: goal.start as usize + goal.start_time as usize,
-                        end: goal.start as usize + goal.finish_time as usize,
-                        task_id: current_task_counter as usize,
+                        begin: goal.start + goal.start_time,
+                        end: goal.start + goal.finish_time,
+                        task_id: current_task_counter,
                     };
                     self.slots.push(slot);
                 }
@@ -429,14 +434,14 @@ impl Calendar {
                         let task = Task {
                             goal_id: goal.id,
                             duration_to_schedule: goal.estimated_duration - goal.effort_invested,
-                            task_id: current_task_counter as usize,
+                            task_id: current_task_counter,
                             task_status: TaskStatus::UNSCHEDULED,
                         };
                         self.tasks.push(task);
                         let slot = Slot {
-                            begin: day_count * 24 + goal.start_time as usize,
-                            end: day_count * 24 + goal.finish_time as usize,
-                            task_id: current_task_counter as usize,
+                            begin: day_count * 24 + goal.start_time,
+                            end: day_count * 24 + goal.finish_time,
+                            task_id: current_task_counter,
                         };
                         self.slots.push(slot);
                         day_count += 1;
@@ -673,7 +678,6 @@ mod tests {
             start: 0,
             finish: 720,
             start_time: 0,
-            finish_time: 24,
             goal_type: GoalType::DAILY,
         };
 
