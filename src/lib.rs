@@ -695,6 +695,20 @@ mod tests {
 
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar:{:#?}\n", calendar);
+
+        let s_vec: Vec<Slot> = vec![
+            Slot {
+                task_id: 0,
+                begin: 5,
+                end: 11,
+            },
+            Slot {
+                task_id: 1,
+                begin: 2,
+                end: 5,
+            },
+        ];
+        assert_eq!(s_vec, calendar.slots);
     }
 
     #[test]
