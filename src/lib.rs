@@ -639,6 +639,30 @@ mod tests {
     }
 
     #[test]
+    fn simple_first_only_duration_goal() {
+        init_env_logger();
+
+        let goal = Goal {
+            id: 1,
+            title: String::from("fixed goal 6h"),
+            estimated_duration: 6,
+            effort_invested: 0,
+            start: 0,
+            finish: 24,
+            start_time: 0,
+            finish_time: 23,
+            goal_type: GoalType::FIXED,
+        };
+
+        let mut calendar = Calendar::new(168, String::from("h"));
+        calendar.add(goal);
+        calendar.schedule();
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
+    }
+
+    #[test]
     fn calendar_with_default_goal_scheduled() {
         init_env_logger();
         let goal = Goal::new();
