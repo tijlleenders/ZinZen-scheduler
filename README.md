@@ -1,0 +1,17 @@
+## Welcome friend!  
+
+If you like Rust and scheduling algorithms you've come to the right place :)  
+We can talk big-O, add features or optimize hot loops.  
+
+Please contact me tijl.leenders@gmail.com or open an issue.
+<br />
+<br />
+
+## Legal stuff
+
+&copy;2020-now ZinZen&reg;  
+
+This code is licensed under AGPLv3 but this license does not grant permission to use the trade names, trademarks, service marks, or product names of the licensor, except as required for reasonable and customary use in describing the origin of the Work and the content of the notice/attribution file.  
+
+ZinZen supports an open and collaborative process.  
+Registering the ZinZen trademark is a tool to protect the ZinZen identity and the quality perception of the ZinZen projects.
