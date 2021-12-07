@@ -723,6 +723,56 @@ mod tests {
     }
 
     #[test]
+    fn sleep_daily_and_other_with_implicit_end_time() {
+        init_env_logger();
+
+        let goal = Goal {
+            id: 1,
+            title: String::from("sleep daily 8h start>=21"),
+            estimated_duration: 8,
+            effort_invested: 0,
+            start: 0,
+            finish: 720,
+            finish_time: None,
+            start_time: 21,
+            goal_type: GoalType::DAILY,
+        };
+        let goal2 = Goal {
+            id: 2,
+            title: String::from("do something >=20:00"),
+            estimated_duration: 2,
+            effort_invested: 0,
+            start: 0,
+            finish: 720,
+            finish_time: None,
+            start_time: 20,
+            goal_type: GoalType::FIXED,
+        };
+
+        let mut calendar = Calendar::new(720, String::from("h"));
+        calendar.add(goal);
+        calendar.add(goal2);
+        calendar.schedule();
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
+
+        //expect goal2 scheduled on day 0 at 20:00-22:00, sleep 22:00 + 8h
+        let task_for_goal2 = calendar
+            .tasks
+            .iter()
+            .find(|&task| task.goal_id == 2)
+            .unwrap();
+        let slot_for_goal2 = calendar
+            .slots
+            .iter()
+            .find(|&slot| slot.task_id == task_for_goal2.task_id)
+            .unwrap();
+        assert_eq!(20, slot_for_goal2.begin);
+        assert_eq!(22, slot_for_goal2.end);
+    }
+
+    #[test]
     fn two_goals_one_constrained_to_single_slot() {
         init_env_logger();
 
