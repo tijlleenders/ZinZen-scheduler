@@ -662,6 +662,42 @@ mod tests {
     }
 
     #[test]
+    fn two_goals_one_constrained_to_single_slot() {
+        init_env_logger();
+
+        let goal = Goal {
+            id: 1,
+            title: String::from("fixed goal 6h"),
+            estimated_duration: 6,
+            effort_invested: 0,
+            start: 0,
+            finish: 24,
+            start_time: 0,
+            finish_time: 23,
+            goal_type: GoalType::FIXED,
+        };
+        let goal2 = Goal {
+            id: 2,
+            title: String::from("constrained to single slot"),
+            estimated_duration: 3,
+            effort_invested: 0,
+            start: 0,
+            finish: 24,
+            start_time: 2,
+            finish_time: 5,
+            goal_type: GoalType::FIXED,
+        };
+
+        let mut calendar = Calendar::new(168, String::from("h"));
+        calendar.add(goal);
+        calendar.add(goal2);
+        calendar.schedule();
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
+    }
+
+    #[test]
     fn calendar_with_default_goal_scheduled() {
         init_env_logger();
         let goal = Goal::new();
