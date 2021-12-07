@@ -276,8 +276,8 @@ impl Calendar {
         let mut lowest_overlap_so_far: Option<usize> = None;
         for slot in self.slots.iter() {
             if slot.task_id == task_id {
-                let num_windows_in_slot = (slot.end - slot.begin)
-                    .checked_sub(self.tasks[task_id].duration_to_schedule + 1);
+                let num_windows_in_slot = (slot.end - slot.begin + 1)
+                    .checked_sub(self.tasks[task_id].duration_to_schedule);
                 #[cfg(not(target_arch = "wasm32"))]
                 log::info!("num_windows_in_slot:{:#?}\n", num_windows_in_slot);
                 match num_windows_in_slot {
@@ -306,7 +306,7 @@ impl Calendar {
                             ))
                         }
                         Some(lowest_overlap) => {
-                            if overlap > lowest_overlap {
+                            if overlap < lowest_overlap {
                                 slot_with_lowest_overlap = Some((
                                     slot.begin + slot_offset,
                                     slot.begin
