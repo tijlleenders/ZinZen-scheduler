@@ -662,6 +662,30 @@ mod tests {
     }
 
     #[test]
+    fn sleep_daily() {
+        init_env_logger();
+
+        let goal = Goal {
+            id: 1,
+            title: String::from("sleep daily 8h start>=21"),
+            estimated_duration: 8,
+            effort_invested: 0,
+            start: 0,
+            finish: 720,
+            start_time: 0,
+            finish_time: 24,
+            goal_type: GoalType::DAILY,
+        };
+
+        let mut calendar = Calendar::new(720, String::from("h"));
+        calendar.add(goal);
+        calendar.schedule();
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
+    }
+
+    #[test]
     fn two_goals_one_constrained_to_single_slot() {
         init_env_logger();
 
