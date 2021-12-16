@@ -1,6 +1,4 @@
 use serde::{Deserialize, Serialize}; // consider https://crates.io/crates/serde-wasm-bindgen
-use std::cmp;
-use std::str::FromStr;
 use std::{fmt, usize};
 
 #[cfg(target_arch = "wasm32")]
