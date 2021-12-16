@@ -48,15 +48,6 @@ pub enum CutOffType {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub enum GoalType {
-    FIXED,
-    DAILY,
-    WEEKLY,
-    MONTHLY,
-    YEARLY,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Slot {
     task_id: usize,
     begin: usize,
