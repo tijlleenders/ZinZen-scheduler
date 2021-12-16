@@ -34,6 +34,7 @@ enum TaskStatus {
     UNSCHEDULED,
     SCHEDULED,
     IMPOSSIBLE,
+    WAITING,
 }
 
 #[derive(Debug, PartialEq)]
@@ -193,6 +194,7 @@ impl Calendar {
         self.slots = new_slots;
         self.slots.push(scheduled_slot);
         self.tasks[task_id].task_status = TaskStatus::SCHEDULED;
+        //Todo: if scheduled and 'before' some other task, remove TaskStatus::WAITING from the other tasks that have 'following' attribute
         //log::info!(
         //     "Calendar right after scheduling task_id {}:{:#?}\n",
         //     task_id,
@@ -292,6 +294,7 @@ impl Calendar {
     fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Searching for new task to process...\n");
+
         let mut task_id_highest_scheduling_possibilities_prio: Option<usize> = None;
         let mut highest_scheduling_possibilities_so_far: usize = 0;
         for (task_index, task) in self.tasks.iter().enumerate() {
@@ -302,7 +305,11 @@ impl Calendar {
                 TaskStatus::SCHEDULED => {
                     continue;
                 }
+                TaskStatus::WAITING => {
+                    continue;
+                }
                 TaskStatus::UNSCHEDULED => {
+                    //Todo: skip if following another task
                     let mut scheduling_possibilities: usize = 0;
                     for slot in self.slots.iter() {
                         if slot.task_id == task.task_id {
