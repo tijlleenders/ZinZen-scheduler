@@ -63,7 +63,7 @@ pub struct Calendar {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Task {
-    pub task_id: usize,
+    task_id: usize,
     duration_to_schedule: usize,
     duration_scheduled: usize,
     task_status: TaskStatus,
@@ -89,13 +89,12 @@ impl Calendar {
         console::log_2(&"Calendar after load:".into(), &temp);
 
         loop {
-            let unscheduled_task_id_with_highest_scheduling_possibilities: Option<usize> =
-                self.find_unscheduled_task_id_with_highest_scheduling_possibilities();
-
-            match unscheduled_task_id_with_highest_scheduling_possibilities {
-                Some(task_id_to_schedule) => {
-                    let least_overlap_interval: Option<(usize, usize)> =
-                        self.find_least_overlap_interval_for_task(task_id_to_schedule);
+            let unscheduled_task_index_with_highest_scheduling_possibilities: Option<usize> =
+                self.find_unscheduled_task_index_with_highest_scheduling_possibilities();
+            match unscheduled_task_index_with_highest_scheduling_possibilities {
+                Some(task_index_to_schedule) => {
+                    let least_overlap_interval: Option<(usize, usize)> = self
+                        .find_least_overlap_interval_for_task(&self.tasks[task_index_to_schedule]);
                     //log::info!(
                     //     "least overlap for task_id {}:{}-{}\n",
                     //     task_id_to_schedule,
@@ -105,13 +104,18 @@ impl Calendar {
                     match least_overlap_interval {
                         None => {
                             self.slots.retain(|slot| {
-                                let delete = { slot.task_id == task_id_to_schedule };
+                                let delete =
+                                    { slot.task_id == self.tasks[task_index_to_schedule].task_id };
                                 !delete
                             });
-                            self.tasks[task_id_to_schedule].task_status = TaskStatus::IMPOSSIBLE;
+                            self.tasks[task_index_to_schedule].task_status = TaskStatus::IMPOSSIBLE;
                         }
                         Some(interval) => {
-                            self.schedule_task(task_id_to_schedule, interval.0, interval.1);
+                            self.schedule_task(
+                                self.tasks[task_index_to_schedule].task_id,
+                                interval.0,
+                                interval.1,
+                            );
                         }
                     }
                 }
@@ -227,15 +231,18 @@ impl Calendar {
         }
     }
 
-    fn find_least_overlap_interval_for_task(&self, task_id: usize) -> Option<(usize, usize)> {
+    fn find_least_overlap_interval_for_task(&self, task: &Task) -> Option<(usize, usize)> {
         #[cfg(not(target_arch = "wasm32"))]
-        log::info!("Finding least overlap interval for task_id:{}\n", task_id);
+        log::info!(
+            "Finding least overlap interval for task_id:{}\n",
+            task.task_id
+        );
         let mut slot_with_lowest_overlap: Option<(usize, usize)> = None;
         let mut lowest_overlap_so_far: Option<usize> = None;
         for slot in self.slots.iter() {
-            if slot.task_id == task_id {
-                let num_windows_in_slot = (slot.end - slot.begin + 1)
-                    .checked_sub(self.tasks[task_id].duration_to_schedule);
+            if slot.task_id == task.task_id {
+                let num_windows_in_slot =
+                    (slot.end - slot.begin + 1).checked_sub(task.duration_to_schedule);
                 #[cfg(not(target_arch = "wasm32"))]
                 log::info!("num_windows_in_slot:{:#?}\n", num_windows_in_slot);
                 match num_windows_in_slot {
@@ -246,13 +253,13 @@ impl Calendar {
                 for slot_offset in 0..num_windows_in_slot.unwrap() {
                     let overlap = self.find_overlap_number_for(
                         slot.begin + slot_offset,
-                        slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
+                        slot.begin + slot_offset + task.duration_to_schedule,
                     );
                     #[cfg(not(target_arch = "wasm32"))]
                     log::info!(
                         "# overlaps for:{}-{}:{}\n",
                         slot.begin + slot_offset,
-                        slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
+                        slot.begin + slot_offset + task.duration_to_schedule,
                         overlap
                     );
                     match lowest_overlap_so_far {
@@ -260,16 +267,14 @@ impl Calendar {
                             lowest_overlap_so_far = Some(overlap);
                             slot_with_lowest_overlap = Some((
                                 slot.begin + slot_offset,
-                                slot.begin + slot_offset + self.tasks[task_id].duration_to_schedule,
+                                slot.begin + slot_offset + task.duration_to_schedule,
                             ))
                         }
                         Some(lowest_overlap) => {
                             if overlap < lowest_overlap {
                                 slot_with_lowest_overlap = Some((
                                     slot.begin + slot_offset,
-                                    slot.begin
-                                        + slot_offset
-                                        + self.tasks[task_id].duration_to_schedule,
+                                    slot.begin + slot_offset + task.duration_to_schedule,
                                 ));
                                 lowest_overlap_so_far = Some(overlap);
                             }
@@ -291,7 +296,7 @@ impl Calendar {
         result
     }
 
-    fn find_unscheduled_task_id_with_highest_scheduling_possibilities(&self) -> Option<usize> {
+    fn find_unscheduled_task_index_with_highest_scheduling_possibilities(&self) -> Option<usize> {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Searching for new task to process...\n");
 
@@ -395,20 +400,39 @@ mod tests {
     fn calendar_with_default_goal_unscheduled() {
         init_env_logger();
 
-        let calendar = Calendar {
+        let mut calendar = Calendar {
             max_time_units: 168,
             time_unit_qualifier: String::from("h"),
             tasks: Vec::new(),
             slots: Vec::new(),
         };
+
+        let task0 = Task {
+            duration_scheduled: 0,
+            duration_to_schedule: 1,
+            task_id: 1,
+            task_status: TaskStatus::UNSCHEDULED,
+        };
+        let slot0 = Slot {
+            task_id: 1,
+            begin: 4,
+            end: 25,
+        };
+        calendar.slots.push(slot0);
+        calendar.tasks.push(task0);
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar:{:#?}\n", calendar);
 
+        calendar.schedule();
         assert_eq!(168, calendar.max_time_units);
         assert_eq!("h", calendar.time_unit_qualifier);
-        let t_vec: Vec<Task> = Vec::new();
-        assert_eq!(t_vec, calendar.tasks);
-        let s_vec: Vec<Slot> = Vec::new();
+        let mut s_vec: Vec<Slot> = Vec::new();
+        let expected_slot = Slot {
+            task_id: 1,
+            begin: 4,
+            end: 5,
+        };
+        s_vec.push(expected_slot);
         assert_eq!(s_vec, calendar.slots);
     }
 
