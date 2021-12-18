@@ -271,6 +271,9 @@ impl Calendar {
                             ))
                         }
                         Some(lowest_overlap) => {
+                            if overlap == 1 {
+                                return slot_with_lowest_overlap;
+                            }
                             if overlap < lowest_overlap {
                                 slot_with_lowest_overlap = Some((
                                     slot.begin + slot_offset,
