@@ -83,11 +83,6 @@ impl Calendar {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar after loading:{:#?}\n", self);
 
-        #[cfg(target_arch = "wasm32")]
-        let temp = JsValue::from_serde(&self).unwrap();
-        #[cfg(target_arch = "wasm32")]
-        console::log_2(&"Calendar after load:".into(), &temp);
-
         loop {
             let unscheduled_task_index_with_highest_scheduling_possibilities: Option<usize> =
                 self.find_unscheduled_task_index_with_highest_scheduling_possibilities();
