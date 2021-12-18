@@ -94,7 +94,7 @@ impl Calendar {
             match unscheduled_task_index_with_highest_scheduling_possibilities {
                 Some(task_index_to_schedule) => {
                     let least_overlap_interval: Option<(usize, usize)> = self
-                        .find_least_overlap_interval_for_task(&self.tasks[task_index_to_schedule]);
+                        .find_least_requested_slot_for_task(&self.tasks[task_index_to_schedule]);
                     //log::info!(
                     //     "least overlap for task_id {}:{}-{}\n",
                     //     task_id_to_schedule,
@@ -231,14 +231,14 @@ impl Calendar {
         }
     }
 
-    fn find_least_overlap_interval_for_task(&self, task: &Task) -> Option<(usize, usize)> {
+    fn find_least_requested_slot_for_task(&self, task: &Task) -> Option<(usize, usize)> {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!(
-            "Finding least overlap interval for task_id:{}\n",
+            "Finding number of requests for possible slot for task_id:{}\n",
             task.task_id
         );
-        let mut slot_with_lowest_overlap: Option<(usize, usize)> = None;
-        let mut lowest_overlap_so_far: Option<usize> = None;
+        let mut slot_with_least_requests: Option<(usize, usize)> = None;
+        let mut lowest_number_of_requests_for_slot: Option<usize> = None;
         for slot in self.slots.iter() {
             if slot.task_id == task.task_id {
                 let num_windows_in_slot =
@@ -262,31 +262,31 @@ impl Calendar {
                         slot.begin + slot_offset + task.duration_to_schedule,
                         overlap
                     );
-                    match lowest_overlap_so_far {
+                    match lowest_number_of_requests_for_slot {
                         None => {
-                            lowest_overlap_so_far = Some(overlap);
-                            slot_with_lowest_overlap = Some((
+                            lowest_number_of_requests_for_slot = Some(overlap);
+                            slot_with_least_requests = Some((
                                 slot.begin + slot_offset,
                                 slot.begin + slot_offset + task.duration_to_schedule,
                             ))
                         }
                         Some(lowest_overlap) => {
                             if overlap == 1 {
-                                return slot_with_lowest_overlap;
+                                return slot_with_least_requests;
                             }
                             if overlap < lowest_overlap {
-                                slot_with_lowest_overlap = Some((
+                                slot_with_least_requests = Some((
                                     slot.begin + slot_offset,
                                     slot.begin + slot_offset + task.duration_to_schedule,
                                 ));
-                                lowest_overlap_so_far = Some(overlap);
+                                lowest_number_of_requests_for_slot = Some(overlap);
                             }
                         }
                     }
                 }
             }
         }
-        slot_with_lowest_overlap
+        slot_with_least_requests
     }
 
     fn find_overlap_number_for(&self, begin: usize, end: usize) -> usize {
