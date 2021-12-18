@@ -403,19 +403,35 @@ mod tests {
             slots: Vec::new(),
         };
 
-        let task0 = Task {
+        let task1 = Task {
             duration_scheduled: 0,
             duration_to_schedule: 1,
             task_id: 1,
             task_status: TaskStatus::UNSCHEDULED,
         };
-        let slot0 = Slot {
+        let task2 = Task {
+            task_id: 2,
+            duration_to_schedule: 1,
+            duration_scheduled: 0,
+            task_status: TaskStatus::UNSCHEDULED,
+        };
+        let slot1 = Slot {
             task_id: 1,
             begin: 4,
-            end: 25,
+            end: 29,
         };
-        calendar.slots.push(slot0);
-        calendar.tasks.push(task0);
+        let slot2 = Slot {
+            task_id: 2,
+            begin: 24,
+            end: 49,
+        };
+
+        calendar.tasks.push(task1);
+        calendar.tasks.push(task2);
+
+        calendar.slots.push(slot2);
+        calendar.slots.push(slot1);
+
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar:{:#?}\n", calendar);
 
@@ -423,12 +439,18 @@ mod tests {
         assert_eq!(168, calendar.max_time_units);
         assert_eq!("h", calendar.time_unit_qualifier);
         let mut s_vec: Vec<Slot> = Vec::new();
-        let expected_slot = Slot {
+        let expected_slot1 = Slot {
             task_id: 1,
             begin: 4,
             end: 5,
         };
-        s_vec.push(expected_slot);
+        let expected_slot2 = Slot {
+            task_id: 2,
+            begin: 24,
+            end: 25,
+        };
+        s_vec.push(expected_slot1);
+        s_vec.push(expected_slot2);
         assert_eq!(s_vec, calendar.slots);
     }
 
