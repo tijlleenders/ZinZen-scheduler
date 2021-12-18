@@ -111,11 +111,7 @@ impl Calendar {
                             self.tasks[task_index_to_schedule].task_status = TaskStatus::IMPOSSIBLE;
                         }
                         Some(interval) => {
-                            self.schedule_task(
-                                self.tasks[task_index_to_schedule].task_id,
-                                interval.0,
-                                interval.1,
-                            );
+                            self.schedule_task(task_index_to_schedule, interval.0, interval.1);
                         }
                     }
                 }
@@ -126,16 +122,13 @@ impl Calendar {
         log::info!("Calendar after scheduling:{:#?}\n", self);
     }
 
-    fn schedule_task(&mut self, task_id: usize, begin: usize, end: usize) -> () {
+    fn schedule_task(&mut self, task_index: usize, begin: usize, end: usize) -> () {
+        let task_id = self.tasks[task_index].task_id;
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Scheduling task_id {}.\n", task_id);
 
-        //Todo: check if initial slot generation respects due date_time
-        let task_option = self.tasks.iter().find(|&task| task.task_id == task_id);
-        let task = task_option.expect("task not found");
-
         #[cfg(not(target_arch = "wasm32"))]
-        log::info!("task {:#?}.\n", task);
+        log::info!("task {:#?}.\n", self.tasks[task_index]);
 
         //Todo: only remove all slots if duration to be scheduled has been exhausted
         self.slots.retain(|slot| {
@@ -197,7 +190,7 @@ impl Calendar {
         }
         self.slots = new_slots;
         self.slots.push(scheduled_slot);
-        self.tasks[task_id].task_status = TaskStatus::SCHEDULED;
+        self.tasks[task_index].task_status = TaskStatus::SCHEDULED;
         //Todo: if scheduled and 'before' some other task, remove TaskStatus::WAITING from the other tasks that have 'following' attribute
         //log::info!(
         //     "Calendar right after scheduling task_id {}:{:#?}\n",
