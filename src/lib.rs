@@ -46,7 +46,7 @@ pub enum CutOffType {
     CUTWHOLE,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Slot {
     task_id: usize,
     begin: usize,
@@ -113,6 +113,7 @@ impl Calendar {
                 None => break,
             }
         }
+        self.slots.sort_by(|a, b| a.begin.cmp(&b.begin));
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar after scheduling:{:#?}\n", self);
     }
