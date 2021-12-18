@@ -415,6 +415,12 @@ mod tests {
             duration_scheduled: 0,
             task_status: TaskStatus::UNSCHEDULED,
         };
+        let task3 = Task {
+            task_id: 3,
+            duration_to_schedule: 1,
+            duration_scheduled: 0,
+            task_status: TaskStatus::UNSCHEDULED,
+        };
         let slot1 = Slot {
             task_id: 1,
             begin: 4,
@@ -425,12 +431,19 @@ mod tests {
             begin: 24,
             end: 49,
         };
+        let slot3 = Slot {
+            task_id: 3,
+            begin: 48,
+            end: 73,
+        };
 
         calendar.tasks.push(task1);
         calendar.tasks.push(task2);
+        calendar.tasks.push(task3);
 
-        calendar.slots.push(slot2);
         calendar.slots.push(slot1);
+        calendar.slots.push(slot2);
+        calendar.slots.push(slot3);
 
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar:{:#?}\n", calendar);
@@ -449,8 +462,14 @@ mod tests {
             begin: 24,
             end: 25,
         };
-        s_vec.push(expected_slot1);
+        let expected_slot3 = Slot {
+            task_id: 3,
+            begin: 48,
+            end: 49,
+        };
+        s_vec.push(expected_slot3);
         s_vec.push(expected_slot2);
+        s_vec.push(expected_slot1);
         assert_eq!(s_vec, calendar.slots);
     }
 
