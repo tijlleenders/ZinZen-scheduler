@@ -390,11 +390,11 @@ mod tests {
     }
 
     #[test]
-    fn calendar_with_default_goal_unscheduled() {
+    fn calendar_with_daily_goal() {
         init_env_logger();
 
         let mut calendar = Calendar {
-            max_time_units: 168,
+            max_time_units: 720,
             time_unit_qualifier: String::from("h"),
             tasks: Vec::new(),
             slots: Vec::new(),
@@ -412,19 +412,19 @@ mod tests {
             duration_to_schedule: 1,
             duration_scheduled: 0,
             task_status: TaskStatus::UNSCHEDULED,
-            goal_id: "goal2".to_string(),
+            goal_id: "goal1".to_string(),
         };
         let task3 = Task {
             task_id: 3,
             duration_to_schedule: 1,
             duration_scheduled: 0,
             task_status: TaskStatus::UNSCHEDULED,
-            goal_id: "goal3".to_string(),
+            goal_id: "goal1".to_string(),
         };
         let slot1 = Slot {
             task_id: 1,
-            begin: 4,
-            end: 29,
+            begin: 6,
+            end: 31,
         };
         let slot2 = Slot {
             task_id: 2,
@@ -449,7 +449,11 @@ mod tests {
         log::info!("Calendar:{:#?}\n", calendar);
 
         calendar.schedule();
-        assert_eq!(168, calendar.max_time_units);
+
+        #[cfg(not(target_arch = "wasm32"))]
+        log::info!("Calendar:{:#?}\n", calendar);
+
+        assert_eq!(720, calendar.max_time_units);
         assert_eq!("h", calendar.time_unit_qualifier);
         let mut s_vec: Vec<Slot> = Vec::new();
         let expected_slot1 = Slot {
