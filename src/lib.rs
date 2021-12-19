@@ -67,6 +67,7 @@ pub struct Task {
     duration_to_schedule: usize,
     duration_scheduled: usize,
     task_status: TaskStatus,
+    goal_id: String,
 }
 
 impl Calendar {
@@ -404,18 +405,21 @@ mod tests {
             duration_to_schedule: 1,
             task_id: 1,
             task_status: TaskStatus::UNSCHEDULED,
+            goal_id: "goal1".to_string(),
         };
         let task2 = Task {
             task_id: 2,
             duration_to_schedule: 1,
             duration_scheduled: 0,
             task_status: TaskStatus::UNSCHEDULED,
+            goal_id: "goal2".to_string(),
         };
         let task3 = Task {
             task_id: 3,
             duration_to_schedule: 1,
             duration_scheduled: 0,
             task_status: TaskStatus::UNSCHEDULED,
+            goal_id: "goal3".to_string(),
         };
         let slot1 = Slot {
             task_id: 1,
@@ -463,9 +467,9 @@ mod tests {
             begin: 48,
             end: 49,
         };
-        s_vec.push(expected_slot3);
-        s_vec.push(expected_slot2);
         s_vec.push(expected_slot1);
+        s_vec.push(expected_slot2);
+        s_vec.push(expected_slot3);
         assert_eq!(s_vec, calendar.slots);
     }
 
