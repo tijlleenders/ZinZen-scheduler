@@ -574,12 +574,12 @@ mod tests {
         let slot1 = Slot {
             task_id: 1,
             begin: 11,
-            end: 24,
+            end: 12,
         };
         let slot2 = Slot {
             task_id: 1,
             begin: 35,
-            end: 48,
+            end: 36,
         };
 
         calendar.tasks.push(task1);
@@ -595,27 +595,15 @@ mod tests {
         #[cfg(not(target_arch = "wasm32"))]
         log::info!("Calendar:{:#?}\n", calendar);
 
-        assert_eq!(720, calendar.max_time_units);
+        assert_eq!(168, calendar.max_time_units);
         assert_eq!("h", calendar.time_unit_qualifier);
         let mut s_vec: Vec<Slot> = Vec::new();
         let expected_slot1 = Slot {
             task_id: 1,
-            begin: 4,
-            end: 5,
-        };
-        let expected_slot2 = Slot {
-            task_id: 2,
-            begin: 24,
-            end: 25,
-        };
-        let expected_slot3 = Slot {
-            task_id: 3,
-            begin: 48,
-            end: 49,
+            begin: 11,
+            end: 12,
         };
         s_vec.push(expected_slot1);
-        s_vec.push(expected_slot2);
-        s_vec.push(expected_slot3);
         assert_eq!(s_vec, calendar.slots);
     }
 
