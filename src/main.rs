@@ -1,6 +1,6 @@
-use zinzen_scheduler::*;
+use zinzen_scheduler::calendar::Calendar;
 
-fn main() {
+pub(crate) fn main() {
 	let mut calendar = Calendar::new(168, String::from("h"));
 
 	// print!("Calendar:{:#?}\n", calendar);
@@ -9,5 +9,5 @@ fn main() {
 	calendar.schedule();
 
 	// calendar.print_slots_for_range(12, 14);
-	print!("Calendar:{:#?}\n", calendar);
+	println!("Calendar: {calendar:?}");
 }
