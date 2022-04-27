@@ -21,21 +21,21 @@ fn calendar_with_daily_goal() {
 		duration_scheduled: 0,
 		duration_to_schedule: 1,
 		task_id: 1,
-		task_status: TaskStatus::UNSCHEDULED,
+		task_status: TaskStatus::Unscheduled,
 		goal_id: "goal1".to_string(),
 	};
 	let task2 = Task {
 		task_id: 2,
 		duration_to_schedule: 1,
 		duration_scheduled: 0,
-		task_status: TaskStatus::UNSCHEDULED,
+		task_status: TaskStatus::Unscheduled,
 		goal_id: "goal1".to_string(),
 	};
 	let task3 = Task {
 		task_id: 3,
 		duration_to_schedule: 1,
 		duration_scheduled: 0,
-		task_status: TaskStatus::UNSCHEDULED,
+		task_status: TaskStatus::Unscheduled,
 		goal_id: "goal1".to_string(),
 	};
 	let slot1 = Slot {
@@ -109,14 +109,14 @@ fn two_goals() {
 		duration_scheduled: 0,
 		duration_to_schedule: 1,
 		task_id: 1,
-		task_status: TaskStatus::UNSCHEDULED,
+		task_status: TaskStatus::Unscheduled,
 		goal_id: "5f39a726-641c-4c1a-aa54-2f28a3847ee8".to_string(),
 	};
 	let task2 = Task {
 		task_id: 2,
 		duration_to_schedule: 1,
 		duration_scheduled: 0,
-		task_status: TaskStatus::UNSCHEDULED,
+		task_status: TaskStatus::Unscheduled,
 		goal_id: "".to_string(),
 	};
 
@@ -184,7 +184,7 @@ fn at_subtract_overflow_panic() {
 		duration_scheduled: 0,
 		duration_to_schedule: 1,
 		task_id: 1,
-		task_status: TaskStatus::UNSCHEDULED,
+		task_status: TaskStatus::Unscheduled,
 		goal_id: "5f39a726-641c-4c1a-aa54-2f28a3847ee8".to_string(),
 	};
 
@@ -233,20 +233,20 @@ fn test_find_cut_off_type() {
 		end: 15,
 	};
 	let cut_off = Calendar::find_cut_off_type(&slot, 0, 12);
-	assert_eq!(cut_off, CutOffType::CUTSTART);
+	assert_eq!(cut_off, CutOffType::CutStart);
 
 	let cut_off = Calendar::find_cut_off_type(&slot, 10, 12);
-	assert_eq!(cut_off, CutOffType::CUTSTART);
+	assert_eq!(cut_off, CutOffType::CutStart);
 
 	let cut_off = Calendar::find_cut_off_type(&slot, 11, 12);
-	assert_eq!(cut_off, CutOffType::CUTMIDDLE);
+	assert_eq!(cut_off, CutOffType::CutMiddle);
 
 	let cut_off = Calendar::find_cut_off_type(&slot, 11, 15);
-	assert_eq!(cut_off, CutOffType::CUTEND);
+	assert_eq!(cut_off, CutOffType::CutEnd);
 
 	let cut_off = Calendar::find_cut_off_type(&slot, 11, 20);
-	assert_eq!(cut_off, CutOffType::CUTEND);
+	assert_eq!(cut_off, CutOffType::CutEnd);
 
 	let cut_off = Calendar::find_cut_off_type(&slot, 20, 22);
-	assert_eq!(cut_off, CutOffType::NOCUT);
+	assert_eq!(cut_off, CutOffType::NoCut);
 }

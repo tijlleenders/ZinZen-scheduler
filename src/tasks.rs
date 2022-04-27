@@ -17,19 +17,19 @@ pub struct Task {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum TaskStatus {
-	UNSCHEDULED,
-	SCHEDULED,
-	IMPOSSIBLE,
-	WAITING,
+	Unscheduled,
+	Scheduled,
+	Impossible,
+	Waiting,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum CutOffType {
-	NOCUT,
-	CUTSTART,
-	CUTEND,
-	CUTMIDDLE,
-	CUTWHOLE,
+	NoCut,
+	CutStart,
+	CutEnd,
+	CutMiddle,
+	CutWhole,
 }
 
 pub struct ParseGoalError;

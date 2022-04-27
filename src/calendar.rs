@@ -61,7 +61,7 @@ impl Calendar {
 								let delete = { slot.task_id == self.tasks[task_index_to_schedule].task_id };
 								!delete
 							});
-							self.tasks[task_index_to_schedule].task_status = TaskStatus::IMPOSSIBLE;
+							self.tasks[task_index_to_schedule].task_status = TaskStatus::Impossible;
 						}
 						Some(interval) => {
 							self.schedule_task(task_index_to_schedule, interval.0, interval.1);
@@ -94,7 +94,7 @@ impl Calendar {
 		for slot in self.slots.iter() {
 			let cut_off_type = Calendar::find_cut_off_type(slot, begin, end);
 			match cut_off_type {
-				CutOffType::CUTSTART => {
+				CutOffType::CutStart => {
 					if end != slot.end {
 						new_slots.push(Slot {
 							task_id: slot.task_id,
@@ -103,7 +103,7 @@ impl Calendar {
 						});
 					}
 				}
-				CutOffType::CUTMIDDLE => {
+				CutOffType::CutMiddle => {
 					if slot.begin != begin {
 						new_slots.push(Slot {
 							task_id: slot.task_id,
@@ -119,7 +119,7 @@ impl Calendar {
 						});
 					}
 				}
-				CutOffType::CUTEND => {
+				CutOffType::CutEnd => {
 					if slot.begin != begin {
 						new_slots.push(Slot {
 							task_id: slot.task_id,
@@ -128,19 +128,19 @@ impl Calendar {
 						});
 					}
 				}
-				CutOffType::NOCUT => {
+				CutOffType::NoCut => {
 					new_slots.push(Slot {
 						task_id: slot.task_id,
 						begin: slot.begin,
 						end: slot.end,
 					});
 				}
-				CutOffType::CUTWHOLE => {}
+				CutOffType::CutWhole => {}
 			}
 		}
 		self.slots = new_slots;
 		self.slots.push(scheduled_slot);
-		self.tasks[task_index].task_status = TaskStatus::SCHEDULED;
+		self.tasks[task_index].task_status = TaskStatus::Scheduled;
 		//Todo: if scheduled and 'before' some other task, remove TaskStatus::WAITING from the other tasks that have 'following' attribute
 		//log::info!(
 		//     "Calendar right after scheduling task_id {}:{:#?}\n",
@@ -151,18 +151,18 @@ impl Calendar {
 
 	pub fn find_cut_off_type(slot: &Slot, begin: usize, end: usize) -> CutOffType {
 		if slot.begin >= begin && slot.begin < end {
-			return CutOffType::CUTSTART;
+			return CutOffType::CutStart;
 		}
 		if slot.begin < begin && slot.end > end {
-			return CutOffType::CUTMIDDLE;
+			return CutOffType::CutMiddle;
 		}
 		if slot.begin < begin && slot.end > begin {
-			return CutOffType::CUTEND;
+			return CutOffType::CutEnd;
 		}
 		if slot.begin >= begin && slot.end <= end {
-			return CutOffType::CUTWHOLE;
+			return CutOffType::CutWhole;
 		}
-		CutOffType::NOCUT
+		CutOffType::NoCut
 	}
 
 	pub fn print_slots_for_range(&self, start: usize, finish: usize) {
@@ -248,16 +248,16 @@ impl Calendar {
 		let mut highest_scheduling_possibilities_so_far: usize = 0;
 		for (task_index, task) in self.tasks.iter().enumerate() {
 			match task.task_status {
-				TaskStatus::IMPOSSIBLE => {
+				TaskStatus::Impossible => {
 					continue;
 				}
-				TaskStatus::SCHEDULED => {
+				TaskStatus::Scheduled => {
 					continue;
 				}
-				TaskStatus::WAITING => {
+				TaskStatus::Waiting => {
 					continue;
 				}
-				TaskStatus::UNSCHEDULED => {
+				TaskStatus::Unscheduled => {
 					//Todo: skip if following another task
 					let mut scheduling_possibilities: usize = 0;
 					for slot in self.slots.iter() {
