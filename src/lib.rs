@@ -14,7 +14,6 @@ mod tests;
 /// Project details
 mod goal;
 mod preprocessor;
-mod schedule;
 mod task;
 
 /// A buffer where IPC Data is written to by Rust and read from by Javascript
