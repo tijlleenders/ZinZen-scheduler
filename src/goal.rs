@@ -1,7 +1,7 @@
 use crate::{console, error::ErrorCode, IPC_BUFFER};
 use nanoserde::{DeJson, SerJson};
 
-/// Loads [Goal]s inserted into IPC by JavaScript
+/// Loads [`Goal`] inserted into IPC by JavaScript
 pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> Vec<Goal> {
 	let slice = &IPC_BUFFER[..ipc_offset];
 
@@ -16,32 +16,31 @@ pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> Vec<Goal> {
 	}
 }
 
-/// An internal ID that is auto-incremented for each goal declared
-static mut AUTO_INCREMENTING_ID: usize = 0;
-
-/// A [Goal] is what one wants to do, it is used in conjunction with a [Timeline] to generate a [Schedule]
+/// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]
 #[derive(DeJson, SerJson, Debug)]
 #[non_exhaustive]
 pub struct Goal {
+	/// Every goal has a unique ID
 	pub id: usize,
+	/// A goal's description
 	pub description: String,
-	pub duration: usize,
+	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to dedicate 72 hours of work"
+	pub duration: f32,
+	/// How often should this goal's tasks appear in the user's schedule, eg "I want to go to the book club weekly"
 	pub repetition: Repetition,
+	/// At what exact time of the day do ou want the tasks to start
 	pub time_constraint: Option<usize>,
+	/// Where each task should be committed to, eg "I want to cook for my dog at home".
+	/// This is useful to make sure a schedule makes sense, since people can't teleport from place to place in minutes
 	pub location_constraint: Option<usize>,
 }
 
 impl Default for Goal {
 	fn default() -> Self {
-		let new_id = unsafe {
-			AUTO_INCREMENTING_ID += 1;
-			AUTO_INCREMENTING_ID
-		};
-
 		Self {
-			id: new_id,
+			id: 0,
 			description: "[NO DESCRIPTION]".to_string(),
-			duration: 0,
+			duration: 0.0,
 			repetition: Repetition::Once,
 			time_constraint: None,
 			location_constraint: None,
