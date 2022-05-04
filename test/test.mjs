@@ -47,4 +47,4 @@ const jsonTarget = new Uint8Array(wasmMemory.buffer, ipcStart, json.length);
 jsonTarget.set(json);
 
 // A simple entry point for debugging
-instance.exports.processGoals(json.length, 24 * 7 * 2);
+instance.exports.preProcessGoals(json.length, 24 * 7 * 2);

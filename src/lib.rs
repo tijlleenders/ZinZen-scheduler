@@ -25,8 +25,8 @@ pub unsafe extern "C" fn getDataPointer() -> *const u8 {
 }
 
 /// This writes some data to the IPC buffer, then returns a pointer and an offset to the data
-pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(source: S) -> usize {
-	let data = source.as_ref();
+pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> usize {
+	let data = buf.as_ref();
 
 	unsafe {
 		if data.len() >= IPC_BUFFER_SIZE {
@@ -42,7 +42,7 @@ pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(source: S) -> usize {
 }
 
 #[no_mangle]
-unsafe extern "C" fn processGoals(bytes: usize, time_in_hours: usize) {
+unsafe extern "C" fn preProcessGoals(bytes: usize, time_in_hours: usize) {
 	let goals = load_goals_from_ipc(bytes);
 
 	let processed = PreProcessor::generate_tasks(&goals, time_in_hours);
