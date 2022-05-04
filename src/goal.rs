@@ -1,10 +1,5 @@
+use crate::{console, error::ErrorCode, IPC_BUFFER};
 use nanoserde::{DeJson, SerJson};
-
-use crate::{
-	console,
-	error::{exit, ErrorCode},
-	IPC_BUFFER,
-};
 
 /// Loads [Goal]s inserted into IPC by JavaScript
 pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> Vec<Goal> {
@@ -12,7 +7,7 @@ pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> Vec<Goal> {
 
 	let string = match std::str::from_utf8(slice) {
 		Ok(str) => str,
-		Err(_) => exit(ErrorCode::DataInIPCNotValidUTF8, 0),
+		Err(err) => console::log_err(ErrorCode::DataInIPCNotValidUTF8, err),
 	};
 
 	match DeJson::deserialize_json(string) {
