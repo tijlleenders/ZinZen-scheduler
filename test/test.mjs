@@ -1,7 +1,7 @@
 import fs from "fs";
 
 // RAW wasm source
-const buffer = fs.readFileSync("output.wasm");
+const buffer = fs.readFileSync("test/output.wasm");
 
 // Compiled wasm module
 const module = await WebAssembly.compile(buffer);
@@ -9,20 +9,24 @@ const module = await WebAssembly.compile(buffer);
 // The current WASM instance
 const instance = await WebAssembly.instantiate(module, {
 	env: {
-		console_log(isString, dataOffset) {
+		console_log(isString, ipcOffset) {
 			if (isString) {
-				let readResult = new Uint8Array(wasmMemory.buffer, dataStart, dataOffset);
+				let readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
 				let decoder = new TextDecoder();
 				let string = decoder.decode(readResult);
+
 				console.log(string);
 			} else {
-				let readResult = new Uint8Array(wasmMemory.buffer, dataStart, dataOffset);
+				let readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
 				console.log(readResult);
 			}
 		},
-		exit(error_code) {
+		exit(error_code, ipcOffset) {
 			if (error_code != 0) {
-				throw new Error(`[WASM_ERROR; ErrorCode:${error_code}]`);
+				let readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
+				let decoder = new TextDecoder();
+
+				throw new Error(`[WASM_ERROR; ErrorCode:${error_code}] ${decoder.decode(readResult)}`);
 			} else {
 				console.info("Webassembly has prematurely finished execution, without errors")
 			}
@@ -31,14 +35,14 @@ const instance = await WebAssembly.instantiate(module, {
 });
 
 // Where the IPC buffer pointer starts at
-const dataStart = instance.exports.getDataPointer();
+const ipcStart = instance.exports.getDataPointer();
 
 // Load JSON
-const json = new Uint8Array(fs.readFileSync("test.json"));
+const json = new Uint8Array(fs.readFileSync("test/test.json"));
 
 // The wasm memory
 const wasmMemory = instance.exports.memory;
-const jsonTarget = new Uint8Array(wasmMemory.buffer, dataStart, json.length);
+const jsonTarget = new Uint8Array(wasmMemory.buffer, ipcStart, json.length);
 
 jsonTarget.set(json);
 
