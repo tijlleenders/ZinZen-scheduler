@@ -1,38 +1,15 @@
-# A simple template for writing quick `WebAssembly` binaries in Rust
+## Welcome friend!
 
-Simply edit `src/libs.rs`, then run `./build.sh`. The output file: `out/output.wasm`, is the resulting `WebAssembly`.
+If you like Rust and scheduling algorithms you've come to the right place :)
+We can talk big-O, add features or optimize hot loops.
 
-It only requires that you give it an `exit` function: **`fn exit(error_type: u8) -> !`**.
+> Please contact me tijl.leenders@gmail.com or open an issue.
 
-To run `./build.sh` without errors, ensure you have `wabt`  and `wasm-opt`installed
+## Legal stuff
 
-## Usage
+&copy;2020-now ZinZen&reg;
 
-```javascript
-const fs = require("fs");
-const assert = require("assert");
+This code is licensed under AGPLv3 but this license does not implicitly grant permission to use the trade names, trademarks, service marks, or product names of the licensor, except as required for reasonable and customary use in describing the origin of the Work and the content of the notice/attribution file.
 
-WebAssembly.instantiate(
-   fs.readFileSync("out/output.wasm"),
-   // Bare-bones import object
-   {
-      "env": {
-         "exit": (error_type) => {
-            switch (error_type) {
-               case 0:
-                  console.log("Normal exit")
-                  break;
-               case 1:
-                  console.log("Some error occurred");
-                  break;
-               default:
-                  console.error("Unknown error occurred");
-                  break;
-            }
-         },
-      },
-   }
-).then(({ instance }) => {
-   assert(instance.exports.add(1, 2) == 3)
-});
-```
+ZinZen supports an open and collaborative process.
+Registering the ZinZen trademark is a tool to protect the ZinZen identity and the quality perception of the ZinZen projects.
