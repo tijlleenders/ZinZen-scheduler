@@ -1,7 +1,7 @@
 import fs from "fs";
 
 // RAW wasm source
-const buffer = fs.readFileSync("./out/output.wasm");
+const buffer = fs.readFileSync("output.wasm");
 
 // Compiled wasm module
 const module = await WebAssembly.compile(buffer);
