@@ -10,9 +10,9 @@ cargo build --target $TARGET --release
 
 # Process final binary
 wasm-strip $BINARY
-mkdir -p out
+mkdir -p test
 wasm-opt -o test/output.wasm -O3 $BINARY
-ls -lh out/output.wasm
+ls -lh test/output.wasm
 
 # Finally execute wasm inside node.js
-node test.mjs
+node test/test.mjs
