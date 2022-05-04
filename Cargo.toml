@@ -11,8 +11,5 @@ name = 'output'
 opt-level = 3
 lto = true
 
-[build]
-target = "wasm32-unknown-unknown"
-
 [dependencies]
 nanoserde = "0.1.29"
