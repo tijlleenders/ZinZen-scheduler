@@ -3,26 +3,13 @@ name = "zinzen_scheduler"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-serde = { version = "1.0.130", features = ["derive"]}
-serde_json = "1.0.71"
-log = "0.4.14"
-env_logger = "0.9.0"
-
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ['cdylib']
+name = 'output'
 
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen  = { version = "0.2.78", features = ["serde-serialize"] }
-js-sys = "0.3"
-web-sys = { version = "0.3", features = [ "console" ] }
-tracing-wasm = "0.2.1"
-console_error_panic_hook = "0.1.7"
-serde = { version = "1.0.130", features = ["derive"]}
-serde_json = "1.0.71"
+[profile.release]
+opt-level = 3
+lto = true
 
-[dev-dependencies]
-# https://rustwasm.github.io/docs/wasm-bindgen/wasm-bindgen-test/usage.html?highlight=wasm-bindgen-test#appendix-using-wasm-bindgen-test-without-wasm-pack
-wasm-bindgen-test = "0.3.28"
+[dependencies]
+nanoserde = "0.1.29"

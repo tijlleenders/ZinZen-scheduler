@@ -1,23 +1,51 @@
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
-#[cfg(target_arch = "wasm32")]
-use web_sys::console;
+use goal::load_goals_from_ipc;
+use preprocessor::PreProcessor;
+use task::Tasks;
 
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen(start)]
-pub fn starts_as_soon_as_module_is_loaded() -> Result<(), JsValue> {
-	// print pretty errors in wasm https://github.com/rustwasm/console_error_panic_hook
-	// This is not needed for tracing_wasm to work, but it is a common tool for getting proper error line numbers for panics.
-	console_error_panic_hook::set_once();
+/// API modules
+mod console;
+mod error;
 
-	tracing_wasm::set_as_global_default();
+/// Tests
+mod tests;
 
-	//will have to debug using web-sys log statements... :/ https://rustwasm.github.io/book/reference/debugging.html#using-a-debugger
+/// Project details
+mod goal;
+mod preprocessor;
+mod task;
 
-	Ok(())
+/// A 64 KiB buffer for communication between Rust and JavaScript
+/// At any one moment, only one read and write is done to this buffer, `WASM` is a single-threaded runtime anyway
+pub const IPC_BUFFER_SIZE: usize = 1024 * 64;
+pub static mut IPC_BUFFER: [u8; IPC_BUFFER_SIZE] = [0; IPC_BUFFER_SIZE];
+
+#[no_mangle]
+pub unsafe extern "C" fn getDataPointer() -> *const u8 {
+	IPC_BUFFER.as_ptr()
 }
 
-pub mod calendar;
-pub mod slot;
-pub mod tasks;
-pub mod tests;
+/// This writes some data to the IPC buffer, then returns a pointer and an offset to the data
+pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> usize {
+	let data = buf.as_ref();
+
+	unsafe {
+		if data.len() >= IPC_BUFFER_SIZE {
+			let error_msg: &[u8] = b"The length of data to be logged to the console exceeds the size of the IPC_BUFFER";
+
+			IPC_BUFFER[..error_msg.len()].copy_from_slice(error_msg);
+			error::exit(error::ErrorCode::IPCDataOverflow, error_msg.len())
+		};
+
+		IPC_BUFFER[..data.len()].copy_from_slice(data);
+		data.len()
+	}
+}
+
+#[no_mangle]
+unsafe extern "C" fn preProcessGoals(bytes: usize, time_in_hours: usize) {
+	let goals = load_goals_from_ipc(bytes);
+
+	let processed = PreProcessor::generate_tasks(&goals, time_in_hours);
+	let tasks: Tasks = processed.as_slice().into();
+	console::log_str(tasks.serialize_json())
+}

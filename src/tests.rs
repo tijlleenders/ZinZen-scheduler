@@ -1,252 +1,83 @@
-#![cfg(test)]
-
-use super::{calendar::*, slot::*, tasks::*};
-fn init_env_logger() {
-	#[cfg(not(target_arch = "wasm32"))]
-	let _ = env_logger::builder().is_test(true).try_init();
-}
+#[allow(unused_imports)]
+use crate::{
+	goal::{Goal, Repetition},
+	preprocessor::PreProcessor,
+};
 
 #[test]
-fn calendar_with_daily_goal() {
-	init_env_logger();
+pub(crate) fn test_preprocessor() {
+	let goals = &[
+		Goal {
+			id: 0,
+			repetition: Repetition::Once,
+			duration: 12.0,
+			..Default::default()
+		},
+		Goal {
+			id: 1,
+			duration: 12.0,
+			repetition: Repetition::Daily,
+			..Default::default()
+		},
+		Goal {
+			id: 2,
+			duration: 12.0,
+			repetition: Repetition::Weekly,
+			..Default::default()
+		},
+		Goal {
+			id: 3,
+			duration: 12.0,
+			repetition: Repetition::Monthly,
+			..Default::default()
+		},
+		Goal {
+			id: 4,
+			duration: 12.0,
+			repetition: Repetition::Monthly,
+			..Default::default()
+		},
+		Goal {
+			id: 5,
+			duration: 12.0,
+			repetition: Repetition::Annually,
+			..Default::default()
+		},
+	];
 
-	let mut calendar = Calendar {
-		max_time_units: 720,
-		time_unit_qualifier: String::from("h"),
-		tasks: Vec::new(),
-		slots: Vec::new(),
-	};
+	let tasks = PreProcessor::generate_tasks(goals, 24 * 7 * 4 * 2);
 
-	let task1 = Task {
-		duration_scheduled: 0,
-		duration_to_schedule: 1,
-		task_id: 1,
-		task_status: TaskStatus::Unscheduled,
-		goal_id: "goal1".to_string(),
-	};
-	let task2 = Task {
-		task_id: 2,
-		duration_to_schedule: 1,
-		duration_scheduled: 0,
-		task_status: TaskStatus::Unscheduled,
-		goal_id: "goal1".to_string(),
-	};
-	let task3 = Task {
-		task_id: 3,
-		duration_to_schedule: 1,
-		duration_scheduled: 0,
-		task_status: TaskStatus::Unscheduled,
-		goal_id: "goal1".to_string(),
-	};
-	let slot1 = Slot {
-		task_id: 1,
-		begin: 6,
-		end: 31,
-	};
-	let slot2 = Slot {
-		task_id: 2,
-		begin: 24,
-		end: 49,
-	};
-	let slot3 = Slot {
-		task_id: 3,
-		begin: 48,
-		end: 73,
-	};
+	let once_count = tasks
+		.iter()
+		.filter(|task| matches!(task.goal.repetition, Repetition::Once))
+		.count();
+	assert_eq!(once_count, 1);
 
-	calendar.tasks.push(task1);
-	calendar.tasks.push(task2);
-	calendar.tasks.push(task3);
+	let dailies_count = tasks
+		.iter()
+		.filter(|task| matches!(task.goal.repetition, Repetition::Daily))
+		.count();
+	assert_eq!(dailies_count, 7 * 4 * 2);
 
-	calendar.slots.push(slot1);
-	calendar.slots.push(slot2);
-	calendar.slots.push(slot3);
+	let weekly_count = tasks
+		.iter()
+		.filter(|task| matches!(task.goal.repetition, Repetition::Weekly))
+		.count();
+	assert_eq!(weekly_count, 4 * 2);
 
-	#[cfg(not(target_arch = "wasm32"))]
-	log::info!("Calendar:{:#?}\n", calendar);
+	let monthly_count = tasks
+		.iter()
+		.filter(|task| matches!(task.goal.repetition, Repetition::Monthly))
+		.count();
+	assert_eq!(monthly_count, 2 * 2);
 
-	calendar.schedule();
+	let annually_count = tasks
+		.iter()
+		.filter(|task| matches!(task.goal.repetition, Repetition::Annually))
+		.count();
+	assert_eq!(annually_count, 1);
 
-	#[cfg(not(target_arch = "wasm32"))]
-	log::info!("Calendar:{:#?}\n", calendar);
-
-	assert_eq!(720, calendar.max_time_units);
-	assert_eq!("h", calendar.time_unit_qualifier);
-	let mut s_vec: Vec<Slot> = Vec::new();
-	let expected_slot1 = Slot {
-		task_id: 1,
-		begin: 4,
-		end: 5,
-	};
-	let expected_slot2 = Slot {
-		task_id: 2,
-		begin: 24,
-		end: 25,
-	};
-	let expected_slot3 = Slot {
-		task_id: 3,
-		begin: 48,
-		end: 49,
-	};
-	s_vec.push(expected_slot1);
-	s_vec.push(expected_slot2);
-	s_vec.push(expected_slot3);
-	assert_eq!(s_vec, calendar.slots);
-}
-
-#[test]
-fn two_goals() {
-	init_env_logger();
-
-	let mut calendar = Calendar {
-		max_time_units: 720,
-		time_unit_qualifier: String::from("h"),
-		tasks: Vec::new(),
-		slots: Vec::new(),
-	};
-
-	let task1 = Task {
-		duration_scheduled: 0,
-		duration_to_schedule: 1,
-		task_id: 1,
-		task_status: TaskStatus::Unscheduled,
-		goal_id: "5f39a726-641c-4c1a-aa54-2f28a3847ee8".to_string(),
-	};
-	let task2 = Task {
-		task_id: 2,
-		duration_to_schedule: 1,
-		duration_scheduled: 0,
-		task_status: TaskStatus::Unscheduled,
-		goal_id: "".to_string(),
-	};
-
-	let slot1 = Slot {
-		task_id: 1,
-		begin: 7,
-		end: 720,
-	};
-	let slot2 = Slot {
-		task_id: 2,
-		begin: 7,
-		end: 720,
-	};
-
-	calendar.tasks.push(task1);
-	calendar.tasks.push(task2);
-
-	calendar.slots.push(slot1);
-	calendar.slots.push(slot2);
-
-	#[cfg(not(target_arch = "wasm32"))]
-	log::info!("Calendar:{:#?}\n", calendar);
-
-	calendar.schedule();
-
-	#[cfg(not(target_arch = "wasm32"))]
-	log::info!("Calendar:{:#?}\n", calendar);
-
-	assert_eq!(720, calendar.max_time_units);
-	assert_eq!("h", calendar.time_unit_qualifier);
-	let mut s_vec: Vec<Slot> = Vec::new();
-	let expected_slot1 = Slot {
-		task_id: 1,
-		begin: 4,
-		end: 5,
-	};
-	let expected_slot2 = Slot {
-		task_id: 2,
-		begin: 24,
-		end: 25,
-	};
-	let expected_slot3 = Slot {
-		task_id: 3,
-		begin: 48,
-		end: 49,
-	};
-	s_vec.push(expected_slot1);
-	s_vec.push(expected_slot2);
-	s_vec.push(expected_slot3);
-	assert_eq!(s_vec, calendar.slots);
-}
-
-#[test]
-fn at_subtract_overflow_panic() {
-	init_env_logger();
-
-	let mut calendar = Calendar {
-		max_time_units: 168,
-		time_unit_qualifier: String::from("h"),
-		tasks: Vec::new(),
-		slots: Vec::new(),
-	};
-
-	let task1 = Task {
-		duration_scheduled: 0,
-		duration_to_schedule: 1,
-		task_id: 1,
-		task_status: TaskStatus::Unscheduled,
-		goal_id: "5f39a726-641c-4c1a-aa54-2f28a3847ee8".to_string(),
-	};
-
-	let slot1 = Slot {
-		task_id: 1,
-		begin: 11,
-		end: 12,
-	};
-	let slot2 = Slot {
-		task_id: 1,
-		begin: 35,
-		end: 36,
-	};
-
-	calendar.tasks.push(task1);
-
-	calendar.slots.push(slot1);
-	calendar.slots.push(slot2);
-
-	#[cfg(not(target_arch = "wasm32"))]
-	log::info!("Calendar:{:#?}\n", calendar);
-
-	calendar.schedule();
-
-	#[cfg(not(target_arch = "wasm32"))]
-	log::info!("Calendar:{:#?}\n", calendar);
-
-	assert_eq!(168, calendar.max_time_units);
-	assert_eq!("h", calendar.time_unit_qualifier);
-	let mut s_vec: Vec<Slot> = Vec::new();
-	let expected_slot1 = Slot {
-		task_id: 1,
-		begin: 11,
-		end: 12,
-	};
-	s_vec.push(expected_slot1);
-	assert_eq!(s_vec, calendar.slots);
-}
-
-#[test]
-fn test_find_cut_off_type() {
-	init_env_logger();
-	let slot = Slot {
-		task_id: 0,
-		begin: 10,
-		end: 15,
-	};
-	let cut_off = Calendar::find_cut_off_type(&slot, 0, 12);
-	assert_eq!(cut_off, CutOffType::CutStart);
-
-	let cut_off = Calendar::find_cut_off_type(&slot, 10, 12);
-	assert_eq!(cut_off, CutOffType::CutStart);
-
-	let cut_off = Calendar::find_cut_off_type(&slot, 11, 12);
-	assert_eq!(cut_off, CutOffType::CutMiddle);
-
-	let cut_off = Calendar::find_cut_off_type(&slot, 11, 15);
-	assert_eq!(cut_off, CutOffType::CutEnd);
-
-	let cut_off = Calendar::find_cut_off_type(&slot, 11, 20);
-	assert_eq!(cut_off, CutOffType::CutEnd);
-
-	let cut_off = Calendar::find_cut_off_type(&slot, 20, 22);
-	assert_eq!(cut_off, CutOffType::NoCut);
+	// float comparison is complicated, (floating point accuracy)
+	let total_task_time = tasks.iter().map(|task| task.duration).reduce(|a, b| a + b).unwrap();
+	assert!(total_task_time - 72.0 <= f32::EPSILON);
 }
