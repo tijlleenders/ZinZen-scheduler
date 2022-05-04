@@ -8,26 +8,38 @@ use crate::{
 pub(crate) fn test_preprocessor() {
 	let goals = &[
 		Goal {
+			id: 0,
 			repetition: Repetition::Once,
+			duration: 12.0,
 			..Default::default()
 		},
 		Goal {
+			id: 1,
+			duration: 12.0,
 			repetition: Repetition::Daily,
 			..Default::default()
 		},
 		Goal {
+			id: 2,
+			duration: 12.0,
 			repetition: Repetition::Weekly,
 			..Default::default()
 		},
 		Goal {
+			id: 3,
+			duration: 12.0,
 			repetition: Repetition::Monthly,
 			..Default::default()
 		},
 		Goal {
+			id: 4,
+			duration: 12.0,
 			repetition: Repetition::Monthly,
 			..Default::default()
 		},
 		Goal {
+			id: 5,
+			duration: 12.0,
 			repetition: Repetition::Annually,
 			..Default::default()
 		},
@@ -64,4 +76,8 @@ pub(crate) fn test_preprocessor() {
 		.filter(|task| matches!(task.goal.repetition, Repetition::Annually))
 		.count();
 	assert_eq!(annually_count, 1);
+
+	// float comparison is complicated, (floating point accuracy)
+	let total_task_time = tasks.iter().map(|task| task.duration).reduce(|a, b| a + b).unwrap();
+	assert!(total_task_time - 72.0 <= f32::EPSILON);
 }

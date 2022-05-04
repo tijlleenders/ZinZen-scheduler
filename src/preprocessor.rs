@@ -50,9 +50,12 @@ impl PreProcessor {
 				(occurrences, goal)
 			})
 			.for_each(|(occurrences, goal)| {
-				for _ in 0..occurrences {
-					tasks.push(Task::new(goal))
-				}
+				(0..occurrences).for_each(|_| {
+					tasks.push(Task {
+						goal,
+						duration: goal.duration / occurrences as f32,
+					})
+				});
 			});
 
 		tasks

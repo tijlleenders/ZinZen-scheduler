@@ -1,20 +1,16 @@
 use crate::goal::Goal;
 
-/// A [Task] is an item a user is expected to accomplish, it is defined in a user's schedule, which itself is just a contiguous list of tasks
+/// A [Task] is an item a user is expected to accomplish, it is simply a time-slice in a user's schedule
 pub struct Task<'a> {
+	/// What goal originally described this task
 	pub(crate) goal: &'a Goal,
-	pub(crate) completed: bool,
+	/// How long should one commit to this task, in hours
+	pub(crate) duration: f32,
 }
 
 impl<'a> Task<'a> {
 	pub fn serialize_json(&self) -> String {
-		format!("{{\"goal_id\": {}, \"completed\": {}}}", self.goal.id, self.completed)
-	}
-}
-
-impl<'a> Task<'a> {
-	pub fn new(goal: &Goal) -> Task {
-		Task { goal, completed: false }
+		format!("{{\"goal_id\": {}, \"duration\": {}}}", self.goal.id, self.duration)
 	}
 }
 
