@@ -2,46 +2,42 @@
 	{
 		"id": 7,
 		"description": "Watch out for that falling tree",
-		"duration": 32,
+		"duration": [115200, 0],
 		"repetition": "Once",
 		"priority": 0
 	},
 	{
 		"id": 8,
 		"description": "Eat a baker's dozen worth of cakes",
-		"duration": 12,
-		"repetition": {
-			"Exact": [
-				5
-			]
-		},
+		"duration": [43200, 0],
+		"repetition": {"Exact": 5},
 		"priority": 0
 	},
 	{
 		"id": 9,
 		"description": "Wake up",
-		"duration": 1,
+		"duration": [3600, 0],
 		"repetition": "Daily",
 		"priority": 0
 	},
 	{
 		"id": 10,
 		"description": "Change the timezone",
-		"duration": 50,
+		"duration": [180000, 0],
 		"repetition": "Weekly",
 		"priority": 0
 	},
 	{
 		"id": 11,
 		"description": "Rip, tear, maul, seethe",
-		"duration": 45,
+		"duration": [162000, 0],
 		"repetition": "Monthly",
 		"priority": 0
 	},
 	{
 		"id": 12,
 		"description": "Take a trip to the moon",
-		"duration": 69,
+		"duration": [248400, 0],
 		"repetition": "Annually",
 		"priority": 0
 	}
