@@ -44,12 +44,12 @@ pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> usize {
 }
 
 #[no_mangle]
-unsafe extern fn preProcessGoals(bytes: usize, time_in_hours: i64) {
+unsafe extern "C" fn preProcessGoals(bytes: usize, time_in_hours: i64) {
 	let goals = load_goals_from_ipc(bytes);
 
 	let processed = PreProcessor::process_task_count(&goals, Duration::hours(time_in_hours));
 	let string =
 		serde_json::to_string(&processed).unwrap_or_else(|err| console::log_err(ErrorCode::SerializationError, err));
 
-	console::log_str(string)
+	console::log_str(string);
 }

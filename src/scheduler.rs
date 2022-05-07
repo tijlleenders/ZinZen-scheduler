@@ -1,5 +1,12 @@
-use crate::{goal::Goal, preprocessor::PreProcessor, task::Task};
-use linked_list::LinkedList;
+use crate::{
+	console,
+	error::{exit, ErrorCode},
+	goal::Goal,
+	preprocessor::PreProcessor,
+	task::Task,
+};
+use linked_list::{Cursor, LinkedList};
+use serde::Serialize;
 use time::{Duration, PrimitiveDateTime};
 
 /// A slot in a user's schedule, can be free time or contains a tasks
@@ -98,5 +105,76 @@ impl Schedule {
 }
 
 pub(self) fn insert_tasks(goal: &Goal, task_count: usize, time_slots: &mut LinkedList<ScheduleSlot>) {
-	todo!()
+	// Amount of time allocated to each task
+	let task_allocation = goal.duration / task_count as f32;
+
+	// The first slot containing free time
+	let mut current_start;
+	let (_, (free_time_start, _)) = compatible_slot(time_slots, task_allocation, None);
+	if let Some(time) = goal.time_constraint {
+		current_start = free_time_start.replace_time(time);
+	} else {
+		current_start = free_time_start.clone();
+	};
+
+	let tasks = (0..task_count)
+		.map(|_| {
+			let task = Task {
+				goal_id: goal.id,
+				start: current_start,
+				finish: current_start + task_allocation,
+			};
+
+			current_start += goal.interval;
+			task
+		})
+		.collect::<Vec<_>>();
+
+	for task in tasks {
+		let (idx, (_, free_end)) = compatible_slot(time_slots, task_allocation, Some(task.start));
+		let free_end_copy = free_end.clone();
+
+		// This free time now ends here
+		*free_end = task.start;
+
+		// Create new splinter free slot
+		let free_slot = ScheduleSlot::Free((task.finish, free_end_copy));
+
+		// Insert occupied slot
+		time_slots.insert(idx, ScheduleSlot::Occupied(task));
+
+		// Insert free slot
+		time_slots.insert(idx + 1, free_slot);
+	}
+}
+
+fn compatible_slot(
+	time_slots: &mut LinkedList<ScheduleSlot>,
+	task_alloc: Duration,
+	instant: Option<time::PrimitiveDateTime>,
+) -> (usize, &mut (PrimitiveDateTime, PrimitiveDateTime)) {
+	let slot = time_slots
+		.iter_mut()
+		.enumerate()
+		.find(|(_, slot)| match slot {
+			ScheduleSlot::Occupied(_) => false,
+			ScheduleSlot::Free((lower, upper)) => {
+				let can_fit = (*upper - *lower) >= task_alloc;
+				let in_range = match instant {
+					Some(instant) => *upper >= instant && instant >= *lower,
+					None => true,
+				};
+
+				in_range && can_fit
+			}
+		})
+		.unwrap();
+
+	(
+		slot.0,
+		match slot.1 {
+			ScheduleSlot::Free(time) => time,
+			ScheduleSlot::Occupied(_) => unreachable!(),
+		},
+	)
 }
