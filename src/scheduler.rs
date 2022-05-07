@@ -3,6 +3,7 @@ use linked_list::LinkedList;
 use time::{Duration, PrimitiveDateTime};
 
 /// A slot in a user's schedule, can be free time or contains a tasks
+#[derive(Debug)]
 pub enum ScheduleSlot {
 	Occupied(Task),
 	Free((PrimitiveDateTime, PrimitiveDateTime)),
@@ -97,5 +98,5 @@ impl Schedule {
 }
 
 pub(self) fn insert_tasks(goal: &Goal, task_count: usize, time_slots: &mut LinkedList<ScheduleSlot>) {
-	todo!("Write task insertion function")
+	todo!()
 }

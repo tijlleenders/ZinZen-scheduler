@@ -32,7 +32,7 @@ const instance = await WebAssembly.instantiate(module, {
 });
 
 // Where the IPC buffer pointer starts at
-const ipcStart = instance.exports.getDataPointer();
+const ipcStart = instance.exports.IPC_BUFFER.value;
 
 // Load JSON
 const json = new Uint8Array(await Deno.readFile("test/test.json"));

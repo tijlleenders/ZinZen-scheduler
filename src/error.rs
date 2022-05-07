@@ -1,6 +1,6 @@
 pub struct ErrorCode;
 
-extern "C" {
+extern {
 	pub fn exit(exit_code: u8, ipc_offset: usize) -> !;
 }
 

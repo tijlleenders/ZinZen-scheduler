@@ -1,10 +1,9 @@
-use crate::goal::Goal;
 use serde::{Deserialize, Serialize};
 use time::PrimitiveDateTime;
 
 /// A [Task] is an item a user is expected to accomplish, it is simply a time-slice in a user's schedule.
 /// Through many tasks can a user achieve a
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Task {
 	/// What goal originally described this task
 	pub(crate) goal_id: usize,

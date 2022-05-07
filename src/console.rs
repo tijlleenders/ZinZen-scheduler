@@ -3,7 +3,7 @@
 #![allow(dead_code)]
 use crate::{error, write_to_ipc};
 
-extern "C" {
+extern {
 	/// Imported logging facade from JavaScript
 	fn console_log(is_string: bool, ipc_offset: usize);
 }
