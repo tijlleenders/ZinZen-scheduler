@@ -10,16 +10,12 @@ extern "C" {
 
 /// Log a string to the console
 pub fn log_str<S: AsRef<str>>(msg: S) {
-	unsafe {
-		console_log(true, write_to_ipc(msg.as_ref()));
-	}
+	unsafe { console_log(true, write_to_ipc(msg.as_ref())) }
 }
 
 /// Log a string to the console
 pub fn log_buf<S: AsRef<[u8]>>(data: S) {
-	unsafe {
-		console_log(false, write_to_ipc(data));
-	}
+	unsafe { console_log(false, write_to_ipc(data)) }
 }
 
 /// Log a Rust error to JS console and exit
