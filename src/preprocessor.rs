@@ -32,7 +32,8 @@ impl PreProcessor {
 
 				// Smallest task time is 15 minutes
 				if in_minutes < 15. {
-					occurrences = (in_minutes / 15.).ceil();
+					let goal_time = goal.duration.as_seconds_f64() / 60.;
+					occurrences = (goal_time / 15.).ceil();
 				}
 
 				(occurrences as usize, goal)
