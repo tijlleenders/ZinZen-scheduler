@@ -1,6 +1,7 @@
+use error::ErrorCode;
 use goal::load_goals_from_ipc;
 use preprocessor::PreProcessor;
-use task::Tasks;
+use time::Duration;
 
 /// API modules
 mod console;
@@ -12,6 +13,7 @@ mod tests;
 /// Project details
 mod goal;
 mod preprocessor;
+mod scheduler;
 mod task;
 
 /// A 64 KiB buffer for communication between Rust and JavaScript
@@ -42,10 +44,12 @@ pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> usize {
 }
 
 #[no_mangle]
-unsafe extern "C" fn preProcessGoals(bytes: usize, time_in_hours: usize) {
+unsafe extern "C" fn preProcessGoals(bytes: usize, time_in_hours: i64) {
 	let goals = load_goals_from_ipc(bytes);
 
-	let processed = PreProcessor::generate_tasks(&goals, time_in_hours);
-	let tasks: Tasks = processed.as_slice().into();
-	console::log_str(tasks.serialize_json())
+	let processed = PreProcessor::process_task_count(&goals, Duration::hours(time_in_hours));
+	let string =
+		serde_json::to_string(&processed).unwrap_or_else(|err| console::log_err(ErrorCode::SerializationError, err));
+
+	console::log_str(string)
 }

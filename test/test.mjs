@@ -1,4 +1,3 @@
-// RAW wasm source
 const buffer = await Deno.readFile("test/scheduler.wasm");
 
 // Compiled wasm module
@@ -12,9 +11,8 @@ const instance = await WebAssembly.instantiate(module, {
 				const readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
 				const decoder = new TextDecoder();
 				const string = decoder.decode(readResult);
-				const json = JSON.parse(string);
 
-				console.log(json);
+				console.log(string);
 			} else {
 				const readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
 				console.log(readResult);
