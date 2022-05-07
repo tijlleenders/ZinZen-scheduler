@@ -1,7 +1,7 @@
 import fs from "fs";
 
 // RAW wasm source
-const buffer = fs.readFileSync("test/output.wasm");
+const buffer = fs.readFileSync("test/scheduler.wasm");
 
 // Compiled wasm module
 const module = await WebAssembly.compile(buffer);
@@ -47,4 +47,4 @@ const jsonTarget = new Uint8Array(wasmMemory.buffer, ipcStart, json.length);
 jsonTarget.set(json);
 
 // A simple entry point for debugging
-instance.exports.preProcessGoals(json.length, 24 * 7 * 2);
+instance.exports.preProcessGoals(json.length, BigInt(24 * 7 * 2));
