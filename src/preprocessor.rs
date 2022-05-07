@@ -1,3 +1,5 @@
+use time::Duration;
+
 use crate::{
 	goal::{Goal, Repetition},
 	task::Task,
@@ -7,57 +9,34 @@ use crate::{
 pub struct PreProcessor;
 
 impl PreProcessor {
-	pub fn generate_tasks(goals: &[Goal], time_in_hours: usize) -> Vec<Task> {
-		let mut tasks = vec![];
+	pub fn process_task_count(goals: &[Goal], duration: Duration) -> Vec<(usize, &Goal)> {
+		let duration_in_hours = duration.whole_hours() as f64;
 
 		goals
 			.into_iter()
 			.map(|goal| {
 				let occurrences = match goal.repetition {
-					Repetition::Exact(exact) => exact,
-
-					Repetition::Once => 1,
-					Repetition::Daily => {
-						if time_in_hours < 24 {
-							1
-						} else {
-							time_in_hours / 24
-						}
-					}
-					Repetition::Weekly => {
-						if time_in_hours < 168 {
-							1
-						} else {
-							time_in_hours / 168
-						}
-					}
-					Repetition::Monthly => {
-						if time_in_hours < 672 {
-							1
-						} else {
-							time_in_hours / 672
-						}
-					}
-					Repetition::Annually => {
-						if time_in_hours < 8064 {
-							1
-						} else {
-							time_in_hours / 8064
-						}
-					}
+					Repetition::Exact(exact) => exact as f64,
+					Repetition::Once => 1.,
+					Repetition::Daily => duration_in_hours / 24.,
+					Repetition::Weekly => duration_in_hours / 168.,
+					Repetition::Monthly => duration_in_hours / 672.,
+					Repetition::Annually => duration_in_hours / 8064.,
 				};
 
-				(occurrences, goal)
+				(occurrences.ceil(), goal)
 			})
-			.for_each(|(occurrences, goal)| {
-				(0..occurrences).for_each(|_| {
-					tasks.push(Task {
-						goal,
-						duration: goal.duration / occurrences as f32,
-					})
-				});
-			});
+			.map(|(mut occurrences, goal)| {
+				let task_time = goal.duration / occurrences;
+				let in_minutes = task_time.as_seconds_f64() / 60.;
 
-		tasks
+				// Smallest task time is 15 minutes
+				if in_minutes < 15. {
+					occurrences = (in_minutes / 15.).ceil();
+				}
+
+				(occurrences as usize, goal)
+			})
+			.collect()
 	}
 }
