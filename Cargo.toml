@@ -5,11 +5,14 @@ edition = "2021"
 
 [lib]
 crate-type = ['cdylib']
-name = 'output'
+name = 'scheduler'
 
 [profile.release]
 opt-level = 3
 lto = true
 
 [dependencies]
-nanoserde = "0.1.29"
+serde_json = "1.0.81"
+serde = { version = "*", features = ["derive"] }
+time = { version = "0.3.9", features = ["serde"] }
+linked-list = "0.0.3"

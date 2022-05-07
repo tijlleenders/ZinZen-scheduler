@@ -1,23 +1,18 @@
 use crate::{console, error::ErrorCode, IPC_BUFFER};
-use nanoserde::{DeJson, SerJson};
+use serde::{Deserialize, Serialize};
 
 /// Loads [`Goal`] inserted into IPC by JavaScript
 pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> Vec<Goal> {
 	let slice = &IPC_BUFFER[..ipc_offset];
 
-	let string = match std::str::from_utf8(slice) {
-		Ok(str) => str,
-		Err(err) => console::log_err(ErrorCode::DataInIPCNotValidUTF8, err),
-	};
-
-	match DeJson::deserialize_json(string) {
+	match serde_json::from_slice(slice) {
 		Ok(ok) => ok,
 		Err(err) => console::log_err(ErrorCode::DeserializationError, err),
 	}
 }
 
 /// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]
-#[derive(DeJson, SerJson, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[non_exhaustive]
 pub struct Goal {
 	/// Every goal has a unique ID
@@ -25,11 +20,11 @@ pub struct Goal {
 	/// A goal's description
 	pub description: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to dedicate 72 hours of work"
-	pub duration: f32,
+	pub duration: time::Duration,
 	/// How often should this goal's tasks appear in the user's schedule, eg "I want to go to the book club weekly"
 	pub repetition: Repetition,
-	/// At what exact time of the day do ou want the tasks to start
-	pub time_constraint: Option<usize>,
+	/// Allows the user to set exact times for when a task should be done, given as a time of day
+	pub time_constraint: Option<time::PrimitiveDateTime>,
 	/// Where each task should be committed to, eg "I want to cook for my dog at home".
 	/// This is useful to make sure a schedule makes sense, since people can't teleport from place to place in minutes
 	pub location_constraint: Option<usize>,
@@ -40,7 +35,7 @@ impl Default for Goal {
 		Self {
 			id: 0,
 			description: "[NO DESCRIPTION]".to_string(),
-			duration: 0.0,
+			duration: time::Duration::ZERO,
 			repetition: Repetition::Once,
 			time_constraint: None,
 			location_constraint: None,
@@ -49,7 +44,7 @@ impl Default for Goal {
 }
 
 /// How often should a task be included in the schedule
-#[derive(DeJson, SerJson, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub enum Repetition {
 	/// If this value is `x`, then the user wants to do the task `x` times, irrespective of the timeline
 	Exact(usize),
