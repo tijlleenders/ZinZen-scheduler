@@ -1,7 +1,5 @@
-import fs from "fs";
-
 // RAW wasm source
-const buffer = fs.readFileSync("test/scheduler.wasm");
+const buffer = await Deno.readFile("test/scheduler.wasm");
 
 // Compiled wasm module
 const module = await WebAssembly.compile(buffer);
@@ -11,20 +9,21 @@ const instance = await WebAssembly.instantiate(module, {
 	env: {
 		console_log(isString, ipcOffset) {
 			if (isString) {
-				let readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
-				let decoder = new TextDecoder();
-				let string = decoder.decode(readResult);
+				const readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
+				const decoder = new TextDecoder();
+				const string = decoder.decode(readResult);
+				const json = JSON.parse(string);
 
-				console.log(string);
+				console.log(json);
 			} else {
-				let readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
+				const readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
 				console.log(readResult);
 			}
 		},
 		exit(error_code, ipcOffset) {
 			if (error_code != 0) {
-				let readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
-				let decoder = new TextDecoder();
+				const readResult = new Uint8Array(wasmMemory.buffer, ipcStart, ipcOffset);
+				const decoder = new TextDecoder();
 
 				throw new Error(`[WASM_ERROR; ErrorCode:${error_code}] ${decoder.decode(readResult)}`);
 			} else {
@@ -38,7 +37,7 @@ const instance = await WebAssembly.instantiate(module, {
 const ipcStart = instance.exports.getDataPointer();
 
 // Load JSON
-const json = new Uint8Array(fs.readFileSync("test/test.json"));
+const json = new Uint8Array(await Deno.readFile("test/test.json"));
 
 // The wasm memory
 const wasmMemory = instance.exports.memory;

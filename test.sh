@@ -15,4 +15,4 @@ wasm-opt -o test/scheduler.wasm -O3 $BINARY
 ls -lh test/scheduler.wasm
 
 # Finally execute wasm inside node.js
-node test/test.mjs
+deno run --allow-read test/test.mjs
