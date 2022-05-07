@@ -21,10 +21,11 @@ pub struct Goal {
 	pub description: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to dedicate 72 hours of work"
 	pub duration: time::Duration,
-	/// How often should this goal's tasks appear in the user's schedule, eg "I want to go to the book club weekly"
-	pub repetition: Repetition,
-	/// Allows the user to set exact times for when a task should be done, given as a time of day
-	pub time_constraint: Option<time::PrimitiveDateTime>,
+	/// The interval between a Goal's tasks, this can be used to repeat a Goal daily, weekly, etc
+	pub interval: time::Duration,
+	/// Allows the user to set exact times for when a task should be done, given as a time of day and an interval in hours
+	/// Here `interval` is fundamentally always divisible by 24
+	pub time_constraint: Option<time::Time>,
 	/// Where each task should be committed to, eg "I want to cook for my dog at home".
 	/// This is useful to make sure a schedule makes sense, since people can't teleport from place to place in minutes
 	pub location_constraint: Option<usize>,
@@ -36,26 +37,31 @@ impl Default for Goal {
 			id: 0,
 			description: "[NO DESCRIPTION]".to_string(),
 			duration: time::Duration::ZERO,
-			repetition: Repetition::Once,
-			time_constraint: None,
+			interval: time::Duration::DAY,
+			time_constraint: (None),
 			location_constraint: None,
 		}
 	}
 }
 
-/// How often should a task be included in the schedule
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
-pub enum Repetition {
-	/// If this value is `x`, then the user wants to do the task `x` times, irrespective of the timeline
-	Exact(usize),
-	/// Exactly once, eg you only need to go to buy a car once
-	Once,
-	/// Do the task each day in the schedule
-	Daily,
-	/// Do the task each week in the schedule
-	Weekly,
-	/// Do the task each month in the schedule
-	Monthly,
-	/// Do the task each year in the schedule
-	Annually,
+impl Goal {
+	pub(crate) fn intersects(
+		&self,
+		other: &Goal,
+		task_allocation_a: time::Duration,
+		task_allocation_b: time::Duration,
+	) -> bool {
+		// No constraint, no intersection
+		if let (Some(time_a), Some(time_b)) = (self.time_constraint, other.time_constraint) {
+			// A intersects B, if time_alloc of A enters into interval of B
+			let a_intersects_b = (time_a - time_b).abs() < task_allocation_a;
+
+			// B intersects A, if time_alloc of B enters into interval of A
+			let b_intersects_a = time_b + task_allocation_b > time_a + self.interval;
+
+			a_intersects_b || b_intersects_a
+		} else {
+			false
+		}
+	}
 }

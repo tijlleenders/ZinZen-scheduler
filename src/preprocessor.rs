@@ -1,9 +1,5 @@
+use crate::goal::Goal;
 use time::Duration;
-
-use crate::{
-	goal::{Goal, Repetition},
-	task::Task,
-};
 
 /// The [PreProcessor] takes in a user's goals, given a duration
 pub struct PreProcessor;
@@ -15,14 +11,7 @@ impl PreProcessor {
 		goals
 			.into_iter()
 			.map(|goal| {
-				let occurrences = match goal.repetition {
-					Repetition::Exact(exact) => exact as f64,
-					Repetition::Once => 1.,
-					Repetition::Daily => duration_in_hours / 24.,
-					Repetition::Weekly => duration_in_hours / 168.,
-					Repetition::Monthly => duration_in_hours / 672.,
-					Repetition::Annually => duration_in_hours / 8064.,
-				};
+				let occurrences = duration / goal.interval;
 
 				(occurrences.ceil(), goal)
 			})
