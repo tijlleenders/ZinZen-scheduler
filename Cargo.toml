@@ -1,7 +1,14 @@
 [package]
-name = "zinzen_scheduler"
+name = "zinzen"
 version = "0.1.0"
 edition = "2021"
+license = "AGPL-3.0"
+keywords = ["zinzen", "scheduler", "todo"]
+description = "Algorithm for auto-scheduling time-constrained tasks on a calendar"
+homepage = "https://github.com/tijlleenders/ZinZen-scheduler/wiki"
+repository = "https://github.com/tijlleenders/ZinZen-scheduler"
+readme = "README.md"
+categories = ["algorithms","date-and-time","wasm"]
 
 [lib]
 crate-type = ['cdylib']
