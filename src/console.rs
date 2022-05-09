@@ -3,7 +3,7 @@
 #![allow(dead_code)]
 use crate::{error, write_to_ipc};
 
-extern {
+extern "C" {
 	/// Imported logging facade from JavaScript
 	fn console_log(is_string: bool, ipc_offset: usize);
 }
@@ -19,7 +19,7 @@ pub fn log_buf<S: AsRef<[u8]>>(data: S) {
 }
 
 /// Log a Rust error to JS console and exit
-pub fn log_err<E: std::error::Error>(error_code: u8, err: E) -> ! {
+pub fn log_err<E: ToString>(error_code: u8, err: E) -> ! {
 	let data = err.to_string();
 	unsafe { error::exit(error_code, write_to_ipc(data.as_bytes())) }
 }
