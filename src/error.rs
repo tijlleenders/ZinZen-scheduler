@@ -1,4 +1,21 @@
+use crate::console;
+
 pub struct ErrorCode;
+
+pub trait ExplodeOption<T> {
+	fn explode(self) -> T;
+}
+
+impl<T> ExplodeOption<T> for Option<T> {
+	fn explode(self) -> T {
+		self.unwrap_or_else(|| {
+			console::log_err(
+				ErrorCode::UnwrapError,
+				format!("Call to .unwrap() panicked @ line: {}", line!()),
+			)
+		})
+	}
+}
 
 extern "C" {
 	pub fn exit(exit_code: u8, ipc_offset: usize) -> !;
