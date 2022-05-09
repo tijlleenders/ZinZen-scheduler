@@ -1,25 +1,16 @@
 use crate::{
-	console,
-	error::{exit, ErrorCode},
 	goal::Goal,
 	preprocessor::PreProcessor,
 	task::Task,
 };
-use linked_list::{Cursor, LinkedList};
-use serde::Serialize;
+use linked_list::LinkedList;
 use time::{Duration, PrimitiveDateTime};
 
-/// A slot in a user's schedule, can be free time or contains a tasks
-#[derive(Debug)]
-pub enum ScheduleSlot {
-	Occupied(Task),
-	Free((PrimitiveDateTime, PrimitiveDateTime)),
-}
-
 /// A schedule is just a list of tasks which satisfy the user's time and location constraints
+#[derive(Debug)]
 pub struct Schedule {
-	slots: LinkedList<ScheduleSlot>,
-	timeline: (PrimitiveDateTime, PrimitiveDateTime),
+	pub(crate) slots: LinkedList<Task>,
+	pub(crate) timeline: (PrimitiveDateTime, PrimitiveDateTime),
 }
 
 impl Schedule {
@@ -30,17 +21,30 @@ impl Schedule {
 		let max_free_time = timeline.1 - timeline.0;
 
 		// Slots initially begin with full free time
-		let mut slots = LinkedList::new();
-		slots.push_front(ScheduleSlot::Free(timeline));
+		let mut schedule = Schedule {
+			slots: LinkedList::new(),
+			timeline,
+		};
+
+		// Insert a task that spans the whole schedule, considered free time
+		let free_task = Task::fill(&mut schedule);
+		schedule.slots.push_front(free_task);
 
 		// ======================= TIMELINE & GOAL CHECKS =================================
 		// Make sure no Goal exceeds the user's free time
-		if goals.iter().any(|g| g.duration >= max_free_time) {
-			return Err("A goal was found with a duration greater than the timeline duration".into());
-		}
+		goals.iter().try_for_each(|g| {
+			if g.task_duration >= max_free_time {
+				Err(format!(
+					"A goal (description = {})was found with a duration greater than the timeline duration",
+					g.description
+				))
+			} else {
+				Ok(())
+			}
+		})?;
 
 		// Make sure the user's free time is enough to accommodate all goal's durations
-		let total_goal_duration = goals.iter().map(|g| g.duration).reduce(|a, b| a + b);
+		let total_goal_duration = goals.iter().map(|g| g.task_duration).reduce(|a, b| a + b);
 
 		if let Some(total) = total_goal_duration {
 			if total >= max_free_time {
@@ -49,44 +53,42 @@ impl Schedule {
 
 			// If the user allocates no time to any Goal, then all time is free time :)
 			if total == Duration::ZERO {
-				return Ok(Schedule { slots, timeline });
+				return Ok(schedule);
 			}
 		} else {
 			// If the user has no goals then they have all free time
-			return Ok(Schedule { slots, timeline });
+			return Ok(schedule);
 		};
 
 		// ========================= CHECK AND VALIDATE TIME_CONSTRAINT BOUNDS =================
 		// Produce a tuple containing task count and goal
-		let goals_occurrences = PreProcessor::process_task_count(goals, timeline.0 - timeline.1);
-		let goals_occurrences_copy = PreProcessor::process_task_count(goals, timeline.0 - timeline.1).clone();
+		let goals_occurrences = PreProcessor::process_task_count(goals, timeline.1 - timeline.0);
+		let goals_occurrences_copy = goals_occurrences.clone();
 
-		goals_occurrences
-			.iter()
+		goals_occurrences_copy
+			.into_iter()
 			.filter(|(_, g)| g.time_constraint.is_some())
 			.enumerate()
 			.try_for_each(|(idx, (task_count_a, goal_self))| -> Result<(), String> {
-				let task_allocation_a = goal_self.duration / *task_count_a as f32;
-
 				// Iterate
-				goals_occurrences_copy
+				goals_occurrences
 					.iter()
 					.filter(|(_, g)| g.time_constraint.is_some())
 					.enumerate()
 					.try_for_each(|(t_idx, (task_count_b, goal_other))| {
-						let task_allocation_b = goal_other.duration / *task_count_b as f32;
-
 						// This prevents checking conflicts with self
 						if t_idx == idx {
 							return Ok(());
 						}
 
 						// TWO goals intersect if their time constraints are within range
-						if goal_self.intersects(goal_other, task_allocation_a, task_allocation_b) {
-							return Err(format!(
+						let err = format!(
 							"Two goals: (description = {}) and (description = {}) are conflicting as they intersect",
 							goal_other.description, goal_self.description
-						));
+						);
+
+						if goal_self.intersects(goal_other, goal_self.task_duration, goal_other.task_duration) {
+							return Err(err);
 						};
 
 						Ok(())
@@ -98,83 +100,130 @@ impl Schedule {
 		// =================== INSERT TASKS INTO TIME SLOTS ===================
 		goals_occurrences
 			.iter()
-			.for_each(|(task_count, goal)| insert_tasks(goal, *task_count, &mut slots));
+			.for_each(|(task_count, goal)| insert_tasks(goal, *task_count, &mut schedule));
 
-		Ok(Schedule { slots, timeline })
+		Ok(schedule)
 	}
 }
 
-pub(self) fn insert_tasks(goal: &Goal, task_count: usize, time_slots: &mut LinkedList<ScheduleSlot>) {
-	// Amount of time allocated to each task
-	let task_allocation = goal.duration / task_count as f32;
-
-	// The first slot containing free time
-	let mut current_start;
-	let (_, (free_time_start, _)) = compatible_slot(time_slots, task_allocation, None);
-	if let Some(time) = goal.time_constraint {
-		current_start = free_time_start.replace_time(time);
-	} else {
-		current_start = free_time_start.clone();
+pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule) {
+	// The first compatible slot
+	let mut current_time_hint = match goal.time_constraint {
+		Some(goal_start) => goal_start,
+		None => schedule.timeline.0,
 	};
 
-	let tasks = (0..task_count)
-		.map(|_| {
-			let task = Task {
-				goal_id: goal.id,
-				start: current_start,
-				finish: current_start + task_allocation,
-			};
+	// Insert the relevant number of tasks into the time slot
+	for _ in 0..(task_count as u32) {
+		// Get's the first compatible slot
+		let slot = if goal.time_constraint.is_some() {
+			compatible_slot(
+				schedule,
+				goal.task_duration,
+				Hint::Exact(current_time_hint),
+				goal.interval,
+			)
+		} else {
+			compatible_slot(
+				schedule,
+				goal.task_duration,
+				Hint::Loose(current_time_hint),
+				goal.interval,
+			)
+		};
 
-			current_start += goal.interval;
-			task
-		})
-		.collect::<Vec<_>>();
+		// Get mutable reference to the Task allocated in the schedule
+		let task_allocated = get(&mut schedule.slots, slot).unwrap();
 
-	for task in tasks {
-		let (idx, (_, free_end)) = compatible_slot(time_slots, task_allocation, Some(task.start));
-		let free_end_copy = free_end.clone();
+		// Get time expected for task a and b
+		let task_allocated_time = task_allocated.finish - task_allocated.start;
+		let task_allocated_duration = task_allocated_time / task_allocated.flexibility;
 
-		// This free time now ends here
-		*free_end = task.start;
+		// Store end_time copy
+		let end_time = task_allocated.finish.clone();
+
+		// The allocated time now ends here
+		task_allocated.finish = current_time_hint;
+		task_allocated.flexibility = (task_allocated.finish - task_allocated.start) / task_allocated_duration;
+
+		// Remove allocated task if no time is allocated
+		if task_allocated.finish - task_allocated.start <= Duration::ZERO {
+			schedule.slots.remove(slot);
+		}
 
 		// Create new splinter free slot
-		let free_slot = ScheduleSlot::Free((task.finish, free_end_copy));
+		let new_allocated = Task {
+			goal_id: goal.id.get(),
+			start: current_time_hint,
+			finish: end_time,
+			flexibility: (end_time - current_time_hint) / goal.task_duration,
+		};
 
-		// Insert occupied slot
-		time_slots.insert(idx, ScheduleSlot::Occupied(task));
+		// Insert newly allocated task
+		schedule.slots.insert(slot, new_allocated);
 
-		// Insert free slot
-		time_slots.insert(idx + 1, free_slot);
+		// Increment time_hint
+		if let Some(interval) = goal.interval {
+			current_time_hint += interval
+		};
 	}
 }
 
+#[derive(Copy, Clone, Debug)]
+pub(self) enum Hint {
+	Loose(time::PrimitiveDateTime),
+	/// Means the time has to start exactly at the given time
+	Exact(time::PrimitiveDateTime),
+}
+
+fn get<T>(list: &mut LinkedList<T>, index: usize) -> Option<&mut T> {
+	for (cmp, item) in list.iter_mut().enumerate() {
+		if cmp == index {
+			return Some(item);
+		}
+	}
+
+	None
+}
+
+/// Returns an index to the first slot compatible with the given constraints
 fn compatible_slot(
-	time_slots: &mut LinkedList<ScheduleSlot>,
-	task_alloc: Duration,
-	instant: Option<time::PrimitiveDateTime>,
-) -> (usize, &mut (PrimitiveDateTime, PrimitiveDateTime)) {
-	let slot = time_slots
-		.iter_mut()
+	schedule: &Schedule,
+	task_duration: Duration,
+	start_hint: Hint,
+	maximum_delta: Option<Duration>,
+) -> usize {
+	schedule
+		.slots
+		.iter()
 		.enumerate()
-		.find(|(_, slot)| match slot {
-			ScheduleSlot::Occupied(_) => false,
-			ScheduleSlot::Free((lower, upper)) => {
-				let can_fit = (*upper - *lower) >= task_alloc;
-				let in_range = match instant {
-					Some(instant) => *upper >= instant && instant >= *lower,
+		.find(|(idx, task)| {
+			let space = task.finish - task.start;
+
+			// Can we fit into the this slot?
+			let can_fit = space >= task_duration;
+
+			// Are we in range of the time hint?
+			let in_range = match start_hint {
+				// If there is no max delta, means the Task can be placed anywhere
+				Hint::Loose(start_time) => match maximum_delta {
+					Some(delta) => (start_time - task.start <= delta) || (task.finish - start_time <= delta),
 					None => true,
-				};
+				},
 
-				in_range && can_fit
-			}
+				Hint::Exact(start_time) => task.finish >= start_time && start_time >= task.start,
+			};
+
+			// Can we append ourselves into this tasks? Slots?
+			let can_append = match start_hint {
+				Hint::Exact(start_time) => {
+					start_time - task.start >= space / task.flexibility && task.finish - start_time >= task_duration
+				}
+				Hint::Loose(_) => true,
+			};
+
+			can_fit && can_append && in_range
 		})
-		.unwrap();
-
-	(
-		slot.0,
-		match slot.1 {
-			ScheduleSlot::Free(time) => time,
-			ScheduleSlot::Occupied(_) => unreachable!(),
-		},
-	)
+		.map(|d| d.0)
+		.unwrap()
 }
