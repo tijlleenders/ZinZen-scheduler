@@ -1,7 +1,12 @@
 #![allow(unused_imports)]
 use std::num::NonZeroUsize;
 
-use crate::{console, error::{ErrorCode, Explode}, goal::Goal, preprocessor::PreProcessor};
+use crate::{
+	console,
+	error::{ErrorCode, Explode},
+	goal::Goal,
+	preprocessor::PreProcessor,
+};
 use time::Duration;
 
 #[test]
@@ -45,8 +50,9 @@ pub(crate) fn test_preprocessor() {
 		},
 	];
 
-	let tasks = PreProcessor::process_task_count(goals, Duration::hours(24 * 7 * 4 * 2));
-	dbg!(tasks);
+	for task in PreProcessor::process_task_count(goals, Duration::hours(24 * 7 * 4 * 2)) {
+		dbg!(task);
+	}
 }
 
 #[test]
