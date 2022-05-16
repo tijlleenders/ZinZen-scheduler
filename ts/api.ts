@@ -94,9 +94,11 @@ export class API {
 	}
 }
 
-export async function loadAPI(path: string): Promise<API> {
+// loads the api
+export async function loadAPI(buffer: ArrayBuffer): Promise<API> {
 	// Build instance
-	const { instance } = await WebAssembly.instantiateStreaming(await fetch(path), {
+	const module = await WebAssembly.compile(buffer);
+	const instance = await WebAssembly.instantiate(module, {
 		env: {
 			console_log(isString: boolean, ipcOffset: number) {
 				if (isString) {

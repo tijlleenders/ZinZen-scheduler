@@ -14,5 +14,5 @@ mkdir -p test
 wasm-opt -o test/scheduler.wasm -O3 $BINARY
 ls -lh test/scheduler.wasm
 
-# Finally execute wasm inside node.js
-deno run --allow-read test/test.mjs
+# Finally execute wasm inside Deno
+deno run --allow-read test/test.ts
