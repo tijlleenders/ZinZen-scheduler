@@ -61,39 +61,6 @@ impl Schedule {
 		// ========================= CHECK AND VALIDATE TIME_CONSTRAINT BOUNDS =================
 		// Produce a tuple containing task count and goal
 		let goals_occurrences = PreProcessor::process_task_count(goals, timeline.1 - timeline.0);
-		let goals_occurrences_copy = goals_occurrences.clone();
-
-		goals_occurrences_copy
-			.into_iter()
-			.filter(|(_, g)| g.time_constraint.is_some())
-			.enumerate()
-			.try_for_each(|(idx, (_, goal_self))| -> Result<(), String> {
-				// Iterate
-				goals_occurrences
-					.iter()
-					.filter(|(_, g)| g.time_constraint.is_some())
-					.enumerate()
-					.try_for_each(|(t_idx, (_, goal_other))| {
-						// This prevents checking conflicts with self
-						if t_idx == idx {
-							return Ok(());
-						}
-
-						// TWO goals intersect if their time constraints are within range
-						let err = format!(
-							"Two goals: (description = {}) and (description = {}) are conflicting as they intersect",
-							goal_other.description, goal_self.description
-						);
-
-						if goal_self.intersects(goal_other, goal_self.task_duration, goal_other.task_duration) {
-							return Err(err);
-						};
-
-						Ok(())
-					})?;
-
-				Ok(())
-			})?;
 
 		// =================== INSERT TASKS INTO TIME SLOTS ===================
 		goals_occurrences

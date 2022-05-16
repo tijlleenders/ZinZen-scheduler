@@ -46,27 +46,3 @@ impl Default for Goal {
 		}
 	}
 }
-
-impl Goal {
-	pub(crate) fn intersects(
-		&self,
-		other: &Goal,
-		task_allocation_a: time::Duration,
-		task_allocation_b: time::Duration,
-	) -> bool {
-		// No constraint, no intersection
-		if let (Some(interval), Some(time_a), Some(time_b)) =
-			(self.interval, self.time_constraint, other.time_constraint)
-		{
-			// A intersects B, if time_alloc of A enters into interval of B
-			let a_intersects_b = (time_a - time_b).abs() < task_allocation_a;
-
-			// B intersects A, if time_alloc of B enters into interval of A
-			let b_intersects_a = time_b + task_allocation_b > time_a + interval;
-
-			a_intersects_b || b_intersects_a
-		} else {
-			false
-		}
-	}
-}
