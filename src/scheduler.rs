@@ -58,15 +58,14 @@ pub fn generate_schedule(
 	};
 
 	// Produce a tuple containing task count and goal, and insert into time slots
-	let goals_occurrences = PreProcessor::process_task_count(goals, timeline.1 - timeline.0);
-	goals_occurrences
-		.iter()
-		.for_each(|(task_count, goal)| insert_tasks(goal, *task_count, &mut schedule));
+	for (task_count, goal) in PreProcessor::process_task_count(goals, timeline.1 - timeline.0) {
+		insert_tasks(goal, task_count, &mut schedule);
+	}
 
 	Ok(schedule)
 }
 
-pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule) {
+pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedule) {
 	// The first compatible slot
 	let mut current_time_hint = match goal.time_constraint {
 		Some(goal_start) => goal_start,
@@ -74,9 +73,9 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule)
 	};
 
 	// Insert the relevant number of tasks into the time slot
-	for _ in 0..(task_count as u32) {
+	(0..task_count).for_each(|_| {
 		// Get's the first compatible slot
-		let slot = if goal.time_constraint.is_some() {
+		let idx = if goal.time_constraint.is_some() {
 			compatible_slot(
 				schedule,
 				goal.task_duration,
@@ -93,7 +92,7 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule)
 		};
 
 		// Get mutable reference to the Task allocated in the schedule
-		let task_allocated = get(&mut schedule.slots, slot).explode();
+		let task_allocated = get(&mut schedule.slots, idx).explode();
 
 		// Get time expected for task a and b
 		let task_allocated_time = task_allocated.finish - task_allocated.start;
@@ -108,7 +107,7 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule)
 
 		// Remove allocated task if no time is allocated
 		if task_allocated.finish - task_allocated.start <= Duration::ZERO {
-			schedule.slots.remove(slot);
+			schedule.slots.remove(idx);
 		}
 
 		// Create new splinter free slot
@@ -120,13 +119,13 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule)
 		};
 
 		// Insert newly allocated task
-		schedule.slots.insert(slot, new_allocated);
+		schedule.slots.insert(idx, new_allocated);
 
 		// Increment time_hint
 		if let Some(interval) = goal.interval {
 			current_time_hint += interval
 		};
-	}
+	});
 }
 
 #[derive(Copy, Clone, Debug)]

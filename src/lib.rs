@@ -51,7 +51,7 @@ unsafe extern "C" fn processTaskCount(bytes: usize, time_in_hours: i64) -> usize
 	let duration = Duration::hours(time_in_hours);
 	let processed = PreProcessor::process_task_count(&goals, duration);
 
-	let with_ids = processed.iter().map(|(a, b)| (*a, b.id)).collect::<Vec<_>>();
+	let with_ids = processed.map(|(a, b)| (a, b.id)).collect::<Vec<_>>();
 	let string = serde_json::to_string(&with_ids).explode();
 
 	write_to_ipc(string)

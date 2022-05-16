@@ -1,0 +1,37 @@
+[
+  {
+    "id": 7,
+    "description": "Watch out for that falling tree",
+    "task_duration": [3600, 0]
+  },
+  {
+    "id": 8,
+    "description": "Eat a baker's dozen worth of cakes",
+    "task_duration": [36000, 0],
+    "interval": [604800, 0]
+  },
+  {
+    "id": 9,
+    "description": "Wake up",
+    "task_duration": [3600, 0],
+    "interval": [86400, 0]
+  },
+  {
+    "id": 10,
+    "description": "Change the timezone",
+    "task_duration": [180000, 0],
+    "interval": [604800, 0]
+  },
+  {
+    "id": 11,
+    "description": "Rip, tear, maul, seethe",
+    "task_duration": [162000, 0],
+    "interval": [172800, 0]
+  },
+  {
+    "id": 12,
+    "description": "Take a trip to the moon",
+    "task_duration": [248400, 0],
+    "interval": [518400, 0]
+  }
+]
