@@ -5,6 +5,9 @@ export type Duration = [number, number];
 // Contains Year, Ordinal Day, Hour, Minute, Second, Nanosecond
 export type DateTime = [number, number, number, number, number, number];
 
+// A schedule is just an array of tasks
+type Schedule = [Task];
+
 // The Goal interface
 export interface Goal {
 	id: number,
@@ -67,7 +70,7 @@ export class API {
 		return new Map(iterator)
 	}
 
-	public generateTasks(goals: [Goal], start: DateTime, finish: DateTime): [Task] {
+	public generateSchedule(goals: [Goal], start: DateTime, finish: DateTime): Schedule {
 		// Serialize data
 		const plan = { goals, start, finish };
 		const string = JSON.stringify(plan);
