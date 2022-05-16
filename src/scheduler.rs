@@ -1,8 +1,6 @@
-use crate::{
-	goal::Goal,
-	preprocessor::PreProcessor,
-	task::Task,
-};
+#![allow(unused)]
+
+use crate::{goal::Goal, preprocessor::PreProcessor, task::Task};
 use linked_list::LinkedList;
 use time::{Duration, PrimitiveDateTime};
 
@@ -15,7 +13,7 @@ pub struct Schedule {
 
 impl Schedule {
 	pub fn generate_schedule(
-		goals: &mut [Goal],
+		goals: &[Goal],
 		timeline: (PrimitiveDateTime, PrimitiveDateTime),
 	) -> Result<Schedule, String> {
 		let max_free_time = timeline.1 - timeline.0;
@@ -69,13 +67,13 @@ impl Schedule {
 			.into_iter()
 			.filter(|(_, g)| g.time_constraint.is_some())
 			.enumerate()
-			.try_for_each(|(idx, (task_count_a, goal_self))| -> Result<(), String> {
+			.try_for_each(|(idx, (_, goal_self))| -> Result<(), String> {
 				// Iterate
 				goals_occurrences
 					.iter()
 					.filter(|(_, g)| g.time_constraint.is_some())
 					.enumerate()
-					.try_for_each(|(t_idx, (task_count_b, goal_other))| {
+					.try_for_each(|(t_idx, (_, goal_other))| {
 						// This prevents checking conflicts with self
 						if t_idx == idx {
 							return Ok(());
@@ -140,7 +138,7 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule)
 		let task_allocated_duration = task_allocated_time / task_allocated.flexibility;
 
 		// Store end_time copy
-		let end_time = task_allocated.finish.clone();
+		let end_time = task_allocated.finish;
 
 		// The allocated time now ends here
 		task_allocated.finish = current_time_hint;
@@ -197,7 +195,7 @@ fn compatible_slot(
 		.slots
 		.iter()
 		.enumerate()
-		.find(|(idx, task)| {
+		.find(|(_, task)| {
 			let space = task.finish - task.start;
 
 			// Can we fit into the this slot?
