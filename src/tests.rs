@@ -1,7 +1,7 @@
 #![allow(unused_imports)]
 use std::num::NonZeroUsize;
 
-use crate::{console, error::ErrorCode, goal::Goal, preprocessor::PreProcessor};
+use crate::{console, error::{ErrorCode, Explode}, goal::Goal, preprocessor::PreProcessor};
 use time::Duration;
 
 #[test]
@@ -51,7 +51,7 @@ pub(crate) fn test_preprocessor() {
 
 #[test]
 pub(crate) fn test_scheduler() {
-	use crate::scheduler::Schedule;
+	use crate::scheduler::generate_schedule;
 
 	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 1).unwrap();
 	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 21).unwrap();
@@ -83,7 +83,7 @@ pub(crate) fn test_scheduler() {
 		},
 	];
 
-	for task in Schedule::generate_schedule(goals, timeline).unwrap().slots {
+	for task in generate_schedule(goals, timeline).explode().slots {
 		dbg!(task);
 	}
 }

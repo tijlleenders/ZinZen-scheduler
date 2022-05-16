@@ -1,4 +1,4 @@
-use error::ErrorCode;
+use error::{ErrorCode, Explode};
 use goal::load_goals_from_ipc;
 use preprocessor::PreProcessor;
 use serde::Deserialize;
@@ -52,7 +52,7 @@ unsafe extern "C" fn processTaskCount(bytes: usize, time_in_hours: i64) -> usize
 	let processed = PreProcessor::process_task_count(&goals, duration);
 
 	let with_ids = processed.iter().map(|(a, b)| (*a, b.id)).collect::<Vec<_>>();
-	let string = serde_json::to_string(&with_ids).unwrap();
+	let string = serde_json::to_string(&with_ids).explode();
 
 	write_to_ipc(string)
 }
@@ -80,9 +80,9 @@ impl Plan {
 unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
 	let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
 
-	let schedule = scheduler::generate_schedule(&goals, (start, finish)).unwrap();
+	let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
 	let tasks = schedule.slots_vector();
-	let string = serde_json::to_string(&tasks).unwrap();
+	let string = serde_json::to_string(&tasks).explode();
 
 	write_to_ipc(string)
 }

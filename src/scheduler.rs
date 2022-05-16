@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-use crate::{goal::Goal, preprocessor::PreProcessor, task::Task};
+use crate::{error::Explode, goal::Goal, preprocessor::PreProcessor, task::Task};
 use linked_list::LinkedList;
 use time::{Duration, PrimitiveDateTime};
 
@@ -18,7 +18,10 @@ impl Schedule {
 	}
 }
 
-pub fn generate_schedule(goals: &[Goal], timeline: (PrimitiveDateTime, PrimitiveDateTime)) -> Result<Schedule, String> {
+pub fn generate_schedule(
+	goals: &[Goal],
+	timeline: (PrimitiveDateTime, PrimitiveDateTime),
+) -> Result<Schedule, &'static str> {
 	let max_free_time = timeline.1 - timeline.0;
 
 	// Slots initially begin with full free time
@@ -33,23 +36,16 @@ pub fn generate_schedule(goals: &[Goal], timeline: (PrimitiveDateTime, Primitive
 
 	// ======================= TIMELINE & GOAL CHECKS =================================
 	// Make sure no Goal exceeds the user's free time
-	goals.iter().try_for_each(|g| {
-		if g.task_duration >= max_free_time {
-			Err(format!(
-				"A goal (description = {})was found with a duration greater than the timeline duration",
-				g.description
-			))
-		} else {
-			Ok(())
-		}
-	})?;
+	if goals.iter().any(|g| g.task_duration >= max_free_time) {
+		return Err("A goal was found with a duration greater than the timeline duration");
+	};
 
 	// Make sure the user's free time is enough to accommodate all goal's durations
 	let total_goal_duration = goals.iter().map(|g| g.task_duration).reduce(|a, b| a + b);
 
 	if let Some(total) = total_goal_duration {
 		if total >= max_free_time {
-			return Err("There isn't enough time in the user's schedule to accommodate all Goal's, either increase your expected timeline or reduce your individual Goal's allocated time".into());
+			return Err("There isn't enough time in the user's schedule to accommodate all Goal's, either increase your expected timeline or reduce your individual Goal's allocated time");
 		}
 
 		// If the user allocates no time to any Goal, then all time is free time :)
@@ -97,7 +93,7 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule)
 		};
 
 		// Get mutable reference to the Task allocated in the schedule
-		let task_allocated = get(&mut schedule.slots, slot).unwrap();
+		let task_allocated = get(&mut schedule.slots, slot).explode();
 
 		// Get time expected for task a and b
 		let task_allocated_time = task_allocated.finish - task_allocated.start;
@@ -189,5 +185,5 @@ fn compatible_slot(
 			can_fit && can_append && in_range
 		})
 		.map(|d| d.0)
-		.unwrap()
+		.explode()
 }

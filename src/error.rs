@@ -1,19 +1,34 @@
-use crate::console;
-
 pub struct ErrorCode;
 
-pub trait ExplodeOption<T> {
+pub trait Explode<T> {
 	fn explode(self) -> T;
 }
 
-impl<T> ExplodeOption<T> for Option<T> {
+impl<T> Explode<T> for Option<T> {
 	fn explode(self) -> T {
-		self.unwrap_or_else(|| {
-			console::log_err(
-				ErrorCode::UnwrapError,
-				format!("Call to .unwrap() panicked @ line: {}", line!()),
-			)
-		})
+		#[cfg(target = "wasm32-unknown-unknown")]
+		{
+			use crate::console;
+			self.unwrap_or_else(|| console::log_err(ErrorCode::UnwrapError, "Call to `Option::unwrap` panicked"))
+		}
+		#[cfg(not(target = "wasm32-unknown-unknown"))]
+		{
+			self.unwrap()
+		}
+	}
+}
+
+impl<T, E: std::fmt::Debug> Explode<T> for Result<T, E> {
+	fn explode(self) -> T {
+		#[cfg(target = "wasm32-unknown-unknown")]
+		{
+			use crate::console;
+			self.unwrap_or_else(|err| console::log_err(ErrorCode::UnwrapError, err))
+		}
+		#[cfg(not(target = "wasm32-unknown-unknown"))]
+		{
+			self.unwrap()
+		}
 	}
 }
 
@@ -22,6 +37,7 @@ extern "C" {
 }
 
 #[allow(non_upper_case_globals)]
+#[allow(dead_code)]
 impl ErrorCode {
 	pub(crate) const IPCDataOverflow: u8 = 2;
 	pub(crate) const DeserializationError: u8 = 4;
