@@ -53,7 +53,8 @@ unsafe extern "C" fn processTaskCount(bytes: usize, time_in_hours: i64) -> usize
 
 	let with_ids = processed.iter().map(|(a, b)| (*a, b.id)).collect::<Vec<_>>();
 	let string = serde_json::to_string(&with_ids).unwrap();
-	write_to_ipc(string.as_bytes())
+
+	write_to_ipc(string)
 }
 
 #[derive(Deserialize)]
@@ -82,5 +83,6 @@ unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
 	let schedule = scheduler::generate_schedule(&goals, (start, finish)).unwrap();
 	let tasks = schedule.slots_vector();
 	let string = serde_json::to_string(&tasks).unwrap();
-	write_to_ipc(string.as_bytes())
+
+	write_to_ipc(string)
 }
