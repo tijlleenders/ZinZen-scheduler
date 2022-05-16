@@ -15,6 +15,14 @@ interface Goal {
 	location_constraint: null | number
 }
 
+// An interface that describes a Task
+interface Task {
+	goal_id: number,
+	start: DateTime,
+	finish: DateTime,
+	flexibility: number,
+}
+
 // A goal id is just a number
 type GoalID = number;
 
@@ -44,7 +52,7 @@ export class API {
 		target.set(data);
 
 		// Process
-		const offset = (this.instance.exports.taskCount as CallableFunction)(json.length, durationInHours) as number;
+		const offset = (this.instance.exports.taskCount as CallableFunction)(data.length, durationInHours) as number;
 		const buffer = this.getIPCView(offset);
 		const readString = this.textDecoder.decode(buffer);
 

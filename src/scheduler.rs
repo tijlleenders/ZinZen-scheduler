@@ -58,11 +58,8 @@ impl Schedule {
 			return Ok(schedule);
 		};
 
-		// ========================= CHECK AND VALIDATE TIME_CONSTRAINT BOUNDS =================
-		// Produce a tuple containing task count and goal
+		// Produce a tuple containing task count and goal, and insert into time slots
 		let goals_occurrences = PreProcessor::process_task_count(goals, timeline.1 - timeline.0);
-
-		// =================== INSERT TASKS INTO TIME SLOTS ===================
 		goals_occurrences
 			.iter()
 			.for_each(|(task_count, goal)| insert_tasks(goal, *task_count, &mut schedule));
