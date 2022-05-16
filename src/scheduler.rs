@@ -12,60 +12,62 @@ pub struct Schedule {
 }
 
 impl Schedule {
-	pub fn generate_schedule(
-		goals: &[Goal],
-		timeline: (PrimitiveDateTime, PrimitiveDateTime),
-	) -> Result<Schedule, String> {
-		let max_free_time = timeline.1 - timeline.0;
-
-		// Slots initially begin with full free time
-		let mut schedule = Schedule {
-			slots: LinkedList::new(),
-			timeline,
-		};
-
-		// Insert a task that spans the whole schedule, considered free time
-		let free_task = Task::fill(&mut schedule);
-		schedule.slots.push_front(free_task);
-
-		// ======================= TIMELINE & GOAL CHECKS =================================
-		// Make sure no Goal exceeds the user's free time
-		goals.iter().try_for_each(|g| {
-			if g.task_duration >= max_free_time {
-				Err(format!(
-					"A goal (description = {})was found with a duration greater than the timeline duration",
-					g.description
-				))
-			} else {
-				Ok(())
-			}
-		})?;
-
-		// Make sure the user's free time is enough to accommodate all goal's durations
-		let total_goal_duration = goals.iter().map(|g| g.task_duration).reduce(|a, b| a + b);
-
-		if let Some(total) = total_goal_duration {
-			if total >= max_free_time {
-				return Err("There isn't enough time in the user's schedule to accommodate all Goal's, either increase your expected timeline or reduce your individual Goal's allocated time".into());
-			}
-
-			// If the user allocates no time to any Goal, then all time is free time :)
-			if total == Duration::ZERO {
-				return Ok(schedule);
-			}
-		} else {
-			// If the user has no goals then they have all free time
-			return Ok(schedule);
-		};
-
-		// Produce a tuple containing task count and goal, and insert into time slots
-		let goals_occurrences = PreProcessor::process_task_count(goals, timeline.1 - timeline.0);
-		goals_occurrences
-			.iter()
-			.for_each(|(task_count, goal)| insert_tasks(goal, *task_count, &mut schedule));
-
-		Ok(schedule)
+	/// Generate a vector of slots from a list of slots
+	pub(crate) fn slots_vector(&self) -> Vec<Task> {
+		self.slots.iter().map(|t| t.clone()).collect::<Vec<_>>()
 	}
+}
+
+pub fn generate_schedule(goals: &[Goal], timeline: (PrimitiveDateTime, PrimitiveDateTime)) -> Result<Schedule, String> {
+	let max_free_time = timeline.1 - timeline.0;
+
+	// Slots initially begin with full free time
+	let mut schedule = Schedule {
+		slots: LinkedList::new(),
+		timeline,
+	};
+
+	// Insert a task that spans the whole schedule, considered free time
+	let free_task = Task::fill(&mut schedule);
+	schedule.slots.push_front(free_task);
+
+	// ======================= TIMELINE & GOAL CHECKS =================================
+	// Make sure no Goal exceeds the user's free time
+	goals.iter().try_for_each(|g| {
+		if g.task_duration >= max_free_time {
+			Err(format!(
+				"A goal (description = {})was found with a duration greater than the timeline duration",
+				g.description
+			))
+		} else {
+			Ok(())
+		}
+	})?;
+
+	// Make sure the user's free time is enough to accommodate all goal's durations
+	let total_goal_duration = goals.iter().map(|g| g.task_duration).reduce(|a, b| a + b);
+
+	if let Some(total) = total_goal_duration {
+		if total >= max_free_time {
+			return Err("There isn't enough time in the user's schedule to accommodate all Goal's, either increase your expected timeline or reduce your individual Goal's allocated time".into());
+		}
+
+		// If the user allocates no time to any Goal, then all time is free time :)
+		if total == Duration::ZERO {
+			return Ok(schedule);
+		}
+	} else {
+		// If the user has no goals then they have all free time
+		return Ok(schedule);
+	};
+
+	// Produce a tuple containing task count and goal, and insert into time slots
+	let goals_occurrences = PreProcessor::process_task_count(goals, timeline.1 - timeline.0);
+	goals_occurrences
+		.iter()
+		.for_each(|(task_count, goal)| insert_tasks(goal, *task_count, &mut schedule));
+
+	Ok(schedule)
 }
 
 pub(self) fn insert_tasks(goal: &Goal, task_count: f64, schedule: &mut Schedule) {

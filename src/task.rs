@@ -5,7 +5,7 @@ use crate::scheduler::Schedule;
 
 /// A [Task] is an item a user is expected to accomplish, it is simply a time-slice in a user's schedule.
 /// Through many tasks can a user achieve a
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Task {
 	/// What goal originally described this task
 	pub(crate) goal_id: usize,
@@ -18,7 +18,7 @@ pub struct Task {
 }
 
 impl Task {
-	pub(crate) fn fill(schedule: &mut Schedule) -> Self {
+	pub(crate) fn fill(schedule: &Schedule) -> Self {
 		let max_seconds = (schedule.timeline.1 - schedule.timeline.0).as_seconds_f64().abs();
 
 		Self {

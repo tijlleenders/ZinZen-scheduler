@@ -1,7 +1,8 @@
 use error::ErrorCode;
 use goal::load_goals_from_ipc;
 use preprocessor::PreProcessor;
-use time::Duration;
+use serde::Deserialize;
+use time::{Duration, PrimitiveDateTime};
 
 /// API modules
 mod console;
@@ -52,5 +53,34 @@ unsafe extern "C" fn processTaskCount(bytes: usize, time_in_hours: i64) -> usize
 
 	let with_ids = processed.iter().map(|(a, b)| (*a, b.id)).collect::<Vec<_>>();
 	let string = serde_json::to_string(&with_ids).unwrap();
+	write_to_ipc(string.as_bytes())
+}
+
+#[derive(Deserialize)]
+/// Just a deserialization target
+struct Plan {
+	goals: Vec<goal::Goal>,
+	start: PrimitiveDateTime,
+	finish: PrimitiveDateTime,
+}
+
+impl Plan {
+	unsafe fn load_plan_from_ipc(ipc_offset: usize) -> Plan {
+		let slice = &IPC_BUFFER[..ipc_offset];
+
+		match serde_json::from_slice(slice) {
+			Ok(ok) => ok,
+			Err(err) => console::log_err(ErrorCode::DeserializationError, err),
+		}
+	}
+}
+
+#[no_mangle]
+unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
+	let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
+
+	let schedule = scheduler::generate_schedule(&goals, (start, finish)).unwrap();
+	let tasks = schedule.slots_vector();
+	let string = serde_json::to_string(&tasks).unwrap();
 	write_to_ipc(string.as_bytes())
 }

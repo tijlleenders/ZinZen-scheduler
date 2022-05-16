@@ -1,12 +1,12 @@
 // A span of time with nanosecond precision. Each Duration is composed of a whole number of seconds and a fractional part represented in nanoseconds.
-type Duration = [number, number];
+export type Duration = [number, number];
 
 // Combined date and time
 // Contains Year, Ordinal Day, Hour, Minute, Second, Nanosecond
-type DateTime = [number, number, number, number, number, number];
+export type DateTime = [number, number, number, number, number, number];
 
 // The Goal interface
-interface Goal {
+export interface Goal {
 	id: number,
 	description: string,
 	task_duration: Duration,
@@ -16,7 +16,7 @@ interface Goal {
 }
 
 // An interface that describes a Task
-interface Task {
+export interface Task {
 	goal_id: number,
 	start: DateTime,
 	finish: DateTime,
@@ -24,7 +24,14 @@ interface Task {
 }
 
 // A goal id is just a number
-type GoalID = number;
+export type GoalID = number;
+
+// Contains data required to generate a schedule
+export interface Plan {
+	goals: [Goal],
+	start: DateTime,
+	finish: DateTime
+}
 
 // A simple API class
 export class API {
@@ -42,7 +49,7 @@ export class API {
 		this.wasmMemory = wasmMemory;
 	}
 
-	public getTaskCount(goals: [Goal], durationInHours: BigInt): [[number, GoalID]] {
+	public processTaskCount(goals: [Goal], durationInHours: BigInt): Map<GoalID, number> {
 		// Encode data
 		const string = JSON.stringify(goals);
 		const data = this.textEncoder.encode(string);
@@ -52,11 +59,31 @@ export class API {
 		target.set(data);
 
 		// Process
-		const offset = (this.instance.exports.taskCount as CallableFunction)(data.length, durationInHours) as number;
+		const offset = (this.instance.exports.processTaskCount as CallableFunction)(data.length, durationInHours) as number;
 		const buffer = this.getIPCView(offset);
 		const readString = this.textDecoder.decode(buffer);
+		const iterator = (JSON.parse(readString) as [[number, GoalID]]).map(a => ([a[1], a[0]] as [number, number]));
 
-		return JSON.parse(readString)
+		return new Map(iterator)
+	}
+
+	public generateTasks(goals: [Goal], start: DateTime, finish: DateTime): [Task] {
+		// Serialize data
+		const plan = { goals, start, finish };
+		const string = JSON.stringify(plan);
+		const bytes = this.textEncoder.encode(string);
+
+		// Send data
+		let view = this.getIPCView(bytes.length);
+		view.set(bytes);
+
+		// Call wasm function
+		const result = (this.instance.exports.generateSchedule as CallableFunction)(view.length) as number;
+
+		// Read result
+		view = this.getIPCView(result);
+		const resultString = this.textDecoder.decode(view);
+		return JSON.parse(resultString)
 	}
 
 	public getIPCView(offset: number): Uint8Array {
