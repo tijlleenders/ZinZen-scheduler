@@ -1,5 +1,3 @@
-#![allow(unused)]
-
 use crate::{error::Explode, goal::Goal, preprocessor::PreProcessor, task::Task};
 use linked_list::LinkedList;
 use time::{Duration, PrimitiveDateTime};
