@@ -9,8 +9,8 @@ const json = Deno.readTextFile("test/goals.json");
 Promise.all([API, json]).then(([API, json]) => {
 	const goals = JSON.parse(json);
 
-	// const taskCounts = API.processTaskCount(goals, BigInt(24 * 7 * 2));
-	// console.log(taskCounts);
+	const taskCounts = API.processTaskCount(goals, BigInt(24 * 7 * 2));
+	console.log(taskCounts);
 
 	const schedule = API.generateSchedule(goals, [2019, 150, 0, 0, 0, 0], [2019, 170, 0, 0, 0, 0]).sort((a, b) => a.flexibility - b.flexibility);
 
