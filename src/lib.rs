@@ -45,11 +45,9 @@ pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> usize {
 }
 
 #[no_mangle]
-unsafe extern "C" fn processTaskCount(bytes: usize, time_in_hours: i64) -> usize {
-	let goals = load_goals_from_ipc(bytes);
-
-	let duration = Duration::hours(time_in_hours);
-	let processed = PreProcessor::process_task_count(&goals, duration);
+unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
+	let (goals, timeline) = load_goals_from_ipc(bytes);
+	let processed = PreProcessor::process_task_count(&goals, timeline);
 
 	let with_ids = processed.map(|(a, b)| (a, b.id)).collect::<Vec<_>>();
 	let string = serde_json::to_string(&with_ids).explode();
