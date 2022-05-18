@@ -15,12 +15,9 @@ Deno.test("API.processTaskCount", () => {
 		const finish = [2019, 170, 0, 0, 0, 0] as DateTime;
 
 		const taskCounts = API.processTaskCount(goals, start, finish);
-		console.log(taskCounts);
+		// TODO: Insert assertions here
 
 		const schedule = API.generateSchedule(goals, start, finish).sort((a, b) => a.flexibility - b.flexibility);
-
-		for (const task of schedule) {
-			console.log(task);
-		}
+		// TODO: Insert assertions here
 	}).catch(console.error);
 });
