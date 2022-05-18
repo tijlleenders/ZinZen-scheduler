@@ -122,7 +122,7 @@ pub(crate) fn test_scheduler() {
 pub(crate) fn test_scheduler_02() {
 	use crate::scheduler::generate_schedule;
 
-	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 9).unwrap();
+	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 10).unwrap();
 	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 20).unwrap();
 
 	let timeline = (

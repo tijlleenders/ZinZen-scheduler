@@ -115,7 +115,7 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 			goal_id: goal.id.get(),
 			start,
 			finish: end_time,
-			flexibility: (end_time - current_time_hint) / goal.task_duration,
+			flexibility: (end_time - start) / goal.task_duration,
 		};
 
 		// Insert newly allocated task
