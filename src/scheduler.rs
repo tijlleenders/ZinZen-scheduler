@@ -29,7 +29,7 @@ pub fn generate_schedule(
 	};
 
 	// Insert a task that spans the whole schedule, considered free time
-	let free_task = Task::fill(&mut schedule);
+	let free_task = Task::fill(&schedule);
 	schedule.slots.push_front(free_task);
 
 	// ======================= TIMELINE & GOAL CHECKS =================================
@@ -56,7 +56,9 @@ pub fn generate_schedule(
 	};
 
 	// Produce a tuple containing task count and goal, and insert into time slots
-	for (task_count, goal) in PreProcessor::process_task_count(goals, timeline.1 - timeline.0) {
+	for (task_count, goal) in PreProcessor::process_task_count(goals, timeline) {
+		dbg!(task_count);
+
 		insert_tasks(goal, task_count, &mut schedule);
 	}
 
@@ -65,7 +67,7 @@ pub fn generate_schedule(
 
 pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedule) {
 	// The first compatible slot
-	let mut current_time_hint = match goal.time_constraint {
+	let mut current_time_hint = match goal.start {
 		Some(goal_start) => goal_start,
 		None => schedule.timeline.0,
 	};
@@ -73,7 +75,7 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 	// Insert the relevant number of tasks into the time slot
 	(0..task_count).for_each(|_| {
 		// Get's the first compatible slot
-		let idx = if goal.time_constraint.is_some() {
+		let idx = if goal.start.is_some() {
 			compatible_slot(
 				schedule,
 				goal.task_duration,

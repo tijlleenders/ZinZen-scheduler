@@ -11,6 +11,14 @@ use time::Duration;
 
 #[test]
 pub(crate) fn test_preprocessor() {
+	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 1).unwrap();
+	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 2).unwrap();
+
+	let timeline = (
+		time::PrimitiveDateTime::new(date_a, time::Time::MIDNIGHT),
+		time::PrimitiveDateTime::new(date_b, time::Time::MIDNIGHT),
+	);
+
 	let goals = &mut [
 		Goal {
 			id: NonZeroUsize::new(7).unwrap(),
@@ -50,8 +58,8 @@ pub(crate) fn test_preprocessor() {
 		},
 	];
 
-	for task in PreProcessor::process_task_count(goals, Duration::hours(24 * 7 * 4 * 2)) {
-		dbg!(task);
+	for (idx, task) in PreProcessor::process_task_count(goals, timeline).enumerate() {
+		dbg!(idx, task);
 	}
 }
 
@@ -60,7 +68,7 @@ pub(crate) fn test_scheduler() {
 	use crate::scheduler::generate_schedule;
 
 	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 1).unwrap();
-	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 21).unwrap();
+	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 2).unwrap();
 
 	let timeline = (
 		time::PrimitiveDateTime::new(date_a, time::Time::MIDNIGHT),
@@ -69,22 +77,27 @@ pub(crate) fn test_scheduler() {
 
 	let goals = &mut [
 		Goal {
-			id: NonZeroUsize::new(1).unwrap(),
-			task_duration: Duration::hours(10),
-			interval: Some(Duration::DAY),
+			id: NonZeroUsize::new(1).explode(),
+			description: "shopping".to_string(),
+			task_duration: Duration::hours(1),
+			interval: None,
+			start: Some(timeline.0.replace_hour(10).unwrap()),
 			..Default::default()
 		},
 		Goal {
-			id: NonZeroUsize::new(2).unwrap(),
-			task_duration: Duration::hours(10),
-			interval: Some(Duration::DAY),
+			id: NonZeroUsize::new(2).explode(),
+			description: "dentist".to_string(),
+			task_duration: Duration::hours(1),
+			interval: None,
+			start: Some(timeline.0.replace_hour(11).unwrap()),
 			..Default::default()
 		},
 		Goal {
-			id: NonZeroUsize::new(3).unwrap(),
-			task_duration: Duration::minutes(30),
-			interval: Some(Duration::WEEK),
-			time_constraint: Some(timeline.0.replace_hour(11).unwrap()),
+			id: NonZeroUsize::new(3).explode(),
+			description: "exercise".to_string(),
+			task_duration: Duration::hours(1),
+			interval: None,
+			start: Some(timeline.0.replace_hour(11).unwrap()),
 			..Default::default()
 		},
 	];
