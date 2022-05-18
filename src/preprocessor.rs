@@ -9,12 +9,14 @@ impl PreProcessor {
 		goals: &[Goal],
 		timeline: (PrimitiveDateTime, PrimitiveDateTime),
 	) -> impl Iterator<Item = (usize, &Goal)> {
-		goals.iter().map(move |goal| match goal.interval {
-			Some(interval) => match goal.deadline {
-				Some(deadline) => (((deadline - timeline.0) / interval).ceil() as usize, goal),
-				None => (((timeline.1 - timeline.0) / interval).ceil() as usize, goal),
-			},
-			None => (1, goal),
+		goals.iter().map(move |goal| {
+			let start = goal.start.unwrap_or(timeline.0);
+			let finish = goal.finish.unwrap_or(timeline.1);
+
+			match goal.interval {
+				Some(interval) => (dbg!((finish - start) / interval).ceil() as usize, goal),
+				None => (1, goal),
+			}
 		})
 	}
 }

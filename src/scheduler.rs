@@ -104,10 +104,10 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		// When does this task start
 		let mut start = current_time_hint;
 
-		// Remove allocated task if no time is allocated
-		if task_allocated.finish - task_allocated.start <= Duration::SECOND || task_allocated.goal_id == 0 {
+		// Remove free task
+		if task_allocated.goal_id == 0 {
 			start = task_allocated.start;
-			schedule.slots.remove(idx);
+			schedule.slots.remove(idx).explode();
 		}
 
 		// Create new splinter free slot
