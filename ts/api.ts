@@ -52,9 +52,9 @@ export class API {
 		this.wasmMemory = wasmMemory;
 	}
 
-	public processTaskCount(goals: [Goal], durationInHours: BigInt): Map<GoalID, number> {
+	public processTaskCount(goals: [Goal], start: DateTime, finish: DateTime): Map<GoalID, number> {
 		// Encode data
-		const string = JSON.stringify(goals);
+		const string = JSON.stringify([goals, [start, finish]]);
 		const data = this.textEncoder.encode(string);
 
 		// Send data
@@ -62,7 +62,7 @@ export class API {
 		target.set(data);
 
 		// Process
-		const offset = (this.instance.exports.processTaskCount as CallableFunction)(data.length, durationInHours) as number;
+		const offset = (this.instance.exports.processTaskCount as CallableFunction)(data.length) as number;
 		const buffer = this.getIPCView(offset);
 		const readString = this.textDecoder.decode(buffer);
 		const iterator = (JSON.parse(readString) as [[number, GoalID]]).map(a => ([a[1], a[0]] as [number, number]));
