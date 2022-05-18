@@ -56,11 +56,9 @@ pub fn generate_schedule(
 	};
 
 	// Produce a tuple containing task count and goal, and insert into time slots
-	for (task_count, goal) in PreProcessor::process_task_count(goals, timeline) {
-		dbg!(task_count);
-
+	PreProcessor::process_task_count(goals, timeline).for_each(|(task_count, goal)| {
 		insert_tasks(goal, task_count, &mut schedule);
-	}
+	});
 
 	Ok(schedule)
 }
@@ -157,10 +155,10 @@ fn compatible_slot(
 		.iter()
 		.enumerate()
 		.find(|(_, task)| {
-			let space = task.finish - task.start;
+			let task_space = task.finish - task.start;
 
 			// Can we fit into the this slot?
-			let can_fit = space >= task_duration;
+			let can_fit = task_space >= task_duration;
 
 			// Are we in range of the time hint?
 			let in_range = match start_hint {
@@ -174,15 +172,19 @@ fn compatible_slot(
 			};
 
 			// Can we append ourselves into this tasks? Slots?
-			let can_append = match start_hint {
-				Hint::Exact(start_time) => {
-					start_time - task.start >= space / task.flexibility && task.finish - start_time >= task_duration
-				}
-				Hint::Loose(_) => true,
-			};
+			// Goal ID 0 is considered free space
+			let can_append = task.goal_id == 0
+				|| match start_hint {
+					Hint::Exact(start_time) => {
+						start_time - task.start >= task_space / task.flexibility
+							&& task.finish - start_time >= task_duration
+					}
+					Hint::Loose(_) => true,
+				};
 
 			can_fit && can_append && in_range
 		})
 		.map(|d| d.0)
+		.ok_or("Unable to find slot for Task")
 		.explode()
 }
