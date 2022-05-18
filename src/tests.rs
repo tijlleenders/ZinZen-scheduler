@@ -68,7 +68,7 @@ pub(crate) fn test_scheduler() {
 	use crate::scheduler::generate_schedule;
 
 	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 1).unwrap();
-	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 20).unwrap();
+	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 2).unwrap();
 
 	let timeline = (
 		time::PrimitiveDateTime::new(date_a, time::Time::MIDNIGHT),
@@ -112,7 +112,7 @@ pub(crate) fn test_scheduler() {
 			counts.insert(task.goal_id, 1);
 		}
 
-		dbg!(task.flexibility);
+		dbg!(task.flexibility, task.goal_id);
 	}
 
 	dbg!(counts);

@@ -25,7 +25,7 @@ impl Task {
 			goal_id: 0,
 			start: schedule.timeline.0,
 			finish: schedule.timeline.1,
-			flexibility: max_seconds / (3600.0),
+			flexibility: max_seconds,
 		}
 	}
 }

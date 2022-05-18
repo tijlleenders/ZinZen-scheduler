@@ -73,7 +73,8 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 	// Insert the relevant number of tasks into the time slot
 	(0..task_count).for_each(|_| {
 		// Get's the first compatible slot
-		let idx = if goal.start.is_some() {
+		// Get mutable reference to the Task allocated in the schedule
+		let (idx, task_allocated) = if goal.start.is_some() {
 			compatible_slot(
 				schedule,
 				goal.task_duration,
@@ -89,9 +90,6 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 			)
 		};
 
-		// Get mutable reference to the Task allocated in the schedule
-		let task_allocated = get(&mut schedule.slots, idx).explode();
-
 		// Get time expected for task a and b
 		let task_allocated_time = task_allocated.finish - task_allocated.start;
 		let task_allocated_duration = task_allocated_time / task_allocated.flexibility;
@@ -103,15 +101,19 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		task_allocated.finish = current_time_hint;
 		task_allocated.flexibility = (task_allocated.finish - task_allocated.start) / task_allocated_duration;
 
+		// When does this task start
+		let mut start = current_time_hint;
+
 		// Remove allocated task if no time is allocated
-		if task_allocated.finish - task_allocated.start <= Duration::ZERO {
+		if task_allocated.finish - task_allocated.start <= Duration::SECOND || task_allocated.goal_id == 0 {
+			start = task_allocated.start;
 			schedule.slots.remove(idx);
 		}
 
 		// Create new splinter free slot
 		let new_allocated = Task {
 			goal_id: goal.id.get(),
-			start: current_time_hint,
+			start,
 			finish: end_time,
 			flexibility: (end_time - current_time_hint) / goal.task_duration,
 		};
@@ -133,26 +135,16 @@ pub(self) enum Hint {
 	Exact(time::PrimitiveDateTime),
 }
 
-fn get<T>(list: &mut LinkedList<T>, index: usize) -> Option<&mut T> {
-	for (cmp, item) in list.iter_mut().enumerate() {
-		if cmp == index {
-			return Some(item);
-		}
-	}
-
-	None
-}
-
 /// Returns an index to the first slot compatible with the given constraints
 fn compatible_slot(
-	schedule: &Schedule,
+	schedule: &mut Schedule,
 	task_duration: Duration,
 	start_hint: Hint,
 	maximum_delta: Option<Duration>,
-) -> usize {
+) -> (usize, &mut Task) {
 	schedule
 		.slots
-		.iter()
+		.iter_mut()
 		.enumerate()
 		.find(|(_, task)| {
 			let task_space = task.finish - task.start;
@@ -184,7 +176,6 @@ fn compatible_slot(
 
 			can_fit && can_append && in_range
 		})
-		.map(|d| d.0)
 		.ok_or("Unable to find slot for Task")
 		.explode()
 }
