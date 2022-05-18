@@ -2,7 +2,7 @@ import { loadAPI, DateTime } from "../ts/api.ts";
 import { assertEquals as _assert } from "https://deno.land/std@0.140.0/testing/asserts.ts";
 
 // Load the API
-const API = loadAPI("file:///home/sokoro/Documents/dev/ZinZen-scheduler/ts/scheduler.wasm");
+const API = loadAPI("https://github.com/tijlleenders/ZinZen-scheduler/raw/main/ts/scheduler.wasm");
 
 // Load JSON
 const json = Deno.readTextFile("test/goals.json");
