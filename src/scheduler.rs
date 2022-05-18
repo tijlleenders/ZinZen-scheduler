@@ -90,6 +90,8 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 			)
 		};
 
+		dbg!(task_allocated.start >= current_time_hint);
+
 		// Get time expected for task a and b
 		let task_allocated_time = task_allocated.finish - task_allocated.start;
 		let task_allocated_duration = task_allocated_time / task_allocated.flexibility;
@@ -157,22 +159,20 @@ fn compatible_slot(
 				// If there is no max delta, means the Task can be placed anywhere
 				Hint::Loose(start_time) => match maximum_delta {
 					Some(delta) => (start_time - task.start <= delta) || (task.finish - start_time <= delta),
-					None => true,
+					None => start_time >= task.start, // BUG: Hmmm!
 				},
 
 				Hint::Exact(start_time) => task.finish >= start_time && start_time >= task.start,
 			};
 
-			// Can we append ourselves into this tasks? Slots?
-			// Goal ID 0 is considered free space
-			let can_append = task.goal_id == 0
-				|| match start_hint {
-					Hint::Exact(start_time) => {
-						start_time - task.start >= task_space / task.flexibility
-							&& task.finish - start_time >= task_duration
-					}
-					Hint::Loose(_) => true,
-				};
+			// Can we append ourselves into this tasks slots?
+			let can_append = match start_hint {
+				Hint::Exact(start_time) => {
+					start_time - task.start >= task_space / task.flexibility
+						&& task.finish - start_time >= task_duration
+				}
+				Hint::Loose(_) => true,
+			};
 
 			can_fit && can_append && in_range
 		})
