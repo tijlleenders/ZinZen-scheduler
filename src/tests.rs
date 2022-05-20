@@ -67,7 +67,7 @@ pub(crate) fn test_preprocessor() {
 pub(crate) fn test_scheduler() {
 	use crate::scheduler::generate_schedule;
 
-	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 1).unwrap();
+	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 10).unwrap();
 	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 20).unwrap();
 
 	let timeline = (
@@ -132,39 +132,39 @@ pub(crate) fn test_scheduler_02() {
 
 	let goals = &mut [
 		Goal {
-			id: NonZeroUsize::new(7).unwrap(),
-			interval: None,
-			task_duration: Duration::hours(12),
-			..Default::default()
-		},
-		Goal {
 			id: NonZeroUsize::new(1).unwrap(),
-			task_duration: Duration::hours(12),
+			task_duration: Duration::minutes(45),
 			interval: Some(Duration::DAY),
 			..Default::default()
 		},
 		Goal {
 			id: NonZeroUsize::new(2).unwrap(),
-			task_duration: Duration::hours(12),
-			interval: Some(Duration::WEEK),
+			task_duration: Duration::minutes(90),
+			interval: Some(Duration::DAY * 3),
 			..Default::default()
 		},
 		Goal {
 			id: NonZeroUsize::new(3).unwrap(),
-			task_duration: Duration::hours(12),
+			task_duration: Duration::hours(1),
 			interval: Some(Duration::WEEK * 4f32),
 			..Default::default()
 		},
 		Goal {
 			id: NonZeroUsize::new(4).unwrap(),
-			task_duration: Duration::hours(12),
+			task_duration: Duration::minutes(15),
 			interval: Some(Duration::WEEK * 4f32),
 			..Default::default()
 		},
 		Goal {
 			id: NonZeroUsize::new(5).unwrap(),
-			task_duration: Duration::hours(12),
+			task_duration: Duration::minutes(30),
 			interval: Some(Duration::WEEK * 52f32),
+			..Default::default()
+		},
+		Goal {
+			id: NonZeroUsize::new(6).unwrap(),
+			interval: None,
+			task_duration: Duration::hours(2),
 			..Default::default()
 		},
 	];
@@ -179,8 +179,12 @@ pub(crate) fn test_scheduler_02() {
 			counts.insert(task.goal_id, 1);
 		}
 
-		dbg!(task.goal_id, task.flexibility);
+		assert_eq!(
+			goals[task.goal_id - 1].task_duration,
+			(task.finish - task.start) / task.flexibility
+		);
 	}
 
+	// TODO: Assert counts here
 	dbg!(counts);
 }

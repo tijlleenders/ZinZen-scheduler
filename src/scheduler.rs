@@ -65,7 +65,7 @@ pub fn generate_schedule(
 
 pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedule) {
 	// The first compatible slot
-	let mut current_time_hint = match goal.start {
+	let mut next_interval = match goal.start {
 		Some(goal_start) => goal_start,
 		None => schedule.timeline.0,
 	};
@@ -75,22 +75,10 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		// Get's the first compatible slot
 		// Get mutable reference to the Task allocated in the schedule
 		let (idx, task_allocated) = if goal.start.is_some() {
-			compatible_slot(
-				schedule,
-				goal.task_duration,
-				Hint::Exact(current_time_hint),
-				goal.interval,
-			)
+			compatible_slot(schedule, goal.task_duration, Hint::Exact(next_interval))
 		} else {
-			compatible_slot(
-				schedule,
-				goal.task_duration,
-				Hint::Loose(current_time_hint),
-				goal.interval,
-			)
+			compatible_slot(schedule, goal.task_duration, Hint::Range(next_interval, goal.interval))
 		};
-
-		dbg!(task_allocated.start >= current_time_hint);
 
 		// Get time expected for task a and b
 		let task_allocated_time = task_allocated.finish - task_allocated.start;
@@ -99,12 +87,24 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		// Store end_time copy
 		let end_time = task_allocated.finish;
 
+		// MATHEMATICS!
+		let divide_time = match goal.start {
+			Some(_) => next_interval,
+			None => {
+				let denominator = task_allocated_duration + goal.task_duration;
+				let ratio = task_allocated_duration / denominator;
+				let task_allocated_new_time = task_allocated_time * ratio;
+
+				task_allocated.start + task_allocated_new_time
+			}
+		};
+
 		// The allocated time now ends here
-		task_allocated.finish = current_time_hint;
+		task_allocated.finish = divide_time;
 		task_allocated.flexibility = (task_allocated.finish - task_allocated.start) / task_allocated_duration;
 
 		// When does this task start
-		let mut start = current_time_hint;
+		let mut start = next_interval;
 
 		// Remove free task
 		if task_allocated.goal_id == 0 {
@@ -125,25 +125,20 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 
 		// Increment time_hint
 		if let Some(interval) = goal.interval {
-			current_time_hint += interval
+			next_interval += interval
 		};
 	});
 }
 
 #[derive(Copy, Clone, Debug)]
 pub(self) enum Hint {
-	Loose(time::PrimitiveDateTime),
+	Range(time::PrimitiveDateTime, Option<Duration>),
 	/// Means the time has to start exactly at the given time
 	Exact(time::PrimitiveDateTime),
 }
 
 /// Returns an index to the first slot compatible with the given constraints
-fn compatible_slot(
-	schedule: &mut Schedule,
-	task_duration: Duration,
-	start_hint: Hint,
-	maximum_delta: Option<Duration>,
-) -> (usize, &mut Task) {
+fn compatible_slot(schedule: &mut Schedule, task_duration: Duration, start_hint: Hint) -> (usize, &mut Task) {
 	schedule
 		.slots
 		.iter_mut()
@@ -152,13 +147,20 @@ fn compatible_slot(
 			let task_space = task.finish - task.start;
 
 			// Can we fit into the this slot?
-			let can_fit = task_space >= task_duration;
+			let can_fit = {
+				let min_remainder = task_space - task_duration;
+				task_space / task.flexibility <= min_remainder
+			};
 
 			// Are we in range of the time hint?
 			let in_range = match start_hint {
-				// If there is no max delta, means the Task can be placed anywhere
-				Hint::Loose(start_time) => match maximum_delta {
-					Some(delta) => (start_time - task.start <= delta) || (task.finish - start_time <= delta),
+				Hint::Range(start_time, range) => match range {
+					Some(delta) => {
+						let lower = start_time >= task.start;
+						let upper = start_time + delta >= task.start;
+						lower && upper
+					}
+					// If there is no interval, it means this is a singular event and can thus be placed anywhere on the timeline
 					None => start_time >= task.start, // BUG: Hmmm!
 				},
 
@@ -171,7 +173,7 @@ fn compatible_slot(
 					start_time - task.start >= task_space / task.flexibility
 						&& task.finish - start_time >= task_duration
 				}
-				Hint::Loose(_) => true,
+				Hint::Range(_, _) => true,
 			};
 
 			can_fit && can_append && in_range
