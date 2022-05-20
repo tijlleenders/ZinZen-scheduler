@@ -105,6 +105,11 @@ pub(crate) fn test_scheduler() {
 	let mut counts = HashMap::new();
 	let slots = generate_schedule(goals, timeline).explode().slots;
 
+	// Log all tasks
+	slots.iter().for_each(|task| {
+		dbg!(task);
+	});
+
 	for task in slots {
 		if let Some(count) = counts.get_mut(&task.goal_id) {
 			*count += 1
@@ -112,7 +117,9 @@ pub(crate) fn test_scheduler() {
 			counts.insert(task.goal_id, 1);
 		}
 
-		dbg!(task.flexibility, task.goal_id);
+		assert!(
+			(goals[task.goal_id - 1].task_duration - (task.finish - task.start) / task.flexibility) <= Duration::SECOND
+		);
 	}
 
 	dbg!(counts);
@@ -122,8 +129,8 @@ pub(crate) fn test_scheduler() {
 pub(crate) fn test_scheduler_02() {
 	use crate::scheduler::generate_schedule;
 
-	let date_a = time::Date::from_calendar_date(2019, time::Month::June, 10).unwrap();
-	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 20).unwrap();
+	let date_a = time::Date::from_calendar_date(2019, time::Month::January, 1).unwrap();
+	let date_b = time::Date::from_calendar_date(2019, time::Month::June, 30).unwrap();
 
 	let timeline = (
 		time::PrimitiveDateTime::new(date_a, time::Time::MIDNIGHT),
@@ -179,9 +186,8 @@ pub(crate) fn test_scheduler_02() {
 			counts.insert(task.goal_id, 1);
 		}
 
-		assert_eq!(
-			goals[task.goal_id - 1].task_duration,
-			(task.finish - task.start) / task.flexibility
+		assert!(
+			(goals[task.goal_id - 1].task_duration - (task.finish - task.start) / task.flexibility) <= Duration::SECOND
 		);
 	}
 
