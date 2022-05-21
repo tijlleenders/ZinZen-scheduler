@@ -3,7 +3,7 @@ use std::{collections::HashMap, num::NonZeroUsize};
 
 use crate::{
 	console,
-	error::{ErrorCode, Explode},
+	error::{ErrorCodes, Explode},
 	goal::Goal,
 	preprocessor::PreProcessor,
 };
@@ -117,6 +117,7 @@ pub(crate) fn test_scheduler() {
 			counts.insert(task.goal_id, 1);
 		}
 
+		assert!(task.flexibility >= 1.0);
 		assert!(
 			(goals[task.goal_id - 1].task_duration - (task.finish - task.start) / task.flexibility) <= Duration::SECOND
 		);
@@ -186,6 +187,7 @@ pub(crate) fn test_scheduler_02() {
 			counts.insert(task.goal_id, 1);
 		}
 
+		assert!(task.flexibility >= 1.0);
 		assert!(
 			(goals[task.goal_id - 1].task_duration - (task.finish - task.start) / task.flexibility) <= Duration::SECOND
 		);
