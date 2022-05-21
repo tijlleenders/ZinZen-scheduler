@@ -1,6 +1,6 @@
 //! Console function implementations for `.wasm`
-
 #![allow(dead_code)]
+
 use crate::{error::Explode, write_to_ipc};
 
 extern "C" {
