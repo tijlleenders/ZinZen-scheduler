@@ -4,11 +4,11 @@ version = "0.1.0"
 edition = "2021"
 license = "AGPL-3.0"
 keywords = ["zinzen", "scheduler", "todo"]
-description = "Algorithm for auto-scheduling time-constrained tasks on a calendar"
+description = "Algorithm for auto-scheduling time-constrained tasks on a timeline"
 homepage = "https://github.com/tijlleenders/ZinZen-scheduler/wiki"
 repository = "https://github.com/tijlleenders/ZinZen-scheduler"
 readme = "README.md"
-categories = ["algorithms","date-and-time","wasm"]
+categories = ["algorithms", "date-and-time", "wasm"]
 
 [lib]
 crate-type = ['cdylib']
@@ -23,3 +23,4 @@ serde_json = "1.0.81"
 serde = { version = "1.0.137", features = ["derive"] }
 time = { version = "0.3.9", features = ["serde"] }
 linked-list = "0.0.3"
+thiserror = "1.0.31"

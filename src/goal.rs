@@ -1,17 +1,12 @@
-use std::num::NonZeroUsize;
-
-use crate::{console, error::ErrorCode, IPC_BUFFER};
+use crate::{error::Explode, IPC_BUFFER};
 use serde::{Deserialize, Serialize};
+use std::num::NonZeroUsize;
 use time::PrimitiveDateTime;
 
 /// Loads [`Goal`] inserted into IPC by JavaScript
 pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> (Vec<Goal>, (PrimitiveDateTime, PrimitiveDateTime)) {
 	let slice = &IPC_BUFFER[..ipc_offset];
-
-	match serde_json::from_slice(slice) {
-		Ok(ok) => ok,
-		Err(err) => console::log_err(ErrorCode::DeserializationError, err),
-	}
+	serde_json::from_slice(slice).explode()
 }
 
 /// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]

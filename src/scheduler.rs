@@ -1,4 +1,9 @@
-use crate::{error::Explode, goal::Goal, preprocessor::PreProcessor, task::Task};
+use crate::{
+	error::{Explode, SchedulerError, SchedulerResult},
+	goal::Goal,
+	preprocessor::PreProcessor,
+	task::Task,
+};
 use linked_list::LinkedList;
 use time::{Duration, PrimitiveDateTime};
 
@@ -19,7 +24,7 @@ impl Schedule {
 pub fn generate_schedule(
 	goals: &[Goal],
 	timeline: (PrimitiveDateTime, PrimitiveDateTime),
-) -> Result<Schedule, &'static str> {
+) -> SchedulerResult<Schedule> {
 	let max_free_time = timeline.1 - timeline.0;
 
 	// Slots initially begin with full free time
@@ -34,36 +39,22 @@ pub fn generate_schedule(
 
 	// ======================= TIMELINE & GOAL CHECKS =================================
 	// Make sure no Goal exceeds the user's free time
-	if goals.iter().any(|g| g.task_duration >= max_free_time) {
-		return Err("A goal was found with a duration greater than the timeline duration");
-	};
-
-	// Make sure the user's free time is enough to accommodate all goal's durations
-	let total_goal_duration = goals.iter().map(|g| g.task_duration).reduce(|a, b| a + b);
-
-	if let Some(total) = total_goal_duration {
-		if total >= max_free_time {
-			return Err("There isn't enough time in the user's schedule to accommodate all Goal's, either increase your expected timeline or reduce your individual Goal's allocated time");
+	goals.iter().try_for_each(|g| {
+		if g.task_duration >= max_free_time {
+			return Err(SchedulerError::GoalTaskDurationOverflow(g.id.to_string()));
 		}
 
-		// If the user allocates no time to any Goal, then all time is free time :)
-		if total == Duration::ZERO {
-			return Ok(schedule);
-		}
-	} else {
-		// If the user has no goals then they have all free time
-		return Ok(schedule);
-	};
+		Ok(())
+	})?;
 
 	// Produce a tuple containing task count and goal, and insert into time slots
-	PreProcessor::process_task_count(goals, timeline).for_each(|(task_count, goal)| {
-		insert_tasks(goal, task_count, &mut schedule);
-	});
+	let mut tasks = PreProcessor::process_task_count(goals, timeline);
+	tasks.try_for_each(|(task_count, goal)| insert_tasks(goal, task_count, &mut schedule))?;
 
 	Ok(schedule)
 }
 
-pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedule) {
+pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedule) -> SchedulerResult {
 	// The first compatible slot
 	let mut next_interval = match goal.start {
 		Some(goal_start) => goal_start,
@@ -71,13 +62,13 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 	};
 
 	// Insert the relevant number of tasks into the time slot
-	(0..task_count).for_each(|_| {
+	(0..task_count).try_for_each(|_| {
 		// Get's the first compatible slot
 		// Get mutable reference to the Task allocated in the schedule
 		let (idx, task_allocated) = if goal.start.is_some() {
-			compatible_slot(schedule, goal.task_duration, Hint::Exact(next_interval))
+			compatible_slot(schedule, goal, Hint::Exact(next_interval))?
 		} else {
-			compatible_slot(schedule, goal.task_duration, Hint::Range(next_interval, goal.interval))
+			compatible_slot(schedule, goal, Hint::Range(next_interval, goal.interval))?
 		};
 
 		// Get time expected for task a and b
@@ -127,7 +118,9 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		if let Some(interval) = goal.interval {
 			next_interval += interval
 		};
-	});
+
+		Ok(())
+	})
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -138,7 +131,11 @@ pub(self) enum Hint {
 }
 
 /// Returns an index to the first slot compatible with the given constraints
-fn compatible_slot(schedule: &mut Schedule, task_duration: Duration, start_hint: Hint) -> (usize, &mut Task) {
+fn compatible_slot<'a>(
+	schedule: &'a mut Schedule,
+	goal: &'a Goal,
+	start_hint: Hint,
+) -> SchedulerResult<(usize, &'a mut Task)> {
 	schedule
 		.slots
 		.iter_mut()
@@ -148,7 +145,7 @@ fn compatible_slot(schedule: &mut Schedule, task_duration: Duration, start_hint:
 
 			// Can we fit into the this slot?
 			let can_fit = {
-				let min_remainder = task_space - task_duration;
+				let min_remainder = task_space - goal.task_duration;
 				task_space / task.flexibility <= min_remainder
 			};
 
@@ -171,13 +168,12 @@ fn compatible_slot(schedule: &mut Schedule, task_duration: Duration, start_hint:
 			let can_append = match start_hint {
 				Hint::Exact(start_time) => {
 					start_time - task.start >= task_space / task.flexibility
-						&& task.finish - start_time >= task_duration
+						&& task.finish - start_time >= goal.task_duration
 				}
 				Hint::Range(_, _) => true,
 			};
 
 			can_fit && can_append && in_range
 		})
-		.ok_or("Unable to find slot for Task")
-		.explode()
+		.ok_or(SchedulerError::UnableToFindTaskSlot(goal.description.to_string()))
 }

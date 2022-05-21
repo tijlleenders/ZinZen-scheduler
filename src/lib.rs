@@ -1,4 +1,4 @@
-use error::{ErrorCode, Explode};
+use error::{Explode, SchedulerError, SchedulerResult};
 use goal::load_goals_from_ipc;
 use preprocessor::PreProcessor;
 use serde::Deserialize;
@@ -28,19 +28,16 @@ pub static mut IPC_BUFFER: [u8; _IPC_BUFFER_SIZE] = [0; _IPC_BUFFER_SIZE];
 pub static IPC_BUFFER_SIZE: usize = _IPC_BUFFER_SIZE;
 
 /// This writes some data to the IPC buffer, then returns a pointer and an offset to the data
-pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> usize {
+pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> SchedulerResult<usize> {
 	let data = buf.as_ref();
 
 	unsafe {
 		if data.len() >= _IPC_BUFFER_SIZE {
-			let error_msg: &[u8] = b"The length of data to be logged to the console exceeds the size of the IPC_BUFFER";
-
-			IPC_BUFFER[..error_msg.len()].copy_from_slice(error_msg);
-			error::exit(error::ErrorCode::IPCDataOverflow, error_msg.len())
+			return Err(SchedulerError::IPCDataOverflow(data.len()));
 		};
 
 		IPC_BUFFER[..data.len()].copy_from_slice(data);
-		data.len()
+		Ok(data.len())
 	}
 }
 
@@ -52,7 +49,7 @@ unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
 	let with_ids = processed.map(|(a, b)| (a, b.id)).collect::<Vec<_>>();
 	let string = serde_json::to_string(&with_ids).explode();
 
-	write_to_ipc(string)
+	write_to_ipc(string).explode()
 }
 
 #[derive(Deserialize)]
@@ -66,11 +63,7 @@ struct Plan {
 impl Plan {
 	unsafe fn load_plan_from_ipc(ipc_offset: usize) -> Plan {
 		let slice = &IPC_BUFFER[..ipc_offset];
-
-		match serde_json::from_slice(slice) {
-			Ok(ok) => ok,
-			Err(err) => console::log_err(ErrorCode::DeserializationError, err),
-		}
+		serde_json::from_slice(slice).explode()
 	}
 }
 
@@ -82,5 +75,5 @@ unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
 	let tasks = schedule.slots_vector();
 	let string = serde_json::to_string(&tasks).explode();
 
-	write_to_ipc(string)
+	write_to_ipc(string).explode()
 }
