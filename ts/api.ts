@@ -13,7 +13,7 @@ export interface Goal {
 	id: number,
 	description: string,
 	task_duration: Duration,
-	interval: Duration,
+	interval: null | Duration,
 	time_constraint: null | DateTime,
 	location_constraint: null | number
 }

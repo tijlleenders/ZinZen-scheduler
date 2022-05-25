@@ -17,7 +17,7 @@ pub struct Schedule {
 impl Schedule {
 	/// Generate a vector of slots from a list of slots
 	pub(crate) fn slots_vector(&self) -> Vec<Task> {
-		self.slots.iter().map(|t| t.clone()).collect::<Vec<_>>()
+		self.slots.iter().cloned().collect::<Vec<_>>()
 	}
 }
 
@@ -136,6 +136,7 @@ fn compatible_slot<'a>(
 	goal: &'a Goal,
 	start_hint: Hint,
 ) -> SchedulerResult<(usize, &'a mut Task)> {
+	#[allow(clippy::or_fun_call)]
 	schedule
 		.slots
 		.iter_mut()
