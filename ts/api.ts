@@ -15,7 +15,8 @@ export interface Goal {
 	task_duration: Duration,
 
 	start: null | DateTime,
-	deadline: null | Duration,
+	deadline: null | DateTime,
+
 	interval: null | Duration,
 	location_constraint: null | number
 }

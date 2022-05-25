@@ -18,6 +18,7 @@ pub struct Goal {
 	pub description: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
 	pub task_duration: time::Duration,
+
 	/// The interval between a Goal's tasks, this can be used to repeat a Goal daily, weekly, etc
 	/// Here `interval` is fundamentally always divisible by 24.
 	/// NONE means it happens only once
@@ -26,6 +27,7 @@ pub struct Goal {
 	pub start: Option<time::PrimitiveDateTime>,
 	/// When this Goal's tasks should end
 	pub deadline: Option<time::PrimitiveDateTime>,
+
 	/// Where each task should be committed to, eg "I want to cook for my dog at home".
 	/// This is useful to make sure a schedule makes sense, since people can't teleport from place to place in minutes
 	pub location_constraint: Option<usize>,
