@@ -3,6 +3,11 @@
  */
 export type Duration = [number, number];
 
+/**
+ * Converts time in hours to a Duration
+ * @param timeInHours Time in hours
+ * @returns A `Duration`, which is a type compatible with the wasm API
+ */
 export function durationFromHours(timeInHours: number): Duration {
 	return [timeInHours * 3600, 0]
 }
