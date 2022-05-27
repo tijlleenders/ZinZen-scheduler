@@ -1,29 +1,23 @@
 [
   {
-    "id": 1,
+    "goalId": 1,
     "description": "shopping",
-    "task_duration": [ 3600, 0 ],
-    "interval": [ 604800, 0 ],
-    "start": [ 2019, 160, 10, 0, 0, 0 ],
-    "finish": null,
-    "location_constraint": null
+    "duration": 1,
+    "start": "2022-05-27T10:00:00.000Z",
+    "deadline": "2022-05-27T13:00:00.000Z"
   },
   {
-    "id": 2,
+    "goalId": 2,
     "description": "dentist",
-    "task_duration": [ 7200, 0 ],
-    "interval": null,
-    "start": [ 2019, 160, 13, 0, 0, 0 ],
-    "finish": null,
-    "location_constraint": null
+    "duration": 1,
+    "start": "2022-05-27T10:00:00.000Z",
+    "deadline": "2022-05-27T11:00:00.000Z"
   },
   {
-    "id": 3,
+    "goalId": 3,
     "description": "exercise",
-    "task_duration": [ 3600, 0 ],
-    "interval": [ 86400, 0 ],
-    "start": [ 2019, 160, 15, 0, 0, 0 ],
-    "finish": null,
-    "location_constraint": null
+    "duration": 1,
+    "start": "2022-05-27T10:00:00.000Z",
+    "deadline": "2022-05-27T18:00:00.000Z"
   }
 ]
