@@ -14,7 +14,7 @@ function isLeapYear(year: number): boolean {
 	return year % 4 == 0 && (year % 25 != 0 || year % 16 == 0)
 }
 
-export function dateToDateTime(date: Date): DateTime {
+export function jsDateToDateTime(date: Date): DateTime {
 	// Simple substitutes
 	const year = date.getFullYear();
 	const hour = date.getHours();
@@ -67,7 +67,7 @@ export interface Plan {
 	finish: DateTime
 }
 
-// A simple API class
+// The wrapper API class
 export class API {
 	private instance: WebAssembly.Instance;
 	private textDecoder: TextDecoder;
@@ -83,9 +83,9 @@ export class API {
 		this.wasmMemory = wasmMemory;
 	}
 
-	public processTaskCount(goals: [Goal], start: DateTime, finish: DateTime): Map<GoalID, number> {
+	public processTaskCount(goals: [Goal], start: Date, finish: Date): Map<GoalID, number> {
 		// Encode data
-		const string = JSON.stringify([goals, [start, finish]]);
+		const string = JSON.stringify([goals, [jsDateToDateTime(start), jsDateToDateTime(finish)]]);
 		const data = this.textEncoder.encode(string);
 
 		// Send data
@@ -101,9 +101,9 @@ export class API {
 		return new Map(iterator)
 	}
 
-	public generateSchedule(goals: [Goal], start: DateTime, finish: DateTime): Schedule {
+	public generateSchedule(goals: [Goal], start: Date, finish: Date): Schedule {
 		// Serialize data
-		const plan = { goals, start, finish };
+		const plan = { goals, start: jsDateToDateTime(start), finish: jsDateToDateTime(finish) };
 		const string = JSON.stringify(plan);
 		const bytes = this.textEncoder.encode(string);
 
