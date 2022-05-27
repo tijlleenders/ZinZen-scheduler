@@ -1,5 +1,3 @@
-use crate::write_to_ipc;
-
 #[cfg(target_arch = "wasm32")]
 extern "C" {
 	/// Quit's the current wasm execution, and returns an error code as well as some info as a string in the IPC
@@ -58,7 +56,7 @@ impl<T> Explode<T> for Option<T> {
 			self.unwrap_or_else(|| unsafe {
 				exit(
 					ErrorCodes::UnwrapError,
-					write_to_ipc("Call to `Option::unwrap` panicked").explode(),
+					crate::write_to_ipc("Call to `Option::unwrap` panicked").explode(),
 				)
 			})
 		}
@@ -80,7 +78,7 @@ impl<T> Explode<T> for SchedulerResult<T> {
 	fn explode(self) -> T {
 		#[cfg(target_arch = "wasm32")]
 		{
-			use crate::{console, write_to_ipc};
+			use crate::write_to_ipc;
 
 			unsafe {
 				match self {
