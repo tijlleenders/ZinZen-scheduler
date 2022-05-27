@@ -1,9 +1,37 @@
 // A span of time with nanosecond precision. Each Duration is composed of a whole number of seconds and a fractional part represented in nanoseconds.
 export type Duration = [number, number];
 
+export function durationFromHours(timeInHours: number): Duration {
+	return [timeInHours * 3600, 0]
+}
+
 // Combined date and time
 // Contains Year, Ordinal Day, Hour, Minute, Second, Nanosecond
 export type DateTime = [number, number, number, number, number, number];
+
+// Checks is a year is a leap year
+function isLeapYear(year: number): boolean {
+	return year % 4 == 0 && (year % 25 != 0 || year % 16 == 0)
+}
+
+export function dateToDateTime(date: Date): DateTime {
+	// Simple substitutes
+	const year = date.getFullYear();
+	const hour = date.getHours();
+	const minutes = date.getMinutes();
+	const seconds = date.getSeconds();
+
+	// Ordinal math is hard
+	const DAYS_CUMULATIVE_COMMON_LEAP = [
+		[0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334],
+		[0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335],
+	];
+
+	const day = date.getDate();
+	const ordinal = DAYS_CUMULATIVE_COMMON_LEAP[isLeapYear(year) ? 1 : 0][date.getMonth()] + day;
+
+	return [year, ordinal, hour, minutes, seconds, 0]
+}
 
 // A schedule is just an array of tasks
 type Schedule = [Task];
