@@ -128,7 +128,9 @@ export class API {
 // loads the api
 export async function loadAPI(path: string): Promise<API> {
 	// Build instance
-	const { instance } = await WebAssembly.instantiateStreaming(fetch(path), {
+	const response = await fetch(path);
+	const buffer = await response.arrayBuffer();
+	const obj = await WebAssembly.instantiate(buffer, {
 		env: {
 			console_log(isString: boolean, ipcOffset: number) {
 				if (isString) {
@@ -154,6 +156,7 @@ export async function loadAPI(path: string): Promise<API> {
 			}
 		},
 	});
+	const instance = obj.instance;
 
 	// Build API
 	const _wasmMemory: WebAssembly.Memory = instance.exports.memory as WebAssembly.Memory;
