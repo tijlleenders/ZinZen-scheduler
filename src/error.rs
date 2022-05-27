@@ -1,3 +1,11 @@
+use crate::write_to_ipc;
+
+#[cfg(target_arch = "wasm32")]
+extern "C" {
+	/// Quit's the current wasm execution, and returns an error code as well as some info as a string in the IPC
+	pub(self) fn exit(exit_code: u8, ipc_offset: usize) -> !;
+}
+
 /// Various error codes
 pub struct ErrorCodes;
 
@@ -45,12 +53,16 @@ pub trait Explode<T> {
 
 impl<T> Explode<T> for Option<T> {
 	fn explode(self) -> T {
-		#[cfg(target = "wasm32-unknown-unknown")]
+		#[cfg(target_arch = "wasm32")]
 		{
-			use crate::console;
-			self.unwrap_or_else(|| console::log_err(ErrorCodes::UnwrapError, "Call to `Option::unwrap` panicked"))
+			self.unwrap_or_else(|| unsafe {
+				exit(
+					ErrorCodes::UnwrapError,
+					write_to_ipc("Call to `Option::unwrap` panicked").explode(),
+				)
+			})
 		}
-		#[cfg(not(target = "wasm32-unknown-unknown"))]
+		#[cfg(not(target_arch = "wasm32"))]
 		{
 			self.unwrap()
 		}
@@ -66,40 +78,36 @@ impl<T> Explode<T> for Option<T> {
 
 impl<T> Explode<T> for SchedulerResult<T> {
 	fn explode(self) -> T {
-		#[cfg(target = "wasm32-unknown-unknown")]
+		#[cfg(target_arch = "wasm32")]
 		{
 			use crate::{console, write_to_ipc};
-
-			extern "C" {
-				/// Quit's the current wasm execution, and returns an error code as well as some info as a string in the IPC
-				pub(self) fn exit(exit_code: u8, ipc_offset: usize) -> !;
-			}
 
 			unsafe {
 				match self {
 					Ok(data) => data,
 					Err(err) => match err {
 						SchedulerError::UnwrapError => {
-							exit(ErrorCodes::UnwrapError, write_to_ipc(err.to_string()).unwrap())
+							exit(ErrorCodes::UnwrapError, write_to_ipc(err.to_string()).explode())
 						}
 						SchedulerError::IPCDataOverflow(_) => {
-							exit(ErrorCodes::IPCDataOverflow, write_to_ipc(err.to_string()).unwrap())
+							exit(ErrorCodes::IPCDataOverflow, write_to_ipc(err.to_string()).explode())
 						}
 						SchedulerError::JSONError(_) => {
-							exit(ErrorCodes::JSONError, write_to_ipc(err.to_string()).unwrap())
+							exit(ErrorCodes::JSONError, write_to_ipc(err.to_string()).explode())
 						}
 						SchedulerError::GoalTaskDurationOverflow(_) => exit(
 							ErrorCodes::GoalTaskDurationOverflow,
-							write_to_ipc(err.to_string()).unwrap(),
+							write_to_ipc(err.to_string()).explode(),
 						),
-						SchedulerError::UnableToFindTaskSlot(_) => {
-							exit(ErrorCodes::UnableToFindTaskSlot, write_to_ipc(err.to_string()).unwrap())
-						}
+						SchedulerError::UnableToFindTaskSlot(_) => exit(
+							ErrorCodes::UnableToFindTaskSlot,
+							write_to_ipc(err.to_string()).explode(),
+						),
 					},
 				}
 			}
 		}
-		#[cfg(not(target = "wasm32-unknown-unknown"))]
+		#[cfg(not(target_arch = "wasm32"))]
 		{
 			self.unwrap()
 		}
