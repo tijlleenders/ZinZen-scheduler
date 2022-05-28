@@ -7,11 +7,11 @@ Deno.test("API.processTaskCount", async () => {
 	const API = await loadAPI("https://github.com/tijlleenders/ZinZen-scheduler/raw/main/ts/scheduler.wasm");
 	
 	// Load JSON
-	const json = Deno.readTextFile("test/goals.json");
+	const jsonString = Deno.readTextFile("test/goals.json");
 	
-	Promise.all([API, json]).then(([API, json]) => {
-		console.log("API:", API.generateSchedule)
-		console.log("Output:", json)
+	Promise.all([API, jsonString]).then(([API, jsonString]) => {
+		console.log("input:", jsonString)
+		console.log("API:", API.generateSchedule(JSON.parse(jsonString), new Date(), new Date() ))
 
 		// TODO: Insert assertions here
 	}).catch(console.error);
