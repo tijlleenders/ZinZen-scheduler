@@ -1,3 +1,4 @@
+
 use crate::{goal::Goal, task::Task};
 use time::PrimitiveDateTime;
 
@@ -10,7 +11,7 @@ impl PreProcessor {
 	pub fn generate_tasks_to_schedule(
 		goals: &[Goal],
 		timeline: (PrimitiveDateTime, PrimitiveDateTime),
-	) -> impl Iterator<Item = (&Task)> {
+	) -> impl Iterator<Item = (usize, &Goal)> {
 		goals.iter().map(move |goal| {
 			
 		})
