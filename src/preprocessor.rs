@@ -3,7 +3,9 @@ use time::Duration;
 use crate::goal::Goal;
 use time::PrimitiveDateTime;
 
-/// The [PreProcessor] takes in a user's goals, given a duration
+/// The preprocessor formats the input so the core-processor can focus on scheduling.
+/// It takes the goal-tree defined in the UI and turns it into a flat list of Tasks.
+/// Each Task has 0-* corresponding time-constrained Slots.
 pub struct PreProcessor;
 
 impl PreProcessor {
