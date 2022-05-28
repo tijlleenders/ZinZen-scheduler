@@ -5,7 +5,6 @@ use crate::{
 	task::Task,
 };
 use linked_list::LinkedList;
-use time::{Duration, PrimitiveDateTime};
 
 /// A schedule is just a list of tasks which satisfy the user's time and location constraints
 #[derive(Debug)]
