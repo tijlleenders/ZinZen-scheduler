@@ -72,11 +72,11 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		};
 
 		// Get time expected for task a and b
-		let task_allocated_time = task_allocated.finish - task_allocated.start;
+		let task_allocated_time = task_allocated.deadline - task_allocated.start;
 		let task_allocated_duration = task_allocated_time / task_allocated.flexibility;
 
 		// Store end_time copy
-		let end_time = task_allocated.finish;
+		let end_time = task_allocated.deadline;
 
 		// MATHEMATICS!
 		let divide_time = match goal.start {
@@ -91,8 +91,8 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		};
 
 		// The allocated time now ends here
-		task_allocated.finish = divide_time;
-		task_allocated.flexibility = (task_allocated.finish - task_allocated.start) / task_allocated_duration;
+		task_allocated.deadline = divide_time;
+		task_allocated.flexibility = (task_allocated.deadline - task_allocated.start) / task_allocated_duration;
 
 		// When does this task start
 		let mut start = next_interval;
@@ -107,7 +107,7 @@ pub(self) fn insert_tasks(goal: &Goal, task_count: usize, schedule: &mut Schedul
 		let new_allocated = Task {
 			goal_id: goal.id.get(),
 			start,
-			finish: end_time,
+			deadline: end_time,
 			flexibility: (end_time - start) / goal.task_duration,
 		};
 
@@ -142,7 +142,7 @@ fn compatible_slot<'a>(
 		.iter_mut()
 		.enumerate()
 		.find(|(_, task)| {
-			let task_space = task.finish - task.start;
+			let task_space = task.deadline - task.start;
 
 			// Can we fit into the this slot?
 			let can_fit = {
@@ -162,14 +162,14 @@ fn compatible_slot<'a>(
 					None => start_time >= task.start, // BUG: Hmmm!
 				},
 
-				Hint::Exact(start_time) => task.finish >= start_time && start_time >= task.start,
+				Hint::Exact(start_time) => task.deadline >= start_time && start_time >= task.start,
 			};
 
 			// Can we append ourselves into this tasks slots?
 			let can_append = match start_hint {
 				Hint::Exact(start_time) => {
 					start_time - task.start >= task_space / task.flexibility
-						&& task.finish - start_time >= goal.task_duration
+						&& task.deadline - start_time >= goal.task_duration
 				}
 				Hint::Range(_, _) => true,
 			};

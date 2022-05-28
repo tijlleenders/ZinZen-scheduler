@@ -12,7 +12,7 @@ pub struct Task {
 	/// When this task starts
 	pub(crate) start: PrimitiveDateTime,
 	/// When this task ends
-	pub(crate) finish: PrimitiveDateTime,
+	pub(crate) deadline: PrimitiveDateTime,
 	/// A Tasks flexibility is how flexible it is within it's allocated time frame.
 	pub(crate) flexibility: f64,
 }
@@ -24,7 +24,7 @@ impl Task {
 		Self {
 			goal_id: 0,
 			start: schedule.timeline.0,
-			finish: schedule.timeline.1,
+			deadline: schedule.timeline.1,
 			flexibility: max_seconds,
 		}
 	}

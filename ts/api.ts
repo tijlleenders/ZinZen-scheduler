@@ -53,7 +53,7 @@ export interface Goal {
 export interface Task {
 	goal_id: number,
 	start: DateTime,
-	finish: DateTime,
+	deadline: DateTime,
 	flexibility: number,
 }
 
@@ -64,7 +64,7 @@ export type GoalID = number;
 export interface Plan {
 	goals: [Goal],
 	start: DateTime,
-	finish: DateTime
+	deadline: DateTime
 }
 
 // The wrapper API class
@@ -83,9 +83,9 @@ export class API {
 		this.wasmMemory = wasmMemory;
 	}
 
-	public processTaskCount(goals: [Goal], start: Date, finish: Date): Map<GoalID, number> {
+	public processTaskCount(goals: [Goal], start: Date, deadline: Date): Map<GoalID, number> {
 		// Encode data
-		const string = JSON.stringify([goals, [jsDateToDateTime(start), jsDateToDateTime(finish)]]);
+		const string = JSON.stringify([goals, [jsDateToDateTime(start), jsDateToDateTime(deadline)]]);
 		const data = this.textEncoder.encode(string);
 
 		// Send data
@@ -101,9 +101,9 @@ export class API {
 		return new Map(iterator)
 	}
 
-	public generateSchedule(goals: [Goal], start: Date, finish: Date): Schedule {
+	public generateSchedule(goals: [Goal], start: Date, deadline: Date): Schedule {
 		// Serialize data
-		const plan = { goals, start: jsDateToDateTime(start), finish: jsDateToDateTime(finish) };
+		const plan = { goals, start: jsDateToDateTime(start), deadline: jsDateToDateTime(deadline) };
 		const string = JSON.stringify(plan);
 		const bytes = this.textEncoder.encode(string);
 

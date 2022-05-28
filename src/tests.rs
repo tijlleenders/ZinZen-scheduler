@@ -119,7 +119,7 @@ pub(crate) fn test_scheduler() {
 
 		assert!(task.flexibility >= 1.0);
 		assert!(
-			(goals[task.goal_id - 1].task_duration - (task.finish - task.start) / task.flexibility) <= Duration::SECOND
+			(goals[task.goal_id - 1].task_duration - (task.deadline - task.start) / task.flexibility) <= Duration::SECOND
 		);
 	}
 
@@ -189,7 +189,7 @@ pub(crate) fn test_scheduler_02() {
 
 		assert!(task.flexibility >= 1.0);
 		assert!(
-			(goals[task.goal_id - 1].task_duration - (task.finish - task.start) / task.flexibility) <= Duration::SECOND
+			(goals[task.goal_id - 1].task_duration - (task.deadline - task.start) / task.flexibility) <= Duration::SECOND
 		);
 	}
 
