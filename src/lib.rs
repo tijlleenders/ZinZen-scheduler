@@ -69,10 +69,10 @@ impl Plan {
 
 #[no_mangle]
 unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
-	let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
+	let Plan { goals, start, deadline } = Plan::load_plan_from_ipc(bytes);
 
-	let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
-	let tasks = schedule.slots_vector();
+	let mut tasks = PreProcessor.generate_tasks_to_schedule(goals, start, deadline);
+	let schedule = scheduler::generate_schedule(tasks, (0, deadline_in_hours_from_start)).explode();
 	let string = serde_json::to_string(&tasks).explode();
 
 	write_to_ipc(string).explode()
