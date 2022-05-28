@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use time::PrimitiveDateTime;
 
 use crate::scheduler::Schedule;
 
@@ -10,9 +9,9 @@ pub struct Task {
 	/// What goal originally described this task
 	pub(crate) goal_id: usize,
 	/// When this task starts
-	pub(crate) start: PrimitiveDateTime,
+	pub(crate) start: usize,
 	/// When this task ends
-	pub(crate) deadline: PrimitiveDateTime,
+	pub(crate) deadline: usize,
 	/// A Tasks flexibility is how flexible it is within it's allocated time frame.
 	pub(crate) flexibility: f64,
 }
