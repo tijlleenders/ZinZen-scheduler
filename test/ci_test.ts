@@ -4,12 +4,12 @@ import { loadAPI } from "../ts/api.ts";
 Deno.test("API.processTaskCount", async () => {
 	
 	// Load the API
-	const API = await loadAPI("https://github.com/tijlleenders/ZinZen-scheduler/raw/main/ts/scheduler.wasm");
+	const API = loadAPI("https://github.com/tijlleenders/ZinZen-scheduler/raw/main/ts/scheduler.wasm");
 	
 	// Load JSON
 	const jsonString = Deno.readTextFile("test/goals.json");
 	
-	Promise.all([API, jsonString]).then(([API, jsonString]) => {
+	await Promise.all([API, jsonString]).then(([API, jsonString]) => {
 		console.log("input:", jsonString)
 		console.log("API:", API.generateSchedule(JSON.parse(jsonString), new Date(), new Date() ))
 
