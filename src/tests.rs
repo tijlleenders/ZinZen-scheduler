@@ -58,7 +58,7 @@ pub(crate) fn test_preprocessor() {
 		},
 	];
 
-	for (idx, task) in PreProcessor::process_task_count(goals, timeline).enumerate() {
+	for (idx, task) in PreProcessor::generate_tasks_to_schedule(goals, timeline).enumerate() {
 		dbg!(idx, task);
 	}
 }
@@ -78,7 +78,7 @@ pub(crate) fn test_scheduler() {
 	let goals = &mut [
 		Goal {
 			id: NonZeroUsize::new(1).explode(),
-			description: "shopping".to_string(),
+			title: "shopping".to_string(),
 			task_duration: Duration::hours(1),
 			interval: Some(Duration::WEEK),
 			start: Some(timeline.0.replace_hour(10).unwrap()),
@@ -86,7 +86,7 @@ pub(crate) fn test_scheduler() {
 		},
 		Goal {
 			id: NonZeroUsize::new(2).explode(),
-			description: "dentist".to_string(),
+			title: "dentist".to_string(),
 			task_duration: Duration::hours(2),
 			interval: None,
 			start: Some(timeline.0.replace_hour(13).unwrap()),
@@ -94,7 +94,7 @@ pub(crate) fn test_scheduler() {
 		},
 		Goal {
 			id: NonZeroUsize::new(3).explode(),
-			description: "exercise".to_string(),
+			title: "exercise".to_string(),
 			task_duration: Duration::hours(1),
 			interval: Some(Duration::DAY),
 			start: Some(timeline.0.replace_hour(15).unwrap()),
