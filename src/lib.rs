@@ -44,7 +44,7 @@ pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> SchedulerResult<usize> {
 #[no_mangle]
 unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
 	let (goals, timeline) = load_goals_from_ipc(bytes);
-	let processed = PreProcessor::process_task_count(&goals, timeline);
+	let processed = PreProcessor::generate_tasks_to_schedule(&goals, timeline);
 
 	let with_ids = processed.map(|(a, b)| (a, b.id)).collect::<Vec<_>>();
 	let string = serde_json::to_string(&with_ids).explode();

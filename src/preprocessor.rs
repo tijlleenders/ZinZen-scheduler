@@ -1,6 +1,6 @@
 use time::Duration;
 
-use crate::goal::Goal;
+use crate::{goal::Goal, task::Task};
 use time::PrimitiveDateTime;
 
 /// The preprocessor formats the input so the core-processor can focus on scheduling.
@@ -9,19 +9,12 @@ use time::PrimitiveDateTime;
 pub struct PreProcessor;
 
 impl PreProcessor {
-	pub fn process_task_count(
+	pub fn generate_tasks_to_schedule(
 		goals: &[Goal],
 		timeline: (PrimitiveDateTime, PrimitiveDateTime),
-	) -> impl Iterator<Item = (usize, &Goal)> {
+	) -> impl Iterator<Item = (&Task)> {
 		goals.iter().map(move |goal| {
-			// Little nudge to prevent over-posting
-			let start = goal.start.unwrap_or(timeline.0) + Duration::seconds(1);
-			let finish = goal.deadline.unwrap_or(timeline.1);
-
-			match goal.interval {
-				Some(interval) => (((finish - start) / interval).floor() as usize + 1, goal),
-				None => (1, goal),
-			}
+			
 		})
 	}
 }

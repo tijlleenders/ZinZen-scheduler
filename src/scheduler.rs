@@ -47,7 +47,7 @@ pub fn generate_schedule(
 	})?;
 
 	// Produce a tuple containing task count and goal, and insert into time slots
-	let mut tasks = PreProcessor::process_task_count(goals, timeline);
+	let mut tasks = PreProcessor::generate_tasks_to_schedule(goals, timeline);
 	tasks.try_for_each(|(task_count, goal)| insert_tasks(goal, task_count, &mut schedule))?;
 
 	Ok(schedule)
@@ -175,5 +175,5 @@ fn compatible_slot<'a>(
 
 			can_fit && can_append && in_range
 		})
-		.ok_or(SchedulerError::UnableToFindTaskSlot(goal.description.to_string()))
+		.ok_or(SchedulerError::UnableToFindTaskSlot(goal.title.to_string()))
 }
