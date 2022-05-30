@@ -32,6 +32,8 @@ Deno.test("Test ProcessTaskCount", () => {
 
 Deno.test("Test API.GenerateSchedule", () => {
 	const schedule = API.generateSchedule(goals, start, finish).sort((a, b) => a.flexibility - b.flexibility);
+	console.log(schedule);
+
 	schedule.forEach(task => {
 		// Minimum flexibility is 1
 		assert(task.flexibility >= 1);
