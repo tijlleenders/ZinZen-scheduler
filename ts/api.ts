@@ -90,7 +90,7 @@ export type GoalID = number;
  * Contains data required to generate a schedule
  */
 export interface Plan {
-	goals: [Goal],
+	goals: Goal[],
 	start: DateTime,
 	finish: DateTime
 }
@@ -121,7 +121,7 @@ export class API {
 	 * @param finish The end of the timeline
 	 * @returns A Map from a Goal's ID to how many tasks can fit within the timeline
 	 */
-	public processTaskCount(goals: [Goal], start: Date, finish: Date): Map<GoalID, number> {
+	public processTaskCount(goals: Goal[], start: Date, finish: Date): Map<GoalID, number> {
 		// Encode data
 		const string = JSON.stringify([goals, [jsDateToDateTime(start), jsDateToDateTime(finish)]]);
 		const data = this.textEncoder.encode(string);
@@ -146,7 +146,7 @@ export class API {
 	 * @param finish The end of the timeline
 	 * @returns A schedule
 	 */
-	public generateSchedule(goals: [Goal], start: Date, finish: Date): Schedule {
+	public generateSchedule(goals: Goal[], start: Date, finish: Date): Schedule {
 		// Serialize data
 		const plan = { goals, start: jsDateToDateTime(start), finish: jsDateToDateTime(finish) };
 		const string = JSON.stringify(plan);
@@ -199,7 +199,7 @@ export async function loadAPI(path: string): Promise<API> {
 					const readResult = new Uint8Array(_wasmMemory.buffer, _ipcStart, ipcOffset);
 					const decoder = new TextDecoder();
 
-					throw new Error(`[WASM_ERROR; ErrorCode:${error_code}] ${decoder.decode(readResult)}`);
+					console.error(`[WASM_ERROR; ErrorCode:${error_code}] ${decoder.decode(readResult)}`);
 				} else {
 					console.info("Webassembly has prematurely finished execution, without errors")
 				}

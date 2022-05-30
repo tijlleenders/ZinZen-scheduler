@@ -27,10 +27,6 @@ pub struct Goal {
 	pub start: Option<time::PrimitiveDateTime>,
 	/// When this Goal's tasks should end
 	pub deadline: Option<time::PrimitiveDateTime>,
-
-	/// Where each task should be committed to, eg "I want to cook for my dog at home".
-	/// This is useful to make sure a schedule makes sense, since people can't teleport from place to place in minutes
-	pub location_constraint: Option<usize>,
 }
 
 impl Default for Goal {
@@ -42,7 +38,6 @@ impl Default for Goal {
 			interval: None,
 			deadline: None,
 			start: None,
-			location_constraint: None,
 		}
 	}
 }

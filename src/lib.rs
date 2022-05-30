@@ -72,7 +72,7 @@ unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
 	let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
 
 	let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
-	let tasks = schedule.slots_vector();
+	let tasks = schedule.into_tasks_vector();
 	let string = serde_json::to_string(&tasks).explode();
 
 	write_to_ipc(string).explode()

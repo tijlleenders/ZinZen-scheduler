@@ -15,8 +15,8 @@ pub struct Schedule {
 }
 
 impl Schedule {
-	/// Generate a vector of slots from a list of slots
-	pub(crate) fn slots_vector(&self) -> Vec<Task> {
+	/// Generate a vector of tasks from a linked-list of slots
+	pub(crate) fn into_tasks_vector(&self) -> Vec<Task> {
 		self.slots.iter().cloned().collect::<Vec<_>>()
 	}
 }
@@ -174,7 +174,7 @@ fn compatible_slot<'a>(
 				Hint::Range(_, _) => true,
 			};
 
-			can_fit && can_append && in_range
+			can_fit && in_range && can_append
 		})
 		.ok_or(SchedulerError::UnableToFindTaskSlot(goal.description.to_string()))
 }

@@ -15,4 +15,4 @@ wasm-opt -o ts/scheduler.wasm -O3 $BINARY
 ls -lh ts/scheduler.wasm
 
 # Finally execute wasm inside Deno
-deno run --allow-read test/test.ts
+deno test -A --allow-read
