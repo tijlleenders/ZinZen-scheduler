@@ -2,4 +2,3 @@
 Cargo.lock
 .vscode
 .cargo
-test/test.ts

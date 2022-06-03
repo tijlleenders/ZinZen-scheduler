@@ -1,23 +1,23 @@
 [
   {
-    "goalId": 1,
+    "id": 1,
     "description": "shopping",
-    "duration": 1,
-    "start": "2022-05-27T10:00:00.000Z",
-    "deadline": "2022-05-27T13:00:00.000Z"
+    "task_duration": 1,
+    "start": "June 1, 2022 12:00:00",
+    "deadline": "June 2, 2022 18:00:00"
   },
   {
-    "goalId": 2,
+    "id": 2,
     "description": "dentist",
-    "duration": 1,
-    "start": "2022-05-27T10:00:00.000Z",
-    "deadline": "2022-05-27T11:00:00.000Z"
+    "task_duration": 2,
+    "start": "June 1, 2022 13:00:00",
+    "deadline": "June 5, 2022 17:00:00"
   },
   {
-    "goalId": 3,
+    "id": 3,
     "description": "exercise",
-    "duration": 1,
-    "start": "2022-05-27T10:00:00.000Z",
-    "deadline": "2022-05-27T18:00:00.000Z"
+    "task_duration": 2,
+    "start": "June 1, 2022 3:00:00",
+    "deadline": "June 2, 2022 6:00:00"
   }
 ]

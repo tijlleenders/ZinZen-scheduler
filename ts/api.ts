@@ -1,19 +1,37 @@
-// A span of time with nanosecond precision. Each Duration is composed of a whole number of seconds and a fractional part represented in nanoseconds.
+/**
+ * A span of time with nanosecond precision. Each Duration is composed of a whole number of seconds and a fractional part represented in nanoseconds.
+ */
 export type Duration = [number, number];
 
+/**
+ * Converts time in hours to a Duration
+ * @param timeInHours Time in hours
+ * @returns A `Duration`, which is a type compatible with the wasm API
+ */
 export function durationFromHours(timeInHours: number): Duration {
 	return [timeInHours * 3600, 0]
 }
 
-// Combined date and time
-// Contains Year, Ordinal Day, Hour, Minute, Second, Nanosecond
+/**
+ * Combined date and time
+ * Contains Year, Ordinal Day (1-365), Hour, Minute, Second, Nanosecond
+ */
 export type DateTime = [number, number, number, number, number, number];
 
-// Checks is a year is a leap year
+/**
+ * Checks is a year is a leap year
+ * @param year The year as a number, ie 2012, 1996, 2022
+ * @returns true is the year is a leap year, false otherwise
+ */
 function isLeapYear(year: number): boolean {
 	return year % 4 == 0 && (year % 25 != 0 || year % 16 == 0)
 }
 
+/**
+ * Converts a [Date] to a internal DateTime struct compatible with webassembly
+ * @param date The JS `Date` value
+ * @returns An internal type, `DateTime`
+ */
 export function jsDateToDateTime(date: Date): DateTime {
 	// Simple substitutes
 	const year = date.getFullYear();
@@ -33,10 +51,14 @@ export function jsDateToDateTime(date: Date): DateTime {
 	return [year, ordinal, hour, minutes, seconds, 0]
 }
 
-// A schedule is just an array of tasks
+/**
+ *  A schedule is just an array of tasks
+ */
 type Schedule = [Task];
 
-// The Goal interface
+/**
+ * The Goal interface
+ */
 export interface Goal {
 	id: number,
 	description: string,
@@ -49,7 +71,9 @@ export interface Goal {
 	location_constraint: null | number
 }
 
-// An interface that describes a Task
+/**
+ * An interface that describes a Task
+ */
 export interface Task {
 	goal_id: number,
 	start: DateTime,
@@ -57,17 +81,23 @@ export interface Task {
 	flexibility: number,
 }
 
-// A goal id is just a number
+/**
+ * A goal id is just a number
+ */
 export type GoalID = number;
 
-// Contains data required to generate a schedule
+/**
+ * Contains data required to generate a schedule
+ */
 export interface Plan {
-	goals: [Goal],
+	goals: Goal[],
 	start: DateTime,
 	finish: DateTime
 }
 
-// The wrapper API class
+/**
+ * The wrapper API class
+ */
 export class API {
 	private instance: WebAssembly.Instance;
 	private textDecoder: TextDecoder;
@@ -75,6 +105,7 @@ export class API {
 	private ipcStart: number;
 	private wasmMemory: WebAssembly.Memory;
 
+	// Internal constructor for API class
 	constructor(instance: WebAssembly.Instance, ipcStart: number, wasmMemory: WebAssembly.Memory) {
 		this.instance = instance;
 		this.textDecoder = new TextDecoder;
@@ -83,7 +114,14 @@ export class API {
 		this.wasmMemory = wasmMemory;
 	}
 
-	public processTaskCount(goals: [Goal], start: Date, finish: Date): Map<GoalID, number> {
+	/**
+	 * Given an array of Goals, it will process the total number of tasks per Goal that can fit within the timeline
+	 * @param goals An array of Goals to be fitted into a timeline
+	 * @param start The start of the timeline
+	 * @param finish The end of the timeline
+	 * @returns A Map from a Goal's ID to how many tasks can fit within the timeline
+	 */
+	public processTaskCount(goals: Goal[], start: Date, finish: Date): Map<GoalID, number> {
 		// Encode data
 		const string = JSON.stringify([goals, [jsDateToDateTime(start), jsDateToDateTime(finish)]]);
 		const data = this.textEncoder.encode(string);
@@ -101,7 +139,14 @@ export class API {
 		return new Map(iterator)
 	}
 
-	public generateSchedule(goals: [Goal], start: Date, finish: Date): Schedule {
+	/**
+	 * A fundamental function, that parses Goals and produces a Schedule, which is just an array of tasks
+	 * @param goals The array of Goals to be processed
+	 * @param start The start of the timeline
+	 * @param finish The end of the timeline
+	 * @returns A schedule
+	 */
+	public generateSchedule(goals: Goal[], start: Date, finish: Date): Schedule {
 		// Serialize data
 		const plan = { goals, start: jsDateToDateTime(start), finish: jsDateToDateTime(finish) };
 		const string = JSON.stringify(plan);
@@ -120,12 +165,19 @@ export class API {
 		return JSON.parse(resultString)
 	}
 
+	/**
+	 * @returns A reference to the IPC buffer used for communication with WebAssembly
+	 */
 	public getIPCView(offset: number): Uint8Array {
 		return new Uint8Array(this.wasmMemory.buffer, this.ipcStart, offset);
 	}
 }
 
-// loads the api
+/**
+ * Loads the WebAssembly api
+ * @param path A valid path that is passed to `fetch` and is used to fetch the webassembly data
+ * @returns A Promise that yields an API to the underlying wasm
+ */
 export async function loadAPI(path: string): Promise<API> {
 	// Build instance
 	const { instance } = await WebAssembly.instantiateStreaming(fetch(path), {
@@ -147,7 +199,7 @@ export async function loadAPI(path: string): Promise<API> {
 					const readResult = new Uint8Array(_wasmMemory.buffer, _ipcStart, ipcOffset);
 					const decoder = new TextDecoder();
 
-					throw new Error(`[WASM_ERROR; ErrorCode:${error_code}] ${decoder.decode(readResult)}`);
+					console.error(`[WASM_ERROR; ErrorCode:${error_code}] ${decoder.decode(readResult)}`);
 				} else {
 					console.info("Webassembly has prematurely finished execution, without errors")
 				}
