@@ -1,7 +1,9 @@
-use crate::{error::Explode, IPC_BUFFER};
-use serde::{Deserialize, Serialize};
 use std::num::NonZeroUsize;
-use time::PrimitiveDateTime;
+
+use serde::{Deserialize, Serialize};
+use time::{Duration, PrimitiveDateTime};
+
+use crate::{error::Explode, IPC_BUFFER};
 
 /// Loads [`Goal`] inserted into IPC by JavaScript
 pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> (Vec<Goal>, (PrimitiveDateTime, PrimitiveDateTime)) {
@@ -17,16 +19,16 @@ pub struct Goal {
 	/// A goal's description
 	pub description: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
-	pub task_duration: time::Duration,
+	pub task_duration: Duration,
 
 	/// The interval between a Goal's tasks, this can be used to repeat a Goal daily, weekly, etc
 	/// Here `interval` is fundamentally always divisible by 24.
 	/// NONE means it happens only once
-	pub interval: Option<time::Duration>,
+	pub interval: Option<Duration>,
 	/// Allows the user to set exact times for when a task should be start, given as a date and time
-	pub start: Option<time::PrimitiveDateTime>,
+	pub start: Option<PrimitiveDateTime>,
 	/// When this Goal's tasks should end
-	pub deadline: Option<time::PrimitiveDateTime>,
+	pub deadline: Option<PrimitiveDateTime>,
 }
 
 impl Default for Goal {
