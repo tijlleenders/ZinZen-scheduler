@@ -28,7 +28,7 @@ struct Goal {
 }
 
 #[derive(Deserialize, Debug)]
-struct Input {
+pub struct Input {
     #[serde(rename = "startDate")]
     start_date: DateTime<Utc>,
     #[serde(rename = "endDate")]
@@ -44,7 +44,7 @@ pub struct ProcessedInput {
     pub slots: Vec<Slot>,
 }
 
-fn preprocessor(input: Input) -> ProcessedInput {
+pub fn preprocessor(input: Input) -> ProcessedInput {
     // TODO repetition
     // TODO filler
 

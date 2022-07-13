@@ -393,6 +393,8 @@ impl fmt::Display for Calendar {
 
 #[cfg(test)]
 mod tests {
+    use crate::preprocessor::{preprocessor, Input};
+
     use super::*;
 
     fn init_env_logger() {
@@ -401,166 +403,44 @@ mod tests {
     }
 
     #[test]
-    fn calendar_with_daily_goal() {
-        init_env_logger();
+    fn DELETE_THIS_TEST_DO_INT_TEST_INSTEAD() {
+        let input: Input = serde_json::from_str(
+            r#"
+{
+    "startDate": "2022-01-01T00:00:00Z",
+    "endDate": "2022-01-02T00:00:00Z",
+    "goals": [
+        {
+          "goalId": "1",
+          "title" : "shopping",
+          "duration": 1,
+          "start": "2022-01-01T10:00:00Z",
+          "deadline": "2022-01-01T13:00:00Z"
+        },
+        {
+          "goalId": "2",
+          "title": "dentist",
+          "duration": 1,
+          "start": "2022-01-01T10:00:00Z",
+          "deadline": "2022-01-01T11:00:00Z"
+        },
+        {
+          "goalId": "3",
+          "title" : "exercise",
+          "duration": 1,
+          "start": "2022-01-01T10:00:00Z",
+          "deadline": "2022-01-01T18:00:00Z"
+        }
+    ]
+}
+        "#,
+        )
+        .unwrap();
 
-        let mut calendar = Calendar {
-            max_time_units: 720,
-            time_unit_qualifier: String::from("h"),
-            tasks: Vec::new(),
-            slots: Vec::new(),
-        };
-
-        let task1 = Task {
-            duration_scheduled: 0,
-            duration_to_schedule: 1,
-            task_id: 1,
-            task_status: TaskStatus::UNSCHEDULED,
-            goal_id: "goal1".to_string(),
-        };
-        let task2 = Task {
-            task_id: 2,
-            duration_to_schedule: 1,
-            duration_scheduled: 0,
-            task_status: TaskStatus::UNSCHEDULED,
-            goal_id: "goal1".to_string(),
-        };
-        let task3 = Task {
-            task_id: 3,
-            duration_to_schedule: 1,
-            duration_scheduled: 0,
-            task_status: TaskStatus::UNSCHEDULED,
-            goal_id: "goal1".to_string(),
-        };
-        let slot1 = Slot {
-            task_id: 1,
-            begin: 6,
-            end: 31,
-        };
-        let slot2 = Slot {
-            task_id: 2,
-            begin: 24,
-            end: 49,
-        };
-        let slot3 = Slot {
-            task_id: 3,
-            begin: 48,
-            end: 73,
-        };
-
-        calendar.tasks.push(task1);
-        calendar.tasks.push(task2);
-        calendar.tasks.push(task3);
-
-        calendar.slots.push(slot1);
-        calendar.slots.push(slot2);
-        calendar.slots.push(slot3);
-
-        #[cfg(not(target_arch = "wasm32"))]
-        log::info!("Calendar:{:#?}\n", calendar);
-
-        calendar.schedule();
-
-        #[cfg(not(target_arch = "wasm32"))]
-        log::info!("Calendar:{:#?}\n", calendar);
-
-        assert_eq!(720, calendar.max_time_units);
-        assert_eq!("h", calendar.time_unit_qualifier);
-        let mut s_vec: Vec<Slot> = Vec::new();
-        let expected_slot1 = Slot {
-            task_id: 1,
-            begin: 4,
-            end: 5,
-        };
-        let expected_slot2 = Slot {
-            task_id: 2,
-            begin: 24,
-            end: 25,
-        };
-        let expected_slot3 = Slot {
-            task_id: 3,
-            begin: 48,
-            end: 49,
-        };
-        s_vec.push(expected_slot1);
-        s_vec.push(expected_slot2);
-        s_vec.push(expected_slot3);
-        assert_eq!(s_vec, calendar.slots);
-    }
-
-    #[test]
-    fn two_goals() {
-        init_env_logger();
-
-        let mut calendar = Calendar {
-            max_time_units: 720,
-            time_unit_qualifier: String::from("h"),
-            tasks: Vec::new(),
-            slots: Vec::new(),
-        };
-
-        let task1 = Task {
-            duration_scheduled: 0,
-            duration_to_schedule: 1,
-            task_id: 1,
-            task_status: TaskStatus::UNSCHEDULED,
-            goal_id: "5f39a726-641c-4c1a-aa54-2f28a3847ee8".to_string(),
-        };
-        let task2 = Task {
-            task_id: 2,
-            duration_to_schedule: 1,
-            duration_scheduled: 0,
-            task_status: TaskStatus::UNSCHEDULED,
-            goal_id: "".to_string(),
-        };
-
-        let slot1 = Slot {
-            task_id: 1,
-            begin: 7,
-            end: 720,
-        };
-        let slot2 = Slot {
-            task_id: 2,
-            begin: 7,
-            end: 720,
-        };
-
-        calendar.tasks.push(task1);
-        calendar.tasks.push(task2);
-
-        calendar.slots.push(slot1);
-        calendar.slots.push(slot2);
-
-        #[cfg(not(target_arch = "wasm32"))]
-        log::info!("Calendar:{:#?}\n", calendar);
-
-        calendar.schedule();
-
-        #[cfg(not(target_arch = "wasm32"))]
-        log::info!("Calendar:{:#?}\n", calendar);
-
-        assert_eq!(720, calendar.max_time_units);
-        assert_eq!("h", calendar.time_unit_qualifier);
-        let mut s_vec: Vec<Slot> = Vec::new();
-        let expected_slot1 = Slot {
-            task_id: 1,
-            begin: 4,
-            end: 5,
-        };
-        let expected_slot2 = Slot {
-            task_id: 2,
-            begin: 24,
-            end: 25,
-        };
-        let expected_slot3 = Slot {
-            task_id: 3,
-            begin: 48,
-            end: 49,
-        };
-        s_vec.push(expected_slot1);
-        s_vec.push(expected_slot2);
-        s_vec.push(expected_slot3);
-        assert_eq!(s_vec, calendar.slots);
+        let pre = preprocessor(input);
+        let mut cal = Calendar::new(168, "h".into(), pre);
+        cal.schedule();
+        dbg!(cal);
     }
 
     #[test]
