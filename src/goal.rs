@@ -25,9 +25,9 @@ pub struct Goal {
 	/// Here `interval` is fundamentally always divisible by 24.
 	/// NONE means it happens only once
 	pub interval: Option<Duration>,
-	/// Allows the user to set exact times for when a task should be start, given as a date and time
+	/// When should this Goal's tasks start
 	pub start: Option<PrimitiveDateTime>,
-	/// When this Goal's tasks should end
+	/// When should this Goal's tasks end
 	pub deadline: Option<PrimitiveDateTime>,
 }
 
