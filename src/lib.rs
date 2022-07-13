@@ -1,10 +1,16 @@
-use serde::{Deserialize, Serialize}; // consider https://crates.io/crates/serde-wasm-bindgen
+// consider https://crates.io/crates/serde-wasm-bindgen
 use std::{fmt, usize};
+
+use serde::{Deserialize, Serialize};
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 #[cfg(target_arch = "wasm32")]
 use web_sys::console;
+
+use crate::preprocessor::ProcessedInput;
+
+mod preprocessor;
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(start)]
@@ -29,8 +35,9 @@ pub fn load_calendar(val: &JsValue) -> JsValue {
     JsValue::from_serde(&calendar).unwrap()
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Default)]
 enum TaskStatus {
+    #[default]
     UNSCHEDULED,
     SCHEDULED,
     IMPOSSIBLE,
@@ -53,7 +60,7 @@ pub struct Slot {
     end: usize,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct Calendar {
     pub max_time_units: usize,
     pub time_unit_qualifier: String,
@@ -61,7 +68,7 @@ pub struct Calendar {
     pub slots: Vec<Slot>,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Default)]
 pub struct Task {
     task_id: usize,
     duration_to_schedule: usize,
@@ -71,7 +78,11 @@ pub struct Task {
 }
 
 impl Calendar {
-    pub fn new(max_time_units: usize, time_unit_qualifier: String) -> Calendar {
+    pub fn new(
+        max_time_units: usize,
+        time_unit_qualifier: String,
+        preprocessor: ProcessedInput,
+    ) -> Calendar {
         Calendar {
             max_time_units,
             time_unit_qualifier,

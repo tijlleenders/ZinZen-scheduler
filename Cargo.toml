@@ -5,24 +5,26 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-serde = { version = "1.0.130", features = ["derive"]}
+[dependencies]
+# ISO8601 time
+chrono = { version = "0.4", features = ["wasmbind", "serde"] }
+serde = { version = "1.0.130", features = ["derive"] }
 serde_json = "1.0.71"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 log = "0.4.14"
 env_logger = "0.9.0"
 
-[lib]
-crate-type = ["cdylib", "rlib"]
-
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen  = { version = "0.2.78", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.78", features = ["serde-serialize"] }
 js-sys = "0.3"
-web-sys = { version = "0.3", features = [ "console" ] }
+web-sys = { version = "0.3", features = ["console"] }
 tracing-wasm = "0.2.1"
 console_error_panic_hook = "0.1.7"
-serde = { version = "1.0.130", features = ["derive"]}
-serde_json = "1.0.71"
 
 [dev-dependencies]
 # https://rustwasm.github.io/docs/wasm-bindgen/wasm-bindgen-test/usage.html?highlight=wasm-bindgen-test#appendix-using-wasm-bindgen-test-without-wasm-pack
 wasm-bindgen-test = "0.3.28"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
