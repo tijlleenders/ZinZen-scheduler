@@ -86,8 +86,8 @@ impl Calendar {
         Calendar {
             max_time_units,
             time_unit_qualifier,
-            tasks: Vec::new(),
-            slots: Vec::new(),
+            tasks: preprocessor.tasks,
+            slots: preprocessor.slots,
         }
     }
 

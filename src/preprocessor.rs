@@ -40,8 +40,8 @@ struct Input {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub struct ProcessedInput {
-    tasks: Vec<Task>,
-    slots: Vec<Slot>,
+    pub tasks: Vec<Task>,
+    pub slots: Vec<Slot>,
 }
 
 fn preprocessor(input: Input) -> ProcessedInput {
