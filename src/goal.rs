@@ -19,15 +19,11 @@ pub struct Goal {
 	/// A goal's description
 	pub description: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
-	pub task_duration: Duration,
+	pub duration: Duration,
 
-	/// The interval between a Goal's tasks, this can be used to repeat a Goal daily, weekly, etc
-	/// Here `interval` is fundamentally always divisible by 24.
-	/// NONE means it happens only once
-	pub interval: Option<Duration>,
-	/// When should this Goal's tasks start
+	/// Earliest start datetime for this Goal's Tasks
 	pub start: Option<PrimitiveDateTime>,
-	/// When should this Goal's tasks end
+	/// Deadline for this Goal's Tasks
 	pub deadline: Option<PrimitiveDateTime>,
 }
 
