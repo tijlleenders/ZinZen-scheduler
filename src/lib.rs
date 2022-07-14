@@ -44,13 +44,14 @@ pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> SchedulerResult<usize> {
 
 #[no_mangle]
 unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
-	let (goals, timeline) = load_goals_from_ipc(bytes);
-	let processed = PreProcessor::preprocess_old(&goals, timeline);
-
-	let with_ids = processed.map(|(a, b)| (a, b.id)).collect::<Vec<_>>();
-	let string = serde_json::to_string(&with_ids).explode();
-
-	write_to_ipc(string).explode()
+	// let (goals, timeline) = load_goals_from_ipc(bytes);
+	// let processed = PreProcessor::preprocess_old(&goals, timeline);
+	//
+	// let with_ids = processed.map(|(a, b)| (a, b.id)).collect::<Vec<_>>();
+	// let string = serde_json::to_string(&with_ids).explode();
+	//
+	// write_to_ipc(string).explode()
+	0 // XXX: stub
 }
 
 #[derive(Deserialize)]

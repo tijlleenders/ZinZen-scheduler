@@ -20,7 +20,6 @@ pub struct Goal {
 	pub description: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
 	pub duration: Duration,
-
 	/// Earliest start datetime for this Goal's Tasks
 	pub start: Option<PrimitiveDateTime>,
 	/// Deadline for this Goal's Tasks
@@ -32,8 +31,7 @@ impl Default for Goal {
 		Self {
 			id: unsafe { NonZeroUsize::new_unchecked(0) },
 			description: "[NO DESCRIPTION]".to_string(),
-			task_duration: time::Duration::ZERO,
-			interval: None,
+			duration: time::Duration::ZERO,
 			deadline: None,
 			start: None,
 		}

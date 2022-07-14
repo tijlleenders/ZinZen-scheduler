@@ -9,27 +9,11 @@ use crate::task::{Slot, Task};
 pub struct PreProcessor;
 
 impl PreProcessor {
-	pub fn preprocess_old(
-		goals: &[Goal],
-		timeline: (PrimitiveDateTime, PrimitiveDateTime),
-	) -> impl Iterator<Item = (usize, &Goal)> {
-		goals.iter().map(move |goal| {
-			// Little nudge to prevent over-posting
-			let start = goal.start.unwrap_or(timeline.0) + Duration::seconds(1);
-			let finish = goal.deadline.unwrap_or(timeline.1);
-
-			match goal.interval {
-				Some(interval) => (((finish - start) / interval).floor() as usize + 1, goal),
-				None => (1, goal),
-			}
-		})
-	}
-
 	pub fn preprocess(goals: &[Goal], timeline: (PrimitiveDateTime, PrimitiveDateTime)) -> (Vec<Task>) {
 		let tasks = goals
 			.iter()
 			.enumerate()
-			.map(|(id, goal)| Task::new(id, goal.id, goal.task_duration));
+			.map(|(id, goal)| Task::new(id, goal.id, goal.duration));
 
 		tasks
 			.map(|mut task| {
