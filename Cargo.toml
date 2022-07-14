@@ -21,6 +21,6 @@ lto = true
 [dependencies]
 serde_json = "1.0.81"
 serde = { version = "1.0.137", features = ["derive"] }
-time = { version = "0.3.9", features = ["serde", "macros"] }
+time = { version = "0.3.9", features = ["serde", "serde-well-known", "serde-human-readable", "macros"] }
 linked-list = "0.0.3"
 thiserror = "1.0.31"

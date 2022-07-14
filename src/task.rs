@@ -8,8 +8,8 @@ use time::{Duration, PrimitiveDateTime};
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct Task {
 	task_id: usize,
-	goal_id: NonZeroUsize,
-	duration_to_schedule: Duration,
+	goal_id: usize,
+	duration_to_schedule: usize,
 	// TODO: should split off the following fields into internal
 	// scheduler implementation, but in a rush now
 	pub duration_scheduled: Duration,
@@ -19,7 +19,7 @@ pub struct Task {
 }
 
 impl Task {
-	pub fn new(task_id: usize, goal_id: NonZeroUsize, duration_to_schedule: Duration) -> Self {
+	pub fn new(task_id: usize, goal_id: usize, duration_to_schedule: usize) -> Self {
 		Self {
 			task_id,
 			goal_id,

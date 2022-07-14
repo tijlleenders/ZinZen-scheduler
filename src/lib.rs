@@ -1,9 +1,9 @@
 use serde::Deserialize;
-use time::PrimitiveDateTime;
+use time::serde::iso8601;
+use time::{OffsetDateTime, PrimitiveDateTime};
 
 use error::{Explode, SchedulerError, SchedulerResult};
 use goal::load_goals_from_ipc;
-use preprocessor::PreProcessor;
 
 /// API modules
 mod console;
@@ -54,16 +54,20 @@ unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
 	0 // XXX: stub
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 /// Just a deserialization target
-pub struct Plan {
+pub struct Input {
+	#[serde(rename = "startDate")]
+	#[serde(with = "iso8601")]
+	start: OffsetDateTime,
+	#[serde(rename = "endDate")]
+	#[serde(with = "iso8601")]
+	end: OffsetDateTime,
 	goals: Vec<goal::Goal>,
-	start: PrimitiveDateTime,
-	finish: PrimitiveDateTime,
 }
 
-impl Plan {
-	unsafe fn load_plan_from_ipc(ipc_offset: usize) -> Plan {
+impl Input {
+	unsafe fn load_plan_from_ipc(ipc_offset: usize) -> Self {
 		let slice = &IPC_BUFFER[..ipc_offset];
 		serde_json::from_slice(slice).explode()
 	}
@@ -71,12 +75,13 @@ impl Plan {
 
 #[no_mangle]
 unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
-	let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
-
-	// XXX: hack
-	//let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
-	//let tasks = schedule.into_tasks_vector();
-	let string = serde_json::to_string(&vec!["a²"]).explode();
-
-	write_to_ipc(string).explode()
+	// let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
+	//
+	// // XXX: hack
+	// //let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
+	// //let tasks = schedule.into_tasks_vector();
+	// let string = serde_json::to_string(&vec!["a²"]).explode();
+	//
+	// write_to_ipc(string).explode()
+	0 // XXX: stub
 }

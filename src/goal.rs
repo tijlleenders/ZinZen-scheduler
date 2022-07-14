@@ -1,7 +1,9 @@
+use std::fmt::Formatter;
 use std::num::NonZeroUsize;
 
 use serde::{Deserialize, Serialize};
-use time::{Duration, PrimitiveDateTime};
+use time::serde::iso8601;
+use time::{Duration, OffsetDateTime, PrimitiveDateTime};
 
 use crate::{error::Explode, IPC_BUFFER};
 
@@ -15,25 +17,17 @@ pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> (Vec<Goal>, (PrimitiveDa
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Goal {
 	/// Every goal has a unique ID
-	pub id: NonZeroUsize,
+	pub id: usize,
 	/// A goal's description
-	pub description: String,
+	pub title: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
-	pub duration: Duration,
+	pub duration: usize,
 	/// Earliest start datetime for this Goal's Tasks
-	pub start: Option<PrimitiveDateTime>,
+	// TODO: should be optional (default to start of today)
+	#[serde(with = "iso8601")]
+	pub start: OffsetDateTime,
 	/// Deadline for this Goal's Tasks
-	pub deadline: Option<PrimitiveDateTime>,
-}
-
-impl Default for Goal {
-	fn default() -> Self {
-		Self {
-			id: unsafe { NonZeroUsize::new_unchecked(0) },
-			description: "[NO DESCRIPTION]".to_string(),
-			duration: time::Duration::ZERO,
-			deadline: None,
-			start: None,
-		}
-	}
+	// TODO: should be optional (will default to end of calendar))
+	#[serde(with = "iso8601")]
+	pub deadline: OffsetDateTime,
 }
