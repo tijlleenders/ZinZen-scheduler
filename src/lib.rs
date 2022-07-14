@@ -15,7 +15,7 @@ mod tests;
 /// Project details
 mod goal;
 mod preprocessor;
-mod scheduler;
+mod scheduler_core;
 mod task;
 
 // 64 Kib for the IPC

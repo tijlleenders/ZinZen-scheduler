@@ -4,25 +4,29 @@ use time::PrimitiveDateTime;
 use time::{Duration, OffsetDateTime};
 
 use crate::goal::Goal;
+use crate::scheduler_core::CoreScheduler;
 use crate::task::{Slot, Task};
 use crate::Input;
 
-pub fn preprocess(Input { start, end, goals }: Input) -> (Vec<Task>) {
-	goals
+pub fn preprocess(Input { start, end, goals }: Input) -> CoreScheduler {
+	let tasks = goals
 		.iter()
 		.enumerate()
-		.map(|(id, goal)| {
-			let mut task = Task::new(id, goal.id, goal.duration);
+		.map(|(id, goal)| Task::new(id, goal.id, goal.duration))
+		.collect::<Vec<_>>();
 
-			// TODO: multiple slots
-			task.slots.push(Slot {
-				start: (goal.start - start).whole_hours() as usize,
-				end: (goal.deadline - start).whole_hours() as usize,
-			});
-
-			task
+	// TODO: goal/task may have multiple slots
+	let slots = goals
+		.iter()
+		.enumerate()
+		.map(|(id, goal)| Slot {
+			task_id: id,
+			start: (goal.start - start).whole_hours() as usize,
+			end: (goal.deadline - start).whole_hours() as usize,
 		})
-		.collect::<Vec<_>>()
+		.collect::<Vec<_>>();
+
+	CoreScheduler::new(tasks, slots)
 }
 
 #[cfg(test)]
@@ -71,13 +75,13 @@ mod tests {
 
 		let result = preprocess(input);
 
-		let mut t1 = Task::new(0, 1, 1);
-		t1.slots.push(Slot { start: 10, end: 13 });
-		let mut t2 = Task::new(1, 2, 1);
-		t2.slots.push(Slot { start: 10, end: 11 });
-		let mut t3 = Task::new(2, 3, 1);
-		t3.slots.push(Slot { start: 10, end: 18 });
-
-		assert_eq!(result, vec![t1, t2, t3])
+		// let mut t1 = Task::new(0, 1, 1);
+		// t1.slots.push(Slot { start: 10, end: 13 });
+		// let mut t2 = Task::new(1, 2, 1);
+		// t2.slots.push(Slot { start: 10, end: 11 });
+		// let mut t3 = Task::new(2, 3, 1);
+		// t3.slots.push(Slot { start: 10, end: 18 });
+		//
+		// assert_eq!(result, vec![t1, t2, t3])
 	}
 }

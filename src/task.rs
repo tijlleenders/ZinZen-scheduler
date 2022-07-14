@@ -5,35 +5,64 @@ use time::{Duration, OffsetDateTime, PrimitiveDateTime};
 
 /// One or many created from a Goal by the preprocessor.
 /// To be scheduled in order by the scheduler.
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Debug, PartialEq, Eq)]
 pub struct Task {
-	task_id: usize,
+	id: usize,
 	goal_id: usize,
 	duration_to_schedule: usize,
 	// TODO: should split off the following fields into internal
 	// scheduler implementation, but in a rush now
 	pub duration_scheduled: usize,
-	pub task_status: TaskStatus,
-	/// The slots that this task can fit into.
-	pub slots: Vec<Slot>,
+	pub status: TaskStatus,
+	pub flexibility: usize,
+}
+
+/// Serialization target to be returned at the end of scheduling
+#[derive(Debug, Serialize)]
+pub struct TaskResult {
+	id: usize,
+	goal_id: usize,
+	duration_to_schedule: usize,
+	pub duration_scheduled: usize,
+	pub status: TaskStatus,
 }
 
 impl Task {
-	pub fn new(task_id: usize, goal_id: usize, duration_to_schedule: usize) -> Self {
+	pub fn new(id: usize, goal_id: usize, duration_to_schedule: usize) -> Self {
 		Self {
-			task_id,
+			id,
 			goal_id,
 			duration_to_schedule,
 			duration_scheduled: 0,
-			task_status: TaskStatus::UNSCHEDULED,
-			slots: vec![],
+			status: TaskStatus::UNSCHEDULED,
+			flexibility: 0,
+		}
+	}
+
+	#[inline]
+	pub fn id(&self) -> usize {
+		self.id
+	}
+
+	pub fn get_duration_to_schedule(&self) -> usize {
+		self.duration_to_schedule
+	}
+
+	pub fn into_task_result(self) -> TaskResult {
+		TaskResult {
+			id: self.id,
+			goal_id: self.goal_id,
+			duration_to_schedule: self.duration_to_schedule,
+			duration_scheduled: self.duration_scheduled,
+			status: self.status,
 		}
 	}
 }
 
 /// Period of time that a task can fit into.
-#[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]
 pub struct Slot {
+	pub task_id: usize,
 	/// in hours
 	pub start: usize,
 	/// in hours
