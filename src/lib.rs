@@ -1,8 +1,9 @@
+use serde::Deserialize;
+use time::PrimitiveDateTime;
+
 use error::{Explode, SchedulerError, SchedulerResult};
 use goal::load_goals_from_ipc;
 use preprocessor::PreProcessor;
-use serde::Deserialize;
-use time::PrimitiveDateTime;
 
 /// API modules
 mod console;
@@ -44,7 +45,7 @@ pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> SchedulerResult<usize> {
 #[no_mangle]
 unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
 	let (goals, timeline) = load_goals_from_ipc(bytes);
-	let processed = PreProcessor::process_task_count(&goals, timeline);
+	let processed = PreProcessor::preprocess_old(&goals, timeline);
 
 	let with_ids = processed.map(|(a, b)| (a, b.id)).collect::<Vec<_>>();
 	let string = serde_json::to_string(&with_ids).explode();
@@ -54,7 +55,7 @@ unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
 
 #[derive(Deserialize)]
 /// Just a deserialization target
-struct Plan {
+pub struct Plan {
 	goals: Vec<goal::Goal>,
 	start: PrimitiveDateTime,
 	finish: PrimitiveDateTime,
@@ -71,9 +72,10 @@ impl Plan {
 unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
 	let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
 
-	let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
-	let tasks = schedule.into_tasks_vector();
-	let string = serde_json::to_string(&tasks).explode();
+	// XXX: hack
+	//let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
+	//let tasks = schedule.into_tasks_vector();
+	let string = serde_json::to_string(&vec!["a²"]).explode();
 
 	write_to_ipc(string).explode()
 }

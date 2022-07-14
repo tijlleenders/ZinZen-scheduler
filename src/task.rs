@@ -1,31 +1,47 @@
+use std::num::NonZeroUsize;
+
 use serde::{Deserialize, Serialize};
-use time::PrimitiveDateTime;
+use time::{Duration, PrimitiveDateTime};
 
-use crate::scheduler::Schedule;
-
-/// A [Task] is an item a user is expected to accomplish, it is simply a time-slice in a user's schedule.
-/// Through many tasks can a user achieve a
-#[derive(Serialize, Deserialize, Debug, Clone)]
+/// One or many created from a Goal by the preprocessor.
+/// To be scheduled in order by the scheduler.
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct Task {
-	/// What goal originally described this task
-	pub(crate) goal_id: usize,
-	/// When this task starts
-	pub(crate) start: PrimitiveDateTime,
-	/// When this task ends
-	pub(crate) finish: PrimitiveDateTime,
-	/// A Tasks flexibility is how flexible it is within it's allocated time frame.
-	pub(crate) flexibility: f64,
+	task_id: usize,
+	goal_id: NonZeroUsize,
+	duration_to_schedule: Duration,
+	// TODO: should split off the following fields into internal
+	// scheduler implementation, but in a rush now
+	pub duration_scheduled: Duration,
+	pub task_status: TaskStatus,
+	/// The slots that this task can fit into.
+	pub slots: Vec<Slot>,
 }
 
 impl Task {
-	pub(crate) fn fill(schedule: &Schedule) -> Self {
-		let max_seconds = (schedule.timeline.1 - schedule.timeline.0).as_seconds_f64().abs();
-
+	pub fn new(task_id: usize, goal_id: NonZeroUsize, duration_to_schedule: Duration) -> Self {
 		Self {
-			goal_id: 0,
-			start: schedule.timeline.0,
-			finish: schedule.timeline.1,
-			flexibility: max_seconds,
+			task_id,
+			goal_id,
+			duration_to_schedule,
+			duration_scheduled: Duration::ZERO,
+			task_status: TaskStatus::UNSCHEDULED,
+			slots: vec![],
 		}
 	}
+}
+
+/// Period of time that a task can fit into.
+#[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub struct Slot {
+	pub begin: PrimitiveDateTime,
+	pub end: PrimitiveDateTime,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub enum TaskStatus {
+	UNSCHEDULED,
+	SCHEDULED,
+	IMPOSSIBLE,
+	WAITING,
 }
