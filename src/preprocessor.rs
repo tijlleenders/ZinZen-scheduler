@@ -5,19 +5,21 @@ use time::{Duration, OffsetDateTime};
 
 use crate::goal::Goal;
 use crate::task::{Slot, Task};
+use crate::Input;
 
-pub fn preprocess(goals: &[Goal], timeline: (PrimitiveDateTime, PrimitiveDateTime)) -> (Vec<Task>) {
-	let tasks = goals
+pub fn preprocess(Input { start, end, goals }: Input) -> (Vec<Task>) {
+	goals
 		.iter()
 		.enumerate()
-		.map(|(id, goal)| Task::new(id, goal.id, goal.duration));
+		.map(|(id, goal)| {
+			let mut task = Task::new(id, goal.id, goal.duration);
 
-	tasks
-		.map(|mut task| {
+			// TODO: multiple slots
 			task.slots.push(Slot {
-				begin: datetime!(1970-01-01 0:00),
-				end: datetime!(1970-01-01 0:00),
+				start: (goal.start - start).whole_hours() as usize,
+				end: (goal.deadline - start).whole_hours() as usize,
 			});
+
 			task
 		})
 		.collect::<Vec<_>>()
@@ -29,9 +31,12 @@ mod tests {
 
 	use super::*;
 
+	// XXX: this unit test is temporary. Transform it into an integration test
+	// once we have the scheduler working, so we can test input/output directly
+	// without having to test internals
 	#[test]
-	fn t() {
-		let plan: Input = serde_json::from_str(
+	fn temporary_basic_unit_test_for_scheduler() {
+		let input: Input = serde_json::from_str(
 			r#"
 {
     "startDate": "2022-01-01T00:00:00Z",
@@ -63,6 +68,16 @@ mod tests {
         "#,
 		)
 		.unwrap();
-		dbg!(plan);
+
+		let result = preprocess(input);
+
+		let mut t1 = Task::new(0, 1, 1);
+		t1.slots.push(Slot { start: 10, end: 13 });
+		let mut t2 = Task::new(1, 2, 1);
+		t2.slots.push(Slot { start: 10, end: 11 });
+		let mut t3 = Task::new(2, 3, 1);
+		t3.slots.push(Slot { start: 10, end: 18 });
+
+		assert_eq!(result, vec![t1, t2, t3])
 	}
 }

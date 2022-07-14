@@ -1,7 +1,7 @@
 use std::num::NonZeroUsize;
 
 use serde::{Deserialize, Serialize};
-use time::{Duration, PrimitiveDateTime};
+use time::{Duration, OffsetDateTime, PrimitiveDateTime};
 
 /// One or many created from a Goal by the preprocessor.
 /// To be scheduled in order by the scheduler.
@@ -12,7 +12,7 @@ pub struct Task {
 	duration_to_schedule: usize,
 	// TODO: should split off the following fields into internal
 	// scheduler implementation, but in a rush now
-	pub duration_scheduled: Duration,
+	pub duration_scheduled: usize,
 	pub task_status: TaskStatus,
 	/// The slots that this task can fit into.
 	pub slots: Vec<Slot>,
@@ -24,7 +24,7 @@ impl Task {
 			task_id,
 			goal_id,
 			duration_to_schedule,
-			duration_scheduled: Duration::ZERO,
+			duration_scheduled: 0,
 			task_status: TaskStatus::UNSCHEDULED,
 			slots: vec![],
 		}
@@ -34,8 +34,10 @@ impl Task {
 /// Period of time that a task can fit into.
 #[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct Slot {
-	pub begin: PrimitiveDateTime,
-	pub end: PrimitiveDateTime,
+	/// in hours
+	pub start: usize,
+	/// in hours
+	pub end: usize,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
