@@ -11,5 +11,5 @@ We can talk big-O, add features or optimize hot loops.
 
 This code is licensed under AGPLv3 but this license does not implicitly grant permission to use the trade names, trademarks, service marks, or product names of the licensor, except as required for reasonable and customary use in describing the origin of the Work and the content of the notice/attribution file.
 
-&reg supports an open and collaborative process.
-Registering the &reg trademark is a tool to protect the &reg identity and the quality perception of the &reg projects.
+ZinZen&reg supports an open and collaborative process.
+Registering the ZinZen&reg trademark is a tool to protect the ZinZen&reg identity and the quality perception of the ZinZen&reg projects.
