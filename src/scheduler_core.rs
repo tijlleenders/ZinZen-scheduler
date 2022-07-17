@@ -178,14 +178,12 @@ impl CoreScheduler {
 			}
 
 			// Get the max flex task
-			// TODO: sort the Vec instead
 			self.tasks.sort_by_key(|x| x.flexibility);
 			let task = self.tasks.pop().unwrap();
 
 			// Find slot with least overlap
 			let (start, end) = self.find_least_requested_slot_for_task(&task);
 			let task_id = task.id();
-			println!("scheduling for {}-{}", start, end);
 			self.do_schedule(task, Slot { start, end, task_id });
 		}
 

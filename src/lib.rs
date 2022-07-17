@@ -1,46 +1,24 @@
+extern crate console_error_panic_hook;
+
 use serde::Deserialize;
 use time::serde::iso8601;
 use time::{OffsetDateTime, PrimitiveDateTime};
+use wasm_bindgen::prelude::*;
 
-use error::{Explode, SchedulerError, SchedulerResult};
-use goal::load_goals_from_ipc;
+use error::SchedulerError;
+
+use crate::preprocessor::preprocess;
+use crate::scheduler_core::SchedulerResult;
 
 /// API modules
 mod console;
 mod error;
-
-/// Tests
-mod tests;
 
 /// Project details
 mod goal;
 mod preprocessor;
 mod scheduler_core;
 mod task;
-
-// 64 Kib for the IPC
-pub const _IPC_BUFFER_SIZE: usize = 1024 * 64;
-
-/// A 64 KiB buffer for communication between Rust and JavaScrip
-/// At any one moment, only one read and write is done to this buffer, `WASM` is a single-threaded runtime anyway
-#[no_mangle]
-pub static mut IPC_BUFFER: [u8; _IPC_BUFFER_SIZE] = [0; _IPC_BUFFER_SIZE];
-#[no_mangle]
-pub static IPC_BUFFER_SIZE: usize = _IPC_BUFFER_SIZE;
-
-/// This writes some data to the IPC buffer, then returns a pointer and an offset to the data
-pub(crate) fn write_to_ipc<S: AsRef<[u8]>>(buf: S) -> SchedulerResult<usize> {
-	let data = buf.as_ref();
-
-	unsafe {
-		if data.len() >= _IPC_BUFFER_SIZE {
-			return Err(SchedulerError::IPCDataOverflow(data.len()));
-		};
-
-		IPC_BUFFER[..data.len()].copy_from_slice(data);
-		Ok(data.len())
-	}
-}
 
 #[no_mangle]
 unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
@@ -66,22 +44,28 @@ pub struct Input {
 	goals: Vec<goal::Goal>,
 }
 
-impl Input {
-	unsafe fn load_plan_from_ipc(ipc_offset: usize) -> Self {
-		let slice = &IPC_BUFFER[..ipc_offset];
-		serde_json::from_slice(slice).explode()
-	}
+#[wasm_bindgen]
+extern "C" {
+	fn alert(s: &str);
 }
 
-#[no_mangle]
-unsafe extern "C" fn generateSchedule(bytes: usize) -> usize {
-	// let Plan { goals, start, finish } = Plan::load_plan_from_ipc(bytes);
-	//
-	// // XXX: hack
-	// //let schedule = scheduler::generate_schedule(&goals, (start, finish)).explode();
-	// //let tasks = schedule.into_tasks_vector();
-	// let string = serde_json::to_string(&vec!["a²"]).explode();
-	//
-	// write_to_ipc(string).explode()
-	0 // XXX: stub
+#[wasm_bindgen]
+pub fn greet() {
+	alert("Hello, wasm-game-of-life!");
+}
+
+// https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
+#[wasm_bindgen]
+pub fn schedule(input: &JsValue) -> JsValue {
+	// Set console error hook, so we get console errors if this panic. This is only ran once
+	console_error_panic_hook::set_once();
+
+	// TODO serde error handling
+	let input = input.into_serde().unwrap();
+
+	let mut scheduler = preprocess(input);
+	let result = scheduler.schedule();
+
+	// Any errors from unwrap() here is our fault
+	JsValue::from_serde(&result).unwrap()
 }
