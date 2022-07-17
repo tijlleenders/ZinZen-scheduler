@@ -9,7 +9,7 @@ use time::{Duration, OffsetDateTime, PrimitiveDateTime};
 pub struct Task {
 	id: usize,
 	goal_id: usize,
-	duration_to_schedule: usize,
+	pub duration_to_schedule: usize,
 	// TODO: should split off the following fields into internal
 	// scheduler implementation, but in a rush now
 	pub duration_scheduled: usize,
@@ -42,10 +42,6 @@ impl Task {
 	#[inline]
 	pub fn id(&self) -> usize {
 		self.id
-	}
-
-	pub fn get_duration_to_schedule(&self) -> usize {
-		self.duration_to_schedule
 	}
 
 	pub fn into_task_result(self) -> TaskResult {

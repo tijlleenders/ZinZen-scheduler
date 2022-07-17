@@ -5,6 +5,8 @@
 //! The scheduler optimizes for the minimum amount of IMPOSSIBLE tasks.
 //! https://github.com/tijlleenders/ZinZen-scheduler/wiki/Core
 
+use std::mem::swap;
+
 use serde::{Deserialize, Serialize};
 
 use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED, UNSCHEDULED};
@@ -68,21 +70,21 @@ impl CoreScheduler {
 			.filter(|slot| slot.task_id == task.id())
 			.map(|slot| {
 				let num_windows_in_slot = (slot.end - slot.start + 1)
-					.checked_sub(task.get_duration_to_schedule())
+					.checked_sub(task.duration_to_schedule)
 					.unwrap();
 
 				(0..num_windows_in_slot)
 					.map(|slot_offset| {
 						let overlap = self.find_overlap_number_for(
 							slot.start + slot_offset,
-							slot.start + slot_offset + task.get_duration_to_schedule(),
+							slot.start + slot_offset + task.duration_to_schedule,
 						);
 
 						SlotOverlap {
 							overlap,
 							slot: (
 								slot.start + slot_offset,
-								slot.start + slot_offset + task.get_duration_to_schedule(),
+								slot.start + slot_offset + task.duration_to_schedule,
 							),
 						}
 					})
@@ -98,6 +100,7 @@ impl CoreScheduler {
 	/// updating the other tasks and their slots as needed.
 	fn do_schedule(&mut self, mut task: Task, scheduled_slot: Slot) {
 		task.status = SCHEDULED;
+		swap(&mut task.duration_scheduled, &mut task.duration_to_schedule);
 		let task_id = task.id();
 
 		self.processed_tasks.push(task);
@@ -249,22 +252,22 @@ mod tests {
     {
       "id": 0,
       "goal_id": 1,
-      "duration_to_schedule": 1,
-      "duration_scheduled": 0,
+      "duration_to_schedule": 0,
+      "duration_scheduled": 1,
       "status": "SCHEDULED"
     },
     {
       "id": 1,
       "goal_id": 2,
-      "duration_to_schedule": 1,
-      "duration_scheduled": 0,
+      "duration_to_schedule": 0,
+      "duration_scheduled": 1,
       "status": "SCHEDULED"
     },
     {
       "id": 2,
       "goal_id": 3,
-      "duration_to_schedule": 1,
-      "duration_scheduled": 0,
+      "duration_to_schedule": 0,
+      "duration_scheduled": 1,
       "status": "SCHEDULED"
     }
   ],
