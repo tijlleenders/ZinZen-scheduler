@@ -78,13 +78,6 @@ impl CoreScheduler {
 							slot.start + slot_offset + task.get_duration_to_schedule(),
 						);
 
-						println!(
-							"# overlaps for:{}-{}:{}",
-							slot.start + slot_offset,
-							slot.start + slot_offset + task.get_duration_to_schedule(),
-							overlap
-						);
-
 						SlotOverlap {
 							overlap,
 							slot: (
@@ -246,10 +239,9 @@ mod tests {
 
 		let mut scheduler = preprocess(input);
 		let result = scheduler.schedule();
-
 		let result_json = serde_json::to_string_pretty(&result).unwrap();
 
-		print!("{}", result_json);
+		//println!("{}", result_json);
 		assert_eq!(
 			result_json,
 			r#"{
