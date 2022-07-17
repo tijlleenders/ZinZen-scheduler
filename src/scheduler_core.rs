@@ -24,6 +24,12 @@ pub struct SchedulerResult {
 	pub slots: Vec<Slot>,
 }
 
+// Internal for collecting
+struct SlotOverlap {
+	overlap: usize,
+	slot: (usize, usize),
+}
+
 impl CoreScheduler {
 	pub fn new(tasks: Vec<Task>, slots: Vec<Slot>) -> Self {
 		Self {
@@ -38,7 +44,7 @@ impl CoreScheduler {
 	}
 
 	fn calculate_flexibility(&mut self) {
-		for task in self.tasks.iter_mut() {
+		for task in &mut self.tasks {
 			let id = task.id();
 			for slot in self.slots.iter_mut().filter(|slot| slot.task_id == id) {
 				task.flexibility += slot.end - slot.start;
@@ -48,7 +54,7 @@ impl CoreScheduler {
 
 	fn find_overlap_number_for(&self, begin: usize, end: usize) -> usize {
 		let mut result: usize = 0;
-		for slot in self.slots.iter() {
+		for slot in &self.slots {
 			if slot.start < end && slot.end > begin {
 				result += 1;
 			}
@@ -57,49 +63,42 @@ impl CoreScheduler {
 	}
 
 	fn find_least_requested_slot_for_task(&self, task: &Task) -> (usize, usize) {
-		// lifted from old code, don't understand the impl yet
-		let mut slot_with_least_requests: Option<(usize, usize)> = None;
-		let mut lowest_number_of_requests_for_slot: Option<usize> = None;
-		for slot in self.slots.iter() {
-			if slot.task_id == task.id() {
-				let num_windows_in_slot = (slot.end - slot.start + 1).checked_sub(task.get_duration_to_schedule());
+		self.slots
+			.iter()
+			.filter(|slot| slot.task_id == task.id())
+			.map(|slot| {
+				let num_windows_in_slot = (slot.end - slot.start + 1)
+					.checked_sub(task.get_duration_to_schedule())
+					.unwrap();
 
-				match num_windows_in_slot {
-					None => continue,
-					Some(_) => {}
-				}
+				(0..num_windows_in_slot)
+					.map(|slot_offset| {
+						let overlap = self.find_overlap_number_for(
+							slot.start + slot_offset,
+							slot.start + slot_offset + task.get_duration_to_schedule(),
+						);
 
-				for slot_offset in 0..num_windows_in_slot.unwrap() {
-					let overlap = self.find_overlap_number_for(
-						slot.start + slot_offset,
-						slot.start + slot_offset + task.get_duration_to_schedule(),
-					);
+						println!(
+							"# overlaps for:{}-{}:{}",
+							slot.start + slot_offset,
+							slot.start + slot_offset + task.get_duration_to_schedule(),
+							overlap
+						);
 
-					match lowest_number_of_requests_for_slot {
-						None => {
-							lowest_number_of_requests_for_slot = Some(overlap);
-							slot_with_least_requests = Some((
+						SlotOverlap {
+							overlap,
+							slot: (
 								slot.start + slot_offset,
 								slot.start + slot_offset + task.get_duration_to_schedule(),
-							))
+							),
 						}
-						Some(lowest_overlap) => {
-							if overlap == 1 {
-								return slot_with_least_requests.unwrap();
-							}
-							if overlap < lowest_overlap {
-								slot_with_least_requests = Some((
-									slot.start + slot_offset,
-									slot.start + slot_offset + task.get_duration_to_schedule(),
-								));
-								lowest_number_of_requests_for_slot = Some(overlap);
-							}
-						}
-					}
-				}
-			}
-		}
-		slot_with_least_requests.unwrap()
+					})
+					.min_by_key(|x| x.overlap)
+					.unwrap()
+			})
+			.min_by_key(|x| x.overlap)
+			.unwrap()
+			.slot
 	}
 
 	/// Schedule the given task to this slot,
@@ -148,6 +147,7 @@ impl CoreScheduler {
 			}
 			acc
 		});
+
 		// Add the newly scheduled slot
 		self.slots.push(scheduled_slot);
 	}
@@ -189,6 +189,7 @@ impl CoreScheduler {
 			// Find slot with least overlap
 			let (start, end) = self.find_least_requested_slot_for_task(&task);
 			let task_id = task.id();
+			println!("scheduling for {}-{}", start, end);
 			self.do_schedule(task, Slot { start, end, task_id });
 		}
 
@@ -248,7 +249,7 @@ mod tests {
 
 		let result_json = serde_json::to_string_pretty(&result).unwrap();
 
-		//print!("{}", result_json);
+		print!("{}", result_json);
 		assert_eq!(
 			result_json,
 			r#"{
@@ -278,8 +279,8 @@ mod tests {
   "slots": [
     {
       "task_id": 0,
-      "start": 12,
-      "end": 13
+      "start": 11,
+      "end": 12
     },
     {
       "task_id": 1,
@@ -288,8 +289,8 @@ mod tests {
     },
     {
       "task_id": 2,
-      "start": 11,
-      "end": 12
+      "start": 13,
+      "end": 14
     }
   ]
 }"#
