@@ -7,7 +7,6 @@ use wasm_bindgen::prelude::*;
 use crate::task_generator::task_generator;
 
 /// API modules
-mod console;
 mod error;
 
 /// Project details
