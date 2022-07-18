@@ -32,6 +32,18 @@ unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
 	0 // XXX: stub
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const TS_APPEND_CONTENT: &'static str = r#"
+
+export type Coords = { "latitude": number, "longitude": number, }; 
+
+interface Input {
+    startDate: string;
+    endDate: string;
+    goals: number
+}
+"#;
+
 #[derive(Deserialize, Debug)]
 /// Just a deserialization target
 pub struct Input {
@@ -44,19 +56,9 @@ pub struct Input {
 	goals: Vec<goal::Goal>,
 }
 
-#[wasm_bindgen]
-extern "C" {
-	fn alert(s: &str);
-}
-
-#[wasm_bindgen]
-pub fn greet() {
-	alert("Hello, wasm-game-of-life!");
-}
-
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
 #[wasm_bindgen]
-pub fn schedule(input: &JsValue) -> JsValue {
+pub fn schedule(input: JsValue) -> JsValue {
 	// Set console error hook, so we get console errors if this panic. This is only ran once
 	console_error_panic_hook::set_once();
 
