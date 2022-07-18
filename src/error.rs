@@ -1,8 +1,8 @@
-#[cfg(target_arch = "wasm32")]
-extern "C" {
-	/// Quit's the current wasm execution, and returns an error code as well as some info as a string in the IPC
-	pub(self) fn exit(exit_code: u8, ipc_offset: usize) -> !;
-}
+// #[cfg(target_arch = "wasm32")]
+// extern "C" {
+// 	/// Quit's the current wasm execution, and returns an error code as well as some info as a string in the IPC
+// 	pub(self) fn exit(exit_code: u8, ipc_offset: usize) -> !;
+// }
 
 /// Various error codes
 pub struct ErrorCodes;
@@ -26,7 +26,7 @@ pub enum SchedulerError {
 	/// Too much data written to IPC
 	#[error(
 		"The maximum length of data in the IPC buffer is {0} bytes, instead found {} bytes which is excess",
-		crate::_IPC_BUFFER_SIZE
+		1
 	)]
 	IPCDataOverflow(usize),
 	/// Unable to serialize data
@@ -40,91 +40,8 @@ pub enum SchedulerError {
 	UnableToFindTaskSlot(String),
 }
 
-/// Internal error type used by crate
-pub(crate) type SchedulerResult<T = ()> = Result<T, SchedulerError>;
+// /// Internal error type used by crate
+// pub(crate) type SchedulerResult<T = ()> = Result<T, SchedulerError>;
 
-/// Safe equivalent to unwrap that works in the wasm context and natively seamlessly
-pub trait Explode<T> {
-	fn explode(self) -> T;
-	fn into_explosion(self) -> SchedulerResult<T>;
-}
-
-impl<T> Explode<T> for Option<T> {
-	fn explode(self) -> T {
-		#[cfg(target_arch = "wasm32")]
-		{
-			self.unwrap_or_else(|| unsafe {
-				exit(
-					ErrorCodes::UnwrapError,
-					crate::write_to_ipc("Call to `Option::unwrap` panicked").explode(),
-				)
-			})
-		}
-		#[cfg(not(target_arch = "wasm32"))]
-		{
-			self.unwrap()
-		}
-	}
-
-	fn into_explosion(self) -> SchedulerResult<T> {
-		match self {
-			Some(data) => Ok(data),
-			None => Err(SchedulerError::UnwrapError),
-		}
-	}
-}
-
-impl<T> Explode<T> for SchedulerResult<T> {
-	fn explode(self) -> T {
-		#[cfg(target_arch = "wasm32")]
-		{
-			use crate::write_to_ipc;
-
-			unsafe {
-				match self {
-					Ok(data) => data,
-					Err(err) => match err {
-						SchedulerError::UnwrapError => {
-							exit(ErrorCodes::UnwrapError, write_to_ipc(err.to_string()).explode())
-						}
-						SchedulerError::IPCDataOverflow(_) => {
-							exit(ErrorCodes::IPCDataOverflow, write_to_ipc(err.to_string()).explode())
-						}
-						SchedulerError::JSONError(_) => {
-							exit(ErrorCodes::JSONError, write_to_ipc(err.to_string()).explode())
-						}
-						SchedulerError::GoalTaskDurationOverflow(_) => exit(
-							ErrorCodes::GoalTaskDurationOverflow,
-							write_to_ipc(err.to_string()).explode(),
-						),
-						SchedulerError::UnableToFindTaskSlot(_) => exit(
-							ErrorCodes::UnableToFindTaskSlot,
-							write_to_ipc(err.to_string()).explode(),
-						),
-					},
-				}
-			}
-		}
-		#[cfg(not(target_arch = "wasm32"))]
-		{
-			self.unwrap()
-		}
-	}
-
-	fn into_explosion(self) -> SchedulerResult<T> {
-		self
-	}
-}
-
-impl<T> Explode<T> for Result<T, serde_json::Error> {
-	fn explode(self) -> T {
-		self.into_explosion().explode()
-	}
-
-	fn into_explosion(self) -> SchedulerResult<T> {
-		match self {
-			Ok(data) => Ok(data),
-			Err(err) => Err(SchedulerError::JSONError(err)),
-		}
-	}
-}
+// Safe equivalent to unwrap that works in the wasm context and natively seamlessly
+// TODO use something like https://github.com/rustwasm/console_error_panic_hook

@@ -2,9 +2,9 @@ name: Deno
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -25,5 +25,22 @@ jobs:
       - name: Run linter
         run: deno lint
 
+      - name: Install wabt
+        run: |
+          set -e
+          curl -L https://github.com/WebAssembly/wabt/releases/download/1.0.13/wabt-1.0.13-linux.tar.gz | tar xzf -
+          echo "`pwd`/wabt-1.0.13" > $GITHUB_PATH
+      - name: Install binaryen
+        run: |
+          set -e
+          curl -L https://github.com/WebAssembly/binaryen/releases/download/1.39.1/binaryen-1.39.1-x86_64-linux.tar.gz | tar xzf -
+          echo "`pwd`/binaryen-1.39.1" > $GITHUB_PATH
+
+      - name: Install wasm-bindgen
+        run: cargo install wasm-bindgen-cli
+
+      - name: Add wasm target
+        run: rustup target add wasm32-unknown-unknown
+
       - name: Run tests
-        run: deno test -A --allow-read
+        run: ./test.sh
