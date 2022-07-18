@@ -18,7 +18,7 @@ Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-sche
                     "id": 2,
                     "title": "dentist",
                     "duration": 1,
-                    "start": "2022-1-01T10:00:00Z",
+                    "start": "2022-01-01T10:00:00Z",
                     "deadline": "2022-01-01T11:00:00Z"
                 },
                 {

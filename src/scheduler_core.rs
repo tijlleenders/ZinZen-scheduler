@@ -7,10 +7,10 @@
 
 use std::mem::swap;
 
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED, UNSCHEDULED};
-use crate::task::{Slot, Task, TaskResult, TaskStatus};
+use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
+use crate::task::{Slot, Task, TaskResult};
 
 #[derive(Debug)]
 pub struct CoreScheduler {
@@ -39,10 +39,6 @@ impl CoreScheduler {
 			slots,
 			processed_tasks: vec![],
 		}
-	}
-
-	fn get_slots(&self) -> &[Slot] {
-		self.slots.as_ref()
 	}
 
 	fn calculate_flexibility(&mut self) {
@@ -162,7 +158,7 @@ impl CoreScheduler {
 
 			// Tasks with min flex should be scheduled now
 			if let Some(i) = self.tasks.iter().position(|task| task.flexibility == 1) {
-				let mut task = self.tasks.remove(i);
+				let task = self.tasks.remove(i);
 				let slot_index = self
 					.slots
 					.iter_mut()
@@ -201,8 +197,6 @@ mod tests {
 	use crate::preprocessor::preprocess;
 	use crate::Input;
 
-	use super::*;
-
 	#[test]
 	fn basic_test() {
 		let input: Input = serde_json::from_str(
@@ -238,7 +232,7 @@ mod tests {
 		)
 		.unwrap();
 
-		let mut scheduler = preprocess(input);
+		let scheduler = preprocess(input);
 		let result = scheduler.schedule();
 		let result_json = serde_json::to_string_pretty(&result).unwrap();
 

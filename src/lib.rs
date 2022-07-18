@@ -1,14 +1,10 @@
 extern crate console_error_panic_hook;
 
 use serde::Deserialize;
-use time::serde::iso8601;
-use time::{OffsetDateTime, PrimitiveDateTime};
+use time::OffsetDateTime;
 use wasm_bindgen::prelude::*;
 
-use error::SchedulerError;
-
 use crate::preprocessor::preprocess;
-use crate::scheduler_core::SchedulerResult;
 
 /// API modules
 mod console;
@@ -21,7 +17,7 @@ mod scheduler_core;
 mod task;
 
 #[no_mangle]
-unsafe extern "C" fn processTaskCount(bytes: usize) -> usize {
+unsafe extern "C" fn processTaskCount(_bytes: usize) -> usize {
 	// let (goals, timeline) = load_goals_from_ipc(bytes);
 	// let processed = PreProcessor::preprocess_old(&goals, timeline);
 	//
@@ -48,11 +44,11 @@ interface Input {
 /// Just a deserialization target
 pub struct Input {
 	#[serde(rename = "startDate")]
-	#[serde(with = "iso8601")]
+	#[serde(with = "time::serde::iso8601")]
 	start: OffsetDateTime,
 	#[serde(rename = "endDate")]
-	#[serde(with = "iso8601")]
-	end: OffsetDateTime,
+	#[serde(with = "time::serde::iso8601")]
+	_end: OffsetDateTime,
 	goals: Vec<goal::Goal>,
 }
 
@@ -65,7 +61,7 @@ pub fn schedule(input: JsValue) -> JsValue {
 	// TODO serde error handling
 	let input = input.into_serde().unwrap();
 
-	let mut scheduler = preprocess(input);
+	let scheduler = preprocess(input);
 	let result = scheduler.schedule();
 
 	// Any errors from unwrap() here is our fault

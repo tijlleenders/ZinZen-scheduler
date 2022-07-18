@@ -1,8 +1,8 @@
-#[cfg(target_arch = "wasm32")]
-extern "C" {
-	/// Quit's the current wasm execution, and returns an error code as well as some info as a string in the IPC
-	pub(self) fn exit(exit_code: u8, ipc_offset: usize) -> !;
-}
+// #[cfg(target_arch = "wasm32")]
+// extern "C" {
+// 	/// Quit's the current wasm execution, and returns an error code as well as some info as a string in the IPC
+// 	pub(self) fn exit(exit_code: u8, ipc_offset: usize) -> !;
+// }
 
 /// Various error codes
 pub struct ErrorCodes;
@@ -40,8 +40,8 @@ pub enum SchedulerError {
 	UnableToFindTaskSlot(String),
 }
 
-/// Internal error type used by crate
-pub(crate) type SchedulerResult<T = ()> = Result<T, SchedulerError>;
+// /// Internal error type used by crate
+// pub(crate) type SchedulerResult<T = ()> = Result<T, SchedulerError>;
 
 // Safe equivalent to unwrap that works in the wasm context and natively seamlessly
 // TODO use something like https://github.com/rustwasm/console_error_panic_hook

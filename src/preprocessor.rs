@@ -1,14 +1,8 @@
-use serde::Deserialize;
-use time::macros::datetime;
-use time::PrimitiveDateTime;
-use time::{Duration, OffsetDateTime};
-
-use crate::goal::Goal;
 use crate::scheduler_core::CoreScheduler;
 use crate::task::{Slot, Task};
 use crate::Input;
 
-pub fn preprocess(Input { start, end, goals }: Input) -> CoreScheduler {
+pub fn preprocess(Input { start, _end: _, goals }: Input) -> CoreScheduler {
 	let tasks = goals
 		.iter()
 		.enumerate()
