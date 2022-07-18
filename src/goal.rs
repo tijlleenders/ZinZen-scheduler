@@ -1,43 +1,25 @@
-use crate::{error::Explode, IPC_BUFFER};
-use serde::{Deserialize, Serialize};
-use std::num::NonZeroUsize;
-use time::PrimitiveDateTime;
 
-/// Loads [`Goal`] inserted into IPC by JavaScript
-pub unsafe fn load_goals_from_ipc(ipc_offset: usize) -> (Vec<Goal>, (PrimitiveDateTime, PrimitiveDateTime)) {
-	let slice = &IPC_BUFFER[..ipc_offset];
-	serde_json::from_slice(slice).explode()
-}
+
+
+use serde::{Deserialize, Serialize};
+use time::serde::iso8601;
+use time::{OffsetDateTime};
 
 /// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Goal {
 	/// Every goal has a unique ID
-	pub id: NonZeroUsize,
+	pub id: usize,
 	/// A goal's description
-	pub description: String,
+	pub title: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
-	pub task_duration: time::Duration,
-
-	/// The interval between a Goal's tasks, this can be used to repeat a Goal daily, weekly, etc
-	/// Here `interval` is fundamentally always divisible by 24.
-	/// NONE means it happens only once
-	pub interval: Option<time::Duration>,
-	/// Allows the user to set exact times for when a task should be start, given as a date and time
-	pub start: Option<time::PrimitiveDateTime>,
-	/// When this Goal's tasks should end
-	pub deadline: Option<time::PrimitiveDateTime>,
-}
-
-impl Default for Goal {
-	fn default() -> Self {
-		Self {
-			id: unsafe { NonZeroUsize::new_unchecked(0) },
-			description: "[NO DESCRIPTION]".to_string(),
-			task_duration: time::Duration::ZERO,
-			interval: None,
-			deadline: None,
-			start: None,
-		}
-	}
+	pub duration: usize,
+	/// Earliest start datetime for this Goal's Tasks
+	// TODO: should be optional (default to start of today)
+	#[serde(with = "iso8601")]
+	pub start: OffsetDateTime,
+	/// Deadline for this Goal's Tasks
+	// TODO: should be optional (will default to end of calendar))
+	#[serde(with = "iso8601")]
+	pub deadline: OffsetDateTime,
 }

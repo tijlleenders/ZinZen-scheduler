@@ -1,31 +1,74 @@
+
+
 use serde::{Deserialize, Serialize};
-use time::PrimitiveDateTime;
 
-use crate::scheduler::Schedule;
 
-/// A [Task] is an item a user is expected to accomplish, it is simply a time-slice in a user's schedule.
-/// Through many tasks can a user achieve a
-#[derive(Serialize, Deserialize, Debug, Clone)]
+/// One or many created from a Goal by the preprocessor.
+/// To be scheduled in order by the scheduler.
+#[derive(Deserialize, Debug, PartialEq, Eq)]
 pub struct Task {
-	/// What goal originally described this task
-	pub(crate) goal_id: usize,
-	/// When this task starts
-	pub(crate) start: PrimitiveDateTime,
-	/// When this task ends
-	pub(crate) finish: PrimitiveDateTime,
-	/// A Tasks flexibility is how flexible it is within it's allocated time frame.
-	pub(crate) flexibility: f64,
+	id: usize,
+	goal_id: usize,
+	pub duration_to_schedule: usize,
+	// TODO: should split off the following fields into internal
+	// scheduler implementation, but in a rush now
+	pub duration_scheduled: usize,
+	pub status: TaskStatus,
+	pub flexibility: usize,
+}
+
+/// Serialization target to be returned at the end of scheduling
+#[derive(Debug, Serialize)]
+pub struct TaskResult {
+	id: usize,
+	goal_id: usize,
+	duration_to_schedule: usize,
+	pub duration_scheduled: usize,
+	pub status: TaskStatus,
 }
 
 impl Task {
-	pub(crate) fn fill(schedule: &Schedule) -> Self {
-		let max_seconds = (schedule.timeline.1 - schedule.timeline.0).as_seconds_f64().abs();
-
+	pub fn new(id: usize, goal_id: usize, duration_to_schedule: usize) -> Self {
 		Self {
-			goal_id: 0,
-			start: schedule.timeline.0,
-			finish: schedule.timeline.1,
-			flexibility: max_seconds,
+			id,
+			goal_id,
+			duration_to_schedule,
+			duration_scheduled: 0,
+			status: TaskStatus::UNSCHEDULED,
+			flexibility: 0,
 		}
 	}
+
+	#[inline]
+	pub fn id(&self) -> usize {
+		self.id
+	}
+
+	pub fn into_task_result(self) -> TaskResult {
+		TaskResult {
+			id: self.id,
+			goal_id: self.goal_id,
+			duration_to_schedule: self.duration_to_schedule,
+			duration_scheduled: self.duration_scheduled,
+			status: self.status,
+		}
+	}
+}
+
+/// Period of time that a task can fit into.
+#[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]
+pub struct Slot {
+	pub task_id: usize,
+	/// in hours
+	pub start: usize,
+	/// in hours
+	pub end: usize,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub enum TaskStatus {
+	UNSCHEDULED,
+	SCHEDULED,
+	IMPOSSIBLE,
+	WAITING,
 }
