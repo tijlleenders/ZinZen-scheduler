@@ -30,7 +30,7 @@ unsafe extern "C" fn processTaskCount(_bytes: usize) -> usize {
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 
-export type Coords = { "latitude": number, "longitude": number, }; 
+export type Coords = { "latitude": number, "longitude": number, };
 
 interface Input {
     startDate: string;
