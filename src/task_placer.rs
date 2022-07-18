@@ -13,7 +13,7 @@ use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
 use crate::task::{Slot, Task, TaskResult};
 
 #[derive(Debug)]
-pub struct CoreScheduler {
+pub struct TaskPlacer {
 	pub tasks: Vec<Task>,
 	pub slots: Vec<Slot>,
 	/// Tasks that have been processed. Initially empty
@@ -21,7 +21,7 @@ pub struct CoreScheduler {
 }
 
 #[derive(Serialize, Debug)]
-pub struct SchedulerResult {
+pub struct Output {
 	pub tasks: Vec<TaskResult>,
 	pub slots: Vec<Slot>,
 }
@@ -32,7 +32,7 @@ struct SlotOverlap {
 	slot: (usize, usize),
 }
 
-impl CoreScheduler {
+impl TaskPlacer {
 	pub fn new(tasks: Vec<Task>, slots: Vec<Slot>) -> Self {
 		Self {
 			tasks,
@@ -144,8 +144,8 @@ impl CoreScheduler {
 		self.slots.push(scheduled_slot);
 	}
 
-	/// Schedule all the tasks.
-	pub fn schedule(mut self) -> SchedulerResult {
+	/// Place all the tasks.
+	pub fn task_placer(mut self) -> Output {
 		while !self.tasks.is_empty() {
 			self.calculate_flexibility();
 			// Tasks with flex 0 are unscheduled
@@ -185,7 +185,7 @@ impl CoreScheduler {
 
 		self.processed_tasks.sort_by_key(|x| x.id());
 		self.slots.sort_by_key(|x| x.task_id);
-		SchedulerResult {
+		Output {
 			tasks: self.processed_tasks.into_iter().map(|t| t.into_task_result()).collect(),
 			slots: self.slots,
 		}
@@ -194,7 +194,7 @@ impl CoreScheduler {
 
 #[cfg(test)]
 mod tests {
-	use crate::preprocessor::preprocess;
+	use crate::task_generator::task_generator;
 	use crate::Input;
 
 	#[test]
@@ -232,8 +232,8 @@ mod tests {
 		)
 		.unwrap();
 
-		let scheduler = preprocess(input);
-		let result = scheduler.schedule();
+		let scheduler = task_generator(input);
+		let result = scheduler.task_placer();
 		let result_json = serde_json::to_string_pretty(&result).unwrap();
 
 		//println!("{}", result_json);

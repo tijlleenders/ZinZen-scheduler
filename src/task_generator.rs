@@ -1,8 +1,8 @@
-use crate::scheduler_core::CoreScheduler;
 use crate::task::{Slot, Task};
+use crate::task_placer::TaskPlacer;
 use crate::Input;
 
-pub fn preprocess(Input { start, _end: _, goals }: Input) -> CoreScheduler {
+pub fn task_generator(Input { start, _end: _, goals }: Input) -> TaskPlacer {
 	let tasks = goals
 		.iter()
 		.enumerate()
@@ -20,5 +20,5 @@ pub fn preprocess(Input { start, _end: _, goals }: Input) -> CoreScheduler {
 		})
 		.collect::<Vec<_>>();
 
-	CoreScheduler::new(tasks, slots)
+	TaskPlacer::new(tasks, slots)
 }

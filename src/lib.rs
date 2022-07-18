@@ -4,7 +4,7 @@ use serde::Deserialize;
 use time::OffsetDateTime;
 use wasm_bindgen::prelude::*;
 
-use crate::preprocessor::preprocess;
+use crate::task_generator::task_generator;
 
 /// API modules
 mod console;
@@ -12,9 +12,9 @@ mod error;
 
 /// Project details
 mod goal;
-mod preprocessor;
-mod scheduler_core;
 mod task;
+mod task_generator;
+mod task_placer;
 
 #[no_mangle]
 unsafe extern "C" fn processTaskCount(_bytes: usize) -> usize {
@@ -61,8 +61,8 @@ pub fn schedule(input: JsValue) -> JsValue {
 	// TODO serde error handling
 	let input = input.into_serde().unwrap();
 
-	let scheduler = preprocess(input);
-	let result = scheduler.schedule();
+	let placer = task_generator(input);
+	let result = placer.task_placer();
 
 	// Any errors from unwrap() here is our fault
 	JsValue::from_serde(&result).unwrap()
