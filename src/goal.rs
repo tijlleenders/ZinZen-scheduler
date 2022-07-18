@@ -1,9 +1,6 @@
-
-
-
 use serde::{Deserialize, Serialize};
 use time::serde::iso8601;
-use time::{OffsetDateTime};
+use time::OffsetDateTime;
 
 /// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]
 #[derive(Serialize, Deserialize, Debug)]
