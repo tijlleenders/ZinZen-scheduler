@@ -2,9 +2,9 @@ name: Deno
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -26,4 +26,4 @@ jobs:
         run: deno lint
 
       - name: Run tests
-        run: deno test -A --allow-read
+        run: deno test --allow-read js-tests/*
