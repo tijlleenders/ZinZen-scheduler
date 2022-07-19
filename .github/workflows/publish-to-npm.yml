@@ -1,4 +1,4 @@
-name: Deno
+name: Deploy to NPM
 
 on:
   push:
@@ -14,16 +14,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      #
+      # Setup
+      #
+
       - name: Setup repo
         uses: actions/checkout@v3
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-
-      - name: Run linter
-        run: deno lint
 
       - name: Install wabt
         run: |
@@ -42,5 +38,26 @@ jobs:
       - name: Add wasm target
         run: rustup target add wasm32-unknown-unknown
 
-      - name: Run tests
-        run: ./test.sh
+      - name: Sync wasm-bindgen and wasm-bindgen-cli versions
+        run: ./scripts/syncWasmBindgenVersions.sh
+
+      #
+      # Build
+      #
+
+      - name: Build
+        run: ./scripts/build.sh
+
+      - name: Check that build worked
+        run: ./scripts/check.sh
+
+      #
+      # Publish to NPM
+      #
+
+      - uses: actions/setup-node@v2
+          with:
+            node-version: '14.x'
+
+      - name: Update NPM package version
+        run: ./scripts/updateNpmPackageVersion.sh
