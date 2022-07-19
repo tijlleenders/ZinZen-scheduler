@@ -26,7 +26,9 @@ serde = { version = "1.0.137", features = ["derive"] }
 time = { version = "0.3.9", features = ["serde", "serde-well-known", "serde-human-readable", "macros"] }
 linked-list = "0.0.3"
 thiserror = "1.0.31"
-# simple WASM codegen
-wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"] }
 # display Rust panics as console.error()
 console_error_panic_hook = "0.1.7"
+
+[dependencies.wasm-bindgen]
+version = "0.2.81"
+features = ["serde-serialize"]
