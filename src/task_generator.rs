@@ -17,7 +17,7 @@ pub fn task_generator(Input { start, end, goals }: Input) -> TaskPlacer {
 			let repeat_interval = repetition.into_hours();
 
 			let mut task_start = (goal_start - start).whole_hours();
-			let mut task_end = (goal_start - start).whole_hours() + repeat_interval - 1;
+			let mut task_end = (goal_start - start).whole_hours() + repeat_interval;
 
 			let goal_end_hours = (goal_end - start).whole_hours();
 			while task_start < goal_end_hours {
@@ -77,7 +77,7 @@ mod tests {
 		);
 		assert_eq!(
 			scheduler.slots,
-			vec![Slot::new(0, 0, 23), Slot::new(1, 24, 47), Slot::new(2, 48, 71),]
+			vec![Slot::new(0, 0, 24), Slot::new(1, 24, 48), Slot::new(2, 48, 72)]
 		)
 	}
 }
