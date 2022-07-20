@@ -1,7 +1,7 @@
 use std::option::Option;
 
+use chrono::prelude::*;
 use serde::Deserialize;
-use time::OffsetDateTime;
 
 /// How often can a task repeat
 #[derive(Deserialize, Debug, Copy, Clone)]
@@ -11,7 +11,7 @@ pub enum Repetition {
 }
 
 impl Repetition {
-	pub fn into_hours(self) -> i64 {
+	pub(crate) fn into_hours(self) -> i64 {
 		match self {
 			Self::DAILY => 24,
 		}
@@ -30,12 +30,10 @@ pub struct Goal {
 	pub repetition: Option<Repetition>,
 	/// Earliest start datetime for this Goal's Tasks
 	#[serde(default)]
-	#[serde(with = "time::serde::iso8601::option")]
-	pub start: Option<OffsetDateTime>,
+	pub start: Option<NaiveDateTime>,
 	/// Deadline for this Goal's Tasks
 	#[serde(default)]
-	#[serde(with = "time::serde::iso8601::option")]
-	pub deadline: Option<OffsetDateTime>,
+	pub deadline: Option<NaiveDateTime>,
 }
 
 #[cfg(test)]
@@ -58,12 +56,12 @@ impl Goal {
 		self
 	}
 
-	pub fn start(mut self, start: OffsetDateTime) -> Self {
+	pub fn start(mut self, start: NaiveDateTime) -> Self {
 		self.start = Some(start);
 		self
 	}
 
-	pub fn deadline(mut self, deadline: OffsetDateTime) -> Self {
+	pub fn deadline(mut self, deadline: NaiveDateTime) -> Self {
 		self.deadline = Some(deadline);
 		self
 	}

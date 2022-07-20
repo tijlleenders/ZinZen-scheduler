@@ -186,29 +186,29 @@ mod tests {
 		let input: Input = serde_json::from_str(
 			r#"
 {
-    "startDate": "2022-01-01T00:00:00Z",
-    "endDate": "2022-01-02T00:00:00Z",
+    "startDate": "2022-01-01",
+    "endDate": "2022-01-02",
     "goals": [
         {
           "id": 1,
           "title" : "shopping",
           "duration": 1,
-          "start": "2022-01-01T10:00:00Z",
-          "deadline": "2022-01-01T13:00:00Z"
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T13:00:00"
         },
         {
           "id": 2,
           "title": "dentist",
           "duration": 1,
-          "start": "2022-01-01T10:00:00Z",
-          "deadline": "2022-01-01T11:00:00Z"
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T11:00:00"
         },
         {
           "id": 3,
           "title" : "exercise",
           "duration": 1,
-          "start": "2022-01-01T10:00:00Z",
-          "deadline": "2022-01-01T18:00:00Z"
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T18:00:00"
         }
     ]
 }
