@@ -19,7 +19,7 @@ impl Repetition {
 }
 
 /// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Default)]
 pub struct Goal {
 	/// Every goal has a unique ID
 	pub id: usize,
@@ -36,4 +36,35 @@ pub struct Goal {
 	#[serde(default)]
 	#[serde(with = "time::serde::iso8601::option")]
 	pub deadline: Option<OffsetDateTime>,
+}
+
+#[cfg(test)]
+impl Goal {
+	pub fn new(id: usize) -> Self {
+		Self {
+			id,
+			title: String::from("Test"),
+			..Default::default()
+		}
+	}
+
+	pub fn duration(mut self, duration: usize) -> Self {
+		self.duration = duration;
+		self
+	}
+
+	pub fn repetition(mut self, repetition: Repetition) -> Self {
+		self.repetition = Some(repetition);
+		self
+	}
+
+	pub fn start(mut self, start: OffsetDateTime) -> Self {
+		self.start = Some(start);
+		self
+	}
+
+	pub fn deadline(mut self, deadline: OffsetDateTime) -> Self {
+		self.deadline = Some(deadline);
+		self
+	}
 }

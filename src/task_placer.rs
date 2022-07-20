@@ -178,8 +178,8 @@ impl TaskPlacer {
 
 #[cfg(test)]
 mod tests {
+	use crate::input::Input;
 	use crate::task_generator::task_generator;
-	use crate::Input;
 
 	#[test]
 	fn basic_test() {

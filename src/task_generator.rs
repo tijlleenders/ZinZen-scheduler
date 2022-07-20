@@ -1,6 +1,8 @@
+use time::macros::datetime;
+
+use crate::input::Input;
 use crate::task::{Slot, Task};
 use crate::task_placer::TaskPlacer;
-use crate::Input;
 
 pub fn task_generator(Input { start, end, goals }: Input) -> TaskPlacer {
 	let mut tasks = vec![];
@@ -45,30 +47,19 @@ pub fn task_generator(Input { start, end, goals }: Input) -> TaskPlacer {
 
 #[cfg(test)]
 mod tests {
+	use crate::goal::{Goal, Repetition};
+	use crate::input::Input;
 	use crate::task_generator::task_generator;
-	use crate::Input;
 
 	use super::*;
 
 	#[test]
 	fn repeat() {
-		let input: Input = serde_json::from_str(
-			r#"
-{
-	"startDate": "2022-01-01T00:00:00Z",
-	"endDate": "2022-01-04T00:00:00Z",
-	"goals": [
-		{
-			"id": 1,
-			"title": "walk",
-			"duration": 1,
-			"repetition": "daily"
-		}
-	]
-}
-        "#,
-		)
-		.unwrap();
+		let input: Input = Input::new(
+			datetime!(2022-01-01 00:00 UTC),
+			datetime!(2022-01-04 00:00 UTC),
+			vec![Goal::new(1).duration(1).repetition(Repetition::DAILY)],
+		);
 
 		let scheduler = task_generator(input);
 		assert_eq!(
@@ -78,6 +69,44 @@ mod tests {
 		assert_eq!(
 			scheduler.slots,
 			vec![Slot::new(0, 0, 24), Slot::new(1, 24, 48), Slot::new(2, 48, 72)]
+		)
+	}
+
+	#[test]
+	fn repeat_start_not_midnight() {
+		let input: Input = Input::new(
+			datetime!(2022-01-01 10:00 UTC),
+			datetime!(2022-01-04 00:00 UTC),
+			vec![Goal::new(1).duration(1).repetition(Repetition::DAILY)],
+		);
+
+		let scheduler = task_generator(input);
+		assert_eq!(
+			scheduler.tasks,
+			vec![Task::new(0, 1, 1), Task::new(1, 1, 1), Task::new(2, 1, 1)]
+		);
+		assert_eq!(
+			scheduler.slots,
+			vec![Slot::new(0, 0, 14), Slot::new(1, 14, 38), Slot::new(2, 38, 62)]
+		)
+	}
+
+	#[test]
+	fn repeat_end_not_midnight() {
+		let input: Input = Input::new(
+			datetime!(2022-01-01 00:00 UTC),
+			datetime!(2022-01-03 10:00 UTC),
+			vec![Goal::new(1).duration(1).repetition(Repetition::DAILY)],
+		);
+
+		let scheduler = task_generator(input);
+		assert_eq!(
+			scheduler.tasks,
+			vec![Task::new(0, 1, 1), Task::new(1, 1, 1), Task::new(2, 1, 1)]
+		);
+		assert_eq!(
+			scheduler.slots,
+			vec![Slot::new(0, 0, 24), Slot::new(1, 24, 48), Slot::new(2, 48, 58)]
 		)
 	}
 }
