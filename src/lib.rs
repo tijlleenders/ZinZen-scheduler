@@ -12,14 +12,14 @@ mod task_placer;
 
 #[wasm_bindgen]
 extern "C" {
-	/// Import console.log from JavaScript
+	// Import console.log from JavaScript
 	#[wasm_bindgen(js_namespace = console)]
-	fn console_log(s: &str);
+	fn log(s: &str);
 }
 
 /// A little logging function to make it easier to debug, calls console.log
-pub fn log<S: AsRef<str>>(input: S) {
-	console_log(input.as_ref());
+pub fn console_log<S: AsRef<str>>(input: S) {
+	log(input.as_ref());
 }
 
 /// Not necessarily an entry point, just initializes the console error hook
@@ -58,7 +58,11 @@ pub fn schedule(input: JsValue) -> Result<JsValue, JsError> {
 	let input = input.into_serde()?;
 
 	let placer = task_generator(input);
-	let result = placer.task_placer();
+	let result = match placer.task_placer() {
+		Ok(res) => res,
+		// How tedious, these error types are somehow incomaptible
+		Err(err) => return Err(JsError::new(&err.to_string())),
+	};
 
 	Ok(JsValue::from_serde(&result)?)
 }
