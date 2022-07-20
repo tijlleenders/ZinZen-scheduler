@@ -47,7 +47,7 @@ pub struct Input {
 	start: OffsetDateTime,
 	#[serde(rename = "endDate")]
 	#[serde(with = "time::serde::iso8601")]
-	_end: OffsetDateTime,
+	end: OffsetDateTime,
 	goals: Vec<goal::Goal>,
 }
 

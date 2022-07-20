@@ -1,7 +1,4 @@
-
-
 use serde::{Deserialize, Serialize};
-
 
 /// One or many created from a Goal by the preprocessor.
 /// To be scheduled in order by the scheduler.
@@ -63,6 +60,12 @@ pub struct Slot {
 	pub start: usize,
 	/// in hours
 	pub end: usize,
+}
+
+impl Slot {
+	pub fn new(task_id: usize, start: usize, end: usize) -> Self {
+		Self { task_id, start, end }
+	}
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]

@@ -108,30 +108,14 @@ impl TaskPlacer {
 		self.slots = self.slots.iter().fold(vec![], |mut acc, slot| {
 			if slot.start >= cut_start && slot.start < cut_end {
 				// start
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: cut_end,
-					end: slot.end,
-				});
+				acc.push(Slot::new(slot.task_id, cut_end, slot.end));
 			} else if scheduled_slot.start < cut_start && scheduled_slot.end > cut_end {
 				// middle
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: slot.start,
-					end: cut_start,
-				});
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: cut_end,
-					end: slot.end,
-				});
+				acc.push(Slot::new(slot.task_id, slot.start, cut_start));
+				acc.push(Slot::new(slot.task_id, cut_end, slot.end));
 			} else if scheduled_slot.start < cut_start && scheduled_slot.end > cut_start {
 				// end
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: slot.start,
-					end: cut_start,
-				});
+				acc.push(Slot::new(slot.task_id, slot.start, cut_end));
 			} else {
 				// no cutoff, keep same slot
 				// XXX cannot move so cloning
@@ -180,7 +164,7 @@ impl TaskPlacer {
 			// Find slot with least overlap
 			let (start, end) = self.find_least_requested_slot_for_task(&task);
 			let task_id = task.id();
-			self.do_schedule(task, Slot { start, end, task_id });
+			self.do_schedule(task, Slot::new(task_id, start, end));
 		}
 
 		self.processed_tasks.sort_by_key(|x| x.id());

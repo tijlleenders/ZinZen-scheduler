@@ -1,12 +1,25 @@
+use std::option::Option;
 
+use serde::Deserialize;
+use time::OffsetDateTime;
 
+/// How often can a task repeat
+#[derive(Deserialize, Debug, Copy, Clone)]
+pub enum Repetition {
+	#[serde(rename = "daily")]
+	DAILY,
+}
 
-use serde::{Deserialize, Serialize};
-use time::serde::iso8601;
-use time::{OffsetDateTime};
+impl Repetition {
+	pub fn into_hours(self) -> i64 {
+		match self {
+			Self::DAILY => 24,
+		}
+	}
+}
 
 /// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct Goal {
 	/// Every goal has a unique ID
 	pub id: usize,
@@ -14,12 +27,13 @@ pub struct Goal {
 	pub title: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
 	pub duration: usize,
+	pub repetition: Option<Repetition>,
 	/// Earliest start datetime for this Goal's Tasks
-	// TODO: should be optional (default to start of today)
-	#[serde(with = "iso8601")]
-	pub start: OffsetDateTime,
+	#[serde(default)]
+	#[serde(with = "time::serde::iso8601::option")]
+	pub start: Option<OffsetDateTime>,
 	/// Deadline for this Goal's Tasks
-	// TODO: should be optional (will default to end of calendar))
-	#[serde(with = "iso8601")]
-	pub deadline: OffsetDateTime,
+	#[serde(default)]
+	#[serde(with = "time::serde::iso8601::option")]
+	pub deadline: Option<OffsetDateTime>,
 }
