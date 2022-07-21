@@ -144,6 +144,40 @@ mod tests {
 	}
 
 	#[test]
+	fn date_range_single() {
+		let r = DateRange {
+			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
+			end: NaiveDate::from_ymd(2022, 1, 1).and_hms(8, 0, 0),
+			interval: Duration::hours(8),
+		};
+
+		assert_eq!(
+			r.into_iter().collect::<Vec<_>>(),
+			vec![(
+				NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
+				NaiveDate::from_ymd(2022, 1, 1).and_hms(8, 0, 0)
+			),]
+		)
+	}
+
+	#[test]
+	fn date_range_single_not_round() {
+		let r = DateRange {
+			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(1, 0, 0),
+			end: NaiveDate::from_ymd(2022, 1, 1).and_hms(7, 0, 0),
+			interval: Duration::hours(8),
+		};
+
+		assert_eq!(
+			r.into_iter().collect::<Vec<_>>(),
+			vec![(
+				NaiveDate::from_ymd(2022, 1, 1).and_hms(1, 0, 0),
+				NaiveDate::from_ymd(2022, 1, 1).and_hms(7, 0, 0)
+			),]
+		)
+	}
+
+	#[test]
 	fn date_range_iter_not_round_end() {
 		let r = DateRange {
 			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
