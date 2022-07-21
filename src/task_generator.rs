@@ -52,13 +52,13 @@ impl Iterator for DateRangeIter {
 			self.end,
 			(self.current_start + self.interval)
 				.duration_round(self.interval)
-				.unwrap(),
+				.ok()?,
 		);
 		let res = (self.current_start, self.current_end);
 
 		self.current_start = min(self.end, self.current_start + self.interval)
 			.duration_round(self.interval)
-			.unwrap();
+			.ok()?;
 
 		Some(res)
 	}
