@@ -1,7 +1,4 @@
-
-
 use serde::{Deserialize, Serialize};
-
 
 /// One or many created from a Goal by the preprocessor.
 /// To be scheduled in order by the scheduler.
