@@ -23,7 +23,6 @@ opt-level = "s"
 [dependencies]
 serde_json = "1.0.81"
 serde = { version = "1.0.137", features = ["derive"] }
-time = { version = "0.3.9", features = ["serde", "serde-well-known", "serde-human-readable", "macros"] }
 chrono = { version = "0.4.19", features = ["wasmbind", "serde"] }
 linked-list = "0.0.3"
 thiserror = "1.0.31"
