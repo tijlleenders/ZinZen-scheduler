@@ -1,12 +1,11 @@
 use std::cmp::min;
 
 use chrono::prelude::*;
-use chrono::Duration;
+use chrono::{Duration, DurationRound};
 
 use crate::input::Input;
 use crate::task::{Slot, Task};
 use crate::task_placer::TaskPlacer;
-use crate::util::MyDurationRound;
 
 /// A range of datetimes with an interval.
 struct DateRange {
