@@ -23,7 +23,7 @@ opt-level = "s"
 [dependencies]
 serde_json = "1.0.81"
 serde = { version = "1.0.137", features = ["derive"] }
-chrono = { git = "https://github.com/chronotope/chrono", features = ["wasmbind", "serde"] }
+chrono = { version = "0.4.19", features = ["wasmbind", "serde"] }
 linked-list = "0.0.3"
 thiserror = "1.0.31"
 # simple WASM codegen
