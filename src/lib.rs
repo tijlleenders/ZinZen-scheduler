@@ -14,6 +14,7 @@ mod input;
 mod task;
 mod task_generator;
 mod task_placer;
+mod util;
 
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"

@@ -1,6 +1,7 @@
 use std::option::Option;
 
 use chrono::prelude::*;
+use chrono::Duration;
 use serde::Deserialize;
 
 /// How often can a task repeat
@@ -10,10 +11,10 @@ pub enum Repetition {
 	DAILY,
 }
 
-impl Repetition {
-	pub(crate) fn into_hours(self) -> i64 {
-		match self {
-			Self::DAILY => 24,
+impl From<Repetition> for Duration {
+	fn from(a: Repetition) -> Self {
+		match a {
+			Repetition::DAILY => Duration::days(1),
 		}
 	}
 }
