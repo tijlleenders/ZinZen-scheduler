@@ -5,12 +5,15 @@ pub use input::Input;
 
 /// API modules
 mod goal;
-/// Project details
 mod input;
 mod task;
 mod task_generator;
 mod task_placer;
 mod util;
+
+// Tests
+#[cfg(test)]
+mod tests;
 
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
