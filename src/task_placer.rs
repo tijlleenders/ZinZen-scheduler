@@ -118,30 +118,14 @@ impl TaskPlacer {
 		self.slots = self.slots.iter().fold(vec![], |mut acc, slot| {
 			if slot.start >= cut_start && slot.start < cut_end {
 				// start
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: cut_end,
-					end: slot.end,
-				});
+				acc.push(Slot::new(slot.task_id, cut_end, slot.end));
 			} else if scheduled_slot.start < cut_start && scheduled_slot.end > cut_end {
 				// middle
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: slot.start,
-					end: cut_start,
-				});
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: cut_end,
-					end: slot.end,
-				});
+				acc.push(Slot::new(slot.task_id, slot.start, cut_start));
+				acc.push(Slot::new(slot.task_id, cut_end, slot.end));
 			} else if scheduled_slot.start < cut_start && scheduled_slot.end > cut_start {
 				// end
-				acc.push(Slot {
-					task_id: slot.task_id,
-					start: slot.start,
-					end: cut_start,
-				});
+				acc.push(Slot::new(slot.task_id, slot.start, cut_end));
 			} else {
 				// no cutoff, keep same slot
 				// XXX cannot move so cloning
@@ -190,7 +174,7 @@ impl TaskPlacer {
 			// Find slot with least overlap
 			let (start, end) = self.find_least_requested_slot_for_task(&task)?;
 			let task_id = task.id();
-			self.do_schedule(task, Slot { start, end, task_id });
+			self.do_schedule(task, Slot::new(task_id, start, end));
 		}
 
 		self.processed_tasks.sort_by_key(|x| x.id());
@@ -205,37 +189,37 @@ impl TaskPlacer {
 
 #[cfg(test)]
 mod tests {
+	use crate::input::Input;
 	use crate::task_generator::task_generator;
-	use crate::Input;
 
 	#[test]
 	fn basic_test() {
 		let input: Input = serde_json::from_str(
 			r#"
 {
-    "startDate": "2022-01-01T00:00:00Z",
-    "endDate": "2022-01-02T00:00:00Z",
+    "startDate": "2022-01-01",
+    "endDate": "2022-01-02",
     "goals": [
         {
           "id": 1,
           "title" : "shopping",
           "duration": 1,
-          "start": "2022-01-01T10:00:00Z",
-          "deadline": "2022-01-01T13:00:00Z"
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T13:00:00"
         },
         {
           "id": 2,
           "title": "dentist",
           "duration": 1,
-          "start": "2022-01-01T10:00:00Z",
-          "deadline": "2022-01-01T11:00:00Z"
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T11:00:00"
         },
         {
           "id": 3,
           "title" : "exercise",
           "duration": 1,
-          "start": "2022-01-01T10:00:00Z",
-          "deadline": "2022-01-01T18:00:00Z"
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T18:00:00"
         }
     ]
 }

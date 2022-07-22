@@ -1,25 +1,5 @@
 
 
-const heap = new Array(32).fill(undefined);
-
-heap.push(undefined, null, true, false);
-
-function getObject(idx) { return heap[idx]; }
-
-let heap_next = heap.length;
-
-function dropObject(idx) {
-    if (idx < 36) return;
-    heap[idx] = heap_next;
-    heap_next = idx;
-}
-
-function takeObject(idx) {
-    const ret = getObject(idx);
-    dropObject(idx);
-    return ret;
-}
-
 const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
 cachedTextDecoder.decode();
@@ -34,15 +14,6 @@ function getUint8Memory0() {
 
 function getStringFromWasm0(ptr, len) {
     return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-}
-
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
-    return idx;
 }
 
 let WASM_VECTOR_LEN = 0;
@@ -98,29 +69,27 @@ function getInt32Memory0() {
     }
     return cachedInt32Memory0;
 }
-/**
-* Not necessarily an entry point, just initializes the console error hook
-*/
-export function init() {
-    wasm.init();
-}
 
+function takeFromExternrefTable0(idx) {
+    const value = wasm.__wbindgen_export_2.get(idx);
+    wasm.__externref_table_dealloc(idx);
+    return value;
+}
 /**
-* Generates a task and slots list from the provided parameters
 * @param {any} input
 * @returns {any}
 */
 export function schedule(input) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.schedule(retptr, addHeapObject(input));
+        wasm.schedule(retptr, input);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
         var r2 = getInt32Memory0()[retptr / 4 + 2];
         if (r2) {
-            throw takeObject(r1);
+            throw takeFromExternrefTable0(r1);
         }
-        return takeObject(r0);
+        return takeFromExternrefTable0(r0);
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
@@ -128,36 +97,12 @@ export function schedule(input) {
 
 const imports = {
     __wbindgen_placeholder__: {
-        __wbg_new_693216e109162396: function() {
-            const ret = new Error();
-            return addHeapObject(ret);
-        },
-        __wbg_stack_0ddaca5d1abfb52f: function(arg0, arg1) {
-            const ret = getObject(arg1).stack;
-            const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            getInt32Memory0()[arg0 / 4 + 1] = len0;
-            getInt32Memory0()[arg0 / 4 + 0] = ptr0;
-        },
-        __wbg_error_09919627ac0992f5: function(arg0, arg1) {
-            try {
-                console.error(getStringFromWasm0(arg0, arg1));
-            } finally {
-                wasm.__wbindgen_free(arg0, arg1);
-            }
-        },
-        __wbindgen_object_drop_ref: function(arg0) {
-            takeObject(arg0);
-        },
         __wbindgen_error_new: function(arg0, arg1) {
             const ret = new Error(getStringFromWasm0(arg0, arg1));
-            return addHeapObject(ret);
-        },
-        __wbg_log_f5e34b85306acb6d: function(arg0, arg1) {
-            console.log(getStringFromWasm0(arg0, arg1));
+            return ret;
         },
         __wbindgen_json_serialize: function(arg0, arg1) {
-            const obj = getObject(arg1);
+            const obj = arg1;
             const ret = JSON.stringify(obj === undefined ? null : obj);
             const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
             const len0 = WASM_VECTOR_LEN;
@@ -166,7 +111,20 @@ const imports = {
         },
         __wbindgen_json_parse: function(arg0, arg1) {
             const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
-            return addHeapObject(ret);
+            return ret;
+        },
+        __wbindgen_throw: function(arg0, arg1) {
+            throw new Error(getStringFromWasm0(arg0, arg1));
+        },
+        __wbindgen_init_externref_table: function() {
+            const table = wasm.__wbindgen_export_2;
+            const offset = table.grow(4);
+            table.set(0, undefined);
+            table.set(offset + 0, undefined);
+            table.set(offset + 1, null);
+            table.set(offset + 2, true);
+            table.set(offset + 3, false);
+            ;
         },
     },
 

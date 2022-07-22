@@ -62,6 +62,12 @@ pub struct Slot {
 	pub end: usize,
 }
 
+impl Slot {
+	pub fn new(task_id: usize, start: usize, end: usize) -> Self {
+		Self { task_id, start, end }
+	}
+}
+
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum TaskStatus {
 	UNSCHEDULED,

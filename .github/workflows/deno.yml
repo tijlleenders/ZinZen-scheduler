@@ -22,9 +22,6 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Run linter
-        run: deno lint
-
       - name: Install wabt
         run: |
           set -e
