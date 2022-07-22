@@ -1,25 +1,5 @@
 
 
-const heap = new Array(32).fill(undefined);
-
-heap.push(undefined, null, true, false);
-
-function getObject(idx) { return heap[idx]; }
-
-let heap_next = heap.length;
-
-function dropObject(idx) {
-    if (idx < 36) return;
-    heap[idx] = heap_next;
-    heap_next = idx;
-}
-
-function takeObject(idx) {
-    const ret = getObject(idx);
-    dropObject(idx);
-    return ret;
-}
-
 const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
 cachedTextDecoder.decode();
@@ -36,6 +16,12 @@ function getStringFromWasm0(ptr, len) {
     return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
 }
 
+const heap = new Array(32).fill(undefined);
+
+heap.push(undefined, null, true, false);
+
+let heap_next = heap.length;
+
 function addHeapObject(obj) {
     if (heap_next === heap.length) heap.push(heap.length + 1);
     const idx = heap_next;
@@ -44,6 +30,8 @@ function addHeapObject(obj) {
     heap[idx] = obj;
     return idx;
 }
+
+function getObject(idx) { return heap[idx]; }
 
 let WASM_VECTOR_LEN = 0;
 
@@ -98,15 +86,19 @@ function getInt32Memory0() {
     }
     return cachedInt32Memory0;
 }
-/**
-* Not necessarily an entry point, just initializes the console error hook
-*/
-export function init() {
-    wasm.init();
+
+function dropObject(idx) {
+    if (idx < 36) return;
+    heap[idx] = heap_next;
+    heap_next = idx;
 }
 
+function takeObject(idx) {
+    const ret = getObject(idx);
+    dropObject(idx);
+    return ret;
+}
 /**
-* Generates a task and slots list from the provided parameters
 * @param {any} input
 * @returns {any}
 */
@@ -128,33 +120,9 @@ export function schedule(input) {
 
 const imports = {
     __wbindgen_placeholder__: {
-        __wbg_new_693216e109162396: function() {
-            const ret = new Error();
-            return addHeapObject(ret);
-        },
-        __wbg_stack_0ddaca5d1abfb52f: function(arg0, arg1) {
-            const ret = getObject(arg1).stack;
-            const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            getInt32Memory0()[arg0 / 4 + 1] = len0;
-            getInt32Memory0()[arg0 / 4 + 0] = ptr0;
-        },
-        __wbg_error_09919627ac0992f5: function(arg0, arg1) {
-            try {
-                console.error(getStringFromWasm0(arg0, arg1));
-            } finally {
-                wasm.__wbindgen_free(arg0, arg1);
-            }
-        },
-        __wbindgen_object_drop_ref: function(arg0) {
-            takeObject(arg0);
-        },
         __wbindgen_error_new: function(arg0, arg1) {
             const ret = new Error(getStringFromWasm0(arg0, arg1));
             return addHeapObject(ret);
-        },
-        __wbg_log_f5e34b85306acb6d: function(arg0, arg1) {
-            console.log(getStringFromWasm0(arg0, arg1));
         },
         __wbindgen_json_serialize: function(arg0, arg1) {
             const obj = getObject(arg1);
@@ -167,6 +135,12 @@ const imports = {
         __wbindgen_json_parse: function(arg0, arg1) {
             const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
             return addHeapObject(ret);
+        },
+        __wbindgen_object_drop_ref: function(arg0) {
+            takeObject(arg0);
+        },
+        __wbindgen_throw: function(arg0, arg1) {
+            throw new Error(getStringFromWasm0(arg0, arg1));
         },
     },
 
@@ -191,6 +165,4 @@ const wasm = wasmInstance.exports;
 
 cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
 cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
-
-wasm.__wbindgen_start();
 
