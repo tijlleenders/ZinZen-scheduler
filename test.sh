@@ -15,7 +15,7 @@ cargo build --target $TARGET --release
 echo -n "Bindgen..."
 mkdir -p js-api
 cp $CARGO_BINARY $BINARY
-wasm-bindgen $BINARY --out-dir js-api/ --target deno
+wasm-bindgen $BINARY --out-dir js-api/ --target deno --reference-types --no-typescript
 echo " ok"
 
 # Process final binary
