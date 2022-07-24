@@ -1,5 +1,5 @@
-use chrono::*;
 use crate::{goal::*, input::*, task::*, task_generator::*};
+use chrono::*;
 
 #[test]
 fn basic_test() {
