@@ -1,5 +1,3 @@
-use std::cmp::min;
-
 use chrono::prelude::*;
 use chrono::Duration;
 
@@ -15,52 +13,22 @@ pub(crate) struct DateRange {
 	pub(crate) interval: Duration,
 }
 
-impl IntoIterator for DateRange {
+impl Iterator for DateRange {
 	type Item = (NaiveDateTime, NaiveDateTime);
-	type IntoIter = DateRangeIter;
-
-	/// Generate an iterator for this DateRange,
-	/// returning each pair of valid dates (start-end) in this interval.
-	/// If start and end dates are not rounded up, they will be rounded
-	/// by the returned values.
-	fn into_iter(self) -> Self::IntoIter {
-		Self::IntoIter {
-			end: self.end,
-			interval: self.interval,
-			current_start: self.start,
-			current_end: self.start,
-		}
-	}
-}
-
-pub(crate) struct DateRangeIter {
-	end: NaiveDateTime,
-	current_start: NaiveDateTime,
-	current_end: NaiveDateTime,
-	interval: Duration,
-}
-
-impl Iterator for DateRangeIter {
-	type Item = (NaiveDateTime, NaiveDateTime);
-
 	fn next(&mut self) -> Option<Self::Item> {
-		if self.current_end == self.end {
-			return None;
+		if self.start < self.end {
+			let start = self.start;
+			let mut end = self.start + self.interval;
+			if end > self.end {
+				end = self.end;
+			} else {
+				end = end.duration_round(self.interval).ok()?;
+			}
+			self.start = end;
+			Some((start, end))
+		} else {
+			None
 		}
-
-		self.current_end = min(
-			self.end,
-			(self.current_start + self.interval)
-				.duration_round(self.interval)
-				.ok()?,
-		);
-		let res = (self.current_start, self.current_end);
-
-		self.current_start = min(self.end, self.current_start + self.interval)
-			.duration_round(self.interval)
-			.ok()?;
-
-		Some(res)
 	}
 }
 
