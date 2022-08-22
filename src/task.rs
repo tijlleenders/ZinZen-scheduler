@@ -1,70 +1,47 @@
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 
 /// One or many created from a Goal by the preprocessor.
 /// To be scheduled in order by the scheduler.
 #[derive(Deserialize, Debug, PartialEq, Eq)]
 pub struct Task {
-	id: usize,
-	goal_id: usize,
-	pub duration_to_schedule: usize,
-	// TODO: should split off the following fields into internal
-	// scheduler implementation, but in a rush now
-	pub duration_scheduled: usize,
+	pub id: usize,
+	pub goal_id: usize,
+    pub title: String,
+	pub duration: usize,
 	pub status: TaskStatus,
 	pub flexibility: usize,
+	pub start: NaiveDateTime,
+	pub end: NaiveDateTime,
+	pub slots: Vec<(NaiveDateTime, NaiveDateTime)>,
 }
 
-/// Serialization target to be returned at the end of scheduling
-#[derive(Debug, Serialize)]
-pub struct TaskResult {
-	id: usize,
-	goal_id: usize,
-	duration_to_schedule: usize,
-	pub duration_scheduled: usize,
-	pub status: TaskStatus,
+impl Ord for Task {
+	fn cmp(&self, other: &Self) -> Ordering {
+		self.flexibility.cmp(&other.flexibility)
+	}
+}
+
+impl PartialOrd for Task {
+	fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+		Some(self.cmp(other))
+	}
 }
 
 impl Task {
-	pub fn new(id: usize, goal_id: usize, duration_to_schedule: usize) -> Self {
+	pub fn new(id: usize, goal_id: usize, title: String, duration: usize, start: NaiveDateTime, end: NaiveDateTime) -> Self {
 		Self {
 			id,
 			goal_id,
-			duration_to_schedule,
-			duration_scheduled: 0,
+            title,
+			duration,
 			status: TaskStatus::UNSCHEDULED,
-			flexibility: 0,
+			flexibility: (end - start).num_hours() as usize,
+			start,
+			end,
+			slots: Vec::new(),
 		}
-	}
-
-	#[inline]
-	pub fn id(&self) -> usize {
-		self.id
-	}
-
-	pub fn into_task_result(self) -> TaskResult {
-		TaskResult {
-			id: self.id,
-			goal_id: self.goal_id,
-			duration_to_schedule: self.duration_to_schedule,
-			duration_scheduled: self.duration_scheduled,
-			status: self.status,
-		}
-	}
-}
-
-/// Period of time that a task can fit into.
-#[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]
-pub struct Slot {
-	pub task_id: usize,
-	/// in hours
-	pub start: usize,
-	/// in hours
-	pub end: usize,
-}
-
-impl Slot {
-	pub fn new(task_id: usize, start: usize, end: usize) -> Self {
-		Self { task_id, start, end }
 	}
 }
 
