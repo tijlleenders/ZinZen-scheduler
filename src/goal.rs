@@ -1,7 +1,9 @@
 use std::option::Option;
-
+use crate::task::Task;
+use crate::task_generator::DateRange;
 use chrono::prelude::*;
 use chrono::Duration;
+use chrono::NaiveDateTime;
 use serde::Deserialize;
 
 /// How often can a task repeat
@@ -37,7 +39,7 @@ pub struct Goal {
 	pub deadline: Option<NaiveDateTime>,
 }
 
-#[cfg(test)]
+//#[cfg(test)]
 impl Goal {
 	pub fn new(id: usize) -> Self {
 		Self {
@@ -65,5 +67,42 @@ impl Goal {
 	pub fn deadline(mut self, deadline: NaiveDateTime) -> Self {
 		self.deadline = Some(deadline);
 		self
+	}
+
+	pub fn generate_tasks(self, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
+		let mut tasks = Vec::new();
+		match self.repetition {
+			Some(rep) => {
+				let date_range = DateRange {
+					start: self.start.unwrap_or(calendar_start),
+					end: self.deadline.unwrap_or(calendar_end),
+					interval: Some(Duration::from(rep)),
+				};
+				for (index, (start, end)) in date_range.enumerate() {
+					let task_id = format!("{}{}", self.id, index);
+					let t = Task::new(
+                        task_id.parse::<usize>().unwrap(), 
+                        self.id, 
+                        self.title.clone(),
+                        self.duration, 
+                        start, 
+                        end);
+					tasks.push(t);
+				}
+			},
+			None => {
+				let task_id = format!("{}{}", self.id, 0);
+				let t = Task::new(
+					task_id.parse::<usize>().unwrap(),
+					self.id,
+                    self.title,
+					self.duration,
+					self.start.unwrap_or(calendar_start),
+					self.deadline.unwrap_or(calendar_end),
+				);
+				tasks.push(t);
+			}
+		}
+		tasks
 	}
 }
