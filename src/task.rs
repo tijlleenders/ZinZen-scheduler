@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::{NaiveDateTime, Duration};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
@@ -37,12 +37,18 @@ impl Task {
             title,
 			duration,
 			status: TaskStatus::UNSCHEDULED,
-			flexibility: (end - start).num_hours() as usize,
+			flexibility: 0,
 			start,
 			end,
 			slots: Vec::new(),
 		}
 	}
+
+    pub fn calculate_flexibility(&mut self) {
+        let duration_available = self.slots[self.slots.len()-1].1 - self.slots[0].0;
+        let hours_available = duration_available.num_hours() as usize;
+        self.flexibility = hours_available - self.duration + 1;
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
