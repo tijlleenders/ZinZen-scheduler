@@ -483,15 +483,6 @@ fn goal_generates_single_nonrepetitive_task() {
 }
 
 #[test]
-fn task_placer_works_simple() {}
-
-#[test]
-fn task_placer_works_multiple_days() {}
-
-#[test]
-fn task_placer_works_long_duration_multiple_days() {}
-
-#[test]
 fn output_formatter_works() {
 	/*
 	Below is a pretty-printed version of the test output for easier reference.
