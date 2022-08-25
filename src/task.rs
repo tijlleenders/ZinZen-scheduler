@@ -1,74 +1,90 @@
+use chrono::{Duration, NaiveDateTime};
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 
 /// One or many created from a Goal by the preprocessor.
 /// To be scheduled in order by the scheduler.
-#[derive(Deserialize, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct Task {
-	id: usize,
-	goal_id: usize,
-	pub duration_to_schedule: usize,
-	// TODO: should split off the following fields into internal
-	// scheduler implementation, but in a rush now
-	pub duration_scheduled: usize,
+	pub id: usize,
+	pub goal_id: usize,
+	pub title: String,
+	pub duration: usize,
 	pub status: TaskStatus,
 	pub flexibility: usize,
+	pub start: NaiveDateTime,
+	pub deadline: NaiveDateTime,
+	pub slots: Vec<(NaiveDateTime, NaiveDateTime)>,
+	pub confirmed_start: Option<NaiveDateTime>,
+	pub confirmed_deadline: Option<NaiveDateTime>,
 }
 
-/// Serialization target to be returned at the end of scheduling
-#[derive(Debug, Serialize)]
-pub struct TaskResult {
-	id: usize,
-	goal_id: usize,
-	duration_to_schedule: usize,
-	pub duration_scheduled: usize,
-	pub status: TaskStatus,
+impl Ord for Task {
+	fn cmp(&self, other: &Self) -> Ordering {
+		self.flexibility.cmp(&other.flexibility)
+	}
+}
+
+impl PartialOrd for Task {
+	fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+		Some(self.cmp(other))
+	}
 }
 
 impl Task {
-	pub fn new(id: usize, goal_id: usize, duration_to_schedule: usize) -> Self {
+	pub fn new(
+		id: usize,
+		goal_id: usize,
+		title: String,
+		duration: usize,
+		start: NaiveDateTime,
+		deadline: NaiveDateTime,
+	) -> Self {
 		Self {
 			id,
 			goal_id,
-			duration_to_schedule,
-			duration_scheduled: 0,
+			title,
+			duration,
 			status: TaskStatus::UNSCHEDULED,
 			flexibility: 0,
+			start,
+			deadline,
+			slots: Vec::new(),
+			confirmed_start: None,
+			confirmed_deadline: None,
 		}
 	}
 
-	#[inline]
-	pub fn id(&self) -> usize {
-		self.id
+	pub fn calculate_flexibility(&mut self) {
+		let duration_available = self.slots[self.slots.len() - 1].1 - self.slots[0].0;
+		let hours_available = duration_available.num_hours() as usize;
+		self.flexibility = hours_available - self.duration + 1;
 	}
 
-	pub fn into_task_result(self) -> TaskResult {
-		TaskResult {
-			id: self.id,
-			goal_id: self.goal_id,
-			duration_to_schedule: self.duration_to_schedule,
-			duration_scheduled: self.duration_scheduled,
-			status: self.status,
+	pub fn set_confirmed_start(&mut self, start: NaiveDateTime) {
+		self.confirmed_start = Some(start);
+	}
+
+	pub fn set_confirmed_deadline(&mut self, deadline: NaiveDateTime) {
+		self.confirmed_deadline = Some(deadline);
+	}
+
+	pub fn get_slots(&self) -> Vec<(NaiveDateTime, NaiveDateTime)> {
+		self.slots.clone()
+	}
+
+	pub fn remove_slot(&mut self, slot: &(NaiveDateTime, NaiveDateTime)) {
+		let mut index = 0;
+		for i in 0..self.slots.len() {
+			if &self.slots[i] == slot {
+				index = i;
+			}
 		}
+		self.slots.remove(index);
 	}
 }
 
-/// Period of time that a task can fit into.
-#[derive(Serialize, Deserialize, Debug, Eq, Ord, PartialEq, PartialOrd, Clone)]
-pub struct Slot {
-	pub task_id: usize,
-	/// in hours
-	pub start: usize,
-	/// in hours
-	pub end: usize,
-}
-
-impl Slot {
-	pub fn new(task_id: usize, start: usize, end: usize) -> Self {
-		Self { task_id, start, end }
-	}
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum TaskStatus {
 	UNSCHEDULED,
 	SCHEDULED,
