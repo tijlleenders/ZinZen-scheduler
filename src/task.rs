@@ -69,17 +69,19 @@ impl Task {
 		self.confirmed_deadline = Some(deadline);
 	}
 
-    pub fn get_slots(&self) -> Vec<(NaiveDateTime,NaiveDateTime)> {
-        self.slots.clone()
-    }
+	pub fn get_slots(&self) -> Vec<(NaiveDateTime, NaiveDateTime)> {
+		self.slots.clone()
+	}
 
-    pub fn remove_slot(&mut self, slot: &(NaiveDateTime,NaiveDateTime)) {
-        for i in 0..self.slots.len() {
-            if &self.slots[i] == slot {
-                self.slots.remove(i);
-            }
-        }
-    }
+	pub fn remove_slot(&mut self, slot: &(NaiveDateTime, NaiveDateTime)) {
+		let mut index = 0;
+		for i in 0..self.slots.len() {
+			if &self.slots[i] == slot {
+				index = i;
+			}
+		}
+		self.slots.remove(index);
+	}
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
