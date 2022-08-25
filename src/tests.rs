@@ -398,63 +398,6 @@ fn date_range_splits_day_into_24_hrs() {
 }
 
 #[test]
-fn goal_generates_daily_tasks() {
-	let goal = Goal::new(1)
-		.duration(1)
-		.repetition(Repetition::DAILY)
-		.start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
-		.deadline(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0));
-
-	assert_eq!(
-		goal.generate_tasks(
-			NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-			NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0)
-		),
-		vec![
-			Task {
-				id: 10,
-				goal_id: 1,
-				title: "Test".to_string(),
-				duration: 1,
-				status: TaskStatus::UNSCHEDULED,
-				flexibility: 0,
-				start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-				deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
-				slots: Vec::new(),
-				confirmed_start: None,
-				confirmed_deadline: None,
-			},
-			Task {
-				id: 11,
-				goal_id: 1,
-				title: "Test".to_string(),
-				duration: 1,
-				status: TaskStatus::UNSCHEDULED,
-				flexibility: 0,
-				start: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
-				deadline: NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0),
-				slots: Vec::new(),
-				confirmed_start: None,
-				confirmed_deadline: None,
-			},
-			Task {
-				id: 12,
-				goal_id: 1,
-				title: "Test".to_string(),
-				duration: 1,
-				status: TaskStatus::UNSCHEDULED,
-				flexibility: 0,
-				start: NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0),
-				deadline: NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
-				slots: Vec::new(),
-				confirmed_start: None,
-				confirmed_deadline: None,
-			},
-		]
-	)
-}
-
-#[test]
 fn goal_generates_single_nonrepetitive_task() {
 	let goal = Goal::new(1)
 		.duration(1)
