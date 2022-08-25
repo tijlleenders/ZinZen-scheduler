@@ -1,8 +1,8 @@
-use chrono::prelude::*;
-use chrono::Duration;
 use crate::input::Input;
 use crate::task::Task;
 use crate::util::MyDurationRound;
+use chrono::prelude::*;
+use chrono::Duration;
 
 /// A range of datetimes with an interval.
 pub(crate) struct DateRange {
@@ -14,13 +14,13 @@ pub(crate) struct DateRange {
 impl Iterator for DateRange {
 	type Item = (NaiveDateTime, NaiveDateTime);
 	fn next(&mut self) -> Option<Self::Item> {
-        if self.interval.is_none() {
-            return Some((self.start,self.end));
-        }
+		if self.interval.is_none() {
+			return Some((self.start, self.end));
+		}
 		if self.start < self.end {
 			let start = self.start;
-			let mut end = self.start + self.interval.unwrap();//It's okay to unwrap coz we've
-                                                              //handled case where is_none() above
+			let mut end = self.start + self.interval.unwrap(); //It's okay to unwrap coz we've
+												   //handled case where is_none() above
 			if end > self.end {
 				end = self.end;
 			} else {
@@ -34,10 +34,16 @@ impl Iterator for DateRange {
 	}
 }
 
-pub fn task_generator(Input { calendar_start, calendar_end, goals }: Input) -> Vec<Task> {
+pub fn task_generator(
+	Input {
+		calendar_start,
+		calendar_end,
+		goals,
+	}: Input,
+) -> Vec<Task> {
 	let mut tasks = vec![];
 	for goal in goals {
-        tasks.extend(goal.generate_tasks(calendar_start,calendar_end)); 
-    }
+		tasks.extend(goal.generate_tasks(calendar_start, calendar_end));
+	}
 	tasks
 }

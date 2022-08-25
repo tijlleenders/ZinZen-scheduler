@@ -1,4 +1,4 @@
-use crate::{goal::*, input::*, output_formatter::*, task::*, task_generator::*, task_placer::*, task::TaskStatus::*};
+use crate::{goal::*, input::*, output_formatter::*, task::TaskStatus::*, task::*, task_generator::*, task_placer::*};
 use chrono::*;
 
 fn get_test_tasks() -> Vec<Task> {
@@ -421,8 +421,8 @@ fn goal_generates_daily_tasks() {
 				start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
 				deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
 				slots: Vec::new(),
-                confirmed_start: None,
-                confirmed_deadline: None,
+				confirmed_start: None,
+				confirmed_deadline: None,
 			},
 			Task {
 				id: 11,
@@ -434,8 +434,8 @@ fn goal_generates_daily_tasks() {
 				start: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
 				deadline: NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0),
 				slots: Vec::new(),
-                confirmed_start: None,
-                confirmed_deadline: None,
+				confirmed_start: None,
+				confirmed_deadline: None,
 			},
 			Task {
 				id: 12,
@@ -447,8 +447,8 @@ fn goal_generates_daily_tasks() {
 				start: NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0),
 				deadline: NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
 				slots: Vec::new(),
-                confirmed_start: None,
-                confirmed_deadline: None,
+				confirmed_start: None,
+				confirmed_deadline: None,
 			},
 		]
 	)
@@ -476,54 +476,20 @@ fn goal_generates_single_nonrepetitive_task() {
 			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
 			deadline: NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
 			slots: Vec::new(),
-            confirmed_start: None,
-            confirmed_deadline: None,
+			confirmed_start: None,
+			confirmed_deadline: None,
 		},]
 	)
 }
 
 #[test]
 fn output_formatter_works() {
-	/*
-	Below is a pretty-printed version of the test output for easier reference.
-	The one used in the actual test doesn't have line breaks and spaces and
-	is therefore hard to read.
+	let desired_output = r#"[{"taskid":20,"goalid":2,"title":"dentist","duration":1,"start":"2022-01-01T10:00:00","deadline":"2022-01-01T11:00:00"},{"taskid":30,"goalid":3,"title":"exercise","duration":1,"start":"2022-01-01T13:00:00","deadline":"2022-01-01T14:00:00"},{"taskid":10,"goalid":1,"title":"shopping","duration":1,"start":"2022-01-01T11:00:00","deadline":"2022-01-01T12:00:00"}]"#;
 
-	let desired_output = r#"
-	[
-	  {
-		"taskid": 20,
-		"goalid": 2,
-		"title": "dentist",
-		"duration": 1,
-		"start": "2022-01-01T10:00:00",
-		"deadline": "2022-01-01T11:00:00"
-	  },
-	  {
-		"taskid": 10,
-		"goalid": 1,
-		"title": "shopping",
-		"duration": 1,
-		"start": "2022-01-01T11:00:00",
-		"deadline": "2022-01-01T12:00:00"
-	  },
-	  {
-		"taskid": 30,
-		"goalid": 3,
-		"title": "exercise",
-		"duration": 1,
-		"start": "2022-01-01T12:00:00",
-		"deadline": "2022-01-01T13:00:00"
-	  }
-	]
-			"#;*/
-let desired_output = r#"[{"taskid":20,"goalid":2,"title":"dentist","duration":1,"start":"2022-01-01T10:00:00","deadline":"2022-01-01T11:00:00"},{"taskid":30,"goalid":3,"title":"exercise","duration":1,"start":"2022-01-01T13:00:00","deadline":"2022-01-01T14:00:00"},{"taskid":10,"goalid":1,"title":"shopping","duration":1,"start":"2022-01-01T11:00:00","deadline":"2022-01-01T12:00:00"}]"#;
-
-let (calendar_start,calendar_end) = get_calendar_bounds();
-let scheduled_tasks = task_placer(get_test_tasks(),calendar_start,calendar_end);
-let output = output_formatter(scheduled_tasks).unwrap();
-assert_eq!(desired_output,serde_json::to_string(&output).unwrap());
-    
+	let (calendar_start, calendar_end) = get_calendar_bounds();
+	let scheduled_tasks = task_placer(get_test_tasks(), calendar_start, calendar_end);
+	let output = output_formatter(scheduled_tasks).unwrap();
+	assert_eq!(desired_output, serde_json::to_string(&output).unwrap());
 }
 
 #[test]
@@ -542,14 +508,31 @@ fn task_placer_slots_tasks_correctly() {
 	let tasks = get_test_tasks();
 	let (calendar_start, calendar_end) = get_calendar_bounds();
 	let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
-    assert_eq!(scheduled_tasks[0].status,SCHEDULED);
-    assert_eq!(scheduled_tasks[1].status,SCHEDULED);
-    assert_eq!(scheduled_tasks[2].status,SCHEDULED);
-    assert_eq!(scheduled_tasks[0].confirmed_start.unwrap(), NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0));
-    assert_eq!(scheduled_tasks[0].confirmed_deadline.unwrap(), NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0));
-    assert_eq!(scheduled_tasks[1].confirmed_start.unwrap(), NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0));
-    assert_eq!(scheduled_tasks[1].confirmed_deadline.unwrap(), NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0));
-    assert_eq!(scheduled_tasks[2].confirmed_start.unwrap(), NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0));
-    assert_eq!(scheduled_tasks[2].confirmed_deadline.unwrap(), NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0));
-
+	assert_eq!(scheduled_tasks[0].status, SCHEDULED);
+	assert_eq!(scheduled_tasks[1].status, SCHEDULED);
+	assert_eq!(scheduled_tasks[2].status, SCHEDULED);
+	assert_eq!(
+		scheduled_tasks[0].confirmed_start.unwrap(),
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0)
+	);
+	assert_eq!(
+		scheduled_tasks[0].confirmed_deadline.unwrap(),
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0)
+	);
+	assert_eq!(
+		scheduled_tasks[1].confirmed_start.unwrap(),
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0)
+	);
+	assert_eq!(
+		scheduled_tasks[1].confirmed_deadline.unwrap(),
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0)
+	);
+	assert_eq!(
+		scheduled_tasks[2].confirmed_start.unwrap(),
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0)
+	);
+	assert_eq!(
+		scheduled_tasks[2].confirmed_deadline.unwrap(),
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0)
+	);
 }

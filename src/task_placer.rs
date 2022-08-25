@@ -57,7 +57,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 		}
 	}
 
-    //slides 12-20
+	//slides 12-20
 	while tasks.len() > 0 {
 		let mut task = tasks.remove(0);
 		'outer: for slot in task.get_slots() {

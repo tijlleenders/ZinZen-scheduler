@@ -4,8 +4,8 @@ import { assertEquals } from "https://deno.land/std@0.141.0/testing/asserts.ts";
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
     schedule({
-      "startDate": "2022-01-01",
-      "endDate": "2022-01-02",
+      "startDate": "2022-01-01T00:00:00",
+      "endDate": "2022-01-02T00:00:00",
       "goals": [
         {
           "id": 1,
@@ -30,47 +30,31 @@ Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-sche
         },
       ],
     }),
-    {
-      "tasks": [
-        {
-          "id": 0,
-          "goal_id": 1,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-        {
-          "id": 1,
-          "goal_id": 2,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-        {
-          "id": 2,
-          "goal_id": 3,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-      ],
-      "slots": [
-        {
-          "task_id": 0,
-          "start": 11,
-          "end": 12,
-        },
-        {
-          "task_id": 1,
-          "start": 10,
-          "end": 11,
-        },
-        {
-          "task_id": 2,
-          "start": 13,
-          "end": 14,
-        },
-      ],
-    },
+    [
+      {
+        "taskid": 20,
+        "goalid": 2,
+        "title": "dentist",
+        "duration": 1,
+        "start": "2022-01-01T10:00:00",
+        "deadline": "2022-01-01T11:00:00",
+      },
+      {
+        "taskid": 30,
+        "goalid": 3,
+        "title": "exercise",
+        "duration": 1,
+        "start": "2022-01-01T13:00:00",
+        "deadline": "2022-01-01T14:00:00",
+      },
+      {
+        "taskid": 10,
+        "goalid": 1,
+        "title": "shopping",
+        "duration": 1,
+        "start": "2022-01-01T11:00:00",
+        "deadline": "2022-01-01T12:00:00",
+      },
+    ],
   );
 });
