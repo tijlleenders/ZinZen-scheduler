@@ -34,22 +34,11 @@ pub fn schedule(input: JsValue) -> Result<JsValue, JsError> {
 	// JsError implements From<Error>, so we can just use `?` on any Error
 	let input:Input = input.into_serde()?;
 
-/*
-	// Generates a task and slots list from the provided parameters
-	let placer = task_generator(input);
-	let result = match placer.task_placer() {
-		Ok(res) => res,
-		// How tedious, these error types are somehow incomaptible
-		Err(err) => return Err(JsError::new(&err.to_string())),
-	};
-
-	Ok(JsValue::from_serde(&result)?)
-*/
     let calendar_start = input.calendar_start;
     let calendar_end = input.calendar_end;
-    let mut tasks = task_generator(input);
-    task_placer(&mut tasks,calendar_start,calendar_end);
-    let output = output_formatter(tasks).unwrap();
+    let tasks = task_generator(input);
+    let scheduled_tasks = task_placer(tasks,calendar_start,calendar_end);
+    let output = output_formatter(scheduled_tasks).unwrap();
     Ok(JsValue::from_serde(&output)?)
 
 }

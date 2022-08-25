@@ -24,8 +24,8 @@ pub fn output_formatter(tasks: Vec<Task>) -> Result<Vec<Output>> {
             goalid: task.goal_id,
             title: task.title,
             duration: task.duration,
-            start: task.slots[0].0,
-            deadline: task.slots[task.slots.len()-1].1,
+            start: task.confirmed_start.unwrap(),
+            deadline: task.confirmed_deadline.unwrap(),
         };
         outputs.push(output);
     }
