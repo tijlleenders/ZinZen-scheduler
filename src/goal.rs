@@ -78,7 +78,7 @@ impl Goal {
 					end: self.deadline.unwrap_or(calendar_end),
 					interval: Some(Duration::from(rep)),
 				};
-                let mut i = 0;
+				let mut i = 0;
 				for _ in date_range {
 					let task_id = format!("{}{}", self.id, i);
 					let t = Task::new(
@@ -90,7 +90,7 @@ impl Goal {
 						self.deadline.unwrap(),
 					);
 					tasks.push(t);
-                    i = i + 1;
+					i = i + 1;
 				}
 			}
 			None => {
