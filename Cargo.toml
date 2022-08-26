@@ -11,7 +11,8 @@ readme = "README.md"
 categories = ["algorithms", "date-and-time", "wasm"]
 
 [lib]
-crate-type = ['cdylib']
+#see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095
+crate-type = ['cdylib','lib']
 name = 'scheduler'
 
 [profile.release]
