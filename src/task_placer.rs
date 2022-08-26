@@ -24,20 +24,21 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 	for task in tasks.iter_mut() {
 		'inner: for i in 0..time_slots.len() {
 			if time_slots[i].0 >= task.start {
-				for _ in 0..task.duration {
-					task.slots.push(time_slots[i]);
-					task.calculate_flexibility();
+				for j in 0..((task.deadline-task.start).num_hours() as usize) {
+					task.slots.push(time_slots[i+j]);
 				}
+				task.calculate_flexibility();
 				break 'inner;
 			}
 		}
 	}
 
+	tasks.sort();
+	tasks.reverse();
 	let mut scheduled_tasks = Vec::new();
 
-	//slide 9
+    //slide 9
 	//TODO: need to make this more concise
-	tasks.reverse();
 	let last_index = tasks.len() - 1;
 	if tasks[last_index].flexibility == 1 {
 		let mut task = tasks.remove(last_index);
