@@ -2,19 +2,20 @@ use wasm_bindgen::prelude::*;
 
 pub use goal::{Goal, Repetition};
 pub use input::Input;
+pub use output_formatter::{Output, output_formatter};
 
 /// API modules
 mod goal;
-mod input;
-mod output_formatter;
+pub mod input;
+pub mod output_formatter;
 mod task;
 mod task_generator;
 mod task_placer;
 mod util;
 
-// Tests
+// Test
 #[cfg(test)]
-mod tests;
+mod unit_tests;
 
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
@@ -40,4 +41,16 @@ pub fn schedule(input: JsValue) -> Result<JsValue, JsError> {
 	let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
 	let output = output_formatter(scheduled_tasks).unwrap();
 	Ok(JsValue::from_serde(&output)?)
+}
+
+pub fn run_scheduler(input: Input) -> Vec<Output> {
+    use output_formatter::*;
+	use task_generator::task_generator;
+	use task_placer::*;
+    let calendar_start = input.calendar_start;
+	let calendar_end = input.calendar_end;
+	let tasks = task_generator(input);
+	let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
+	let output = output_formatter(scheduled_tasks).unwrap();
+    output
 }
