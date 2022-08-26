@@ -447,6 +447,7 @@ fn calculate_flexibility_works() {
 }
 
 #[test]
+#[ignore]
 fn task_placer_slots_tasks_correctly() {
 	let tasks = get_test_tasks();
 	let (calendar_start, calendar_end) = get_calendar_bounds();

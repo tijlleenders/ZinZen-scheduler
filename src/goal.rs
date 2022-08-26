@@ -1,10 +1,10 @@
-use std::option::Option;
 use crate::task::Task;
 use crate::task_generator::DateRange;
 use chrono::prelude::*;
 use chrono::Duration;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
+use std::option::Option;
 
 /// How often can a task repeat
 #[derive(Deserialize, Debug, Copy, Clone)]
@@ -78,24 +78,27 @@ impl Goal {
 					end: self.deadline.unwrap_or(calendar_end),
 					interval: Some(Duration::from(rep)),
 				};
-				for (index, (start, end)) in date_range.enumerate() {
-					let task_id = format!("{}{}", self.id, index);
+				let mut i = 0;
+				for _ in date_range {
+					let task_id = format!("{}{}", self.id, i);
 					let t = Task::new(
-                        task_id.parse::<usize>().unwrap(), 
-                        self.id, 
-                        self.title.clone(),
-                        self.duration, 
-                        start, 
-                        end);
+						task_id.parse::<usize>().unwrap(),
+						self.id,
+						self.title.clone(),
+						self.duration,
+						self.start.unwrap(),
+						self.deadline.unwrap(),
+					);
 					tasks.push(t);
+					i = i + 1;
 				}
-			},
+			}
 			None => {
 				let task_id = format!("{}{}", self.id, 0);
 				let t = Task::new(
 					task_id.parse::<usize>().unwrap(),
 					self.id,
-                    self.title,
+					self.title,
 					self.duration,
 					self.start.unwrap_or(calendar_start),
 					self.deadline.unwrap_or(calendar_end),
