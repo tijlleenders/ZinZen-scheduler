@@ -7,7 +7,7 @@
 
 use crate::task::Task;
 use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
-use crate::task_generator::DateRange;
+use crate::date_range::DateRange;
 use chrono::{Duration, NaiveDateTime};
 
 //see the slides for an explanation of the algorithm https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
