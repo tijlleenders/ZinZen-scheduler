@@ -7,8 +7,8 @@ import {
 Deno.test("can duplicate with daily repetition", () => {
   assertEquals(
     schedule({
-      "startDate": "2022-01-01",
-      "endDate": "2022-01-04",
+      "startDate": "2022-01-01T00:00:00",
+      "endDate": "2022-01-04T00:00:00",
       "goals": [
         {
           "id": 1,
@@ -18,115 +18,83 @@ Deno.test("can duplicate with daily repetition", () => {
         },
       ],
     }),
-    {
-      "tasks": [
-        {
-          "id": 0,
-          "goal_id": 1,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-        {
-          "id": 1,
-          "goal_id": 1,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-        {
-          "id": 2,
-          "goal_id": 1,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-      ],
-      "slots": [
-        {
-          "task_id": 0,
-          "start": 0,
-          "end": 1,
-        },
-        {
-          "task_id": 1,
-          "start": 24,
-          "end": 25,
-        },
-        {
-          "task_id": 2,
-          "start": 48,
-          "end": 49,
-        },
-      ],
-    },
+     [
+      {
+        "taskid": 12,
+        "goalid": 1,
+        "title": "walk",
+        "duration": 1,
+        "start": "2022-01-03T00:00:00",
+        "deadline": "2022-01-03T01:00:00",
+      },
+      {
+        "taskid": 11,
+        "goalid": 1,
+        "title": "walk",
+        "duration": 1,
+        "start": "2022-01-02T00:00:00",
+        "deadline": "2022-01-02T01:00:00",
+      },
+      {
+        "taskid": 10,
+        "goalid": 1,
+        "title": "walk",
+        "duration": 1,
+        "start": "2022-01-01T00:00:00",
+        "deadline": "2022-01-01T01:00:00",
+      },
+     ] 
   );
 });
 
-Deno.test("daily repetition with non-midnight start and end", () => {
+/*Deno.test("daily repetition with daily bounds", () => {
   assertEquals(
     schedule({
-      "startDate": "2022-01-01",
-      "endDate": "2022-01-04",
+      "startDate": "2022-01-01T00:00:00",
+      "endDate": "2022-01-04T00:00:00",
       "goals": [
         {
           "id": 1,
           "title": "walk",
           "duration": 1,
           "repetition": "daily",
-          "start": "2022-01-01T10:12:34",
-          "deadline": "2022-01-03T23:12:34",
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T22:00:00",
         },
       ],
     }),
-    {
-      "tasks": [
-        {
-          "id": 0,
-          "goal_id": 1,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-        {
-          "id": 1,
-          "goal_id": 1,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-        {
-          "id": 2,
-          "goal_id": 1,
-          "duration_to_schedule": 0,
-          "duration_scheduled": 1,
-          "status": "SCHEDULED",
-        },
-      ],
-      "slots": [
-        {
-          "task_id": 0,
-          "start": 10,
-          "end": 11,
-        },
-        {
-          "task_id": 1,
-          "start": 24,
-          "end": 25,
-        },
-        {
-          "task_id": 2,
-          "start": 48,
-          "end": 49,
-        },
-      ],
-    },
+    [
+      {
+        "taskid": 12,
+        "goalid": 1,
+        "title": "walk",
+        "duration": 1,
+        "start": "2022-01-03T10:00:00",
+        "deadline": "2022-01-03T11:00:00",
+      },
+      {
+        "taskid": 11,
+        "goalid": 1,
+        "title": "walk",
+        "duration": 1,
+        "start": "2022-01-02T10:00:00",
+        "deadline": "2022-01-02T11:00:00",
+      },
+      {
+        "taskid": 10,
+        "goalid": 1,
+        "title": "walk",
+        "duration": 1,
+        "start": "2022-01-01T10:00:00",
+        "deadline": "2022-01-01T11:00:00",
+      },
+    ],
   );
-});
+});*/
 
 // TODO should check the error for this test, see issue #26,
 // if it is fixed please change this test to check the error
-Deno.test("invalid repetition", () => {
+Deno.test("invalid repetition",() => {
   assertThrows(
     () =>
       schedule({

@@ -1,5 +1,5 @@
 use crate::task::Task;
-use crate::task_generator::DateRange;
+use crate::date_range::DateRange;
 use chrono::prelude::*;
 use chrono::Duration;
 use chrono::NaiveDateTime;
@@ -72,27 +72,32 @@ impl Goal {
 	pub fn generate_tasks(self, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 		let mut tasks = Vec::new();
 		match self.repetition {
+            //If there is a repetion, split up the calendar_start - calendar_end by the repetition,
+            //and generate a task for each block. e.g. if the repetition is daily, a task will be
+            //generated for each day.
 			Some(rep) => {
 				let date_range = DateRange {
-					start: self.start.unwrap_or(calendar_start),
-					end: self.deadline.unwrap_or(calendar_end),
+					start: calendar_start,
+					end: calendar_end,
 					interval: Some(Duration::from(rep)),
 				};
 				let mut i = 0;
-				for _ in date_range {
+				for (start,deadline) in date_range {
 					let task_id = format!("{}{}", self.id, i);
 					let t = Task::new(
 						task_id.parse::<usize>().unwrap(),
 						self.id,
 						self.title.clone(),
 						self.duration,
-						self.start.unwrap(),
-						self.deadline.unwrap(),
+						start,
+						deadline,
 					);
 					tasks.push(t);
 					i = i + 1;
 				}
 			}
+            //If there is no repetition, the task's start and deadline are equivalent to the goal's
+            //start/deadline, or the calendar start/deadline if no goal start/deadline exists.
 			None => {
 				let task_id = format!("{}{}", self.id, 0);
 				let t = Task::new(

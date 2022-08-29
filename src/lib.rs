@@ -12,6 +12,7 @@ mod task;
 mod task_generator;
 mod task_placer;
 mod util;
+mod date_range;
 
 // Test
 #[cfg(test)]

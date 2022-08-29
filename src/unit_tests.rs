@@ -1,4 +1,4 @@
-use crate::{goal::*, input::*, output_formatter::*, task::TaskStatus::*, task::*, task_generator::*, task_placer::*};
+use crate::{goal::*, input::*, output_formatter::*, task::TaskStatus::*, task::*, task_generator::*, task_placer::*, date_range::*};
 use chrono::*;
 
 fn get_test_tasks() -> Vec<Task> {
@@ -447,7 +447,6 @@ fn calculate_flexibility_works() {
 }
 
 #[test]
-#[ignore]
 fn task_placer_slots_tasks_correctly() {
 	let tasks = get_test_tasks();
 	let (calendar_start, calendar_end) = get_calendar_bounds();
