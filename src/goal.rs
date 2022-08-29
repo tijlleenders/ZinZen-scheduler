@@ -82,15 +82,15 @@ impl Goal {
 					interval: Some(Duration::from(rep)),
 				};
 				let mut i = 0;
-				for _ in date_range {
+				for (start,deadline) in date_range {
 					let task_id = format!("{}{}", self.id, i);
 					let t = Task::new(
 						task_id.parse::<usize>().unwrap(),
 						self.id,
 						self.title.clone(),
 						self.duration,
-						self.start.unwrap(),
-						self.deadline.unwrap(),
+						start,
+						deadline,
 					);
 					tasks.push(t);
 					i = i + 1;
