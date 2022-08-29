@@ -1,0 +1,12 @@
+{
+  "startDate": "2022-01-01",
+  "endDate": "2022-01-04",
+  "goals": [
+    {
+      "id": 1,
+      "title": "walk",
+      "duration": 1,
+      "repetition": "daily"
+    }
+  ]
+}
