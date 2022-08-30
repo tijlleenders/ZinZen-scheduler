@@ -47,7 +47,7 @@ Deno.test("can duplicate with daily repetition", () => {
   );
 });
 
-/*Deno.test("daily repetition with daily bounds", () => {
+Deno.test("daily repetition with daily bounds", () => {
   assertEquals(
     schedule({
       "startDate": "2022-01-01T00:00:00",
@@ -58,8 +58,10 @@ Deno.test("can duplicate with daily repetition", () => {
           "title": "walk",
           "duration": 1,
           "repetition": "daily",
-          "start": "2022-01-01T10:00:00",
-          "deadline": "2022-01-01T22:00:00",
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-04T00:00:00",
+          "after_time": 10,
+          "before_time": 16
         },
       ],
     }),
@@ -90,7 +92,7 @@ Deno.test("can duplicate with daily repetition", () => {
       },
     ],
   );
-});*/
+});
 
 // TODO should check the error for this test, see issue #26,
 // if it is fixed please change this test to check the error

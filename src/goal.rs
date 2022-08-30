@@ -37,6 +37,10 @@ pub struct Goal {
 	/// Deadline for this Goal's Tasks
 	#[serde(default)]
 	pub deadline: Option<NaiveDateTime>,
+    #[serde(default)]
+    pub after_time: Option<usize>,
+    #[serde(default)]
+    pub before_time: Option<usize>,
 }
 
 //#[cfg(test)]
@@ -71,29 +75,27 @@ impl Goal {
 
 	pub fn generate_tasks(self, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 		let mut tasks = Vec::new();
+        //If there is a repetion in the goal, a different task will be generated for each day of the repetition.
 		match self.repetition {
-            //If there is a repetion, split up the calendar_start - calendar_end by the repetition,
-            //and generate a task for each block. e.g. if the repetition is daily, a task will be
-            //generated for each day.
 			Some(rep) => {
 				let date_range = DateRange {
-					start: calendar_start,
-					end: calendar_end,
+					start: self.start.unwrap_or(calendar_start),
+					end: self.deadline.unwrap_or(calendar_end),
 					interval: Some(Duration::from(rep)),
 				};
-				let mut i = 0;
+				let mut id = 0;
 				for (start,deadline) in date_range {
-					let task_id = format!("{}{}", self.id, i);
+					let task_id = format!("{}{}", self.id, id);
 					let t = Task::new(
 						task_id.parse::<usize>().unwrap(),
 						self.id,
 						self.title.clone(),
 						self.duration,
-						start,
-						deadline,
+                        if self.after_time.is_none() {start} else {start + Duration::hours(self.after_time.unwrap() as i64)}, 
+                        if self.before_time.is_none() {deadline} else {start + Duration::hours(self.before_time.unwrap() as i64)},
 					);
 					tasks.push(t);
-					i = i + 1;
+					id = id + 1;
 				}
 			}
             //If there is no repetition, the task's start and deadline are equivalent to the goal's
