@@ -2,7 +2,7 @@ use chrono::{Duration, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
-/// One or many created from a Goal by the preprocessor.
+/// One or many created from a Goal.
 /// To be scheduled in order by the scheduler.
 #[derive(Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct Task {
@@ -14,6 +14,8 @@ pub struct Task {
 	pub flexibility: usize,
 	pub start: NaiveDateTime,
 	pub deadline: NaiveDateTime,
+    pub after_time: usize,
+    pub before_time: usize,
 	pub slots: Vec<(NaiveDateTime, NaiveDateTime)>,
 	pub confirmed_start: Option<NaiveDateTime>,
 	pub confirmed_deadline: Option<NaiveDateTime>,
@@ -39,6 +41,8 @@ impl Task {
 		duration: usize,
 		start: NaiveDateTime,
 		deadline: NaiveDateTime,
+        after_time: usize,
+        before_time: usize,
 	) -> Self {
 		Self {
 			id,
@@ -49,15 +53,18 @@ impl Task {
 			flexibility: 0,
 			start,
 			deadline,
+            after_time,
+            before_time,
 			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
 		}
 	}
 
+    //TODO: The current way this is done may not be entirely accurate for tasks that can be done on
+    //multiple days within certain time bounds.
 	pub fn calculate_flexibility(&mut self) {
-		let duration_available = self.slots[self.slots.len() - 1].1 - self.slots[0].0;
-		let hours_available = duration_available.num_hours() as usize;
+        let hours_available = self.slots.len(); 
 		self.flexibility = hours_available - self.duration + 1;
 	}
 
