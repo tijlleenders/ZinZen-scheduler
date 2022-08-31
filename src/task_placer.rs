@@ -29,7 +29,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
            if (time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline) {
                if (time_slots[i].0.hour() >= task.after_time as u32) && (time_slots[i].1.hour() <= task.before_time as u32) {
                     if !task.slots.contains(&time_slots[i]){
-                        for j in 0..((task.before_time - task.after_time) as usize) {
+                        for j in 0..task.duration as usize {
                             task.slots.push(time_slots[i+j]);
                         }
                     }
