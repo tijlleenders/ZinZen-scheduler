@@ -10,8 +10,10 @@ fn get_test_tasks() -> Vec<Task> {
 			duration: 1,
 			status: TaskStatus::UNSCHEDULED,
 			flexibility: 0,
-			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-			deadline: NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
+			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
+			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
+            after_time: 10,
+            before_time: 11,
 			slots: vec![(
 				NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
 				NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
@@ -26,8 +28,10 @@ fn get_test_tasks() -> Vec<Task> {
 			duration: 1,
 			status: TaskStatus::UNSCHEDULED,
 			flexibility: 0,
-			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-			deadline: NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
+			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
+			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
+            after_time: 10,
+            before_time: 13, 
 			slots: vec![
 				(
 					NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
@@ -52,8 +56,10 @@ fn get_test_tasks() -> Vec<Task> {
 			duration: 1,
 			status: TaskStatus::UNSCHEDULED,
 			flexibility: 0,
-			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-			deadline: NaiveDate::from_ymd(2022, 1, 1).and_hms(18, 0, 0),
+			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
+			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
+            after_time: 10,
+            before_time: 18,
 			slots: vec![
 				(
 					NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
@@ -418,6 +424,8 @@ fn goal_generates_single_nonrepetitive_task() {
 			flexibility: 0,
 			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
 			deadline: NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
+            after_time: 0,
+            before_time: 24,
 			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,

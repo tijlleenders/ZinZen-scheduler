@@ -4,7 +4,6 @@ use scheduler::{Input, Output};
 use std::path::Path;
 
 #[test]
-#[ignore]
 fn basic_test_works() {
 	let input_path = Path::new("./js-tests/basic-test/input.json");
 	let output_path = Path::new("./js-tests/basic-test/output.json");

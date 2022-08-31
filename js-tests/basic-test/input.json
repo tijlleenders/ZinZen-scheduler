@@ -6,22 +6,28 @@
           "id": 1,
           "title": "shopping",
           "duration": 1,
-          "start": "2022-01-01T10:00:00",
-          "deadline": "2022-01-01T13:00:00"
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-02T00:00:00",
+          "after_time": 10,
+          "before_time": 13
         },
         {
           "id": 2,
           "title": "dentist",
           "duration": 1,
-          "start": "2022-01-01T10:00:00",
-          "deadline": "2022-01-01T11:00:00"
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-02T00:00:00",
+          "after_time": 10,
+          "before_time": 11
         },
         {
           "id": 3,
           "title": "exercise",
           "duration": 1,
-          "start": "2022-01-01T10:00:00",
-          "deadline": "2022-01-01T18:00:00"
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-02T00:00:00",
+          "after_time": 10,
+          "before_time": 18
         }
     ]
 }

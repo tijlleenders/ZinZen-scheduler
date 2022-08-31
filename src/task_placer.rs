@@ -8,11 +8,11 @@
 use crate::task::Task;
 use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
 use crate::date_range::DateRange;
-use chrono::{Duration, NaiveDateTime};
+use chrono::{Duration, NaiveDateTime, Timelike};
 
 //see the slides for an explanation of the algorithm https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
-	//slide 1
+	//slide 1 (generate all time slots based on calendar dates)
 	let date_range = DateRange {
 		start: calendar_start,
 		end: calendar_end,
@@ -20,24 +20,31 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 	};
 	let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = date_range.collect();
 
-	//slides 2 - 7
-	for task in tasks.iter_mut() {
-		'inner: for i in 0..time_slots.len() {
-			if time_slots[i].0 >= task.start {
-				for j in 0..((task.deadline-task.start).num_hours() as usize) {
-					task.slots.push(time_slots[i+j]);
-				}
-				task.calculate_flexibility();
-				break 'inner;
-			}
-		}
-	}
+	//slides 2 - 7 (assign slots to tasks)
+    for task in tasks.iter_mut() {
+        for i in 0..time_slots.len() {
+           //check if the time_slot is 1) within the start and deadline dates of the task, 2)
+           //within the after_time and before_time of the task, and 3) the task doesn't already
+           //contain the slot
+           if (time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline) {
+               if (time_slots[i].0.hour() >= task.after_time as u32) && (time_slots[i].1.hour() <= task.before_time as u32) {
+                    if !task.slots.contains(&time_slots[i]){
+                        for j in 0..((task.before_time - task.after_time) as usize) {
+                            task.slots.push(time_slots[i+j]);
+                        }
+                    }
+               }
+           }
+        }
+        task.calculate_flexibility();
+    }
+
 
 	tasks.sort();
 	tasks.reverse();
 	let mut scheduled_tasks = Vec::new();
 
-    //slide 9
+    //slide 9 (assign slot(s) to task with flexibilityof 1)
 	//TODO: need to make this more concise
 	let last_index = tasks.len() - 1;
 	if tasks[last_index].flexibility == 1 {
@@ -48,7 +55,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 		task.set_confirmed_deadline(deadline);
 		task.status = SCHEDULED;
 		scheduled_tasks.push(task);
-		//slide 10:
+		//slide 10 (remove the assigned slot from other tasks' slot lists)
 		for task in &mut tasks {
 			for i in 0..my_slots.len() {
 				if task.slots.contains(&my_slots[i]) {
@@ -58,7 +65,8 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 		}
 	}
 
-	//slides 12-20
+	//slides 12-20 (attempt to schedule the other tasks without conflicting with other tasks'
+    //slots)
 	while tasks.len() > 0 {
 		let mut task = tasks.remove(0);
 		'outer: for slot in task.get_slots() {

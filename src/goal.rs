@@ -1,6 +1,5 @@
 use crate::task::Task;
 use crate::date_range::DateRange;
-use chrono::prelude::*;
 use chrono::Duration;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
@@ -21,7 +20,6 @@ impl From<Repetition> for Duration {
 	}
 }
 
-/// A [Goal] is what one wants to do, it is used in conjunction with a span of time to generate a [Schedule]
 #[derive(Deserialize, Debug, Default)]
 pub struct Goal {
 	/// Every goal has a unique ID
@@ -37,8 +35,10 @@ pub struct Goal {
 	/// Deadline for this Goal's Tasks
 	#[serde(default)]
 	pub deadline: Option<NaiveDateTime>,
+    /// Time of day after which activity should be done
     #[serde(default)]
     pub after_time: Option<usize>,
+    /// Time of day before which activity should be done
     #[serde(default)]
     pub before_time: Option<usize>,
 }
@@ -73,6 +73,16 @@ impl Goal {
 		self
 	}
 
+    pub fn after_time(mut self, after_time: usize) -> Self {
+        self.after_time = Some(after_time);
+        self
+    }
+
+    pub fn before_time(mut self, before_time: usize) -> Self {
+        self.before_time = Some(before_time);
+        self
+    }
+
 	pub fn generate_tasks(self, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 		let mut tasks = Vec::new();
         //If there is a repetion in the goal, a different task will be generated for each day of the repetition.
@@ -91,15 +101,17 @@ impl Goal {
 						self.id,
 						self.title.clone(),
 						self.duration,
-                        if self.after_time.is_none() {start} else {start + Duration::hours(self.after_time.unwrap() as i64)}, 
-                        if self.before_time.is_none() {deadline} else {start + Duration::hours(self.before_time.unwrap() as i64)},
+                        start,
+                        deadline,
+                        self.after_time.unwrap_or(0), 
+                        self.before_time.unwrap_or(24),
 					);
 					tasks.push(t);
 					id = id + 1;
 				}
 			}
             //If there is no repetition, the task's start and deadline are equivalent to the goal's
-            //start/deadline, or the calendar start/deadline if no goal start/deadline exists.
+            //start/deadline.
 			None => {
 				let task_id = format!("{}{}", self.id, 0);
 				let t = Task::new(
@@ -109,6 +121,8 @@ impl Goal {
 					self.duration,
 					self.start.unwrap_or(calendar_start),
 					self.deadline.unwrap_or(calendar_end),
+                    self.after_time.unwrap_or(0),
+                    self.before_time.unwrap_or(24),
 				);
 				tasks.push(t);
 			}
