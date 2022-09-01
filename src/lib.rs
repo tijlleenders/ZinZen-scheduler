@@ -1,8 +1,9 @@
 use wasm_bindgen::prelude::*;
 
-pub use goal::{Goal, Repetition};
+pub use goal::Goal;
 pub use input::Input;
 pub use output_formatter::{Output, output_formatter};
+pub use time_slice_iterator::Repetition;
 
 /// API modules
 mod goal;
@@ -12,7 +13,7 @@ mod task;
 mod task_generator;
 mod task_placer;
 mod util;
-mod date_range;
+mod time_slice_iterator;
 
 // Test
 #[cfg(test)]

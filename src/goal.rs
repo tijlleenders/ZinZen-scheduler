@@ -1,44 +1,29 @@
 use crate::task::Task;
-use crate::date_range::DateRange;
+use crate::time_slice_iterator::{TimeSliceIterator, Repetition};
 use chrono::Duration;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 use std::option::Option;
 
-/// How often can a task repeat
-#[derive(Deserialize, Debug, Copy, Clone)]
-pub enum Repetition {
-	#[serde(rename = "daily")]
-	DAILY,
-}
 
-impl From<Repetition> for Duration {
-	fn from(a: Repetition) -> Self {
-		match a {
-			Repetition::DAILY => Duration::days(1),
-		}
-	}
-}
 
 #[derive(Deserialize, Debug, Default)]
 pub struct Goal {
-	/// Every goal has a unique ID
 	pub id: usize,
-	/// A goal's description
 	pub title: String,
 	/// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
 	pub duration: usize,
 	pub repetition: Option<Repetition>,
-	/// Earliest start datetime for this Goal's Tasks
+	/// start date bound for this Goal's Tasks
 	#[serde(default)]
 	pub start: Option<NaiveDateTime>,
-	/// Deadline for this Goal's Tasks
+	/// deadline date bound for this Goal's Tasks
 	#[serde(default)]
 	pub deadline: Option<NaiveDateTime>,
-    /// Time of day after which activity should be done
+    /// start time bound after which activity should be done
     #[serde(default)]
     pub after_time: Option<usize>,
-    /// Time of day before which activity should be done
+    /// deadline time bound before which activity should be done
     #[serde(default)]
     pub before_time: Option<usize>,
 }
@@ -86,15 +71,17 @@ impl Goal {
 	pub fn generate_tasks(self, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 		let mut tasks = Vec::new();
         //If there is a repetion in the goal, a different task will be generated for each day of the repetition.
+        //e.g. if the repetition is DAILY, a different task will be generated for each day.
+        //e.g. if the repetition is MONDAYS, a different task will be generated for each monday.
 		match self.repetition {
 			Some(rep) => {
-				let date_range = DateRange {
+				let time_slices = TimeSliceIterator {
 					start: self.start.unwrap_or(calendar_start),
 					end: self.deadline.unwrap_or(calendar_end),
-					interval: Some(Duration::from(rep)),
+					repetition: rep,
 				};
 				let mut id = 0;
-				for (start,deadline) in date_range {
+				for (start,deadline) in time_slices {
 					let task_id = format!("{}{}", self.id, id);
 					let t = Task::new(
 						task_id.parse::<usize>().unwrap(),
