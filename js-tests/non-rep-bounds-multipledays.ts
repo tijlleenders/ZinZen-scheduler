@@ -1,7 +1,7 @@
 import { schedule } from "../js-api/scheduler.js";
 import { assertEquals } from "https://deno.land/std@0.141.0/testing/asserts.ts";
 
-Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
+Deno.test("non repetitive spanning multiple days with time bound", () => {
   assertEquals(
     schedule({
         "startDate": "2022-01-01T00:00:00",
