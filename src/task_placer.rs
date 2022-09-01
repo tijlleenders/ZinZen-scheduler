@@ -7,18 +7,18 @@
 
 use crate::task::Task;
 use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
-use crate::date_range::DateRange;
+use crate::time_slice_iterator::{TimeSliceIterator, Repetition};
 use chrono::{Duration, NaiveDateTime, Timelike};
 
 //see the slides for an explanation of the algorithm https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 	//slide 1 (generate all time slots based on calendar dates)
-	let date_range = DateRange {
+	let time_slice_iterator = TimeSliceIterator {
 		start: calendar_start,
 		end: calendar_end,
-		interval: Some(Duration::hours(1)),
+		repetition: Repetition::HOURLY,
 	};
-	let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = date_range.collect();
+	let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = time_slice_iterator.collect();
 
 	//slides 2 - 7 (assign slots to tasks)
     for task in tasks.iter_mut() {
