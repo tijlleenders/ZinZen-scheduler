@@ -69,17 +69,20 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
     //slots)
 	while tasks.len() > 0 {
 		let mut task = tasks.remove(0);
-		'outer: for slot in task.get_slots() {
+		'outer: for (index,slot) in task.get_slots().iter().enumerate() {
+            let my_slots = task.get_slots();
+            let desired_first_slot = my_slots.get(index).unwrap();
+            let desired_last_slot = my_slots.get(index + task.duration - 1).unwrap();
 			for other_task in tasks.iter() {
 				if other_task.status == SCHEDULED {
 					continue;
 				}
-				if other_task.slots.contains(&slot) {
+				if other_task.slots.contains(&desired_first_slot) || other_task.slots.contains(&desired_last_slot) {
 					continue 'outer;
 				}
 			}
-			task.set_confirmed_start(slot.0);
-			task.set_confirmed_deadline(slot.1);
+			task.set_confirmed_start(desired_first_slot.0);
+			task.set_confirmed_deadline(desired_last_slot.1);
 			task.status = SCHEDULED;
 			scheduled_tasks.push(task);
 			break;

@@ -10,12 +10,19 @@ pub enum Repetition {
 	#[serde(rename = "daily")]
 	DAILY,
     HOURLY,
+    #[serde(rename = "mondays")]
     MONDAYS,
+    #[serde(rename = "tuesdays")]
     TUESDAYS,
+    #[serde(rename = "wednesdays")]
     WEDNESDAYS,
+    #[serde(rename = "thursdays")]
     THURSDAYS,
+    #[serde(rename = "fridays")]
     FRIDAYS,
+    #[serde(rename = "saturdays")]
     SATURDAYS,
+    #[serde(rename = "sundays")]
     SUNDAYS,
 }
 
@@ -32,7 +39,7 @@ impl fmt::Display for Repetition {
             Repetition::MONDAYS => "Mon",
             Repetition::TUESDAYS => "Tue",
             Repetition::WEDNESDAYS => "Wed",
-            Repetition::THURSDAYS => "Thur",
+            Repetition::THURSDAYS => "Thu",
             Repetition::FRIDAYS => "Fri",
             Repetition::SATURDAYS => "Sat",
             Repetition::SUNDAYS => "Sun",
