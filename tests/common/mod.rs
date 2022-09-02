@@ -18,5 +18,5 @@ pub fn get_output_string_from_json<P: AsRef<Path>>(path: P) -> Result<String, se
     let file = File::open(path).expect("Error reading file");
     let reader = BufReader::new(file);
     let output: Vec<Output> = serde_json::from_reader(reader)?;
-    serde_json::to_string(&output)
+    serde_json::to_string_pretty(&output)
 }

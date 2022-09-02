@@ -2,6 +2,8 @@ extern crate scheduler;
 mod common;
 use scheduler::{Input, Output};
 use std::path::Path;
+#[cfg(test)]
+use pretty_assertions::assert_eq;
 
 
 fn run_test(directory: &str) -> (String,String) {
@@ -13,7 +15,7 @@ fn run_test(directory: &str) -> (String,String) {
 	let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
 	let output: Vec<Output> = scheduler::run_scheduler(input);
 
-    (serde_json::to_string(&output).unwrap(),desired_output)
+    (serde_json::to_string_pretty(&output).unwrap(),desired_output)
 }
 
 #[test]
@@ -43,5 +45,11 @@ fn non_repetitive_bounds_multipledays_works() {
 #[test]
 fn single_day_many_goals_works() {
     let (actual_output, desired_output) = run_test("singleday-manygoals");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_wednesday_works() {
+    let (actual_output, desired_output) = run_test("every-wednesday");
     assert_eq!(actual_output, desired_output);
 }
