@@ -34,3 +34,6 @@ wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"] }
 
 # display Rust panics as console.error()
 console_error_panic_hook = "0.1.7"
+
+[dev-dependencies]
+pretty_assertions = "1.3.0"

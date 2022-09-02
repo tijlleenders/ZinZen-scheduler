@@ -1,0 +1,14 @@
+{
+  "startDate": "2022-09-01T00:00:00",
+  "endDate": "2022-10-01T00:00:00",
+  "goals": [
+    {
+      "id": 1,
+      "title": "piano practice",
+      "duration": 2,
+      "repetition": "wednesdays",
+      "after_time": 12,
+      "before_time": 14
+    }
+  ]
+}

@@ -110,7 +110,7 @@ Deno.test("single day many goals", () => {
             "title": "meeting",
             "duration": 2,
             "start": "2022-01-01T13:00:00",
-            "deadline": "2022-01-01T14:00:00"
+            "deadline": "2022-01-01T15:00:00"
           },
           {
             "taskid": 50,
@@ -118,7 +118,7 @@ Deno.test("single day many goals", () => {
             "title": "cook",
             "duration": 2,
             "start": "2022-01-01T18:00:00",
-            "deadline": "2022-01-01T19:00:00"
+            "deadline": "2022-01-01T20:00:00"
           },
           {
             "taskid": 10,
