@@ -39,31 +39,30 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
         task.calculate_flexibility();
     }
 
-
 	tasks.sort();
 	tasks.reverse();
 	let mut scheduled_tasks = Vec::new();
 
     //slide 9 (assign slot(s) to task with flexibilityof 1)
 	//TODO: need to make this more concise
-	let last_index = tasks.len() - 1;
-	if tasks[last_index].flexibility == 1 {
-		let mut task = tasks.remove(last_index);
-		let my_slots = task.get_slots();
-		task.set_confirmed_start(my_slots[0].0);
-		let deadline = my_slots[my_slots.len() - 1].1;
-		task.set_confirmed_deadline(deadline);
-		task.status = SCHEDULED;
-		scheduled_tasks.push(task);
-		//slide 10 (remove the assigned slot from other tasks' slot lists)
-		for task in &mut tasks {
-			for i in 0..my_slots.len() {
-				if task.slots.contains(&my_slots[i]) {
-					task.remove_slot(&my_slots[i]);
-				}
-			}
-		}
-	}
+    for index in 0..tasks.len() {
+        if tasks[index].flexibility == 1 {
+            let my_slots = tasks[index].get_slots();
+            tasks[index].set_confirmed_start(my_slots[0].0);
+            let deadline = my_slots[my_slots.len() - 1].1;
+            tasks[index].set_confirmed_deadline(deadline);
+            tasks[index].status = SCHEDULED;
+            scheduled_tasks.push(tasks[index].clone());
+            //slide 10 (remove the assigned slot from other tasks' slot lists)
+            for task in &mut tasks {
+                for i in 0..my_slots.len() {
+                    if task.slots.contains(&my_slots[i]) {
+                        task.remove_slot(&my_slots[i]);
+                    }
+                }
+            }
+        }
+    }
 
 	//slides 12-20 (attempt to schedule the other tasks without conflicting with other tasks'
     //slots)
