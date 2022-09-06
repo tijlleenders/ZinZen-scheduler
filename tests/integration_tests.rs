@@ -5,7 +5,6 @@ use std::path::Path;
 #[cfg(test)]
 use pretty_assertions::assert_eq;
 
-
 fn run_test(directory: &str) -> (String,String) {
     let i = format!("./js-tests/{}/input.json",directory);
     let o = format!("./js-tests/{}/output.json",directory);
@@ -51,5 +50,11 @@ fn single_day_many_goals_works() {
 #[test]
 fn every_wednesday_works() {
     let (actual_output, desired_output) = run_test("every-wednesday");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn realistic_schedule_works() {
+    let (actual_output, desired_output) = run_test("realistic-schedule");
     assert_eq!(actual_output, desired_output);
 }
