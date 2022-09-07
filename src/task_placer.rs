@@ -1,16 +1,14 @@
-//! The core-scheduler focusses on scheduling. It is referred to as 'core' to avoid confusion
-//! with the scheduler (which is pre-processor + core).
-//! It takes a flat list of tasks with 0-* corresponding time-constrained slots.
-//! For each tasks it decides which of the possible positions within the corresponding slots is best.
+//! The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
+//! task a confirmed start and deadline.
 //! The scheduler optimizes for the minimum amount of IMPOSSIBLE tasks.
 //! https://github.com/tijlleenders/ZinZen-scheduler/wiki/Core
+//For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use crate::task::Task;
 use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
 use crate::time_slice_iterator::{TimeSliceIterator, Repetition};
 use chrono::{Duration, NaiveDateTime, Timelike};
 
-//see the slides for an explanation of the algorithm https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 	//slide 1 (generate all time slots based on calendar dates)
 	let time_slice_iterator = TimeSliceIterator {
@@ -29,7 +27,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
            if (time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline) {
                if (time_slots[i].0.hour() >= task.after_time as u32) && (time_slots[i].1.hour() <= task.before_time as u32) {
                     if !task.slots.contains(&time_slots[i]){
-                        for j in 0..task.duration as usize {
+                        for j in 0..(task.before_time-task.after_time) as usize {
                             task.slots.push(time_slots[i+j]);
                         }
                     }
@@ -52,6 +50,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
             let deadline = my_slots[my_slots.len() - 1].1;
             tasks[index].set_confirmed_deadline(deadline);
             tasks[index].status = SCHEDULED;
+            println!("Scheduled {}",tasks[index].title);
             scheduled_tasks.push(tasks[index].clone());
             //slide 10 (remove the assigned slot from other tasks' slot lists)
             for task in &mut tasks {
