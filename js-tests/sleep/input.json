@@ -1,0 +1,14 @@
+{
+      "startDate": "2022-01-01T00:00:00",
+      "endDate": "2022-01-09T00:00:00",
+      "goals": [
+        {
+          "id": 1,
+          "title": "sleep",
+          "duration": 8,
+          "repetition": "daily",
+          "after_time": 22,
+          "before_time": 6 
+        }
+      ]
+}
