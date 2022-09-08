@@ -5,11 +5,11 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use crate::task::Task;
-use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
+use crate::task::TaskStatus::SCHEDULED;
 use crate::time_slice_iterator::{Repetition, TimeSliceIterator};
-use chrono::{Duration, NaiveDateTime, Timelike};
+use chrono::{NaiveDateTime, Timelike};
 
-pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
+pub fn task_placer(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 	//slide 1 (generate all time slots based on calendar dates)
 	let time_slice_iterator = TimeSliceIterator {
 		start: calendar_start,
@@ -30,12 +30,12 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 					for _ in 0..(get_num_slots(task)) as usize {
 						if i < time_slots.len() {
 							task.slots.push(time_slots[i]);
-							i = i + 1;
+							i += 1;
 						}
 					}
 					//skip to midnight so as not to add more slots on the same day
 					while time_slots[i - 1].1.hour() != 0 {
-						i = i + 1;
+						i += 1;
 						if i == time_slots.len() {
 							break;
 						}
@@ -48,7 +48,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 					continue;
 				}
 			}
-			i = i + 1;
+			i += 1;
 		}
 		task.calculate_flexibility();
 	}
@@ -68,9 +68,9 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 			scheduled_tasks.push(tasks[index].clone());
 			//slide 10 (remove the assigned slot from other tasks' slot lists)
 			for task in &mut tasks {
-				for i in 0..my_slots.len() {
-					if task.slots.contains(&my_slots[i]) {
-						task.remove_slot(&my_slots[i]);
+                for slot in &my_slots {
+					if task.slots.contains(slot) {
+						task.remove_slot(slot);
 					}
 				}
 			}
@@ -79,7 +79,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 
 	//slides 12-20 (attempt to schedule the other tasks without conflicting with other tasks'
 	//slots)
-	while tasks.len() > 0 {
+	while !tasks.is_empty() {
 		let mut task = tasks.remove(0);
 		'outer: for (index, _) in task.get_slots().iter().enumerate() {
 			let my_slots = task.get_slots();
@@ -89,7 +89,7 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 				if other_task.status == SCHEDULED {
 					continue;
 				}
-				if other_task.slots.contains(&desired_first_slot) || other_task.slots.contains(&desired_last_slot) {
+				if other_task.slots.contains(desired_first_slot) || other_task.slots.contains(desired_last_slot) {
 					continue 'outer;
 				}
 			}
