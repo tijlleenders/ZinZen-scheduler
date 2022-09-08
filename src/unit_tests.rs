@@ -14,10 +14,7 @@ fn get_test_tasks() -> Vec<Task> {
 			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
             after_time: 10,
             before_time: 11,
-			slots: vec![(
-				NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-				NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-			)],
+            slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
 		},
@@ -32,20 +29,7 @@ fn get_test_tasks() -> Vec<Task> {
 			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
             after_time: 10,
             before_time: 13, 
-			slots: vec![
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
-				),
-			],
+            slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
 		},
@@ -60,40 +44,7 @@ fn get_test_tasks() -> Vec<Task> {
 			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
             after_time: 10,
             before_time: 18,
-			slots: vec![
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(15, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(15, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(16, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(16, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(17, 0, 0),
-				),
-				(
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(17, 0, 0),
-					NaiveDate::from_ymd(2022, 1, 1).and_hms(18, 0, 0),
-				),
-			],
+			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
 		},
