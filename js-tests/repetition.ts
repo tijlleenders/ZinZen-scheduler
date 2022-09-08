@@ -3,6 +3,8 @@ import {
   assertEquals,
   assertThrows,
 } from "https://deno.land/std@0.141.0/testing/asserts.ts";
+import input from "./repetition-daily/input.json" assert {type: "json"};
+import output from "./repetition-daily/output.json" assert {type: "json"};
 
 Deno.test("can duplicate with daily repetition", () => {
   assertEquals(
