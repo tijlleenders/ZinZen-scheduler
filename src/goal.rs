@@ -78,26 +78,15 @@ impl Goal {
 					end: self.deadline.unwrap_or(calendar_end),
 					repetition: rep,
 				};
-				let mut id = 0;
-				for (start, deadline) in time_slices {
+				for (id, (start, deadline)) in time_slices.enumerate() {
 					let task_id = format!("{}{}", self.id, id);
 					let deadline = if self.before_time.unwrap_or(24) < self.after_time.unwrap_or(0) {
 						deadline + Duration::days(1)
 					} else {
 						deadline
 					};
-					let t = Task::new(
-						task_id.parse::<usize>().unwrap(),
-						self.id,
-						self.title.clone(),
-						self.duration,
-						start,
-						deadline,
-						self.after_time.unwrap_or(0),
-						self.before_time.unwrap_or(24),
-					);
+					let t = Task::new(task_id.parse::<usize>().unwrap(), start, deadline, &self);
 					tasks.push(t);
-					id = id + 1;
 				}
 			}
 			//If there is no repetition, the task's start and deadline are equivalent to the goal's
@@ -106,13 +95,9 @@ impl Goal {
 				let task_id = format!("{}{}", self.id, 0);
 				let t = Task::new(
 					task_id.parse::<usize>().unwrap(),
-					self.id,
-					self.title,
-					self.duration,
 					self.start.unwrap_or(calendar_start),
-					self.deadline.unwrap_or(calendar_end),
-					self.after_time.unwrap_or(0),
-					self.before_time.unwrap_or(24),
+					self.deadline.unwrap_or(calendar_start),
+					&self,
 				);
 				tasks.push(t);
 			}

@@ -94,7 +94,7 @@ impl Iterator for TimeSliceIterator {
            },
            _ => {
                 while self.start.weekday().to_string() != self.repetition.to_string() && (self.start < self.end) {
-                    self.start = self.start + Duration::days(1);
+                    self.start += Duration::days(1);
                 }
                 if self.start.weekday().to_string() == self.repetition.to_string() {
                     let start = self.start;
