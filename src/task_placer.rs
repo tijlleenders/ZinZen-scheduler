@@ -1,7 +1,6 @@
 //! The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 //! task a confirmed start and deadline.
 //! The scheduler optimizes for the minimum amount of IMPOSSIBLE tasks.
-//! https://github.com/tijlleenders/ZinZen-scheduler/wiki/Core
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use crate::task::Task;
@@ -19,7 +18,7 @@ pub fn task_placer(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar
 	let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = time_slice_iterator.collect();
 
 	//slides 2 - 7 (assign slots to tasks)
-	for task in tasks.iter_mut() {
+	for task in &mut tasks {
 		let mut i = 0;
 		while i < time_slots.len() {
 			//check if the time_slot is:
@@ -62,8 +61,7 @@ pub fn task_placer(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar
 		if tasks[index].flexibility == 1 {
 			let my_slots = tasks[index].get_slots();
 			tasks[index].set_confirmed_start(my_slots[0].0);
-			let deadline = my_slots[my_slots.len() - 1].1;
-			tasks[index].set_confirmed_deadline(deadline);
+			tasks[index].set_confirmed_deadline(my_slots[my_slots.len() - 1].1);
 			tasks[index].status = SCHEDULED;
 			scheduled_tasks.push(tasks[index].clone());
 			//slide 10 (remove the assigned slot from other tasks' slot lists)
@@ -85,7 +83,7 @@ pub fn task_placer(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar
 			let my_slots = task.get_slots();
 			let desired_first_slot = my_slots.get(index).unwrap();
 			let desired_last_slot = my_slots.get(index + task.duration - 1).unwrap();
-			for other_task in tasks.iter() {
+			for other_task in &tasks {
 				if other_task.status == SCHEDULED {
 					continue;
 				}

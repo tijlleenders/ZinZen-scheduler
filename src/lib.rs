@@ -30,7 +30,7 @@ interface Input {
 
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
 #[wasm_bindgen]
-pub fn schedule(input: JsValue) -> Result<JsValue, JsError> {
+pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 	use output_formatter::*;
 	use task_generator::task_generator;
 	use task_placer::*;
@@ -53,6 +53,5 @@ pub fn run_scheduler(input: Input) -> Vec<Output> {
 	let calendar_end = input.calendar_end;
 	let tasks = task_generator(input);
 	let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
-	let output = output_formatter(scheduled_tasks).unwrap();
-    output
+	output_formatter(scheduled_tasks).unwrap()
 }
