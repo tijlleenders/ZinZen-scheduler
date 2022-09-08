@@ -1,4 +1,7 @@
-use crate::{goal::*, input::*, output_formatter::*, task::TaskStatus::*, task::*, task_generator::*, task_placer::*, time_slice_iterator::*};
+use crate::{
+	goal::*, input::*, output_formatter::*, task::TaskStatus::*, task::*, task_generator::*, task_placer::*,
+	time_slice_iterator::*,
+};
 use chrono::*;
 
 fn get_test_tasks() -> Vec<Task> {
@@ -12,9 +15,9 @@ fn get_test_tasks() -> Vec<Task> {
 			flexibility: 0,
 			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
 			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
-            after_time: 10,
-            before_time: 11,
-            slots: Vec::new(),
+			after_time: 10,
+			before_time: 11,
+			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
 		},
@@ -27,9 +30,9 @@ fn get_test_tasks() -> Vec<Task> {
 			flexibility: 0,
 			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
 			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
-            after_time: 10,
-            before_time: 13, 
-            slots: Vec::new(),
+			after_time: 10,
+			before_time: 13,
+			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
 		},
@@ -42,8 +45,8 @@ fn get_test_tasks() -> Vec<Task> {
 			flexibility: 0,
 			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
 			deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
-            after_time: 10,
-            before_time: 18,
+			after_time: 10,
+			before_time: 18,
 			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
@@ -103,13 +106,13 @@ fn time_slice_iterator_splits_into_single_days() {
 
 #[test]
 fn time_slice_iterator_returns_all_mondays() {
-    let r = TimeSliceIterator {
-        start: NaiveDate::from_ymd(2022,9,1).and_hms(0,0,0),
-        end: NaiveDate::from_ymd(2022,9,30).and_hms(0,0,0),
-        repetition: Repetition::MONDAYS,
-    };
+	let r = TimeSliceIterator {
+		start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+		end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+		repetition: Repetition::MONDAYS,
+	};
 
-    assert_eq!(
+	assert_eq!(
 		r.into_iter().collect::<Vec<_>>(),
 		vec![
 			(
@@ -130,18 +133,17 @@ fn time_slice_iterator_returns_all_mondays() {
 			),
 		]
 	)
-
 }
 
 #[test]
 fn time_slice_iterator_range_returns_all_tuesdays() {
-    let r = TimeSliceIterator {
-        start: NaiveDate::from_ymd(2022,9,1).and_hms(0,0,0),
-        end: NaiveDate::from_ymd(2022,9,30).and_hms(0,0,0),
-        repetition: Repetition::TUESDAYS,
-    };
+	let r = TimeSliceIterator {
+		start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+		end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+		repetition: Repetition::TUESDAYS,
+	};
 
-    assert_eq!(
+	assert_eq!(
 		r.into_iter().collect::<Vec<_>>(),
 		vec![
 			(
@@ -162,18 +164,17 @@ fn time_slice_iterator_range_returns_all_tuesdays() {
 			),
 		]
 	)
-
 }
 
 #[test]
 fn time_slice_iterator_range_returns_all_wednesdays() {
-    let r = TimeSliceIterator {
-        start: NaiveDate::from_ymd(2022,9,1).and_hms(0,0,0),
-        end: NaiveDate::from_ymd(2022,9,30).and_hms(0,0,0),
-        repetition: Repetition::WEDNESDAYS,
-    };
+	let r = TimeSliceIterator {
+		start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+		end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+		repetition: Repetition::WEDNESDAYS,
+	};
 
-    assert_eq!(
+	assert_eq!(
 		r.into_iter().collect::<Vec<_>>(),
 		vec![
 			(
@@ -194,17 +195,16 @@ fn time_slice_iterator_range_returns_all_wednesdays() {
 			),
 		]
 	)
-
 }
 
 fn time_slice_iterator_range_returns_all_thursdays() {
-    let r = TimeSliceIterator {
-        start: NaiveDate::from_ymd(2022,9,1).and_hms(0,0,0),
-        end: NaiveDate::from_ymd(2022,9,30).and_hms(0,0,0),
-        repetition: Repetition::THURSDAYS,
-    };
+	let r = TimeSliceIterator {
+		start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+		end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+		repetition: Repetition::THURSDAYS,
+	};
 
-    assert_eq!(
+	assert_eq!(
 		r.into_iter().collect::<Vec<_>>(),
 		vec![
 			(
@@ -223,23 +223,22 @@ fn time_slice_iterator_range_returns_all_thursdays() {
 				NaiveDate::from_ymd(2022, 9, 22).and_hms(0, 0, 0),
 				NaiveDate::from_ymd(2022, 9, 23).and_hms(0, 0, 0),
 			),
-            (
+			(
 				NaiveDate::from_ymd(2022, 9, 29).and_hms(0, 0, 0),
 				NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
 			),
 		]
 	)
-
 }
 
 fn time_slice_iterator_range_returns_all_fridays() {
-    let r = TimeSliceIterator {
-        start: NaiveDate::from_ymd(2022,9,1).and_hms(0,0,0),
-        end: NaiveDate::from_ymd(2022,9,30).and_hms(0,0,0),
-        repetition: Repetition::FRIDAYS,
-    };
+	let r = TimeSliceIterator {
+		start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+		end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+		repetition: Repetition::FRIDAYS,
+	};
 
-    assert_eq!(
+	assert_eq!(
 		r.into_iter().collect::<Vec<_>>(),
 		vec![
 			(
@@ -258,23 +257,22 @@ fn time_slice_iterator_range_returns_all_fridays() {
 				NaiveDate::from_ymd(2022, 9, 23).and_hms(0, 0, 0),
 				NaiveDate::from_ymd(2022, 9, 24).and_hms(0, 0, 0),
 			),
-            (
+			(
 				NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
 				NaiveDate::from_ymd(2022, 10, 1).and_hms(0, 0, 0),
 			),
 		]
 	)
-
 }
 
 fn time_slice_iterator_range_returns_all_saturdays() {
-    let r = TimeSliceIterator {
-        start: NaiveDate::from_ymd(2022,9,1).and_hms(0,0,0),
-        end: NaiveDate::from_ymd(2022,9,30).and_hms(0,0,0),
-        repetition: Repetition::SATURDAYS,
-    };
+	let r = TimeSliceIterator {
+		start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+		end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+		repetition: Repetition::SATURDAYS,
+	};
 
-    assert_eq!(
+	assert_eq!(
 		r.into_iter().collect::<Vec<_>>(),
 		vec![
 			(
@@ -295,17 +293,16 @@ fn time_slice_iterator_range_returns_all_saturdays() {
 			),
 		]
 	)
-
 }
 
 fn time_slice_iterator_range_returns_all_sundays() {
-    let r = TimeSliceIterator {
-        start: NaiveDate::from_ymd(2022,9,1).and_hms(0,0,0),
-        end: NaiveDate::from_ymd(2022,9,30).and_hms(0,0,0),
-        repetition: Repetition::SUNDAYS,
-    };
+	let r = TimeSliceIterator {
+		start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+		end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+		repetition: Repetition::SUNDAYS,
+	};
 
-    assert_eq!(
+	assert_eq!(
 		r.into_iter().collect::<Vec<_>>(),
 		vec![
 			(
@@ -326,7 +323,6 @@ fn time_slice_iterator_range_returns_all_sundays() {
 			),
 		]
 	)
-
 }
 
 #[test]
@@ -461,8 +457,8 @@ fn goal_generates_single_nonrepetitive_task() {
 			flexibility: 0,
 			start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
 			deadline: NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
-            after_time: 0,
-            before_time: 24,
+			after_time: 0,
+			before_time: 24,
 			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
@@ -483,6 +479,58 @@ fn output_formatter_works() {
 #[test]
 fn calculate_flexibility_works() {
 	let mut tasks = get_test_tasks();
+	tasks[0].slots = vec![(
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
+		NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
+	)];
+	tasks[1].slots = vec![
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
+		),
+	];
+	tasks[2].slots = vec![
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(15, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(15, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(16, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(16, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(17, 0, 0),
+		),
+		(
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(17, 0, 0),
+			NaiveDate::from_ymd(2022, 1, 1).and_hms(18, 0, 0),
+		),
+	];
 	for task in &mut tasks {
 		task.calculate_flexibility();
 	}
