@@ -368,6 +368,14 @@ Deno.test("realistic schedule", () => {
         "deadline": "2022-09-25T03:00:00"
       },
       {
+        "taskid": 70,
+        "goalid": 7,
+        "title": "shopping",
+        "duration": 2,
+        "start": "2022-09-10T12:00:00",
+        "deadline": "2022-09-10T14:00:00"
+      },
+      {
         "taskid": 55,
         "goalid": 5,
         "title": "work",
@@ -414,14 +422,6 @@ Deno.test("realistic schedule", () => {
         "duration": 8,
         "start": "2022-09-01T09:00:00",
         "deadline": "2022-09-01T17:00:00"
-      },
-      {
-        "taskid": 70,
-        "goalid": 7,
-        "title": "shopping",
-        "duration": 2,
-        "start": "2022-09-10T12:00:00",
-        "deadline": "2022-09-10T14:00:00"
       },
       {
         "taskid": 229,

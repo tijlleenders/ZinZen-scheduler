@@ -113,14 +113,6 @@ Deno.test("single day many goals", () => {
             "deadline": "2022-01-01T15:00:00"
           },
           {
-            "taskid": 50,
-            "goalid": 5,
-            "title": "cook",
-            "duration": 2,
-            "start": "2022-01-01T18:00:00",
-            "deadline": "2022-01-01T20:00:00"
-          },
-          {
             "taskid": 10,
             "goalid": 1,
             "title": "shopping",
@@ -133,8 +125,16 @@ Deno.test("single day many goals", () => {
             "goalid": 6,
             "title": "read",
             "duration": 1,
-            "start": "2022-01-01T20:00:00",
-            "deadline": "2022-01-01T21:00:00"
+            "start": "2022-01-01T21:00:00",
+            "deadline": "2022-01-01T22:00:00"
+          },
+          {
+            "taskid": 50,
+            "goalid": 5,
+            "title": "cook",
+            "duration": 2,
+            "start": "2022-01-01T18:00:00",
+            "deadline": "2022-01-01T20:00:00"
           },
           {
             "taskid": 40,
