@@ -68,7 +68,7 @@ pub fn task_placer(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar
 			scheduled_tasks.push(tasks[index].clone());
 			//slide 10 (remove the assigned slot from other tasks' slot lists)
 			for task in &mut tasks {
-                for slot in &my_slots {
+				for slot in &my_slots {
 					if task.slots.contains(slot) {
 						task.remove_slot(slot);
 					}
