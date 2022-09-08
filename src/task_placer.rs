@@ -1,16 +1,14 @@
-//! The core-scheduler focusses on scheduling. It is referred to as 'core' to avoid confusion
-//! with the scheduler (which is pre-processor + core).
-//! It takes a flat list of tasks with 0-* corresponding time-constrained slots.
-//! For each tasks it decides which of the possible positions within the corresponding slots is best.
+//! The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
+//! task a confirmed start and deadline.
 //! The scheduler optimizes for the minimum amount of IMPOSSIBLE tasks.
 //! https://github.com/tijlleenders/ZinZen-scheduler/wiki/Core
+//For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use crate::task::Task;
 use crate::task::TaskStatus::{IMPOSSIBLE, SCHEDULED};
-use crate::time_slice_iterator::{TimeSliceIterator, Repetition};
+use crate::time_slice_iterator::{Repetition, TimeSliceIterator};
 use chrono::{Duration, NaiveDateTime, Timelike};
 
-//see the slides for an explanation of the algorithm https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, calendar_end: NaiveDateTime) -> Vec<Task> {
 	//slide 1 (generate all time slots based on calendar dates)
 	let time_slice_iterator = TimeSliceIterator {
@@ -21,57 +19,72 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 	let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = time_slice_iterator.collect();
 
 	//slides 2 - 7 (assign slots to tasks)
-    for task in tasks.iter_mut() {
-        for i in 0..time_slots.len() {
-           //check if the time_slot is 1) within the start and deadline dates of the task, 2)
-           //within the after_time and before_time of the task, and 3) the task doesn't already
-           //contain the slot
-           if (time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline) {
-               if (time_slots[i].0.hour() >= task.after_time as u32) && (time_slots[i].1.hour() <= task.before_time as u32) {
-                    if !task.slots.contains(&time_slots[i]){
-                        for j in 0..task.duration as usize {
-                            task.slots.push(time_slots[i+j]);
-                        }
-                    }
-               }
-           }
-        }
-        task.calculate_flexibility();
-    }
+	for task in tasks.iter_mut() {
+		let mut i = 0;
+		while i < time_slots.len() {
+			//check if the time_slot is:
+			//1) within the start and deadline dates of the task
+			if (time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline) {
+				//2) after the after_time of the task
+				if time_slots[i].0.hour() >= task.after_time as u32 {
+					for _ in 0..(get_num_slots(task)) as usize {
+						if i < time_slots.len() {
+							task.slots.push(time_slots[i]);
+							i = i + 1;
+						}
+					}
+					//skip to midnight so as not to add more slots on the same day
+					while time_slots[i - 1].1.hour() != 0 {
+						i = i + 1;
+						if i == time_slots.len() {
+							break;
+						}
+					}
+					//if the remaining slots on calendar are less than this task's duration,
+					//truncate the task's duration
+					if task.slots.len() < task.duration {
+						task.duration = task.slots.len();
+					}
+					continue;
+				}
+			}
+			i = i + 1;
+		}
+		task.calculate_flexibility();
+	}
 
 	tasks.sort();
 	tasks.reverse();
 	let mut scheduled_tasks = Vec::new();
 
-    //slide 9 (assign slot(s) to task with flexibilityof 1)
-	//TODO: need to make this more concise
-    for index in 0..tasks.len() {
-        if tasks[index].flexibility == 1 {
-            let my_slots = tasks[index].get_slots();
-            tasks[index].set_confirmed_start(my_slots[0].0);
-            let deadline = my_slots[my_slots.len() - 1].1;
-            tasks[index].set_confirmed_deadline(deadline);
-            tasks[index].status = SCHEDULED;
-            scheduled_tasks.push(tasks[index].clone());
-            //slide 10 (remove the assigned slot from other tasks' slot lists)
-            for task in &mut tasks {
-                for i in 0..my_slots.len() {
-                    if task.slots.contains(&my_slots[i]) {
-                        task.remove_slot(&my_slots[i]);
-                    }
-                }
-            }
-        }
-    }
+	//slide 9 (assign slot(s) to task with flexibilityof 1)
+	for index in 0..tasks.len() {
+		if tasks[index].flexibility == 1 {
+			let my_slots = tasks[index].get_slots();
+			tasks[index].set_confirmed_start(my_slots[0].0);
+			let deadline = my_slots[my_slots.len() - 1].1;
+			tasks[index].set_confirmed_deadline(deadline);
+			tasks[index].status = SCHEDULED;
+			scheduled_tasks.push(tasks[index].clone());
+			//slide 10 (remove the assigned slot from other tasks' slot lists)
+			for task in &mut tasks {
+				for i in 0..my_slots.len() {
+					if task.slots.contains(&my_slots[i]) {
+						task.remove_slot(&my_slots[i]);
+					}
+				}
+			}
+		}
+	}
 
 	//slides 12-20 (attempt to schedule the other tasks without conflicting with other tasks'
-    //slots)
+	//slots)
 	while tasks.len() > 0 {
 		let mut task = tasks.remove(0);
-		'outer: for (index,slot) in task.get_slots().iter().enumerate() {
-            let my_slots = task.get_slots();
-            let desired_first_slot = my_slots.get(index).unwrap();
-            let desired_last_slot = my_slots.get(index + task.duration - 1).unwrap();
+		'outer: for (index, _) in task.get_slots().iter().enumerate() {
+			let my_slots = task.get_slots();
+			let desired_first_slot = my_slots.get(index).unwrap();
+			let desired_last_slot = my_slots.get(index + task.duration - 1).unwrap();
 			for other_task in tasks.iter() {
 				if other_task.status == SCHEDULED {
 					continue;
@@ -88,4 +101,12 @@ pub fn task_placer<'a>(mut tasks: Vec<Task>, calendar_start: NaiveDateTime, cale
 		}
 	}
 	scheduled_tasks
+}
+
+fn get_num_slots(task: &Task) -> usize {
+	if task.before_time > task.after_time {
+		task.before_time - task.after_time
+	} else {
+		task.before_time + (24 - task.after_time)
+	}
 }
