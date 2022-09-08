@@ -1,6 +1,7 @@
-use chrono::{Duration, NaiveDateTime};
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
+use crate::goal::Goal;
 
 /// One or many created from a Goal.
 /// To be scheduled in order by the scheduler.
@@ -36,25 +37,21 @@ impl PartialOrd for Task {
 impl Task {
 	pub fn new(
 		id: usize,
-		goal_id: usize,
-		title: String,
-		duration: usize,
 		start: NaiveDateTime,
 		deadline: NaiveDateTime,
-        after_time: usize,
-        before_time: usize,
+        goal: &Goal,
 	) -> Self {
 		Self {
 			id,
-			goal_id,
-			title,
-			duration,
+			goal_id: goal.id,
+			title: goal.title.clone(),
+			duration: goal.duration,
 			status: TaskStatus::UNSCHEDULED,
 			flexibility: 0,
 			start,
 			deadline,
-            after_time,
-            before_time,
+            after_time: goal.after_time.unwrap_or(0),
+            before_time: goal.before_time.unwrap_or(24),
 			slots: Vec::new(),
 			confirmed_start: None,
 			confirmed_deadline: None,
