@@ -6,8 +6,8 @@ use std::path::Path;
 use pretty_assertions::assert_eq;
 
 fn run_test(directory: &str) -> (String,String) {
-    let i = format!("./js-tests/{}/input.json",directory);
-    let o = format!("./js-tests/{}/output.json",directory);
+    let i = format!("./tests/jsons/{}/input.json",directory);
+    let o = format!("./tests/jsons/{}/output.json",directory);
     let input_path = Path::new(&i[..]);
 	let output_path = Path::new(&o[..]);
 	let input: Input = common::get_input_from_json(input_path).unwrap();
