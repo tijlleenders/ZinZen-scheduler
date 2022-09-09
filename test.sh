@@ -26,4 +26,4 @@ echo " ok"
 
 # Run JS test
 echo "Running deno tests"
-deno test --allow-read js-tests/*
+deno test --allow-read tests/*
