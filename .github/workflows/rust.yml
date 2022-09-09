@@ -21,13 +21,13 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
     - name: Install latest nightly
-    - uses: actions-rs/toolchain@v1
+      uses: actions-rs/toolchain@v1
       with:
           toolchain: nightly
           override: true
           components: rustfmt
     - name: Run rust fmt
-    - uses: actions-rs/cargo@v1
+      uses: actions-rs/cargo@v1
       with:
           command: fmt
           args: --all -- --check
