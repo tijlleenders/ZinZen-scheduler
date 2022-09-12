@@ -70,6 +70,7 @@ impl Goal {
         self,
         calendar_start: NaiveDateTime,
         calendar_end: NaiveDateTime,
+        counter: &mut usize,
     ) -> Vec<Task> {
         let mut tasks = Vec::new();
         //If there is a repetion in the goal, a different task will be generated for each day of the repetition.
@@ -82,24 +83,26 @@ impl Goal {
                     end: self.deadline.unwrap_or(calendar_end),
                     repetition: rep,
                 };
-                for (id, (start, deadline)) in time_slices.enumerate() {
-                    let task_id = format!("{}{}", self.id, id);
+                for (start, deadline) in time_slices {
+                    let task_id = *counter;
+                    *counter += 1;
                     let deadline = if self.before_time.unwrap_or(24) < self.after_time.unwrap_or(0)
                     {
                         deadline + Duration::days(1)
                     } else {
                         deadline
                     };
-                    let t = Task::new(task_id.parse::<usize>().unwrap(), start, deadline, &self);
+                    let t = Task::new(task_id, start, deadline, &self);
                     tasks.push(t);
                 }
             }
             //If there is no repetition, the task's start and deadline are equivalent to the goal's
             //start/deadline.
             None => {
-                let task_id = format!("{}{}", self.id, 0);
+                let task_id = *counter;
+                *counter += 1;
                 let t = Task::new(
-                    task_id.parse::<usize>().unwrap(),
+                    task_id,
                     self.start.unwrap_or(calendar_start),
                     self.deadline.unwrap_or(calendar_start),
                     &self,
