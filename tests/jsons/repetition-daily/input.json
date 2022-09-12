@@ -6,7 +6,7 @@
       "id": 1,
       "title": "walk",
       "duration": 1,
-      "repetition": "daily"
+      "repeat": "daily"
     }
   ]
 }

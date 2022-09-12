@@ -1,20 +1,23 @@
 extern crate scheduler;
 mod common;
-use scheduler::{Input, Output};
-use std::path::Path;
 #[cfg(test)]
 use pretty_assertions::assert_eq;
+use scheduler::{Input, Output};
+use std::path::Path;
 
-fn run_test(directory: &str) -> (String,String) {
-    let i = format!("./tests/jsons/{}/input.json",directory);
-    let o = format!("./tests/jsons/{}/output.json",directory);
+fn run_test(directory: &str) -> (String, String) {
+    let i = format!("./js-tests/{}/input.json", directory);
+    let o = format!("./js-tests/{}/output.json", directory);
     let input_path = Path::new(&i[..]);
-	let output_path = Path::new(&o[..]);
-	let input: Input = common::get_input_from_json(input_path).unwrap();
-	let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
-	let output: Vec<Output> = scheduler::run_scheduler(input);
+    let output_path = Path::new(&o[..]);
+    let input: Input = common::get_input_from_json(input_path).unwrap();
+    let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
+    let output: Vec<Output> = scheduler::run_scheduler(input);
 
-    (serde_json::to_string_pretty(&output).unwrap(),desired_output)
+    (
+        serde_json::to_string_pretty(&output).unwrap(),
+        desired_output,
+    )
 }
 
 #[test]
