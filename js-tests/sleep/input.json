@@ -6,7 +6,7 @@
           "id": 1,
           "title": "sleep",
           "duration": 8,
-          "repetition": "daily",
+          "repeat": "daily",
           "after_time": 22,
           "before_time": 6 
         }

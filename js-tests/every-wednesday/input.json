@@ -6,7 +6,7 @@
       "id": 1,
       "title": "piano practice",
       "duration": 2,
-      "repetition": "wednesdays",
+      "repeat": "wednesdays",
       "after_time": 12,
       "before_time": 14
     }
