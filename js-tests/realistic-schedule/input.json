@@ -6,7 +6,7 @@
           "id": 1,
           "title": "walk",
           "duration": 1,
-          "repetition": "daily",
+          "repeat": "daily",
           "after_time": 17,
           "before_time": 20 
         },
@@ -14,7 +14,7 @@
           "id": 2,
           "title": "read",
           "duration": 1,
-          "repetition": "daily",
+          "repeat": "daily",
           "after_time": 19,
           "before_time": 22 
         },
@@ -22,7 +22,7 @@
           "id": 3,
           "title": "piano practice",
           "duration": 2,
-          "repetition": "wednesdays",
+          "repeat": "wednesdays",
           "after_time": 12,
           "before_time": 14 
         },
@@ -30,7 +30,7 @@
           "id": 4,
           "title": "gym",
           "duration": 2,
-          "repetition": "daily",
+          "repeat": "daily",
           "after_time": 5,
           "before_time": 7 
         },
@@ -38,7 +38,7 @@
           "id": 5,
           "title": "work",
           "duration": 8,
-          "repetition": "daily",
+          "repeat": "daily",
           "start": "2022-09-01T00:00:00",
           "deadline": "2022-09-07T00:00:00",
           "after_time": 9,

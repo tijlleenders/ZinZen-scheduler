@@ -1,14 +1,14 @@
 use crate::util::MyDurationRound;
 use chrono::prelude::*;
 use chrono::Duration;
-use std::fmt;
 use serde::Deserialize;
+use std::fmt;
 
 /// How often can a task repeat
 #[derive(Deserialize, Debug, Copy, Clone)]
 pub enum Repetition {
-	#[serde(rename = "daily")]
-	DAILY,
+    #[serde(rename = "daily")]
+    DAILY,
     HOURLY,
     #[serde(rename = "mondays")]
     MONDAYS,
@@ -27,8 +27,8 @@ pub enum Repetition {
 }
 
 //the reason Display is being implemented for repetition
-// is so that the string representation of MONDAYS-SUNDAYS matches the 
-//string representation of chrono::Weekday(). This makes it easy to match 
+// is so that the string representation of MONDAYS-SUNDAYS matches the
+//string representation of chrono::Weekday(). This makes it easy to match
 //when generating date ranges.
 //see: https://docs.rs/chrono/latest/src/chrono/weekday.rs.html#141
 impl fmt::Display for Repetition {
@@ -53,19 +53,19 @@ impl fmt::Display for Repetition {
 /// e.g. all DAYS between 1st September 2022 and 30th September 2022.
 /// e.g. all HOURS between 1st September 2022 and 30th September 2022.
 pub(crate) struct TimeSliceIterator {
-	pub(crate) start: NaiveDateTime,
-	pub(crate) end: NaiveDateTime,
-	pub(crate) repetition: Repetition,
+    pub(crate) start: NaiveDateTime,
+    pub(crate) end: NaiveDateTime,
+    pub(crate) repetition: Repetition,
 }
 
 impl Iterator for TimeSliceIterator {
-	type Item = (NaiveDateTime, NaiveDateTime);
-	fn next(&mut self) -> Option<Self::Item> {
-       match self.repetition {
-           Repetition::DAILY => {
+    type Item = (NaiveDateTime, NaiveDateTime);
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.repetition {
+            Repetition::DAILY => {
                 if self.start < self.end {
                     let start = self.start;
-                    let mut end = self.start + Duration::days(1); 
+                    let mut end = self.start + Duration::days(1);
                     if end > self.end {
                         end = self.end;
                     } else {
@@ -76,11 +76,11 @@ impl Iterator for TimeSliceIterator {
                 } else {
                     None
                 }
-           },
-           Repetition::HOURLY => {
+            }
+            Repetition::HOURLY => {
                 if self.start < self.end {
                     let start = self.start;
-                    let mut end = self.start + Duration::hours(1); 
+                    let mut end = self.start + Duration::hours(1);
                     if end > self.end {
                         end = self.end;
                     } else {
@@ -91,19 +91,21 @@ impl Iterator for TimeSliceIterator {
                 } else {
                     None
                 }
-           },
-           _ => {
-                while self.start.weekday().to_string() != self.repetition.to_string() && (self.start < self.end) {
+            }
+            _ => {
+                while self.start.weekday().to_string() != self.repetition.to_string()
+                    && (self.start < self.end)
+                {
                     self.start += Duration::days(1);
                 }
                 if self.start.weekday().to_string() == self.repetition.to_string() {
                     let start = self.start;
                     let end = self.start + Duration::days(1);
-                    self.start = end; 
+                    self.start = end;
                     return Some((start, end));
                 }
                 return None;
-           }
-       }
-	}
+            }
+        }
+    }
 }
