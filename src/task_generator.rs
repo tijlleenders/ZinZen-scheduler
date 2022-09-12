@@ -8,9 +8,10 @@ pub fn task_generator(
         goals,
     }: Input,
 ) -> Vec<Task> {
+    let mut counter: usize = 0;
     let mut tasks = vec![];
     for goal in goals {
-        tasks.extend(goal.generate_tasks(calendar_start, calendar_end));
+        tasks.extend(goal.generate_tasks(calendar_start, calendar_end, &mut counter));
     }
     tasks
 }
