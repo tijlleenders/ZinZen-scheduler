@@ -442,14 +442,15 @@ fn goal_generates_single_nonrepetitive_task() {
         .duration(1)
         .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
         .deadline(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0));
-
+    let mut counter = 0;
     assert_eq!(
         goal.generate_tasks(
             NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0)
+            NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
+            &mut counter
         ),
         vec![Task {
-            id: 10,
+            id: 0,
             goal_id: 1,
             title: "Test".to_string(),
             duration: 1,
