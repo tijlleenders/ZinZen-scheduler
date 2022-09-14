@@ -2,7 +2,7 @@ use wasm_bindgen::prelude::*;
 
 pub use goal::Goal;
 pub use input::Input;
-pub use output_formatter::{output_formatter, Output};
+pub use output_formatter::{output_formatter, Error, Output};
 pub use time_slice_iterator::Repetition;
 
 /// API modules
@@ -41,7 +41,13 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     let calendar_end = input.calendar_end;
     let tasks = task_generator(input);
     let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
-    let output = output_formatter(scheduled_tasks).unwrap();
+    let output = match output_formatter(scheduled_tasks) {
+        Err(Error::NoConfirmedDate(id)) => {
+            panic!("Error with task:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
+        }
+        Ok(output) => output,
+    };
+
     Ok(JsValue::from_serde(&output)?)
 }
 
@@ -53,5 +59,10 @@ pub fn run_scheduler(input: Input) -> Vec<Output> {
     let calendar_end = input.calendar_end;
     let tasks = task_generator(input);
     let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
-    output_formatter(scheduled_tasks).unwrap()
+    match output_formatter(scheduled_tasks) {
+        Err(Error::NoConfirmedDate(id)) => {
+            panic!("Error with task:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
+        }
+        Ok(output) => output,
+    }
 }
