@@ -4,7 +4,7 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use crate::task::Task;
-use crate::task::TaskStatus::SCHEDULED;
+use crate::task::TaskStatus::{SCHEDULED, UNSCHEDULED};
 use crate::time_slice_iterator::{Repetition, TimeSliceIterator};
 use chrono::{NaiveDateTime, Timelike};
 
@@ -58,16 +58,14 @@ pub fn task_placer(
 
     tasks.sort();
     tasks.reverse();
-    let mut scheduled_tasks = Vec::new();
 
-    //slide 9 (assign slot(s) to task with flexibilityof 1)
+    //slide 9 (schedule task(s) with flexibilityof 1)
     for index in 0..tasks.len() {
         if tasks[index].flexibility == 1 {
             let my_slots = tasks[index].get_slots();
             tasks[index].set_confirmed_start(my_slots[0].0);
             tasks[index].set_confirmed_deadline(my_slots[my_slots.len() - 1].1);
             tasks[index].status = SCHEDULED;
-            scheduled_tasks.push(tasks[index].clone());
             //slide 10 (remove the assigned slot from other tasks' slot lists)
             for task in &mut tasks {
                 for slot in &my_slots {
@@ -81,30 +79,7 @@ pub fn task_placer(
 
     //slides 12-20 (attempt to schedule the other tasks without conflicting with other tasks'
     //slots)
-    while !tasks.is_empty() {
-        let mut task = tasks.remove(0);
-        'outer: for (index, _) in task.get_slots().iter().enumerate() {
-            let my_slots = task.get_slots();
-            let desired_first_slot = my_slots.get(index).unwrap();
-            let desired_last_slot = my_slots.get(index + task.duration - 1).unwrap();
-            for other_task in &tasks {
-                if other_task.status == SCHEDULED {
-                    continue;
-                }
-                if other_task.slots.contains(desired_first_slot)
-                    || other_task.slots.contains(desired_last_slot)
-                {
-                    continue 'outer;
-                }
-            }
-            task.set_confirmed_start(desired_first_slot.0);
-            task.set_confirmed_deadline(desired_last_slot.1);
-            task.status = SCHEDULED;
-            scheduled_tasks.push(task);
-            break;
-        }
-    }
-    scheduled_tasks
+    schedule_tasks(tasks)
 }
 
 fn get_num_slots(task: &Task) -> usize {
@@ -113,4 +88,35 @@ fn get_num_slots(task: &Task) -> usize {
     } else {
         task.before_time + (24 - task.after_time)
     }
+}
+
+fn schedule_tasks(mut tasks: Vec<Task>) -> Vec<Task> {
+    let length = tasks.len();
+    'outer: for i in 0..length {
+        let my_slots = tasks[i].get_slots();
+        'inner: for (j, _) in my_slots.iter().enumerate() {
+            let desired_first_slot = my_slots.get(j).unwrap();
+            let desired_last_slot = my_slots.get(j + tasks[i].duration - 1).unwrap();
+            let mut is_conflicting = false;
+            for k in 0..length {
+                if tasks[k].status == SCHEDULED || k == i {
+                    continue;
+                }
+                if tasks[k].slots.contains(desired_first_slot)
+                    || tasks[k].slots.contains(desired_last_slot)
+                {
+                    is_conflicting = true;
+                    break;
+                }
+            }
+            if is_conflicting {
+                continue 'inner;
+            }
+            tasks[i].set_confirmed_start(desired_first_slot.0);
+            tasks[i].set_confirmed_deadline(desired_last_slot.1);
+            tasks[i].status = SCHEDULED;
+            continue 'outer;
+        }
+    }
+    tasks
 }
