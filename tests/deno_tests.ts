@@ -2,6 +2,8 @@ import { schedule } from "../js-api/scheduler.js";
 import { assertEquals, assertThrows } from "https://deno.land/std@0.141.0/testing/asserts.ts";
 import basic_test_input from "./jsons/basic-test/input.json" assert {type: "json"};
 import basic_test_output from "./jsons/basic-test/output.json" assert {type: "json"};
+import basic_test_1 from "./jsons/basic-test-1/input.json" assert {type: "json"};
+import basic_test_1_output from "./jsons/basic-test-1/output.json" assert {type: "json"};
 import every_wednesday_input from "./jsons/every-wednesday/input.json" assert {type: "json"};
 import every_wednesday_output from "./jsons/every-wednesday/output.json" assert {type: "json"};
 import non_rep_input from "./jsons/non-rep-bounds-multipledays/input.json" assert {type: "json"};
@@ -19,6 +21,11 @@ import singleday_output from "./jsons/singleday-manygoals/output.json" assert {t
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
     schedule(basic_test_input),basic_test_output);
+});
+
+Deno.test("basic test 1", () => {
+  assertEquals(
+    schedule(basic_test_1),basic_test_1_output);
 });
 
 Deno.test("every wednesday", () => {
