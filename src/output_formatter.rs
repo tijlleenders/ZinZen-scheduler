@@ -1,5 +1,6 @@
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
+use crate::errors::Error;
 use crate::task::Task;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -13,11 +14,6 @@ pub struct Output {
     duration: usize,
     start: NaiveDateTime,
     deadline: NaiveDateTime,
-}
-
-#[derive(Debug)]
-pub enum Error {
-    NoConfirmedDate(usize),
 }
 
 pub fn output_formatter(tasks: Vec<Task>) -> Result<Vec<Output>, Error> {

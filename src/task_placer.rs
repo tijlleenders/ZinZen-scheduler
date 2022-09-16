@@ -3,10 +3,23 @@
 //! The scheduler optimizes for the minimum amount of IMPOSSIBLE tasks.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
+use crate::errors::Error;
 use crate::task::Task;
-use crate::task::TaskStatus::SCHEDULED;
+use crate::task::TaskStatus::{SCHEDULED, UNSCHEDULED};
 use crate::time_slice_iterator::{Repetition, TimeSliceIterator};
 use chrono::{NaiveDateTime, Timelike};
+
+pub trait Conflicts {
+    fn conflicts_with(&self, time1: NaiveDateTime, time2: NaiveDateTime) -> bool;
+}
+
+impl Conflicts for (NaiveDateTime, NaiveDateTime) {
+    fn conflicts_with(&self, after_time: NaiveDateTime, before_time: NaiveDateTime) -> bool {
+        //we can be either completely before or completely after. otherwise it's a conflict.
+        !((self.0 < after_time && self.1 <= before_time)
+            || (self.0 >= before_time && self.1 > before_time))
+    }
+}
 
 pub fn task_placer(
     mut tasks: Vec<Task>,
@@ -25,92 +38,127 @@ pub fn task_placer(
     for task in &mut tasks {
         let mut i = 0;
         while i < time_slots.len() {
-            //check if the time_slot is:
-            //1) within the start and deadline dates of the task
-            if (time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline) {
-                //2) after the after_time of the task
-                if time_slots[i].0.hour() >= task.after_time as u32 {
-                    for _ in 0..(get_num_slots(task)) as usize {
-                        if i < time_slots.len() {
-                            task.slots.push(time_slots[i]);
-                            i += 1;
-                        }
-                    }
-                    //skip to midnight so as not to add more slots on the same day
-                    while time_slots[i - 1].1.hour() != 0 {
-                        i += 1;
-                        if i == time_slots.len() {
-                            break;
-                        }
-                    }
-                    //if the remaining slots on calendar are less than this task's duration,
-                    //truncate the task's duration
-                    if task.slots.len() < task.duration {
-                        task.duration = task.slots.len();
-                    }
-                    continue;
-                }
+            //1) is the time_slot within the start and deadline dates of the task?
+            if !((time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline)) {
+                i += 1;
+                continue;
+            }
+            //2) is the time_slot after the after_time of the task?
+            if !(time_slots[i].0.hour() >= task.after_time as u32) {
+                i += 1;
+                continue;
+            }
+            assign_slots(task, &time_slots, &mut i);
+            //if too few slots were assigned (the remaining slots on calendar were not enough),
+            //truncate the task's duration
+            if task.slots.len() < task.duration {
+                task.duration = task.slots.len();
             }
             i += 1;
         }
         task.calculate_flexibility();
     }
 
-    tasks.sort();
-    tasks.reverse();
-    let mut scheduled_tasks = Vec::new();
-
-    //slide 9 (assign slot(s) to task with flexibilityof 1)
+    //slide 9 (schedule task(s) with flexibilityof 1)
     for index in 0..tasks.len() {
         if tasks[index].flexibility == 1 {
             let my_slots = tasks[index].get_slots();
             tasks[index].set_confirmed_start(my_slots[0].0);
             tasks[index].set_confirmed_deadline(my_slots[my_slots.len() - 1].1);
             tasks[index].status = SCHEDULED;
-            scheduled_tasks.push(tasks[index].clone());
             //slide 10 (remove the assigned slot from other tasks' slot lists)
-            for task in &mut tasks {
-                for slot in &my_slots {
-                    if task.slots.contains(slot) {
-                        task.remove_slot(slot);
-                    }
-                }
-            }
+            remove_slots_from_tasks(&mut tasks, my_slots[0].0, my_slots[my_slots.len() - 1].1);
         }
     }
 
     //slides 12-20 (attempt to schedule the other tasks without conflicting with other tasks'
     //slots)
-    while !tasks.is_empty() {
-        let mut task = tasks.remove(0);
-        'outer: for (index, _) in task.get_slots().iter().enumerate() {
-            let my_slots = task.get_slots();
-            let desired_first_slot = my_slots.get(index).unwrap();
-            let desired_last_slot = my_slots.get(index + task.duration - 1).unwrap();
-            for other_task in &tasks {
-                if other_task.status == SCHEDULED {
-                    continue;
-                }
-                if other_task.slots.contains(desired_first_slot)
-                    || other_task.slots.contains(desired_last_slot)
-                {
-                    continue 'outer;
-                }
-            }
-            task.set_confirmed_start(desired_first_slot.0);
-            task.set_confirmed_deadline(desired_last_slot.1);
-            task.status = SCHEDULED;
-            scheduled_tasks.push(task);
+    let mut counter = tasks[tasks.len() - 1].id + 1;
+    loop {
+        schedule_tasks(&mut tasks, &mut counter);
+        if !tasks.iter().any(|t| t.status == UNSCHEDULED) {
             break;
         }
     }
-    scheduled_tasks
+
+    tasks
 }
 
-fn get_num_slots(task: &Task) -> usize {
-    if task.before_time > task.after_time {
-        task.before_time - task.after_time
-    } else {
-        task.before_time + (24 - task.after_time)
+fn assign_slots(task: &mut Task, time_slots: &Vec<(NaiveDateTime, NaiveDateTime)>, i: &mut usize) {
+    for _ in 0..(task.num_slots()) as usize {
+        if *i < time_slots.len() {
+            task.slots.push(time_slots[*i]);
+            *i += 1;
+        }
+    }
+    //skip to midnight so as not to add more slots on the same day
+    while time_slots[*i - 1].1.hour() != 0 {
+        *i += 1;
+        if *i == time_slots.len() {
+            break;
+        }
+    }
+}
+
+fn schedule_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
+    tasks.sort();
+    tasks.reverse();
+
+    let tasks_length = tasks.len();
+    'task_loop: for i in 0..tasks_length {
+        while let Some((desired_start, desired_deadline)) =
+            tasks[i].next_start_deadline_combination()
+        {
+            let mut is_conflicting = false;
+            for k in 0..tasks_length {
+                if tasks[k].status == SCHEDULED || k == i {
+                    continue;
+                }
+                let other_task_after_time = tasks[k].slots[0].0;
+                let other_task_before_time = tasks[k].slots[tasks[k].slots.len() - 1].1;
+                if (desired_start, desired_deadline)
+                    .conflicts_with(other_task_after_time, other_task_before_time)
+                {
+                    if k < i {
+                        //this is a task that already tried to be scheduled but failed
+                        //so we can split it and take slots from it
+                        match tasks[k].split(&(desired_start, desired_deadline), counter) {
+                            Err(Error::CannotSplit) | Err(_) => {
+                                is_conflicting = true;
+                                break;
+                            }
+                            Ok((taska, taskb)) => {
+                                tasks.push(taska);
+                                tasks.push(taskb);
+                                tasks[i].schedule(desired_start, desired_deadline);
+                                remove_slots_from_tasks(tasks, desired_start, desired_deadline);
+                                tasks.remove(k);
+                                continue 'task_loop;
+                            }
+                        }
+                    } else {
+                        is_conflicting = true;
+                        break;
+                    }
+                }
+            }
+            if is_conflicting {
+                continue;
+            }
+            tasks[i].schedule(desired_start, desired_deadline);
+            remove_slots_from_tasks(tasks, desired_start, desired_deadline);
+            continue 'task_loop;
+        }
+    }
+}
+
+fn remove_slots_from_tasks(tasks: &mut Vec<Task>, start: NaiveDateTime, deadline: NaiveDateTime) {
+    for task in tasks {
+        let slots = task.get_slots();
+        for slot in slots {
+            if slot.0 >= start && slot.1 <= deadline {
+                task.remove_slot(&slot);
+            }
+        }
     }
 }

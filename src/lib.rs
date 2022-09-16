@@ -2,9 +2,10 @@ use wasm_bindgen::prelude::*;
 
 pub use goal::Goal;
 pub use input::Input;
-pub use output_formatter::{output_formatter, Error, Output};
+pub use output_formatter::{output_formatter, Output};
 pub use time_slice_iterator::Repetition;
 
+mod errors;
 /// API modules
 mod goal;
 pub mod input;
@@ -31,6 +32,7 @@ interface Input {
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
 #[wasm_bindgen]
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
+    use errors::Error;
     use output_formatter::*;
     use task_generator::task_generator;
     use task_placer::*;
@@ -45,6 +47,9 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
         Err(Error::NoConfirmedDate(id)) => {
             panic!("Error with task:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
         }
+        Err(e) => {
+            panic!("Unexpected error: {:?}", e);
+        }
         Ok(output) => output,
     };
 
@@ -52,6 +57,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 }
 
 pub fn run_scheduler(input: Input) -> Vec<Output> {
+    use errors::Error;
     use output_formatter::*;
     use task_generator::task_generator;
     use task_placer::*;
@@ -61,7 +67,10 @@ pub fn run_scheduler(input: Input) -> Vec<Output> {
     let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
     match output_formatter(scheduled_tasks) {
         Err(Error::NoConfirmedDate(id)) => {
-            panic!("Error with task:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
+            panic!("Error with task:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
+        }
+        Err(e) => {
+            panic!("Unexpected error: {:?}", e);
         }
         Ok(output) => output,
     }
