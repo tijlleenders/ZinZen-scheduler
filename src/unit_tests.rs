@@ -20,6 +20,7 @@ fn get_test_tasks() -> Vec<Task> {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
+            internal_index: 0,
         },
         Task {
             id: 10,
@@ -35,6 +36,7 @@ fn get_test_tasks() -> Vec<Task> {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
+            internal_index: 0,
         },
         Task {
             id: 30,
@@ -50,6 +52,7 @@ fn get_test_tasks() -> Vec<Task> {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
+            internal_index: 0,
         },
     ]
 }
@@ -463,6 +466,7 @@ fn goal_generates_single_nonrepetitive_task() {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
+            internal_index: 0,
         },]
     )
 }
@@ -700,6 +704,7 @@ fn task_splitting_works() {
         slots: original_slots,
         confirmed_start: None,
         confirmed_deadline: None,
+        internal_index: 0,
     };
 
     let task_a = Task {
@@ -716,6 +721,7 @@ fn task_splitting_works() {
         slots: task_a_slots,
         confirmed_start: None,
         confirmed_deadline: None,
+        internal_index: 0,
     };
 
     let task_b = Task {
@@ -732,6 +738,7 @@ fn task_splitting_works() {
         slots: task_b_slots,
         confirmed_start: None,
         confirmed_deadline: None,
+        internal_index: 0,
     };
 
     let split_slot = (

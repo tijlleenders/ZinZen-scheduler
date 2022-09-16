@@ -21,6 +21,7 @@ pub struct Task {
     pub slots: Vec<(NaiveDateTime, NaiveDateTime)>,
     pub confirmed_start: Option<NaiveDateTime>,
     pub confirmed_deadline: Option<NaiveDateTime>,
+    pub internal_index: usize,
 }
 
 impl Ord for Task {
@@ -51,6 +52,7 @@ impl Task {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
+            internal_index: 0,
         }
     }
 
@@ -88,7 +90,7 @@ impl Task {
         slot: &(NaiveDateTime, NaiveDateTime),
         counter: &mut usize,
     ) -> Result<(Task, Task), Error> {
-        if self.slots.len() == 2 {
+        if self.slots.len() < 3 {
             return Err(Error::CannotSplit);
         }
         let mut task_a_slots: Vec<(NaiveDateTime, NaiveDateTime)> = Vec::new();
@@ -114,6 +116,7 @@ impl Task {
             slots: task_a_slots,
             confirmed_start: None,
             confirmed_deadline: None,
+            internal_index: 0,
         };
         *counter += 1;
         let task_b_duration = self.duration - task_a.duration;
@@ -131,9 +134,33 @@ impl Task {
             slots: task_b_slots,
             confirmed_start: None,
             confirmed_deadline: None,
+            internal_index: 0,
         };
         *counter += 1;
         Ok((task_a, task_b))
+    }
+
+    pub fn next_start_deadline_combination(&mut self) -> Option<(NaiveDateTime, NaiveDateTime)> {
+        if self.internal_index + self.duration - 1 >= self.slots.len() {
+            return None;
+        }
+        let index = self.internal_index;
+        self.internal_index += 1;
+        return Some((self.slots[index].0, self.slots[index + self.duration - 1].1));
+    }
+
+    pub fn schedule(&mut self, start: NaiveDateTime, deadline: NaiveDateTime) {
+        self.set_confirmed_start(start);
+        self.set_confirmed_deadline(deadline);
+        self.status = TaskStatus::SCHEDULED;
+    }
+
+    pub fn num_slots(&self) -> usize {
+        if self.before_time > self.after_time {
+            self.before_time - self.after_time
+        } else {
+            self.before_time + (24 - self.after_time)
+        }
     }
 }
 
