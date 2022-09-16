@@ -67,3 +67,9 @@ fn sleep() {
     let (actual_output, desired_output) = run_test("sleep");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn split_simple() {
+    let (actual_output, desired_output) = run_test("split-tasks-simple");
+    assert_eq!(actual_output, desired_output);
+}
