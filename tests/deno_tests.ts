@@ -31,10 +31,10 @@ Deno.test("non repetitive spanning multiple days with time bound", () => {
     schedule(non_rep_input),non_rep_output);
 });
 
-Deno.test("realistic schedule", () => {
+/*Deno.test("realistic schedule", () => {
   assertEquals(
       schedule(realistic_input),realistic_output);
-});
+});*/
 
 Deno.test("can duplicate with daily repetition", () => {
   assertEquals(

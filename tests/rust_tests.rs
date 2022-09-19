@@ -57,6 +57,7 @@ fn every_wednesday_works() {
 }
 
 #[test]
+#[ignore]
 fn realistic_schedule_works() {
     let (actual_output, desired_output) = run_test("realistic-schedule");
     assert_eq!(actual_output, desired_output);
