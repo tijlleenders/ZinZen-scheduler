@@ -73,3 +73,9 @@ fn split_simple() {
     let (actual_output, desired_output) = run_test("split-tasks-simple");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn new_split_simple_variant() {
+    let (actual_output, desired_output) = run_test("split-tasks-simple-2");
+    assert_eq!(actual_output, desired_output);
+}

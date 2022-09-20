@@ -14,6 +14,8 @@ import rep_bounds_input from "./jsons/repetition-daily-bounds/input.json" assert
 import rep_bounds_output from "./jsons/repetition-daily-bounds/output.json" assert {type: "json"};
 import singleday_input from "./jsons/singleday-manygoals/input.json" assert {type: "json"};
 import singleday_output from "./jsons/singleday-manygoals/output.json" assert {type: "json"};
+import split_tasks_simple_2_input from "./jsons/split-tasks-simple-2/input.json" assert {type: "json"}
+import split_tasks_simple_2_output from "./jsons/split-tasks-simple-2/output.json" assert {type: "json"}
 
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
@@ -71,4 +73,10 @@ Deno.test("invalid repetition",() => {
 Deno.test("single day many goals", () => {
   assertEquals(
     schedule(singleday_input),singleday_output);
+});
+
+Deno.tes("new split task variant with 1hr duration", () => {
+  assertEquals(
+    schedule(split_tasks_simple_2_input, split_tasks_simple_2_output)
+  );
 });
