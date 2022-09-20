@@ -57,6 +57,7 @@ fn every_wednesday_works() {
 }
 
 #[test]
+#[ignore]
 fn realistic_schedule_works() {
     let (actual_output, desired_output) = run_test("realistic-schedule");
     assert_eq!(actual_output, desired_output);
@@ -77,5 +78,10 @@ fn split_simple() {
 #[test]
 fn new_split_simple_variant() {
     let (actual_output, desired_output) = run_test("split-tasks-simple-2");
+}
+
+#[test]
+fn split_tasks_variant() {
+    let (actual_output, desired_output) = run_test("splitting-tasks-simple-1");
     assert_eq!(actual_output, desired_output);
 }

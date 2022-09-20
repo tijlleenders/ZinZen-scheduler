@@ -9,46 +9,6 @@
         "deadline": "2022-01-01T01:00:00"
       },
       {
-        "taskid": 2,
-        "goalid": 3,
-        "title": "exercise",
-        "duration": 1,
-        "start": "2022-01-01T17:00:00",
-        "deadline": "2022-01-01T18:00:00"
-      },
-      {
-        "taskid": 6,
-        "goalid": 7,
-        "title": "meeting",
-        "duration": 2,
-        "start": "2022-01-01T13:00:00",
-        "deadline": "2022-01-01T15:00:00"
-      },
-      {
-        "taskid": 0,
-        "goalid": 1,
-        "title": "shopping",
-        "duration": 1,
-        "start": "2022-01-01T11:00:00",
-        "deadline": "2022-01-01T12:00:00"
-      },
-      {
-        "taskid": 5,
-        "goalid": 6,
-        "title": "read",
-        "duration": 1,
-        "start": "2022-01-01T21:00:00",
-        "deadline": "2022-01-01T22:00:00"
-      },
-      {
-        "taskid": 4,
-        "goalid": 5,
-        "title": "cook",
-        "duration": 2,
-        "start": "2022-01-01T18:00:00",
-        "deadline": "2022-01-01T20:00:00"
-      },
-      {
         "taskid": 3,
         "goalid": 4,
         "title": "meditate",
@@ -63,5 +23,45 @@
         "duration": 1,
         "start": "2022-01-01T10:00:00",
         "deadline": "2022-01-01T11:00:00"
+      },
+      {
+        "taskid": 0,
+        "goalid": 1,
+        "title": "shopping",
+        "duration": 1,
+        "start": "2022-01-01T11:00:00",
+        "deadline": "2022-01-01T12:00:00"
+      },
+      {
+        "taskid": 6,
+        "goalid": 7,
+        "title": "meeting",
+        "duration": 2,
+        "start": "2022-01-01T13:00:00",
+        "deadline": "2022-01-01T15:00:00"
+      },
+      {
+        "taskid": 2,
+        "goalid": 3,
+        "title": "exercise",
+        "duration": 1,
+        "start": "2022-01-01T17:00:00",
+        "deadline": "2022-01-01T18:00:00"
+      },
+      {
+        "taskid": 4,
+        "goalid": 5,
+        "title": "cook",
+        "duration": 2,
+        "start": "2022-01-01T18:00:00",
+        "deadline": "2022-01-01T20:00:00"
+      },
+      {
+        "taskid": 5,
+        "goalid": 6,
+        "title": "read",
+        "duration": 1,
+        "start": "2022-01-01T21:00:00",
+        "deadline": "2022-01-01T22:00:00"
       }
 ]

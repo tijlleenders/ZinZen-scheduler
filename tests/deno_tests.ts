@@ -16,7 +16,10 @@ import singleday_input from "./jsons/singleday-manygoals/input.json" assert {typ
 import singleday_output from "./jsons/singleday-manygoals/output.json" assert {type: "json"};
 import split_tasks_simple_2_input from "./jsons/split-tasks-simple-2/input.json" assert {type: "json"}
 import split_tasks_simple_2_output from "./jsons/split-tasks-simple-2/output.json" assert {type: "json"}
-
+import simple_split_task_input from "./jsons/split-tasks-simple/input.json" assert {type: "json"};
+import simple_split_task_output from "./jsons/split-tasks-simple/output.json" assert {type: "json"};
+import split_task_variant_input from "./jsons/splitting-tasks-simple-1/input.json" assert {type: "json"};
+import split_task_variant_output from "./jsons/splitting-tasks-simple-1/output.json" assert {type: "json"};
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -33,10 +36,10 @@ Deno.test("non repetitive spanning multiple days with time bound", () => {
     schedule(non_rep_input),non_rep_output);
 });
 
-Deno.test("realistic schedule", () => {
+/*Deno.test("realistic schedule", () => {
   assertEquals(
       schedule(realistic_input),realistic_output);
-});
+});*/
 
 Deno.test("can duplicate with daily repetition", () => {
   assertEquals(
@@ -80,3 +83,16 @@ Deno.tes("new split task variant with 1hr duration", () => {
     schedule(split_tasks_simple_2_input, split_tasks_simple_2_output)
   );
 });
+
+// test for splitting tasks
+Deno.test("single day with split tasks", () => {
+  assertEquals(
+    schedule(simple_split_task_input),simple_split_task_output);
+});
+
+// test for splitting tasks variant
+Deno.test("single day with three goals to be split", () => {
+  assertEquals(
+    schedule(split_task_variant_input),split_task_variant_output);
+});
+

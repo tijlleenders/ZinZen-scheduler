@@ -4,9 +4,10 @@ use crate::errors::Error;
 use crate::task::Task;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 //use serde_json::Result;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct Output {
     taskid: usize,
     goalid: usize,
@@ -14,6 +15,18 @@ pub struct Output {
     duration: usize,
     start: NaiveDateTime,
     deadline: NaiveDateTime,
+}
+
+impl Ord for Output {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.start.cmp(&other.start)
+    }
+}
+
+impl PartialOrd for Output {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
 }
 
 pub fn output_formatter(tasks: Vec<Task>) -> Result<Vec<Output>, Error> {
@@ -37,5 +50,6 @@ pub fn output_formatter(tasks: Vec<Task>) -> Result<Vec<Output>, Error> {
         };
         outputs.push(output);
     }
+    outputs.sort();
     Ok(outputs)
 }
