@@ -16,6 +16,8 @@ import singleday_input from "./jsons/singleday-manygoals/input.json" assert {typ
 import singleday_output from "./jsons/singleday-manygoals/output.json" assert {type: "json"};
 import simple_split_task_input from "./jsons/split-tasks-simple/input.json" assert {type: "json"};
 import simple_split_task_output from "./jsons/split-tasks-simple/output.json" assert {type: "json"};
+import split_task_variant_input from "./jsons/splitting-tasks-simple-1/input.json" assert {type: "json"};
+import split_task_variant_output from "./jsons/splitting-tasks-simple-1/output.json" assert {type: "json"};
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -78,4 +80,10 @@ Deno.test("single day many goals", () => {
 Deno.test("single day with split tasks", () => {
   assertEquals(
     schedule(simple_split_task_input),simple_split_task_output);
+});
+
+// test for splitting tasks variant
+Deno.test("single day with split tasks", () => {
+  assertEquals(
+    schedule(split_task_variant_input),split_task_variant_output);
 });
