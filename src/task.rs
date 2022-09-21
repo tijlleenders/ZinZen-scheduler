@@ -85,59 +85,32 @@ impl Task {
         self.slots.remove(index);
     }
 
-    pub fn split(
-        &mut self,
-        slot: &(NaiveDateTime, NaiveDateTime),
-        counter: &mut usize,
-    ) -> Result<(Task, Task), Error> {
-        if self.slots.len() < 3 {
+    pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Task>, Error> {
+        if self.duration == 1 {
             return Err(Error::CannotSplit);
         }
-        let mut task_a_slots: Vec<(NaiveDateTime, NaiveDateTime)> = Vec::new();
-        let mut task_b_slots: Vec<(NaiveDateTime, NaiveDateTime)> = Vec::new();
-        for i in 0..self.slots.len() {
-            if self.slots[i].0 < slot.0 {
-                task_a_slots.push(self.slots[i]);
-            } else if self.slots[i].0 > slot.0 {
-                task_b_slots.push(self.slots[i]);
-            }
+        let mut tasks = Vec::new();
+        for _ in 0..self.duration {
+            let task = Task {
+                id: *counter,
+                goal_id: self.goal_id,
+                title: self.title.clone(),
+                duration: 1,
+                status: TaskStatus::UNSCHEDULED,
+                flexibility: self.slots.len(),
+                start: self.start,
+                deadline: self.deadline,
+                after_time: self.after_time,
+                before_time: self.before_time,
+                slots: self.get_slots(),
+                confirmed_start: None,
+                confirmed_deadline: None,
+                internal_index: 0,
+            };
+            *counter += 1;
+            tasks.push(task);
         }
-        let task_a = Task {
-            id: *counter,
-            goal_id: self.goal_id,
-            title: self.title.clone(),
-            duration: task_a_slots.len(),
-            status: TaskStatus::UNSCHEDULED,
-            flexibility: 1,
-            start: self.start,
-            deadline: self.deadline,
-            after_time: task_a_slots[0].0.hour() as usize,
-            before_time: task_a_slots[task_a_slots.len() - 1].1.hour() as usize,
-            slots: task_a_slots,
-            confirmed_start: None,
-            confirmed_deadline: None,
-            internal_index: 0,
-        };
-        *counter += 1;
-        let task_b_duration = self.duration - task_a.duration;
-        let task_b = Task {
-            id: *counter,
-            goal_id: self.goal_id,
-            title: self.title.clone(),
-            duration: task_b_duration,
-            status: TaskStatus::UNSCHEDULED,
-            flexibility: task_b_slots.len() - task_b_duration + 1,
-            start: self.start,
-            deadline: self.deadline,
-            after_time: task_b_slots[0].0.hour() as usize,
-            before_time: task_b_slots[task_b_slots.len() - 1].1.hour() as usize,
-            slots: task_b_slots,
-            confirmed_start: None,
-            confirmed_deadline: None,
-            internal_index: 0,
-        };
-        *counter += 1;
-        Ok((task_a, task_b))
+        Ok(tasks)
     }
 
     pub fn next_start_deadline_combination(&mut self) -> Option<(NaiveDateTime, NaiveDateTime)> {
@@ -155,7 +128,7 @@ impl Task {
         self.status = TaskStatus::SCHEDULED;
     }
 
-    pub fn num_slots(&self) -> usize {
+    pub fn num_slots_to_be_assigned(&self) -> usize {
         if self.before_time > self.after_time {
             self.before_time - self.after_time
         } else {
