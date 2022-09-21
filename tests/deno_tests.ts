@@ -78,10 +78,10 @@ Deno.test("single day many goals", () => {
     schedule(singleday_input),singleday_output);
 });
 
-Deno.tes("new split task variant with 1hr duration", () => {
+Deno.test("new split task variant with 1hr duration", () => {
   assertEquals(
-    schedule(split_tasks_simple_2_input, split_tasks_simple_2_output)
-  );
+    schedule(split_tasks_simple_2_input), split_tasks_simple_2_output)
+  ;
 });
 
 // test for splitting tasks
