@@ -135,6 +135,12 @@ impl Task {
             self.before_time + (24 - self.after_time)
         }
     }
+
+    pub fn can_coexist_with(&self, other_task: &Task) -> bool {
+        (self.duration == 1 && other_task.duration == 1)
+            && (self.after_time == other_task.after_time)
+            && (self.before_time == other_task.before_time)
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]

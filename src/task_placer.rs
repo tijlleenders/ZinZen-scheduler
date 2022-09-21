@@ -149,6 +149,7 @@ fn schedule_tasks(tasks: &mut Vec<Task>) {
                 if (desired_start, desired_deadline)
                     .conflicts_with(other_task_after_time, other_task_before_time)
                     && !(tasks[i].goal_id == tasks[k].goal_id)
+                    && !tasks[i].can_coexist_with(&tasks[k])
                 {
                     continue 'slot_loop;
                 }
