@@ -44,8 +44,8 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     let tasks = task_generator(input);
     let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
     let output = match output_formatter(scheduled_tasks) {
-        Err(Error::NoConfirmedDate(id)) => {
-            panic!("Error with task:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
+        Err(Error::NoConfirmedDate(title, id)) => {
+            panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
         }
         Err(e) => {
             panic!("Unexpected error: {:?}", e);
@@ -66,8 +66,8 @@ pub fn run_scheduler(input: Input) -> Vec<Output> {
     let tasks = task_generator(input);
     let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
     match output_formatter(scheduled_tasks) {
-        Err(Error::NoConfirmedDate(id)) => {
-            panic!("Error with task:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
+        Err(Error::NoConfirmedDate(title, id)) => {
+            panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
         }
         Err(e) => {
             panic!("Unexpected error: {:?}", e);

@@ -1,5 +1,5 @@
 #[derive(Debug)]
 pub enum Error {
-    NoConfirmedDate(usize),
+    NoConfirmedDate(String, usize),
     CannotSplit,
 }
