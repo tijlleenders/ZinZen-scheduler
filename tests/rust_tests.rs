@@ -69,24 +69,24 @@ fn sleep() {
 }
 
 #[test]
-fn split_simple() {
-    let (actual_output, desired_output) = run_test("split-tasks-simple");
+fn split_1_works() {
+    let (actual_output, desired_output) = run_test("split-1");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn new_split_simple_variant() {
-    let (actual_output, desired_output) = run_test("split-3");
-}
-
-#[test]
-fn split_tasks_variant() {
+fn split_2_works() {
     let (actual_output, desired_output) = run_test("split-2");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn split_tasks_simple_3() {
+fn split_3_works() {
+    let (actual_output, desired_output) = run_test("split-3");
+}
+
+#[test]
+fn split_4_works() {
     let (actual_output, desired_output) = run_test("split-4");
     assert_eq!(actual_output, desired_output);
 }
