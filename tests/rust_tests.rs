@@ -87,7 +87,7 @@ fn split_tasks_variant() {
 }
 
 #[test]
-fn split_tasks_variant() {
+fn split_tasks_simple_3() {
     let (actual_output, desired_output) = run_test("split-tasks-simple-3");
     assert_eq!(actual_output, desired_output);
 }
