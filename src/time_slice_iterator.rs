@@ -10,6 +10,7 @@ pub enum Repetition {
     #[serde(rename = "daily")]
     DAILY,
     HOURLY,
+    WEEKDAYS,
     #[serde(rename = "mondays")]
     MONDAYS,
     #[serde(rename = "tuesdays")]
@@ -36,6 +37,7 @@ impl fmt::Display for Repetition {
         f.write_str(match *self {
             Repetition::DAILY => "DAILY",
             Repetition::HOURLY => "HOURLY",
+            Repetition::WEEKDAYS => "WEEKDAYS",
             Repetition::MONDAYS => "Mon",
             Repetition::TUESDAYS => "Tue",
             Repetition::WEDNESDAYS => "Wed",
@@ -92,9 +94,31 @@ impl Iterator for TimeSliceIterator {
                     None
                 }
             }
+            Repetition::WEEKDAYS => {
+                if self.start >= self.end {
+                    return None;
+                }
+                while self.start.weekday().to_string() == "Sat"
+                    || self.start.weekday().to_string() == "Sun" && self.start < self.end
+                {
+                    self.start += Duration::days(1);
+                }
+                if self.start.weekday().to_string() != "Sat"
+                    && self.start.weekday().to_string() != "Sun"
+                {
+                    let start = self.start;
+                    let end = self.start + Duration::days(1);
+                    self.start = end;
+                    return Some((start, end));
+                }
+                return None;
+            }
             _ => {
+                if self.start >= self.end {
+                    return None;
+                }
                 while self.start.weekday().to_string() != self.repetition.to_string()
-                    && (self.start < self.end)
+                    && self.start < self.end
                 {
                     self.start += Duration::days(1);
                 }
