@@ -137,9 +137,18 @@ impl Task {
     }
 
     pub fn can_coexist_with(&self, other_task: &Task) -> bool {
-        (self.duration == 1 && other_task.duration == 1)
-            && (self.after_time == other_task.after_time)
-            && (self.before_time == other_task.before_time)
+        if !(self.duration == 1 && other_task.duration == 1) {
+            return false;
+        }
+        if self.slots.len() != other_task.slots.len() {
+            return false;
+        }
+        for i in 0..self.slots.len() {
+            if self.slots[i] != other_task.slots[i] {
+                return false;
+            }
+        }
+        true
     }
 }
 
