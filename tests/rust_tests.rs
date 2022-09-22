@@ -46,7 +46,7 @@ fn non_repetitive_bounds_multipledays_works() {
 
 #[test]
 fn single_day_many_goals_works() {
-    let (actual_output, desired_output) = run_test("singleday-manygoals");
+    let (actual_output, desired_output) = run_test("singleday-manygoals-1");
     assert_eq!(actual_output, desired_output);
 }
 
