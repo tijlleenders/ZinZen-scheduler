@@ -1,27 +1,27 @@
 import { schedule } from "../js-api/scheduler.js";
 import { assertEquals, assertThrows } from "https://deno.land/std@0.141.0/testing/asserts.ts";
-import basic_test_input from "./jsons/basic-test/input.json" assert {type: "json"};
-import basic_test_output from "./jsons/basic-test/output.json" assert {type: "json"};
-import every_wednesday_input from "./jsons/every-wednesday/input.json" assert {type: "json"};
-import every_wednesday_output from "./jsons/every-wednesday/output.json" assert {type: "json"};
-import non_rep_input from "./jsons/non-rep-bounds-multipledays/input.json" assert {type: "json"};
-import non_rep_output from "./jsons/non-rep-bounds-multipledays/output.json" assert {type: "json"};
-import realistic_input from "./jsons/realistic-schedule/input.json" assert {type: "json"};
-import realistic_output from "./jsons/realistic-schedule/output.json" assert {type: "json"};
-import repetition_input from "./jsons/repetition-daily/input.json" assert {type: "json"};
-import repetition_output from "./jsons/repetition-daily/output.json" assert {type: "json"};
-import rep_bounds_input from "./jsons/repetition-daily-bounds/input.json" assert {type: "json"};
-import rep_bounds_output from "./jsons/repetition-daily-bounds/output.json" assert {type: "json"};
-import singleday_input from "./jsons/singleday-manygoals/input.json" assert {type: "json"};
-import singleday_output from "./jsons/singleday-manygoals/output.json" assert {type: "json"};
-import split_tasks_simple_2_input from "./jsons/split-tasks-simple-2/input.json" assert {type: "json"}
-import split_tasks_simple_2_output from "./jsons/split-tasks-simple-2/output.json" assert {type: "json"}
-import simple_split_task_input from "./jsons/split-tasks-simple/input.json" assert {type: "json"};
-import simple_split_task_output from "./jsons/split-tasks-simple/output.json" assert {type: "json"};
-import split_task_variant_input from "./jsons/splitting-tasks-simple-1/input.json" assert {type: "json"};
-import split_task_variant_output from "./jsons/splitting-tasks-simple-1/output.json" assert {type: "json"};
-import split_tasks_simple_3_input from "./jsons/split-tasks-simple-3/input.json" assert {type: "json"}
-import split_tasks_simple_3_output from "./jsons/split-tasks-simple-3/output.json" assert {type: "json"}
+import basic_test_input from "./jsons/basic-1/input.json" assert {type: "json"};
+import basic_test_output from "./jsons/basic-1/output.json" assert {type: "json"};
+import every_wednesday_input from "./jsons/every-wednesday-1/input.json" assert {type: "json"};
+import every_wednesday_output from "./jsons/every-wednesday-1/output.json" assert {type: "json"};
+import non_rep_input from "./jsons/non-rep-bounds-multipledays-1/input.json" assert {type: "json"};
+import non_rep_output from "./jsons/non-rep-bounds-multipledays-1/output.json" assert {type: "json"};
+import realistic_input from "./jsons/realistic-schedule-1/input.json" assert {type: "json"};
+import realistic_output from "./jsons/realistic-schedule-1/output.json" assert {type: "json"};
+import repetition_input from "./jsons/repetition-daily-1/input.json" assert {type: "json"};
+import repetition_output from "./jsons/repetition-daily-1/output.json" assert {type: "json"};
+import rep_bounds_input from "./jsons/repetition-daily-bounds-1/input.json" assert {type: "json"};
+import rep_bounds_output from "./jsons/repetition-daily-bounds-1/output.json" assert {type: "json"};
+import singleday_input from "./jsons/singleday-manygoals-1/input.json" assert {type: "json"};
+import singleday_output from "./jsons/singleday-manygoals-1/output.json" assert {type: "json"};
+import simple_split_task_input from "./jsons/split-1/input.json" assert {type: "json"};
+import simple_split_task_output from "./jsons/split-1/output.json" assert {type: "json"};
+import split_task_variant_input from "./jsons/split-2/input.json" assert {type: "json"};
+import split_task_variant_output from "./jsons/split-2/output.json" assert {type: "json"};
+import split_tasks_simple_2_input from "./jsons/split-3/input.json" assert {type: "json"}
+import split_tasks_simple_2_output from "./jsons/split-3/output.json" assert {type: "json"}
+import split_tasks_simple_3_input from "./jsons/split-4/input.json" assert {type: "json"}
+import split_tasks_simple_3_output from "./jsons/split-4/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
