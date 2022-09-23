@@ -10,7 +10,9 @@ pub enum Repetition {
     #[serde(rename = "daily")]
     DAILY,
     HOURLY,
+    #[serde(rename = "weekdays")]
     WEEKDAYS,
+    #[serde(rename = "weekends")]
     WEEKENDS,
     #[serde(rename = "mondays")]
     MONDAYS,
@@ -107,6 +109,7 @@ impl Iterator for TimeSliceIterator {
                 }
                 if self.start.weekday().to_string() != "Sat"
                     && self.start.weekday().to_string() != "Sun"
+                    && self.start < self.end
                 {
                     let start = self.start;
                     let end = self.start + Duration::days(1);
@@ -125,8 +128,9 @@ impl Iterator for TimeSliceIterator {
                 {
                     self.start += Duration::days(1);
                 }
-                if self.start.weekday().to_string() == "Sat"
-                    || self.start.weekday().to_string() == "Sun"
+                if (self.start.weekday().to_string() == "Sat"
+                    || self.start.weekday().to_string() == "Sun")
+                    && self.start < self.end
                 {
                     let start = self.start;
                     let end = self.start + Duration::days(1);
