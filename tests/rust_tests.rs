@@ -90,3 +90,9 @@ fn split_4_works() {
     let (actual_output, desired_output) = run_test("split-4");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn split_4_works() {
+    let (actual_output, desired_output) = run_test("repetition-weekends-1");
+    assert_eq!(actual_output, desired_output);
+}
