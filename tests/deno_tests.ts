@@ -22,6 +22,8 @@ import split_tasks_simple_2_input from "./jsons/split-3/input.json" assert {type
 import split_tasks_simple_2_output from "./jsons/split-3/output.json" assert {type: "json"}
 import split_tasks_simple_3_input from "./jsons/split-4/input.json" assert {type: "json"}
 import split_tasks_simple_3_output from "./jsons/split-4/output.json" assert {type: "json"}
+import repetition_weekend_1_input from "./jsons/repetition-weekends-1/input.json" assert {type: "json"}
+import repetition_weekend_1_output from "./jsons/repetition-weekends-1/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -102,5 +104,11 @@ Deno.test("single day with three goals to be split", () => {
 Deno.test("single day goals with same flexibility", () => {
   assertEquals(
     schedule(split_tasks_simple_3_input),split_tasks_simple_3_output);
+});
+
+// test for single task repeating on weekends
+Deno.test("repetition weekend simple", () => {
+  assertEquals(
+    schedule(repetition_weekend_1_input),repetition_weekend_1_output);
 });
 

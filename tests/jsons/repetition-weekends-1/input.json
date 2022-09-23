@@ -1,0 +1,14 @@
+{
+   "startDate": "2022-09-01T00:00:00",
+   "endDate": "2022-10-01T00:00:00",
+   "goals": [
+      {
+         "id": 1,
+         "title": "community_cleanup",
+         "duration": 3,
+         "repeat": "weekends",
+         "after_time": 10,
+         "before_time": 15
+      }
+   ]
+}
