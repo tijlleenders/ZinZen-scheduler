@@ -200,6 +200,7 @@ fn time_slice_iterator_range_returns_all_wednesdays() {
     )
 }
 
+#[test]
 fn time_slice_iterator_range_returns_all_thursdays() {
     let r = TimeSliceIterator {
         start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
@@ -234,6 +235,7 @@ fn time_slice_iterator_range_returns_all_thursdays() {
     )
 }
 
+#[test]
 fn time_slice_iterator_range_returns_all_fridays() {
     let r = TimeSliceIterator {
         start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
@@ -268,6 +270,7 @@ fn time_slice_iterator_range_returns_all_fridays() {
     )
 }
 
+#[test]
 fn time_slice_iterator_range_returns_all_saturdays() {
     let r = TimeSliceIterator {
         start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
@@ -298,6 +301,7 @@ fn time_slice_iterator_range_returns_all_saturdays() {
     )
 }
 
+#[test]
 fn time_slice_iterator_range_returns_all_sundays() {
     let r = TimeSliceIterator {
         start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
@@ -323,6 +327,57 @@ fn time_slice_iterator_range_returns_all_sundays() {
             (
                 NaiveDate::from_ymd(2022, 9, 25).and_hms(0, 0, 0),
                 NaiveDate::from_ymd(2022, 9, 26).and_hms(0, 0, 0),
+            ),
+        ]
+    )
+}
+
+#[test]
+fn time_slice_iterator_range_returns_all_weekdays() {
+    let r = TimeSliceIterator {
+        start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+        end: NaiveDate::from_ymd(2022, 9, 14).and_hms(0, 0, 0),
+        repetition: Repetition::WEEKDAYS,
+    };
+
+    assert_eq!(
+        r.into_iter().collect::<Vec<_>>(),
+        vec![
+            (
+                NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 2).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 2).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 3).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 5).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 6).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 6).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 7).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 7).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 8).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 8).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 9).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 9).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 10).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 12).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 13).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 13).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 14).and_hms(0, 0, 0),
             ),
         ]
     )
