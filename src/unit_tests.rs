@@ -384,6 +384,53 @@ fn time_slice_iterator_range_returns_all_weekdays() {
 }
 
 #[test]
+fn time_slice_iterator_range_returns_all_weekends() {
+    let r = TimeSliceIterator {
+        start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
+        end: NaiveDate::from_ymd(2022, 9, 30).and_hms(0, 0, 0),
+        repetition: Repetition::WEEKENDS,
+    };
+
+    assert_eq!(
+        r.into_iter().collect::<Vec<_>>(),
+        vec![
+            (
+                NaiveDate::from_ymd(2022, 9, 3).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 4).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 4).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 5).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 10).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 11).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 11).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 12).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 17).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 18).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 18).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 19).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 24).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 25).and_hms(0, 0, 0),
+            ),
+            (
+                NaiveDate::from_ymd(2022, 9, 25).and_hms(0, 0, 0),
+                NaiveDate::from_ymd(2022, 9, 26).and_hms(0, 0, 0),
+            ),
+        ]
+    )
+}
+
+#[test]
 fn time_slice_iterator_range_splits_day_into_24_hrs() {
     let r = TimeSliceIterator {
         start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
