@@ -92,7 +92,7 @@ fn split_4_works() {
 }
 
 #[test]
-fn split_4_works() {
+fn repetition_weekends_1_works() {
     let (actual_output, desired_output) = run_test("repetition-weekends-1");
     assert_eq!(actual_output, desired_output);
 }
