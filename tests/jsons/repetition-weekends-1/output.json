@@ -1,0 +1,50 @@
+[
+   {
+      "taskid": 0,
+      "goalid": 1,
+      "title": "community_cleanup",
+      "duration": 3,
+      "start": "2022-09-03T10:00:00",
+      "deadline": "2022-09-03T13:00:00"
+   },
+   {
+      "taskid": 0,
+      "goalid": 1,
+      "title": "community_cleanup",
+      "duration": 3,
+      "start": "2022-09-04T10:00:00",
+      "deadline": "2022-09-04T13:00:00"
+   },
+   {
+      "taskid": 0,
+      "goalid": 1,
+      "title": "community_cleanup",
+      "duration": 3,
+      "start": "2022-09-17T10:00:00",
+      "deadline": "2022-09-17T13:00:00"
+   },
+   {
+      "taskid": 0,
+      "goalid": 1,
+      "title": "community_cleanup",
+      "duration": 3,
+      "start": "2022-09-18T10:00:00",
+      "deadline": "2022-09-18T13:00:00"
+   },
+   {
+      "taskid": 0,
+      "goalid": 1,
+      "title": "community_cleanup",
+      "duration": 3,
+      "start": "2022-09-24T10:00:00",
+      "deadline": "2022-09-24T13:00:00"
+   },
+   {
+      "taskid": 0,
+      "goalid": 1,
+      "title": "community_cleanup",
+      "duration": 3,
+      "start": "2022-09-25T10:00:00",
+      "deadline": "2022-09-25T13:00:00"
+   }
+]
