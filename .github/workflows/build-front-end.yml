@@ -12,5 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
       - name: Use script to build for front-end
         run: ./build-for-frontend.sh
