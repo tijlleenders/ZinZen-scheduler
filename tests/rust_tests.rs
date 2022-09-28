@@ -96,3 +96,9 @@ fn repetition_weekends_1_works() {
     let (actual_output, desired_output) = run_test("repetition-weekends-1");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn realistic_weekend_repetition_1_works() {
+    let (actual_output, desired_output) = run_test("realistic-weekend-repetition-1");
+    assert_eq!(actual_output, desired_output);
+}
