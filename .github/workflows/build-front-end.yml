@@ -1,0 +1,15 @@
+name: Build-Front-End
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-front-end:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use script to build for front-end
+        run: sh ./build-for-frontend.sh
