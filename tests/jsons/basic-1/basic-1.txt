@@ -1,0 +1,3 @@
+shopping 1hour start 1/1 due 2/1 after 10 before 13
+dentist 1hour start 1/1 due 2/1 after 10 before 11
+exercise 1hour start start 1/1 due 2/1 after 10 before 18

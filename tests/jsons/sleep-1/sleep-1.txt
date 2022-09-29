@@ -1,0 +1,1 @@
+sleep 8hours daily start 1/1 due 9/1 22-6

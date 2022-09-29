@@ -1,0 +1,3 @@
+work 8hours start 1/9 due 2/9 8-21
+shopping 1hour start 1/9 due 2/9 14-17
+walk 2hours start 1/9 due 2/9 13-16

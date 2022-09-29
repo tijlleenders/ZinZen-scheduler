@@ -1,0 +1,8 @@
+shopping 1hour start 1/1 due 2/1 10-13
+dentist 1hour start 1/1 due 2/1 10-11
+exercise 1hour start 1/1 due 2/1 10-18
+meditate 1hour start 1/1 due 2/1 5-7
+cook 2hours start 1/1 due 2/1 18-21
+read 1hour start 1/1 due 2/1 20-22
+meeting 2hours start 1/1 due 2/1 13-17
+code 1hour start 1/1 due 2/1 

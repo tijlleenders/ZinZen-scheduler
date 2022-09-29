@@ -1,0 +1,8 @@
+walk 1hour daily start 1/9 due 1/10 17-20
+read 1hour daily start 1/9 due 1/10 19-20
+piano practice 2hours every wednesday start 1/9 due 1/10 12-14
+gym 2hours daily start 1/9 due 1/10 5-7
+work 8 hours daily start 1/9 due 7/9 9-21
+dentist 1hour start 14/9 due 15/9 10-11
+shopping 2hours start 10/9 due 11/9 12-18
+repair sink 3hours start 25/9 due 26/9
