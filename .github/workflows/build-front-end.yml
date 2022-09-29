@@ -17,5 +17,5 @@ jobs:
           toolchain: nightly
           override: true
       - run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - name: Use script to build for front-end
-        run: ./build-for-frontend.sh
+      - name: Run wasm-pack build
+        run: wasm-pack build
