@@ -18,4 +18,4 @@ jobs:
           override: true
       - run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - name: Run wasm-pack build
-        run: wasm-pack build
+        run: wasm-pack build --dev --target web
