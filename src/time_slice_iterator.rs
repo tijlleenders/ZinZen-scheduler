@@ -1,39 +1,94 @@
 use crate::util::MyDurationRound;
 use chrono::prelude::*;
 use chrono::Duration;
+use serde::de::{self, Visitor};
 use serde::Deserialize;
+use serde::*;
 use std::fmt;
 
 /// How often can a task repeat
-#[derive(Deserialize, Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Repetition {
-    #[serde(rename = "daily")]
     DAILY,
     HOURLY,
-    #[serde(rename = "weekdays")]
     WEEKDAYS,
-    #[serde(rename = "weekends")]
+    EveryXdays(usize),
     WEEKENDS,
-    #[serde(rename = "mondays")]
     MONDAYS,
-    #[serde(rename = "tuesdays")]
     TUESDAYS,
-    #[serde(rename = "wednesdays")]
     WEDNESDAYS,
-    #[serde(rename = "thursdays")]
     THURSDAYS,
-    #[serde(rename = "fridays")]
     FRIDAYS,
-    #[serde(rename = "saturdays")]
     SATURDAYS,
-    #[serde(rename = "sundays")]
     SUNDAYS,
 }
 
-//the reason Display is being implemented for repetition
+//How to implement serde deserialize: https://serde.rs/impl-deserialize.html
+struct RepetitionVisitor;
+
+impl<'de> Visitor<'de> for RepetitionVisitor {
+    type Value = Repetition;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "a string of either daily, hourly, weekly, mondays etc."
+        )
+    }
+
+    fn visit_str<E>(self, s: &str) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        let split = s.split(" ").collect::<Vec<&str>>();
+        if split.len() == 3 {
+            //e.g. 'every 5 days' == 3 words
+            let number = split[1];
+            match number.parse::<usize>() {
+                Ok(num) => Ok(Repetition::EveryXdays(num)),
+                Err(e) => Err(E::custom(format!("Error deserializing goal: {}", e))),
+            }
+        } else {
+            match s {
+                "daily" => Ok(Repetition::DAILY),
+                "hourly" => Ok(Repetition::HOURLY),
+                "weekdays" => Ok(Repetition::WEEKDAYS),
+                "weekends" => Ok(Repetition::WEEKENDS),
+                "mondays" => Ok(Repetition::MONDAYS),
+                "tuesdays" => Ok(Repetition::TUESDAYS),
+                "wednesdays" => Ok(Repetition::WEDNESDAYS),
+                "thursdays" => Ok(Repetition::THURSDAYS),
+                "fridays" => Ok(Repetition::FRIDAYS),
+                "saturdays" => Ok(Repetition::SATURDAYS),
+                "sundays" => Ok(Repetition::SUNDAYS),
+                _ => Err(E::custom(format!("Error deserializing goal"))),
+            }
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for Repetition {
+    fn deserialize<D>(deserializer: D) -> Result<Repetition, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        deserializer.deserialize_string(RepetitionVisitor)
+    }
+}
+
+#[derive(PartialEq)]
+pub struct EveryXdays(pub usize);
+
+impl fmt::Display for EveryXdays {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "every {} days", self.0)
+    }
+}
+
+//The reason Display is being implemented for repetition
 // is so that the string representation of MONDAYS-SUNDAYS matches the
 //string representation of chrono::Weekday(). This makes it easy to match
-//when generating date ranges.
+//when generating date ranges, e.g. by doing self.start.weekday().to_string() == "Sat".
 //see: https://docs.rs/chrono/latest/src/chrono/weekday.rs.html#141
 impl fmt::Display for Repetition {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -42,6 +97,7 @@ impl fmt::Display for Repetition {
             Repetition::HOURLY => "HOURLY",
             Repetition::WEEKDAYS => "WEEKDAYS",
             Repetition::WEEKENDS => "WEEKENDS",
+            Repetition::EveryXdays(usize) => "EveryXdays",
             Repetition::MONDAYS => "Mon",
             Repetition::TUESDAYS => "Tue",
             Repetition::WEDNESDAYS => "Wed",
