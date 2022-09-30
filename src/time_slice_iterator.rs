@@ -12,8 +12,8 @@ pub enum Repetition {
     DAILY,
     HOURLY,
     WEEKDAYS,
-    EveryXdays(usize),
     WEEKENDS,
+    EveryXdays(usize),
     MONDAYS,
     TUESDAYS,
     WEDNESDAYS,
@@ -194,6 +194,21 @@ impl Iterator for TimeSliceIterator {
                     return Some((start, end));
                 }
                 return None;
+            }
+            Repetition::EveryXdays(days) => {
+                if self.start < self.end {
+                    let start = self.start;
+                    let mut end = self.start + Duration::days(1);
+                    if end > self.end {
+                        end = self.end;
+                    } else {
+                        end = end.duration_round(Duration::days(1)).ok()?;
+                    }
+                    self.start = end + Duration::days((days - 1) as i64);
+                    Some((start, end))
+                } else {
+                    None
+                }
             }
             _ => {
                 if self.start >= self.end {
