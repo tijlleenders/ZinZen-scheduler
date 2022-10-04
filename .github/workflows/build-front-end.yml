@@ -19,3 +19,8 @@ jobs:
       - run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - name: Run wasm-pack build
         run: wasm-pack build --dev --target web
+      - name: Archive wasm build pkg
+        uses: actions/upload-artifact@v3
+        with:
+          name: wasm-build-pkg
+          path: pkg/
