@@ -11,6 +11,7 @@ use std::fmt;
 pub enum Repetition {
     DAILY,
     HOURLY,
+    WEEKLY,
     WEEKDAYS,
     WEEKENDS,
     EveryXdays(usize),
@@ -52,6 +53,7 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
             match s {
                 "daily" => Ok(Repetition::DAILY),
                 "hourly" => Ok(Repetition::HOURLY),
+                "weekly" => Ok(Repetition::WEEKLY),
                 "weekdays" => Ok(Repetition::WEEKDAYS),
                 "weekends" => Ok(Repetition::WEEKENDS),
                 "mondays" => Ok(Repetition::MONDAYS),
@@ -95,6 +97,7 @@ impl fmt::Display for Repetition {
         f.write_str(match *self {
             Repetition::DAILY => "DAILY",
             Repetition::HOURLY => "HOURLY",
+            Repetition::WEEKLY => "WEEKLY",
             Repetition::WEEKDAYS => "WEEKDAYS",
             Repetition::WEEKENDS => "WEEKENDS",
             Repetition::EveryXdays(usize) => "EveryXdays",
@@ -153,6 +156,23 @@ impl Iterator for TimeSliceIterator {
                 } else {
                     None
                 }
+            }
+            Repetition::WEEKLY => {
+                if self.start >= self.end {
+                    return None;
+                }
+                let start = self.start;
+                let mut end = self.start;
+                while end.weekday().to_string() != "Sun" && end <= self.end {
+                    end += Duration::days(1);
+                }
+                if end >= self.end {
+                    end = self.end;
+                } else {
+                    end += Duration::days(1);
+                }
+                self.start = end;
+                return Some((start, end));
             }
             Repetition::WEEKDAYS => {
                 if self.start >= self.end {

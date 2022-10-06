@@ -1,12 +1,12 @@
 {
-  startDate: 2022-10-01T00:00:00,
-  endDate: 2022-11-01T00:00:00,
-  goals: [
+  "startDate": "2022-10-01T00:00:00",
+  "endDate": "2022-11-01T00:00:00",
+  "goals": [
     {
-      id: 1,
-      title: "study french",
-      duration: 2,
-      repeat: "weekly"
+      "id": 1,
+      "title": "study french",
+      "duration": 2,
+      "repeat": "weekly"
     }
   ]
 }
