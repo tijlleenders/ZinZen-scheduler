@@ -11,7 +11,6 @@ use std::fmt;
 pub enum Repetition {
     DAILY,
     HOURLY,
-    #[serde(rename = "weekly")]
     WEEKLY,
     WEEKDAYS,
     WEEKENDS,
@@ -54,6 +53,7 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
             match s {
                 "daily" => Ok(Repetition::DAILY),
                 "hourly" => Ok(Repetition::HOURLY),
+                "weekly" => Ok(Repetition::WEEKLY),
                 "weekdays" => Ok(Repetition::WEEKDAYS),
                 "weekends" => Ok(Repetition::WEEKENDS),
                 "mondays" => Ok(Repetition::MONDAYS),
