@@ -1,0 +1,26 @@
+name: Build-Front-End
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-front-end:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: rustup target add wasm32-unknown-unknown
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+      - run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - name: Run wasm-pack build
+        run: wasm-pack build --dev --target web
+      - name: Archive wasm build pkg
+        uses: actions/upload-artifact@v3
+        with:
+          name: wasm-build-pkg
+          path: pkg/

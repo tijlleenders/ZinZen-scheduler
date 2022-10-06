@@ -1,0 +1,14 @@
+{
+  "startDate": "2022-09-01T00:00:00",
+  "endDate": "2022-10-01T00:00:00",
+  "goals": [
+    {
+      "id": 1,
+      "title": "water plants",
+      "duration": 1,
+      "repeat": "every 3 days",
+      "after_time": 13,
+      "before_time": 15
+    }
+  ]
+}

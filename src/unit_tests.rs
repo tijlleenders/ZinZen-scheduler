@@ -1,3 +1,4 @@
+use self::serde::*;
 use crate::{
     goal::*, input::*, output_formatter::*, task::TaskStatus::*, task::*, task_generator::*,
     task_placer::*, time_slice_iterator::*,
@@ -877,5 +878,9 @@ fn task_splitting_works() {
 }
 
 #[test]
-#[ignore]
-fn split_on_first_slot() {}
+fn custom_deserialization_of_every_x_days_works() {
+    let correct_deserialization = Repetition::EveryXdays(3);
+    let string = "\"every 3 days\"";
+    let actual_deserialization: Repetition = serde_json::from_str(&string).unwrap();
+    assert_eq!(correct_deserialization, actual_deserialization);
+}
