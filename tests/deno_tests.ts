@@ -28,8 +28,10 @@ import realistic_weekend_repetition_1_input from "./jsons/realistic-weekend-repe
 import realistic_weekend_repetition_1_output from "./jsons/realistic-weekend-repetition-1/output.json" assert {type: "json"}
 import every_3_days_input from "./jsons/every-3-days/input.json" assert {type: "json"}
 import every_3_days_output from "./jsons/every-3-days/output.json" assert {type: "json"}
-import weekly_input from "./jsons/weekly-1/input.json" assert {type: "json"}
-import weekly_output from "./jsons/weekly-1/output.json" assert {type: "json"}
+import weekly1_input from "./jsons/weekly-1/input.json" assert {type: "json"}
+import weekly1_output from "./jsons/weekly-1/output.json" assert {type: "json"}
+import weekly2_input from "./jsons/weekly-2/input.json" assert {type: "json"}
+import weekly2_output from "./jsons/weekly-2/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -128,7 +130,12 @@ Deno.test("every 3 days", () => {
     schedule(every_3_days_input),every_3_days_output);
 });
 
-Deno.test("weekly", () => {
+Deno.test("weekly1", () => {
   assertEquals(
-    schedule(weekly_input),weekly_output);
+    schedule(weekly1_input),weekly1_output);
+});
+
+Deno.test("weekly2", () => {
+  assertEquals(
+    schedule(weekly2_input),weekly2_output);
 });
