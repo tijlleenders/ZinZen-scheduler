@@ -1,0 +1,12 @@
+{
+  "startDate": "2022-10-01T00:00:00",
+  "endDate": "2023-01-01T00:00:00",
+  "goals": [
+    {
+      "id": 1,
+      "title": "transfer savings",
+      "duration": 3,
+      "repeat": "every 21 days"
+    }
+  ]
+}
