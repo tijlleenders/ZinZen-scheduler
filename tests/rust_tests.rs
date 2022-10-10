@@ -110,7 +110,13 @@ fn every_3_days_works() {
 }
 
 #[test]
-fn weekly_works() {
+fn weekly1_works() {
     let (actual_output, desired_output) = run_test("weekly-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn weekly2_works() {
+    let (actual_output, desired_output) = run_test("weekly-2");
     assert_eq!(actual_output, desired_output);
 }
