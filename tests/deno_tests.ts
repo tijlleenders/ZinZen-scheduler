@@ -32,6 +32,11 @@ import weekly1_input from "./jsons/weekly-1/input.json" assert {type: "json"}
 import weekly1_output from "./jsons/weekly-1/output.json" assert {type: "json"}
 import weekly2_input from "./jsons/weekly-2/input.json" assert {type: "json"}
 import weekly2_output from "./jsons/weekly-2/output.json" assert {type: "json"}
+import every_2_days_input from "./jsons/every-2-days/input.json" assert {type: "json"}
+import every_2_days_output from "./jsons/every-2-days/output.json" assert {type: "json"}
+import every_60_days_input from "./jsons/every-60-days/input.json" assert {type: "json"}
+import every_60_days_output from "./jsons/every-60-days/output.json" assert {type: "json"}
+
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -138,4 +143,14 @@ Deno.test("weekly1", () => {
 Deno.test("weekly2", () => {
   assertEquals(
     schedule(weekly2_input),weekly2_output);
+});
+
+Deno.test("every 2 days", () => {
+  assertEquals(
+    schedule(every_2_days_input),every_2_days_output);
+});
+
+Deno.test("every 60 days", () => {
+  assertEquals(
+    schedule(every_60_days_input),every_60_days_output);
 });
