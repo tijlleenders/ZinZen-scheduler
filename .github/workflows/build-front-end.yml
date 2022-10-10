@@ -1,10 +1,10 @@
 name: Build-Front-End
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    - branches: [ "main" ]
+    - paths:
+        'src/*'
 
 jobs:
   build-front-end:
