@@ -1,3 +1,4 @@
+//This comment is just testing if CI will trigger.
 use wasm_bindgen::prelude::*;
 
 pub use goal::Goal;
