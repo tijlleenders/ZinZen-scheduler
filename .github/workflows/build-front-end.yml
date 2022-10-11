@@ -2,8 +2,8 @@ name: Build-Front-End
 
 on:
   pull_request:
-    - branches: [ "main" ]
-    - paths:
+    branches: [ "main" ]
+    paths:
         - 'src/*'
         - 'Cargo.toml'
 
