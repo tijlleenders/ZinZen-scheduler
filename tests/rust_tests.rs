@@ -132,3 +132,15 @@ fn every_60_days_works() {
     let (actual_output, desired_output) = run_test("every-60-days");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn after_12_works() {
+    let (actual_output, desired_output) = run_test("after-12");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn before_7_works() {
+    let (actual_output, desired_output) = run_test("before-7");
+    assert_eq!(actual_output, desired_output);
+}
