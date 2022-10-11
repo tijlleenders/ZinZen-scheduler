@@ -1,3 +1,4 @@
+# This comment is part of testing CI (#142). Delete once tested.
 [package]
 name = "zinzen"
 version = "0.1.0"
