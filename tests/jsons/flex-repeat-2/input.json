@@ -1,0 +1,44 @@
+{
+  "startDate": "2022-10-01T00:00:00",
+  "endDate": "2022-11-01T00:00:00",
+  "goals": [
+    {
+      "id": 1,
+      "title": "side project",
+      "duration": 8,
+      "repeat": "1-3/week"
+    },
+    {
+      "id": 2,
+      "title": "sleep",
+      "duration": 10,
+      "repeat": "daily",
+      "after_time": 10,
+      "before_time": 8
+    },
+    {
+      "id": 3,
+      "title": "work",
+      "duration": 9,
+      "repeat": "weekdays",
+      "after_time": 8,
+      "before_time": 17
+    },
+    {
+      "id": 4,
+      "title": "exercise",
+      "duration": 3,
+      "repeat": "weekdays",
+      "after_time": 17,
+      "before_time": 20
+    },
+    {
+      "id": 5,
+      "title": "family time",
+      "duration": 3,
+      "repeat": "daily",
+      "after_time": 20,
+      "before_time": 22
+    }
+  ]
+}
