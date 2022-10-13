@@ -1,0 +1,34 @@
+{
+  "startDate": "2022-10-01T00:00:00",
+  "endDate": "2022-11-01T00:00:00",
+  "goals": [
+    {
+      "id": 1,
+      "title": "write blog article",
+      "duration": 2,
+      "repeat": "2/week",
+      "after_time": 19,
+      "before_time":22 
+    },
+    {
+      "id": 2,
+      "title": "watch movie",
+      "duration": 3,
+      "repeat": "2/week",
+      "start": "2022-10-03T19:00:00",
+      "deadline": "2022-10-03T22:00:00",
+      "after_time": 19,
+      "before_time":22 
+    },
+    {
+      "id": 3,
+      "title": "study",
+      "duration": 3,
+      "repeat": "2/week",
+      "start": "2022-10-11T19:00:00",
+      "deadline": "2022-10-11T22:00:00",
+      "after_time": 19,
+      "before_time":22 
+    }
+  ]
+}
