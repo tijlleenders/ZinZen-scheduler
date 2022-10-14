@@ -117,13 +117,13 @@ impl fmt::Display for Repetition {
 /// e.g. all MONDAYS between 1st September 2022 and 30th September 2022.
 /// e.g. all DAYS between 1st September 2022 and 30th September 2022.
 /// e.g. all HOURS between 1st September 2022 and 30th September 2022.
-pub(crate) struct TimeSliceIterator {
+pub(crate) struct TimeSlotIterator {
     pub(crate) start: NaiveDateTime,
     pub(crate) end: NaiveDateTime,
     pub(crate) repetition: Repetition,
 }
 
-impl Iterator for TimeSliceIterator {
+impl Iterator for TimeSlotIterator {
     type Item = (NaiveDateTime, NaiveDateTime);
     fn next(&mut self) -> Option<Self::Item> {
         match self.repetition {

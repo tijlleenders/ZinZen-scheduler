@@ -3,7 +3,7 @@ use wasm_bindgen::prelude::*;
 pub use goal::Goal;
 pub use input::Input;
 pub use output_formatter::{output_formatter, Output};
-pub use time_slice_iterator::Repetition;
+pub use time_slot_iterator::Repetition;
 
 mod errors;
 /// API modules
@@ -13,7 +13,7 @@ pub mod output_formatter;
 mod task;
 mod task_generator;
 mod task_placer;
-mod time_slice_iterator;
+mod time_slot_iterator;
 mod util;
 
 // Test

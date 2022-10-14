@@ -6,7 +6,7 @@
 use crate::errors::Error;
 use crate::task::Task;
 use crate::task::TaskStatus::{SCHEDULED, UNSCHEDULED};
-use crate::time_slice_iterator::{Repetition, TimeSliceIterator};
+use crate::time_slot_iterator::{Repetition, TimeSlotIterator};
 use chrono::{NaiveDateTime, Timelike};
 
 pub fn task_placer(
@@ -15,12 +15,12 @@ pub fn task_placer(
     calendar_end: NaiveDateTime,
 ) -> Vec<Task> {
     //slide 1 (generate all time slots based on calendar dates)
-    let time_slice_iterator = TimeSliceIterator {
+    let time_slot_iterator = TimeSlotIterator {
         start: calendar_start,
         end: calendar_end,
         repetition: Repetition::HOURLY,
     };
-    let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = time_slice_iterator.collect();
+    let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = time_slot_iterator.collect();
 
     //slides 2 - 7 (assign slots to tasks)
     for task in &mut tasks {
