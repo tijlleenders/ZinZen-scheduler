@@ -83,16 +83,16 @@ impl Goal {
                     end: self.deadline.unwrap_or(calendar_end),
                     repetition: rep,
                 };
-                for (start, deadline) in time_slices {
+                for slot in time_slices {
                     let task_id = *counter;
                     *counter += 1;
                     let deadline = if self.before_time.unwrap_or(24) < self.after_time.unwrap_or(0)
                     {
-                        deadline + Duration::days(1)
+                        slot.end + Duration::days(1)
                     } else {
-                        deadline
+                        slot.end
                     };
-                    let t = Task::new(task_id, start, deadline, &self);
+                    let t = Task::new(task_id, slot.start, deadline, &self);
                     tasks.push(t);
                 }
             }

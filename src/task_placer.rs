@@ -4,6 +4,7 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use crate::errors::Error;
+use crate::slot::Slot;
 use crate::task::Task;
 use crate::task::TaskStatus::{SCHEDULED, UNSCHEDULED};
 use crate::time_slot_iterator::{Repetition, TimeSlotIterator};
@@ -20,19 +21,20 @@ pub fn task_placer(
         end: calendar_end,
         repetition: Repetition::HOURLY,
     };
-    let time_slots: Vec<(NaiveDateTime, NaiveDateTime)> = time_slot_iterator.collect();
+    let time_slots: Vec<Slot> = time_slot_iterator.collect();
 
     //slides 2 - 7 (assign slots to tasks)
     for task in &mut tasks {
         let mut i = 0;
         while i < time_slots.len() {
             //1) is the time_slot within the start and deadline dates of the task?
-            if !((time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline)) {
+            //if !((time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline)) {
+            if !((time_slots[i].start >= task.start) && (time_slots[i].end < task.deadline)) {
                 i += 1;
                 continue;
             }
             //2) is the time_slot after the after_time of the task?
-            if !(time_slots[i].0.hour() >= task.after_time as u32) {
+            if !(time_slots[i].start.hour() >= task.after_time as u32) {
                 i += 1;
                 continue;
             }
@@ -52,11 +54,15 @@ pub fn task_placer(
     for index in 0..tasks.len() {
         if tasks[index].flexibility == 1 {
             let my_slots = tasks[index].get_slots();
-            tasks[index].set_confirmed_start(my_slots[0].0);
-            tasks[index].set_confirmed_deadline(my_slots[my_slots.len() - 1].1);
+            tasks[index].set_confirmed_start(my_slots[0].start);
+            tasks[index].set_confirmed_deadline(my_slots[my_slots.len() - 1].end);
             tasks[index].status = SCHEDULED;
             //slide 10 (remove the assigned slot from other tasks' slot lists)
-            remove_slots_from_tasks(&mut tasks, my_slots[0].0, my_slots[my_slots.len() - 1].1);
+            remove_slots_from_tasks(
+                &mut tasks,
+                my_slots[0].start,
+                my_slots[my_slots.len() - 1].end,
+            );
         }
     }
 
@@ -83,7 +89,7 @@ pub fn task_placer(
 
 //assigns slots to a task based on its after_time and before_time.
 //"i" is an index referring to a position in the time_slots vector.
-fn assign_slots(task: &mut Task, time_slots: &Vec<(NaiveDateTime, NaiveDateTime)>, i: &mut usize) {
+fn assign_slots(task: &mut Task, time_slots: &Vec<Slot>, i: &mut usize) {
     for _ in 0..(task.num_slots_to_be_assigned()) as usize {
         if *i < time_slots.len() {
             task.slots.push(time_slots[*i]);
@@ -91,7 +97,7 @@ fn assign_slots(task: &mut Task, time_slots: &Vec<(NaiveDateTime, NaiveDateTime)
         }
     }
     //move the time_slots index to midnight so as not to add more slots on the same day
-    while time_slots[*i - 1].1.hour() != 0 {
+    while time_slots[*i - 1].end.hour() != 0 {
         *i += 1;
         if *i == time_slots.len() {
             break;
@@ -102,12 +108,16 @@ fn assign_slots(task: &mut Task, time_slots: &Vec<(NaiveDateTime, NaiveDateTime)
 //when a task is scheduled, remove the time it occupies from other tasks' slots
 fn remove_slots_from_tasks(tasks: &mut Vec<Task>, start: NaiveDateTime, deadline: NaiveDateTime) {
     for task in tasks {
+        let s = Slot {
+            start,
+            end: deadline,
+        };
+        let mut new_slots = Vec::new();
         let slots = task.get_slots();
         for slot in slots {
-            if slot.0 >= start && slot.1 <= deadline {
-                task.remove_slot(&slot);
-            }
+            new_slots.extend(slot - s);
         }
+        task.slots = new_slots;
     }
 }
 
@@ -144,8 +154,8 @@ fn schedule_tasks(tasks: &mut Vec<Task>) {
                 if tasks[k].status == SCHEDULED || tasks[k].goal_id == tasks[i].goal_id {
                     continue 'inner;
                 }
-                let other_task_after_time = tasks[k].slots[0].0;
-                let other_task_before_time = tasks[k].slots[tasks[k].slots.len() - 1].1;
+                let other_task_after_time = tasks[k].slots[0].start;
+                let other_task_before_time = tasks[k].slots[tasks[k].slots.len() - 1].end;
                 if (desired_start, desired_deadline)
                     .conflicts_with(other_task_after_time, other_task_before_time)
                     && !(tasks[i].goal_id == tasks[k].goal_id)

@@ -1,6 +1,7 @@
 use crate::errors::Error;
 use crate::goal::Goal;
-use chrono::{NaiveDateTime, Timelike};
+use crate::slot::Slot;
+use chrono::{NaiveDate, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
@@ -18,7 +19,7 @@ pub struct Task {
     pub deadline: NaiveDateTime,
     pub after_time: usize,
     pub before_time: usize,
-    pub slots: Vec<(NaiveDateTime, NaiveDateTime)>,
+    pub slots: Vec<Slot>,
     pub confirmed_start: Option<NaiveDateTime>,
     pub confirmed_deadline: Option<NaiveDateTime>,
     pub internal_index: usize,
@@ -71,18 +72,18 @@ impl Task {
         self.confirmed_deadline = Some(deadline);
     }
 
-    pub fn get_slots(&self) -> Vec<(NaiveDateTime, NaiveDateTime)> {
+    pub fn get_slots(&self) -> Vec<Slot> {
         self.slots.clone()
     }
 
-    pub fn remove_slot(&mut self, slot: &(NaiveDateTime, NaiveDateTime)) {
-        let mut index = 0;
+    pub fn remove_slot(&mut self, slot: &Slot) {
+        /*let mut index = 0;
         for i in 0..self.slots.len() {
             if &self.slots[i] == slot {
                 index = i;
             }
         }
-        self.slots.remove(index);
+        self.slots.remove(index);*/
     }
 
     pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Task>, Error> {
@@ -119,7 +120,10 @@ impl Task {
         }
         let index = self.internal_index;
         self.internal_index += 1;
-        return Some((self.slots[index].0, self.slots[index + self.duration - 1].1));
+        return Some((
+            self.slots[index].start,
+            self.slots[index + self.duration - 1].end,
+        ));
     }
 
     pub fn schedule(&mut self, start: NaiveDateTime, deadline: NaiveDateTime) {
