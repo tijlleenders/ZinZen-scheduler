@@ -1,5 +1,5 @@
 use crate::task::Task;
-use crate::time_slice_iterator::{Repetition, TimeSliceIterator};
+use crate::time_slot_iterator::{Repetition, TimeSlotIterator};
 use chrono::Duration;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
@@ -78,21 +78,21 @@ impl Goal {
         //e.g. if the repetition is MONDAYS, a different task will be generated for each monday.
         match self.repeat {
             Some(rep) => {
-                let time_slices = TimeSliceIterator {
+                let time_slices = TimeSlotIterator {
                     start: self.start.unwrap_or(calendar_start),
                     end: self.deadline.unwrap_or(calendar_end),
                     repetition: rep,
                 };
-                for (start, deadline) in time_slices {
+                for slot in time_slices {
                     let task_id = *counter;
                     *counter += 1;
                     let deadline = if self.before_time.unwrap_or(24) < self.after_time.unwrap_or(0)
                     {
-                        deadline + Duration::days(1)
+                        slot.end + Duration::days(1)
                     } else {
-                        deadline
+                        slot.end
                     };
-                    let t = Task::new(task_id, start, deadline, &self);
+                    let t = Task::new(task_id, slot.start, deadline, &self);
                     tasks.push(t);
                 }
             }

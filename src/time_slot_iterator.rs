@@ -1,3 +1,4 @@
+use crate::slot::Slot;
 use crate::util::MyDurationRound;
 use chrono::prelude::*;
 use chrono::Duration;
@@ -117,14 +118,14 @@ impl fmt::Display for Repetition {
 /// e.g. all MONDAYS between 1st September 2022 and 30th September 2022.
 /// e.g. all DAYS between 1st September 2022 and 30th September 2022.
 /// e.g. all HOURS between 1st September 2022 and 30th September 2022.
-pub(crate) struct TimeSliceIterator {
+pub(crate) struct TimeSlotIterator {
     pub(crate) start: NaiveDateTime,
     pub(crate) end: NaiveDateTime,
     pub(crate) repetition: Repetition,
 }
 
-impl Iterator for TimeSliceIterator {
-    type Item = (NaiveDateTime, NaiveDateTime);
+impl Iterator for TimeSlotIterator {
+    type Item = Slot;
     fn next(&mut self) -> Option<Self::Item> {
         match self.repetition {
             Repetition::DAILY => {
@@ -137,7 +138,7 @@ impl Iterator for TimeSliceIterator {
                         end = end.duration_round(Duration::days(1)).ok()?;
                     }
                     self.start = end;
-                    Some((start, end))
+                    Some(Slot { start, end })
                 } else {
                     None
                 }
@@ -152,7 +153,7 @@ impl Iterator for TimeSliceIterator {
                         end = end.duration_round(Duration::hours(1)).ok()?;
                     }
                     self.start = end;
-                    Some((start, end))
+                    Some(Slot { start, end })
                 } else {
                     None
                 }
@@ -172,7 +173,7 @@ impl Iterator for TimeSliceIterator {
                     end += Duration::days(1);
                 }
                 self.start = end;
-                return Some((start, end));
+                return Some(Slot { start, end });
             }
             Repetition::WEEKDAYS => {
                 if self.start >= self.end {
@@ -190,7 +191,7 @@ impl Iterator for TimeSliceIterator {
                     let start = self.start;
                     let end = self.start + Duration::days(1);
                     self.start = end;
-                    return Some((start, end));
+                    return Some(Slot { start, end });
                 }
                 return None;
             }
@@ -211,7 +212,7 @@ impl Iterator for TimeSliceIterator {
                     let start = self.start;
                     let end = self.start + Duration::days(1);
                     self.start = end;
-                    return Some((start, end));
+                    return Some(Slot { start, end });
                 }
                 return None;
             }
@@ -225,7 +226,7 @@ impl Iterator for TimeSliceIterator {
                         end = end.duration_round(Duration::days(1)).ok()?;
                     }
                     self.start = end + Duration::days((days - 1) as i64);
-                    Some((start, end))
+                    Some(Slot { start, end })
                 } else {
                     None
                 }
@@ -243,7 +244,7 @@ impl Iterator for TimeSliceIterator {
                     let start = self.start;
                     let end = self.start + Duration::days(1);
                     self.start = end;
-                    return Some((start, end));
+                    return Some(Slot { start, end });
                 }
                 return None;
             }
