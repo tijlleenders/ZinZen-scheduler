@@ -1,3 +1,4 @@
+use chrono::Duration;
 use chrono::{NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 use std::ops::{Add, Sub};
@@ -101,5 +102,17 @@ impl Add for Slot {
             //slots that are adjacent to each other
             return self;
         }
+    }
+}
+
+impl Slot {
+    pub fn num_hours(&self) -> usize {
+        let mut hours = 0;
+        let mut time = self.start;
+        while time < self.end {
+            time += Duration::hours(1);
+            hours += 1;
+        }
+        return hours;
     }
 }

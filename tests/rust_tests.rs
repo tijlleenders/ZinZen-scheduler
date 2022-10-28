@@ -83,6 +83,7 @@ fn split_2_works() {
 #[test]
 fn split_3_works() {
     let (actual_output, desired_output) = run_test("split-3");
+    assert_eq!(actual_output, desired_output);
 }
 
 #[test]

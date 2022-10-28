@@ -9,16 +9,16 @@
    },
    {
       "taskid": 1,
-      "goalid": 2,
-      "title": "dentist",
+      "goalid": 3,
+      "title": "walk",
       "duration": 1,
       "start": "2022-09-01T14:00:00",
       "deadline": "2022-09-01T15:00:00"
    },
    {
       "taskid": 2,
-      "goalid": 3,
-      "title": "walk",
+      "goalid": 2,
+      "title": "dentist",
       "duration": 1,
       "start": "2022-09-01T15:00:00",
       "deadline": "2022-09-01T16:00:00"
