@@ -28,7 +28,6 @@ pub fn task_placer(
         let mut i = 0;
         while i < time_slots.len() {
             //1) is the time_slot within the start and deadline dates of the task?
-            //if !((time_slots[i].0 >= task.start) && (time_slots[i].1 < task.deadline)) {
             if !((time_slots[i].start >= task.start) && (time_slots[i].end < task.deadline)) {
                 i += 1;
                 continue;
@@ -39,12 +38,18 @@ pub fn task_placer(
                 continue;
             }
             assign_slots(task, &time_slots, &mut i);
-            //if too few slots were assigned (the remaining slots on calendar were not enough),
-            //truncate the task's duration
-            if task.slots.len() < task.duration {
-                task.duration = task.slots.len();
-            }
+
             i += 1;
+        }
+        //if too few slots were assigned for the task (the remaining slots on calendar were not enough),
+        //truncate the task's duration.
+        //TODO: Need to confirm if this is the expected behaviour in all cases.
+        let mut total_slot_hours = 0;
+        for slot in &task.slots {
+            total_slot_hours += slot.num_hours();
+        }
+        if total_slot_hours < task.duration {
+            task.duration = total_slot_hours;
         }
         task.calculate_flexibility();
     }
@@ -55,14 +60,10 @@ pub fn task_placer(
         if tasks[index].flexibility == 1 {
             let my_slots = tasks[index].get_slots();
             tasks[index].set_confirmed_start(my_slots[0].start);
-            tasks[index].set_confirmed_deadline(my_slots[my_slots.len() - 1].end);
+            tasks[index].set_confirmed_deadline(my_slots[0].end);
             tasks[index].status = SCHEDULED;
             //slide 10 (remove the assigned slot from other tasks' slot lists)
-            remove_slots_from_tasks(
-                &mut tasks,
-                my_slots[0].start,
-                my_slots[my_slots.len() - 1].end,
-            );
+            remove_slots_from_tasks(&mut tasks, my_slots[0].start, my_slots[0].end);
         }
     }
 
@@ -90,12 +91,20 @@ pub fn task_placer(
 //assigns slots to a task based on its after_time and before_time.
 //"i" is an index referring to a position in the time_slots vector.
 fn assign_slots(task: &mut Task, time_slots: &Vec<Slot>, i: &mut usize) {
-    for _ in 0..(task.num_slots_to_be_assigned()) as usize {
-        if *i < time_slots.len() {
-            task.slots.push(time_slots[*i]);
+    let start = time_slots[*i];
+    let mut end = time_slots[*i];
+    for _ in 1..(task.size_of_slots_to_be_assigned()) as usize {
+        if *i < time_slots.len() - 1 {
             *i += 1;
+            end = time_slots[*i];
         }
     }
+    let slot = Slot {
+        start: start.start,
+        end: end.end,
+    };
+
+    task.slots.push(slot);
     //move the time_slots index to midnight so as not to add more slots on the same day
     while time_slots[*i - 1].end.hour() != 0 {
         *i += 1;
@@ -118,6 +127,9 @@ fn remove_slots_from_tasks(tasks: &mut Vec<Task>, start: NaiveDateTime, deadline
             new_slots.extend(slot - s);
         }
         task.slots = new_slots;
+        if !task.slots.is_empty() {
+            task.internal_marker = task.slots[0].start;
+        }
     }
 }
 
@@ -146,7 +158,8 @@ fn schedule_tasks(tasks: &mut Vec<Task>) {
         if tasks[i].status == SCHEDULED {
             continue;
         }
-        tasks[i].internal_index = 0;
+        //Place internal marker at first possible hour of task
+        tasks[i].internal_marker = tasks[i].slots[0].start;
         'slot_loop: while let Some((desired_start, desired_deadline)) =
             tasks[i].next_start_deadline_combination()
         {
