@@ -21,7 +21,7 @@ fn get_test_tasks() -> Vec<Task> {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
-            internal_index: 0,
+            internal_marker: NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
         },
         Task {
             id: 10,
@@ -37,7 +37,7 @@ fn get_test_tasks() -> Vec<Task> {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
-            internal_index: 0,
+            internal_marker: NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
         },
         Task {
             id: 30,
@@ -53,7 +53,7 @@ fn get_test_tasks() -> Vec<Task> {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
-            internal_index: 0,
+            internal_marker: NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
         },
     ]
 }
@@ -166,7 +166,7 @@ fn goal_generates_single_nonrepetitive_task() {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
-            internal_index: 0,
+            internal_marker: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
         },]
     )
 }
@@ -180,69 +180,6 @@ fn output_formatter_works() {
     let output = output_formatter(scheduled_tasks).unwrap();
     assert_eq!(desired_output, serde_json::to_string(&output).unwrap());
 }
-
-/*#[test]
-fn calculate_flexibility_works() {
-    let mut tasks = get_test_tasks();
-    tasks[0].slots = vec![(
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-    )];
-    tasks[1].slots = vec![
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
-        ),
-    ];
-    tasks[2].slots = vec![
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(15, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(15, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(16, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(16, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(17, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(17, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(18, 0, 0),
-        ),
-    ];
-    for task in &mut tasks {
-        task.calculate_flexibility();
-    }
-    assert_eq!(tasks[0].flexibility, 1);
-    assert_eq!(tasks[1].flexibility, 3);
-    assert_eq!(tasks[2].flexibility, 8);
-}*/
 
 #[test]
 fn task_placer_slots_tasks_correctly() {
@@ -278,92 +215,6 @@ fn task_placer_slots_tasks_correctly() {
         NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0)
     );
 }
-
-/*#[test]
-fn task_splitting_works() {
-    let original_slots = vec![
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(8, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(9, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(9, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 6).and_hms(13, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(14, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(14, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(15, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(15, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(16, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(16, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(17, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(17, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(18, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(18, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(19, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(19, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(20, 0, 0),
-        ),
-        (
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(20, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 7).and_hms(21, 0, 0),
-        ),
-    ];
-
-    let mut task = Task {
-        id: 1,
-        goal_id: 1,
-        title: "Work".to_string(),
-        duration: 8,
-        status: UNSCHEDULED,
-        flexibility: 6,
-        start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-        deadline: NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0),
-        after_time: 8,
-        before_time: 21,
-        slots: original_slots,
-        confirmed_start: None,
-        confirmed_deadline: None,
-        internal_index: 0,
-    };
-
-    let mut counter = 1;
-    let one_hour_tasks = task.split(&mut counter).unwrap();
-    assert_eq!(one_hour_tasks.len(), 8);
-    for i in 0..one_hour_tasks.len() {
-        assert_eq!(one_hour_tasks[i].duration, 1);
-        assert_eq!(one_hour_tasks[i].after_time, task.after_time);
-        assert_eq!(one_hour_tasks[i].before_time, task.before_time);
-        assert_eq!(one_hour_tasks[i].get_slots().len(), task.get_slots().len());
-        assert_eq!(one_hour_tasks[i].id, i + 1);
-    }
-}*/
 
 #[test]
 fn custom_deserialization_of_every_x_days_works() {
@@ -546,5 +397,134 @@ fn adding_slots_to_each_other_works() {
             end: NaiveDate::from_ymd(2022, 1, 1).and_hms(18, 0, 0)
         },
         slot_a + slot_h
+    );
+}
+
+fn get_test_tasks_2() -> Vec<Task> {
+    vec![
+        Task {
+            id: 1,
+            goal_id: 2,
+            title: "clean car".to_string(),
+            duration: 2,
+            status: TaskStatus::UNSCHEDULED,
+            flexibility: 0,
+            start: NaiveDate::from_ymd(2022, 10, 24).and_hms(0, 0, 0),
+            deadline: NaiveDate::from_ymd(2022, 10, 29).and_hms(0, 0, 0),
+            after_time: 10,
+            before_time: 14,
+            slots: Vec::new(),
+            confirmed_start: None,
+            confirmed_deadline: None,
+            internal_marker: NaiveDate::from_ymd(2022, 10, 24).and_hms(10, 0, 0),
+        },
+        Task {
+            id: 2,
+            goal_id: 1,
+            title: "shopping".to_string(),
+            duration: 1,
+            status: TaskStatus::UNSCHEDULED,
+            flexibility: 0,
+            start: NaiveDate::from_ymd(2022, 11, 1).and_hms(0, 0, 0),
+            deadline: NaiveDate::from_ymd(2022, 11, 2).and_hms(0, 0, 0),
+            after_time: 10,
+            before_time: 14,
+            slots: Vec::new(),
+            confirmed_start: None,
+            confirmed_deadline: None,
+            internal_marker: NaiveDate::from_ymd(2022, 11, 1).and_hms(10, 0, 0),
+        },
+        Task {
+            id: 3,
+            goal_id: 3,
+            title: "dentist".to_string(),
+            duration: 1,
+            status: TaskStatus::UNSCHEDULED,
+            flexibility: 0,
+            start: NaiveDate::from_ymd(2022, 11, 2).and_hms(0, 0, 0),
+            deadline: NaiveDate::from_ymd(2022, 11, 3).and_hms(0, 0, 0),
+            after_time: 10,
+            before_time: 11,
+            slots: Vec::new(),
+            confirmed_start: None,
+            confirmed_deadline: None,
+            internal_marker: NaiveDate::from_ymd(2022, 11, 2).and_hms(10, 0, 0),
+        },
+    ]
+}
+
+fn get_calendar_bounds_2() -> (NaiveDateTime, NaiveDateTime) {
+    (
+        (NaiveDate::from_ymd(2022, 10, 23).and_hms(0, 0, 0)),
+        NaiveDate::from_ymd(2022, 11, 3).and_hms(0, 0, 0),
+    )
+}
+
+#[test]
+fn task_placer_assigns_contiguous_slots() {
+    let tasks = get_test_tasks_2();
+    let (calendar_start, calendar_end) = get_calendar_bounds_2();
+    let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
+    assert_eq!(scheduled_tasks[0].status, SCHEDULED);
+    assert_eq!(scheduled_tasks[1].status, SCHEDULED);
+    assert_eq!(scheduled_tasks[2].status, SCHEDULED);
+    println!("In test: {:?}", scheduled_tasks[0].slots);
+    assert_eq!(scheduled_tasks[0].slots.len(), 5);
+    assert_eq!(scheduled_tasks[1].slots.len(), 1);
+    assert_eq!(scheduled_tasks[2].slots.len(), 0); //0 because the entire slot was removed when this
+                                                   //task was scheduled.
+
+    assert_eq!(
+        scheduled_tasks[0].slots[0].start,
+        NaiveDate::from_ymd(2022, 10, 24).and_hms(12, 0, 0)
+    );
+    assert_eq!(
+        scheduled_tasks[0].slots[0].end,
+        NaiveDate::from_ymd(2022, 10, 24).and_hms(14, 0, 0)
+    );
+
+    assert_eq!(
+        scheduled_tasks[0].slots[1].start,
+        NaiveDate::from_ymd(2022, 10, 25).and_hms(10, 0, 0)
+    );
+    assert_eq!(
+        scheduled_tasks[0].slots[1].end,
+        NaiveDate::from_ymd(2022, 10, 25).and_hms(14, 0, 0)
+    );
+
+    assert_eq!(
+        scheduled_tasks[0].slots[2].start,
+        NaiveDate::from_ymd(2022, 10, 26).and_hms(10, 0, 0)
+    );
+    assert_eq!(
+        scheduled_tasks[0].slots[2].end,
+        NaiveDate::from_ymd(2022, 10, 26).and_hms(14, 0, 0)
+    );
+
+    assert_eq!(
+        scheduled_tasks[0].slots[3].start,
+        NaiveDate::from_ymd(2022, 10, 27).and_hms(10, 0, 0)
+    );
+    assert_eq!(
+        scheduled_tasks[0].slots[3].end,
+        NaiveDate::from_ymd(2022, 10, 27).and_hms(14, 0, 0)
+    );
+
+    assert_eq!(
+        scheduled_tasks[0].slots[4].start,
+        NaiveDate::from_ymd(2022, 10, 28).and_hms(10, 0, 0)
+    );
+    assert_eq!(
+        scheduled_tasks[0].slots[4].end,
+        NaiveDate::from_ymd(2022, 10, 28).and_hms(14, 0, 0)
+    );
+
+    assert_eq!(
+        scheduled_tasks[1].slots[0].start,
+        NaiveDate::from_ymd(2022, 11, 1).and_hms(11, 0, 0)
+    );
+    assert_eq!(
+        scheduled_tasks[1].slots[0].end,
+        NaiveDate::from_ymd(2022, 11, 1).and_hms(14, 0, 0)
     );
 }
