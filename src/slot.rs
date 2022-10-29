@@ -107,12 +107,6 @@ impl Add for Slot {
 
 impl Slot {
     pub fn num_hours(&self) -> usize {
-        let mut hours = 0;
-        let mut time = self.start;
-        while time < self.end {
-            time += Duration::hours(1);
-            hours += 1;
-        }
-        return hours;
+        (self.end - self.start).num_hours() as usize
     }
 }
