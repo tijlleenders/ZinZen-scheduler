@@ -1,7 +1,7 @@
 use self::serde::*;
 use crate::{
-    goal::*, input::*, output_formatter::*, slot::*, task::TaskStatus::*, task::*,
-    task_generator::*, task_placer::*, time_slot_iterator::*,
+    goal::*, input::*, output_formatter::*, slot::*, slot_assigner::*, task::TaskStatus::*,
+    task::*, task_generator::*, task_placer::*, time_slot_iterator::*,
 };
 use chrono::*;
 
@@ -176,16 +176,17 @@ fn output_formatter_works() {
     let desired_output = r#"[{"taskid":0,"goalid":2,"title":"dentist","duration":1,"start":"2022-01-01T10:00:00","deadline":"2022-01-01T11:00:00"},{"taskid":1,"goalid":1,"title":"shopping","duration":1,"start":"2022-01-01T11:00:00","deadline":"2022-01-01T12:00:00"},{"taskid":2,"goalid":3,"title":"exercise","duration":1,"start":"2022-01-01T13:00:00","deadline":"2022-01-01T14:00:00"}]"#;
 
     let (calendar_start, calendar_end) = get_calendar_bounds();
-    let scheduled_tasks = task_placer(get_test_tasks(), calendar_start, calendar_end);
+    let assigned_tasks = slot_assigner(get_test_tasks(), calendar_start, calendar_end);
+    let scheduled_tasks = task_placer(assigned_tasks);
     let output = output_formatter(scheduled_tasks).unwrap();
     assert_eq!(desired_output, serde_json::to_string(&output).unwrap());
 }
 
 #[test]
 fn task_placer_slots_tasks_correctly() {
-    let tasks = get_test_tasks();
     let (calendar_start, calendar_end) = get_calendar_bounds();
-    let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
+    let assigned_tasks = slot_assigner(get_test_tasks(), calendar_start, calendar_end);
+    let scheduled_tasks = task_placer(assigned_tasks);
     assert_eq!(scheduled_tasks[0].status, SCHEDULED);
     assert_eq!(scheduled_tasks[1].status, SCHEDULED);
     assert_eq!(scheduled_tasks[2].status, SCHEDULED);
@@ -462,9 +463,9 @@ fn get_calendar_bounds_2() -> (NaiveDateTime, NaiveDateTime) {
 
 #[test]
 fn task_placer_assigns_contiguous_slots() {
-    let tasks = get_test_tasks_2();
     let (calendar_start, calendar_end) = get_calendar_bounds_2();
-    let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
+    let assigned_tasks = slot_assigner(get_test_tasks_2(), calendar_start, calendar_end);
+    let scheduled_tasks = task_placer(assigned_tasks);
     assert_eq!(scheduled_tasks[0].status, SCHEDULED);
     assert_eq!(scheduled_tasks[1].status, SCHEDULED);
     assert_eq!(scheduled_tasks[2].status, SCHEDULED);
