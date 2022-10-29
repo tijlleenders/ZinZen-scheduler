@@ -12,6 +12,7 @@ mod goal;
 pub mod input;
 pub mod output_formatter;
 mod slot;
+mod slot_assigner;
 mod task;
 mod task_generator;
 mod task_placer;
@@ -36,6 +37,7 @@ interface Input {
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     use errors::Error;
     use output_formatter::*;
+    use slot_assigner::slot_assigner;
     use task_generator::task_generator;
     use task_placer::*;
     // JsError implements From<Error>, so we can just use `?` on any Error
@@ -43,8 +45,9 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 
     let calendar_start = input.calendar_start;
     let calendar_end = input.calendar_end;
-    let tasks = task_generator(input);
-    let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
+    let mut tasks = task_generator(input);
+    tasks = slot_assigner(tasks, calendar_start, calendar_end);
+    let scheduled_tasks = task_placer(tasks);
     let output = match output_formatter(scheduled_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
@@ -61,12 +64,14 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 pub fn run_scheduler(input: Input) -> Vec<Output> {
     use errors::Error;
     use output_formatter::*;
+    use slot_assigner::slot_assigner;
     use task_generator::task_generator;
     use task_placer::*;
     let calendar_start = input.calendar_start;
     let calendar_end = input.calendar_end;
-    let tasks = task_generator(input);
-    let scheduled_tasks = task_placer(tasks, calendar_start, calendar_end);
+    let mut tasks = task_generator(input);
+    tasks = slot_assigner(tasks, calendar_start, calendar_end);
+    let scheduled_tasks = task_placer(tasks);
     match output_formatter(scheduled_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
