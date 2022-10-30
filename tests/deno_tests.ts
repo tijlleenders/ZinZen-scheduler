@@ -40,6 +40,8 @@ import after_12_input from "./jsons/after-12/input.json" assert {type: "json"}
 import after_12_output from "./jsons/after-12/output.json" assert {type: "json"}
 import before_7_input from "./jsons/before-7/input.json" assert {type: "json"}
 import before_7_output from "./jsons/before-7/output.json" assert {type: "json"}
+import ui_test_case_without_start_or_deadline_input from "./jsons/ui-test-case-without-start-or-deadline/input.json" assert {type: "json"}
+import ui_test_case_without_start_or_deadline_output from "./jsons/ui-test-case-without-start-or-deadline/output.json" assert {type: "json"}
 
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
@@ -165,6 +167,11 @@ Deno.test("after 12", () => {
 });
 
 Deno.test("before 7", () => {
+  assertEquals(
+    schedule(before_7_input),before_7_output);
+});
+
+Deno.test("ui without start or deadline", () => {
   assertEquals(
     schedule(before_7_input),before_7_output);
 });
