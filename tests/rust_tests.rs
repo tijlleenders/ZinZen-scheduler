@@ -146,7 +146,6 @@ fn before_7_works() {
     assert_eq!(actual_output, desired_output);
 }
 
-
 #[test]
 fn ui_test_case_without_start_or_deadline_works() {
     let (actual_output, desired_output) = run_test("ui-test-case-without-start-or-deadline");
