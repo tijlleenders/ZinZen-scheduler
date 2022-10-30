@@ -104,7 +104,7 @@ impl Goal {
                 let t = Task::new(
                     task_id,
                     self.start.unwrap_or(calendar_start),
-                    self.deadline.unwrap_or(calendar_start),
+                    self.deadline.unwrap_or(calendar_end),
                     &self,
                 );
                 tasks.push(t);
