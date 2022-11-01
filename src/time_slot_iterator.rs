@@ -121,14 +121,24 @@ impl fmt::Display for Repetition {
 pub(crate) struct TimeSlotIterator {
     pub(crate) start: NaiveDateTime,
     pub(crate) end: NaiveDateTime,
-    pub(crate) repetition: Repetition,
+    pub(crate) repetition: Option<Repetition>,
 }
 
 impl Iterator for TimeSlotIterator {
     type Item = Slot;
     fn next(&mut self) -> Option<Self::Item> {
         match self.repetition {
-            Repetition::DAILY => {
+            None => {
+                if self.start < self.end {
+                    let start = self.start;
+                    let end = self.end;
+                    self.start = end;
+                    Some(Slot { start, end })
+                } else {
+                    None
+                }
+            }
+            Some(Repetition::DAILY) => {
                 if self.start < self.end {
                     let start = self.start;
                     let mut end = self.start + Duration::days(1);
@@ -143,7 +153,7 @@ impl Iterator for TimeSlotIterator {
                     None
                 }
             }
-            Repetition::HOURLY => {
+            Some(Repetition::HOURLY) => {
                 if self.start < self.end {
                     let start = self.start;
                     let mut end = self.start + Duration::hours(1);
@@ -158,7 +168,7 @@ impl Iterator for TimeSlotIterator {
                     None
                 }
             }
-            Repetition::WEEKLY => {
+            Some(Repetition::WEEKLY) => {
                 if self.start >= self.end {
                     return None;
                 }
@@ -175,7 +185,7 @@ impl Iterator for TimeSlotIterator {
                 self.start = end;
                 return Some(Slot { start, end });
             }
-            Repetition::WEEKDAYS => {
+            Some(Repetition::WEEKDAYS) => {
                 if self.start >= self.end {
                     return None;
                 }
@@ -195,7 +205,7 @@ impl Iterator for TimeSlotIterator {
                 }
                 return None;
             }
-            Repetition::WEEKENDS => {
+            Some(Repetition::WEEKENDS) => {
                 if self.start >= self.end {
                     return None;
                 }
@@ -216,7 +226,7 @@ impl Iterator for TimeSlotIterator {
                 }
                 return None;
             }
-            Repetition::EveryXdays(days) => {
+            Some(Repetition::EveryXdays(days)) => {
                 if self.start < self.end {
                     let start = self.start;
                     let mut end = self.start + Duration::days(1);
@@ -235,12 +245,12 @@ impl Iterator for TimeSlotIterator {
                 if self.start >= self.end {
                     return None;
                 }
-                while self.start.weekday().to_string() != self.repetition.to_string()
+                while self.start.weekday().to_string() != self.repetition.unwrap().to_string()
                     && self.start < self.end
                 {
                     self.start += Duration::days(1);
                 }
-                if self.start.weekday().to_string() == self.repetition.to_string() {
+                if self.start.weekday().to_string() == self.repetition.unwrap().to_string() {
                     let start = self.start;
                     let end = self.start + Duration::days(1);
                     self.start = end;
