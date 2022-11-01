@@ -39,7 +39,14 @@ impl PartialOrd for Task {
 }
 
 impl Task {
-    pub fn new(id: usize, start: NaiveDateTime, deadline: NaiveDateTime, goal: &Goal) -> Self {
+    pub fn new(
+        id: usize,
+        start: NaiveDateTime,
+        deadline: NaiveDateTime,
+        slots: Vec<Slot>,
+        flexibility: usize,
+        goal: &Goal,
+    ) -> Self {
         //set internal_marker to first possible hour for the task
         let mut internal_marker = start;
         internal_marker += Duration::hours(goal.after_time.unwrap_or(0) as i64);
@@ -49,12 +56,12 @@ impl Task {
             title: goal.title.clone(),
             duration: goal.duration,
             status: TaskStatus::UNSCHEDULED,
-            flexibility: 0,
+            flexibility,
             start,
             deadline,
             after_time: goal.after_time.unwrap_or(0),
             before_time: goal.before_time.unwrap_or(24),
-            slots: Vec::new(),
+            slots,
             confirmed_start: None,
             confirmed_deadline: None,
             internal_marker,
@@ -174,6 +181,15 @@ impl Task {
             }
         }
         true
+    }
+
+    pub fn remove_invalid_slots(&mut self) {
+        self.slots = self
+            .slots
+            .iter()
+            .filter(|slot| (slot.end - slot.start).num_hours() >= self.duration as i64)
+            .copied()
+            .collect();
     }
 }
 
