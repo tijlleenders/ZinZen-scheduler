@@ -6,7 +6,21 @@ use crate::slot::Slot;
 use crate::time_slot_iterator::{Repetition, TimeSlotIterator};
 use chrono::{Duration, Timelike};
 
-pub fn slot_generator(after_time: usize, before_time: usize, time_period: &Slot) -> Vec<Slot> {
+pub fn slot_generator(
+    after_time: Option<usize>,
+    before_time: Option<usize>,
+    time_period: &Slot,
+) -> Vec<Slot> {
+    if after_time.is_none() && before_time.is_none() {
+        return vec![Slot {
+            start: time_period.start,
+            end: time_period.end,
+        }];
+    }
+
+    let after_time = after_time.unwrap_or(0);
+    let before_time = before_time.unwrap_or(24);
+
     //slides 2 - 7 (assign slots to tasks)
     let hour_iterator = TimeSlotIterator {
         start: time_period.start,
@@ -29,15 +43,7 @@ pub fn slot_generator(after_time: usize, before_time: usize, time_period: &Slot)
         if before_time < after_time {
             slot.end += Duration::hours(before_time as i64);
         }
-        //merge adjacent slots. this happens when aftertime is 0 and beforetime is 24 and the time
-        //period spans multiple days.
-        if slots.len() > 0 && slot.start == slots[slots.len() - 1].end {
-            slots.push(slots[slots.len() - 1] + slot);
-            slots.remove(slots.len() - 2);
-        } else {
-            slots.push(slot);
-        }
-
+        slots.push(slot);
         i += 1;
     }
 
