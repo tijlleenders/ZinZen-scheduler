@@ -86,8 +86,6 @@ impl Goal {
          **the start and deadline.*/
         let start = self.start.unwrap_or(calendar_start);
         let deadline = self.deadline.unwrap_or(calendar_end);
-        let after_time = self.after_time.unwrap_or(0);
-        let before_time = self.before_time.unwrap_or(24);
         let time_periods = TimeSlotIterator {
             start,
             end: deadline,
@@ -97,7 +95,7 @@ impl Goal {
             let task_id = *counter;
             *counter += 1;
             //assign slots that are within the specified after_time and before_time
-            let slots = slot_generator(after_time, before_time, &time_period);
+            let slots = slot_generator(self.after_time, self.before_time, &time_period);
             //calculate flexibility
             let mut hours_available = 0;
             for slot in &slots {
