@@ -70,12 +70,16 @@ impl Task {
 
     //TODO: The current way this is done may not be entirely accurate for tasks that can be done on
     //multiple days within certain time bounds.
-    pub fn calculate_flexibility(&mut self) {
+    fn calculate_flexibility(&mut self) {
         let mut hours_available = 0;
         for slot in &self.slots {
             hours_available += slot.num_hours();
         }
         self.flexibility = hours_available - self.duration + 1;
+    }
+
+    pub fn get_flex(&mut self) -> usize {
+        self.flexibility
     }
 
     pub fn set_confirmed_start(&mut self, start: NaiveDateTime) {
@@ -183,13 +187,21 @@ impl Task {
         true
     }
 
-    pub fn remove_invalid_slots(&mut self) {
+    fn remove_invalid_slots(&mut self) {
         self.slots = self
             .slots
             .iter()
             .filter(|slot| (slot.end - slot.start).num_hours() >= self.duration as i64)
             .copied()
             .collect();
+    }
+
+    pub fn remove_slot(&mut self, s: Slot) {
+        let mut new_slots = Vec::new();
+        for slot in &mut self.slots {
+            new_slots.extend(*slot - s);
+        }
+        self.slots = new_slots;
     }
 }
 
