@@ -1,6 +1,6 @@
+use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::{Repetition, TimeSlotIterator};
-use chrono::Duration;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 use std::option::Option;
@@ -73,42 +73,37 @@ impl Goal {
         counter: &mut usize,
     ) -> Vec<Task> {
         let mut tasks = Vec::new();
-        //If there is a repetion in the goal, a different task will be generated for each day of the repetition.
-        //e.g. if the repetition is DAILY, a different task will be generated for each day.
-        //e.g. if the repetition is MONDAYS, a different task will be generated for each monday.
-        match self.repeat {
-            Some(rep) => {
-                let time_slices = TimeSlotIterator {
-                    start: self.start.unwrap_or(calendar_start),
-                    end: self.deadline.unwrap_or(calendar_end),
-                    repetition: rep,
-                };
-                for slot in time_slices {
-                    let task_id = *counter;
-                    *counter += 1;
-                    let deadline = if self.before_time.unwrap_or(24) < self.after_time.unwrap_or(0)
-                    {
-                        slot.end + Duration::days(1)
-                    } else {
-                        slot.end
-                    };
-                    let t = Task::new(task_id, slot.start, deadline, &self);
-                    tasks.push(t);
-                }
+        /*If the repetition of the goal is DAILY, a different task will be generated for each day between
+         **the start and deadline.
+         **If the repetition is MONDAYS, a different task will be generated for each monday
+         **between the start and deadline.
+         **If the repetition is WEEKLY, a different task will be generated for each mon-sun
+         **period between the start and deadline. etc...(to see all handled scenarios see time_slot_iterator.rs.)
+         **.
+         **.
+         **.
+         **If the repetition is NONE, only one task will be generated for the period between
+         **the start and deadline.*/
+        let start = self.start.unwrap_or(calendar_start);
+        let deadline = self.deadline.unwrap_or(calendar_end);
+        let time_periods = TimeSlotIterator {
+            start,
+            end: deadline,
+            repetition: self.repeat,
+        };
+        for time_period in time_periods {
+            let task_id = *counter;
+            *counter += 1;
+            //assign slots that are within the specified after_time and before_time
+            let slots = slot_generator(self.after_time, self.before_time, &time_period);
+            //calculate flexibility
+            let mut hours_available = 0;
+            for slot in &slots {
+                hours_available += slot.num_hours();
             }
-            //If there is no repetition, the task's start and deadline are equivalent to the goal's
-            //start/deadline.
-            None => {
-                let task_id = *counter;
-                *counter += 1;
-                let t = Task::new(
-                    task_id,
-                    self.start.unwrap_or(calendar_start),
-                    self.deadline.unwrap_or(calendar_end),
-                    &self,
-                );
-                tasks.push(t);
-            }
+            let flexibility = hours_available - self.duration + 1;
+            let t = Task::new(task_id, start, deadline, slots, flexibility, &self);
+            tasks.push(t);
         }
         tasks
     }

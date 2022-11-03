@@ -51,12 +51,7 @@ fn remove_slots_from_tasks(tasks: &mut Vec<Task>, start: NaiveDateTime, deadline
             start,
             end: deadline,
         };
-        let mut new_slots = Vec::new();
-        let slots = task.get_slots();
-        for slot in slots {
-            new_slots.extend(slot - s);
-        }
-        task.slots = new_slots;
+        task.remove_slot(s);
         if !task.slots.is_empty() {
             task.internal_marker = task.slots[0].start;
         }

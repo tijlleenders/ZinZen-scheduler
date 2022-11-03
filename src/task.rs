@@ -39,7 +39,14 @@ impl PartialOrd for Task {
 }
 
 impl Task {
-    pub fn new(id: usize, start: NaiveDateTime, deadline: NaiveDateTime, goal: &Goal) -> Self {
+    pub fn new(
+        id: usize,
+        start: NaiveDateTime,
+        deadline: NaiveDateTime,
+        slots: Vec<Slot>,
+        flexibility: usize,
+        goal: &Goal,
+    ) -> Self {
         //set internal_marker to first possible hour for the task
         let mut internal_marker = start;
         internal_marker += Duration::hours(goal.after_time.unwrap_or(0) as i64);
@@ -49,12 +56,12 @@ impl Task {
             title: goal.title.clone(),
             duration: goal.duration,
             status: TaskStatus::UNSCHEDULED,
-            flexibility: 0,
+            flexibility,
             start,
             deadline,
             after_time: goal.after_time.unwrap_or(0),
             before_time: goal.before_time.unwrap_or(24),
-            slots: Vec::new(),
+            slots,
             confirmed_start: None,
             confirmed_deadline: None,
             internal_marker,
@@ -63,12 +70,16 @@ impl Task {
 
     //TODO: The current way this is done may not be entirely accurate for tasks that can be done on
     //multiple days within certain time bounds.
-    pub fn calculate_flexibility(&mut self) {
+    fn calculate_flexibility(&mut self) {
         let mut hours_available = 0;
         for slot in &self.slots {
             hours_available += slot.num_hours();
         }
         self.flexibility = hours_available - self.duration + 1;
+    }
+
+    pub fn get_flex(&mut self) -> usize {
+        self.flexibility
     }
 
     pub fn set_confirmed_start(&mut self, start: NaiveDateTime) {
@@ -174,6 +185,23 @@ impl Task {
             }
         }
         true
+    }
+
+    fn remove_invalid_slots(&mut self) {
+        self.slots = self
+            .slots
+            .iter()
+            .filter(|slot| (slot.end - slot.start).num_hours() >= self.duration as i64)
+            .copied()
+            .collect();
+    }
+
+    pub fn remove_slot(&mut self, s: Slot) {
+        let mut new_slots = Vec::new();
+        for slot in &mut self.slots {
+            new_slots.extend(*slot - s);
+        }
+        self.slots = new_slots;
     }
 }
 
