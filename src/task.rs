@@ -23,7 +23,7 @@ pub struct Task {
     pub slots: Vec<Slot>,
     pub confirmed_start: Option<NaiveDateTime>,
     pub confirmed_deadline: Option<NaiveDateTime>,
-    pub internal_marker: NaiveDateTime,
+    internal_marker: NaiveDateTime,
 }
 
 impl Ord for Task {
@@ -48,8 +48,7 @@ impl Task {
         goal: &Goal,
     ) -> Self {
         //set internal_marker to first possible hour for the task
-        let mut internal_marker = start;
-        internal_marker += Duration::hours(goal.after_time.unwrap_or(0) as i64);
+        let internal_marker = slots[0].start;
         Self {
             id,
             goal_id: goal.id,
@@ -99,11 +98,9 @@ impl Task {
             return Err(Error::CannotSplit);
         }
         let mut tasks = Vec::new();
-        for i in 0..self.duration {
+        for _ in 0..self.duration {
             //set internal_marker to first possible hour for the task
-            let mut internal_marker = self.start;
-            internal_marker += Duration::hours(self.after_time as i64);
-
+            let internal_marker = self.get_slots()[0].start;
             let task = Task {
                 id: *counter,
                 goal_id: self.goal_id,
@@ -151,6 +148,10 @@ impl Task {
             if index != self.slots.len() - 1 {
                 self.internal_marker = self.slots[index + 1].start;
             }
+        }
+        //reset the internal_marker and return none
+        if !self.slots.is_empty() {
+            self.internal_marker = self.slots[0].start;
         }
         return None;
     }
@@ -202,6 +203,9 @@ impl Task {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
+        if !self.slots.is_empty() {
+            self.internal_marker = self.slots[0].start;
+        }
     }
 }
 
