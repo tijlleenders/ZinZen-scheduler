@@ -52,9 +52,6 @@ fn remove_slots_from_tasks(tasks: &mut Vec<Task>, start: NaiveDateTime, deadline
             end: deadline,
         };
         task.remove_slot(s);
-        if !task.slots.is_empty() {
-            task.internal_marker = task.slots[0].start;
-        }
     }
 }
 
@@ -83,8 +80,6 @@ fn schedule_tasks(tasks: &mut Vec<Task>) {
         if tasks[i].status == SCHEDULED {
             continue;
         }
-        //Place internal marker at first possible hour of task
-        tasks[i].internal_marker = tasks[i].slots[0].start;
         'slot_loop: while let Some((desired_start, desired_deadline)) =
             tasks[i].next_start_deadline_combination()
         {
