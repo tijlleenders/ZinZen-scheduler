@@ -7,7 +7,6 @@ use crate::errors::Error;
 use crate::slot::Slot;
 use crate::task::Task;
 use crate::task::TaskStatus::{SCHEDULED, UNSCHEDULED};
-use chrono::NaiveDateTime;
 
 pub fn task_placer(mut tasks: Vec<Task>) -> Vec<Task> {
     //slide 9 (schedule task(s) with flexibilityof 1)
@@ -19,7 +18,13 @@ pub fn task_placer(mut tasks: Vec<Task>) -> Vec<Task> {
             tasks[index].set_confirmed_deadline(my_slots[0].end);
             tasks[index].status = SCHEDULED;
             //slide 10 (remove the assigned slot from other tasks' slot lists)
-            remove_slots_from_tasks(&mut tasks, my_slots[0].start, my_slots[0].end);
+            remove_slot_from_tasks(
+                &mut tasks,
+                Slot {
+                    start: my_slots[0].start,
+                    end: my_slots[0].end,
+                },
+            );
         }
     }
 
@@ -45,27 +50,9 @@ pub fn task_placer(mut tasks: Vec<Task>) -> Vec<Task> {
 }
 
 //when a task is scheduled, remove the time it occupies from other tasks' slots
-fn remove_slots_from_tasks(tasks: &mut Vec<Task>, start: NaiveDateTime, deadline: NaiveDateTime) {
+fn remove_slot_from_tasks(tasks: &mut Vec<Task>, slot: Slot) {
     for task in tasks {
-        let s = Slot {
-            start,
-            end: deadline,
-        };
-        task.remove_slot(s);
-    }
-}
-
-//This trait allows us to check whether we can schedule a task at a particular time by calling
-//(desired_start,desired_deadline).conflicts_with(other_task's_aftertime,other_task's_beforetime)
-pub trait Conflicts {
-    fn conflicts_with(&self, time1: NaiveDateTime, time2: NaiveDateTime) -> bool;
-}
-
-impl Conflicts for (NaiveDateTime, NaiveDateTime) {
-    fn conflicts_with(&self, after_time: NaiveDateTime, before_time: NaiveDateTime) -> bool {
-        //we can be either completely before or completely after. otherwise it's a conflict.
-        !((self.0 < after_time && self.1 <= after_time)
-            || (self.0 >= before_time && self.1 > before_time))
+        task.remove_slot(slot);
     }
 }
 
@@ -80,27 +67,22 @@ fn schedule_tasks(tasks: &mut Vec<Task>) {
         if tasks[i].status == SCHEDULED {
             continue;
         }
-        'slot_loop: while let Some((desired_start, desired_deadline)) =
-            tasks[i].next_start_deadline_combination()
-        {
+        let mut start_deadline_iterator = tasks[i].start_deadline_iterator();
+        'slot_loop: while let Some(desired_time) = start_deadline_iterator.next() {
             'inner: for k in 0..tasks_length {
                 if tasks[k].status == SCHEDULED || tasks[k].goal_id == tasks[i].goal_id {
                     continue 'inner;
                 }
-                let other_task_after_time = tasks[k].slots[0].start;
-                let other_task_before_time = tasks[k].slots[tasks[k].slots.len() - 1].end;
-                if (desired_start, desired_deadline)
-                    .conflicts_with(other_task_after_time, other_task_before_time)
-                    && !(tasks[i].goal_id == tasks[k].goal_id)
-                    && !tasks[i].can_coexist_with(&tasks[k])
-                {
-                    continue 'slot_loop;
+                for slot in &tasks[k].slots {
+                    if desired_time.conflicts_with(slot) && !tasks[i].can_coexist_with(&tasks[k]) {
+                        continue 'slot_loop;
+                    }
                 }
             }
             //if we've reached here it means no conflicts were found for this start/deadline
             //combination and we can schedule.
-            tasks[i].schedule(desired_start, desired_deadline);
-            remove_slots_from_tasks(tasks, desired_start, desired_deadline);
+            tasks[i].schedule(desired_time);
+            remove_slot_from_tasks(tasks, desired_time);
             continue 'task_loop;
         }
     }
