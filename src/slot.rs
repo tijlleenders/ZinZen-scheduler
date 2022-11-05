@@ -109,4 +109,9 @@ impl Slot {
     pub fn num_hours(&self) -> usize {
         (self.end - self.start).num_hours() as usize
     }
+
+    pub fn conflicts_with(&self, other_slot: &Slot) -> bool {
+        !((self.start < other_slot.start && self.end <= other_slot.start)
+            || (self.start >= other_slot.end && self.end > other_slot.end))
+    }
 }
