@@ -23,7 +23,6 @@ pub struct Task {
     pub slots: Vec<Slot>,
     pub confirmed_start: Option<NaiveDateTime>,
     pub confirmed_deadline: Option<NaiveDateTime>,
-    internal_marker: NaiveDateTime,
 }
 
 impl Ord for Task {
@@ -38,6 +37,56 @@ impl PartialOrd for Task {
     }
 }
 
+//An iterator for start/deadline combinations for the task.
+//e.g. if a task has duration of 2, and one slot with start 10 and end 14,
+//then the following start/deadline combinations are possible:
+//10-12, 11-13, and 12-14.
+//It also needs to handle scenarios where the task has multiple slots.
+pub struct StartDeadlineIterator {
+    slots: Vec<Slot>,
+    duration: usize,
+    marker: NaiveDateTime,
+}
+
+impl StartDeadlineIterator {
+    fn new(slots: Vec<Slot>, duration: usize) -> StartDeadlineIterator {
+        let marker = slots[0].start;
+        StartDeadlineIterator {
+            slots,
+            duration,
+            marker,
+        }
+    }
+}
+
+impl Iterator for StartDeadlineIterator {
+    type Item = Slot;
+    fn next(&mut self) -> Option<Self::Item> {
+        for (index, slot) in self.slots.iter().enumerate() {
+            if !(self.marker >= slot.start && self.marker < slot.end) {
+                continue;
+            }
+            while (self.marker + Duration::hours(self.duration as i64)) <= slot.end {
+                let start = self.marker;
+                let end = self.marker + Duration::hours(self.duration as i64);
+                self.marker += Duration::hours(1);
+                if self.marker == slot.end {
+                    if index != self.slots.len() - 1 {
+                        self.marker = self.slots[index + 1].start;
+                    }
+                }
+                return Some(Slot { start, end });
+            }
+
+            if index != self.slots.len() - 1 {
+                self.marker = self.slots[index + 1].start;
+            }
+        }
+
+        return None;
+    }
+}
+
 impl Task {
     pub fn new(
         id: usize,
@@ -47,8 +96,6 @@ impl Task {
         flexibility: usize,
         goal: &Goal,
     ) -> Self {
-        //set internal_marker to first possible hour for the task
-        let internal_marker = slots[0].start;
         Self {
             id,
             goal_id: goal.id,
@@ -63,7 +110,6 @@ impl Task {
             slots,
             confirmed_start: None,
             confirmed_deadline: None,
-            internal_marker,
         }
     }
 
@@ -99,8 +145,6 @@ impl Task {
         }
         let mut tasks = Vec::new();
         for _ in 0..self.duration {
-            //set internal_marker to first possible hour for the task
-            let internal_marker = self.get_slots()[0].start;
             let task = Task {
                 id: *counter,
                 goal_id: self.goal_id,
@@ -115,7 +159,6 @@ impl Task {
                 slots: self.get_slots(),
                 confirmed_start: None,
                 confirmed_deadline: None,
-                internal_marker,
             };
             *counter += 1;
             tasks.push(task);
@@ -123,42 +166,13 @@ impl Task {
         Ok(tasks)
     }
 
-    pub fn next_start_deadline_combination(&mut self) -> Option<(NaiveDateTime, NaiveDateTime)> {
-        //uses the internal_marker belonging to this task to keep track of the last attempted start
-        //time, and increments before the next call.
-        //note that if the task has multiple slots (which will be separated by an hr or more),
-        //the marker will be moved to the start of the next slot when it reaches the end of a
-        //particular slot.
-        for (index, slot) in self.slots.iter().enumerate() {
-            if !(self.internal_marker >= slot.start && self.internal_marker < slot.end) {
-                continue;
-            }
-            while (self.internal_marker + Duration::hours(self.duration as i64)) <= slot.end {
-                let start = self.internal_marker;
-                let end = self.internal_marker + Duration::hours(self.duration as i64);
-                self.internal_marker += Duration::hours(1);
-                if self.internal_marker == slot.end {
-                    if index != self.slots.len() - 1 {
-                        self.internal_marker = self.slots[index + 1].start;
-                    }
-                }
-                return Some((start, end));
-            }
-
-            if index != self.slots.len() - 1 {
-                self.internal_marker = self.slots[index + 1].start;
-            }
-        }
-        //reset the internal_marker and return none
-        if !self.slots.is_empty() {
-            self.internal_marker = self.slots[0].start;
-        }
-        return None;
+    pub fn start_deadline_iterator(&mut self) -> StartDeadlineIterator {
+        StartDeadlineIterator::new(self.get_slots(), self.duration)
     }
 
-    pub fn schedule(&mut self, start: NaiveDateTime, deadline: NaiveDateTime) {
-        self.set_confirmed_start(start);
-        self.set_confirmed_deadline(deadline);
+    pub fn schedule(&mut self, slot: Slot) {
+        self.set_confirmed_start(slot.start);
+        self.set_confirmed_deadline(slot.end);
         self.status = TaskStatus::SCHEDULED;
     }
 
@@ -203,9 +217,6 @@ impl Task {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
-        if !self.slots.is_empty() {
-            self.internal_marker = self.slots[0].start;
-        }
     }
 }
 
