@@ -51,10 +51,10 @@ pub fn slot_generator(
 }
 
 fn assign_slots(num_of_slots: usize, hours: &Vec<Slot>, i: &mut usize) -> Slot {
-    let start = dbg!(hours[*i]);
+    let start = hours[*i];
     let mut end = hours[*i];
     for _ in 1..num_of_slots as usize {
-        if *i < dbg!(hours.len() - 1) {
+        if *i < hours.len() - 1 {
             *i += 1;
             end = hours[*i];
         }

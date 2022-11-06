@@ -79,41 +79,6 @@ fn time_slot_iterator_returns_all_mondays() {
     )
 }
 
-#[test]
-fn goal_generates_single_nonrepetitive_task() {
-    let goal = Goal::new(1)
-        .duration(1)
-        .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
-        .deadline(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0));
-    let mut counter = 0;
-    assert_eq!(
-        goal.generate_tasks(
-            NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-            NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
-            &mut counter
-        ),
-        vec![Task {
-            id: 0,
-            goal_id: 1,
-            title: "Test".to_string(),
-            duration: 1,
-            status: TaskStatus::UNSCHEDULED,
-            flexibility: 72,
-            start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-            deadline: NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0),
-            after_time: 0,
-            before_time: 24,
-            slots: vec!(Slot {
-                start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-                end: NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0)
-            }),
-            confirmed_start: None,
-            confirmed_deadline: None,
-            internal_marker: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
-        },]
-    )
-}
-
 fn get_calendar_bounds() -> (NaiveDateTime, NaiveDateTime) {
     (
         (NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0)),
