@@ -151,3 +151,9 @@ fn ui_test_case_without_start_or_deadline_works() {
     let (actual_output, desired_output) = run_test("ui-test-case-without-start-or-deadline");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn slots_reduced_by_other_tasks_works() {
+    let (actual_output, desired_output) = run_test("slot-reduced-1");
+    assert_eq!(actual_output, desired_output);
+}
