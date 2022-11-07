@@ -65,18 +65,22 @@ impl StartDeadlineIterator {
 impl Iterator for StartDeadlineIterator {
     type Item = Slot;
     fn next(&mut self) -> Option<Self::Item> {
-        if self.marker > self.slots[self.slot_index].end - Duration::hours(self.duration as i64) {
-            if self.slot_index != self.slots.len() - 1 {
-                self.marker = self.slots[self.slot_index + 1].start;
+        while self.slot_index < self.slots.len() {
+            if self.marker > self.slots[self.slot_index].end - Duration::hours(self.duration as i64)
+            {
+                if self.slot_index >= self.slots.len() - 1 {
+                    return None;
+                }
                 self.slot_index += 1;
-            } else {
-                return None;
+                self.marker = self.slots[self.slot_index].start;
+                continue;
             }
+            let start = self.marker;
+            let end = self.marker + Duration::hours(self.duration as i64);
+            self.marker += Duration::hours(1);
+            return Some(Slot { start, end });
         }
-        let start = self.marker;
-        let end = self.marker + Duration::hours(self.duration as i64);
-        self.marker += Duration::hours(1);
-        return Some(Slot { start, end });
+        return None;
     }
 }
 
