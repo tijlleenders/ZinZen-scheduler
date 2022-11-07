@@ -46,15 +46,18 @@ pub struct StartDeadlineIterator {
     slots: Vec<Slot>,
     duration: usize,
     marker: NaiveDateTime,
+    slot_index: usize,
 }
 
 impl StartDeadlineIterator {
     fn new(slots: Vec<Slot>, duration: usize) -> StartDeadlineIterator {
         let marker = slots[0].start;
+        let slot_index = 0 as usize;
         StartDeadlineIterator {
             slots,
             duration,
             marker,
+            slot_index,
         }
     }
 }
@@ -62,28 +65,18 @@ impl StartDeadlineIterator {
 impl Iterator for StartDeadlineIterator {
     type Item = Slot;
     fn next(&mut self) -> Option<Self::Item> {
-        for (index, slot) in self.slots.iter().enumerate() {
-            if !(self.marker >= slot.start && self.marker < slot.end) {
-                continue;
-            }
-            while (self.marker + Duration::hours(self.duration as i64)) <= slot.end {
-                let start = self.marker;
-                let end = self.marker + Duration::hours(self.duration as i64);
-                self.marker += Duration::hours(1);
-                if self.marker == slot.end {
-                    if index != self.slots.len() - 1 {
-                        self.marker = self.slots[index + 1].start;
-                    }
-                }
-                return Some(Slot { start, end });
-            }
-
-            if index != self.slots.len() - 1 {
-                self.marker = self.slots[index + 1].start;
+        if self.marker > self.slots[self.slot_index].end - Duration::hours(self.duration as i64) {
+            if self.slot_index != self.slots.len() - 1 {
+                self.marker = self.slots[self.slot_index + 1].start;
+                self.slot_index += 1;
+            } else {
+                return None;
             }
         }
-
-        return None;
+        let start = self.marker;
+        let end = self.marker + Duration::hours(self.duration as i64);
+        self.marker += Duration::hours(1);
+        return Some(Slot { start, end });
     }
 }
 
