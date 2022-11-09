@@ -41,10 +41,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     use task_placer::*;
     // JsError implements From<Error>, so we can just use `?` on any Error
     let input: Input = input.into_serde()?;
-
-    let calendar_start = input.calendar_start;
-    let calendar_end = input.calendar_end;
-    let mut tasks = task_generator(input);
+    let tasks = task_generator(input);
     let scheduled_tasks = task_placer(tasks);
     let output = match output_formatter(scheduled_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
@@ -64,9 +61,7 @@ pub fn run_scheduler(input: Input) -> Vec<Output> {
     use output_formatter::*;
     use task_generator::task_generator;
     use task_placer::*;
-    let calendar_start = input.calendar_start;
-    let calendar_end = input.calendar_end;
-    let mut tasks = task_generator(input);
+    let tasks = task_generator(input);
     let scheduled_tasks = task_placer(tasks);
     match output_formatter(scheduled_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
