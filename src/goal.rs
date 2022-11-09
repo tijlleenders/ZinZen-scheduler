@@ -36,6 +36,11 @@ impl Goal {
         }
     }
 
+    pub fn title(mut self, title: &str) -> Self {
+        self.title = title.to_string();
+        self
+    }
+
     pub fn duration(mut self, duration: usize) -> Self {
         self.duration = duration;
         self
@@ -97,11 +102,10 @@ impl Goal {
             //assign slots that are within the specified after_time and before_time
             let slots = slot_generator(self.after_time, self.before_time, &time_period);
             //calculate flexibility
-            let mut hours_available = 0;
+            let mut flexibility = 0;
             for slot in &slots {
-                hours_available += slot.num_hours();
+                flexibility += slot.num_hours() - self.duration + 1;
             }
-            let flexibility = hours_available - self.duration + 1;
             let t = Task::new(task_id, start, deadline, slots, flexibility, &self);
             tasks.push(t);
         }
