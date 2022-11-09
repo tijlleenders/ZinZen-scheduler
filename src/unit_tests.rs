@@ -90,18 +90,21 @@ fn get_calendar_bounds() -> (NaiveDateTime, NaiveDateTime) {
 fn task_placer_slots_tasks_correctly() {
     let (calendar_start, calendar_end) = get_calendar_bounds();
     let goal1 = Goal::new(1)
+        .title("dentist")
         .duration(1)
         .after_time(10)
         .before_time(11)
         .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
         .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
     let goal2 = Goal::new(2)
+        .title("shopping")
         .duration(1)
         .after_time(10)
         .before_time(13)
         .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
         .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
     let goal3 = Goal::new(3)
+        .title("exercise")
         .duration(1)
         .after_time(10)
         .before_time(18)
@@ -336,7 +339,7 @@ fn get_calendar_bounds_2() -> (NaiveDateTime, NaiveDateTime) {
 }
 
 #[test]
-fn task_placer_assigns_contiguous_slots() {
+fn slot_generator_assigns_contiguous_slots() {
     let (calendar_start, calendar_end) = get_calendar_bounds_2();
     let goal1 = Goal::new(1)
         .duration(2)
@@ -362,67 +365,59 @@ fn task_placer_assigns_contiguous_slots() {
         calendar_end,
         goals,
     });
-    let scheduled_tasks = task_placer(tasks);
-    assert_eq!(scheduled_tasks[0].status, SCHEDULED);
-    assert_eq!(scheduled_tasks[1].status, SCHEDULED);
-    assert_eq!(scheduled_tasks[2].status, SCHEDULED);
-    println!("In test: {:?}", scheduled_tasks[0].slots);
-    assert_eq!(scheduled_tasks[0].slots.len(), 5);
-    assert_eq!(scheduled_tasks[1].slots.len(), 1);
-    assert_eq!(scheduled_tasks[2].slots.len(), 0); //0 because the entire slot was removed when this
-                                                   //task was scheduled.
-
+    assert_eq!(tasks[0].slots.len(), 5);
+    assert_eq!(tasks[1].slots.len(), 1);
+    assert_eq!(tasks[2].slots.len(), 1);
     assert_eq!(
-        scheduled_tasks[0].slots[0].start,
-        NaiveDate::from_ymd(2022, 10, 24).and_hms(12, 0, 0)
+        tasks[0].slots[0].start,
+        NaiveDate::from_ymd(2022, 10, 24).and_hms(10, 0, 0)
     );
     assert_eq!(
-        scheduled_tasks[0].slots[0].end,
+        tasks[0].slots[0].end,
         NaiveDate::from_ymd(2022, 10, 24).and_hms(14, 0, 0)
     );
-
     assert_eq!(
-        scheduled_tasks[0].slots[1].start,
+        tasks[0].slots[1].start,
         NaiveDate::from_ymd(2022, 10, 25).and_hms(10, 0, 0)
     );
     assert_eq!(
-        scheduled_tasks[0].slots[1].end,
+        tasks[0].slots[1].end,
         NaiveDate::from_ymd(2022, 10, 25).and_hms(14, 0, 0)
     );
 
     assert_eq!(
-        scheduled_tasks[0].slots[2].start,
+        tasks[0].slots[2].start,
         NaiveDate::from_ymd(2022, 10, 26).and_hms(10, 0, 0)
     );
     assert_eq!(
-        scheduled_tasks[0].slots[2].end,
+        tasks[0].slots[2].end,
         NaiveDate::from_ymd(2022, 10, 26).and_hms(14, 0, 0)
     );
 
     assert_eq!(
-        scheduled_tasks[0].slots[3].start,
+        tasks[0].slots[3].start,
         NaiveDate::from_ymd(2022, 10, 27).and_hms(10, 0, 0)
     );
     assert_eq!(
-        scheduled_tasks[0].slots[3].end,
+        tasks[0].slots[3].end,
         NaiveDate::from_ymd(2022, 10, 27).and_hms(14, 0, 0)
     );
 
     assert_eq!(
-        scheduled_tasks[0].slots[4].start,
+        tasks[0].slots[4].start,
         NaiveDate::from_ymd(2022, 10, 28).and_hms(10, 0, 0)
     );
     assert_eq!(
-        scheduled_tasks[0].slots[4].end,
+        tasks[0].slots[4].end,
         NaiveDate::from_ymd(2022, 10, 28).and_hms(14, 0, 0)
     );
 
     assert_eq!(
-        scheduled_tasks[1].slots[0].start,
-        NaiveDate::from_ymd(2022, 11, 1).and_hms(11, 0, 0)
+        tasks[1].slots[0].start,
+        NaiveDate::from_ymd(2022, 11, 1).and_hms(10, 0, 0)
     );
     assert_eq!(
-        scheduled_tasks[1].slots[0].end,
+        tasks[1].slots[0].end,
         NaiveDate::from_ymd(2022, 11, 1).and_hms(14, 0, 0)
     );
 }
@@ -477,4 +472,163 @@ fn slot_generator_multiple_slots_works() {
         },
     ];
     assert_eq!(slots, expected_slots);
+}
+
+#[test]
+fn vec_of_tasks_sorts_flex1_then_high_to_low_works() {
+    let (calendar_start, calendar_end) = get_calendar_bounds();
+    //will generate task of flex 1
+    let goal1 = Goal::new(1)
+        .duration(1)
+        .after_time(10)
+        .before_time(11)
+        .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
+    //will generate task of flex 2
+    let goal2 = Goal::new(2)
+        .duration(1)
+        .after_time(10)
+        .before_time(12)
+        .start(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0));
+    //will generate task of flex 3
+    let goal3 = Goal::new(3)
+        .duration(1)
+        .after_time(10)
+        .before_time(13)
+        .start(NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0));
+    //will generate task of flex 4
+    let goal4 = Goal::new(4)
+        .duration(1)
+        .after_time(10)
+        .before_time(14)
+        .start(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 5).and_hms(0, 0, 0));
+    //will generate task of flex 5
+    let goal5 = Goal::new(5)
+        .duration(1)
+        .after_time(10)
+        .before_time(15)
+        .start(NaiveDate::from_ymd(2022, 1, 5).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 6).and_hms(0, 0, 0));
+
+    let goals = vec![goal1, goal2, goal3, goal4, goal5];
+    let mut tasks: Vec<Task> = task_generator(Input {
+        calendar_start,
+        calendar_end,
+        goals,
+    });
+    tasks.sort();
+    assert_eq!(tasks[0].goal_id, 1);
+    assert_eq!(tasks[1].goal_id, 5);
+    assert_eq!(tasks[2].goal_id, 4);
+    assert_eq!(tasks[3].goal_id, 3);
+    assert_eq!(tasks[4].goal_id, 2);
+}
+
+#[test]
+fn vec_of_tasks_sorts_multiple_flex1_then_high_to_low_works() {
+    let (calendar_start, calendar_end) = get_calendar_bounds();
+    //will generate task of flex 1
+    let goal1 = Goal::new(1)
+        .duration(1)
+        .after_time(10)
+        .before_time(11)
+        .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
+    //will generate task of flex 1
+    let goal2 = Goal::new(2)
+        .duration(1)
+        .after_time(10)
+        .before_time(11)
+        .start(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0));
+    //will generate task of flex 1
+    let goal3 = Goal::new(3)
+        .duration(1)
+        .after_time(10)
+        .before_time(11)
+        .start(NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0));
+    //will generate task of flex 4
+    let goal4 = Goal::new(4)
+        .duration(1)
+        .after_time(10)
+        .before_time(14)
+        .start(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 5).and_hms(0, 0, 0));
+    //will generate task of flex 5
+    let goal5 = Goal::new(5)
+        .duration(1)
+        .after_time(10)
+        .before_time(15)
+        .start(NaiveDate::from_ymd(2022, 1, 5).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 6).and_hms(0, 0, 0));
+
+    let goals = vec![goal1, goal2, goal3, goal4, goal5];
+    let mut tasks: Vec<Task> = task_generator(Input {
+        calendar_start,
+        calendar_end,
+        goals,
+    });
+    tasks.sort();
+    assert_eq!(tasks[0].goal_id, 1);
+    assert_eq!(tasks[1].goal_id, 2);
+    assert_eq!(tasks[2].goal_id, 3);
+    assert_eq!(tasks[3].goal_id, 5);
+    assert_eq!(tasks[4].goal_id, 4);
+}
+
+#[test]
+fn vec_of_tasks_sorts_no_flex1_then_high_to_low_works() {
+    let (calendar_start, calendar_end) = get_calendar_bounds();
+    //will generate task of flex 2
+    let goal1 = Goal::new(1)
+        .duration(1)
+        .after_time(10)
+        .before_time(12)
+        .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
+    //will generate task of flex 3
+    let goal2 = Goal::new(2)
+        .duration(1)
+        .after_time(10)
+        .before_time(13)
+        .start(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0));
+    //will generate task of flex 4
+    let goal3 = Goal::new(3)
+        .duration(1)
+        .after_time(10)
+        .before_time(14)
+        .start(NaiveDate::from_ymd(2022, 1, 3).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0));
+    //will generate task of flex 5
+    let goal4 = Goal::new(4)
+        .duration(1)
+        .after_time(10)
+        .before_time(15)
+        .start(NaiveDate::from_ymd(2022, 1, 4).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 5).and_hms(0, 0, 0));
+    //will generate task of flex 6
+    let goal5 = Goal::new(5)
+        .duration(1)
+        .after_time(10)
+        .before_time(16)
+        .start(NaiveDate::from_ymd(2022, 1, 5).and_hms(0, 0, 0))
+        .deadline(NaiveDate::from_ymd(2022, 1, 6).and_hms(0, 0, 0));
+
+    let goals = vec![goal1, goal2, goal3, goal4, goal5];
+    let mut tasks: Vec<Task> = task_generator(Input {
+        calendar_start,
+        calendar_end,
+        goals,
+    });
+    tasks.sort();
+    assert_eq!(tasks[0].goal_id, 5);
+    assert_eq!(tasks[1].goal_id, 4);
+    assert_eq!(tasks[2].goal_id, 3);
+    assert_eq!(tasks[3].goal_id, 2);
+    assert_eq!(tasks[4].goal_id, 1);
 }
