@@ -200,18 +200,13 @@ impl Task {
     //slots. This happens for example after splitting tasks to 1hr tasks.
     //Without this condition, these tasks would never get scheduled.
     pub fn can_coexist_with(&self, other_task: &Task) -> bool {
-        if !(self.duration == 1 && other_task.duration == 1) {
-            return false;
+        if (self.duration == 1 && other_task.duration == 1)
+            && self.slots.len() == other_task.slots.len()
+            && self.slots == other_task.slots
+        {
+            return true;
         }
-        if self.slots.len() != other_task.slots.len() {
-            return false;
-        }
-        for i in 0..self.slots.len() {
-            if self.slots[i] != other_task.slots[i] {
-                return false;
-            }
-        }
-        true
+        false
     }
 
     fn remove_invalid_slots(&mut self) {
