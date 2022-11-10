@@ -157,3 +157,21 @@ fn slots_reduced_by_other_tasks_works() {
     let (actual_output, desired_output) = run_test("slot-reduced-1");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn x_per_week_1_works() {
+    let (actual_output, desired_output) = run_test("x-per-week-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_week_2_works() {
+    let (actual_output, desired_output) = run_test("x-per-week-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_week_3_works() {
+    let (actual_output, desired_output) = run_test("x-per-week-3");
+    assert_eq!(actual_output, desired_output);
+}
