@@ -2,8 +2,9 @@
 //between a certain time period.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
+use crate::repetition::Repetition;
 use crate::slot::Slot;
-use crate::time_slot_iterator::{Repetition, TimeSlotIterator};
+use crate::time_slot_iterator::TimeSlotIterator;
 use chrono::{Duration, Timelike};
 
 pub fn slot_generator(

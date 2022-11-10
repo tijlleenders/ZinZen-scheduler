@@ -44,7 +44,12 @@ import ui_test_case_without_start_or_deadline_input from "./jsons/ui-test-case-w
 import ui_test_case_without_start_or_deadline_output from "./jsons/ui-test-case-without-start-or-deadline/output.json" assert {type: "json"}
 import slot_reduced_1_input from "./jsons/slot-reduced-1/input.json" assert {type: "json"}
 import slot_reduced_1_output from "./jsons/slot-reduced-1/output.json" assert {type: "json"}
-
+import x_per_week_1_input from "./jsons/x-per-week-1/input.json" assert {type: "json"}
+import x_per_week_1_output from "./jsons/x-per-week-1/output.json" assert {type: "json"}
+import x_per_week_2_input from "./jsons/x-per-week-2/input.json" assert {type: "json"}
+import x_per_week_2_output from "./jsons/x-per-week-2/output.json" assert {type: "json"}
+import x_per_week_3_input from "./jsons/x-per-week-3/input.json" assert {type: "json"}
+import x_per_week_3_output from "./jsons/x-per-week-3/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -181,4 +186,19 @@ Deno.test("ui without start or deadline", () => {
 Deno.test("slot reduced by other task", () => {
   assertEquals(
     schedule(slot_reduced_1_input),slot_reduced_1_output);
+});
+
+Deno.test("x per week 1", () => {
+  assertEquals(
+    schedule(x_per_week_1_input),x_per_week_1_output);
+});
+
+Deno.test("x per week 2", () => {
+  assertEquals(
+    schedule(x_per_week_2_input),x_per_week_2_output);
+});
+
+Deno.test("x per week 3", () => {
+  assertEquals(
+    schedule(x_per_week_3_input),x_per_week_3_output);
 });
