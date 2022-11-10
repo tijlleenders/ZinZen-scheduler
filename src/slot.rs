@@ -17,11 +17,11 @@ impl Sub for Slot {
         if (other.start < self.start) && (other.end <= self.start) {
             //other is completely before self
             result.push(self);
-            return result;
+            result
         } else if (other.start >= self.end) && (other.end > self.end) {
             //other is completely after self
             result.push(self);
-            return result;
+            result
         } else if (other.start == self.start) && (other.end < self.end) {
             //other starts same time as self and ends before self ends
             let slot = Slot {
@@ -29,7 +29,7 @@ impl Sub for Slot {
                 end: self.end,
             };
             result.push(slot);
-            return result;
+            result
         } else if (other.start > self.start) && (other.end < self.end) {
             //other is inside self. starts after and ends before
             let slot1 = Slot {
@@ -42,7 +42,7 @@ impl Sub for Slot {
             };
             result.push(slot1);
             result.push(slot2);
-            return result;
+            result
         } else if (other.start > self.start) && (other.end == self.end) {
             //other is inside self but end is same as self end
             let slot = Slot {
@@ -50,10 +50,10 @@ impl Sub for Slot {
                 end: other.start,
             };
             result.push(slot);
-            return result;
+            result
         } else if (other.start <= self.start) && (other.end >= self.end) {
             //other engulfs self
-            return result;
+            result
         } else if (other.start < self.start) && (other.end > self.start) && (other.end <= self.end)
         {
             //other starts before self and ends in-between self or when self ends
@@ -61,20 +61,20 @@ impl Sub for Slot {
                 start: other.end,
                 end: self.end,
             };
-            if !(slot.start == slot.end) {
+            if slot.start != slot.end {
                 result.push(slot);
             }
-            return result;
+            result
         } else {
             //other starts in-between self or when self starts and ends after self ends
             let slot = Slot {
                 start: self.start,
                 end: other.start,
             };
-            if !(slot.start == slot.end) {
+            if slot.start != slot.end {
                 result.push(slot);
             }
-            return result;
+            result
         }
     }
 }

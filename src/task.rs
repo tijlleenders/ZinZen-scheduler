@@ -8,7 +8,7 @@ use std::cmp::Ordering;
 
 /// One or many created from a Goal.
 /// To be scheduled in order by the scheduler.
-#[derive(Deserialize, Debug, PartialEq, Eq, Clone)]
+#[derive(Deserialize, Debug, Eq, Clone)]
 pub struct Task {
     pub id: usize,
     pub goal_id: usize,
@@ -25,15 +25,32 @@ pub struct Task {
     pub confirmed_deadline: Option<NaiveDateTime>,
 }
 
-impl Ord for Task {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.flexibility.cmp(&other.flexibility)
+impl PartialEq for Task {
+    fn eq(&self, other: &Self) -> bool {
+        self.flexibility == other.flexibility
     }
 }
 
 impl PartialOrd for Task {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
+    }
+}
+
+impl Ord for Task {
+    //Custom ordering for collections of Tasks:
+    //All tasks with flex 1 should be first, followed by task with highest flex to
+    //task with lowest flex.
+    fn cmp(&self, other: &Self) -> Ordering {
+        if self.flexibility == other.flexibility {
+            Ordering::Equal
+        } else if self.flexibility == 1 {
+            Ordering::Less
+        } else if other.flexibility == 1 {
+            Ordering::Greater
+        } else {
+            other.flexibility.cmp(&self.flexibility)
+        }
     }
 }
 
@@ -52,7 +69,7 @@ pub struct StartDeadlineIterator {
 impl StartDeadlineIterator {
     fn new(slots: Vec<Slot>, duration: usize) -> StartDeadlineIterator {
         let marker = slots[0].start;
-        let slot_index = 0 as usize;
+        let slot_index = 0_usize;
         StartDeadlineIterator {
             slots,
             duration,
@@ -80,7 +97,7 @@ impl Iterator for StartDeadlineIterator {
             self.marker += Duration::hours(1);
             return Some(Slot { start, end });
         }
-        return None;
+        None
     }
 }
 
@@ -110,17 +127,15 @@ impl Task {
         }
     }
 
-    //TODO: The current way this is done may not be entirely accurate for tasks that can be done on
-    //multiple days within certain time bounds.
     fn calculate_flexibility(&mut self) {
-        let mut hours_available = 0;
+        let mut flexibility = 0;
         for slot in &self.slots {
-            hours_available += slot.num_hours();
+            flexibility += slot.num_hours() - self.duration + 1;
         }
-        self.flexibility = hours_available - self.duration + 1;
+        self.flexibility = flexibility;
     }
 
-    pub fn get_flex(&mut self) -> usize {
+    pub fn flexibility(&mut self) -> usize {
         self.flexibility
     }
 
@@ -185,27 +200,18 @@ impl Task {
     //slots. This happens for example after splitting tasks to 1hr tasks.
     //Without this condition, these tasks would never get scheduled.
     pub fn can_coexist_with(&self, other_task: &Task) -> bool {
-        if !(self.duration == 1 && other_task.duration == 1) {
-            return false;
+        if (self.duration == 1 && other_task.duration == 1)
+            && self.slots.len() == other_task.slots.len()
+            && self.slots == other_task.slots
+        {
+            return true;
         }
-        if self.slots.len() != other_task.slots.len() {
-            return false;
-        }
-        for i in 0..self.slots.len() {
-            if self.slots[i] != other_task.slots[i] {
-                return false;
-            }
-        }
-        true
+        false
     }
 
     fn remove_invalid_slots(&mut self) {
-        self.slots = self
-            .slots
-            .iter()
-            .filter(|slot| (slot.end - slot.start).num_hours() >= self.duration as i64)
-            .copied()
-            .collect();
+        self.slots
+            .retain(|slot| (slot.end - slot.start).num_hours() >= self.duration as i64);
     }
 
     pub fn remove_slot(&mut self, s: Slot) {
@@ -214,6 +220,8 @@ impl Task {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
+        self.remove_invalid_slots();
+        self.calculate_flexibility();
     }
 }
 
