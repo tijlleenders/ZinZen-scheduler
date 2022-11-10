@@ -1,6 +1,7 @@
+use crate::repetition::Repetition;
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
-use crate::time_slot_iterator::{Repetition, TimeSlotIterator};
+use crate::time_slot_iterator::TimeSlotIterator;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 use std::option::Option;
@@ -96,18 +97,24 @@ impl Goal {
             end: deadline,
             repetition: self.repeat,
         };
+        let tasks_per_period = match self.repeat {
+            Some(Repetition::WEEKLY(x)) => x,
+            _ => 1,
+        };
         for time_period in time_periods {
-            let task_id = *counter;
-            *counter += 1;
-            //assign slots that are within the specified after_time and before_time
-            let slots = slot_generator(self.after_time, self.before_time, &time_period);
-            //calculate flexibility
-            let mut flexibility = 0;
-            for slot in &slots {
-                flexibility += slot.num_hours() - self.duration + 1;
+            for _ in 0..tasks_per_period {
+                let task_id = *counter;
+                *counter += 1;
+                //assign slots that are within the specified after_time and before_time
+                let slots = slot_generator(self.after_time, self.before_time, &time_period);
+                //calculate flexibility
+                let mut flexibility = 0;
+                for slot in &slots {
+                    flexibility += slot.num_hours() - self.duration + 1;
+                }
+                let t = Task::new(task_id, start, deadline, slots, flexibility, &self);
+                tasks.push(t);
             }
-            let t = Task::new(task_id, start, deadline, slots, flexibility, &self);
-            tasks.push(t);
         }
         tasks
     }
