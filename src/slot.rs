@@ -1,6 +1,5 @@
-use chrono::Duration;
-use chrono::{NaiveDateTime, Timelike};
-use serde::{Deserialize, Serialize};
+use chrono::NaiveDateTime;
+use serde::Deserialize;
 use std::ops::{Add, Sub};
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy, Deserialize)]

@@ -1,7 +1,7 @@
 use self::serde::*;
 use crate::{
-    goal::*, input::*, output_formatter::*, slot::*, slot_generator::*, task::TaskStatus::*,
-    task::*, task_generator::*, task_placer::*, time_slot_iterator::*,
+    goal::*, input::*, output_formatter::*, repetition::Repetition, slot::*, slot_generator::*,
+    task::TaskStatus::*, task::*, task_generator::*, task_placer::*, time_slot_iterator::*,
 };
 use chrono::*;
 
@@ -10,7 +10,7 @@ fn time_slot_iterator_splits_into_single_days() {
     let r = TimeSlotIterator {
         start: NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0),
         end: NaiveDate::from_ymd(2022, 1, 7).and_hms(23, 59, 59),
-        repetition: Some(Repetition::DAILY),
+        repetition: Some(Repetition::DAILY(1)),
     };
 
     assert_eq!(
