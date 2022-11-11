@@ -1,0 +1,21 @@
+{
+  "startDate": "2022-11-11T00:00:00",
+  "endDate": "2022-11-12T00:00:00",
+  "goals": [
+    {
+      "id": 1,
+      "title": "take medicine",
+      "duration": 1,
+      "repeat": "3/day",
+      "after_time": 10,
+      "before_time": 20 
+    },
+    {
+      "id": 2,
+      "title": "work",
+      "duration": 3,
+      "after_time": 12,
+      "before_time": 18 
+    }
+  ]
+}
