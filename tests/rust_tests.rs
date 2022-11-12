@@ -175,3 +175,27 @@ fn x_per_week_3_works() {
     let (actual_output, desired_output) = run_test("x-per-week-3");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn x_per_day_1_works() {
+    let (actual_output, desired_output) = run_test("x-per-day-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_day_2_works() {
+    let (actual_output, desired_output) = run_test("x-per-day-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_day_3_works() {
+    let (actual_output, desired_output) = run_test("x-per-day-3");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_day_4_works() {
+    let (actual_output, desired_output) = run_test("x-per-day-4");
+    assert_eq!(actual_output, desired_output);
+}

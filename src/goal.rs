@@ -99,6 +99,7 @@ impl Goal {
         };
         let tasks_per_period = match self.repeat {
             Some(Repetition::WEEKLY(x)) => x,
+            Some(Repetition::DAILY(x)) => x,
             _ => 1,
         };
         for time_period in time_periods {
@@ -116,6 +117,6 @@ impl Goal {
                 tasks.push(t);
             }
         }
-        tasks
+        dbg!(tasks)
     }
 }

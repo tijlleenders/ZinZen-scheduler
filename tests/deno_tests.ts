@@ -50,6 +50,14 @@ import x_per_week_2_input from "./jsons/x-per-week-2/input.json" assert {type: "
 import x_per_week_2_output from "./jsons/x-per-week-2/output.json" assert {type: "json"}
 import x_per_week_3_input from "./jsons/x-per-week-3/input.json" assert {type: "json"}
 import x_per_week_3_output from "./jsons/x-per-week-3/output.json" assert {type: "json"}
+import x_per_day_1_input from "./jsons/x-per-day-1/input.json" assert {type: "json"}
+import x_per_day_1_output from "./jsons/x-per-day-1/output.json" assert {type: "json"}
+import x_per_day_2_input from "./jsons/x-per-day-2/input.json" assert {type: "json"}
+import x_per_day_2_output from "./jsons/x-per-day-2/output.json" assert {type: "json"}
+import x_per_day_3_input from "./jsons/x-per-day-3/input.json" assert {type: "json"}
+import x_per_day_3_output from "./jsons/x-per-day-3/output.json" assert {type: "json"}
+import x_per_day_4_input from "./jsons/x-per-day-4/input.json" assert {type: "json"}
+import x_per_day_4_output from "./jsons/x-per-day-4/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -188,17 +196,32 @@ Deno.test("slot reduced by other task", () => {
     schedule(slot_reduced_1_input),slot_reduced_1_output);
 });
 
-Deno.test("x per week 1", () => {
+Deno.test("x per day 1", () => {
   assertEquals(
-    schedule(x_per_week_1_input),x_per_week_1_output);
+    schedule(x_per_day_1_input),x_per_day_1_output);
 });
 
-Deno.test("x per week 2", () => {
+Deno.test("x per day 2", () => {
   assertEquals(
-    schedule(x_per_week_2_input),x_per_week_2_output);
+    schedule(x_per_day_2_input),x_per_day_2_output);
 });
 
-Deno.test("x per week 3", () => {
+Deno.test("x per day 3", () => {
   assertEquals(
-    schedule(x_per_week_3_input),x_per_week_3_output);
+    schedule(x_per_day_3_input),x_per_day_3_output);
+});
+
+Deno.test("x per day 1", () => {
+  assertEquals(
+    schedule(x_per_day_1_input),x_per_day_1_output);
+});
+
+Deno.test("x per day 2", () => {
+  assertEquals(
+    schedule(x_per_day_2_input),x_per_day_2_output);
+});
+
+Deno.test("x per day 3", () => {
+  assertEquals(
+    schedule(x_per_day_3_input),x_per_day_3_output);
 });
