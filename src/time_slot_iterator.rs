@@ -118,19 +118,30 @@ impl Iterator for TimeSlotIterator {
                 return None;
             }
             Some(Repetition::EveryXdays(days)) => {
-                if self.start < self.end {
-                    let start = self.start;
-                    let mut end = self.start + Duration::days(1);
-                    if end > self.end {
-                        end = self.end;
-                    } else {
-                        end = end.duration_round(Duration::days(1)).ok()?;
-                    }
-                    self.start = end + Duration::days((days - 1) as i64);
-                    Some(Slot { start, end })
-                } else {
-                    None
+                if self.start >= self.end {
+                    return None;
                 }
+                let start = self.start;
+                let mut end = self.start + Duration::days(1);
+                if end > self.end {
+                    end = self.end;
+                } else {
+                    end = end.duration_round(Duration::days(1)).ok()?;
+                }
+                self.start = end + Duration::days((days - 1) as i64);
+                Some(Slot { start, end })
+            }
+            Some(Repetition::EveryXhours(hours)) => {
+                if self.start >= self.end {
+                    return None;
+                }
+                let start = self.start;
+                let mut end = self.start + Duration::hours(1);
+                if end > self.end {
+                    end = self.end;
+                }
+                self.start = end + Duration::hours((hours - 1) as i64);
+                Some(Slot { start, end })
             }
             _ => {
                 //it's a day of the week e.g. MONDAYS or TUESDAYS
