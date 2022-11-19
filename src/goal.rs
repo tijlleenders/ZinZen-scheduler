@@ -2,7 +2,7 @@ use crate::repetition::Repetition;
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
-use chrono::NaiveDateTime;
+use chrono::{NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::option::Option;
 
@@ -108,6 +108,17 @@ impl Goal {
                 *counter += 1;
                 //assign slots that are within the specified after_time and before_time
                 let slots = slot_generator(self.after_time, self.before_time, &time_period);
+                //the following two 'if' checks are needed because of every-x-hours repetitions
+                if slots.is_empty() {
+                    continue;
+                }
+                if self.before_time.is_some()
+                    && slots
+                        .iter()
+                        .any(|slot| (slot.end.hour() as usize) > self.before_time.unwrap())
+                {
+                    continue;
+                }
                 //calculate flexibility
                 let mut flexibility = 0;
                 for slot in &slots {
