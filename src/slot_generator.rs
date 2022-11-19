@@ -21,7 +21,6 @@ pub fn slot_generator(
 
     let after_time = after_time.unwrap_or(0);
     let before_time = before_time.unwrap_or(24);
-
     //slides 2 - 7 (assign slots to tasks)
     let hour_iterator = TimeSlotIterator {
         start: time_period.start,

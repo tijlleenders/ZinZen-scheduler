@@ -199,3 +199,15 @@ fn x_per_day_4_works() {
     let (actual_output, desired_output) = run_test("x-per-day-4");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn every_2_hours_works() {
+    let (actual_output, desired_output) = run_test("every-2-hours");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_8_hours_works() {
+    let (actual_output, desired_output) = run_test("every-8-hours");
+    assert_eq!(actual_output, desired_output);
+}

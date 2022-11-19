@@ -17,6 +17,7 @@ pub enum Repetition {
     WEEKDAYS,
     WEEKENDS,
     EveryXdays(usize),
+    EveryXhours(usize),
     MONDAYS,
     TUESDAYS,
     WEDNESDAYS,
@@ -73,8 +74,15 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
                     let split = s.split(' ').collect::<Vec<&str>>();
                     let num = split[1]
                         .parse::<usize>()
-                        .expect("front end should use format 'every x days'");
-                    Ok(Repetition::EveryXdays(num))
+                        .expect("front end should use format 'every x days' or 'every x hours' ");
+                    let rep = split[2];
+                    if rep == "days" {
+                        Ok(Repetition::EveryXdays(num))
+                    } else if rep == "hours" {
+                        Ok(Repetition::EveryXhours(num))
+                    } else {
+                        panic!("front end should use format 'every x days' or 'every x hours' ");
+                    }
                 } else {
                     Err(E::custom("Error deserializing goal"))
                 }
@@ -106,6 +114,7 @@ impl fmt::Display for Repetition {
             Repetition::WEEKDAYS => "WEEKDAYS",
             Repetition::WEEKENDS => "WEEKENDS",
             Repetition::EveryXdays(_) => "EveryXdays",
+            Repetition::EveryXhours(_) => "EveryXhours",
             Repetition::MONDAYS => "Mon",
             Repetition::TUESDAYS => "Tue",
             Repetition::WEDNESDAYS => "Wed",
