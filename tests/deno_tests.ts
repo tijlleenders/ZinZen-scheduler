@@ -58,6 +58,11 @@ import x_per_day_3_input from "./jsons/x-per-day-3/input.json" assert {type: "js
 import x_per_day_3_output from "./jsons/x-per-day-3/output.json" assert {type: "json"}
 import x_per_day_4_input from "./jsons/x-per-day-4/input.json" assert {type: "json"}
 import x_per_day_4_output from "./jsons/x-per-day-4/output.json" assert {type: "json"}
+import every_2_hours_input from "./jsons/every-2-hours/input.json" assert {type: "json"}
+import every_2_hours_output from "./jsons/every-2-hours/output.json" assert {type: "json"}
+import every_8_hours_input from "./jsons/every-8-hours/input.json" assert {type: "json"}
+import every_8_hours_output from "./jsons/every-8-hours/output.json" assert {type: "json"}
+
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -224,4 +229,14 @@ Deno.test("x per day 2", () => {
 Deno.test("x per day 3", () => {
   assertEquals(
     schedule(x_per_day_3_input),x_per_day_3_output);
+});
+
+Deno.test("every 2 hours", () => {
+  assertEquals(
+    schedule(every_2_hours_input),every_2_hours_output);
+});
+
+Deno.test("every 8 hours", () => {
+  assertEquals(
+    schedule(every_8_hours_input),every_8_hours_output);
 });
