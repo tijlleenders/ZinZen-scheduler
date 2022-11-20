@@ -11,7 +11,7 @@ use std::cmp::Ordering;
 #[derive(Deserialize, Debug, Eq, Clone)]
 pub struct Task {
     pub id: usize,
-    pub goal_id: usize,
+    pub goal_id: String,
     pub title: String,
     pub duration: usize,
     pub status: TaskStatus,
@@ -112,7 +112,7 @@ impl Task {
     ) -> Self {
         Self {
             id,
-            goal_id: goal.id,
+            goal_id: goal.id.clone(),
             title: goal.title.clone(),
             duration: goal.duration,
             status: TaskStatus::UNSCHEDULED,
@@ -159,7 +159,7 @@ impl Task {
         for _ in 0..self.duration {
             let task = Task {
                 id: *counter,
-                goal_id: self.goal_id,
+                goal_id: self.goal_id.clone(),
                 title: self.title.clone(),
                 duration: 1,
                 status: TaskStatus::UNSCHEDULED,

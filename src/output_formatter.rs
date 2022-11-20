@@ -9,7 +9,7 @@ use std::cmp::Ordering;
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct Output {
     taskid: usize,
-    goalid: usize,
+    goalid: String,
     title: String,
     duration: usize,
     start: NaiveDateTime,
@@ -47,7 +47,7 @@ pub fn output_formatter(tasks: Vec<Task>) -> Result<Vec<Output>, Error> {
 fn get_output_from_task(task: &Task) -> Output {
     Output {
         taskid: task.id,
-        goalid: task.goal_id,
+        goalid: task.goal_id.clone(),
         title: task.title.clone(),
         duration: task.duration,
         start: task
