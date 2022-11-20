@@ -8,7 +8,7 @@ use std::option::Option;
 
 #[derive(Deserialize, Debug, Default)]
 pub struct Goal {
-    pub id: usize,
+    pub id: String,
     pub title: String,
     /// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
     pub duration: usize,
@@ -31,7 +31,7 @@ pub struct Goal {
 impl Goal {
     pub fn new(id: usize) -> Self {
         Self {
-            id,
+            id: id.to_string(),
             title: String::from("Test"),
             ..Default::default()
         }
