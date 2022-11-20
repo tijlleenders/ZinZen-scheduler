@@ -1,7 +1,7 @@
 [
     {
       "taskid": 0,
-      "goalid": 2,
+      "goalid": "2",
       "title": "cook pasta",
       "duration": 2,
       "start": "2022-11-07T16:00:00",
@@ -9,7 +9,7 @@
     },
     {
       "taskid": 1,
-      "goalid": 3,
+      "goalid": "3",
       "title": "cook burger",
       "duration": 2,
       "start": "2022-11-08T16:00:00",
@@ -17,7 +17,7 @@
     },
     {
       "taskid": 2,
-      "goalid": 4,
+      "goalid": "4",
       "title": "cook pizza",
       "duration": 2,
       "start": "2022-11-09T16:00:00",
@@ -25,7 +25,7 @@
     },
     {
       "taskid": 3,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 5,
       "start": "2022-11-10T12:00:00",

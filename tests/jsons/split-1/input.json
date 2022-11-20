@@ -3,7 +3,7 @@
       "endDate": "2022-09-02T00:00:00",
       "goals": [
         {
-          "id": 1,
+          "id": "1",
           "title": "dentist",
           "duration": 1,
           "start": "2022-09-01T00:00:00",
@@ -12,7 +12,7 @@
           "before_time": 14 
         },
         {
-          "id": 2,
+          "id": "2",
           "title": "work",
           "duration": 8,
           "start": "2022-09-01T00:00:00",

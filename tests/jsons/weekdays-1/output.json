@@ -1,7 +1,7 @@
 [
    {
       "taskid": 0,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-03T08:00:00",
@@ -9,7 +9,7 @@
    },
    {
       "taskid": 1,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-04T08:00:00",
@@ -17,7 +17,7 @@
    },
    {
       "taskid": 2,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-05T08:00:00",
@@ -25,7 +25,7 @@
    },
    {
       "taskid": 3,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-06T08:00:00",
@@ -33,7 +33,7 @@
    },
    {
       "taskid": 4,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-07T08:00:00",
@@ -41,7 +41,7 @@
    },
    {
       "taskid": 5,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-10T08:00:00",
@@ -49,7 +49,7 @@
    },
    {
       "taskid": 6,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-11T08:00:00",
@@ -57,7 +57,7 @@
    },
    {
       "taskid": 7,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-12T08:00:00",
@@ -65,7 +65,7 @@
    },
    {
       "taskid": 8,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-13T08:00:00",
@@ -73,7 +73,7 @@
    },
    {
       "taskid": 9,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-14T08:00:00",
@@ -81,7 +81,7 @@
    },
    {
       "taskid": 10,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-17T08:00:00",
@@ -89,7 +89,7 @@
    },
    {
       "taskid": 11,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-18T08:00:00",
@@ -97,7 +97,7 @@
    },
    {
       "taskid": 12,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-19T08:00:00",
@@ -105,7 +105,7 @@
    },
    {
       "taskid": 13,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-20T08:00:00",
@@ -113,7 +113,7 @@
    },
    {
       "taskid": 14,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-21T08:00:00",
@@ -121,7 +121,7 @@
    },
    {
       "taskid": 15,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-24T08:00:00",
@@ -129,7 +129,7 @@
    },
    {
       "taskid": 16,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-25T08:00:00",
@@ -137,7 +137,7 @@
    },
    {
       "taskid": 17,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-26T08:00:00",
@@ -145,7 +145,7 @@
    },
    {
       "taskid": 18,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-27T08:00:00",
@@ -153,7 +153,7 @@
    },
    {
       "taskid": 19,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 8,
       "start": "2022-10-28T08:00:00",

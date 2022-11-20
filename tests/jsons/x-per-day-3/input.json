@@ -3,7 +3,7 @@
   "endDate": "2022-11-14T00:00:00",
   "goals": [
     {
-      "id": 1,
+      "id": "1",
       "title": "take medicine",
       "duration": 1,
       "repeat": "3/day",
@@ -11,7 +11,7 @@
       "before_time": 20 
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "work",
       "duration": 3,
       "after_time": 12,

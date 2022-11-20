@@ -520,11 +520,11 @@ fn vec_of_tasks_sorts_flex1_then_high_to_low_works() {
         goals,
     });
     tasks.sort();
-    assert_eq!(tasks[0].goal_id, 1);
-    assert_eq!(tasks[1].goal_id, 5);
-    assert_eq!(tasks[2].goal_id, 4);
-    assert_eq!(tasks[3].goal_id, 3);
-    assert_eq!(tasks[4].goal_id, 2);
+    assert_eq!(tasks[0].goal_id, 1.to_string());
+    assert_eq!(tasks[1].goal_id, 5.to_string());
+    assert_eq!(tasks[2].goal_id, 4.to_string());
+    assert_eq!(tasks[3].goal_id, 3.to_string());
+    assert_eq!(tasks[4].goal_id, 2.to_string());
 }
 
 #[test]
@@ -573,11 +573,11 @@ fn vec_of_tasks_sorts_multiple_flex1_then_high_to_low_works() {
         goals,
     });
     tasks.sort();
-    assert_eq!(tasks[0].goal_id, 1);
-    assert_eq!(tasks[1].goal_id, 2);
-    assert_eq!(tasks[2].goal_id, 3);
-    assert_eq!(tasks[3].goal_id, 5);
-    assert_eq!(tasks[4].goal_id, 4);
+    assert_eq!(tasks[0].goal_id, 1.to_string());
+    assert_eq!(tasks[1].goal_id, 2.to_string());
+    assert_eq!(tasks[2].goal_id, 3.to_string());
+    assert_eq!(tasks[3].goal_id, 5.to_string());
+    assert_eq!(tasks[4].goal_id, 4.to_string());
 }
 
 #[test]
@@ -626,9 +626,9 @@ fn vec_of_tasks_sorts_no_flex1_then_high_to_low_works() {
         goals,
     });
     tasks.sort();
-    assert_eq!(tasks[0].goal_id, 5);
-    assert_eq!(tasks[1].goal_id, 4);
-    assert_eq!(tasks[2].goal_id, 3);
-    assert_eq!(tasks[3].goal_id, 2);
-    assert_eq!(tasks[4].goal_id, 1);
+    assert_eq!(tasks[0].goal_id, 5.to_string());
+    assert_eq!(tasks[1].goal_id, 4.to_string());
+    assert_eq!(tasks[2].goal_id, 3.to_string());
+    assert_eq!(tasks[3].goal_id, 2.to_string());
+    assert_eq!(tasks[4].goal_id, 1.to_string());
 }

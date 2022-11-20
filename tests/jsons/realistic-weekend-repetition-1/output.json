@@ -1,7 +1,7 @@
 [
    {
       "taskid": 0,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration": 2,
       "start": "2022-09-03T05:00:00",
@@ -9,7 +9,7 @@
    },
    {
       "taskid": 1,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 6,
       "start": "2022-09-03T08:00:00",
@@ -17,7 +17,7 @@
    },
    {
       "taskid": 2,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-03T17:00:00",
@@ -25,7 +25,7 @@
    },
    {
       "taskid": 3,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration": 2,
       "start": "2022-09-04T05:00:00",
@@ -33,7 +33,7 @@
    },
    {
       "taskid": 4,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 2,
       "start": "2022-09-04T08:00:00",
@@ -41,7 +41,7 @@
    },
    {
       "taskid": 5,
-      "goalid": 4,
+      "goalid": "4",
       "title": "church",
       "duration": 1,
       "start": "2022-09-04T10:00:00",
@@ -49,7 +49,7 @@
    },
    {
       "taskid": 6,
-      "goalid": 5,
+      "goalid": "5",
       "title": "dentist",
       "duration": 1,
       "start": "2022-09-04T11:00:00",
@@ -57,7 +57,7 @@
    },
    {
       "taskid": 7,
-      "goalid": 4,
+      "goalid": "4",
       "title": "church",
       "duration": 1,
       "start": "2022-09-04T12:00:00",
@@ -65,7 +65,7 @@
    },
    {
       "taskid": 8,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 4,
       "start": "2022-09-04T14:00:00",
@@ -73,7 +73,7 @@
    },
    {
       "taskid": 9,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-04T18:00:00",
@@ -81,7 +81,7 @@
    },
    {
       "taskid": 10,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration": 2,
       "start": "2022-09-10T05:00:00",
@@ -89,7 +89,7 @@
    },
    {
       "taskid": 11,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 6,
       "start": "2022-09-10T08:00:00",
@@ -97,7 +97,7 @@
    },
    {
       "taskid": 12,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-10T17:00:00",
@@ -105,7 +105,7 @@
    },
    {
       "taskid": 13,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration":   2,
       "start": "2022-09-11T05:00:00",
@@ -113,7 +113,7 @@
    },
    {
       "taskid": 14,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 2,
       "start": "2022-09-11T08:00:00",
@@ -121,7 +121,7 @@
    },
    {
       "taskid": 15,
-      "goalid": 4,
+      "goalid": "4",
       "title": "church",
       "duration": 2,
       "start": "2022-09-11T10:00:00",
@@ -129,7 +129,7 @@
    },
    {
       "taskid": 16,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 4,
       "start": "2022-09-11T14:00:00",
@@ -137,7 +137,7 @@
    },
    {
       "taskid": 17,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-11T18:00:00",
@@ -145,7 +145,7 @@
    },
    {
       "taskid": 18,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration": 2,
       "start": "2022-09-17T05:00:00",
@@ -153,7 +153,7 @@
    },
    {
       "taskid": 19,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 6,
       "start": "2022-09-17T08:00:00",
@@ -161,7 +161,7 @@
    },
    {
       "taskid": 20,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-17T17:00:00",
@@ -169,7 +169,7 @@
    },
    {
       "taskid": 21,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration": 2,
       "start": "2022-09-18T05:00:00",
@@ -177,7 +177,7 @@
    },
    {
       "taskid": 22,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration":   2,
       "start": "2022-09-18T08:00:00",
@@ -185,7 +185,7 @@
    },
    {
       "taskid": 23,
-      "goalid": 4,
+      "goalid": "4",
       "title": "church",
       "duration": 2,
       "start": "2022-09-18T10:00:00",
@@ -193,7 +193,7 @@
    },
    {
       "taskid": 24,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 4,
       "start": "2022-09-18T14:00:00",
@@ -201,7 +201,7 @@
    },
    {
       "taskid": 25,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-18T18:00:00",
@@ -209,7 +209,7 @@
    },
    {
       "taskid": 26,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration": 2,
       "start": "2022-09-24T05:00:00",
@@ -217,7 +217,7 @@
    },
    {
       "taskid": 27,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 6,
       "start": "2022-09-24T08:00:00",
@@ -225,7 +225,7 @@
    },
    {
       "taskid": 28,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-24T17:00:00",
@@ -233,7 +233,7 @@
    },
    {
       "taskid": 29,
-      "goalid": 2,
+      "goalid": "2",
       "title": "gym",
       "duration": 2,
       "start": "2022-09-25T05:00:00",
@@ -241,7 +241,7 @@
    },
    {
       "taskid": 30,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 2,
       "start": "2022-09-25T08:00:00",
@@ -249,7 +249,7 @@
    },
    {
       "taskid": 31,
-      "goalid": 4,
+      "goalid": "4",
       "title": "church",
       "duration":   2,
       "start": "2022-09-25T10:00:00",
@@ -257,7 +257,7 @@
    },
    {
       "taskid": 32,
-      "goalid": 1,
+      "goalid": "1",
       "title": "work",
       "duration": 4,
       "start": "2022-09-25T14:00:00",
@@ -265,7 +265,7 @@
    },
    {
       "taskid": 33,
-      "goalid": 3,
+      "goalid": "3",
       "title": "walk",
       "duration": 1,
       "start": "2022-09-25T18:00:00",

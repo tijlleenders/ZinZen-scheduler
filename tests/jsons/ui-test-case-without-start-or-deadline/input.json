@@ -3,21 +3,21 @@
       "endDate": "2022-01-02T00:00:00",
       "goals": [
         {
-          "id": 1,
+          "id": "1",
           "title": "shopping",
           "duration": 1,
           "after_time": 10,
           "before_time": 13
         },
         {
-          "id": 2,
+          "id": "2",
           "title": "dentist",
           "duration": 1,
           "after_time": 10,
           "before_time": 11
         },
         {
-          "id": 3,
+          "id": "3",
           "title": "exercise",
           "duration": 1,
           "after_time": 10,

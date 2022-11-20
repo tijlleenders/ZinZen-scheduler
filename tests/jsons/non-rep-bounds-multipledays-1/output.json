@@ -1,7 +1,7 @@
 [
       {
         "taskid": 0,
-        "goalid": 1,
+        "goalid": "1",
         "title": "home repair",
         "duration": 1,
         "start": "2022-01-01T15:00:00",

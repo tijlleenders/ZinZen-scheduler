@@ -3,7 +3,7 @@
   "endDate": "2022-11-02T00:00:00",
   "goals": [
     {
-      "id": 1,
+      "id": "1",
       "title": "write blog article",
       "duration": 2,
       "repeat": "2/week",
@@ -11,7 +11,7 @@
       "before_time":22 
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "watch movie",
       "duration": 3,
       "start": "2022-10-03T00:00:00",
@@ -20,7 +20,7 @@
       "before_time":22 
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "study",
       "duration": 3,
       "start": "2022-10-11T00:00:00",

@@ -1,13 +1,13 @@
 {
-  "startDate": "2022-10-10T00:00:00",
-  "endDate": "2022-10-17T00:00:00",
-  "goals": [
-    {
-      "id": 1,
-      "title": "eat breakfast",
-      "duration": 1,
-      "repeat": "daily",
-      "after_time": 12
-    }
-  ]
+    "startDate": "2022-10-10T00:00:00",
+    "endDate": "2022-10-17T00:00:00",
+    "goals": [
+      {
+        "id": "1",
+        "title": "eat breakfast",
+        "duration": 1,
+        "repeat": "daily",
+        "after_time": 12
+      }
+    ]
 }
