@@ -3,7 +3,7 @@
   "endDate": "2022-11-01T00:00:00",
   "goals": [
     {
-      "id": 1,
+      "id": "1",
       "title": "study french",
       "duration": 2,
       "repeat": "weekly"

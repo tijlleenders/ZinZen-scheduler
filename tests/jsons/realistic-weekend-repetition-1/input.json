@@ -3,7 +3,7 @@
    "endDate": "2022-10-01T00:00:00",
    "goals": [
       {
-         "id": 1,
+         "id": "1",
          "title": "work",
          "duration": 6,
          "repeat": "weekends",
@@ -11,7 +11,7 @@
          "before_time": 18
       },
       {
-         "id": 2,
+         "id": "2",
          "title": "gym",
          "duration": 2,
          "repeat": "weekends",
@@ -19,7 +19,7 @@
          "before_time": 8
       },
       {
-         "id": 3,
+         "id": "3",
          "title": "walk",
          "duration": 1,
          "repeat": "weekends",
@@ -27,7 +27,7 @@
          "before_time": 19
       },
       {
-         "id": 4,
+         "id": "4",
          "title": "church",
          "duration": 2,
          "repeat": "sundays",
@@ -35,7 +35,7 @@
          "before_time": 14
       },
       {
-         "id": 5,
+         "id": "5",
          "title": "dentist",
          "duration": 1,
          "start": "2022-09-04T00:00:00",

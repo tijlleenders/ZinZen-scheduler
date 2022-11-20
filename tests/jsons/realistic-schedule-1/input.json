@@ -3,7 +3,7 @@
       "endDate": "2022-10-01T00:00:00",
       "goals": [
         {
-          "id": 1,
+          "id": "1",
           "title": "walk",
           "duration": 1,
           "repeat": "daily",
@@ -11,7 +11,7 @@
           "before_time": 20 
         },
         {
-          "id": 2,
+          "id": "2",
           "title": "read",
           "duration": 1,
           "repeat": "daily",
@@ -19,7 +19,7 @@
           "before_time": 22 
         },
         {
-          "id": 3,
+          "id": "3",
           "title": "piano practice",
           "duration": 2,
           "repeat": "wednesdays",
@@ -27,7 +27,7 @@
           "before_time": 14 
         },
         {
-          "id": 4,
+          "id": "4",
           "title": "gym",
           "duration": 2,
           "repeat": "daily",
@@ -35,7 +35,7 @@
           "before_time": 7 
         },
         {
-          "id": 5,
+          "id": "5",
           "title": "work",
           "duration": 8,
           "repeat": "daily",
@@ -45,7 +45,7 @@
           "before_time": 21 
         },
         {
-          "id": 6,
+          "id": "6",
           "title": "dentist",
           "duration": 1,
           "start": "2022-09-14T00:00:00",
@@ -54,7 +54,7 @@
           "before_time": 11 
         },
         {
-          "id": 7,
+          "id": "7",
           "title": "shopping",
           "duration": 2,
           "start": "2022-09-10T00:00:00",
@@ -63,7 +63,7 @@
           "before_time": 18 
         },
         {
-          "id": 8,
+          "id": "8",
           "title": "repair sink",
           "duration": 3,
           "start": "2022-09-25T00:00:00",

@@ -3,7 +3,7 @@
       "endDate": "2022-01-02T00:00:00",
       "goals": [
         {
-          "id": 1,
+          "id": "1",
           "title": "shopping",
           "duration": 1,
           "start": "2022-01-01T00:00:00",
@@ -12,7 +12,7 @@
           "before_time": 13
         },
         {
-          "id": 2,
+          "id": "2",
           "title": "dentist",
           "duration": 1,
           "start": "2022-01-01T00:00:00",
@@ -21,7 +21,7 @@
           "before_time": 11
         },
         {
-          "id": 3,
+          "id": "3",
           "title": "exercise",
           "duration": 1,
           "start": "2022-01-01T00:00:00",
@@ -30,7 +30,7 @@
           "before_time": 18
         },
         {
-          "id": 4,
+          "id": "4",
           "title": "meditate",
           "duration": 1,
           "start": "2022-01-01T00:00:00",
@@ -39,7 +39,7 @@
           "before_time": 7 
         },
         {
-          "id": 5,
+          "id": "5",
           "title": "cook",
           "duration": 2,
           "start": "2022-01-01T00:00:00",
@@ -48,7 +48,7 @@
           "before_time": 21 
         },
         {
-          "id": 6,
+          "id": "6",
           "title": "read",
           "duration": 1,
           "start": "2022-01-01T00:00:00",
@@ -57,7 +57,7 @@
           "before_time": 22 
         },
         {
-          "id": 7,
+          "id": "7",
           "title": "meeting",
           "duration": 2,
           "start": "2022-01-01T00:00:00",
@@ -66,7 +66,7 @@
           "before_time": 17 
         },
         {
-          "id": 8,
+          "id": "8",
           "title": "code",
           "duration": 1,
           "start": "2022-01-01T00:00:00",
