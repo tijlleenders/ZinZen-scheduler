@@ -107,18 +107,31 @@ impl Goal {
                 let task_id = *counter;
                 *counter += 1;
                 //assign slots that are within the specified after_time and before_time
-                let slots = slot_generator(self.after_time, self.before_time, &time_period);
-                //the following two 'if' checks are needed because of every-x-hours repetitions
+
+                let slots =
+                    slot_generator(self.after_time, self.before_time, &time_period, self.repeat);
+                //the following two 'if' checks are needed because of every-x-hours repetitions.
+                //the slot_generator doesn't currently handle 'every-x-hours' repetitions very well.
+                //after the slots have been assigned, we need to ignore slots that are empty or not within
+                //the after/before time of the goal.
+                //this may be improved upon by a wider refactor of the slot_generator.
                 if slots.is_empty() {
                     continue;
                 }
-                if self.before_time.is_some()
-                    && slots
-                        .iter()
-                        .any(|slot| (slot.end.hour() as usize) > self.before_time.unwrap())
-                {
+                if self.before_time.unwrap_or(24) < self.after_time.unwrap_or(0) {
+                    if slots.iter().any(|slot| {
+                        (slot.end.hour() as usize) > self.before_time.unwrap_or(24)
+                            && (slot.start.hour() as usize) < self.after_time.unwrap_or(0)
+                    }) {
+                        continue;
+                    }
+                } else if slots.iter().any(|slot| {
+                    (slot.end.hour() as usize) > self.before_time.unwrap_or(24)
+                        || (slot.start.hour() as usize) < self.after_time.unwrap_or(0)
+                }) {
                     continue;
                 }
+
                 //calculate flexibility
                 let mut flexibility = 0;
                 for slot in &slots {
@@ -128,6 +141,6 @@ impl Goal {
                 tasks.push(t);
             }
         }
-        dbg!(tasks)
+        tasks
     }
 }
