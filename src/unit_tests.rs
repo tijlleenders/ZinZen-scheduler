@@ -431,7 +431,7 @@ fn slot_generator_one_slot_works() {
 
     let after_time = Some(10);
     let before_time = Some(12);
-    let slots = slot_generator(after_time, before_time, &time_slice);
+    let slots = slot_generator(after_time, before_time, &time_slice, None);
     let expected_slots = vec![Slot {
         start: NaiveDate::from_ymd(2022, 11, 1).and_hms(10, 0, 0),
         end: NaiveDate::from_ymd(2022, 11, 1).and_hms(12, 0, 0),
@@ -448,7 +448,7 @@ fn slot_generator_multiple_slots_works() {
 
     let after_time = Some(10);
     let before_time = Some(12);
-    let slots = slot_generator(after_time, before_time, &time_period);
+    let slots = slot_generator(after_time, before_time, &time_period, None);
     let expected_slots = vec![
         Slot {
             start: NaiveDate::from_ymd(2022, 10, 31).and_hms(10, 0, 0),
