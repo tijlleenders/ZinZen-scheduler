@@ -62,6 +62,8 @@ import every_2_hours_input from "./jsons/every-2-hours/input.json" assert {type:
 import every_2_hours_output from "./jsons/every-2-hours/output.json" assert {type: "json"}
 import every_8_hours_input from "./jsons/every-8-hours/input.json" assert {type: "json"}
 import every_8_hours_output from "./jsons/every-8-hours/output.json" assert {type: "json"}
+import every_2_hours_overlap_input from "./jsons/every-2-hours-overlap/input.json" assert {type: "json"}
+import every_2_hours_overlap_output from "./jsons/every-2-hours-overlap/output.json" assert {type: "json"}
 
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
@@ -239,4 +241,9 @@ Deno.test("every 2 hours", () => {
 Deno.test("every 8 hours", () => {
   assertEquals(
     schedule(every_8_hours_input),every_8_hours_output);
+});
+
+Deno.test("every 2 hours overlap", () => {
+  assertEquals(
+    schedule(every_2_hours_overlap_input),every_2_hours_overlap_output);
 });
