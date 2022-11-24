@@ -109,6 +109,8 @@ impl Task {
         slots: Vec<Slot>,
         flexibility: usize,
         goal: &Goal,
+        after_time: usize,
+        before_time: usize,
     ) -> Self {
         Self {
             id,
@@ -119,8 +121,8 @@ impl Task {
             flexibility,
             start,
             deadline,
-            after_time: goal.after_time.unwrap_or(0),
-            before_time: goal.before_time.unwrap_or(24),
+            after_time,
+            before_time,
             slots,
             confirmed_start: None,
             confirmed_deadline: None,

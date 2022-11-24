@@ -21,10 +21,10 @@ pub fn slot_generator(
     }
 
     //special case for 'every-x-hours' repetition: return the time_period as is
-    if let Some(Repetition::EveryXhours(_)) = repetition {
+    if let Some(Repetition::EveryXhours(num)) = repetition {
         return vec![Slot {
             start: time_period.start,
-            end: time_period.end,
+            end: time_period.start + Duration::hours(num as i64),
         }];
     }
 

@@ -217,3 +217,9 @@ fn every_2_hours_overlap_works() {
     let (actual_output, desired_output) = run_test("every-2-hours-overlap");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn every_6_hours_works() {
+    let (actual_output, desired_output) = run_test("every-6-hours");
+    assert_eq!(actual_output, desired_output);
+}
