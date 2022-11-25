@@ -1,7 +1,7 @@
-use crate::repetition::Repetition;
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
+use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::{Duration, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::option::Option;
@@ -90,16 +90,16 @@ impl Goal {
          **.
          **If the repetition is NONE, only one task will be generated for the period between
          **the start and deadline.*/
-        let mut start = self.start.unwrap_or(calendar_start);
+        let start = self.start.unwrap_or(calendar_start);
         let deadline = self.deadline.unwrap_or(calendar_end);
-        if let Some(Repetition::EveryXhours(_)) = self.repeat {
-            start += Duration::hours(self.after_time.unwrap_or(0) as i64);
-        }
-        let time_periods = TimeSlotIterator {
+
+        let time_periods = TimeSlotIterator::new(
             start,
-            end: deadline,
-            repetition: self.repeat,
-        };
+            deadline,
+            self.repeat,
+            self.after_time.unwrap_or(0),
+            self.before_time.unwrap_or(24),
+        );
         let tasks_per_period = match self.repeat {
             Some(Repetition::WEEKLY(x)) => x,
             Some(Repetition::DAILY(x)) => x,
@@ -109,50 +109,16 @@ impl Goal {
             for _ in 0..tasks_per_period {
                 let task_id = *counter;
                 *counter += 1;
+                let t = Task::new(task_id, time_period.start, time_period.end, &self);
                 //assign slots that are within the specified after_time and before_time
-                let slots =
-                    slot_generator(self.after_time, self.before_time, &time_period, self.repeat);
-                //the following 'if' check is needed because of every-x-hours repetitions.
-                //the slot_generator doesn't currently handle 'every-x-hours' repetitions very well.
-                //after the slots have been assigned, we need to ignore slots that are not within
-                //the after/before time of the goal.
-                //this may be improved upon by a wider refactor of the slot_generator.
-                if self.before_time.unwrap_or(24) < self.after_time.unwrap_or(0) {
-                    if slots.iter().any(|slot| {
-                        (slot.start.hour() as usize) > self.before_time.unwrap_or(24)
-                            && (slot.start.hour() as usize) < self.after_time.unwrap_or(0)
-                    }) {
-                        continue;
-                    }
-                } else if slots.iter().any(|slot| {
-                    (slot.start.hour() as usize) >= self.before_time.unwrap_or(24)
-                        || (slot.start.hour() as usize) < self.after_time.unwrap_or(0)
-                }) {
-                    continue;
-                }
-
+                let mut t = slot_generator(t, &time_period);
                 //calculate flexibility
                 let mut flexibility = 0;
-                for slot in &slots {
+                for slot in &t.slots {
                     flexibility += slot.num_hours() - self.duration + 1;
                 }
-                let mut a_time = self.after_time.unwrap_or(0);
-                let mut b_time = self.before_time.unwrap_or(24);
-                //handle edge case of everyxhours (the tasks should have after and before time of the time period, not of the goal)
-                if let Some(Repetition::EveryXhours(_)) = self.repeat {
-                    a_time = time_period.start.hour() as usize;
-                    b_time = time_period.end.hour() as usize;
-                }
-                let t = Task::new(
-                    task_id,
-                    start,
-                    deadline,
-                    slots,
-                    flexibility,
-                    &self,
-                    a_time,
-                    b_time,
-                );
+                t.flexibility = flexibility;
+                t.status = TaskStatus::UNSCHEDULED;
                 tasks.push(t);
             }
         }

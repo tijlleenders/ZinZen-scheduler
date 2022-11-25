@@ -1,3 +1,4 @@
+use crate::repetition;
 use crate::repetition::Repetition;
 use crate::slot::Slot;
 use crate::util::MyDurationRound;
@@ -10,9 +11,29 @@ use chrono::Duration;
 /// e.g. all DAYS between 1st September 2022 and 30th September 2022.
 /// e.g. all HOURS between 1st September 2022 and 30th September 2022.
 pub(crate) struct TimeSlotIterator {
-    pub(crate) start: NaiveDateTime,
-    pub(crate) end: NaiveDateTime,
-    pub(crate) repetition: Option<Repetition>,
+    start: NaiveDateTime,
+    end: NaiveDateTime,
+    repetition: Option<Repetition>,
+    after_time: usize,
+    before_time: usize,
+}
+
+impl TimeSlotIterator {
+    pub fn new(
+        start: NaiveDateTime,
+        end: NaiveDateTime,
+        repetition: Option<Repetition>,
+        after_time: usize,
+        before_time: usize,
+    ) -> TimeSlotIterator {
+        TimeSlotIterator {
+            start: start + Duration::hours(after_time as i64),
+            end,
+            repetition,
+            after_time,
+            before_time,
+        }
+    }
 }
 
 impl Iterator for TimeSlotIterator {
@@ -35,8 +56,6 @@ impl Iterator for TimeSlotIterator {
                     let mut end = self.start + Duration::days(1);
                     if end > self.end {
                         end = self.end;
-                    } else {
-                        end = end.duration_round(Duration::days(1)).ok()?;
                     }
                     self.start = end;
                     Some(Slot { start, end })
@@ -74,7 +93,7 @@ impl Iterator for TimeSlotIterator {
                     end += Duration::days(1);
                 }
                 self.start = end;
-                return Some(Slot { start, end });
+                Some(Slot { start, end })
             }
             Some(Repetition::WEEKDAYS) => {
                 if self.start >= self.end {
@@ -94,7 +113,7 @@ impl Iterator for TimeSlotIterator {
                     self.start = end;
                     return Some(Slot { start, end });
                 }
-                return None;
+                None
             }
             Some(Repetition::WEEKENDS) => {
                 if self.start >= self.end {
@@ -115,7 +134,7 @@ impl Iterator for TimeSlotIterator {
                     self.start = end;
                     return Some(Slot { start, end });
                 }
-                return None;
+                None
             }
             Some(Repetition::EveryXdays(days)) => {
                 if self.start >= self.end {
@@ -125,8 +144,6 @@ impl Iterator for TimeSlotIterator {
                 let mut end = self.start + Duration::days(1);
                 if end > self.end {
                     end = self.end;
-                } else {
-                    end = end.duration_round(Duration::days(1)).ok()?;
                 }
                 self.start = end + Duration::days((days - 1) as i64);
                 Some(Slot { start, end })
@@ -135,11 +152,19 @@ impl Iterator for TimeSlotIterator {
                 if self.start >= self.end {
                     return None;
                 }
-                let start = self.start;
-                let mut end = self.start + Duration::hours(1);
-                if end > self.end {
-                    end = self.end;
+                while !hour_is_within_bounds(
+                    self.after_time,
+                    self.before_time,
+                    self.start.hour() as usize,
+                ) {
+                    self.start += Duration::hours(1);
+                    if self.start >= self.end {
+                        return None;
+                    }
                 }
+                //we are now at an hour that is within the time bounds of the task
+                let start = self.start;
+                let end = self.start + Duration::hours(1);
                 self.start = end + Duration::hours((hours - 1) as i64);
                 Some(Slot { start, end })
             }
@@ -159,8 +184,16 @@ impl Iterator for TimeSlotIterator {
                     self.start = end;
                     return Some(Slot { start, end });
                 }
-                return None;
+                None
             }
         }
+    }
+}
+
+fn hour_is_within_bounds(after_time: usize, before_time: usize, hour: usize) -> bool {
+    if before_time < after_time {
+        hour < before_time || hour >= after_time
+    } else {
+        hour >= after_time && hour < before_time
     }
 }
