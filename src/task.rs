@@ -102,28 +102,19 @@ impl Iterator for StartDeadlineIterator {
 }
 
 impl Task {
-    pub fn new(
-        id: usize,
-        start: NaiveDateTime,
-        deadline: NaiveDateTime,
-        slots: Vec<Slot>,
-        flexibility: usize,
-        goal: &Goal,
-        after_time: usize,
-        before_time: usize,
-    ) -> Self {
+    pub fn new(id: usize, start: NaiveDateTime, deadline: NaiveDateTime, goal: &Goal) -> Self {
         Self {
             id,
             goal_id: goal.id.clone(),
             title: goal.title.clone(),
             duration: goal.duration,
-            status: TaskStatus::UNSCHEDULED,
-            flexibility,
+            status: TaskStatus::UNINITIALIZED,
+            flexibility: 0,
             start,
             deadline,
-            after_time,
-            before_time,
-            slots,
+            after_time: goal.after_time.unwrap_or(0),
+            before_time: goal.before_time.unwrap_or(24),
+            slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
         }
@@ -225,6 +216,15 @@ impl Task {
         self.remove_invalid_slots();
         self.calculate_flexibility();
     }
+
+    pub fn bounds_contain(&self, hour: usize) -> bool {
+        //checks if the provided hour is within the time bounds of the task.
+        if self.before_time < self.after_time {
+            hour < self.before_time || hour >= self.after_time
+        } else {
+            hour >= self.after_time && hour < self.before_time
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
@@ -233,4 +233,5 @@ pub enum TaskStatus {
     SCHEDULED,
     IMPOSSIBLE,
     WAITING,
+    UNINITIALIZED,
 }
