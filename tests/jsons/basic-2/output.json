@@ -1,26 +1,29 @@
-[
-  {
-    "taskid": 2,
-    "goalid": "2",
-    "title": "presentation",
-    "duration": 1,
-    "start": "2022-01-01T08:00:00",
-    "deadline": "2022-01-01T09:00:00"
-  },
-  {
-    "taskid": 1,
-    "goalid": "3",
-    "title": "swimming_class",
-    "duration": 2,
-    "start": "2022-01-01T11:00:00",
-    "deadline": "2022-01-01T13:00:00"
-  },
-  {
-    "taskid": 0,
-    "goalid": "1",
-    "title": "group_discussion",
-    "duration": 3,
-    "start": "2022-01-01T13:00:00",
-    "deadline": "2022-01-01T16:00:00"
-  }
-]
+{
+  "scheduled": [
+    {
+      "taskid": 2,
+      "goalid": "2",
+      "title": "presentation",
+      "duration": 1,
+      "start": "2022-01-01T08:00:00",
+      "deadline": "2022-01-01T09:00:00"
+    },
+    {
+      "taskid": 1,
+      "goalid": "3",
+      "title": "swimming_class",
+      "duration": 2,
+      "start": "2022-01-01T11:00:00",
+      "deadline": "2022-01-01T13:00:00"
+    },
+    {
+      "taskid": 0,
+      "goalid": "1",
+      "title": "group_discussion",
+      "duration": 3,
+      "start": "2022-01-01T13:00:00",
+      "deadline": "2022-01-01T16:00:00"
+    }
+  ],
+  "impossible": []
+}

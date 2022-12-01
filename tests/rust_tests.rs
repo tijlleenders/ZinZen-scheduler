@@ -2,7 +2,7 @@ extern crate scheduler;
 mod common;
 #[cfg(test)]
 use pretty_assertions::assert_eq;
-use scheduler::{Input, Output};
+use scheduler::{FinalOutput, Input};
 use std::path::Path;
 
 fn run_test(directory: &str) -> (String, String) {
@@ -12,7 +12,7 @@ fn run_test(directory: &str) -> (String, String) {
     let output_path = Path::new(&o[..]);
     let input: Input = common::get_input_from_json(input_path).unwrap();
     let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
-    let output: Vec<Output> = scheduler::run_scheduler(input);
+    let output: FinalOutput = scheduler::run_scheduler(input);
 
     (
         serde_json::to_string_pretty(&output).unwrap(),
@@ -221,5 +221,17 @@ fn every_2_hours_overlap_works() {
 #[test]
 fn every_6_hours_works() {
     let (actual_output, desired_output) = run_test("every-6-hours");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn impossible_1_works() {
+    let (actual_output, desired_output) = run_test("impossible-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn impossible_2_works() {
+    let (actual_output, desired_output) = run_test("impossible-2");
     assert_eq!(actual_output, desired_output);
 }

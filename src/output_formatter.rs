@@ -1,7 +1,7 @@
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
-use crate::errors::Error;
 use crate::task::Task;
+use crate::{errors::Error, task::TaskStatus};
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
@@ -14,6 +14,8 @@ pub struct Output {
     duration: usize,
     start: NaiveDateTime,
     deadline: NaiveDateTime,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    first_conflict_with: Option<String>,
 }
 
 impl Ord for Output {
@@ -28,34 +30,77 @@ impl PartialOrd for Output {
     }
 }
 
-pub fn output_formatter(tasks: Vec<Task>) -> Result<Vec<Output>, Error> {
-    let mut outputs: Vec<Output> = Vec::new();
-    for i in 0..tasks.len() {
-        if tasks[i].confirmed_start.is_none() || tasks[i].confirmed_deadline.is_none() {
-            return Err(Error::NoConfirmedDate(tasks[i].title.clone(), tasks[i].id));
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub struct FinalOutput {
+    pub scheduled: Vec<Output>,
+    pub impossible: Vec<Output>,
+}
+
+pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<FinalOutput, Error> {
+    let mut scheduled_outputs: Vec<Output> = Vec::new();
+    let mut impossible_outputs: Vec<Output> = Vec::new();
+    //convert scheduled tasks to output objects and add to scheduled_outputs vec
+    for task in scheduled {
+        if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+            return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
         }
-        outputs.push(get_output_from_task(&tasks[i]));
+        scheduled_outputs.push(get_output_from_task(&task));
     }
-    outputs.sort();
-    combine(&mut outputs);
-    for i in 0..outputs.len() {
-        outputs[i].taskid = i;
+    //convert impossible tasks to output objects and add to impossible_outputs vec
+    for task in impossible {
+        impossible_outputs.push(get_output_from_task(&task));
     }
-    Ok(outputs)
+    //sort and combine the scheduled outputs
+    scheduled_outputs.sort();
+    combine(&mut scheduled_outputs);
+    //assign task ids
+    let mut i = 0;
+    for task in &mut scheduled_outputs {
+        task.taskid = i;
+        i += 1;
+    }
+    //sort and combine the impossible outputs
+    impossible_outputs.sort();
+    //assign task ids (start from last scheduled id)
+    combine(&mut impossible_outputs);
+    for task in &mut impossible_outputs {
+        task.taskid = i;
+        i += 1;
+    }
+    //create final output object
+    let final_ouput = FinalOutput {
+        scheduled: scheduled_outputs,
+        impossible: impossible_outputs,
+    };
+
+    Ok(final_ouput)
 }
 
 fn get_output_from_task(task: &Task) -> Output {
+    let start = if task.status == TaskStatus::SCHEDULED {
+        task.confirmed_start
+            .expect("Checked for None above so should always be Some.")
+    } else {
+        task.conflicts[0].0.start
+    };
+    let deadline = if task.status == TaskStatus::SCHEDULED {
+        task.confirmed_deadline
+            .expect("Checked for None above so should always be Some.")
+    } else {
+        task.conflicts[0].0.end
+    };
     Output {
         taskid: task.id,
         goalid: task.goal_id.clone(),
         title: task.title.clone(),
         duration: task.duration,
-        start: task
-            .confirmed_start
-            .expect("Checked for None done above so should always be Some."),
-        deadline: task
-            .confirmed_deadline
-            .expect("Checked for None done above so should always be Some."),
+        start,
+        deadline,
+        first_conflict_with: if task.status == TaskStatus::IMPOSSIBLE {
+            Some(task.conflicts[0].1.to_owned())
+        } else {
+            None
+        },
     }
 }
 
