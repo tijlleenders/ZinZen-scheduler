@@ -23,6 +23,7 @@ pub struct Task {
     pub slots: Vec<Slot>,
     pub confirmed_start: Option<NaiveDateTime>,
     pub confirmed_deadline: Option<NaiveDateTime>,
+    pub conflicts: Vec<(Slot, String)>,
 }
 
 impl PartialEq for Task {
@@ -117,12 +118,17 @@ impl Task {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
+            conflicts: Vec::new(),
         }
     }
 
     fn calculate_flexibility(&mut self) {
         let mut flexibility = 0;
         for slot in &self.slots {
+            if slot.num_hours() < self.duration {
+                flexibility += slot.num_hours();
+                continue;
+            }
             flexibility += slot.num_hours() - self.duration + 1;
         }
         self.flexibility = flexibility;
@@ -149,14 +155,15 @@ impl Task {
             return Err(Error::CannotSplit);
         }
         let mut tasks = Vec::new();
+
         for _ in 0..self.duration {
-            let task = Task {
+            let mut task = Task {
                 id: *counter,
                 goal_id: self.goal_id.clone(),
                 title: self.title.clone(),
                 duration: 1,
-                status: TaskStatus::UNSCHEDULED,
-                flexibility: self.slots.len(),
+                status: TaskStatus::UNINITIALIZED,
+                flexibility: 0,
                 start: self.start,
                 deadline: self.deadline,
                 after_time: self.after_time,
@@ -164,7 +171,10 @@ impl Task {
                 slots: self.get_slots(),
                 confirmed_start: None,
                 confirmed_deadline: None,
+                conflicts: Vec::new(),
             };
+            task.calculate_flexibility();
+            task.status = TaskStatus::UNSCHEDULED;
             *counter += 1;
             tasks.push(task);
         }
@@ -189,22 +199,16 @@ impl Task {
         }
     }
 
-    //Tasks of duration 1 with equal slots should be allowed to eat into each other's
+    //Tasks of duration 1 with equal slots and flex > 1 should be allowed to eat into each other's
     //slots. This happens for example after splitting tasks to 1hr tasks.
     //Without this condition, these tasks would never get scheduled.
+    //e.g. walk 1hr with slot (10-12) and dentist 1hr with slot (10-12).
+    //The scheduler should allow walk to be scheduled at 10-11 and dentist at 11-12.
     pub fn can_coexist_with(&self, other_task: &Task) -> bool {
-        if (self.duration == 1 && other_task.duration == 1)
-            && self.slots.len() == other_task.slots.len()
+        (self.duration == 1 && other_task.duration == 1)
+            && self.flexibility > 1
+            && other_task.flexibility > 1
             && self.slots == other_task.slots
-        {
-            return true;
-        }
-        false
-    }
-
-    fn remove_invalid_slots(&mut self) {
-        self.slots
-            .retain(|slot| (slot.end - slot.start).num_hours() >= self.duration as i64);
     }
 
     pub fn remove_slot(&mut self, s: Slot) {
@@ -213,7 +217,12 @@ impl Task {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
-        self.remove_invalid_slots();
+        //if no more slots left, this is an impossible task - mark it as such and return
+        if self.slots.is_empty() {
+            self.status = TaskStatus::IMPOSSIBLE;
+            return;
+        }
+        //the flexibility should be recalculated
         self.calculate_flexibility();
     }
 
@@ -232,6 +241,5 @@ pub enum TaskStatus {
     UNSCHEDULED,
     SCHEDULED,
     IMPOSSIBLE,
-    WAITING,
     UNINITIALIZED,
 }
