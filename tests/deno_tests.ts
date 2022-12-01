@@ -66,6 +66,10 @@ import every_2_hours_overlap_input from "./jsons/every-2-hours-overlap/input.jso
 import every_2_hours_overlap_output from "./jsons/every-2-hours-overlap/output.json" assert {type: "json"}
 import every_6_hours_input from "./jsons/every-6-hours/input.json" assert {type: "json"}
 import every_6_hours_output from "./jsons/every-6-hours/output.json" assert {type: "json"}
+import impossible_1_input from "./jsons/impossible-1/input.json" assert {type: "json"}
+import impossible_1_output from "./jsons/impossible-1/output.json" assert {type: "json"}
+import impossible_2_input from "./jsons/impossible-2/input.json" assert {type: "json"}
+import impossible_2_output from "./jsons/impossible-2/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -252,4 +256,14 @@ Deno.test("every 2 hours overlap", () => {
 Deno.test("every 6 hours", () => {
   assertEquals(
     schedule(every_6_hours_input),every_6_hours_output);
+});
+
+Deno.test("impossible 1", () => {
+  assertEquals(
+    schedule(impossible_1_input),impossible_1_output);
+});
+
+Deno.test("impossible 2", () => {
+  assertEquals(
+    schedule(impossible_2_input),impossible_2_output);
 });
