@@ -7,15 +7,17 @@
       "duration": 4,
       "start": "2022-11-19T15:00:00",
       "deadline": "2022-11-19T19:00:00"
-    },
-    {
-      "taskid": 1,
-      "goalid": "1",
-      "title": "backup data",
-      "duration": 4,
-      "start": "2022-11-19T21:00:00",
-      "deadline": "2022-11-20T01:00:00"
     }
   ],
-  "impossible": []
+  "impossible": [
+         {
+           "taskid": 1,
+           "goalid": "1",
+           "title": "backup data",
+           "duration": 4,
+           "start": "2022-11-19T21:00:00",
+          "deadline": "2022-11-20T00:00:00",
+          "first_conflict_with": "Passes Calendar End"
+         }
+      ]
 }
