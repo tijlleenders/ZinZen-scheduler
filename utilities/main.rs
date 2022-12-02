@@ -1,7 +1,7 @@
 use chrono::format::format;
 use scheduler;
 use scheduler::input::Input;
-use scheduler::output_formatter::Output;
+use scheduler::output_formatter::{FinalOutput, Output};
 use std::error::Error;
 use std::fs::OpenOptions;
 use std::fs::{self, DirEntry, File};
@@ -24,7 +24,7 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-fn process_file(filename: &Path) {
+/* fn process_file(filename: &Path) {
     //create a second input.json file (input2.json)
     //that has been edited in some way
     //and store it in same directory as input.json
@@ -48,11 +48,30 @@ fn process_file(filename: &Path) {
             }
         }
     }
+} */
+
+fn process_file(filename: &Path) {
+    println!("processing {:?}", filename);
+    //capture the outputs into a vec of outputs
+    let file = File::open(filename).expect("Error reading file");
+    let reader = BufReader::new(file);
+    let outputs = serde_json::from_reader(reader).unwrap();
+    //crate a finaloutput object with scheduled as the outputs and impossible as empty vec
+    let final_ouput = FinalOutput {
+        scheduled: outputs,
+        impossible: Vec::new(),
+    };
+    //write the deserialized final_output to output2.json
+    let json = serde_json::to_string_pretty(&final_ouput).unwrap();
+    let mut output_path = filename.to_owned();
+    output_path.set_file_name("output2");
+    output_path.set_extension("json");
+    fs::write(output_path.to_str().unwrap(), json).unwrap();
 }
 
 fn visit_dirs(dir: &Path, cb: &dyn Fn(&Path)) -> io::Result<()> {
     //visit each location in 'dir'
-    //if the location is a file named 'input.json' run the callback function with that file as input
+    //if the location is a file named 'output.json' run the callback function with that file as input
     if dir.is_dir() {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
@@ -60,7 +79,7 @@ fn visit_dirs(dir: &Path, cb: &dyn Fn(&Path)) -> io::Result<()> {
             if path.is_dir() {
                 visit_dirs(&path, cb)?;
             } else {
-                if entry.path().file_name().unwrap() == "input.json" {
+                if entry.path().file_name().unwrap() == "output.json" {
                     cb(&entry.path());
                 }
             }
