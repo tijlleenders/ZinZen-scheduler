@@ -70,6 +70,8 @@ import impossible_1_input from "./jsons/impossible-1/input.json" assert {type: "
 import impossible_1_output from "./jsons/impossible-1/output.json" assert {type: "json"}
 import impossible_2_input from "./jsons/impossible-2/input.json" assert {type: "json"}
 import impossible_2_output from "./jsons/impossible-2/output.json" assert {type: "json"}
+import non_midnight_start_deadline_input from "./jsons/non-midnight-start-deadline/input.json" assert {type: "json"}
+import non_midnight_start_deadline_output from "./jsons/non-midnight-start-deadline/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -266,4 +268,9 @@ Deno.test("impossible 1", () => {
 Deno.test("impossible 2", () => {
   assertEquals(
     schedule(impossible_2_input),impossible_2_output);
+});
+
+Deno.test("non midnight start deadline", () => {
+  assertEquals(
+    schedule(non_midnight_start_deadline_input),non_midnight_start_deadline_output);
 });
