@@ -1,3 +1,4 @@
+use crate::slot::Slot;
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
@@ -111,14 +112,24 @@ impl Goal {
                 *counter += 1;
                 let t = Task::new(task_id, time_period.start, time_period.end, &self);
                 //assign slots that are within the specified after_time and before_time
-                let mut t = slot_generator(t, &time_period);
-                //calculate flexibility
-                let mut flexibility = 0;
-                for slot in &t.slots {
-                    flexibility += slot.num_hours() - self.duration + 1;
+                let mut t = slot_generator(t, &time_period, self.deadline);
+                //if only one slot was assigned and it is too short for the duration,
+                //mark the task as impossible.
+                //this happens for e.g. in a 'sleep daily' repetition where the calendar end
+                //prevents the last sleep task from being assigned enough slots.
+                if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {
+                    t.status = TaskStatus::IMPOSSIBLE;
+                    t.conflicts
+                        .push((t.slots[0], "Passes Deadline".to_string()));
+                } else {
+                    //calculate flexibility and mark it as unscheduled.
+                    let mut flexibility = 0;
+                    for slot in &t.slots {
+                        flexibility += slot.num_hours() - self.duration + 1;
+                    }
+                    t.flexibility = flexibility;
+                    t.status = TaskStatus::UNSCHEDULED;
                 }
-                t.flexibility = flexibility;
-                t.status = TaskStatus::UNSCHEDULED;
                 tasks.push(t);
             }
         }

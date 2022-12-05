@@ -235,7 +235,6 @@ impl Task {
         }
     }
 }
-
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum TaskStatus {
     UNSCHEDULED,

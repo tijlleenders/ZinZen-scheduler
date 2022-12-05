@@ -1,0 +1,29 @@
+{
+      "startDate": "2022-11-30T00:00:00",
+      "endDate": "2022-12-01T00:00:00",
+      "goals": [
+        {
+          "id": "1",
+          "title": "dentist",
+          "duration": 1,
+          "start": "2022-11-30T10:00:00",
+          "deadline": "2022-11-30T11:00:00",
+          "after_time": 1
+        },
+        {
+          "id": "2",
+          "title": "shopping",
+          "duration": 1,
+          "start": "2022-11-30T10:00:00",
+          "deadline": "2022-11-30T13:00:00"
+        },
+        {
+          "id": "3",
+          "title": "exercise",
+          "duration": 1,
+          "start": "2022-11-30T10:00:00",
+          "deadline": "2022-11-30T18:00:00",
+          "after_time": 2
+        }
+    ]
+}

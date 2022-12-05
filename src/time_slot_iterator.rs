@@ -26,8 +26,9 @@ impl TimeSlotIterator {
         after_time: usize,
         before_time: usize,
     ) -> TimeSlotIterator {
+        let start = skip_to_after_time(start, after_time);
         TimeSlotIterator {
-            start: start + Duration::hours(after_time as i64),
+            start,
             end,
             repetition,
             after_time,
@@ -196,4 +197,11 @@ fn hour_is_within_bounds(after_time: usize, before_time: usize, hour: usize) -> 
     } else {
         hour >= after_time && hour < before_time
     }
+}
+
+fn skip_to_after_time(mut original_time: NaiveDateTime, after_time: usize) -> NaiveDateTime {
+    while original_time.hour() < after_time as u32 {
+        original_time += Duration::hours(1);
+    }
+    original_time
 }

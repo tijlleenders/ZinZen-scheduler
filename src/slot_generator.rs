@@ -2,13 +2,20 @@
 //between a certain time period.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
+use std::num;
+
 use crate::repetition::Repetition;
 use crate::slot::Slot;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
-use chrono::{Duration, Timelike};
+use chrono::{Duration, NaiveDateTime, Timelike};
 
-pub fn slot_generator(mut task: Task, time_period: &Slot) -> Task {
+pub fn slot_generator(
+    mut task: Task,
+    time_period: &Slot,
+    hard_deadline: Option<NaiveDateTime>,
+) -> Task {
+    dbg!(&task);
     if task.after_time == 0 && task.before_time == 24 {
         let slots = vec![Slot {
             start: time_period.start,
@@ -34,14 +41,14 @@ pub fn slot_generator(mut task: Task, time_period: &Slot) -> Task {
 
     let mut slots: Vec<Slot> = Vec::new();
     let hours: Vec<Slot> = hour_iterator.collect();
-    let mut i = 0;
+    let mut i = 0; //index of hours
     while i < hours.len() {
         if !task.bounds_contain(hours[i].start.hour() as usize) {
             i += 1;
             continue;
         }
         let num_of_slots = size_of_slots_to_be_assigned(task.after_time, task.before_time);
-        let slot = assign_slots(num_of_slots, hours.as_slice(), &mut i);
+        let slot = assign_slots(num_of_slots, hours.as_slice(), &mut i, hard_deadline);
         slots.push(slot);
         i += 1;
     }
@@ -49,11 +56,18 @@ pub fn slot_generator(mut task: Task, time_period: &Slot) -> Task {
     task
 }
 
-fn assign_slots(num_of_slots: usize, hours: &[Slot], i: &mut usize) -> Slot {
+fn assign_slots(
+    mut num_of_slots: usize,
+    hours: &[Slot],
+    i: &mut usize,
+    hard_deadline: Option<NaiveDateTime>,
+) -> Slot {
     let start = hours[*i];
-    let end = start.start + Duration::hours(num_of_slots as i64);
+    let mut end = start.start + Duration::hours(num_of_slots as i64);
+    if hard_deadline.is_some() && end > hard_deadline.unwrap() {
+        end = hard_deadline.unwrap();
+    }
     *i += num_of_slots;
-
     Slot {
         start: start.start,
         end,
