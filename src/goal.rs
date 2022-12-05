@@ -112,7 +112,7 @@ impl Goal {
                 *counter += 1;
                 let t = Task::new(task_id, time_period.start, time_period.end, &self);
                 //assign slots that are within the specified after_time and before_time
-                let mut t = slot_generator(t, &time_period, deadline);
+                let mut t = slot_generator(t, &time_period, self.deadline);
                 //if only one slot was assigned and it is too short for the duration,
                 //mark the task as impossible.
                 //this happens for e.g. in a 'sleep daily' repetition where the calendar end
@@ -120,7 +120,7 @@ impl Goal {
                 if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {
                     t.status = TaskStatus::IMPOSSIBLE;
                     t.conflicts
-                        .push((t.slots[0], "Passes Calendar End".to_string()));
+                        .push((t.slots[0], "Passes Deadline".to_string()));
                 } else {
                     //calculate flexibility and mark it as unscheduled.
                     let mut flexibility = 0;
