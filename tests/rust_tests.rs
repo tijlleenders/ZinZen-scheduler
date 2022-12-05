@@ -241,3 +241,9 @@ fn non_midnight_start_deadline_works() {
     let (actual_output, desired_output) = run_test("non-midnight-start-deadline");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn every_6_hours_2_works() {
+    let (actual_output, desired_output) = run_test("every-6-hours-2");
+    assert_eq!(actual_output, desired_output);
+}

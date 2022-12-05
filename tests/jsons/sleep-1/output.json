@@ -55,17 +55,15 @@
       "duration": 8,
       "start": "2022-01-07T22:00:00",
       "deadline": "2022-01-08T06:00:00"
+    },
+    {
+      "taskid": 7,
+      "goalid": "1",
+      "title": "sleep",
+      "duration": 8,
+      "start": "2022-01-08T22:00:00",
+      "deadline": "2022-01-09T06:00:00"
     }
   ],
-  "impossible": [
-        {
-          "taskid": 7,
-          "goalid": "1",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-01-08T22:00:00",
-          "deadline": "2022-01-09T00:00:00",
-          "first_conflict_with": "Passes Calendar End"
-        }
-      ]
+  "impossible": []
 }
