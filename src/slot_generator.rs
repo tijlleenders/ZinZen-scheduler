@@ -10,7 +10,11 @@ use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
 use chrono::{Duration, NaiveDateTime, Timelike};
 
-pub fn slot_generator(mut task: Task, time_period: &Slot, calendar_end: NaiveDateTime) -> Task {
+pub fn slot_generator(
+    mut task: Task,
+    time_period: &Slot,
+    hard_deadline: Option<NaiveDateTime>,
+) -> Task {
     dbg!(&task);
     if task.after_time == 0 && task.before_time == 24 {
         let slots = vec![Slot {
@@ -44,7 +48,7 @@ pub fn slot_generator(mut task: Task, time_period: &Slot, calendar_end: NaiveDat
             continue;
         }
         let num_of_slots = size_of_slots_to_be_assigned(task.after_time, task.before_time);
-        let slot = assign_slots(num_of_slots, hours.as_slice(), &mut i, calendar_end);
+        let slot = assign_slots(num_of_slots, hours.as_slice(), &mut i, hard_deadline);
         slots.push(slot);
         i += 1;
     }
@@ -56,17 +60,14 @@ fn assign_slots(
     mut num_of_slots: usize,
     hours: &[Slot],
     i: &mut usize,
-    calendar_end: NaiveDateTime,
+    hard_deadline: Option<NaiveDateTime>,
 ) -> Slot {
     let start = hours[*i];
-    let end = if start.start + Duration::hours(num_of_slots as i64) > calendar_end {
-        calendar_end
-    } else {
-        start.start + Duration::hours(num_of_slots as i64)
-    };
-
+    let mut end = start.start + Duration::hours(num_of_slots as i64);
+    if hard_deadline.is_some() && end > hard_deadline.unwrap() {
+        end = hard_deadline.unwrap();
+    }
     *i += num_of_slots;
-
     Slot {
         start: start.start,
         end,
