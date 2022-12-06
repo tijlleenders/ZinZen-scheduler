@@ -25,6 +25,8 @@ pub enum Repetition {
     FRIDAYS,
     SATURDAYS,
     SUNDAYS,
+    FlexDaily(usize, usize),
+    FlexWeekly(usize, usize),
 }
 
 //How to implement serde deserialize: https://serde.rs/impl-deserialize.html
@@ -58,12 +60,29 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
             "saturdays" => Ok(Repetition::SATURDAYS),
             "sundays" => Ok(Repetition::SUNDAYS),
             _ => {
-                if s.contains('/') {
+                if s.contains('-') && s.contains('/') {
+                    //e.g. '3-5/week'
+                    let split = s.split('/').collect::<Vec<&str>>();
+                    let numbers = split[0]; //e.g. 3-5
+                    let rep = split[1]; //e.g. week
+                    let split = numbers.split('-').collect::<Vec<&str>>();
+                    let min = split[0]
+                        .parse::<usize>()
+                        .expect("expected format to be x-y/period"); //e.g. 3
+                    let max = split[1]
+                        .parse::<usize>()
+                        .expect("expected format to be x-y/period"); //e.g. 5
+                    match rep {
+                        "week" => Ok(Repetition::FlexWeekly(min, max)),
+                        "day" => Ok(Repetition::FlexDaily(min, max)),
+                        _ => panic!("unrecognized repetition: {}", rep),
+                    }
+                } else if s.contains('/') {
                     //e.g. '4/week'
                     let split = s.split('/').collect::<Vec<&str>>();
                     let num = split[0]
                         .parse::<usize>()
-                        .expect("front end should use format x/period");
+                        .expect("expected format to be x/period");
                     match split[1] {
                         "week" => Ok(Repetition::WEEKLY(num)),
                         "day" => Ok(Repetition::DAILY(num)),
@@ -122,6 +141,8 @@ impl fmt::Display for Repetition {
             Repetition::FRIDAYS => "Fri",
             Repetition::SATURDAYS => "Sat",
             Repetition::SUNDAYS => "Sun",
+            Repetition::FlexDaily(_, _) => "FlexDaily",
+            Repetition::FlexWeekly(_, _) => "FlexWeekly",
         })
     }
 }
