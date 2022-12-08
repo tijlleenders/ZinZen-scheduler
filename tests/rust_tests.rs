@@ -247,3 +247,21 @@ fn every_6_hours_2_works() {
     let (actual_output, desired_output) = run_test("every-6-hours-2");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn flex_repeat_1_works() {
+    let (actual_output, desired_output) = run_test("flex-repeat-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn flex_repeat_2_works() {
+    let (actual_output, desired_output) = run_test("flex-repeat-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn flex_repeat_3_works() {
+    let (actual_output, desired_output) = run_test("flex-repeat-3");
+    assert_eq!(actual_output, desired_output);
+}

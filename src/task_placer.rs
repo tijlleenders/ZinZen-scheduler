@@ -3,7 +3,11 @@
 //! The scheduler optimizes for the minimum amount of IMPOSSIBLE tasks.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
+use chrono::{Duration, Timelike};
+use serde::__private::de;
+
 use crate::errors::Error;
+use crate::goal::Tag;
 use crate::slot::Slot;
 use crate::task::TaskStatus::{SCHEDULED, UNSCHEDULED};
 use crate::task::{Task, TaskStatus};
@@ -47,16 +51,26 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
         if let Some(desired_time) = can_schedule(i, tasks) {
             tasks[i].schedule(desired_time);
             //since the task was scheduled, remove this time from other tasks' slots (except for those already scheduled)
-            //for task in &mut tasks {
             for k in 0..tasks.len() {
                 if tasks[k].status == TaskStatus::UNSCHEDULED {
-                    let slot = tasks[k].slots[0]; //save a copy of the other task's first slot temporarily
-                    tasks[k].remove_slot(desired_time);
+                    //if the other task is a weekly task and is of the same goal id, remove the entire day from the
+                    //other task's slots. else remove just the time that this task has been scheduled at.
+                    //this is to prevent weekly tasks from combining all on on one day.
+                    if tasks[k].tags.contains(&Tag::WEEKLY) && tasks[k].goal_id == tasks[i].goal_id
+                    {
+                        let day = desired_time.start.date().and_hms(0, 0, 0);
+                        let slot = Slot {
+                            start: day,
+                            end: day + Duration::days(1),
+                        };
+                        tasks[k].remove_slot(slot);
+                    } else {
+                        tasks[k].remove_slot(desired_time);
+                    }
                     //if the removal has rendered the other task IMPOSSIBLE, add this task to that task's conflicts
-                    //this is why we saved it's first slot, so that we can mention it in the conflict
                     if tasks[k].status == TaskStatus::IMPOSSIBLE {
                         let goal_id = tasks[i].goal_id.to_owned();
-                        tasks[k].conflicts.push((slot, goal_id));
+                        tasks[k].conflicts.push((desired_time, goal_id));
                     }
                 }
             }
@@ -104,7 +118,7 @@ fn split_unscheduled_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     let mut new_tasks = Vec::new();
     let mut ids_to_remove = Vec::new();
     for task in tasks.iter_mut() {
-        if task.status == UNSCHEDULED {
+        if task.status == UNSCHEDULED && !task.tags.contains(&Tag::OPTIONAL) {
             match task.split(counter) {
                 Err(Error::CannotSplit) | Err(_) => {}
                 Ok(mut one_hour_tasks) => {

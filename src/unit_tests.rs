@@ -90,67 +90,6 @@ fn get_calendar_bounds() -> (NaiveDateTime, NaiveDateTime) {
     )
 }
 
-/*#[test]
-fn task_placer_slots_tasks_correctly() {
-    let (calendar_start, calendar_end) = get_calendar_bounds();
-    let goal1 = Goal::new(1)
-        .title("dentist")
-        .duration(1)
-        .after_time(10)
-        .before_time(11)
-        .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
-        .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
-    let goal2 = Goal::new(2)
-        .title("shopping")
-        .duration(1)
-        .after_time(10)
-        .before_time(13)
-        .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
-        .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
-    let goal3 = Goal::new(3)
-        .title("exercise")
-        .duration(1)
-        .after_time(10)
-        .before_time(18)
-        .start(NaiveDate::from_ymd(2022, 1, 1).and_hms(0, 0, 0))
-        .deadline(NaiveDate::from_ymd(2022, 1, 2).and_hms(0, 0, 0));
-    let goals = vec![goal1, goal2, goal3];
-    let tasks = task_generator(Input {
-        calendar_start,
-        calendar_end,
-        goals,
-    });
-    let scheduled_tasks = task_placer(tasks);
-    assert_eq!(scheduled_tasks[0].status, SCHEDULED);
-    assert_eq!(scheduled_tasks[1].status, SCHEDULED);
-    assert_eq!(scheduled_tasks[2].status, SCHEDULED);
-
-    assert_eq!(
-        scheduled_tasks[0].confirmed_start.unwrap(),
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(13, 0, 0)
-    );
-    assert_eq!(
-        scheduled_tasks[0].confirmed_deadline.unwrap(),
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(14, 0, 0)
-    );
-    assert_eq!(
-        scheduled_tasks[1].confirmed_start.unwrap(),
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0)
-    );
-    assert_eq!(
-        scheduled_tasks[1].confirmed_deadline.unwrap(),
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(12, 0, 0)
-    );
-    assert_eq!(
-        scheduled_tasks[2].confirmed_start.unwrap(),
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(10, 0, 0)
-    );
-    assert_eq!(
-        scheduled_tasks[2].confirmed_deadline.unwrap(),
-        NaiveDate::from_ymd(2022, 1, 1).and_hms(11, 0, 0)
-    );
-}*/
-
 #[test]
 fn custom_deserialization_of_every_x_days_works() {
     let correct_deserialization = Repetition::EveryXdays(3);
@@ -664,4 +603,17 @@ fn task_placer_returns_impossible_tasks() {
             "1".to_owned()
         )
     );
+}
+
+#[test]
+fn custom_deserialization_of_flex_repeat_works() {
+    let correct_deserialization = Repetition::FlexWeekly(3, 5);
+    let string = "\"3-5/week\"";
+    let actual_deserialization: Repetition = serde_json::from_str(&string).unwrap();
+    assert_eq!(correct_deserialization, actual_deserialization);
+
+    let correct_deserialization = Repetition::FlexDaily(3, 5);
+    let string = "\"3-5/day\"";
+    let actual_deserialization: Repetition = serde_json::from_str(&string).unwrap();
+    assert_eq!(correct_deserialization, actual_deserialization);
 }

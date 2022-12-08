@@ -1,0 +1,307 @@
+{
+  "scheduled": [
+    {
+      "taskid": 0,
+      "goalid": "4",
+      "title": "family",
+      "duration": 6,
+      "start": "2022-10-01T08:00:00",
+      "deadline": "2022-10-01T14:00:00"
+    },
+    {
+      "taskid": 1,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-01T14:00:00",
+      "deadline": "2022-10-01T22:00:00"
+    },
+    {
+      "taskid": 2,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-01T22:00:00",
+      "deadline": "2022-10-02T08:00:00"
+    },
+    {
+      "taskid": 3,
+      "goalid": "4",
+      "title": "family",
+      "duration": 6,
+      "start": "2022-10-02T08:00:00",
+      "deadline": "2022-10-02T14:00:00"
+    },
+    {
+      "taskid": 4,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-02T14:00:00",
+      "deadline": "2022-10-02T22:00:00"
+    },
+    {
+      "taskid": 5,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-02T22:00:00",
+      "deadline": "2022-10-03T08:00:00"
+    },
+    {
+      "taskid": 6,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-03T08:00:00",
+      "deadline": "2022-10-03T22:00:00"
+    },
+    {
+      "taskid": 7,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-03T22:00:00",
+      "deadline": "2022-10-04T08:00:00"
+    },
+    {
+      "taskid": 8,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-04T08:00:00",
+      "deadline": "2022-10-04T22:00:00"
+    },
+    {
+      "taskid": 9,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-04T22:00:00",
+      "deadline": "2022-10-05T08:00:00"
+    },
+    {
+      "taskid": 10,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-05T08:00:00",
+      "deadline": "2022-10-05T22:00:00"
+    },
+    {
+      "taskid": 11,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-05T22:00:00",
+      "deadline": "2022-10-06T08:00:00"
+    },
+    {
+      "taskid": 12,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-06T08:00:00",
+      "deadline": "2022-10-06T22:00:00"
+    },
+    {
+      "taskid": 13,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-06T22:00:00",
+      "deadline": "2022-10-07T08:00:00"
+    },
+    {
+      "taskid": 14,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-07T08:00:00",
+      "deadline": "2022-10-07T22:00:00"
+    },
+    {
+      "taskid": 15,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-07T22:00:00",
+      "deadline": "2022-10-08T08:00:00"
+    },
+    {
+      "taskid": 16,
+      "goalid": "4",
+      "title": "family",
+      "duration": 6,
+      "start": "2022-10-08T08:00:00",
+      "deadline": "2022-10-08T14:00:00"
+    },
+    {
+      "taskid": 17,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-08T14:00:00",
+      "deadline": "2022-10-08T22:00:00"
+    },
+    {
+      "taskid": 18,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-08T22:00:00",
+      "deadline": "2022-10-09T08:00:00"
+    },
+    {
+      "taskid": 19,
+      "goalid": "4",
+      "title": "family",
+      "duration": 6,
+      "start": "2022-10-09T08:00:00",
+      "deadline": "2022-10-09T14:00:00"
+    },
+    {
+      "taskid": 20,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-09T14:00:00",
+      "deadline": "2022-10-09T22:00:00"
+    },
+    {
+      "taskid": 21,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-09T22:00:00",
+      "deadline": "2022-10-10T08:00:00"
+    },
+    {
+      "taskid": 22,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-10T08:00:00",
+      "deadline": "2022-10-10T22:00:00"
+    },
+    {
+      "taskid": 23,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-10T22:00:00",
+      "deadline": "2022-10-11T08:00:00"
+    },
+    {
+      "taskid": 24,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-11T08:00:00",
+      "deadline": "2022-10-11T22:00:00"
+    },
+    {
+      "taskid": 25,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-11T22:00:00",
+      "deadline": "2022-10-12T08:00:00"
+    },
+    {
+      "taskid": 26,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-12T08:00:00",
+      "deadline": "2022-10-12T22:00:00"
+    },
+    {
+      "taskid": 27,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-12T22:00:00",
+      "deadline": "2022-10-13T08:00:00"
+    },
+    {
+      "taskid": 28,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-13T08:00:00",
+      "deadline": "2022-10-13T22:00:00"
+    },
+    {
+      "taskid": 29,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-13T22:00:00",
+      "deadline": "2022-10-14T08:00:00"
+    },
+    {
+      "taskid": 30,
+      "goalid": "3",
+      "title": "work",
+      "duration": 14,
+      "start": "2022-10-14T08:00:00",
+      "deadline": "2022-10-14T22:00:00"
+    },
+    {
+      "taskid": 31,
+      "goalid": "2",
+      "title": "sleep",
+      "duration": 10,
+      "start": "2022-10-14T22:00:00",
+      "deadline": "2022-10-15T08:00:00"
+    }
+  ],
+  "impossible": [
+    {
+      "taskid": 32,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-02T14:00:00",
+      "deadline": "2022-10-02T22:00:00",
+      "first_conflict_with": "1"
+    },
+    {
+      "taskid": 33,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-09T14:00:00",
+      "deadline": "2022-10-09T22:00:00",
+      "first_conflict_with": "1"
+    },
+    {
+      "taskid": 34,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-14T08:00:00",
+      "deadline": "2022-10-14T22:00:00",
+      "first_conflict_with": "3"
+    },
+    {
+      "taskid": 35,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-14T08:00:00",
+      "deadline": "2022-10-14T22:00:00",
+      "first_conflict_with": "3"
+    },
+    {
+      "taskid": 36,
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-14T08:00:00",
+      "deadline": "2022-10-14T22:00:00",
+      "first_conflict_with": "3"
+    }
+  ]
+}

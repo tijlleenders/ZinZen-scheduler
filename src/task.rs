@@ -1,5 +1,5 @@
 use crate::errors::Error;
-use crate::goal::Goal;
+use crate::goal::{Goal, Tag};
 use crate::slot::Slot;
 use chrono::Duration;
 use chrono::{NaiveDate, NaiveDateTime, Timelike};
@@ -24,6 +24,8 @@ pub struct Task {
     pub confirmed_start: Option<NaiveDateTime>,
     pub confirmed_deadline: Option<NaiveDateTime>,
     pub conflicts: Vec<(Slot, String)>,
+    #[serde(default)]
+    pub tags: Vec<Tag>,
 }
 
 impl PartialEq for Task {
@@ -119,6 +121,7 @@ impl Task {
             confirmed_start: None,
             confirmed_deadline: None,
             conflicts: Vec::new(),
+            tags: goal.tags.clone(),
         }
     }
 
@@ -172,6 +175,7 @@ impl Task {
                 confirmed_start: None,
                 confirmed_deadline: None,
                 conflicts: Vec::new(),
+                tags: self.tags.clone(),
             };
             task.calculate_flexibility();
             task.status = TaskStatus::UNSCHEDULED;

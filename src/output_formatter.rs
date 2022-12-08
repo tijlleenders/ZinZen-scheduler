@@ -1,5 +1,6 @@
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
+use crate::goal::Tag;
 use crate::task::Task;
 use crate::{errors::Error, task::TaskStatus};
 use chrono::NaiveDateTime;
@@ -48,6 +49,10 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     }
     //convert impossible tasks to output objects and add to impossible_outputs vec
     for task in impossible {
+        //don't report optional tasks
+        if task.tags.contains(&Tag::OPTIONAL) {
+            continue;
+        }
         impossible_outputs.push(get_output_from_task(&task));
     }
     //sort and combine the scheduled outputs
