@@ -74,6 +74,12 @@ import non_midnight_start_deadline_input from "./jsons/non-midnight-start-deadli
 import non_midnight_start_deadline_output from "./jsons/non-midnight-start-deadline/output.json" assert {type: "json"}
 import every_6_hours_2_input from "./jsons/every-6-hours-2/input.json" assert {type: "json"}
 import every_6_hours_2_output from "./jsons/every-6-hours-2/output.json" assert {type: "json"}
+import flex_repeat_1_input from "./jsons/flex-repeat-1/input.json" assert {type: "json"}
+import flex_repeat_1_output from "./jsons/flex-repeat-1/output.json" assert {type: "json"}
+import flex_repeat_2_input from "./jsons/flex-repeat-2/input.json" assert {type: "json"}
+import flex_repeat_2_output from "./jsons/flex-repeat-2/output.json" assert {type: "json"}
+import flex_repeat_3_input from "./jsons/flex-repeat-3/input.json" assert {type: "json"}
+import flex_repeat_3_output from "./jsons/flex-repeat-3/output.json" assert {type: "json"}
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -280,4 +286,19 @@ Deno.test("non midnight start deadline", () => {
 Deno.test("every 6 hours 2", () => {
   assertEquals(
     schedule(every_6_hours_2_input),every_6_hours_2_output);
+});
+
+Deno.test("flex repeat 1", () => {
+  assertEquals(
+    schedule(flex_repeat_1_input),flex_repeat_1_output);
+});
+
+Deno.test("flex repeat 2", () => {
+  assertEquals(
+    schedule(flex_repeat_2_input),flex_repeat_2_output);
+});
+
+Deno.test("flex repeat 3", () => {
+  assertEquals(
+    schedule(flex_repeat_3_input),flex_repeat_3_output);
 });
