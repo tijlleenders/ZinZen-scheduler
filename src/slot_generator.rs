@@ -15,7 +15,6 @@ pub fn slot_generator(
     time_period: &Slot,
     hard_deadline: Option<NaiveDateTime>,
 ) -> Task {
-    dbg!(&task);
     if task.after_time == 0 && task.before_time == 24 {
         let slots = vec![Slot {
             start: time_period.start,
