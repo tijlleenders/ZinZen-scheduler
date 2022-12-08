@@ -4,10 +4,10 @@ use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::{Duration, NaiveDateTime, Timelike};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::option::Option;
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug, Default, Clone)]
 pub struct Goal {
     pub id: String,
     pub title: String,
@@ -26,6 +26,8 @@ pub struct Goal {
     /// deadline time bound before which activity should be done
     #[serde(default)]
     pub before_time: Option<usize>,
+    #[serde(default)]
+    pub tags: Vec<Tag>,
 }
 
 //#[cfg(test)]
@@ -130,9 +132,19 @@ impl Goal {
                     t.flexibility = flexibility;
                     t.status = TaskStatus::UNSCHEDULED;
                 }
+                if let Some(Repetition::WEEKLY(_)) = self.repeat {
+                    t.tags.push(Tag::WEEKLY);
+                }
                 tasks.push(t);
             }
         }
         tasks
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
+pub enum Tag {
+    DONOTSPLIT,
+    WEEKLY,
+    OPTIONAL,
 }
