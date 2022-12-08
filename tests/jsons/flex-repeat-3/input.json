@@ -1,5 +1,5 @@
 {
-  "startDate": "2022-10-01T00:00:00",
+  "startDate": "2022-10-01T08:00:00",
   "endDate": "2022-10-15T00:00:00",
   "goals": [
     {
@@ -23,6 +23,14 @@
       "repeat": "weekdays",
       "after_time": 8,
       "before_time": 22 
-    }  
+    },
+    {
+      "id": "4",
+      "title": "family",
+      "duration": 6,
+      "repeat": "weekends",
+      "after_time": 8,
+      "before_time": 14 
+    }
   ]
 }
