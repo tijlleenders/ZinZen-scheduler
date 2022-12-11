@@ -9,6 +9,7 @@ homepage = "https://github.com/tijlleenders/ZinZen-scheduler/wiki"
 repository = "https://github.com/tijlleenders/ZinZen-scheduler"
 readme = "README.md"
 categories = ["algorithms", "date-and-time", "wasm"]
+default-run = "main"
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095
