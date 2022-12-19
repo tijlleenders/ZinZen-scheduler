@@ -80,6 +80,11 @@ import flex_repeat_2_input from "./jsons/flex-repeat-2/input.json" assert {type:
 import flex_repeat_2_output from "./jsons/flex-repeat-2/output.json" assert {type: "json"}
 import flex_repeat_3_input from "./jsons/flex-repeat-3/input.json" assert {type: "json"}
 import flex_repeat_3_output from "./jsons/flex-repeat-3/output.json" assert {type: "json"}
+import flex_duration_1_input from "./jsons/flex-duration-1/input.json" assert {type: "json"}
+import flex_duration_1_output from "./jsons/flex-duration-1/output.json" assert {type: "json"}
+import flex_duration_2_input from "./jsons/flex-duration-2/input.json" assert {type: "json"}
+import flex_duration_2_output from "./jsons/flex-duration-2/output.json" assert {type: "json"}
+
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -301,4 +306,14 @@ Deno.test("flex repeat 2", () => {
 Deno.test("flex repeat 3", () => {
   assertEquals(
     schedule(flex_repeat_3_input),flex_repeat_3_output);
+});
+
+Deno.test("flex duration 1", () => {
+  assertEquals(
+    schedule(flex_duration_1_input),flex_duration_1_output);
+});
+
+Deno.test("flex duration 2", () => {
+  assertEquals(
+    schedule(flex_duration_2_input),flex_duration_2_output);
 });
