@@ -17,6 +17,10 @@ pub struct Output {
     deadline: NaiveDateTime,
     #[serde(skip_serializing_if = "Option::is_none")]
     first_conflict_with: Option<String>,
+    #[serde(skip)]
+    tags: Vec<Tag>,
+    #[serde(skip)]
+    impossible: bool,
 }
 
 impl Ord for Output {
@@ -106,6 +110,8 @@ fn get_output_from_task(task: &Task) -> Output {
         } else {
             None
         },
+        tags: task.tags.clone(),
+        impossible: task.status == TaskStatus::IMPOSSIBLE,
     }
 }
 
@@ -117,6 +123,13 @@ fn combine(outputs: &mut Vec<Output>) {
     'outer: while i < outputs.len() {
         for j in (i + 1)..outputs.len() {
             if outputs[j].goalid == outputs[i].goalid && outputs[j].start == outputs[i].deadline {
+                outputs[i].deadline = outputs[j].deadline;
+                outputs[i].duration += outputs[j].duration;
+                indexes_to_remove.push(j);
+            } else if outputs[j].goalid == outputs[i].goalid
+                && outputs[i].tags.contains(&Tag::FLEX_DUR)
+                && outputs[i].impossible
+            {
                 outputs[i].deadline = outputs[j].deadline;
                 outputs[i].duration += outputs[j].duration;
                 indexes_to_remove.push(j);
