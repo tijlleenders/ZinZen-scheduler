@@ -5,7 +5,7 @@
       {
         "id": "1",
         "title": "check on baby",
-        "duration": 1,
+        "duration": "1",
         "repeat": "every 2 hours",
         "after_time": 22,
         "before_time": 7 

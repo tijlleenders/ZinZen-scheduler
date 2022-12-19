@@ -5,7 +5,7 @@
     {
       "id": "1",
       "title": "transfer savings",
-      "duration": 3,
+      "duration": "3",
       "repeat": "every 21 days"
     }
   ]

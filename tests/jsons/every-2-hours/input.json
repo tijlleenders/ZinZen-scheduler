@@ -5,7 +5,7 @@
       {
         "id": "1",
         "title": "drink water",
-        "duration": 1,
+        "duration": "1",
         "repeat": "every 2 hours",
         "after_time": 8,
         "before_time": 18 
