@@ -1,10 +1,12 @@
-use crate::slot::Slot;
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::{Duration, NaiveDateTime, Timelike};
+use serde::de::{self, Visitor};
+use serde::*;
 use serde::{Deserialize, Serialize};
+use std::fmt;
 use std::option::Option;
 
 #[derive(Deserialize, Debug, Default, Clone)]
@@ -12,7 +14,7 @@ pub struct Goal {
     pub id: String,
     pub title: String,
     /// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
-    pub duration: usize,
+    pub duration: GoalDuration,
     pub repeat: Option<Repetition>,
     /// start date bound for this Goal's Tasks
     #[serde(default)]
@@ -28,6 +30,48 @@ pub struct Goal {
     pub before_time: Option<usize>,
     #[serde(default)]
     pub tags: Vec<Tag>,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Default)]
+pub struct GoalDuration(pub usize, pub Option<usize>); //in case of flex-duration, the second value represents the upper bound of the duration
+struct GoalDurationVisitor;
+
+impl<'de> Visitor<'de> for GoalDurationVisitor {
+    type Value = GoalDuration;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            formatter,
+            "a string of either the duration or a flex duration."
+        )
+    }
+
+    fn visit_str<E>(self, s: &str) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        if s.contains('-') && s.contains("h") {
+            //e.g. '35-40h'
+            let split = s.split('-').collect::<Vec<&str>>();
+            let min = split[0];
+            let max = &split[1][0..split[1].len() - 1];
+            let min = min.parse::<usize>().expect("expected format to be x-yh");
+            let max = max.parse::<usize>().expect("expected format to be x-yh");
+            Ok(GoalDuration(min, Some(max)))
+        } else {
+            let duration = s.parse::<usize>().expect("expected format to be x-yh");
+            Ok(GoalDuration(duration, None))
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for GoalDuration {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        deserializer.deserialize_string(GoalDurationVisitor)
+    }
 }
 
 //#[cfg(test)]
@@ -46,7 +90,7 @@ impl Goal {
     }
 
     pub fn duration(mut self, duration: usize) -> Self {
-        self.duration = duration;
+        self.duration = GoalDuration(duration, None);
         self
     }
 
@@ -117,8 +161,6 @@ impl Goal {
                 let mut t = slot_generator(t, &time_period, self.deadline);
                 //if only one slot was assigned and it is too short for the duration,
                 //mark the task as impossible.
-                //this happens for e.g. in a 'sleep daily' repetition where the calendar end
-                //prevents the last sleep task from being assigned enough slots.
                 if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {
                     t.status = TaskStatus::IMPOSSIBLE;
                     t.conflicts
@@ -127,13 +169,15 @@ impl Goal {
                     //calculate flexibility and mark it as unscheduled.
                     let mut flexibility = 0;
                     for slot in &t.slots {
-                        flexibility += slot.num_hours() - self.duration + 1;
+                        flexibility += slot.num_hours() - self.duration.0 + 1;
                     }
                     t.flexibility = flexibility;
                     t.status = TaskStatus::UNSCHEDULED;
                 }
                 if let Some(Repetition::WEEKLY(_)) = self.repeat {
-                    t.tags.push(Tag::WEEKLY);
+                    if !self.tags.contains(&Tag::FLEX_DUR) {
+                        t.tags.push(Tag::WEEKLY);
+                    }
                 }
                 tasks.push(t);
             }
@@ -147,4 +191,5 @@ pub enum Tag {
     DONOTSPLIT,
     WEEKLY,
     OPTIONAL,
+    FLEX_DUR,
 }
