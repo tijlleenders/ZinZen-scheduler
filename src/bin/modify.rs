@@ -24,7 +24,7 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-/* fn process_file(filename: &Path) {
+fn process_file(filename: &Path) {
     //create a second input.json file (input2.json)
     //that has been edited in some way
     //and store it in same directory as input.json
@@ -36,11 +36,11 @@ where
     if let Ok(lines) = read_lines(filename) {
         for line in lines {
             if let Ok(l) = line {
-                if l.contains("\"id\":") {
+                if l.contains("\"duration\":") {
                     let words = l.split(':').collect::<Vec<&str>>();
                     let trimmed = words[1].trim();
-                    let mut id = &trimmed[..trimmed.len() - 1];
-                    let new_line = format!("{}: \"{}\",", words[0], id);
+                    let mut duration = &trimmed[..trimmed.len() - 1];
+                    let new_line = format!("{}: \"{}\",", words[0], duration);
                     writeln!(file, "{}", new_line).unwrap();
                 } else {
                     writeln!(file, "{}", l).unwrap();
@@ -48,9 +48,9 @@ where
             }
         }
     }
-} */
+}
 
-fn process_file(filename: &Path) {
+/*fn process_file(filename: &Path) {
     println!("processing {:?}", filename);
     //capture the outputs into a vec of outputs
     let file = File::open(filename).expect("Error reading file");
@@ -67,7 +67,7 @@ fn process_file(filename: &Path) {
     output_path.set_file_name("output2");
     output_path.set_extension("json");
     fs::write(output_path.to_str().unwrap(), json).unwrap();
-}
+}*/
 
 fn visit_dirs(dir: &Path, cb: &dyn Fn(&Path)) -> io::Result<()> {
     //visit each location in 'dir'
@@ -79,7 +79,7 @@ fn visit_dirs(dir: &Path, cb: &dyn Fn(&Path)) -> io::Result<()> {
             if path.is_dir() {
                 visit_dirs(&path, cb)?;
             } else {
-                if entry.path().file_name().unwrap() == "output.json" {
+                if entry.path().file_name().unwrap() == "input.json" {
                     cb(&entry.path());
                 }
             }
