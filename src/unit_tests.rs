@@ -617,3 +617,11 @@ fn custom_deserialization_of_flex_repeat_works() {
     let actual_deserialization: Repetition = serde_json::from_str(&string).unwrap();
     assert_eq!(correct_deserialization, actual_deserialization);
 }
+
+#[test]
+fn custom_serialization_of_duration_works() {
+    let string = "\"35-40h\"";
+    let correct_deserialization = GoalDuration(35, Some(40));
+    let actual_deserialization: GoalDuration = serde_json::from_str(&string).unwrap();
+    assert_eq!(correct_deserialization, actual_deserialization);
+}

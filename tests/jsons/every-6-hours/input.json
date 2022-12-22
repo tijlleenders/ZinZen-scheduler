@@ -5,7 +5,7 @@
     {
       "id": "1",
       "title": "backup data",
-      "duration": 4,
+      "duration": "4",
       "repeat": "every 6 hours",
       "after_time": 15
     }

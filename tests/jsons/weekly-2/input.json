@@ -5,7 +5,7 @@
     {
       "id": "1",
       "title": "study french",
-      "duration": 2,
+      "duration": "2",
       "repeat": "weekly",
       "after_time": 18,
       "before_time": 22

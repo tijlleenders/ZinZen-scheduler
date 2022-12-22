@@ -51,6 +51,10 @@ impl Ord for Task {
             Ordering::Less
         } else if other.flexibility == 1 {
             Ordering::Greater
+        } else if other.tags.contains(&Tag::OPTIONAL) && !self.tags.contains(&Tag::OPTIONAL) {
+            Ordering::Less
+        } else if !other.tags.contains(&Tag::OPTIONAL) && self.tags.contains(&Tag::OPTIONAL) {
+            Ordering::Greater
         } else {
             other.flexibility.cmp(&self.flexibility)
         }
@@ -110,7 +114,7 @@ impl Task {
             id,
             goal_id: goal.id.clone(),
             title: goal.title.clone(),
-            duration: goal.duration,
+            duration: goal.duration.0,
             status: TaskStatus::UNINITIALIZED,
             flexibility: 0,
             start,

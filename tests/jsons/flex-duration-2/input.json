@@ -1,11 +1,11 @@
 {
   "startDate": "2022-10-01T00:00:00",
-  "endDate": "2023-10-15T00:00:00",
+  "endDate": "2022-10-15T00:00:00",
   "goals": [
     {
       "id": "1",
       "title": "work",
-      "duration": "35-40",
+      "duration": "35-40h",
       "repeat": "weekly",
       "after_time": 8,
       "before_time": 18 

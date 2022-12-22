@@ -5,7 +5,7 @@
       {
         "id": "1",
         "title": "eat breakfast",
-        "duration": 1,
+        "duration": "1",
         "repeat": "daily",
         "after_time": 12
       }

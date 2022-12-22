@@ -5,7 +5,7 @@
         {
           "id": "1",
           "title": "home repair",
-          "duration": 1,
+          "duration": "1",
           "start": "2022-01-01T00:00:00",
           "deadline": "2022-01-06T00:00:00",
           "after_time": 15,
