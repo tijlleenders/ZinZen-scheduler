@@ -26,6 +26,14 @@ pub struct Task {
     pub conflicts: Vec<(Slot, String)>,
     #[serde(default)]
     pub tags: Vec<Tag>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub options: Option<Vec<ScheduleOption>>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+pub struct ScheduleOption {
+    pub start: NaiveDateTime,
+    pub deadline: NaiveDateTime,
 }
 
 impl PartialEq for Task {
@@ -74,15 +82,18 @@ pub struct StartDeadlineIterator {
 }
 
 impl StartDeadlineIterator {
-    fn new(slots: Vec<Slot>, duration: usize) -> StartDeadlineIterator {
+    fn new(slots: Vec<Slot>, duration: usize) -> Option<StartDeadlineIterator> {
+        if slots.is_empty() {
+            return None;
+        }
         let marker = slots[0].start;
         let slot_index = 0_usize;
-        StartDeadlineIterator {
+        Some(StartDeadlineIterator {
             slots,
             duration,
             marker,
             slot_index,
-        }
+        })
     }
 }
 
@@ -126,6 +137,7 @@ impl Task {
             confirmed_deadline: None,
             conflicts: Vec::new(),
             tags: goal.tags.clone(),
+            options: None,
         }
     }
 
@@ -180,6 +192,7 @@ impl Task {
                 confirmed_deadline: None,
                 conflicts: Vec::new(),
                 tags: self.tags.clone(),
+                options: None,
             };
             task.calculate_flexibility();
             task.status = TaskStatus::UNSCHEDULED;
@@ -189,7 +202,7 @@ impl Task {
         Ok(tasks)
     }
 
-    pub fn start_deadline_iterator(&mut self) -> StartDeadlineIterator {
+    pub fn start_deadline_iterator(&mut self) -> Option<StartDeadlineIterator> {
         StartDeadlineIterator::new(self.get_slots(), self.duration)
     }
 
@@ -226,7 +239,7 @@ impl Task {
         }
         self.slots = new_slots;
         //if no more slots left, this is an impossible task - mark it as such and return
-        if self.slots.is_empty() {
+        if self.slots.is_empty() && self.status != TaskStatus::SCHEDULED {
             self.status = TaskStatus::IMPOSSIBLE;
             return;
         }

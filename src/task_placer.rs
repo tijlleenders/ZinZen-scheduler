@@ -52,26 +52,23 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
             tasks[i].schedule(desired_time);
             //since the task was scheduled, remove this time from other tasks' slots (except for those already scheduled)
             for k in 0..tasks.len() {
-                if tasks[k].status == TaskStatus::UNSCHEDULED {
-                    //if the other task is a weekly task and is of the same goal id, remove the entire day from the
-                    //other task's slots. else remove just the time that this task has been scheduled at.
-                    //this is to prevent weekly tasks from combining all on on one day.
-                    if tasks[k].tags.contains(&Tag::WEEKLY) && tasks[k].goal_id == tasks[i].goal_id
-                    {
-                        let day = desired_time.start.date().and_hms(0, 0, 0);
-                        let slot = Slot {
-                            start: day,
-                            end: day + Duration::days(1),
-                        };
-                        tasks[k].remove_slot(slot);
-                    } else {
-                        tasks[k].remove_slot(desired_time);
-                    }
-                    //if the removal has rendered the other task IMPOSSIBLE, add this task to that task's conflicts
-                    if tasks[k].status == TaskStatus::IMPOSSIBLE {
-                        let goal_id = tasks[i].goal_id.to_owned();
-                        tasks[k].conflicts.push((desired_time, goal_id));
-                    }
+                //if the other task is a weekly task and is of the same goal id, remove the entire day from the
+                //other task's slots. else remove just the time that this task has been scheduled at.
+                //this is to prevent weekly tasks from combining all on on one day.
+                if tasks[k].tags.contains(&Tag::WEEKLY) && tasks[k].goal_id == tasks[i].goal_id {
+                    let day = desired_time.start.date().and_hms(0, 0, 0);
+                    let slot = Slot {
+                        start: day,
+                        end: day + Duration::days(1),
+                    };
+                    tasks[k].remove_slot(slot);
+                } else {
+                    tasks[k].remove_slot(desired_time);
+                }
+                //if the removal has rendered the other task IMPOSSIBLE, add this task to that task's conflicts
+                if tasks[k].status == TaskStatus::IMPOSSIBLE {
+                    let goal_id = tasks[i].goal_id.to_owned();
+                    tasks[k].conflicts.push((desired_time, goal_id));
                 }
             }
             //add the task to list of scheduled tasks
@@ -84,8 +81,8 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
     }
 }
 
-fn can_schedule(i: usize, tasks: &mut Vec<Task>) -> Option<Slot> {
-    let start_deadline_iterator = tasks[i].start_deadline_iterator();
+pub fn can_schedule(i: usize, tasks: &mut Vec<Task>) -> Option<Slot> {
+    let start_deadline_iterator = tasks[i].start_deadline_iterator().unwrap();
     'outer: for desired_time in start_deadline_iterator {
         if tasks[i].flexibility == 1 {
             //if task has flex 1, no need to check for conflicts with other tasks
