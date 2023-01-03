@@ -10,6 +10,7 @@ mod errors;
 /// API modules
 mod goal;
 pub mod input;
+mod options_generator;
 pub mod output_formatter;
 mod repetition;
 mod slot;
