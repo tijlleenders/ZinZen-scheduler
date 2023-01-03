@@ -277,3 +277,9 @@ fn flex_duration_2_works() {
     let (actual_output, desired_output) = run_test("flex-duration-2");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn bug_215_works() {
+    let (actual_output, desired_output) = run_test("bug-215");
+    assert_eq!(actual_output, desired_output);
+}

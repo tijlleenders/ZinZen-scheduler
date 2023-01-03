@@ -47,7 +47,13 @@ pub fn slot_generator(
             continue;
         }
         let num_of_slots = size_of_slots_to_be_assigned(task.after_time, task.before_time);
-        let slot = assign_slots(num_of_slots, hours.as_slice(), &mut i, hard_deadline);
+        let slot = assign_slots(
+            num_of_slots,
+            hours.as_slice(),
+            &mut i,
+            hard_deadline,
+            task.before_time,
+        );
         slots.push(slot);
         i += 1;
     }
@@ -56,15 +62,20 @@ pub fn slot_generator(
 }
 
 fn assign_slots(
-    mut num_of_slots: usize,
+    num_of_slots: usize,
     hours: &[Slot],
     i: &mut usize,
     hard_deadline: Option<NaiveDateTime>,
+    before_time: usize,
 ) -> Slot {
     let start = hours[*i];
     let mut end = start.start + Duration::hours(num_of_slots as i64);
     if hard_deadline.is_some() && end > hard_deadline.unwrap() {
         end = hard_deadline.unwrap();
+    }
+    //make sure assigned slots do not go past the task's beforetime
+    if end.hour() > before_time as u32 {
+        end = end.with_hour(before_time as u32).unwrap();
     }
     *i += num_of_slots;
     Slot {
