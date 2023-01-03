@@ -5,7 +5,6 @@ use crate::{
 use std::vec;
 
 pub fn options_generator(mut tasks: Vec<Task>) -> Vec<Task> {
-    &dbg!(&tasks);
     for i in 0..tasks.len() {
         if tasks[i].start_deadline_iterator().is_none() {
             continue;
