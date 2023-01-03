@@ -3,7 +3,8 @@ mod common;
 #[cfg(test)]
 use pretty_assertions::assert_eq;
 use scheduler::{FinalOutput, Input};
-use std::path::Path;
+use std::io::Write;
+use std::{fs::File, path::Path};
 
 fn run_test(directory: &str) -> (String, String) {
     let i = format!("./tests/jsons/{}/input.json", directory);
@@ -281,5 +282,11 @@ fn flex_duration_2_works() {
 #[test]
 fn bug_215_works() {
     let (actual_output, desired_output) = run_test("bug-215");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn options_1_works() {
+    let (actual_output, desired_output) = run_test("options-1");
     assert_eq!(actual_output, desired_output);
 }

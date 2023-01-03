@@ -14,7 +14,13 @@
       "title": "play chess",
       "duration": 2,
       "start": "2022-11-11T08:00:00",
-      "deadline": "2022-11-11T10:00:00"
+      "deadline": "2022-11-11T10:00:00",
+      "options": [
+        {
+          "start": "2022-11-11T23:00:00",
+          "deadline": "2022-11-12T00:00:00"
+        }
+      ]
     },
     {
       "taskid": 2,
@@ -46,7 +52,13 @@
       "title": "play chess",
       "duration": 1,
       "start": "2022-11-11T16:00:00",
-      "deadline": "2022-11-11T17:00:00"
+      "deadline": "2022-11-11T17:00:00",
+      "options": [
+        {
+          "start": "2022-11-11T23:00:00",
+          "deadline": "2022-11-12T00:00:00"
+        }
+      ]
     },
     {
       "taskid": 6,
