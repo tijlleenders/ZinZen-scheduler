@@ -1,7 +1,8 @@
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
 use crate::goal::Tag;
-use crate::task::Task;
+use crate::options_generator::options_generator;
+use crate::task::{ScheduleOption, Task};
 use crate::{errors::Error, task::TaskStatus};
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
@@ -21,6 +22,8 @@ pub struct Output {
     tags: Vec<Tag>,
     #[serde(skip)]
     impossible: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    options: Option<Vec<ScheduleOption>>,
 }
 
 impl Ord for Output {
@@ -44,6 +47,7 @@ pub struct FinalOutput {
 pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
+    let scheduled = options_generator(scheduled);
     //convert scheduled tasks to output objects and add to scheduled_outputs vec
     for task in scheduled {
         if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
@@ -112,6 +116,7 @@ fn get_output_from_task(task: &Task) -> Output {
         },
         tags: task.tags.clone(),
         impossible: task.status == TaskStatus::IMPOSSIBLE,
+        options: task.options.clone(),
     }
 }
 
