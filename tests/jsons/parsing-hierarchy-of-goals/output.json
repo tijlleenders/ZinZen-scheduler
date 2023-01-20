@@ -1,0 +1,23 @@
+{
+  "scheduled": [
+    {
+      "taskid": 0,
+      "goalid": "2",
+      "title": "Project X",
+      "duration": 10,
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T10:00:00"
+    },
+    {
+      "taskid": 1,
+      "goalid": "1",
+      "title": "Day job filler",
+      "duration": 30,
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-02T60:00:00"
+    }
+  ],
+  "impossible": []
+}
+
+
