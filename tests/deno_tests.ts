@@ -86,7 +86,8 @@ import flex_duration_2_input from "./jsons/flex-duration-2/input.json" assert {t
 import flex_duration_2_output from "./jsons/flex-duration-2/output.json" assert {type: "json"}
 import options_1_input from "./jsons/options-1/input.json" assert {type: "json"}
 import options_1_output from "./jsons/options-1/output.json" assert {type: "json"}
-
+import goals_hierarchy_input from "./jsons/goals-hierarchy/input.json" assert {type: "json"};
+import goals_hierarchy_output from "./jsons/goals-hierarchy/output.json" assert {type: "json"};
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -323,4 +324,12 @@ Deno.test("flex duration 2", () => {
 Deno.test("options 1", () => {
   assertEquals(
     schedule(options_1_input),options_1_output);
+});
+Deno.test("options 1", () => {
+  assertEquals(
+    schedule(options_1_input),options_1_output);
+});
+Deno.test("goals hierarchy", () => {
+  assertEquals(
+    schedule(goals_hierarchy_input),goals_hierarchy_output);
 });
