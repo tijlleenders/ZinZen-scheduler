@@ -12,7 +12,7 @@ pub fn task_generator(
 ) -> Vec<Task> {
     let mut counter: usize = 0;
     let mut tasks = vec![];
-    let goals = handle_heirarchy(goals);
+    let goals = handle_hierarchy(goals);
     for goal in goals {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
