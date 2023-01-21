@@ -1,0 +1,25 @@
+{
+  "startDate": "2018-01-01T00:00:00",
+  "endDate": "2018-01-06T00:00:00",
+  "goals": [
+    {
+      "id": "1",
+      "title": "Day job",
+      "duration": "40",
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_time": 8,
+      "before_time": 16,
+      "children": ["2"]
+    },
+    {
+      "id": "2",
+      "title": "Project X",
+      "duration": "10",
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_time": 8,
+      "before_time": 16
+    }
+]
+}

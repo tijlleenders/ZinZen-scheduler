@@ -30,6 +30,8 @@ pub struct Goal {
     pub before_time: Option<usize>,
     #[serde(default)]
     pub tags: Vec<Tag>,
+    #[serde(default)]
+    pub children: Option<Vec<String>>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Default)]
@@ -152,6 +154,7 @@ impl Goal {
             Some(Repetition::DAILY(x)) => x,
             _ => 1,
         };
+
         for time_period in time_periods {
             for _ in 0..tasks_per_period {
                 let task_id = *counter;
@@ -192,4 +195,34 @@ pub enum Tag {
     WEEKLY,
     OPTIONAL,
     FLEX_DUR,
+}
+
+pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
+    let parent_goals = goals
+        .iter()
+        .filter(|goal| goal.children.is_some() == true)
+        .cloned()
+        .collect::<Vec<Goal>>();
+    let mut children_goals = goals
+        .iter()
+        .filter(|goal| goal.children.is_some() == false)
+        .cloned()
+        .collect::<Vec<Goal>>();
+
+    for p in parent_goals {
+        let mut children_duration = 0;
+        let mut child = p.clone();
+        let child_ids = p.children.unwrap();
+
+        for goal in children_goals.iter() {
+            if child_ids.contains(&goal.id) {
+                children_duration += goal.duration.0;
+            }
+        }
+
+        child.title.push_str(" filler");
+        child.duration.0 = child.duration.0 - children_duration;
+        children_goals.push(child);
+    }
+    children_goals
 }
