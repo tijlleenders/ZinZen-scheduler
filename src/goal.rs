@@ -197,7 +197,7 @@ pub enum Tag {
     FLEX_DUR,
 }
 
-pub fn handle_heirarchy(goals: Vec<Goal>) -> Vec<Goal> {
+pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     let parent_goals = goals
         .iter()
         .filter(|goal| goal.children.is_some() == true)
