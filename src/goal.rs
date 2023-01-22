@@ -52,7 +52,7 @@ impl<'de> Visitor<'de> for GoalDurationVisitor {
     where
         E: de::Error,
     {
-        if s.contains('-') && s.contains("h") {
+        if s.contains('-') && s.contains('h') {
             //e.g. '35-40h'
             let split = s.split('-').collect::<Vec<&str>>();
             let min = split[0];
