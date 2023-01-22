@@ -31,18 +31,17 @@ fn process_file(filename: &Path) {
     let mut file = OpenOptions::new().append(true).open(output_path).unwrap();
     if let Ok(lines) = read_lines(filename) {
         for line in lines.flatten() {
-                if line.contains("\"duration\":") {
-                    let words = line.split(':').collect::<Vec<&str>>();
-                    let trimmed = words[1].trim();
-                    let duration = &trimmed[..trimmed.len() - 1];
-                    let new_line = format!("{}: \"{}\",", words[0], duration);
-                    writeln!(file, "{}", new_line).unwrap();
-                } else {
-                    writeln!(file, "{}", line).unwrap();
-                }
+            if line.contains("\"duration\":") {
+                let words = line.split(':').collect::<Vec<&str>>();
+                let trimmed = words[1].trim();
+                let duration = &trimmed[..trimmed.len() - 1];
+                let new_line = format!("{}: \"{}\",", words[0], duration);
+                writeln!(file, "{}", new_line).unwrap();
+            } else {
+                writeln!(file, "{}", line).unwrap();
             }
         }
-    
+    }
 }
 
 /*fn process_file(filename: &Path) {
@@ -74,9 +73,8 @@ fn visit_dirs(dir: &Path, cb: &dyn Fn(&Path)) -> io::Result<()> {
             if path.is_dir() {
                 visit_dirs(&path, cb)?;
             } else if entry.path().file_name().unwrap() == "input.json" {
-                    cb(&entry.path());
-                }
-            
+                cb(&entry.path());
+            }
         }
     }
     Ok(())
