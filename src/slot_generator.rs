@@ -68,9 +68,13 @@ fn assign_slots(
 ) -> Slot {
     let start = hours[*i];
     let mut end = start.start + Duration::hours(num_of_slots as i64);
-    if hard_deadline.is_some() && end > hard_deadline.unwrap() {
-        end = hard_deadline.unwrap();
-    }
+
+    if let Some(hard_deadline) = hard_deadline {
+        if end > hard_deadline {
+            end = hard_deadline;
+        }
+    };
+
     //make sure assigned slots do not go past the task's beforetime
     if end.hour() > before_time as u32 {
         end = end.with_hour(before_time as u32).unwrap();
