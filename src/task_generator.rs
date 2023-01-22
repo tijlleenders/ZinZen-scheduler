@@ -57,7 +57,7 @@ pub fn task_generator(
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     let mut goals = vec![];
-    let mut dur = goal.duration.0;
+    let dur = goal.duration.0;
     for _ in 0..dur {
         let mut g = goal.clone();
         g.duration.0 = 1;
