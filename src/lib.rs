@@ -1,11 +1,10 @@
-use wasm_bindgen::prelude::*;
 pub use goal::Goal;
 pub use input::Input;
 pub use output_formatter::{output_formatter, FinalOutput};
 pub use repetition::Repetition;
 use serde_wasm_bindgen::{from_value, to_value};
 pub use slot::Slot;
-
+use wasm_bindgen::prelude::*;
 
 mod errors;
 /// API modules
