@@ -69,7 +69,7 @@ pub enum MyRoundingError {
     ///
     /// ``` rust
     /// # use chrono::{DateTime, DurationRound, Duration, RoundingError, TimeZone, Utc};
-    /// let dt = Utc.ymd(1970, 12, 12).and_hms(0, 0, 0);
+    /// let dt = Utc.ymd(1970, 12, 12).and_hms_opt(0, 0, 0);
     ///
     /// assert_eq!(
     ///     dt.duration_round(Duration::days(365)),
@@ -82,7 +82,7 @@ pub enum MyRoundingError {
     ///
     /// ``` rust
     /// # use chrono::{DateTime, DurationRound, Duration, RoundingError, TimeZone, Utc};
-    /// let dt = Utc.ymd(2260, 12, 31).and_hms_nano(23, 59, 59, 1_75_500_000);
+    /// let dt = Utc.ymd(2260, 12, 31).and_hms_opt_nano(23, 59, 59, 1_75_500_000);
     ///
     /// assert_eq!(
     ///     dt.duration_round(Duration::days(300 * 365)),
@@ -95,7 +95,7 @@ pub enum MyRoundingError {
     ///
     /// ``` rust
     /// # use chrono::{DateTime, DurationRound, Duration, RoundingError, TimeZone, Utc};
-    /// let dt = Utc.ymd(2300, 12, 12).and_hms(0, 0, 0);
+    /// let dt = Utc.ymd(2300, 12, 12).and_hms_opt(0, 0, 0);
     ///
     /// assert_eq!(dt.duration_round(Duration::days(1)), Err(RoundingError::TimestampExceedsLimit),);
     /// ```
@@ -147,7 +147,7 @@ pub trait MyDurationRound: Sized {
     /// # Example
     /// ``` rust
     /// # use chrono::{DateTime, DurationRound, Duration, TimeZone, Utc};
-    /// let dt = Utc.ymd(2018, 1, 11).and_hms_milli(12, 0, 0, 154);
+    /// let dt = Utc.ymd(2018, 1, 11).and_hms_opt_milli(12, 0, 0, 154);
     /// assert_eq!(
     ///     dt.duration_round(Duration::milliseconds(10)).unwrap().to_string(),
     ///     "2018-01-11 12:00:00.150 UTC"
@@ -164,7 +164,7 @@ pub trait MyDurationRound: Sized {
     /// # Example
     /// ``` rust
     /// # use chrono::{DateTime, DurationRound, Duration, TimeZone, Utc};
-    /// let dt = Utc.ymd(2018, 1, 11).and_hms_milli(12, 0, 0, 154);
+    /// let dt = Utc.ymd(2018, 1, 11).and_hms_opt_milli(12, 0, 0, 154);
     /// assert_eq!(
     ///     dt.duration_trunc(Duration::milliseconds(10)).unwrap().to_string(),
     ///     "2018-01-11 12:00:00.150 UTC"

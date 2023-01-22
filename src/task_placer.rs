@@ -55,7 +55,7 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
                 //other task's slots. else remove just the time that this task has been scheduled at.
                 //this is to prevent weekly tasks from combining all on on one day.
                 if tasks[k].tags.contains(&Tag::Weekly) && tasks[k].goal_id == tasks[i].goal_id {
-                    let day = desired_time.start.date().and_hms(0, 0, 0);
+                    let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
                     let slot = Slot {
                         start: day,
                         end: day + Duration::days(1),
