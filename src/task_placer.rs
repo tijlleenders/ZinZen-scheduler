@@ -3,8 +3,8 @@
 //! The scheduler optimizes for the minimum amount of Impossible tasks.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
-use chrono::{Duration, Timelike};
-use serde::__private::de;
+use chrono::{Duration};
+
 
 use crate::errors::Error;
 use crate::goal::Tag;

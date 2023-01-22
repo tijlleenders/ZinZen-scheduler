@@ -1,4 +1,4 @@
-use crate::goal::{handle_hierarchy, Goal, GoalDuration, Tag};
+use crate::goal::{handle_hierarchy, Goal, Tag};
 use crate::input::Input;
 use crate::task::Task;
 use crate::Repetition;

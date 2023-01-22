@@ -2,7 +2,7 @@ use crate::errors::Error;
 use crate::goal::{Goal, Tag};
 use crate::slot::Slot;
 use chrono::Duration;
-use chrono::{NaiveDate, NaiveDateTime, Timelike};
+use chrono::{NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
