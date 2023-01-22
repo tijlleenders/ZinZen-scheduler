@@ -2,7 +2,7 @@ use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
-use chrono::{Duration, NaiveDateTime, Timelike};
+use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
 use serde::*;
 use serde::{Deserialize, Serialize};
@@ -52,7 +52,7 @@ impl<'de> Visitor<'de> for GoalDurationVisitor {
     where
         E: de::Error,
     {
-        if s.contains('-') && s.contains("h") {
+        if s.contains('-') && s.contains('h') {
             //e.g. '35-40h'
             let split = s.split('-').collect::<Vec<&str>>();
             let min = split[0];
@@ -132,7 +132,7 @@ impl Goal {
          **the start and deadline.
          **If the repetition is MONDAYS, a different task will be generated for each monday
          **between the start and deadline.
-         **If the repetition is WEEKLY, a different task will be generated for each mon-sun
+         **If the repetition is Weekly, a different task will be generated for each mon-sun
          **period between the start and deadline. etc...(to see all handled scenarios see time_slot_iterator.rs.)
          **.
          **.
@@ -150,7 +150,7 @@ impl Goal {
             self.before_time.unwrap_or(24),
         );
         let tasks_per_period = match self.repeat {
-            Some(Repetition::WEEKLY(x)) => x,
+            Some(Repetition::Weekly(x)) => x,
             Some(Repetition::DAILY(x)) => x,
             _ => 1,
         };
@@ -165,7 +165,7 @@ impl Goal {
                 //if only one slot was assigned and it is too short for the duration,
                 //mark the task as impossible.
                 if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {
-                    t.status = TaskStatus::IMPOSSIBLE;
+                    t.status = TaskStatus::Impossible;
                     t.conflicts
                         .push((t.slots[0], "Passes Deadline".to_string()));
                 } else {
@@ -175,11 +175,11 @@ impl Goal {
                         flexibility += slot.num_hours() - self.duration.0 + 1;
                     }
                     t.flexibility = flexibility;
-                    t.status = TaskStatus::UNSCHEDULED;
+                    t.status = TaskStatus::UNScheduled;
                 }
-                if let Some(Repetition::WEEKLY(_)) = self.repeat {
-                    if !self.tags.contains(&Tag::FLEX_DUR) {
-                        t.tags.push(Tag::WEEKLY);
+                if let Some(Repetition::Weekly(_)) = self.repeat {
+                    if !self.tags.contains(&Tag::FlexDur) {
+                        t.tags.push(Tag::Weekly);
                     }
                 }
                 tasks.push(t);
@@ -191,21 +191,21 @@ impl Goal {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Tag {
-    DONOTSPLIT,
-    WEEKLY,
-    OPTIONAL,
-    FLEX_DUR,
+    Donotsplit,
+    Weekly,
+    Optional,
+    FlexDur,
 }
 
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     let parent_goals = goals
         .iter()
-        .filter(|goal| goal.children.is_some() == true)
+        .filter(|goal| goal.children.is_some())
         .cloned()
         .collect::<Vec<Goal>>();
     let mut children_goals = goals
         .iter()
-        .filter(|goal| goal.children.is_some() == false)
+        .filter(|goal| goal.children.is_none())
         .cloned()
         .collect::<Vec<Goal>>();
 
@@ -221,7 +221,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         }
 
         child.title.push_str(" filler");
-        child.duration.0 = child.duration.0 - children_duration;
+        child.duration.0 -= children_duration;
         children_goals.push(child);
     }
     children_goals

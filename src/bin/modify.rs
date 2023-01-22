@@ -1,19 +1,15 @@
-use chrono::format::format;
-use scheduler;
-use scheduler::input::Input;
-use scheduler::output_formatter::{FinalOutput, Output};
-use std::error::Error;
 use std::fs::OpenOptions;
-use std::fs::{self, DirEntry, File};
+use std::fs::{self, File};
 use std::io::prelude::*;
-use std::io::BufReader;
-use std::io::LineWriter;
 use std::io::{self, BufRead};
 use std::path::Path;
 
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     let path = Path::new("./tests/jsons");
-    visit_dirs(path, &process_file);
+    match visit_dirs(path, &process_file) {
+        Ok(_) => Ok(()),
+        Err(e) => Err(e),
+    }
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -31,20 +27,18 @@ fn process_file(filename: &Path) {
     let mut output_path = filename.to_owned();
     output_path.set_file_name("input2");
     output_path.set_extension("json");
-    let file = File::create(&output_path).unwrap();
+    let _file = File::create(&output_path).unwrap();
     let mut file = OpenOptions::new().append(true).open(output_path).unwrap();
     if let Ok(lines) = read_lines(filename) {
-        for line in lines {
-            if let Ok(l) = line {
-                if l.contains("\"duration\":") {
-                    let words = l.split(':').collect::<Vec<&str>>();
-                    let trimmed = words[1].trim();
-                    let mut duration = &trimmed[..trimmed.len() - 1];
-                    let new_line = format!("{}: \"{}\",", words[0], duration);
-                    writeln!(file, "{}", new_line).unwrap();
-                } else {
-                    writeln!(file, "{}", l).unwrap();
-                }
+        for line in lines.flatten() {
+            if line.contains("\"duration\":") {
+                let words = line.split(':').collect::<Vec<&str>>();
+                let trimmed = words[1].trim();
+                let duration = &trimmed[..trimmed.len() - 1];
+                let new_line = format!("{}: \"{}\",", words[0], duration);
+                writeln!(file, "{}", new_line).unwrap();
+            } else {
+                writeln!(file, "{}", line).unwrap();
             }
         }
     }
@@ -78,10 +72,8 @@ fn visit_dirs(dir: &Path, cb: &dyn Fn(&Path)) -> io::Result<()> {
             let path = entry.path();
             if path.is_dir() {
                 visit_dirs(&path, cb)?;
-            } else {
-                if entry.path().file_name().unwrap() == "input.json" {
-                    cb(&entry.path());
-                }
+            } else if entry.path().file_name().unwrap() == "input.json" {
+                cb(&entry.path());
             }
         }
     }

@@ -13,7 +13,7 @@ use std::fmt;
 pub enum Repetition {
     DAILY(usize),
     HOURLY,
-    WEEKLY(usize),
+    Weekly(usize),
     WEEKDAYS,
     WEEKENDS,
     EveryXdays(usize),
@@ -49,7 +49,7 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
         match s {
             "daily" => Ok(Repetition::DAILY(1)),
             "hourly" => Ok(Repetition::HOURLY),
-            "weekly" => Ok(Repetition::WEEKLY(1)),
+            "weekly" => Ok(Repetition::Weekly(1)),
             "weekdays" => Ok(Repetition::WEEKDAYS),
             "weekends" => Ok(Repetition::WEEKENDS),
             "mondays" => Ok(Repetition::MONDAYS),
@@ -84,7 +84,7 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
                         .parse::<usize>()
                         .expect("expected format to be x/period");
                     match split[1] {
-                        "week" => Ok(Repetition::WEEKLY(num)),
+                        "week" => Ok(Repetition::Weekly(num)),
                         "day" => Ok(Repetition::DAILY(num)),
                         _ => panic!("unrecognized repetition: {}", s),
                     }
@@ -129,7 +129,7 @@ impl fmt::Display for Repetition {
         f.write_str(match *self {
             Repetition::DAILY(_) => "DAILY",
             Repetition::HOURLY => "HOURLY",
-            Repetition::WEEKLY(_) => "WEEKLY",
+            Repetition::Weekly(_) => "Weekly",
             Repetition::WEEKDAYS => "WEEKDAYS",
             Repetition::WEEKENDS => "WEEKENDS",
             Repetition::EveryXdays(_) => "EveryXdays",

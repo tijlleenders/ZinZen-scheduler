@@ -3,8 +3,7 @@ mod common;
 #[cfg(test)]
 use pretty_assertions::assert_eq;
 use scheduler::{FinalOutput, Input};
-use std::io::Write;
-use std::{fs::File, path::Path};
+use std::path::Path;
 
 fn run_test(directory: &str) -> (String, String) {
     let i = format!("./tests/jsons/{}/input.json", directory);

@@ -1,4 +1,4 @@
-use crate::goal::{handle_hierarchy, Goal, GoalDuration, Tag};
+use crate::goal::{handle_hierarchy, Goal, Tag};
 use crate::input::Input;
 use crate::task::Task;
 use crate::Repetition;
@@ -20,10 +20,10 @@ pub fn task_generator(
             //with 2/week. The 2/week goal will be tagged optional so won't show up in impossible
             //tasks in case any aren't scheduled.
             let mut goal1 = goal.clone();
-            goal1.repeat = Some(Repetition::WEEKLY(min));
+            goal1.repeat = Some(Repetition::Weekly(min));
             let mut goal2 = goal.clone();
-            goal2.repeat = Some(Repetition::WEEKLY(max - min));
-            goal2.tags.push(Tag::OPTIONAL);
+            goal2.repeat = Some(Repetition::Weekly(max - min));
+            goal2.tags.push(Tag::Optional);
             tasks.extend(goal1.generate_tasks(calendar_start, calendar_end, &mut counter));
             tasks.extend(goal2.generate_tasks(calendar_start, calendar_end, &mut counter));
         } else if goal.duration.1.is_some() {
@@ -32,12 +32,12 @@ pub fn task_generator(
             //of these goals into 1hr goals and generate tasks from each.
             let mut goal1 = goal.clone();
             (goal1.duration.0, goal1.duration.1) = (goal.duration.0, None);
-            goal1.tags.push(Tag::FLEX_DUR);
+            goal1.tags.push(Tag::FlexDur);
             let mut goal2 = goal.clone();
             (goal2.duration.0, goal2.duration.1) =
                 ((goal.duration.1.unwrap() - goal.duration.0), None);
-            goal2.tags.push(Tag::OPTIONAL);
-            goal2.tags.push(Tag::FLEX_DUR);
+            goal2.tags.push(Tag::Optional);
+            goal2.tags.push(Tag::FlexDur);
 
             //turn into 1hr goals
             let mut goals: Vec<Goal> = vec![];
@@ -57,7 +57,7 @@ pub fn task_generator(
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     let mut goals = vec![];
-    let mut dur = goal.duration.0;
+    let dur = goal.duration.0;
     for _ in 0..dur {
         let mut g = goal.clone();
         g.duration.0 = 1;

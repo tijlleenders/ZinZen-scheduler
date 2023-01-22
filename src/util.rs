@@ -69,7 +69,7 @@ pub enum MyRoundingError {
     ///
     /// ``` rust
     /// # use chrono::{DateTime, DurationRound, Duration, RoundingError, TimeZone, Utc};
-    /// let dt = Utc.ymd(1970, 12, 12).and_hms(0, 0, 0);
+    /// let dt = Utc.ymd(1970, 12, 12).and_hms_opt(0, 0, 0).unwrap();
     ///
     /// assert_eq!(
     ///     dt.duration_round(Duration::days(365)),
@@ -95,7 +95,7 @@ pub enum MyRoundingError {
     ///
     /// ``` rust
     /// # use chrono::{DateTime, DurationRound, Duration, RoundingError, TimeZone, Utc};
-    /// let dt = Utc.ymd(2300, 12, 12).and_hms(0, 0, 0);
+    /// let dt = Utc.ymd(2300, 12, 12).and_hms_opt(0, 0, 0).unwrap();
     ///
     /// assert_eq!(dt.duration_round(Duration::days(1)), Err(RoundingError::TimestampExceedsLimit),);
     /// ```

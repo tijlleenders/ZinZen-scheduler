@@ -13,12 +13,10 @@ impl Sub for Slot {
 
     fn sub(self, other: Self) -> Self::Output {
         let mut result = Vec::new();
-        if (other.start < self.start) && (other.end <= self.start) {
+        if (other.start < self.start) && (other.end <= self.start)
+            || (other.start >= self.end) && (other.end > self.end)
+        {
             //other is completely before self
-            result.push(self);
-            result
-        } else if (other.start >= self.end) && (other.end > self.end) {
-            //other is completely after self
             result.push(self);
             result
         } else if (other.start == self.start) && (other.end < self.end) {
@@ -84,11 +82,10 @@ impl Add for Slot {
     fn add(self, other: Self) -> Self::Output {
         if (other.start < self.start) && (other.end == self.start) {
             //other is before self and touching it
-            let slot = Slot {
+            Slot {
                 start: other.start,
                 end: self.end,
-            };
-            return slot;
+            }
         } else if (other.start == self.end) && (other.end > self.end) {
             //other is after self and touching it
             let slot = Slot {

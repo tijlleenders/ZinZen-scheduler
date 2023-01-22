@@ -2,7 +2,7 @@ use crate::errors::Error;
 use crate::goal::{Goal, Tag};
 use crate::slot::Slot;
 use chrono::Duration;
-use chrono::{NaiveDate, NaiveDateTime, Timelike};
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
@@ -59,9 +59,9 @@ impl Ord for Task {
             Ordering::Less
         } else if other.flexibility == 1 {
             Ordering::Greater
-        } else if other.tags.contains(&Tag::OPTIONAL) && !self.tags.contains(&Tag::OPTIONAL) {
+        } else if other.tags.contains(&Tag::Optional) && !self.tags.contains(&Tag::Optional) {
             Ordering::Less
-        } else if !other.tags.contains(&Tag::OPTIONAL) && self.tags.contains(&Tag::OPTIONAL) {
+        } else if !other.tags.contains(&Tag::Optional) && self.tags.contains(&Tag::Optional) {
             Ordering::Greater
         } else {
             other.flexibility.cmp(&self.flexibility)
@@ -126,7 +126,7 @@ impl Task {
             goal_id: goal.id.clone(),
             title: goal.title.clone(),
             duration: goal.duration.0,
-            status: TaskStatus::UNINITIALIZED,
+            status: TaskStatus::Uninitialized,
             flexibility: 0,
             start,
             deadline,
@@ -181,7 +181,7 @@ impl Task {
                 goal_id: self.goal_id.clone(),
                 title: self.title.clone(),
                 duration: 1,
-                status: TaskStatus::UNINITIALIZED,
+                status: TaskStatus::Uninitialized,
                 flexibility: 0,
                 start: self.start,
                 deadline: self.deadline,
@@ -195,7 +195,7 @@ impl Task {
                 options: None,
             };
             task.calculate_flexibility();
-            task.status = TaskStatus::UNSCHEDULED;
+            task.status = TaskStatus::UNScheduled;
             *counter += 1;
             tasks.push(task);
         }
@@ -209,7 +209,7 @@ impl Task {
     pub fn schedule(&mut self, slot: Slot) {
         self.set_confirmed_start(slot.start);
         self.set_confirmed_deadline(slot.end);
-        self.status = TaskStatus::SCHEDULED;
+        self.status = TaskStatus::Scheduled;
     }
 
     pub fn size_of_slots_to_be_assigned(&self) -> usize {
@@ -239,8 +239,8 @@ impl Task {
         }
         self.slots = new_slots;
         //if no more slots left, this is an impossible task - mark it as such and return
-        if self.slots.is_empty() && self.status != TaskStatus::SCHEDULED {
-            self.status = TaskStatus::IMPOSSIBLE;
+        if self.slots.is_empty() && self.status != TaskStatus::Scheduled {
+            self.status = TaskStatus::Impossible;
             return;
         }
         //the flexibility should be recalculated
@@ -258,8 +258,8 @@ impl Task {
 }
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum TaskStatus {
-    UNSCHEDULED,
-    SCHEDULED,
-    IMPOSSIBLE,
-    UNINITIALIZED,
+    UNScheduled,
+    Scheduled,
+    Impossible,
+    Uninitialized,
 }

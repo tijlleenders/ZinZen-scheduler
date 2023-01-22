@@ -1,10 +1,10 @@
-use wasm_bindgen::prelude::*;
-
 pub use goal::Goal;
 pub use input::Input;
 pub use output_formatter::{output_formatter, FinalOutput};
 pub use repetition::Repetition;
+use serde_wasm_bindgen::{from_value, to_value};
 pub use slot::Slot;
+use wasm_bindgen::prelude::*;
 
 mod errors;
 /// API modules
@@ -42,7 +42,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     use task_generator::task_generator;
     use task_placer::*;
     // JsError implements From<Error>, so we can just use `?` on any Error
-    let input: Input = input.into_serde()?;
+    let input: Input = from_value(input.clone()).unwrap();
     let tasks = task_generator(input);
     let (scheduled_tasks, impossible_tasks) = task_placer(tasks);
     let output = match output_formatter(scheduled_tasks, impossible_tasks) {
@@ -55,7 +55,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
         Ok(output) => output,
     };
 
-    Ok(JsValue::from_serde(&output)?)
+    Ok(to_value(&output)?)
 }
 
 pub fn run_scheduler(input: Input) -> FinalOutput {
