@@ -1,19 +1,15 @@
-use chrono::format::format;
-use scheduler;
-use scheduler::input::Input;
-use scheduler::output_formatter::{FinalOutput, Output};
-use std::error::Error;
 use std::fs::OpenOptions;
-use std::fs::{self, DirEntry, File};
+use std::fs::{self, File};
 use std::io::prelude::*;
-use std::io::BufReader;
-use std::io::LineWriter;
 use std::io::{self, BufRead};
 use std::path::Path;
 
-fn main() {
+fn main()-> Result<(),std::io::Error>{
     let path = Path::new("./tests/jsons");
-    visit_dirs(path, &process_file);
+    match visit_dirs(path, &process_file){
+        Ok(_) => Ok(()),
+        Err(e) => Err(e),
+    }
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
