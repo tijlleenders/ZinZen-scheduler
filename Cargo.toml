@@ -28,7 +28,9 @@ serde = { version = "1.0.137", features = ["derive"] }
 chrono = { version = "0.4.19", features = ["wasmbind", "serde"] }
 
 # simple WASM codegen
-wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.81" }
+# instead of wasm-bindgen::serde-serialize feature that may lead to a cyclic package dependency 
+serde-wasm-bindgen = "0.4.5"
 
 # display Rust panics as console.error()
 console_error_panic_hook = "0.1.7"
