@@ -2,8 +2,6 @@
 //between a certain time period.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
-use std::num;
-
 use crate::repetition::Repetition;
 use crate::slot::Slot;
 use crate::task::Task;

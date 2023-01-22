@@ -2,7 +2,7 @@ use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
-use chrono::{Duration, NaiveDateTime, Timelike};
+use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
 use serde::*;
 use serde::{Deserialize, Serialize};
@@ -178,7 +178,7 @@ impl Goal {
                     t.status = TaskStatus::UNSCHEDULED;
                 }
                 if let Some(Repetition::WEEKLY(_)) = self.repeat {
-                    if !self.tags.contains(&Tag::FLEX_DUR) {
+                    if !self.tags.contains(&Tag::FlexDur) {
                         t.tags.push(Tag::WEEKLY);
                     }
                 }
@@ -194,7 +194,7 @@ pub enum Tag {
     DONOTSPLIT,
     WEEKLY,
     OPTIONAL,
-    FLEX_DUR,
+    FlexDur,
 }
 
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {

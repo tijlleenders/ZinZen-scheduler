@@ -132,7 +132,7 @@ fn combine(outputs: &mut Vec<Output>) {
                 outputs[i].duration += outputs[j].duration;
                 indexes_to_remove.push(j);
             } else if outputs[j].goalid == outputs[i].goalid
-                && outputs[i].tags.contains(&Tag::FLEX_DUR)
+                && outputs[i].tags.contains(&Tag::FlexDur)
                 && outputs[i].impossible
             {
                 outputs[i].deadline = outputs[j].deadline;
