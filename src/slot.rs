@@ -84,11 +84,10 @@ impl Add for Slot {
     fn add(self, other: Self) -> Self::Output {
         if (other.start < self.start) && (other.end == self.start) {
             //other is before self and touching it
-            let slot = Slot {
+            Slot {
                 start: other.start,
                 end: self.end,
-            };
-            return slot;
+            }
         } else if (other.start == self.end) && (other.end > self.end) {
             //other is after self and touching it
             let slot = Slot {
