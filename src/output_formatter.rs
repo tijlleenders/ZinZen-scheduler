@@ -127,13 +127,10 @@ fn combine(outputs: &mut Vec<Output>) {
     let mut i = 0;
     'outer: while i < outputs.len() {
         for j in (i + 1)..outputs.len() {
-            if outputs[j].goalid == outputs[i].goalid && outputs[j].start == outputs[i].deadline {
-                outputs[i].deadline = outputs[j].deadline;
-                outputs[i].duration += outputs[j].duration;
-                indexes_to_remove.push(j);
-            } else if outputs[j].goalid == outputs[i].goalid
-                && outputs[i].tags.contains(&Tag::FlexDur)
-                && outputs[i].impossible
+            if (outputs[j].goalid == outputs[i].goalid && outputs[j].start == outputs[i].deadline)
+                || (outputs[j].goalid == outputs[i].goalid
+                    && outputs[i].tags.contains(&Tag::FlexDur)
+                    && outputs[i].impossible)
             {
                 outputs[i].deadline = outputs[j].deadline;
                 outputs[i].duration += outputs[j].duration;
