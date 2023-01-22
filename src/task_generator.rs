@@ -32,12 +32,12 @@ pub fn task_generator(
             //of these goals into 1hr goals and generate tasks from each.
             let mut goal1 = goal.clone();
             (goal1.duration.0, goal1.duration.1) = (goal.duration.0, None);
-            goal1.tags.push(Tag::FLEX_DUR);
+            goal1.tags.push(Tag::FlexDur);
             let mut goal2 = goal.clone();
             (goal2.duration.0, goal2.duration.1) =
                 ((goal.duration.1.unwrap() - goal.duration.0), None);
             goal2.tags.push(Tag::OPTIONAL);
-            goal2.tags.push(Tag::FLEX_DUR);
+            goal2.tags.push(Tag::FlexDur);
 
             //turn into 1hr goals
             let mut goals: Vec<Goal> = vec![];
