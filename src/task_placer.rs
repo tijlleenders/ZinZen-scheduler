@@ -3,8 +3,7 @@
 //! The scheduler optimizes for the minimum amount of Impossible tasks.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
-use chrono::{Duration};
-
+use chrono::Duration;
 
 use crate::errors::Error;
 use crate::goal::Tag;
@@ -93,7 +92,7 @@ pub fn can_schedule(i: usize, tasks: &mut Vec<Task>) -> Option<Slot> {
                 continue 'inner;
             }
             for slot in &tasks[k].slots {
-                if desired_time.conflicts_with(&slot) && !tasks[i].can_coexist_with(&tasks[k]) {
+                if desired_time.conflicts_with(slot) && !tasks[i].can_coexist_with(&tasks[k]) {
                     //found a conflict so try another start/deadline combo
                     //but save the conflict first
                     let goal_id = tasks[k].goal_id.to_owned();
