@@ -200,12 +200,12 @@ pub enum Tag {
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     let parent_goals = goals
         .iter()
-        .filter(|goal| goal.children.is_some() == true)
+        .filter(|goal| goal.children.is_some())
         .cloned()
         .collect::<Vec<Goal>>();
     let mut children_goals = goals
         .iter()
-        .filter(|goal| goal.children.is_some() == false)
+        .filter(|goal| goal.children.is_none())
         .cloned()
         .collect::<Vec<Goal>>();
 
@@ -221,7 +221,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         }
 
         child.title.push_str(" filler");
-        child.duration.0 = child.duration.0 - children_duration;
+        child.duration.0 -= children_duration;
         children_goals.push(child);
     }
     children_goals
