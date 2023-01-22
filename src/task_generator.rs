@@ -20,10 +20,10 @@ pub fn task_generator(
             //with 2/week. The 2/week goal will be tagged optional so won't show up in impossible
             //tasks in case any aren't scheduled.
             let mut goal1 = goal.clone();
-            goal1.repeat = Some(Repetition::WEEKLY(min));
+            goal1.repeat = Some(Repetition::Weekly(min));
             let mut goal2 = goal.clone();
-            goal2.repeat = Some(Repetition::WEEKLY(max - min));
-            goal2.tags.push(Tag::OPTIONAL);
+            goal2.repeat = Some(Repetition::Weekly(max - min));
+            goal2.tags.push(Tag::Optional);
             tasks.extend(goal1.generate_tasks(calendar_start, calendar_end, &mut counter));
             tasks.extend(goal2.generate_tasks(calendar_start, calendar_end, &mut counter));
         } else if goal.duration.1.is_some() {
@@ -36,7 +36,7 @@ pub fn task_generator(
             let mut goal2 = goal.clone();
             (goal2.duration.0, goal2.duration.1) =
                 ((goal.duration.1.unwrap() - goal.duration.0), None);
-            goal2.tags.push(Tag::OPTIONAL);
+            goal2.tags.push(Tag::Optional);
             goal2.tags.push(Tag::FlexDur);
 
             //turn into 1hr goals

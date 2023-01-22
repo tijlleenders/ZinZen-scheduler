@@ -58,7 +58,7 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     //convert impossible tasks to output objects and add to impossible_outputs vec
     for task in impossible {
         //don't report optional tasks
-        if task.tags.contains(&Tag::OPTIONAL) {
+        if task.tags.contains(&Tag::Optional) {
             continue;
         }
         impossible_outputs.push(get_output_from_task(&task));
@@ -90,13 +90,13 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
 }
 
 fn get_output_from_task(task: &Task) -> Output {
-    let start = if task.status == TaskStatus::SCHEDULED {
+    let start = if task.status == TaskStatus::Scheduled {
         task.confirmed_start
             .expect("Checked for None above so should always be Some.")
     } else {
         task.conflicts[0].0.start
     };
-    let deadline = if task.status == TaskStatus::SCHEDULED {
+    let deadline = if task.status == TaskStatus::Scheduled {
         task.confirmed_deadline
             .expect("Checked for None above so should always be Some.")
     } else {
@@ -109,13 +109,13 @@ fn get_output_from_task(task: &Task) -> Output {
         duration: task.duration,
         start,
         deadline,
-        first_conflict_with: if task.status == TaskStatus::IMPOSSIBLE {
+        first_conflict_with: if task.status == TaskStatus::Impossible {
             Some(task.conflicts[0].1.to_owned())
         } else {
             None
         },
         tags: task.tags.clone(),
-        impossible: task.status == TaskStatus::IMPOSSIBLE,
+        impossible: task.status == TaskStatus::Impossible,
         options: task.options.clone(),
     }
 }

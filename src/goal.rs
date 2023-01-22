@@ -132,7 +132,7 @@ impl Goal {
          **the start and deadline.
          **If the repetition is MONDAYS, a different task will be generated for each monday
          **between the start and deadline.
-         **If the repetition is WEEKLY, a different task will be generated for each mon-sun
+         **If the repetition is Weekly, a different task will be generated for each mon-sun
          **period between the start and deadline. etc...(to see all handled scenarios see time_slot_iterator.rs.)
          **.
          **.
@@ -150,7 +150,7 @@ impl Goal {
             self.before_time.unwrap_or(24),
         );
         let tasks_per_period = match self.repeat {
-            Some(Repetition::WEEKLY(x)) => x,
+            Some(Repetition::Weekly(x)) => x,
             Some(Repetition::DAILY(x)) => x,
             _ => 1,
         };
@@ -165,7 +165,7 @@ impl Goal {
                 //if only one slot was assigned and it is too short for the duration,
                 //mark the task as impossible.
                 if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {
-                    t.status = TaskStatus::IMPOSSIBLE;
+                    t.status = TaskStatus::Impossible;
                     t.conflicts
                         .push((t.slots[0], "Passes Deadline".to_string()));
                 } else {
@@ -175,11 +175,11 @@ impl Goal {
                         flexibility += slot.num_hours() - self.duration.0 + 1;
                     }
                     t.flexibility = flexibility;
-                    t.status = TaskStatus::UNSCHEDULED;
+                    t.status = TaskStatus::UNScheduled;
                 }
-                if let Some(Repetition::WEEKLY(_)) = self.repeat {
+                if let Some(Repetition::Weekly(_)) = self.repeat {
                     if !self.tags.contains(&Tag::FlexDur) {
-                        t.tags.push(Tag::WEEKLY);
+                        t.tags.push(Tag::Weekly);
                     }
                 }
                 tasks.push(t);
@@ -191,9 +191,9 @@ impl Goal {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Tag {
-    DONOTSPLIT,
-    WEEKLY,
-    OPTIONAL,
+    Donotsplit,
+    Weekly,
+    Optional,
     FlexDur,
 }
 

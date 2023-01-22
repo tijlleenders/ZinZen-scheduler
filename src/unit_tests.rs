@@ -564,10 +564,10 @@ fn task_placer_returns_impossible_tasks() {
     dbg!(&tasks);
     let (scheduled_tasks, impossible_tasks) = task_placer(tasks);
     dbg!(&impossible_tasks);
-    assert_eq!(scheduled_tasks[0].status, SCHEDULED);
-    assert_eq!(scheduled_tasks[1].status, SCHEDULED);
-    assert_eq!(scheduled_tasks[2].status, SCHEDULED);
-    assert_eq!(impossible_tasks[0].status, IMPOSSIBLE);
+    assert_eq!(scheduled_tasks[0].status, Scheduled);
+    assert_eq!(scheduled_tasks[1].status, Scheduled);
+    assert_eq!(scheduled_tasks[2].status, Scheduled);
+    assert_eq!(impossible_tasks[0].status, Impossible);
 
     assert_eq!(
         scheduled_tasks[0].confirmed_start.unwrap(),

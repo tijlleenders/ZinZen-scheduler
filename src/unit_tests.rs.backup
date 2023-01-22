@@ -295,7 +295,7 @@ fn time_slot_iterator_range_returns_weeks() {
     let r = TimeSlotIterator {
         start: NaiveDate::from_ymd(2022, 9, 1).and_hms(0, 0, 0),
         end: NaiveDate::from_ymd(2022, 10, 1).and_hms(0, 0, 0),
-        repetition: Repetition::WEEKLY,
+        repetition: Repetition::Weekly,
     };
 
     assert_eq!(
@@ -330,7 +330,7 @@ fn time_slot_iterator_range_returns_weeks_starting_on_a_sunday() {
     let r = TimeSlotIterator {
         start: NaiveDate::from_ymd(2023, 1, 1).and_hms(0, 0, 0),
         end: NaiveDate::from_ymd(2023, 2, 1).and_hms(0, 0, 0),
-        repetition: Repetition::WEEKLY,
+        repetition: Repetition::Weekly,
     };
 
     assert_eq!(
@@ -369,7 +369,7 @@ fn time_slot_iterator_range_returns_weeks_ending_on_a_sunday() {
     let r = TimeSlotIterator {
         start: NaiveDate::from_ymd(2023, 4, 1).and_hms(0, 0, 0),
         end: NaiveDate::from_ymd(2023, 5, 1).and_hms(0, 0, 0),
-        repetition: Repetition::WEEKLY,
+        repetition: Repetition::Weekly,
     };
 
     assert_eq!(

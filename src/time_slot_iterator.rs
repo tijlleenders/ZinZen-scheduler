@@ -79,7 +79,7 @@ impl Iterator for TimeSlotIterator {
                     None
                 }
             }
-            Some(Repetition::WEEKLY(_)) => {
+            Some(Repetition::Weekly(_)) => {
                 if self.start >= self.end {
                     return None;
                 }

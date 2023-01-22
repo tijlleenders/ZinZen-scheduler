@@ -1,6 +1,6 @@
 //! The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 //! task a confirmed start and deadline.
-//! The scheduler optimizes for the minimum amount of IMPOSSIBLE tasks.
+//! The scheduler optimizes for the minimum amount of Impossible tasks.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use chrono::{Duration, Timelike};
@@ -9,7 +9,7 @@ use serde::__private::de;
 use crate::errors::Error;
 use crate::goal::Tag;
 use crate::slot::Slot;
-use crate::task::TaskStatus::{SCHEDULED, UNSCHEDULED};
+use crate::task::TaskStatus::{Scheduled, UNScheduled};
 use crate::task::{Task, TaskStatus};
 
 pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
@@ -32,7 +32,7 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
 
     //if tasks is still not empty, these are impossible to schedule tasks
     for task in &mut tasks {
-        task.status = TaskStatus::IMPOSSIBLE;
+        task.status = TaskStatus::Impossible;
     }
 
     (scheduled_tasks, tasks)
@@ -42,8 +42,8 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
     let mut i = 0; //index that points to a task in the collection of tasks
     tasks.sort();
     while i < tasks.len() {
-        //if this task's status is IMPOSSIBLE, skip
-        if tasks[i].status == TaskStatus::IMPOSSIBLE {
+        //if this task's status is Impossible, skip
+        if tasks[i].status == TaskStatus::Impossible {
             i += 1;
             continue;
         }
@@ -55,7 +55,7 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
                 //if the other task is a weekly task and is of the same goal id, remove the entire day from the
                 //other task's slots. else remove just the time that this task has been scheduled at.
                 //this is to prevent weekly tasks from combining all on on one day.
-                if tasks[k].tags.contains(&Tag::WEEKLY) && tasks[k].goal_id == tasks[i].goal_id {
+                if tasks[k].tags.contains(&Tag::Weekly) && tasks[k].goal_id == tasks[i].goal_id {
                     let day = desired_time.start.date().and_hms(0, 0, 0);
                     let slot = Slot {
                         start: day,
@@ -65,8 +65,8 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
                 } else {
                     tasks[k].remove_slot(desired_time);
                 }
-                //if the removal has rendered the other task IMPOSSIBLE, add this task to that task's conflicts
-                if tasks[k].status == TaskStatus::IMPOSSIBLE {
+                //if the removal has rendered the other task Impossible, add this task to that task's conflicts
+                if tasks[k].status == TaskStatus::Impossible {
                     let goal_id = tasks[i].goal_id.to_owned();
                     tasks[k].conflicts.push((desired_time, goal_id));
                 }
@@ -89,7 +89,7 @@ pub fn can_schedule(i: usize, tasks: &mut Vec<Task>) -> Option<Slot> {
             return Some(desired_time);
         }
         'inner: for k in 0..tasks.len() {
-            if tasks[k].status == SCHEDULED || tasks[k].goal_id == tasks[i].goal_id {
+            if tasks[k].status == Scheduled || tasks[k].goal_id == tasks[i].goal_id {
                 continue 'inner;
             }
             for slot in &tasks[k].slots {
@@ -115,7 +115,7 @@ fn split_unscheduled_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     let mut new_tasks = Vec::new();
     let mut ids_to_remove = Vec::new();
     for task in tasks.iter_mut() {
-        if task.status == UNSCHEDULED && !task.tags.contains(&Tag::OPTIONAL) {
+        if task.status == UNScheduled && !task.tags.contains(&Tag::Optional) {
             match task.split(counter) {
                 Err(Error::CannotSplit) | Err(_) => {}
                 Ok(mut one_hour_tasks) => {
