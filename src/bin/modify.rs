@@ -4,9 +4,9 @@ use std::io::prelude::*;
 use std::io::{self, BufRead};
 use std::path::Path;
 
-fn main()-> Result<(),std::io::Error>{
+fn main() -> Result<(), std::io::Error> {
     let path = Path::new("./tests/jsons");
-    match visit_dirs(path, &process_file){
+    match visit_dirs(path, &process_file) {
         Ok(_) => Ok(()),
         Err(e) => Err(e),
     }
@@ -27,7 +27,7 @@ fn process_file(filename: &Path) {
     let mut output_path = filename.to_owned();
     output_path.set_file_name("input2");
     output_path.set_extension("json");
-    let file = File::create(&output_path).unwrap();
+    let _file = File::create(&output_path).unwrap();
     let mut file = OpenOptions::new().append(true).open(output_path).unwrap();
     if let Ok(lines) = read_lines(filename) {
         for line in lines {
@@ -35,7 +35,7 @@ fn process_file(filename: &Path) {
                 if l.contains("\"duration\":") {
                     let words = l.split(':').collect::<Vec<&str>>();
                     let trimmed = words[1].trim();
-                    let mut duration = &trimmed[..trimmed.len() - 1];
+                    let duration = &trimmed[..trimmed.len() - 1];
                     let new_line = format!("{}: \"{}\",", words[0], duration);
                     writeln!(file, "{}", new_line).unwrap();
                 } else {

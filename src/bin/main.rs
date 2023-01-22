@@ -1,5 +1,5 @@
 extern crate scheduler;
-use scheduler::{FinalOutput, Input};
+use scheduler::Input;
 use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;
@@ -10,7 +10,7 @@ fn main() {
     let paths = vec![path, path2];
     for path in paths {
         let input: Input = get_input_from_json(path).unwrap();
-        let output = scheduler::run_scheduler(input);
+        let _output = scheduler::run_scheduler(input);
     }
 }
 
