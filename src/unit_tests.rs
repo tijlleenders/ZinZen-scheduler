@@ -1,6 +1,6 @@
 use crate::{
-    goal::*, input::*, repetition::Repetition, slot::*,
-    task::TaskStatus::*, task::*, task_generator::*, task_placer::*, time_slot_iterator::*,
+    goal::*, input::*, repetition::Repetition, slot::*, task::TaskStatus::*, task::*,
+    task_generator::*, task_placer::*, time_slot_iterator::*,
 };
 use chrono::*;
 
