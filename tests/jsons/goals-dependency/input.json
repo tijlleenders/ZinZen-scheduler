@@ -4,8 +4,8 @@
   "goals": [
     {
       "id": "1",
-      "title": "program a zin zin app in rust",
-      "duration": "10",
+      "title": "publish zin zin app",
+      "duration": "10m",
       "start": "2018-01-01T00:00:00",
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
@@ -14,8 +14,8 @@
     },
     {
       "id": "2",
-      "title": "learn rust programming",
-      "duration": "25",
+      "title": "program a zin zin app in rust",
+      "duration": "8",
       "start": "2018-01-01T00:00:00",
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
@@ -24,6 +24,16 @@
     },
     {
       "id": "3",
+      "title": "learn rust programming",
+      "duration": "25",
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_time": 8,
+      "before_time": 16,
+      "depend_on": ["4"]
+    },
+    {
+      "id": "4",
       "title": "find a good rust resource",
       "duration": "5",
       "start": "2018-01-01T00:00:00",
