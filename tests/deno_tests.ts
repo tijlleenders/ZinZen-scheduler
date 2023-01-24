@@ -88,6 +88,8 @@ import options_1_input from "./jsons/options-1/input.json" assert {type: "json"}
 import options_1_output from "./jsons/options-1/output.json" assert {type: "json"}
 import goals_hierarchy_input from "./jsons/goals-hierarchy/input.json" assert {type: "json"};
 import goals_hierarchy_output from "./jsons/goals-hierarchy/output.json" assert {type: "json"};
+import goals_dependency_input from "./jsons/goals-dependency/input.json" assert {type: "json"};
+import goals_dependency_output from "./jsons/goals-dependency/output.json" assert {type: "json"};
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   assertEquals(
@@ -332,4 +334,8 @@ Deno.test("options 1", () => {
 Deno.test("goals hierarchy", () => {
   assertEquals(
     schedule(goals_hierarchy_input),goals_hierarchy_output);
+});
+Deno.test("goals dependency", () => {
+  assertEquals(
+    schedule(goals_dependency_input),goals_dependency_output);
 });
