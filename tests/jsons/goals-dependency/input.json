@@ -5,12 +5,12 @@
     {
       "id": "1",
       "title": "publish zin zin app",
-      "duration": "10m",
+      "duration": "1",
       "start": "2018-01-01T00:00:00",
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
       "before_time": 16,
-      "depend_on": ["2"]
+      "after_goals": ["2"]
     },
     {
       "id": "2",
@@ -20,7 +20,7 @@
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
       "before_time": 16,
-      "depend_on": ["3"]
+      "after_goals": ["3"]
     },
     {
       "id": "3",
@@ -30,7 +30,7 @@
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
       "before_time": 16,
-      "depend_on": ["4"]
+      "after_goals": ["4"]
     },
     {
       "id": "4",
