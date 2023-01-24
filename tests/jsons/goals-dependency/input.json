@@ -1,0 +1,35 @@
+{
+  "startDate": "2018-01-01T00:00:00",
+  "endDate": "2018-01-06T00:00:00",
+  "goals": [
+    {
+      "id": "1",
+      "title": "program a zin zin app in rust",
+      "duration": "10",
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_time": 8,
+      "before_time": 16,
+      "depend_on": ["2"]
+    },
+    {
+      "id": "2",
+      "title": "learn rust programming",
+      "duration": "25",
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_time": 8,
+      "before_time": 16,
+      "depend_on": ["3"]
+    },
+    {
+      "id": "3",
+      "title": "find a good rust resource",
+      "duration": "5",
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_time": 8,
+      "before_time": 16
+    }
+]
+}
