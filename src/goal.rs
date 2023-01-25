@@ -229,8 +229,6 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     children_goals
 }
 
-
-
 // pub fn handle_dependency(goals: Vec<Goal>) -> Vec<Goal> {
 //     let dependent_goals = goals
 //         .iter()
@@ -245,5 +243,3 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
 //         .cloned()
 //         .collect::<Vec<Goal>>();
 // }
-
-
