@@ -32,6 +32,8 @@ pub struct Goal {
     pub tags: Vec<Tag>,
     #[serde(default)]
     pub children: Option<Vec<String>>,
+    #[serde(default)]
+    pub after_goals: Option<Vec<String>>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Default)]
@@ -226,3 +228,22 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     }
     children_goals
 }
+
+
+
+// pub fn handle_dependency(goals: Vec<Goal>) -> Vec<Goal> {
+//     let dependent_goals = goals
+//         .iter()
+//         .filter(|goal| goal.after_goals.is_some())
+//         .cloned()
+//         .collect::<Vec<Goal>>();
+//         let odrdered_goals= vec![];
+//         dependent_goals.iter().filter(|s|s.after_goals)
+//     let mut independent_goals = goals
+//         .iter()
+//         .filter(|goal| goal.children.is_none())
+//         .cloned()
+//         .collect::<Vec<Goal>>();
+// }
+
+

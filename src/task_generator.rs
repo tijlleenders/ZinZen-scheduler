@@ -65,3 +65,15 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     }
     goals
 }
+
+// #[test]
+// fn test(){
+   
+//     let input=include_str!("/home/mus/ZinZen-scheduler/tests/jsons/goals-dependency/input.json");
+//     let res:Input= serde_json::from_str(&input).expect("Unable to parse");
+//     //println!("{:#?}", res);
+//     let tasks=task_generator(res);
+//     println!("{:#?}", tasks);
+//     let x = true;
+//     assert!(x, "x wasn't true!");
+//}
