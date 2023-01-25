@@ -1,7 +1,8 @@
 use crate::goal::{handle_hierarchy, Goal, Tag};
+use crate::graph_handler::get_graph_info;
 use crate::input::Input;
 use crate::task::Task;
-use crate::Repetition;
+use crate::{Repetition, DAG};
 
 pub fn task_generator(
     Input {
@@ -13,6 +14,8 @@ pub fn task_generator(
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let goals = handle_hierarchy(goals);
+    let graph_info = get_graph_info(goals.to_owned());
+    let goals = get_ordered_goals(goals, graph_info);
     for goal in goals {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
@@ -66,14 +69,36 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     goals
 }
 
-// #[test]
-// fn test(){
-   
-//     let input=include_str!("/home/mus/ZinZen-scheduler/tests/jsons/goals-dependency/input.json");
-//     let res:Input= serde_json::from_str(&input).expect("Unable to parse");
-//     //println!("{:#?}", res);
-//     let tasks=task_generator(res);
-//     println!("{:#?}", tasks);
-//     let x = true;
-//     assert!(x, "x wasn't true!");
-//}
+pub fn get_ordered_goals(goals: Vec<Goal>, graph_info: Vec<(usize, usize)>) -> Vec<Goal> {
+    let mut ordered_ids = DAG::new(graph_info);
+    ordered_ids.reverse();
+    let mut orderd_goals = vec![];
+    for id in ordered_ids {
+        orderd_goals.push(
+            goals
+                .iter()
+                .find(|&x| x.id.parse::<usize>().unwrap() == id)
+                .unwrap()
+                .clone(),
+        )
+    }
+    orderd_goals.reverse();
+    orderd_goals
+}
+
+#[test]
+fn test() {
+    use crate::graph_handler::*;
+    let input = include_str!("/home/mus/ZinZen-scheduler/tests/jsons/goals-dependency/input.json");
+
+    let res: Input = serde_json::from_str(&input).expect("Unable to parse");
+
+    let info = get_graph_info(res.goals.clone());
+
+    //let goals = get_ordered_goals(res.goals.to_owned(), info);
+    // println!("{:#?}", info);
+    //let tasks=task_generator(goals.to_owned());
+    // println!("{:#?}", tasks);
+    let x = true;
+    assert!(x, "x wasn't true!");
+}
