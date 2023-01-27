@@ -289,3 +289,9 @@ fn options_1_works() {
     let (actual_output, desired_output) = run_test("options-1");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn goals_dependency_works() {
+    let (actual_output, desired_output) = run_test("goals-dependency");
+    assert_eq!(actual_output, desired_output);
+}
