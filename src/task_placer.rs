@@ -1,6 +1,3 @@
-//! The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
-//! task a confirmed start and deadline.
-//! The scheduler optimizes for the minimum amount of Impossible tasks.
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
 use chrono::Duration;
@@ -11,6 +8,9 @@ use crate::slot::Slot;
 use crate::task::TaskStatus::{Scheduled, UNScheduled};
 use crate::task::{Task, TaskStatus};
 
+/// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
+/// task a confirmed start and deadline.
+/// The scheduler optimizes for the minimum amount of Impossible tasks.
 pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
     let mut scheduled_tasks: Vec<Task> = Vec::new();
 

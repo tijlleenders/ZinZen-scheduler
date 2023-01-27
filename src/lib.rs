@@ -8,17 +8,17 @@ use wasm_bindgen::prelude::*;
 
 mod errors;
 /// API modules
-mod goal;
+pub mod goal;
 pub mod input;
-mod options_generator;
+pub mod options_generator;
 pub mod output_formatter;
-mod repetition;
-mod slot;
-mod slot_generator;
-mod task;
-mod task_generator;
-mod task_placer;
-mod time_slot_iterator;
+pub mod repetition;
+pub mod slot;
+pub mod slot_generator;
+pub mod task;
+pub mod task_generator;
+pub mod task_placer;
+pub mod time_slot_iterator;
 mod util;
 
 // Test

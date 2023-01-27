@@ -4,7 +4,10 @@ use serde::Deserialize;
 use crate::goal::Goal;
 
 #[derive(Deserialize, Debug)]
-/// Just a deserialization target
+/// The front end passes data into the scheduler via an Input object.
+/// It defines the calendar start and end, and a collection of goals that the scheduler needs to schedule.
+/// On the scheduler side, the Input is passed as a ['JSValue'](https://rustwasm.github.io/wasm-bindgen/api/wasm_bindgen/struct.JsValue.html).
+/// This allows it to be deserialized into this struct.
 pub struct Input {
     #[serde(rename = "startDate")]
     pub calendar_start: NaiveDateTime,
