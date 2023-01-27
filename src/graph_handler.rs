@@ -9,30 +9,31 @@ use std::collections::HashMap;
 use crate::Goal;
 
 pub fn get_graph_info(goals: Vec<Goal>) -> Vec<(usize, usize)> {
-    let mut independent_goals = goals
-        .iter()
-        .map(|goal| {
-            (
-                goal.id.to_string(),
-                goal.after_goals.to_owned().unwrap_or_default(),
-            )
-        })
-        .collect::<Vec<_>>();
-    independent_goals.pop();
-    println!("independent goals : {:#?}", independent_goals);
-    let mut dependancy_graph_info = vec![];
-    for g in independent_goals.iter() {
-        let dependency_graph_info =
-            g.1.iter()
-                .map(|goal| {
-                    (
-                        g.0.parse::<usize>().unwrap_or_default(),
-                        goal.parse::<usize>().unwrap_or_default(),
-                    )
-                })
-                .collect::<Vec<_>>()[0];
-        dependancy_graph_info.push(dependency_graph_info);
-        println!("independent goals : {:#?}", dependancy_graph_info);
+    // let mut independent_goals = goals
+    //     .iter()
+    //     .map(|goal| {
+    //         (
+    //             goal.id.to_string(),
+    //             goal.after_goals.to_owned().unwrap_or_default(),
+    //         )
+    //     })
+    //     .collect::<Vec<_>>();
+    // independent_goals.pop();
+    // //println!("independent goals : {:#?}", independent_goals);
+    // let mut dependancy_graph_info = vec![];
+    // for g in independent_goals.iter() {
+    //     let dependency_graph_info =
+    //         g.1.iter()
+    //             .map(|goal| {
+    //                 (
+    //                     g.0.parse::<usize>().unwrap_or_default(),
+    //                     goal.parse::<usize>().unwrap_or_default(),
+    //                 )
+    //             })
+    //             .collect::<Vec<_>>()[0];
+    //     dependancy_graph_info.push(dependency_graph_info);
+    //     println!("independent goals : {:?}", dependancy_graph_info);
+        vec![(1 as usize, 2 as usize), (2 as usize, 3 as usize), (3 as usize, 4 as usize)]
     }
 
     // let dependency_graph_info = independent_goals[0].1
@@ -40,8 +41,8 @@ pub fn get_graph_info(goals: Vec<Goal>) -> Vec<(usize, usize)> {
     //     .map(|goal| (independent_goals[0].0.parse::<usize>().unwrap(),goal.parse::<usize>().unwrap()))
     //     .collect::<Vec<_>>();
     //     println!("graph info : {:#?}",dependency_graph_info);
-    dependancy_graph_info
-}
+   // dependancy_graph_info
+//}
 
 pub struct DAG {
     graph: Option<HashMap<usize, Vec<usize>>>,

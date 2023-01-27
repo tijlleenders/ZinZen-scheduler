@@ -1,8 +1,10 @@
+use crate::errors::Error;
 use crate::goal::{handle_hierarchy, Goal, Tag};
 use crate::graph_handler::get_graph_info;
 use crate::input::Input;
 use crate::task::Task;
-use crate::{Repetition, DAG};
+use crate::task_placer::task_placer;
+use crate::{Repetition, DAG, output_formatter};
 
 pub fn task_generator(
     Input {
@@ -13,7 +15,7 @@ pub fn task_generator(
 ) -> Vec<Task> {
     let mut counter: usize = 0;
     let mut tasks = vec![];
-    let goals = handle_hierarchy(goals);
+   // let goals = handle_hierarchy(goals);
     let graph_info = get_graph_info(goals.to_owned());
     let goals = get_ordered_goals(goals, graph_info);
     for goal in goals {
@@ -52,7 +54,9 @@ pub fn task_generator(
                 tasks.extend(goal.generate_tasks(calendar_start, calendar_end, &mut counter));
             }
         } else {
-            tasks.extend(goal.generate_tasks(calendar_start, calendar_end, &mut counter));
+            let goals_vec=goal.generate_tasks(calendar_start, calendar_end, &mut counter);
+            println!("{:#?}",goals_vec);
+            tasks.extend(goals_vec);
         }
     }
     tasks
@@ -82,23 +86,33 @@ pub fn get_ordered_goals(goals: Vec<Goal>, graph_info: Vec<(usize, usize)>) -> V
                 .clone(),
         )
     }
-    orderd_goals.reverse();
     orderd_goals
 }
 
 #[test]
 fn test() {
     use crate::graph_handler::*;
+
     let input = include_str!("/home/mus/ZinZen-scheduler/tests/jsons/goals-dependency/input.json");
 
-    let res: Input = serde_json::from_str(&input).expect("Unable to parse");
+    let mut res: Input = serde_json::from_str(&input).expect("Unable to parse");
 
     let info = get_graph_info(res.goals.clone());
 
-    //let goals = get_ordered_goals(res.goals.to_owned(), info);
-    // println!("{:#?}", info);
-    //let tasks=task_generator(goals.to_owned());
-    // println!("{:#?}", tasks);
+    let goals = get_ordered_goals(res.goals.to_owned(), info);
+    // println!("{:#?}", goals);
+     res.goals= goals;
+    let tasks=task_generator(res);
+    let (scheduled,impossible) = task_placer(tasks);
+    match output_formatter(scheduled, impossible) {
+        Err(Error::NoConfirmedDate(title, id)) => {
+            panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
+        }
+        Err(e) => {
+            panic!("Unexpected error: {:?}", e);
+        }
+        Ok(output) => {println!("scheduled {:#?}", output);}
+    }
     let x = true;
     assert!(x, "x wasn't true!");
 }
