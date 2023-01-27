@@ -6,6 +6,8 @@ use crate::task::Task;
 use crate::task_placer::task_placer;
 use crate::{Repetition, DAG, output_formatter};
 
+/// # Task Generator
+/// Takes an [Input](../input/index.html) and outputs a vector of Unscheduled [Tasks](../task/index.html).
 pub fn task_generator(
     Input {
         calendar_start,

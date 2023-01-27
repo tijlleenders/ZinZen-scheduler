@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::option::Option;
 
+/// Represents a Goal passed in by the user from the front end.
+/// Goals are converted into [Task](../task/index.html)s by the scheduler.
 #[derive(Deserialize, Debug, Default, Clone)]
 pub struct Goal {
     pub id: String,
