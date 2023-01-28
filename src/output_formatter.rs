@@ -47,7 +47,10 @@ pub struct FinalOutput {
 pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
-    let scheduled = options_generator(scheduled);
+    let mut scheduled = scheduled;
+    if !scheduled[0].clone().tags.contains(&Tag::DoNotSort) {
+        scheduled = options_generator(scheduled);
+    }
     //convert scheduled tasks to output objects and add to scheduled_outputs vec
     for task in scheduled {
         if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
