@@ -278,6 +278,7 @@ Deno.test("goals hierarchy", () => {
       schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
   });
 Deno.test("goals dependency", () => {
-  assertEquals(
-    schedule(goals_dependency_input),goals_dependency_output);
-});
+  const [inputFile, outputFile] = getFiles('goals-dependency');
+    assertEquals(
+      schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
+  });
