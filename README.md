@@ -20,7 +20,9 @@ can talk big-O, add features or optimize hot loops.
 
 5. ```sudo apt-get install binaryen```
 
-6. You can now run the test from javascript land using ```./test.sh```  
+6. [Install deno](https://deno.land/manual/getting_started/installation)
+
+7. You can now run the test from javascript/deno land using ```deno test```  
   
 ## Legal stuff
 
