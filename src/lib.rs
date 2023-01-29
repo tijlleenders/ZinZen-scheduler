@@ -1,4 +1,5 @@
 pub use goal::Goal;
+pub use graph_handler::DAG;
 pub use input::Input;
 pub use output_formatter::{output_formatter, FinalOutput};
 pub use repetition::Repetition;
@@ -8,7 +9,8 @@ use wasm_bindgen::prelude::*;
 
 mod errors;
 /// API modules
-pub mod goal;
+mod goal;
+mod graph_handler;
 pub mod input;
 pub mod options_generator;
 pub mod output_formatter;

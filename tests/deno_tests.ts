@@ -7,6 +7,8 @@ const getFiles = (directory: string): [string, string] => {
   const outputFile = Deno.readTextFileSync(dir + '/output.json');
   return [inputFile, outputFile];
 };
+import goals_dependency_input from "./jsons/goals-dependency/input.json" assert {type: "json"};
+import goals_dependency_output from "./jsons/goals-dependency/output.json" assert {type: "json"};
 
 Deno.test("basic test from issue #3 (https://github.com/tijlleenders/ZinZen-scheduler/issues/3)", () => {
   const [inputFile, outputFile] = getFiles('basic-1');
@@ -272,6 +274,11 @@ Deno.test("options 1", () => {
   
 Deno.test("goals hierarchy", () => {
   const [inputFile, outputFile] = getFiles('goals-hierarchy');
+    assertEquals(
+      schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
+  });
+Deno.test("goals dependency", () => {
+  const [inputFile, outputFile] = getFiles('goals-dependency');
     assertEquals(
       schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
   });
