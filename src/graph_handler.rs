@@ -4,13 +4,17 @@ pub struct DAG {
 }
 
 impl DAG {
-    pub fn new_dag_vec(graph_info: Vec<(usize, usize)>) -> Vec<usize> {
+    pub fn new_dag_vec(graph_info: Vec<(usize, Option<usize>)>) -> Vec<usize> {
         // DirectedGraph { graph: None }
         let mut adjacency_list: HashMap<usize, Vec<usize>> = HashMap::new();
         let graph = graph_info.get(0..);
         for value in graph.unwrap() {
             let source_vertex = &mut adjacency_list.entry(value.0).or_default();
-            source_vertex.push(value.1);
+
+            match value.1 {
+                Some(val) => source_vertex.push(val),
+                None => {}
+            }
         }
         let the_graph = DAG {
             graph: Some(adjacency_list),
@@ -45,7 +49,7 @@ impl DAG {
 
 #[test]
 fn test_topological_order() {
-    let mut result = DAG::new_dag_vec(vec![(0, 2), (1, 2), (2, 3), (3, 4)]);
+    let mut result = DAG::new_dag_vec(vec![(0, Some(2)), (1, Some(2)), (2, Some(3)), (3, Some(4))]);
     assert_eq!(result.pop(), Some(4));
     assert_eq!(result.pop(), Some(3));
     assert_eq!(result.pop(), Some(2));

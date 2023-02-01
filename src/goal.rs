@@ -250,6 +250,7 @@ pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
     let graph_info = get_graph_info(&goals);
     let mut ordered_ids = DAG::new_dag_vec(graph_info);
     ordered_ids.reverse();
+    println!("ids is :{:?}", ordered_ids);
     let mut orderd_goals = vec![];
     for id in ordered_ids {
         orderd_goals.push(
@@ -266,7 +267,7 @@ pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
     orderd_goals
 }
 
-pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, usize)> {
+pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, Option<usize>)> {
     let mut dependent_goals = goals
         .iter()
         .map(|goal| {
@@ -277,20 +278,27 @@ pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, usize)> {
         })
         .collect::<Vec<_>>();
     //to remove ids of goals that depend on nothing
-    dependent_goals.retain(|item| !item.1.is_empty());
-
+    //dependent_goals.retain(|item| !item.1.is_empty());
+    println!("{:?}", dependent_goals);
     let mut dependancy_graph_info = vec![];
     for g in dependent_goals.iter() {
-        let dependency_graph_info =
-            g.1.iter()
-                .map(|goal| {
-                    (
-                        g.0.parse::<usize>().unwrap_or_default(),
-                        goal.parse::<usize>().unwrap_or_default(),
-                    )
-                })
-                .collect::<Vec<_>>()[0];
-        dependancy_graph_info.push(dependency_graph_info);
+        println!("elem {:?}", g);
+        if g.1.len() < 1 {
+            dependancy_graph_info.push((g.0.parse::<usize>().unwrap_or_default(), None));
+        } else {
+            let dependent_graph_info =
+                g.1.iter()
+                    .map(|goal| {
+                        (
+                            g.0.parse::<usize>().unwrap_or_default(),
+                            Some(goal.parse::<usize>().unwrap_or_default()),
+                        )
+                    })
+                    .collect::<Vec<_>>();
+            println!("goal is {:?}", dependent_graph_info);
+            dependancy_graph_info.extend(dependent_graph_info);
+        }
     }
+    //println!("{:?}",dependancy_graph_info);
     dependancy_graph_info
 }

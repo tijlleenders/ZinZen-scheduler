@@ -40,9 +40,9 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
 fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
     let mut i = 0; //index that points to a task in the collection of tasks
                    //Don't sort tasks that depend on other tasks as it already sorted
-    if !tasks[i].tags.contains(&Tag::DoNotSort) {
-        tasks.sort();
-    }
+                   //    if !tasks[i].tags.contains(&Tag::DoNotSort) {
+    tasks.sort();
+    //   }
     while i < tasks.len() {
         //if this task's status is Impossible, skip
         if tasks[i].status == TaskStatus::Impossible {

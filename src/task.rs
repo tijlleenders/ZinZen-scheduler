@@ -177,7 +177,8 @@ impl Task {
     }
 
     pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Task>, Error> {
-        if self.duration == 1 && !self.tags.contains(&Tag::DoNotSort) {
+        if self.duration == 1 {
+            // && !self.tags.contains(&Tag::DoNotSort) {
             return Err(Error::CannotSplit);
         }
         let mut tasks = Vec::new();
