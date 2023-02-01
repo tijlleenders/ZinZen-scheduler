@@ -177,7 +177,7 @@ impl Goal {
                     //calculate flexibility and mark it as unscheduled.
                     let mut flexibility = 0;
                     for slot in &t.slots {
-                        if slot.num_hours() >=(self.duration.0){
+                        if slot.num_hours() >= (self.duration.0) {
                             flexibility += slot.num_hours() - self.duration.0 + 1;
                         }
                     }
