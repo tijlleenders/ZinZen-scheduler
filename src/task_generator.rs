@@ -71,7 +71,7 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     }
     goals
 }
-
+//just for debug should be cleaned 
 #[test]
 fn test() {
     use crate::graph_handler::*;
