@@ -1,7 +1,9 @@
+use crate::errors::Error;
 use crate::goal::{handle_dependency, handle_hierarchy, Goal, Tag};
 use crate::input::Input;
 use crate::task::Task;
-use crate::Repetition;
+use crate::{Repetition, output_formatter};
+use crate::task_placer::task_placer;
 
 /// # Task Generator
 /// Takes an [Input](../input/index.html) and outputs a vector of Unscheduled [Tasks](../task/index.html).
@@ -68,4 +70,35 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
         goals.push(g);
     }
     goals
+}
+
+//just for debug should be cleaned 
+#[test]
+fn test() {
+    use crate::graph_handler::*;
+
+    let input =
+        include_str!("/home/mus/ZinZen-scheduler/tests/jsons/planned-goals-hierarchy/input.json");
+
+    let mut res: Input = serde_json::from_str(&input).expect("Unable to parse");
+
+    let goals = res.goals;
+    // println!("{:#?}", goals);
+    res.goals = goals;
+    let tasks = task_generator(res);
+    //println!("{:#?}", tasks);
+    let (scheduled, impossible) = task_placer(tasks);
+    match output_formatter(scheduled, impossible) {
+        Err(Error::NoConfirmedDate(title, id)) => {
+            panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
+        }
+        Err(e) => {
+            panic!("Unexpected error: {:?}", e);
+        }
+        Ok(output) => {
+             println!("scheduled {:#?}", output);
+        }
+    }
+    let x = true;
+    assert!(x, "x wasn't true!");
 }

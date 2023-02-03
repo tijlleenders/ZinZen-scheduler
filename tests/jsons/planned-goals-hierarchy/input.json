@@ -5,10 +5,10 @@
     {
       "id": "1",
       "title": "work",
-      "duration": "30-40",
+      "duration": "30-40h",
       "after_time": 6,
       "before_time": 16,
-      "children": ["2","3"]
+      "children": ["2","3","4"]
     },
     {
       "id": "2",
