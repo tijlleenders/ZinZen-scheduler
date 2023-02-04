@@ -211,6 +211,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         .filter(|goal| goal.children.is_some())
         .cloned()
         .collect::<Vec<Goal>>();
+
     let mut children_goals = goals
         .iter()
         .filter(|goal| goal.children.is_none())
@@ -227,10 +228,16 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
                 children_duration += goal.duration.0;
             }
         }
-
         child.title.push_str(" filler");
-        child.duration.0 -= children_duration;
-        children_goals.push(child);
+        if child.duration.1.is_some() {
+            child.duration.0 = child.duration.1.unwrap_or(child.duration.0);
+            child.duration.0 -= children_duration;
+            child.duration.1 = None;
+            children_goals.push(child);
+        } else {
+            child.duration.0 -= children_duration;
+            children_goals.push(child);
+        }
     }
     children_goals
 }
