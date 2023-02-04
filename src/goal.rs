@@ -230,9 +230,9 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         }
         child.title.push_str(" filler");
         if child.duration.1.is_some() {
-            child.duration.0 = child.duration.1.unwrap_or(child.duration.0);
+            let new_max = child.duration.1.unwrap() - children_duration;
             child.duration.0 -= children_duration;
-            child.duration.1 = None;
+            child.duration.1 = Some(new_max);
             children_goals.push(child);
         } else {
             child.duration.0 -= children_duration;
