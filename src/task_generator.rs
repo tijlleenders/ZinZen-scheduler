@@ -2,8 +2,8 @@ use crate::errors::Error;
 use crate::goal::{handle_dependency, handle_hierarchy, Goal, Tag};
 use crate::input::Input;
 use crate::task::Task;
-use crate::{Repetition, output_formatter};
 use crate::task_placer::task_placer;
+use crate::{output_formatter, Repetition};
 
 /// # Task Generator
 /// Takes an [Input](../input/index.html) and outputs a vector of Unscheduled [Tasks](../task/index.html).
@@ -72,7 +72,7 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     goals
 }
 
-//just for debug should be cleaned 
+//just for debug should be cleaned
 #[test]
 fn test() {
     use crate::graph_handler::*;
@@ -96,7 +96,7 @@ fn test() {
             panic!("Unexpected error: {:?}", e);
         }
         Ok(output) => {
-             println!("scheduled {:#?}", output);
+            println!("scheduled {:#?}", output);
         }
     }
     let x = true;
