@@ -7,7 +7,6 @@ use serde_wasm_bindgen::{from_value, to_value};
 pub use slot::Slot;
 use wasm_bindgen::prelude::*;
 
-mod budget;
 mod errors;
 /// API modules
 mod goal;
