@@ -177,7 +177,9 @@ impl Goal {
                     //calculate flexibility and mark it as unscheduled.
                     let mut flexibility = 0;
                     for slot in &t.slots {
-                        flexibility += slot.num_hours() - self.duration.0 + 1;
+                        if slot.num_hours() >= (self.duration.0) {
+                            flexibility += slot.num_hours() - self.duration.0 + 1;
+                        }
                     }
                     t.flexibility = flexibility;
                     t.status = TaskStatus::UNScheduled;
@@ -209,6 +211,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         .filter(|goal| goal.children.is_some())
         .cloned()
         .collect::<Vec<Goal>>();
+
     let mut children_goals = goals
         .iter()
         .filter(|goal| goal.children.is_none())
@@ -225,10 +228,16 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
                 children_duration += goal.duration.0;
             }
         }
-
         child.title.push_str(" filler");
-        child.duration.0 -= children_duration;
-        children_goals.push(child);
+        if child.duration.1.is_some() {
+            let new_max = child.duration.1.unwrap() - children_duration;
+            child.duration.0 -= children_duration;
+            child.duration.1 = Some(new_max);
+            children_goals.push(child);
+        } else {
+            child.duration.0 -= children_duration;
+            children_goals.push(child);
+        }
     }
     children_goals
 }

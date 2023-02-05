@@ -1,0 +1,13 @@
+{
+  "startDate": "2022-01-31T00:00:00",
+  "endDate": "2022-02-07T00:00:00",
+  "goals": [
+    {
+      "id": "1",
+      "title": "work",
+      "duration": "12",
+      "after_time": 6,
+      "before_time": 10
+    }
+]
+}
