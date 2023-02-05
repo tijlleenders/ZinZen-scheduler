@@ -223,9 +223,10 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         let mut child = p.clone();
         let child_ids = p.children.unwrap();
 
-        for goal in children_goals.iter() {
+        for goal in children_goals.iter_mut() {
             if child_ids.contains(&goal.id) {
                 children_duration += goal.duration.0;
+                goal.duration.1 = Some(goal.duration.0);
             }
         }
         child.title.push_str(" filler");

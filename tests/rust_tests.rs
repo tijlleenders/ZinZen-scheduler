@@ -289,3 +289,15 @@ fn options_1_works() {
     let (actual_output, desired_output) = run_test("options-1");
     assert_eq!(actual_output, desired_output);
 }
+
+#[test]
+fn bug_236() {
+    let (actual_output, desired_output) = run_test("bug-236");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn planned_goals_hierarchy() {
+    let (actual_output, desired_output) = run_test("planned-goals-hierarchy");
+    assert_eq!(actual_output, desired_output);
+}
