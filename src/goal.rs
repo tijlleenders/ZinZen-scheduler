@@ -202,7 +202,7 @@ pub enum Tag {
     Weekly,
     Optional,
     FlexDur,
-    DoNotSort,
+   
 }
 
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
@@ -272,7 +272,9 @@ pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
         )
     }
     for g in orderd_goals.iter_mut() {
-        g.tags.push(Tag::DoNotSort);
+        
+        g.duration.1 = Some(g.duration.0)
+
     }
     orderd_goals
 }
