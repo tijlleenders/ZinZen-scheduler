@@ -26,10 +26,8 @@
       "title": "Brush my teeth",
       "duration": "1",
       "start": "2018-01-01T00:00:00",
-      "deadline": "2018-01-06T00:00:00",
-      "after_goals": ["1"],
-      "after_time": 6,
-      "before_time": 8 
+      "deadline": "2018-01-02T00:00:00",
+      "after_goals": ["1"]  
     }
 ]
 } 
