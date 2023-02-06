@@ -68,36 +68,4 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     }
     goals
 }
-//just for debug should be cleaned
-#[test]
-fn test() {
-    use crate::errors::Error;
-    use crate::graph_handler::*;
-    use crate::output_formatter;
-    use crate::task_placer::task_placer;
-    let input =
-        include_str!("/home/mus/ZinZen-scheduler/tests/jsons/goals-dependency-2/input.json");
 
-    let mut res: Input = serde_json::from_str(&input).expect("Unable to parse");
-
-    let tasks = task_generator(res);
-
-    let (scheduled, impossible) = task_placer(tasks);
-    // println!("{:#?}", scheduled);
-    match output_formatter(scheduled, impossible) {
-        Err(Error::NoConfirmedDate(title, id)) => {
-            panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
-        }
-        Err(e) => {
-            panic!("Unexpected error: {:?}", e);
-        }
-        Ok(output) => {
-            println!(
-                "scheduled {:#}",
-                serde_json::to_string_pretty(&output).unwrap()
-            );
-        }
-    }
-    let x = true;
-    assert!(x, "x wasn't true!");
-}

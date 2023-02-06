@@ -32,7 +32,6 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
         waiting_tasks.retain(|task| task.status == TaskStatus::Waiting);
         schedule(&mut tasks, &mut scheduled_tasks, &mut waiting_tasks);
     }
-    //println!("tasks {:#?}",tasks);
     //if tasks is not empty, it means some tasks were unable to be scheduled
     //so we split the tasks and do another schedule run
     if !tasks.is_empty() {
@@ -107,7 +106,7 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>, waiting_task
                             waiting_tasks[k].status = TaskStatus::Uninitialized;
                             waiting_tasks.retain(|x| x.id != tasks[k].id);
                         }
-                        if new_after.len() > 0 {
+                        if !new_after.is_empty() {
                             waiting_tasks[k].after_goals = Some(new_after);
                         }
                     }
@@ -122,7 +121,7 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>, waiting_task
                             waiting_tasks[k].status = TaskStatus::Uninitialized;
                             //waiting_tasks.retain(|x| x.id != tasks[k].id);
                         }
-                        if new_after.len() > 0 {
+                        if !new_after.is_empty() {
                             waiting_tasks[k].after_goals = Some(new_after);
                         }
                     }

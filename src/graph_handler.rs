@@ -11,10 +11,7 @@ impl DAG {
         for value in graph.unwrap() {
             let source_vertex = &mut adjacency_list.entry(value.0).or_default();
 
-            match value.1 {
-                Some(val) => source_vertex.push(val),
-                None => {}
-            }
+            if let Some(val) = value.1 { source_vertex.push(val) }
         }
         let the_graph = DAG {
             graph: Some(adjacency_list),

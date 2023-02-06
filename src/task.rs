@@ -265,14 +265,14 @@ impl Task {
     pub fn remove_taken_slots(&mut self, s: Slot) {
         let mut new_slots = Vec::new();
         for slot in &mut self.slots {
-            if (slot.start >= s.end) {
+            if slot.start >= s.end {
                 new_slots.push(*slot);
             }
-            if (slot.end > s.end && slot.start < s.start) {
+            if slot.end > s.end && slot.start < s.start {
                 slot.start = s.start;
                 new_slots.push(*slot);
             }
-            if (slot.end > s.end && slot.start >= s.start) {
+            if slot.end > s.end && slot.start >= s.start {
                 new_slots.push(*slot);
             }
             if !(slot.end <= s.end && slot.start <= s.start) {
