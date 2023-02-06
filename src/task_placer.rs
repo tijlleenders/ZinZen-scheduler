@@ -19,7 +19,7 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
         .cloned()
         .collect::<Vec<Task>>();
     tasks.retain(|task| task.status != TaskStatus::Waiting);
-        //first pass of scheduler while tasks are unsplit
+    //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks, &mut scheduled_tasks, &mut waiting_tasks);
     while !waiting_tasks.is_empty() {
         let allowed_tasks = waiting_tasks
@@ -88,6 +88,47 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>, waiting_task
                     tasks[k].conflicts.push((desired_time, goal_id));
                 }
             }
+            for k in 0..waiting_tasks.len() {
+                if waiting_tasks[k].tags.contains(&Tag::Weekly)
+                    && waiting_tasks[k].goal_id == tasks[i].goal_id
+                {
+                    let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
+                    let slot = Slot {
+                        start: day,
+                        end: day + Duration::days(1),
+                    };
+                    waiting_tasks[k].remove_slot(slot);
+                    if waiting_tasks[k].after_goals.is_some() {
+                        let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
+                        new_after.retain(|x| x.eq(&waiting_tasks[i].goal_id));
+                        if new_after.is_empty() {
+                            waiting_tasks[k].after_goals = None;
+
+                            waiting_tasks[k].status = TaskStatus::Uninitialized;
+                            waiting_tasks.retain(|x| x.id != tasks[k].id);
+                        }
+                        if new_after.len() > 0 {
+                            waiting_tasks[k].after_goals = Some(new_after);
+                        }
+                    }
+                } else {
+                    waiting_tasks[k].remove_slot(desired_time);
+                    if waiting_tasks[k].after_goals.is_some() {
+                        let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
+                        new_after.retain(|x| x.eq(&waiting_tasks[i].goal_id));
+                        if new_after.is_empty() {
+                            waiting_tasks[k].after_goals = None;
+
+                            waiting_tasks[k].status = TaskStatus::Uninitialized;
+                            //waiting_tasks.retain(|x| x.id != tasks[k].id);
+                        }
+                        if new_after.len() > 0 {
+                            waiting_tasks[k].after_goals = Some(new_after);
+                        }
+                    }
+                }
+            }
+
             //add the task to list of scheduled tasks
             scheduled_tasks.push(tasks.remove(i));
             i = 0;
