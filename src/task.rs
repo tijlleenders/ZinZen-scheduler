@@ -245,24 +245,20 @@ impl Task {
     }
 
     pub fn remove_slot(&mut self, s: Slot) {
-        // println!("delete : {:},{:#?}",self.title,s);
-        //if self.status==TaskStatus::Waiting{
-        //Self::remove_taken_slots(self,s)
-        // }
-        // else{
+
         let mut new_slots = Vec::new();
         for slot in &mut self.slots {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
-        //  }
-        // println!("slots after  : {:},{:#?}",self.title,self.slots);
+        if self.status == TaskStatus::Waiting {
+            Self::remove_taken_slots(self, s);
+        }
         //if no more slots left, this is an impossible task - mark it as such and return
         if self.slots.is_empty() && self.status != TaskStatus::Scheduled {
             self.status = TaskStatus::Impossible;
             return;
         }
-
         //the flexibility should be recalculated
         self.calculate_flexibility();
     }
@@ -272,19 +268,18 @@ impl Task {
             if (slot.start >= s.end) {
                 new_slots.push(*slot);
             }
-            if (slot.end > s.end && slot.start <= s.start) {
+            if (slot.end > s.end && slot.start < s.start) {
                 slot.start = s.start;
                 new_slots.push(*slot);
             }
             if (slot.end > s.end && slot.start >= s.start) {
                 new_slots.push(*slot);
             }
+            if !(slot.end <= s.end && slot.start <= s.start) {
+                new_slots.push(*slot);
+            }
         }
         self.slots = new_slots;
-        println!(
-            "slots inside are :{:#?} {:},{:#?}",
-            s, self.title, self.slots
-        );
     }
 
     pub fn bounds_contain(&self, hour: usize) -> bool {
