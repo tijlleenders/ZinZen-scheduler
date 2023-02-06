@@ -13,10 +13,10 @@ use crate::task::{Task, TaskStatus};
 /// The scheduler optimizes for the minimum amount of Impossible tasks.
 pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
     let mut scheduled_tasks: Vec<Task> = Vec::new();
-
+    let mut waiting_tasks = vec![];
     //first pass of scheduler while tasks are unsplit
-    schedule(&mut tasks, &mut scheduled_tasks);
-
+    schedule(&mut tasks, &mut scheduled_tasks, &mut waiting_tasks);
+    //println!("tasks {:#?}",tasks);
     //if tasks is not empty, it means some tasks were unable to be scheduled
     //so we split the tasks and do another schedule run
     if !tasks.is_empty() {
@@ -26,7 +26,7 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
         split_unscheduled_tasks(&mut tasks, &mut counter);
         tasks.sort();
         //schedule again
-        schedule(&mut tasks, &mut scheduled_tasks);
+        schedule(&mut tasks, &mut scheduled_tasks, &mut waiting_tasks);
     }
 
     //if tasks is still not empty, these are impossible to schedule tasks
@@ -37,18 +37,31 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
     (scheduled_tasks, tasks)
 }
 
-fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>) {
+fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>, waiting_tasks: &mut Vec<Task>) {
     let mut i = 0; //index that points to a task in the collection of tasks
                    //Don't sort tasks that depend on other tasks as it already sorted
                    //    if !tasks[i].tags.contains(&Tag::DoNotSort) {
+
+    let mut waiting = tasks
+        .iter()
+        .filter(|task| task.status == TaskStatus::Waiting)
+        .cloned()
+        .collect::<Vec<Task>>();
+    waiting_tasks.extend(waiting);
+    tasks.retain(|task| task.status != TaskStatus::Waiting);
     tasks.sort();
+    println!("tasks {:#?}", tasks);
+    println!("waiting_tasks {:#?}", waiting_tasks);
+
     //   }
+
     while i < tasks.len() {
         //if this task's status is Impossible, skip
         if tasks[i].status == TaskStatus::Impossible {
             i += 1;
             continue;
         }
+
         //check if it is possible to schedule this task
         if let Some(desired_time) = can_schedule(i, tasks) {
             tasks[i].schedule(desired_time);
