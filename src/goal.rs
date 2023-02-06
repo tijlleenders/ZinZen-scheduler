@@ -186,6 +186,9 @@ impl Goal {
                     if t.after_goals.is_some() {
                         t.status = TaskStatus::Waiting;
                     }
+                    if t.after_goals.is_none() {
+                        t.status = TaskStatus::UNScheduled;
+                    }
                 }
                 if let Some(Repetition::Weekly(_)) = self.repeat {
                     if !self.tags.contains(&Tag::FlexDur) {
