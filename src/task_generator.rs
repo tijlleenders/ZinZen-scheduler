@@ -81,8 +81,9 @@ fn test() {
     let mut res: Input = serde_json::from_str(&input).expect("Unable to parse");
 
     let tasks = task_generator(res);
-    println!("{:#?}", tasks);
+
     let (scheduled, impossible) = task_placer(tasks);
+    // println!("{:#?}", scheduled);
     match output_formatter(scheduled, impossible) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
