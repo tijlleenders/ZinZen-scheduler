@@ -180,9 +180,12 @@ impl Goal {
                         if slot.num_hours() >= (self.duration.0) {
                             flexibility += slot.num_hours() - self.duration.0 + 1;
                         }
+                        //  println!( "task : {:?},  flex :{:?}",t.title,flexibility);
                     }
                     t.flexibility = flexibility;
-                    t.status = TaskStatus::UNScheduled;
+                    if t.after_goals.is_some() {
+                        t.status = TaskStatus::Waiting;
+                    }
                 }
                 if let Some(Repetition::Weekly(_)) = self.repeat {
                     if !self.tags.contains(&Tag::FlexDur) {
@@ -260,7 +263,7 @@ pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
     let graph_info = get_graph_info(&goals);
     let mut ordered_ids = DAG::new_dag_vec(graph_info);
     ordered_ids.reverse();
-    println!("ids is :{:?}", ordered_ids);
+    //println!("ids is :{:?}", ordered_ids);
     let mut orderd_goals = vec![];
     for id in ordered_ids {
         orderd_goals.push(
@@ -272,7 +275,7 @@ pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
         )
     }
     for g in orderd_goals.iter_mut() {
-        g.tags.push(Tag::DoNotSort);
+        //.tags.push(Tag::DoNotSort);
     }
     orderd_goals
 }
@@ -289,10 +292,10 @@ pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, Option<usize>)> {
         .collect::<Vec<_>>();
     //to remove ids of goals that depend on nothing
     //dependent_goals.retain(|item| !item.1.is_empty());
-    println!("{:?}", dependent_goals);
+    // println!("{:?}", dependent_goals);
     let mut dependancy_graph_info = vec![];
     for g in dependent_goals.iter() {
-        println!("elem {:?}", g);
+        // println!("elem {:?}", g);
         if g.1.len() < 1 {
             dependancy_graph_info.push((g.0.parse::<usize>().unwrap_or_default(), None));
         } else {
@@ -305,7 +308,7 @@ pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, Option<usize>)> {
                         )
                     })
                     .collect::<Vec<_>>();
-            println!("goal is {:?}", dependent_graph_info);
+            // println!("goal is {:?}", dependent_graph_info);
             dependancy_graph_info.extend(dependent_graph_info);
         }
     }
