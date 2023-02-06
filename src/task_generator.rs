@@ -1,9 +1,7 @@
-use crate::errors::Error;
-use crate::goal::{handle_dependency, handle_hierarchy, Goal, Tag};
+use crate::goal::{handle_hierarchy, Goal, Tag};
 use crate::input::Input;
 use crate::task::Task;
-use crate::task_placer::task_placer;
-use crate::{output_formatter, Repetition};
+use crate::Repetition;
 
 /// # Task Generator
 /// Takes an [Input](../input/index.html) and outputs a vector of Unscheduled [Tasks](../task/index.html).
@@ -17,7 +15,6 @@ pub fn task_generator(
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let goals = handle_hierarchy(goals);
-    // let goals = handle_dependency(goals);
     for goal in goals {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
@@ -74,18 +71,17 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
 //just for debug should be cleaned
 #[test]
 fn test() {
+    use crate::errors::Error;
     use crate::graph_handler::*;
-
+    use crate::output_formatter;
+    use crate::task_placer::task_placer;
     let input =
         include_str!("/home/mus/ZinZen-scheduler/tests/jsons/goals-dependency-2/input.json");
 
     let mut res: Input = serde_json::from_str(&input).expect("Unable to parse");
 
-    // let goals = handle_dependency(res.goals);
-    //println!("goals : {:#?}", goals);
-    //res.goals = goals;
     let tasks = task_generator(res);
-    // println!("{:#?}", tasks);
+    println!("{:#?}", tasks);
     let (scheduled, impossible) = task_placer(tasks);
     match output_formatter(scheduled, impossible) {
         Err(Error::NoConfirmedDate(title, id)) => {
@@ -95,7 +91,10 @@ fn test() {
             panic!("Unexpected error: {:?}", e);
         }
         Ok(output) => {
-            //   println!("scheduled {:#}", serde_json::to_string_pretty(&output).unwrap());
+            println!(
+                "scheduled {:#}",
+                serde_json::to_string_pretty(&output).unwrap()
+            );
         }
     }
     let x = true;
