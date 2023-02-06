@@ -17,7 +17,7 @@ pub fn task_generator(
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let goals = handle_hierarchy(goals);
-    //let goals = handle_dependency(goals);
+    // let goals = handle_dependency(goals);
     for goal in goals {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
@@ -71,7 +71,7 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     }
     goals
 }
-//just for debug should be cleaned 
+//just for debug should be cleaned
 #[test]
 fn test() {
     use crate::graph_handler::*;
@@ -81,11 +81,11 @@ fn test() {
 
     let mut res: Input = serde_json::from_str(&input).expect("Unable to parse");
 
-    let goals = handle_dependency(res.goals);
-    // println!("{:#?}", goals);
-    res.goals = goals;
+    // let goals = handle_dependency(res.goals);
+    //println!("goals : {:#?}", goals);
+    //res.goals = goals;
     let tasks = task_generator(res);
-    //println!("{:#?}", tasks);
+    // println!("{:#?}", tasks);
     let (scheduled, impossible) = task_placer(tasks);
     match output_formatter(scheduled, impossible) {
         Err(Error::NoConfirmedDate(title, id)) => {
@@ -95,7 +95,7 @@ fn test() {
             panic!("Unexpected error: {:?}", e);
         }
         Ok(output) => {
-            // println!("scheduled {:#?}", output);
+            //   println!("scheduled {:#}", serde_json::to_string_pretty(&output).unwrap());
         }
     }
     let x = true;
