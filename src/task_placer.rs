@@ -99,7 +99,7 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>, waiting_task
                     waiting_tasks[k].remove_slot(slot);
                     if waiting_tasks[k].after_goals.is_some() {
                         let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
-                        new_after.retain(|x| x.eq(&waiting_tasks[i].goal_id));
+                        new_after.retain(|x| !x.eq(&tasks[i].goal_id));
                         if new_after.is_empty() {
                             waiting_tasks[k].after_goals = None;
 
@@ -114,7 +114,7 @@ fn schedule(tasks: &mut Vec<Task>, scheduled_tasks: &mut Vec<Task>, waiting_task
                     waiting_tasks[k].remove_slot(desired_time);
                     if waiting_tasks[k].after_goals.is_some() {
                         let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
-                        new_after.retain(|x| x.eq(&waiting_tasks[i].goal_id));
+                        new_after.retain(|x| !x.eq(&tasks[i].goal_id));
                         if new_after.is_empty() {
                             waiting_tasks[k].after_goals = None;
 
