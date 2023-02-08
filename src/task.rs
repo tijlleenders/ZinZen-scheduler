@@ -245,7 +245,6 @@ impl Task {
     }
 
     pub fn remove_slot(&mut self, s: Slot) {
-
         let mut new_slots = Vec::new();
         for slot in &mut self.slots {
             new_slots.extend(*slot - s);
