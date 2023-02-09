@@ -297,4 +297,5 @@ pub enum TaskStatus {
     Impossible,
     Uninitialized,
     Waiting,
+    Allowed,
 }
