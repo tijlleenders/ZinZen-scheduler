@@ -1,7 +1,6 @@
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
-use crate::DAG;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
