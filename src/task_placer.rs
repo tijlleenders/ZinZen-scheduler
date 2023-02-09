@@ -18,7 +18,7 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
         .iter()
         .filter(|task| task.status == TaskStatus::Waiting)
         .cloned()
-        .collect::<VecDeque<Task>>();
+        .collect::<Vec<Task>>();
     let mut allowed_tasks: VecDeque<Task> = VecDeque::new();
     tasks.retain(|task| task.status != TaskStatus::Waiting);
     //first pass of scheduler while tasks are unsplit
@@ -28,6 +28,7 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
         &mut waiting_tasks,
         &mut allowed_tasks,
     );
+    waiting_tasks.sort();
     while !waiting_tasks.is_empty() {
         //remove non-waiting or allowed_tasks
         waiting_tasks.retain(|task| task.status == TaskStatus::Waiting);
@@ -72,7 +73,7 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
 fn schedule(
     tasks: &mut Vec<Task>,
     scheduled_tasks: &mut Vec<Task>,
-    waiting_tasks: &mut VecDeque<Task>,
+    waiting_tasks: &mut Vec<Task>,
     allowed_tasks: &mut VecDeque<Task>,
 ) {
     let mut i = 0; //index that points to a task in the collection of tasks
@@ -152,18 +153,16 @@ fn schedule(
                 }
             }
             //start loop over allowed to remove taken slots
-            for k in 0..allowed_tasks.len() {
-                if allowed_tasks[k].tags.contains(&Tag::Weekly)
-                    && allowed_tasks[k].goal_id == tasks[i].goal_id
-                {
+            for t in allowed_tasks.iter_mut() {
+                if t.tags.contains(&Tag::Weekly) && t.goal_id == tasks[i].goal_id {
                     let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
                     let slot = Slot {
                         start: day,
                         end: day + Duration::days(1),
                     };
-                    allowed_tasks[k].remove_slot(slot);
+                    t.remove_slot(slot);
                 } else {
-                    allowed_tasks[k].remove_slot(desired_time);
+                    t.remove_slot(desired_time);
                 }
             }
             //end of allowed
