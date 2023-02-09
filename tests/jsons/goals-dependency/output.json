@@ -6,7 +6,21 @@
       "title": "find a good rust resource",
       "duration": 5,
       "start": "2018-01-01T08:00:00",
-      "deadline": "2018-01-01T13:00:00"
+      "deadline": "2018-01-01T13:00:00",
+      "options": [
+        {
+          "start": "2018-01-04T08:00:00",
+          "deadline": "2018-01-04T13:00:00"
+        },
+        {
+          "start": "2018-01-04T09:00:00",
+          "deadline": "2018-01-04T14:00:00"
+        },
+        {
+          "start": "2018-01-04T10:00:00",
+          "deadline": "2018-01-04T15:00:00"
+        }
+      ]
     },
     {
       "taskid": 1,
@@ -14,7 +28,21 @@
       "title": "learn rust programming",
       "duration": 3,
       "start": "2018-01-01T13:00:00",
-      "deadline": "2018-01-01T16:00:00"
+      "deadline": "2018-01-01T16:00:00",
+      "options": [
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        },
+        {
+          "start": "2018-01-03T15:00:00",
+          "deadline": "2018-01-03T16:00:00"
+        },
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        }
+      ]
     },
     {
       "taskid": 2,
@@ -22,7 +50,21 @@
       "title": "learn rust programming",
       "duration": 5,
       "start": "2018-01-02T08:00:00",
-      "deadline": "2018-01-02T13:00:00"
+      "deadline": "2018-01-02T13:00:00",
+      "options": [
+        {
+          "start": "2018-01-02T15:00:00",
+          "deadline": "2018-01-02T16:00:00"
+        },
+        {
+          "start": "2018-01-02T15:00:00",
+          "deadline": "2018-01-02T16:00:00"
+        },
+        {
+          "start": "2018-01-02T15:00:00",
+          "deadline": "2018-01-02T16:00:00"
+        }
+      ]
     },
     {
       "taskid": 3,
@@ -30,7 +72,21 @@
       "title": "program a ZinZen app in rust",
       "duration": 3,
       "start": "2018-01-02T13:00:00",
-      "deadline": "2018-01-02T16:00:00"
+      "deadline": "2018-01-02T16:00:00",
+      "options": [
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        },
+        {
+          "start": "2018-01-03T15:00:00",
+          "deadline": "2018-01-03T16:00:00"
+        },
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        }
+      ]
     },
     {
       "taskid": 4,
@@ -38,18 +94,44 @@
       "title": "program a ZinZen app in rust",
       "duration": 5,
       "start": "2018-01-03T08:00:00",
-      "deadline": "2018-01-03T13:00:00"
+      "deadline": "2018-01-03T13:00:00",
+      "options": [
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        },
+        {
+          "start": "2018-01-03T15:00:00",
+          "deadline": "2018-01-03T16:00:00"
+        },
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        }
+      ]
     },
     {
       "taskid": 5,
       "goalid": "1",
       "title": "publish ZinZen app",
-      "duration":1,
+      "duration": 1,
       "start": "2018-01-03T13:00:00",
-      "deadline": "2018-01-03T14:00:00"
+      "deadline": "2018-01-03T14:00:00",
+      "options": [
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        },
+        {
+          "start": "2018-01-03T15:00:00",
+          "deadline": "2018-01-03T16:00:00"
+        },
+        {
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        }
+      ]
     }
   ],
   "impossible": []
 }
-
-
