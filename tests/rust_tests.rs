@@ -291,6 +291,18 @@ fn options_1_works() {
 }
 
 #[test]
+fn goals_dependency_works() {
+    let (actual_output, desired_output) = run_test("goals-dependency");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn goals_dependency_2_works() {
+    let (actual_output, desired_output) = run_test("goals-dependency-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
 fn bug_236() {
     let (actual_output, desired_output) = run_test("bug-236");
     assert_eq!(actual_output, desired_output);

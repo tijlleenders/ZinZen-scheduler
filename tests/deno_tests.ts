@@ -277,6 +277,7 @@ Deno.test("goals hierarchy", () => {
     assertEquals(
       schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
   });
+  
 Deno.test("goals dependency", () => {
   const [inputFile, outputFile] = getFiles('goals-dependency');
     assertEquals(
@@ -290,6 +291,12 @@ Deno.test("bug 236", () => {
 
 Deno.test("planned goals hierarchy", () => {
   const [inputFile, outputFile] = getFiles('planned-goals-hierarchy');
+    assertEquals(
+      schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
+  });
+
+Deno.test("goals dependency 2", () => {
+  const [inputFile, outputFile] = getFiles('goals-dependency-2');
     assertEquals(
       schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
   });

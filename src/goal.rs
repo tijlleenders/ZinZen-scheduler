@@ -1,7 +1,6 @@
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
-use crate::DAG;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
@@ -182,7 +181,12 @@ impl Goal {
                         }
                     }
                     t.flexibility = flexibility;
-                    t.status = TaskStatus::UNScheduled;
+                    if t.after_goals.is_some() {
+                        t.status = TaskStatus::Waiting;
+                    }
+                    if t.after_goals.is_none() {
+                        t.status = TaskStatus::UNScheduled;
+                    }
                 }
                 if let Some(Repetition::Weekly(_)) = self.repeat {
                     if !self.tags.contains(&Tag::FlexDur) {
@@ -243,64 +247,67 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     children_goals
 }
 
-pub fn handle_dependency(goals: Vec<Goal>) -> Vec<Goal> {
-    let mut is_dependency = false;
-    for g in goals.iter() {
-        if g.after_goals.is_some() {
-            is_dependency = true;
-        }
-    }
-    if is_dependency {
-        return sort_goals(goals);
-    }
-    goals
-}
+// pub fn handle_dependency(goals: Vec<Goal>) -> Vec<Goal> {
+//     let mut is_dependency = false;
+//     for g in goals.iter() {
+//         if g.after_goals.is_some() {
+//             is_dependency = true;
+//             break;
+//         }
+//     }
+//     if is_dependency {
+//         return sort_goals(goals);
+//     }
+//     goals
+// }
 
-pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
-    let graph_info = get_graph_info(&goals);
-    let mut ordered_ids = DAG::new_dag_vec(graph_info);
-    ordered_ids.reverse();
-    let mut orderd_goals = vec![];
-    for id in ordered_ids {
-        orderd_goals.push(
-            goals
-                .iter()
-                .find(|&x| x.id.parse::<usize>().unwrap() == id)
-                .unwrap()
-                .clone(),
-        )
-    }
-    for g in orderd_goals.iter_mut() {
-        g.tags.push(Tag::DoNotSort);
-    }
-    orderd_goals
-}
+// pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
+//     let graph_info = get_graph_info(&goals);
+//     let mut ordered_ids = DAG::new_dag_vec(graph_info);
+//     ordered_ids.reverse();
+//     let mut orderd_goals = vec![];
+//     for id in ordered_ids {
+//         orderd_goals.push(
+//             goals
+//                 .iter()
+//                 .find(|&x| x.id.parse::<usize>().unwrap() == id)
+//                 .unwrap()
+//                 .clone(),
+//         )
+//     }
 
-pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, usize)> {
-    let mut dependent_goals = goals
-        .iter()
-        .map(|goal| {
-            (
-                goal.id.to_string(),
-                goal.after_goals.to_owned().unwrap_or_default(),
-            )
-        })
-        .collect::<Vec<_>>();
-    //to remove ids of goals that depend on nothing
-    dependent_goals.retain(|item| !item.1.is_empty());
+//     orderd_goals
+// }
 
-    let mut dependancy_graph_info = vec![];
-    for g in dependent_goals.iter() {
-        let dependency_graph_info =
-            g.1.iter()
-                .map(|goal| {
-                    (
-                        g.0.parse::<usize>().unwrap_or_default(),
-                        goal.parse::<usize>().unwrap_or_default(),
-                    )
-                })
-                .collect::<Vec<_>>()[0];
-        dependancy_graph_info.push(dependency_graph_info);
-    }
-    dependancy_graph_info
-}
+// pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, Option<usize>)> {
+//     let dependent_goals = goals
+//         .iter()
+//         .map(|goal| {
+//             (
+//                 goal.id.to_string(),
+//                 goal.after_goals.to_owned().unwrap_or_default(),
+//             )
+//         })
+//         .collect::<Vec<_>>();
+
+//     let mut dependancy_graph_info = vec![];
+//     for g in dependent_goals.iter() {
+//         if g.1.is_empty() {
+//             dependancy_graph_info.push((g.0.parse::<usize>().unwrap_or_default(), None));
+//         } else {
+//             let dependent_graph_info =
+//                 g.1.iter()
+//                     .map(|goal| {
+//                         (
+//                             g.0.parse::<usize>().unwrap_or_default(),
+//                             Some(goal.parse::<usize>().unwrap_or_default()),
+//                         )
+//                     })
+//                     .collect::<Vec<_>>();
+
+//             dependancy_graph_info.extend(dependent_graph_info);
+//         }
+//     }
+
+//     dependancy_graph_info
+// }

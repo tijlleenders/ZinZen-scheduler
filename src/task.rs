@@ -35,6 +35,8 @@ pub struct Task {
     pub tags: Vec<Tag>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<Vec<ScheduleOption>>,
+    #[serde(default)]
+    pub after_goals: Option<Vec<String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
@@ -145,6 +147,7 @@ impl Task {
             conflicts: Vec::new(),
             tags: goal.tags.clone(),
             options: None,
+            after_goals: goal.after_goals.clone(),
         }
     }
 
@@ -177,7 +180,8 @@ impl Task {
     }
 
     pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Task>, Error> {
-        if self.duration == 1 && !self.tags.contains(&Tag::DoNotSort) {
+        if self.duration == 1 {
+            // && !self.tags.contains(&Tag::DoNotSort) {
             return Err(Error::CannotSplit);
         }
         let mut tasks = Vec::new();
@@ -200,6 +204,7 @@ impl Task {
                 conflicts: Vec::new(),
                 tags: self.tags.clone(),
                 options: None,
+                after_goals: self.after_goals.clone(),
             };
             task.calculate_flexibility();
             task.status = TaskStatus::UNScheduled;
@@ -245,6 +250,9 @@ impl Task {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
+        if self.status == TaskStatus::Waiting {
+            Self::remove_taken_slots(self, s);
+        }
         //if no more slots left, this is an impossible task - mark it as such and return
         if self.slots.is_empty() && self.status != TaskStatus::Scheduled {
             self.status = TaskStatus::Impossible;
@@ -252,6 +260,25 @@ impl Task {
         }
         //the flexibility should be recalculated
         self.calculate_flexibility();
+    }
+    pub fn remove_taken_slots(&mut self, s: Slot) {
+        let mut new_slots = Vec::new();
+        for slot in &mut self.slots {
+            if slot.start >= s.end {
+                new_slots.push(*slot);
+            }
+            if slot.end > s.end && slot.start < s.start {
+                slot.start = s.start;
+                new_slots.push(*slot);
+            }
+            if slot.end > s.end && slot.start >= s.start {
+                new_slots.push(*slot);
+            }
+            if !(slot.end <= s.end && slot.start <= s.start) {
+                new_slots.push(*slot);
+            }
+        }
+        self.slots = new_slots;
     }
 
     pub fn bounds_contain(&self, hour: usize) -> bool {
@@ -269,4 +296,6 @@ pub enum TaskStatus {
     Scheduled,
     Impossible,
     Uninitialized,
+    Waiting,
+    Allowed,
 }
