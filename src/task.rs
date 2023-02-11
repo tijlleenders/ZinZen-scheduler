@@ -157,8 +157,8 @@ impl Task {
             tags: goal.tags.clone(),
             options: None,
             after_goals: goal.after_goals.clone(),
-            calender_start: calender_start,
-            calender_end: calender_end,
+            calender_start,
+            calender_end,
         }
     }
 
