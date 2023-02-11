@@ -132,8 +132,9 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
         }
         scheduled_outputs.push(get_output_from_task(&task));
     }
-
-    scheduled_outputs.push(get_output_from_task(&last_free_task));
+    if last_free_slot.num_hours() > 0 {
+        scheduled_outputs.push(get_output_from_task(&last_free_task));
+    }
     //convert impossible tasks to output objects and add to impossible_outputs vec
     for task in impossible {
         //don't report optional tasks
