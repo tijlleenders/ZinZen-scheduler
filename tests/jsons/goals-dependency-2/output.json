@@ -2,6 +2,14 @@
   "scheduled": [
     {
       "taskid": 0,
+      "goalid": "free",
+      "title": "free",
+      "duration": 6,
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-01T06:00:00"
+    },
+    {
+      "taskid": 1,
       "goalid": "1",
       "title": "Eat breakfast at home",
       "duration": 1,
@@ -23,7 +31,7 @@
       ]
     },
     {
-      "taskid": 1,
+      "taskid": 2,
       "goalid": "2",
       "title": "Catch the bus to work",
       "duration": 1,
@@ -45,7 +53,7 @@
       ]
     },
     {
-      "taskid": 2,
+      "taskid": 3,
       "goalid": "3",
       "title": "Brush my teeth",
       "duration": 1,
@@ -65,6 +73,14 @@
           "deadline": "2018-01-01T12:00:00"
         }
       ]
+    },
+    {
+      "taskid": 4,
+      "goalid": "free",
+      "title": "free",
+      "duration": 111,
+      "start": "2018-01-01T09:00:00",
+      "deadline": "2018-01-06T00:00:00"
     }
   ],
   "impossible": []
