@@ -5,11 +5,11 @@ use crate::goal::Tag;
 use crate::options_generator::options_generator;
 use crate::task::{ScheduleOption, Task};
 use crate::{errors::Error, task::TaskStatus};
-use chrono::{NaiveDateTime, Timelike};
+use chrono::{Datelike, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct Output {
     taskid: usize,
     goalid: String,
@@ -146,6 +146,7 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     //sort and combine the scheduled outputs
     scheduled_outputs.sort();
     combine(&mut scheduled_outputs);
+    split_cross_day_task(&mut scheduled_outputs);
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
@@ -226,4 +227,31 @@ fn combine(outputs: &mut Vec<Output>) {
     while !indexes_to_remove.is_empty() {
         outputs.remove(indexes_to_remove.pop().unwrap());
     }
+}
+
+//If a task starts in one day and ends in the next day, it should be splitted into two tasks.
+//e.g. A Task 'Sleep' from 22:00-6:00 should be split into two output tasks in output formatter: 22:00-0:00 and 0:00-6:00
+fn split_cross_day_task(outputs: &mut Vec<Output>) {
+    let mut new_outputs = vec![];
+    for task in outputs.iter_mut() {
+        if task.start.day() < task.deadline.day() {
+            let mut task2 = task.clone();
+            task.deadline = task.deadline.with_hour(0).unwrap();
+            task2.start = task.deadline.with_hour(0).unwrap();
+            task.duration = Slot {
+                start: task.start,
+                end: task.deadline,
+            }
+            .num_hours();
+            task2.duration -= task.duration;
+            new_outputs.push(task.clone());
+            if task2.duration > 0 {
+                new_outputs.push(task2);
+            }
+        } else {
+            new_outputs.push(task.clone());
+        }
+    }
+    outputs.clear();
+    outputs.extend(new_outputs);
 }
