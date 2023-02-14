@@ -234,6 +234,21 @@ fn combine(outputs: &mut Vec<Output>) {
 fn split_cross_day_task(outputs: &mut Vec<Output>) {
     let mut new_outputs = vec![];
     for task in outputs.iter_mut() {
+        let mut free_task = task.clone();
+        free_task.title = "free".to_string();
+        free_task.goalid = "free".to_string();
+        free_task.start = task.deadline;
+        free_task.deadline = task.start;
+        if free_task.deadline.hour() > free_task.start.hour() {
+            free_task.duration = (free_task.deadline.hour() - free_task.start.hour()) as usize;
+        }
+        if free_task.deadline.hour() < free_task.start.hour() {
+            free_task.duration = (free_task.start.hour() - free_task.deadline.hour()) as usize;
+        }
+        if (free_task.start < task.start) && (free_task.duration > 0) {
+            new_outputs.push(free_task.to_owned());
+        }
+
         if task.start.day() < task.deadline.day() {
             let mut task2 = task.clone();
             task.deadline = task.deadline.with_hour(0).unwrap();
@@ -250,6 +265,9 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
             }
         } else {
             new_outputs.push(task.clone());
+        }
+        if task.start < free_task.start && (free_task.duration > 0) {
+            new_outputs.push(free_task);
         }
     }
     outputs.clear();
