@@ -43,10 +43,14 @@ impl PartialOrd for Output {
         Some(self.cmp(other))
     }
 }
-
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub struct ScheduledOutput {
+    pub day: NaiveDate,
+    pub outputs: Vec<Output>,
+}
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct FinalOutput {
-    pub scheduled: Vec<Output>,
+    pub scheduled: Vec<ScheduledOutput>,
     pub impossible: Vec<Output>,
 }
 
@@ -161,7 +165,6 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     combine(&mut scheduled_outputs);
     split_cross_day_task(&mut scheduled_outputs);
     generate_free_tasks(&mut scheduled_outputs);
-    get_calender_days(calender_start, calender_end);
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
@@ -178,13 +181,34 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     }
     //create final output object
     let final_ouput = FinalOutput {
-        scheduled: scheduled_outputs,
+        scheduled: get_output_with_date(scheduled_outputs, calender_start, calender_end),
         impossible: impossible_outputs,
     };
 
     Ok(final_ouput)
 }
 
+fn get_output_with_date(
+    scheduled: Vec<Output>,
+    start: NaiveDateTime,
+    end: NaiveDateTime,
+) -> Vec<ScheduledOutput> {
+    let scheduled = scheduled;
+    let mut scheduled_output = vec![];
+    for day in get_calender_days(start, end).iter() {
+        let outputs = scheduled
+            .iter()
+            .filter(|&e| day.eq(&e.start.date()))
+            .cloned()
+            .collect::<Vec<Output>>();
+
+        scheduled_output.push(ScheduledOutput {
+            day: day.to_owned(),
+            outputs,
+        })
+    }
+    scheduled_output
+}
 fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
     let mut date = start.date();
     let days_num = Slot { start, end }.num_hours() / 24;
@@ -294,9 +318,9 @@ fn generate_free_tasks(outputs: &mut Vec<Output>) {
             start: task.start,
             end: task.deadline,
         };
-        let mut free_slot = vec![];
+
         if !task.goalid.eq("free") {
-            free_slot.extend(day_slot - task_slot);
+            let mut free_slot = day_slot - task_slot;
             let mut free_tasks: VecDeque<Output> = VecDeque::new();
             for slot in free_slot.iter_mut() {
                 let mut free_task = task.clone();
@@ -318,11 +342,11 @@ fn generate_free_tasks(outputs: &mut Vec<Output>) {
                 free_task.duration = slot.num_hours();
                 free_tasks.push_back(free_task);
             }
-
             while !free_tasks.is_empty() {
                 new_outputs.push(free_tasks.pop_front().unwrap());
             }
         }
+
         new_outputs.push(task.to_owned());
     }
     new_outputs.sort_by(|a, b| a.start.cmp(&b.start));
