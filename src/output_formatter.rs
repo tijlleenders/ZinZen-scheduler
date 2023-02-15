@@ -5,7 +5,7 @@ use crate::goal::Tag;
 use crate::options_generator::options_generator;
 use crate::task::{ScheduleOption, Task};
 use crate::{errors::Error, task::TaskStatus};
-use chrono::{Datelike, NaiveDateTime, Timelike};
+use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use std::collections::VecDeque;
@@ -161,6 +161,7 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     combine(&mut scheduled_outputs);
     split_cross_day_task(&mut scheduled_outputs);
     generate_free_tasks(&mut scheduled_outputs);
+    get_calender_days(calender_start, calender_end);
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
@@ -184,6 +185,16 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     Ok(final_ouput)
 }
 
+fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
+    let mut date = start.date();
+    let days_num = Slot { start, end }.num_hours() / 24;
+    let mut days = vec![];
+    for _i in 0..days_num {
+        days.push(date);
+        date = date.checked_add_days(Days::new(1)).unwrap();
+    }
+    days
+}
 fn get_output_from_task(task: &Task) -> Output {
     let start = if task.status == TaskStatus::Scheduled {
         task.confirmed_start
