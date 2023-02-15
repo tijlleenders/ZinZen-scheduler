@@ -8,6 +8,7 @@ use crate::{errors::Error, task::TaskStatus};
 use chrono::{Datelike, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
+use std::collections::VecDeque;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct Output {
@@ -17,6 +18,10 @@ pub struct Output {
     duration: usize,
     start: NaiveDateTime,
     deadline: NaiveDateTime,
+    #[serde(skip)]
+    after_time: usize,
+    #[serde(skip)]
+    before_time: usize,
     #[serde(skip_serializing_if = "Option::is_none")]
     first_conflict_with: Option<String>,
     #[serde(skip)]
@@ -68,7 +73,10 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     let reserved_end = scheduled[last_index].confirmed_deadline;
     let first_free_slot = Slot {
         start: calender_start,
-        end: reserved_start.unwrap(),
+        end: reserved_start
+            .unwrap()
+            .with_hour(scheduled[0].before_time as u32)
+            .unwrap(),
     };
     let last_free_slot = Slot {
         start: reserved_end.unwrap(),
@@ -82,12 +90,17 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
         status: TaskStatus::Scheduled,
         flexibility: 0,
         start: calender_start,
-        deadline: reserved_start.unwrap(),
+        deadline: reserved_start
+            .unwrap()
+            .with_hour(scheduled[0].before_time as u32)
+            .unwrap(),
         after_time: calender_start.hour() as usize,
         before_time: reserved_start.unwrap().hour() as usize,
         slots: vec![first_free_slot],
         confirmed_start: Some(calender_start),
-        confirmed_deadline: reserved_start,
+        confirmed_deadline: reserved_start
+            .unwrap()
+            .with_hour(scheduled[0].before_time as u32),
         conflicts: vec![],
         tags: vec![],
         options: None,
@@ -147,6 +160,7 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     scheduled_outputs.sort();
     combine(&mut scheduled_outputs);
     split_cross_day_task(&mut scheduled_outputs);
+    generate_free_tasks(&mut scheduled_outputs);
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
@@ -198,6 +212,8 @@ fn get_output_from_task(task: &Task) -> Output {
         tags: task.tags.clone(),
         impossible: task.status == TaskStatus::Impossible,
         options: task.options.clone(),
+        after_time: task.after_time,
+        before_time: task.before_time,
     }
 }
 
@@ -234,22 +250,7 @@ fn combine(outputs: &mut Vec<Output>) {
 fn split_cross_day_task(outputs: &mut Vec<Output>) {
     let mut new_outputs = vec![];
     for task in outputs.iter_mut() {
-        let mut free_task = task.clone();
-        free_task.title = "free".to_string();
-        free_task.goalid = "free".to_string();
-        free_task.start = task.deadline;
-        free_task.deadline = task.start;
-        if free_task.deadline.hour() > free_task.start.hour() {
-            free_task.duration = (free_task.deadline.hour() - free_task.start.hour()) as usize;
-        }
-        if free_task.deadline.hour() < free_task.start.hour() {
-            free_task.duration = (free_task.start.hour() - free_task.deadline.hour()) as usize;
-        }
-        if (free_task.start < task.start) && (free_task.duration > 0) {
-            new_outputs.push(free_task.to_owned());
-        }
-
-        if task.start.day() < task.deadline.day() {
+        if is_cross_day(task) {
             let mut task2 = task.clone();
             task.deadline = task.deadline.with_hour(0).unwrap();
             task2.start = task.deadline.with_hour(0).unwrap();
@@ -266,10 +267,57 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
         } else {
             new_outputs.push(task.clone());
         }
-        if task.start < free_task.start && (free_task.duration > 0) {
-            new_outputs.push(free_task);
-        }
     }
     outputs.clear();
     outputs.extend(new_outputs);
+}
+fn generate_free_tasks(outputs: &mut Vec<Output>) {
+    let mut new_outputs = vec![];
+    for task in outputs.iter_mut() {
+        let day_slot = Slot {
+            start: task.start.with_hour(0).unwrap(),
+            end: task.start.with_hour(23).unwrap(),
+        };
+
+        let task_slot = Slot {
+            start: task.start,
+            end: task.deadline,
+        };
+        let mut free_slot = vec![];
+        if !task.goalid.eq("free") {
+            free_slot.extend(day_slot - task_slot);
+            let mut free_tasks: VecDeque<Output> = VecDeque::new();
+            for slot in free_slot.iter_mut() {
+                let mut free_task = task.clone();
+                free_task.title = "free".to_string();
+                free_task.goalid = "free".to_string();
+                if ((slot.start.hour() as usize) < task.before_time)
+                    && ((slot.end.hour() as usize) > task.before_time)
+                {
+                    slot.start = slot.start.with_hour(task.before_time as u32).unwrap()
+                }
+                if ((slot.start.hour() as usize) < task.after_time)
+                    && ((slot.end.hour() as usize) > task.after_time)
+                {
+                    slot.end = slot.start.with_hour(task.after_time as u32).unwrap()
+                }
+                free_task.start = slot.start;
+                free_task.deadline = slot.end;
+
+                free_task.duration = slot.num_hours();
+                free_tasks.push_back(free_task);
+            }
+
+            while !free_tasks.is_empty() {
+                new_outputs.push(free_tasks.pop_front().unwrap());
+            }
+        }
+        new_outputs.push(task.to_owned());
+    }
+    new_outputs.sort_by(|a, b| a.start.cmp(&b.start));
+    outputs.clear();
+    outputs.extend(new_outputs);
+}
+fn is_cross_day(task: &Output) -> bool {
+    task.start.day() < task.deadline.day()
 }
