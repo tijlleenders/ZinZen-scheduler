@@ -111,9 +111,6 @@ impl Slot {
             || (self.start >= other_slot.end && self.end > other_slot.end))
     }
     pub fn contains_hour_slot(&self, other: &Slot) -> bool {
-        (other.start > self.start) && (other.end == self.end)
-            || (other.start > self.start) && (other.end < self.end)
-            || (other.start == self.start) && (other.end < self.end)
-            || (other.start == self.start) && (other.end == self.end)
+        (other.start >= self.start) && (other.end <= self.end)
     }
 }
