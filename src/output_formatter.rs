@@ -5,11 +5,9 @@ use crate::goal::Tag;
 use crate::options_generator::options_generator;
 use crate::task::{ScheduleOption, Task};
 use crate::{errors::Error, task::TaskStatus};
-use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
+use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
-use std::collections::VecDeque;
-use std::ptr::eq;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct Output {
@@ -199,6 +197,7 @@ fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
     }
     days
 }
+
 fn get_output_from_task(task: &Task) -> Output {
     let start = if task.status == TaskStatus::Scheduled {
         task.confirmed_start
@@ -286,6 +285,7 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
     outputs.clear();
     outputs.extend(new_outputs);
 }
+
 fn get_output_with_date(
     scheduled: Vec<Output>,
     start: NaiveDateTime,
@@ -359,6 +359,7 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
     outputs.clear();
     outputs.extend(new_outputs);
 }
+
 fn is_cross_day(task: &Output) -> bool {
     task.start.day() < task.deadline.day()
 }
