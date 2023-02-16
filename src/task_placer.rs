@@ -4,6 +4,7 @@ use chrono::Duration;
 
 use crate::errors::Error;
 use crate::goal::Tag;
+use crate::input::{GeneratedTasks, PlacedTasks};
 use crate::slot::Slot;
 use crate::task::TaskStatus::{Scheduled, UNScheduled};
 use crate::task::{Task, TaskStatus};
@@ -12,7 +13,8 @@ use std::collections::VecDeque;
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible tasks.
-pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
+pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
+    let mut tasks = generated_tasks.tasks;
     let mut scheduled_tasks: Vec<Task> = Vec::new();
     let mut waiting_tasks = tasks
         .iter()
@@ -67,7 +69,11 @@ pub fn task_placer(mut tasks: Vec<Task>) -> (Vec<Task>, Vec<Task>) {
         task.status = TaskStatus::Impossible;
     }
 
-    (scheduled_tasks, tasks)
+    PlacedTasks {
+        calendar_start: generated_tasks.calendar_start,
+        calendar_end: generated_tasks.calendar_end,
+        tasks: (scheduled_tasks, tasks),
+    }
 }
 
 fn schedule(
