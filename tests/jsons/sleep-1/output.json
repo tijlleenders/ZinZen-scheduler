@@ -1,249 +1,225 @@
 {
   "scheduled": [
     {
-      "taskid": 0,
-      "goalid": "free",
-      "title": "free",
-      "duration": 6,
-      "start": "2022-01-01T00:00:00",
-      "deadline": "2022-01-01T06:00:00"
+      "day": "2022-01-01",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 22,
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-01T22:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-01T22:00:00",
+          "deadline": "2022-01-02T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 1,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-01T06:00:00",
-      "deadline": "2022-01-01T22:00:00"
+      "day": "2022-01-02",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-01-02T00:00:00",
+          "deadline": "2022-01-02T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-01-02T06:00:00",
+          "deadline": "2022-01-02T22:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-02T22:00:00",
+          "deadline": "2022-01-03T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 2,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 2,
-      "start": "2022-01-01T22:00:00",
-      "deadline": "2022-01-02T00:00:00"
+      "day": "2022-01-03",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-01-03T00:00:00",
+          "deadline": "2022-01-03T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-01-03T06:00:00",
+          "deadline": "2022-01-03T22:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-03T22:00:00",
+          "deadline": "2022-01-04T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 3,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 6,
-      "start": "2022-01-02T00:00:00",
-      "deadline": "2022-01-02T06:00:00"
+      "day": "2022-01-04",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-01-04T00:00:00",
+          "deadline": "2022-01-04T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-01-04T06:00:00",
+          "deadline": "2022-01-04T22:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-04T22:00:00",
+          "deadline": "2022-01-05T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 4,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-02T06:00:00",
-      "deadline": "2022-01-02T22:00:00"
+      "day": "2022-01-05",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-01-05T00:00:00",
+          "deadline": "2022-01-05T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-01-05T06:00:00",
+          "deadline": "2022-01-05T22:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-05T22:00:00",
+          "deadline": "2022-01-06T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 5,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-02T06:00:00",
-      "deadline": "2022-01-02T22:00:00"
+      "day": "2022-01-06",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-01-06T00:00:00",
+          "deadline": "2022-01-06T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-01-06T06:00:00",
+          "deadline": "2022-01-06T22:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-06T22:00:00",
+          "deadline": "2022-01-07T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 6,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 2,
-      "start": "2022-01-02T22:00:00",
-      "deadline": "2022-01-03T00:00:00"
+      "day": "2022-01-07",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-01-07T00:00:00",
+          "deadline": "2022-01-07T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-01-07T06:00:00",
+          "deadline": "2022-01-07T22:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-07T22:00:00",
+          "deadline": "2022-01-08T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 7,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 6,
-      "start": "2022-01-03T00:00:00",
-      "deadline": "2022-01-03T06:00:00"
-    },
-    {
-      "taskid": 8,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-03T06:00:00",
-      "deadline": "2022-01-03T22:00:00"
-    },
-    {
-      "taskid": 9,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-03T06:00:00",
-      "deadline": "2022-01-03T22:00:00"
-    },
-    {
-      "taskid": 10,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 2,
-      "start": "2022-01-03T22:00:00",
-      "deadline": "2022-01-04T00:00:00"
-    },
-    {
-      "taskid": 11,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 6,
-      "start": "2022-01-04T00:00:00",
-      "deadline": "2022-01-04T06:00:00"
-    },
-    {
-      "taskid": 12,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-04T06:00:00",
-      "deadline": "2022-01-04T22:00:00"
-    },
-    {
-      "taskid": 13,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-04T06:00:00",
-      "deadline": "2022-01-04T22:00:00"
-    },
-    {
-      "taskid": 14,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 2,
-      "start": "2022-01-04T22:00:00",
-      "deadline": "2022-01-05T00:00:00"
-    },
-    {
-      "taskid": 15,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 6,
-      "start": "2022-01-05T00:00:00",
-      "deadline": "2022-01-05T06:00:00"
-    },
-    {
-      "taskid": 16,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-05T06:00:00",
-      "deadline": "2022-01-05T22:00:00"
-    },
-    {
-      "taskid": 17,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-05T06:00:00",
-      "deadline": "2022-01-05T22:00:00"
-    },
-    {
-      "taskid": 18,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 2,
-      "start": "2022-01-05T22:00:00",
-      "deadline": "2022-01-06T00:00:00"
-    },
-    {
-      "taskid": 19,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 6,
-      "start": "2022-01-06T00:00:00",
-      "deadline": "2022-01-06T06:00:00"
-    },
-    {
-      "taskid": 20,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-06T06:00:00",
-      "deadline": "2022-01-06T22:00:00"
-    },
-    {
-      "taskid": 21,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-06T06:00:00",
-      "deadline": "2022-01-06T22:00:00"
-    },
-    {
-      "taskid": 22,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 2,
-      "start": "2022-01-06T22:00:00",
-      "deadline": "2022-01-07T00:00:00"
-    },
-    {
-      "taskid": 23,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 6,
-      "start": "2022-01-07T00:00:00",
-      "deadline": "2022-01-07T06:00:00"
-    },
-    {
-      "taskid": 24,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-07T06:00:00",
-      "deadline": "2022-01-07T22:00:00"
-    },
-    {
-      "taskid": 25,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-07T06:00:00",
-      "deadline": "2022-01-07T22:00:00"
-    },
-    {
-      "taskid": 26,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 2,
-      "start": "2022-01-07T22:00:00",
-      "deadline": "2022-01-08T00:00:00"
-    },
-    {
-      "taskid": 27,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 6,
-      "start": "2022-01-08T00:00:00",
-      "deadline": "2022-01-08T06:00:00"
-    },
-    {
-      "taskid": 28,
-      "goalid": "free",
-      "title": "free",
-      "duration": 16,
-      "start": "2022-01-08T06:00:00",
-      "deadline": "2022-01-08T22:00:00"
-    },
-    {
-      "taskid": 29,
-      "goalid": "free",
-      "title": "free",
-      "duration": 18,
-      "start": "2022-01-08T06:00:00",
-      "deadline": "2022-01-09T00:00:00"
+      "day": "2022-01-08",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-01-08T00:00:00",
+          "deadline": "2022-01-08T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 18,
+          "start": "2022-01-08T06:00:00",
+          "deadline": "2022-01-09T00:00:00"
+        }
+      ]
     }
   ],
   "impossible": [
     {
-      "taskid": 30,
+      "taskid": 16,
       "goalid": "1",
       "title": "sleep",
       "duration": 8,
