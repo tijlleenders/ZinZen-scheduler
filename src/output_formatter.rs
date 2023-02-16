@@ -60,91 +60,6 @@ pub fn output_formatter(
 ) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
-    //let mut scheduled = scheduled;
-    // let last_index = scheduled.len() - 1;
-    // if scheduled[0].confirmed_start.is_none() {
-    //     return Err(Error::NoConfirmedDate(
-    //         scheduled[0].title.clone(),
-    //         scheduled[0].id,
-    //     ));
-    // }
-    // if scheduled[last_index].confirmed_deadline.is_none() {
-    //     return Err(Error::NoConfirmedDate(
-    //         scheduled[last_index].title.clone(),
-    //         scheduled[last_index].id,
-    //     ));
-    // }
-    // let calender_start = scheduled[0].calender_start;
-    // let calender_end = scheduled[0].calender_end;
-    // let reserved_start = scheduled[0].confirmed_start;
-    // let reserved_end = scheduled[last_index].confirmed_deadline;
-    // let tommorow_day=reserved_start.unwrap().with_hour(0).unwrap().checked_add_days(Days::new(1)).unwrap();
-    // let first_free_slot = Slot {
-    //     start: calender_start,
-    //     end: reserved_start
-    //         .unwrap()
-    //         .with_hour(scheduled[0].before_time as u32)
-    //         .unwrap_or(tommorow_day),
-    // };
-    // let last_free_slot = Slot {
-    //     start: reserved_end.unwrap(),
-    //     end: calender_end,
-    // };
-    // let first_free_task = Task {
-    //     id: 0,
-    //     goal_id: "free".to_string(),
-    //     title: "free".to_string(),
-    //     duration: first_free_slot.num_hours(),
-    //     status: TaskStatus::Scheduled,
-    //     flexibility: 0,
-    //     start: calender_start,
-    //     deadline: reserved_start
-    //         .unwrap()
-    //         .with_hour(scheduled[0].before_time as u32)
-    //         .unwrap_or(tommorow_day),
-    //     after_time: calender_start.hour() as usize,
-    //     before_time: reserved_start.unwrap().hour() as usize,
-    //     slots: vec![first_free_slot],
-    //     confirmed_start: Some(calender_start),
-    //     confirmed_deadline: reserved_start
-    //         .unwrap()
-    //         .with_hour(scheduled[0].before_time as u32),
-    //     conflicts: vec![],
-    //     tags: vec![],
-    //     options: None,
-    //     after_goals: None,
-    //     calender_start,
-    //     calender_end,
-    // };
-    // let last_free_task = Task {
-    //     id: last_index + 1,
-    //     goal_id: "free".to_string(),
-    //     title: "free".to_string(),
-    //     duration: last_free_slot.num_hours(),
-    //     status: TaskStatus::Scheduled,
-    //     flexibility: 0,
-    //     start: reserved_end.unwrap(),
-    //     deadline: calender_end,
-    //     after_time: reserved_end.unwrap().hour() as usize,
-    //     before_time: calender_end.hour() as usize,
-    //     slots: vec![last_free_slot],
-    //     confirmed_start: reserved_end,
-    //     confirmed_deadline: Some(calender_end),
-    //     conflicts: vec![],
-    //     tags: vec![],
-    //     options: None,
-    //     after_goals: None,
-    //     calender_start,
-    //     calender_end,
-    // };
-
-    // scheduled = options_generator(scheduled);
-    // if first_free_slot.num_hours() > 0 {
-    //     for task in scheduled.iter_mut() {
-    //         task.id += 1;
-    //     }
-    //     scheduled_outputs.push(get_output_from_task(&first_free_task));
-    // }
 
     //convert scheduled tasks to output objects and add to scheduled_outputs vec
     for task in scheduled {
@@ -153,9 +68,7 @@ pub fn output_formatter(
         }
         scheduled_outputs.push(get_output_from_task(&task));
     }
-    // if last_free_slot.num_hours() > 0 {
-    //     scheduled_outputs.push(get_output_from_task(&last_free_task));
-    // }
+
     //convert impossible tasks to output objects and add to impossible_outputs vec
     for task in impossible {
         //don't report optional tasks
