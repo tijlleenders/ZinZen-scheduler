@@ -4,41 +4,111 @@
       "taskid": 0,
       "goalid": "1",
       "title": "transfer savings",
-      "duration": 1,
+      "duration": 3,
       "start": "2022-10-01T00:00:00",
-      "deadline": "2022-10-01T01:00:00"
+      "deadline": "2022-10-01T03:00:00",
+      "options": [
+        {
+          "start": "2022-10-01T03:00:00",
+          "deadline": "2022-10-01T06:00:00"
+        },
+        {
+          "start": "2022-10-01T04:00:00",
+          "deadline": "2022-10-01T07:00:00"
+        },
+        {
+          "start": "2022-10-01T05:00:00",
+          "deadline": "2022-10-01T08:00:00"
+        }
+      ]
     },
     {
       "taskid": 1,
       "goalid": "1",
       "title": "transfer savings",
-      "duration": 1,
+      "duration": 3,
       "start": "2022-10-22T00:00:00",
-      "deadline": "2022-10-22T01:00:00"
+      "deadline": "2022-10-22T03:00:00",
+      "options": [
+        {
+          "start": "2022-10-22T03:00:00",
+          "deadline": "2022-10-22T06:00:00"
+        },
+        {
+          "start": "2022-10-22T04:00:00",
+          "deadline": "2022-10-22T07:00:00"
+        },
+        {
+          "start": "2022-10-22T05:00:00",
+          "deadline": "2022-10-22T08:00:00"
+        }
+      ]
     },
     {
       "taskid": 2,
       "goalid": "1",
       "title": "transfer savings",
-      "duration": 1,
+      "duration": 3,
       "start": "2022-11-12T00:00:00",
-      "deadline": "2022-11-12T01:00:00"
+      "deadline": "2022-11-12T03:00:00",
+      "options": [
+        {
+          "start": "2022-11-12T03:00:00",
+          "deadline": "2022-11-12T06:00:00"
+        },
+        {
+          "start": "2022-11-12T04:00:00",
+          "deadline": "2022-11-12T07:00:00"
+        },
+        {
+          "start": "2022-11-12T05:00:00",
+          "deadline": "2022-11-12T08:00:00"
+        }
+      ]
     },
     {
       "taskid": 3,
       "goalid": "1",
       "title": "transfer savings",
-      "duration": 1,
+      "duration": 3,
       "start": "2022-12-03T00:00:00",
-      "deadline": "2022-12-03T01:00:00"
+      "deadline": "2022-12-03T03:00:00",
+      "options": [
+        {
+          "start": "2022-12-03T03:00:00",
+          "deadline": "2022-12-03T06:00:00"
+        },
+        {
+          "start": "2022-12-03T04:00:00",
+          "deadline": "2022-12-03T07:00:00"
+        },
+        {
+          "start": "2022-12-03T05:00:00",
+          "deadline": "2022-12-03T08:00:00"
+        }
+      ]
     },
     {
       "taskid": 4,
       "goalid": "1",
       "title": "transfer savings",
-      "duration": 1,
+      "duration": 3,
       "start": "2022-12-24T00:00:00",
-      "deadline": "2022-12-24T01:00:00"
+      "deadline": "2022-12-24T03:00:00",
+      "options": [
+        {
+          "start": "2022-12-24T03:00:00",
+          "deadline": "2022-12-24T06:00:00"
+        },
+        {
+          "start": "2022-12-24T04:00:00",
+          "deadline": "2022-12-24T07:00:00"
+        },
+        {
+          "start": "2022-12-24T05:00:00",
+          "deadline": "2022-12-24T08:00:00"
+        }
+      ]
     }
   ],
   "impossible": []
