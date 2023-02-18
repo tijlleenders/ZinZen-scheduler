@@ -12,7 +12,10 @@ const getFiles = (directory: string): [string, string] => {
 
 const tests = Deno.readDirSync(testFolder);
 for (const dirEntry of tests) {
-  if (dirEntry.isDirectory) {
+  if( dirEntry.name === "benchmark-tests") {
+    continue;
+  }
+  if (dirEntry.isDirectory ){
     const entry = `${dirEntry.name}`;
   Deno.test(`${entry}`, () => {
       const [inputFile, outputFile] = getFiles(`${entry}`);
