@@ -35,8 +35,9 @@ fn run_all_tests() {
         if !dir.is_dir() {
             continue;
         }
-        let (actual_output, desired_output) = run_test(dir.file_name().unwrap().to_str().unwrap());
         println!("Run test {:#?}", dir.file_name().unwrap());
+        let (actual_output, desired_output) = run_test(dir.file_name().unwrap().to_str().unwrap());
+        
         assert_eq!(actual_output, desired_output);
     }
 }
