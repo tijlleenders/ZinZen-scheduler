@@ -64,7 +64,6 @@ pub fn output_formatter(
         if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
             return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
         }
-        println!("{:#?}", task);
         //prevent slot end from exceeding calender end
         // for tas in task.slots.iter_mut() {
         if task.confirmed_deadline.unwrap() > calender_end {
