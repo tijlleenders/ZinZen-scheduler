@@ -3,7 +3,14 @@ mod common;
 #[cfg(test)]
 use pretty_assertions::assert_eq;
 use scheduler::{FinalOutput, Input};
-use std::path::Path;
+use std::path::{Path, PathBuf};
+
+fn get_test_dirs() -> Result<Vec<PathBuf>, std::io::Error> {
+    let dirs = std::fs::read_dir("./tests/jsons")?
+        .map(|res| res.map(|e| e.path()))
+        .collect::<Result<Vec<_>, std::io::Error>>()?;
+    Ok(dirs)
+}
 
 fn run_test(directory: &str) -> (String, String) {
     let i = format!("./tests/jsons/{}/input.json", directory);
@@ -18,6 +25,20 @@ fn run_test(directory: &str) -> (String, String) {
         serde_json::to_string_pretty(&output).unwrap(),
         desired_output,
     )
+}
+#[test]
+fn run_all_tests() {
+    for dir in get_test_dirs()
+        .expect("Unable to read tests directory")
+        .iter()
+    {
+        if !dir.is_dir() {
+            continue;
+        }
+        let (actual_output, desired_output) = run_test(dir.file_name().unwrap().to_str().unwrap());
+        println!("Run test {:#?}", dir.file_name().unwrap());
+        assert_eq!(actual_output, desired_output);
+    }
 }
 
 #[test]
