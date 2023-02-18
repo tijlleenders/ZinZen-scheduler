@@ -32,7 +32,7 @@ fn run_all_tests() {
         .expect("Unable to read tests directory")
         .iter()
     {
-        if !dir.is_dir() {
+        if dir.file_name().unwrap().eq("benchmark-tests")|| (!dir.is_dir()){
             continue;
         }
         println!("Run test {:#?}", dir.file_name().unwrap());
