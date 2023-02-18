@@ -53,13 +53,25 @@ pub struct FinalOutput {
 }
 
 pub fn output_formatter(
-    scheduled: Vec<Task>,
+    mut scheduled: Vec<Task>,
     impossible: Vec<Task>,
     calender_start: NaiveDateTime,
     calender_end: NaiveDateTime,
 ) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
+    for task in scheduled.iter_mut() {
+        if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+            return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+        }
+        println!("{:#?}", task);
+        //prevent slot end from exceeding calender end
+        // for tas in task.slots.iter_mut() {
+        if task.confirmed_deadline.unwrap() > calender_end {
+            task.confirmed_deadline = Some(calender_end);
+            //  }
+        }
+    }
 
     //convert scheduled tasks to output objects and add to scheduled_outputs vec
     for task in scheduled {

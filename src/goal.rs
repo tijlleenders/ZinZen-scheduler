@@ -173,12 +173,7 @@ impl Goal {
                 );
                 //assign slots that are within the specified after_time and before_time
                 let mut t = slot_generator(t, &time_period, self.deadline);
-                // prevent slot end from exceeding calender end
-                for slot in t.slots.iter_mut() {
-                    if slot.end > calendar_end {
-                        slot.end = calendar_end;
-                    }
-                }
+
                 //if only one slot was assigned and it is too short for the duration,
                 //mark the task as impossible.
                 if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {

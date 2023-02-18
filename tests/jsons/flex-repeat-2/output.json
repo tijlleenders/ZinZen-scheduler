@@ -1379,9 +1379,9 @@
         },
         {
           "taskid": 153,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
+          "goalid": "2",
+          "title": "sleep",
+          "duration": 10,
           "start": "2022-10-31T22:00:00",
           "deadline": "2022-11-01T00:00:00"
         }
@@ -1391,84 +1391,12 @@
   "impossible": [
     {
       "taskid": 154,
-      "goalid": "2",
-      "title": "sleep",
-      "duration": 10,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-11-01T00:00:00",
-      "first_conflict_with": "Passes Deadline"
-    },
-    {
-      "taskid": 155,
       "goalid": "1",
       "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 156,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 157,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 158,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 159,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 160,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 161,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 162,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-31T22:00:00",
-      "deadline": "2022-10-31T23:00:00",
-      "first_conflict_with": "2"
+      "duration": 8,
+      "start": "2022-10-31T20:00:00",
+      "deadline": "2022-10-31T22:00:00",
+      "first_conflict_with": "5"
     }
   ]
 }

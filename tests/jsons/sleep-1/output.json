@@ -210,22 +210,20 @@
           "taskid": 21,
           "goalid": "free",
           "title": "free",
-          "duration": 18,
+          "duration": 16,
           "start": "2022-01-08T06:00:00",
+          "deadline": "2022-01-08T22:00:00"
+        },
+        {
+          "taskid": 22,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-08T22:00:00",
           "deadline": "2022-01-09T00:00:00"
         }
       ]
     }
   ],
-  "impossible": [
-    {
-      "taskid": 22,
-      "goalid": "1",
-      "title": "sleep",
-      "duration": 8,
-      "start": "2022-01-08T22:00:00",
-      "deadline": "2022-01-09T00:00:00",
-      "first_conflict_with": "Passes Deadline"
-    }
-  ]
+  "impossible": []
 }

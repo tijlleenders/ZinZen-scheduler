@@ -431,228 +431,30 @@
     },
     {
       "taskid": 45,
-      "goalid": "2",
-      "title": "sleep",
-      "duration": 10,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-15T00:00:00",
-      "first_conflict_with": "Passes Deadline"
+      "goalid": "1",
+      "title": "side project",
+      "duration": 8,
+      "start": "2022-10-14T08:00:00",
+      "deadline": "2022-10-14T22:00:00",
+      "first_conflict_with": "3"
     },
     {
       "taskid": 46,
       "goalid": "1",
       "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
+      "duration": 8,
+      "start": "2022-10-14T08:00:00",
+      "deadline": "2022-10-14T22:00:00",
+      "first_conflict_with": "3"
     },
     {
       "taskid": 47,
       "goalid": "1",
       "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 48,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 49,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 50,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 51,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 52,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 53,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 54,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 55,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 56,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 57,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 58,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 59,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 60,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 61,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 62,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 63,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 64,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 65,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 66,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 67,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 68,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
-    },
-    {
-      "taskid": 69,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 1,
-      "start": "2022-10-14T22:00:00",
-      "deadline": "2022-10-14T23:00:00",
-      "first_conflict_with": "2"
+      "duration": 8,
+      "start": "2022-10-14T08:00:00",
+      "deadline": "2022-10-14T22:00:00",
+      "first_conflict_with": "3"
     }
   ]
 }
