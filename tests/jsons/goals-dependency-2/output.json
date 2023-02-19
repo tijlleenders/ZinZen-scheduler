@@ -1,68 +1,99 @@
 {
   "scheduled": [
     {
-      "taskid": 0,
-      "goalid": "1",
-      "title": "Eat breakfast at home",
-      "duration": 1,
-      "start": "2018-01-01T06:00:00",
-      "deadline": "2018-01-01T07:00:00",
-      "options": [
+      "day": "2018-01-01",
+      "outputs": [
         {
-          "start": "2018-01-02T06:00:00",
-          "deadline": "2018-01-02T07:00:00"
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2018-01-01T00:00:00",
+          "deadline": "2018-01-01T06:00:00"
         },
         {
-          "start": "2018-01-02T07:00:00",
-          "deadline": "2018-01-02T08:00:00"
+          "taskid": 1,
+          "goalid": "1",
+          "title": "Eat breakfast at home",
+          "duration": 1,
+          "start": "2018-01-01T06:00:00",
+          "deadline": "2018-01-01T07:00:00"
         },
         {
-          "start": "2018-01-03T06:00:00",
-          "deadline": "2018-01-03T07:00:00"
-        }
-      ]
-    },
-    {
-      "taskid": 1,
-      "goalid": "2",
-      "title": "Catch the bus to work",
-      "duration": 1,
-      "start": "2018-01-01T07:00:00",
-      "deadline": "2018-01-01T08:00:00",
-      "options": [
-        {
-          "start": "2018-01-02T06:00:00",
-          "deadline": "2018-01-02T07:00:00"
+          "taskid": 2,
+          "goalid": "2",
+          "title": "Catch the bus to work",
+          "duration": 1,
+          "start": "2018-01-01T07:00:00",
+          "deadline": "2018-01-01T08:00:00"
         },
         {
-          "start": "2018-01-02T07:00:00",
-          "deadline": "2018-01-02T08:00:00"
+          "taskid": 3,
+          "goalid": "3",
+          "title": "Brush my teeth",
+          "duration": 1,
+          "start": "2018-01-01T08:00:00",
+          "deadline": "2018-01-01T09:00:00"
         },
         {
-          "start": "2018-01-02T06:00:00",
-          "deadline": "2018-01-02T07:00:00"
-        }
-      ]
-    },
-    {
-      "taskid": 2,
-      "goalid": "3",
-      "title": "Brush my teeth",
-      "duration": 1,
-      "start": "2018-01-01T08:00:00",
-      "deadline": "2018-01-01T09:00:00",
-      "options": [
-        {
+          "taskid": 4,
+          "goalid": "free",
+          "title": "free",
+          "duration": 15,
           "start": "2018-01-01T09:00:00",
-          "deadline": "2018-01-01T10:00:00"
-        },
+          "deadline": "2018-01-02T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-02",
+      "outputs": [
         {
-          "start": "2018-01-01T10:00:00",
-          "deadline": "2018-01-01T11:00:00"
-        },
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-01-02T00:00:00",
+          "deadline": "2018-01-03T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-03",
+      "outputs": [
         {
-          "start": "2018-01-01T11:00:00",
-          "deadline": "2018-01-01T12:00:00"
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-01-03T00:00:00",
+          "deadline": "2018-01-04T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-04",
+      "outputs": [
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-01-04T00:00:00",
+          "deadline": "2018-01-05T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-05",
+      "outputs": [
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-01-05T00:00:00",
+          "deadline": "2018-01-06T00:00:00"
         }
       ]
     }

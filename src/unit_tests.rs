@@ -588,7 +588,8 @@ fn slot_generator_assigns_contiguous_slots() {
         calendar_start,
         calendar_end,
         goals,
-    });
+    })
+    .tasks;
     assert_eq!(tasks[0].slots.len(), 5);
     assert_eq!(tasks[1].slots.len(), 1);
     assert_eq!(tasks[2].slots.len(), 1);
@@ -776,7 +777,8 @@ fn vec_of_tasks_sorts_flex1_then_high_to_low_works() {
         calendar_start,
         calendar_end,
         goals,
-    });
+    })
+    .tasks;
     tasks.sort();
     assert_eq!(tasks[0].goal_id, 1.to_string());
     assert_eq!(tasks[1].goal_id, 5.to_string());
@@ -879,7 +881,8 @@ fn vec_of_tasks_sorts_multiple_flex1_then_high_to_low_works() {
         calendar_start,
         calendar_end,
         goals,
-    });
+    })
+    .tasks;
     tasks.sort();
     assert_eq!(tasks[0].goal_id, 1.to_string());
     assert_eq!(tasks[1].goal_id, 2.to_string());
@@ -982,7 +985,8 @@ fn vec_of_tasks_sorts_no_flex1_then_high_to_low_works() {
         calendar_start,
         calendar_end,
         goals,
-    });
+    })
+    .tasks;
     tasks.sort();
     assert_eq!(tasks[0].goal_id, 5.to_string());
     assert_eq!(tasks[1].goal_id, 4.to_string());
@@ -1069,7 +1073,7 @@ fn task_placer_returns_impossible_tasks() {
         goals,
     });
     dbg!(&tasks);
-    let (scheduled_tasks, impossible_tasks) = task_placer(tasks);
+    let (scheduled_tasks, impossible_tasks) = task_placer(tasks).tasks;
     dbg!(&impossible_tasks);
     assert_eq!(scheduled_tasks[0].status, Scheduled);
     assert_eq!(scheduled_tasks[1].status, Scheduled);

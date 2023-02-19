@@ -300,3 +300,9 @@ Deno.test("goals dependency 2", () => {
     assertEquals(
       schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
   });
+
+Deno.test("sleep 1", () => {
+  const [inputFile, outputFile] = getFiles('sleep-1');
+    assertEquals(
+      schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
+  });

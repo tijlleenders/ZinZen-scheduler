@@ -1,7 +1,7 @@
+use crate::goal::Goal;
+use crate::task::Task;
 use chrono::prelude::*;
 use serde::Deserialize;
-
-use crate::goal::Goal;
 
 #[derive(Deserialize, Debug)]
 /// The front end passes data into the scheduler via an Input object.
@@ -27,4 +27,18 @@ impl Input {
             goals,
         }
     }
+}
+
+#[derive(Deserialize, Debug)]
+pub struct GeneratedTasks {
+    pub calendar_start: NaiveDateTime,
+    pub calendar_end: NaiveDateTime,
+    pub tasks: Vec<Task>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct PlacedTasks {
+    pub calendar_start: NaiveDateTime,
+    pub calendar_end: NaiveDateTime,
+    pub tasks: (Vec<Task>, Vec<Task>),
 }

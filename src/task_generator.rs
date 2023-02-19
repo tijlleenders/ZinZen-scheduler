@@ -1,6 +1,5 @@
 use crate::goal::{handle_hierarchy, Goal, Tag};
-use crate::input::Input;
-use crate::task::Task;
+use crate::input::{GeneratedTasks, Input};
 use crate::Repetition;
 
 /// # Task Generator
@@ -11,7 +10,7 @@ pub fn task_generator(
         calendar_end,
         goals,
     }: Input,
-) -> Vec<Task> {
+) -> GeneratedTasks {
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let goals = handle_hierarchy(goals);
@@ -55,7 +54,11 @@ pub fn task_generator(
             tasks.extend(goals_vec);
         }
     }
-    tasks
+    GeneratedTasks {
+        calendar_start,
+        calendar_end,
+        tasks,
+    }
 }
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
