@@ -282,5 +282,4 @@ fn non_midnight_start_deadline() {
 fn repetition_daily_1() {
     let (actual_output, desired_output) = run_test("repetition-daily-1");
     assert_eq!(actual_output, desired_output);
-} 
-
+}
