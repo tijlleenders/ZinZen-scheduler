@@ -1,14 +1,14 @@
+use crate::Slot;
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
 use crate::goal::Tag;
-use crate::options_generator::options_generator;
 use crate::task::{ScheduleOption, Task};
 use crate::{errors::Error, task::TaskStatus};
-use chrono::NaiveDateTime;
+use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct Output {
     taskid: usize,
     goalid: String,
@@ -16,6 +16,10 @@ pub struct Output {
     duration: usize,
     start: NaiveDateTime,
     deadline: NaiveDateTime,
+    #[serde(skip)]
+    after_time: usize,
+    #[serde(skip)]
+    before_time: usize,
     #[serde(skip_serializing_if = "Option::is_none")]
     first_conflict_with: Option<String>,
     #[serde(skip)]
@@ -37,20 +41,42 @@ impl PartialOrd for Output {
         Some(self.cmp(other))
     }
 }
-
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub struct ScheduledOutput {
+    pub day: NaiveDate,
+    pub outputs: Vec<Output>,
+}
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct FinalOutput {
-    pub scheduled: Vec<Output>,
+    pub scheduled: Vec<ScheduledOutput>,
     pub impossible: Vec<Output>,
 }
 
-pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<FinalOutput, Error> {
+pub fn output_formatter(
+    mut scheduled: Vec<Task>,
+    impossible: Vec<Task>,
+    calender_start: NaiveDateTime,
+    calender_end: NaiveDateTime,
+) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
-    let mut scheduled = scheduled;
-    //if !scheduled[0].clone().tags.contains(&Tag::DoNotSort) {
-    scheduled = options_generator(scheduled);
-    // }
+
+    //prevent deadline end from exceeding calender end and update duration
+    for task in scheduled.iter_mut() {
+        if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+            return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+        }
+        //prevent slot end from exceeding calender end
+        if task.confirmed_deadline.unwrap() > calender_end {
+            task.confirmed_deadline = Some(calender_end);
+            task.duration = Slot {
+                start: task.confirmed_start.unwrap(),
+                end: task.confirmed_deadline.unwrap(),
+            }
+            .num_hours();
+        }
+    }
+
     //convert scheduled tasks to output objects and add to scheduled_outputs vec
     for task in scheduled {
         if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
@@ -58,6 +84,7 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
         }
         scheduled_outputs.push(get_output_from_task(&task));
     }
+
     //convert impossible tasks to output objects and add to impossible_outputs vec
     for task in impossible {
         //don't report optional tasks
@@ -69,6 +96,8 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     //sort and combine the scheduled outputs
     scheduled_outputs.sort();
     combine(&mut scheduled_outputs);
+    split_cross_day_task(&mut scheduled_outputs);
+    generate_free_tasks(&mut scheduled_outputs, calender_start, calender_end);
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
@@ -85,11 +114,22 @@ pub fn output_formatter(scheduled: Vec<Task>, impossible: Vec<Task>) -> Result<F
     }
     //create final output object
     let final_ouput = FinalOutput {
-        scheduled: scheduled_outputs,
+        scheduled: get_output_with_date(scheduled_outputs, calender_start, calender_end),
         impossible: impossible_outputs,
     };
 
     Ok(final_ouput)
+}
+
+fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
+    let mut date = start.date();
+    let days_num = Slot { start, end }.num_hours() / 24;
+    let mut days = vec![];
+    for _i in 0..days_num {
+        days.push(date);
+        date = date.checked_add_days(Days::new(1)).unwrap();
+    }
+    days
 }
 
 fn get_output_from_task(task: &Task) -> Output {
@@ -120,6 +160,8 @@ fn get_output_from_task(task: &Task) -> Output {
         tags: task.tags.clone(),
         impossible: task.status == TaskStatus::Impossible,
         options: task.options.clone(),
+        after_time: task.after_time,
+        before_time: task.before_time,
     }
 }
 
@@ -149,4 +191,122 @@ fn combine(outputs: &mut Vec<Output>) {
     while !indexes_to_remove.is_empty() {
         outputs.remove(indexes_to_remove.pop().unwrap());
     }
+}
+
+//If a task starts in one day and ends in the next day, it should be splitted into two tasks.
+//e.g. A Task 'Sleep' from 22:00-6:00 should be split into two output tasks in output formatter: 22:00-0:00 and 0:00-6:00
+fn split_cross_day_task(outputs: &mut Vec<Output>) {
+    let mut new_outputs = vec![];
+    for task in outputs.iter_mut() {
+        if is_cross_day(task) {
+            let mut task2 = task.clone();
+            task.deadline = task.deadline.with_hour(0).unwrap();
+            task2.start = task.deadline.with_hour(0).unwrap();
+            task.duration = Slot {
+                start: task.start,
+                end: task.deadline,
+            }
+            .num_hours();
+            task2.duration -= task.duration;
+            new_outputs.push(task.clone());
+            if task2.duration > 0 {
+                new_outputs.push(task2);
+            }
+        } else {
+            new_outputs.push(task.clone());
+        }
+    }
+    outputs.clear();
+    outputs.extend(new_outputs);
+}
+
+fn get_output_with_date(
+    scheduled: Vec<Output>,
+    start: NaiveDateTime,
+    end: NaiveDateTime,
+) -> Vec<ScheduledOutput> {
+    let scheduled = scheduled;
+
+    let mut scheduled_output = vec![];
+    for day in get_calender_days(start, end).iter() {
+        let mut outputs = scheduled
+            .iter()
+            .filter(|&e| day.eq(&e.start.date()))
+            .cloned()
+            .collect::<Vec<Output>>();
+        outputs.sort_by(|a, b| a.start.cmp(&b.start));
+
+        combine(&mut outputs);
+        scheduled_output.push(ScheduledOutput {
+            day: day.to_owned(),
+            outputs,
+        })
+    }
+
+    scheduled_output
+}
+
+fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: NaiveDateTime) {
+    let mut new_outputs = vec![];
+    for day in get_calender_days(start, end).iter() {
+        let mut day_outputs = outputs
+            .iter()
+            .filter(|&e| day.eq(&e.start.date()))
+            .cloned()
+            .collect::<Vec<Output>>();
+        let filled_slots = day_outputs
+            .iter()
+            .map(|e| Slot {
+                start: e.start,
+                end: e.deadline,
+            })
+            .collect::<Vec<_>>();
+        let mut day_slot = day_hour_slots(day);
+        for slot in filled_slots.iter() {
+            day_slot.retain(|ds| !slot.contains_hour_slot(ds));
+        }
+        let free_outputs = day_slot
+            .iter()
+            .map(|s| Output {
+                taskid: 0,
+                goalid: "free".to_string(),
+                title: "free".to_string(),
+                duration: s.num_hours(),
+                start: s.start,
+                deadline: s.end,
+                after_time: 0,
+                before_time: 23,
+                first_conflict_with: None,
+                tags: vec![],
+                impossible: false,
+                options: None,
+            })
+            .collect::<Vec<_>>();
+        day_outputs.extend(free_outputs);
+        day_outputs.sort_by(|a, b| a.start.cmp(&b.start));
+
+        combine(&mut day_outputs);
+
+        new_outputs.extend(day_outputs);
+    }
+    new_outputs.sort_by(|a, b| a.start.cmp(&b.start));
+    outputs.clear();
+    outputs.extend(new_outputs);
+}
+
+fn is_cross_day(task: &Output) -> bool {
+    task.start.day() < task.deadline.day()
+}
+
+fn day_hour_slots(day: &NaiveDate) -> Vec<Slot> {
+    let mut result = vec![];
+    let start = day.and_hms_opt(0, 0, 0).unwrap();
+    let end_of_day = start.checked_add_days(Days::new(1)).unwrap();
+    for hour in 0..24 {
+        result.push(Slot {
+            start: start.with_hour(hour).unwrap_or_default(),
+            end: start.with_hour(hour + 1).unwrap_or(end_of_day),
+        })
+    }
+    result
 }

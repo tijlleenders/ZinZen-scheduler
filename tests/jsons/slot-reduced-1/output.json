@@ -1,44 +1,131 @@
 {
   "scheduled": [
     {
-      "taskid": 0,
-      "goalid": "2",
-      "title": "cook pasta",
-      "duration": 2,
-      "start": "2022-11-07T16:00:00",
-      "deadline": "2022-11-07T18:00:00"
-    },
-    {
-      "taskid": 1,
-      "goalid": "3",
-      "title": "cook burger",
-      "duration": 2,
-      "start": "2022-11-08T16:00:00",
-      "deadline": "2022-11-08T18:00:00"
-    },
-    {
-      "taskid": 2,
-      "goalid": "4",
-      "title": "cook pizza",
-      "duration": 2,
-      "start": "2022-11-09T16:00:00",
-      "deadline": "2022-11-09T18:00:00"
-    },
-    {
-      "taskid": 3,
-      "goalid": "1",
-      "title": "work",
-      "duration": 5,
-      "start": "2022-11-10T12:00:00",
-      "deadline": "2022-11-10T17:00:00",
-      "options": [
+      "day": "2022-11-07",
+      "outputs": [
         {
-          "start": "2022-11-11T12:00:00",
-          "deadline": "2022-11-11T17:00:00"
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-11-07T00:00:00",
+          "deadline": "2022-11-07T16:00:00"
         },
         {
-          "start": "2022-11-11T13:00:00",
-          "deadline": "2022-11-11T18:00:00"
+          "taskid": 1,
+          "goalid": "2",
+          "title": "cook pasta",
+          "duration": 2,
+          "start": "2022-11-07T16:00:00",
+          "deadline": "2022-11-07T18:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2022-11-07T18:00:00",
+          "deadline": "2022-11-08T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-08",
+      "outputs": [
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-11-08T00:00:00",
+          "deadline": "2022-11-08T16:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "3",
+          "title": "cook burger",
+          "duration": 2,
+          "start": "2022-11-08T16:00:00",
+          "deadline": "2022-11-08T18:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2022-11-08T18:00:00",
+          "deadline": "2022-11-09T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-09",
+      "outputs": [
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 16,
+          "start": "2022-11-09T00:00:00",
+          "deadline": "2022-11-09T16:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "4",
+          "title": "cook pizza",
+          "duration": 2,
+          "start": "2022-11-09T16:00:00",
+          "deadline": "2022-11-09T18:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2022-11-09T18:00:00",
+          "deadline": "2022-11-10T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-10",
+      "outputs": [
+        {
+          "taskid": 9,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-11-10T00:00:00",
+          "deadline": "2022-11-10T12:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "1",
+          "title": "work",
+          "duration": 5,
+          "start": "2022-11-10T12:00:00",
+          "deadline": "2022-11-10T17:00:00"
+        },
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-10T17:00:00",
+          "deadline": "2022-11-11T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-11",
+      "outputs": [
+        {
+          "taskid": 12,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-11-11T00:00:00",
+          "deadline": "2022-11-12T00:00:00"
         }
       ]
     }

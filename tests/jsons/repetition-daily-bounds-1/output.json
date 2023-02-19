@@ -1,68 +1,89 @@
 {
   "scheduled": [
     {
-      "taskid": 0,
-      "goalid": "1",
-      "title": "walk",
-      "duration": 1,
-      "start": "2022-01-01T10:00:00",
-      "deadline": "2022-01-01T11:00:00",
-      "options": [
+      "day": "2022-01-01",
+      "outputs": [
         {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-01T10:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "1",
+          "title": "walk",
+          "duration": 1,
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T11:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
           "start": "2022-01-01T11:00:00",
-          "deadline": "2022-01-01T12:00:00"
-        },
-        {
-          "start": "2022-01-01T12:00:00",
-          "deadline": "2022-01-01T13:00:00"
-        },
-        {
-          "start": "2022-01-01T13:00:00",
-          "deadline": "2022-01-01T14:00:00"
+          "deadline": "2022-01-02T00:00:00"
         }
       ]
     },
     {
-      "taskid": 1,
-      "goalid": "1",
-      "title": "walk",
-      "duration": 1,
-      "start": "2022-01-02T10:00:00",
-      "deadline": "2022-01-02T11:00:00",
-      "options": [
+      "day": "2022-01-02",
+      "outputs": [
         {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-01-02T00:00:00",
+          "deadline": "2022-01-02T10:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "1",
+          "title": "walk",
+          "duration": 1,
+          "start": "2022-01-02T10:00:00",
+          "deadline": "2022-01-02T11:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
           "start": "2022-01-02T11:00:00",
-          "deadline": "2022-01-02T12:00:00"
-        },
-        {
-          "start": "2022-01-02T12:00:00",
-          "deadline": "2022-01-02T13:00:00"
-        },
-        {
-          "start": "2022-01-02T13:00:00",
-          "deadline": "2022-01-02T14:00:00"
+          "deadline": "2022-01-03T00:00:00"
         }
       ]
     },
     {
-      "taskid": 2,
-      "goalid": "1",
-      "title": "walk",
-      "duration": 1,
-      "start": "2022-01-03T10:00:00",
-      "deadline": "2022-01-03T11:00:00",
-      "options": [
+      "day": "2022-01-03",
+      "outputs": [
         {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-01-03T00:00:00",
+          "deadline": "2022-01-03T10:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "1",
+          "title": "walk",
+          "duration": 1,
+          "start": "2022-01-03T10:00:00",
+          "deadline": "2022-01-03T11:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
           "start": "2022-01-03T11:00:00",
-          "deadline": "2022-01-03T12:00:00"
-        },
-        {
-          "start": "2022-01-03T12:00:00",
-          "deadline": "2022-01-03T13:00:00"
-        },
-        {
-          "start": "2022-01-03T13:00:00",
-          "deadline": "2022-01-03T14:00:00"
+          "deadline": "2022-01-04T00:00:00"
         }
       ]
     }

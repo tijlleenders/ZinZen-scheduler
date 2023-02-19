@@ -37,6 +37,8 @@ pub struct Task {
     pub options: Option<Vec<ScheduleOption>>,
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
+    pub calender_start: NaiveDateTime,
+    pub calender_end: NaiveDateTime,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
@@ -129,7 +131,14 @@ impl Iterator for StartDeadlineIterator {
 }
 
 impl Task {
-    pub fn new(id: usize, start: NaiveDateTime, deadline: NaiveDateTime, goal: &Goal) -> Self {
+    pub fn new(
+        id: usize,
+        start: NaiveDateTime,
+        deadline: NaiveDateTime,
+        goal: &Goal,
+        calender_start: NaiveDateTime,
+        calender_end: NaiveDateTime,
+    ) -> Self {
         Self {
             id,
             goal_id: goal.id.clone(),
@@ -148,6 +157,8 @@ impl Task {
             tags: goal.tags.clone(),
             options: None,
             after_goals: goal.after_goals.clone(),
+            calender_start,
+            calender_end,
         }
     }
 
@@ -205,6 +216,8 @@ impl Task {
                 tags: self.tags.clone(),
                 options: None,
                 after_goals: self.after_goals.clone(),
+                calender_start: self.calender_start,
+                calender_end: self.calender_end,
             };
             task.calculate_flexibility();
             task.status = TaskStatus::UNScheduled;

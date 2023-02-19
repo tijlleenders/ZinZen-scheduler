@@ -1,76 +1,163 @@
 {
   "scheduled": [
     {
-      "taskid": 0,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-19T00:00:00",
-      "deadline": "2022-11-19T01:00:00"
+      "day": "2022-11-19",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-19T00:00:00",
+          "deadline": "2022-11-19T01:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-19T01:00:00",
+          "deadline": "2022-11-19T08:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-19T08:00:00",
+          "deadline": "2022-11-19T09:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-19T09:00:00",
+          "deadline": "2022-11-19T16:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-19T16:00:00",
+          "deadline": "2022-11-19T17:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-19T17:00:00",
+          "deadline": "2022-11-20T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 1,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-19T08:00:00",
-      "deadline": "2022-11-19T09:00:00"
+      "day": "2022-11-20",
+      "outputs": [
+        {
+          "taskid": 6,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-20T00:00:00",
+          "deadline": "2022-11-20T01:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-20T01:00:00",
+          "deadline": "2022-11-20T08:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-20T08:00:00",
+          "deadline": "2022-11-20T09:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-20T09:00:00",
+          "deadline": "2022-11-20T16:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-20T16:00:00",
+          "deadline": "2022-11-20T17:00:00"
+        },
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-20T17:00:00",
+          "deadline": "2022-11-21T00:00:00"
+        }
+      ]
     },
     {
-      "taskid": 2,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-19T16:00:00",
-      "deadline": "2022-11-19T17:00:00"
-    },
-    {
-      "taskid": 3,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-20T00:00:00",
-      "deadline": "2022-11-20T01:00:00"
-    },
-    {
-      "taskid": 4,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-20T08:00:00",
-      "deadline": "2022-11-20T09:00:00"
-    },
-    {
-      "taskid": 5,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-20T16:00:00",
-      "deadline": "2022-11-20T17:00:00"
-    },
-    {
-      "taskid": 6,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-21T00:00:00",
-      "deadline": "2022-11-21T01:00:00"
-    },
-    {
-      "taskid": 7,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-21T08:00:00",
-      "deadline": "2022-11-21T09:00:00"
-    },
-    {
-      "taskid": 8,
-      "goalid": "1",
-      "title": "drink water",
-      "duration": 1,
-      "start": "2022-11-21T16:00:00",
-      "deadline": "2022-11-21T17:00:00"
+      "day": "2022-11-21",
+      "outputs": [
+        {
+          "taskid": 12,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-21T00:00:00",
+          "deadline": "2022-11-21T01:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-21T01:00:00",
+          "deadline": "2022-11-21T08:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-21T08:00:00",
+          "deadline": "2022-11-21T09:00:00"
+        },
+        {
+          "taskid": 15,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-21T09:00:00",
+          "deadline": "2022-11-21T16:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "1",
+          "title": "drink water",
+          "duration": 1,
+          "start": "2022-11-21T16:00:00",
+          "deadline": "2022-11-21T17:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2022-11-21T17:00:00",
+          "deadline": "2022-11-22T00:00:00"
+        }
+      ]
     }
   ],
   "impossible": []
