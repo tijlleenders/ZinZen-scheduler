@@ -2,7 +2,7 @@ use std::io::Write;
 use std::path::PathBuf;
 
 fn write_test(file: &mut std::fs::File, content: &mut str) -> Result<(), std::io::Error> {
-    write!(file, "{}\n", content)?;
+    writeln!(file, "{}", content)?;
     Ok(())
 }
 
@@ -54,10 +54,10 @@ fn main() -> Result<(), std::io::Error> {
     result.push(get_imports());
     result.push(get_run_test());
     for dir in dirs_vec.iter() {
-        result.push(test_template(dir.replace("-", "_").as_str(), dir));
+        result.push(test_template(dir.replace('-', "_").as_str(), dir));
     }
 
-    let mut rust_tests_file = std::fs::File::create(&format!("{}/rust_tests.rs", out_dir))?;
+    let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
     write_test(&mut rust_tests_file, &mut result.join(""))?;
     Ok(())
 }
