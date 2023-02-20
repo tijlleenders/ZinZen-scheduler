@@ -40,4 +40,4 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
 
       - name: Run tests
-        run: ./test.sh
+        run: ./deno_test.sh
