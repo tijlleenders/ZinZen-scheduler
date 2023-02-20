@@ -1,10 +1,11 @@
 import { schedule } from "../js-api/scheduler.js";
 import { assertEquals, assertThrows } from "https://deno.land/std@0.141.0/testing/asserts.ts";
+import {existsSync} from "https://deno.land/std/fs/mod.ts";
 
 const testFolder = './tests/jsons/';
 
 const getFiles = (directory: string): [string, string] => {
-  const dir = './tests/jsons/' + directory;  
+  const dir = testFolder + directory;  
   const inputFile = Deno.readTextFileSync(dir + '/input.json');
   const outputFile = Deno.readTextFileSync(dir + '/output.json');
   return [inputFile, outputFile];
@@ -15,7 +16,9 @@ for (const dirEntry of tests) {
   if( dirEntry.name === "benchmark-tests") {
     continue;
   }
-  if (dirEntry.isDirectory ){
+  const input_path =testFolder+`${dirEntry.name}`+"/input.json";
+  const output_path =testFolder+`${dirEntry.name}`+"/input.json";
+  if (dirEntry.isDirectory && existsSync(input_path) && existsSync(output_path)){
     const entry = `${dirEntry.name}`;
   Deno.test(`${entry}`, () => {
       const [inputFile, outputFile] = getFiles(`${entry}`);
