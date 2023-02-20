@@ -44,12 +44,19 @@ fn main() -> Result<(), std::io::Error> {
     let out_dir = String::from("./tests/");
     let mut dirs = get_test_dirs().expect("Unable to read tests directory");
     dirs.retain(|d| !d.file_name().unwrap().eq("benchmark-tests") && (d.is_dir()));
-
-    let dirs_vec = dirs
+    let mut dirs_to_remove = vec![];
+    for d in dirs.iter() {
+        if let Ok(mut dir) = d.read_dir() {
+            if dir.next().is_none() {
+                dirs_to_remove.push(d.file_name().unwrap().to_str().unwrap());
+            }
+        }
+    }
+    let mut dirs_vec = dirs
         .iter()
         .map(|d| d.file_name().unwrap().to_str().unwrap())
         .collect::<Vec<_>>();
-
+    dirs_vec.retain(|d| !dirs_to_remove.contains(d));
     let mut result = vec!["".to_string()];
     result.push(get_imports());
     result.push(get_run_test());
