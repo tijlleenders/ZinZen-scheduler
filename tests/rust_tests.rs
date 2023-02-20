@@ -259,6 +259,11 @@ fn x_per_day_2() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
+fn demo_test() {
+    let (actual_output, desired_output) = run_test("demo-test");
+    assert_eq!(actual_output, desired_output);
+}
+#[test]
 fn weekly_2() {
     let (actual_output, desired_output) = run_test("weekly-2");
     assert_eq!(actual_output, desired_output);
