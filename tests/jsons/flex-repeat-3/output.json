@@ -412,49 +412,76 @@
   ],
   "impossible": [
     {
-      "taskid": 43,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 8,
-      "start": "2022-10-02T14:00:00",
-      "deadline": "2022-10-02T22:00:00",
-      "first_conflict_with": "1"
+      "day": "2022-10-01",
+      "outputs": []
     },
     {
-      "taskid": 44,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 8,
-      "start": "2022-10-09T14:00:00",
-      "deadline": "2022-10-09T22:00:00",
-      "first_conflict_with": "1"
+      "day": "2022-10-02",
+      "outputs": [
+        {
+          "taskid": 43,
+          "goalid": "1",
+          "title": "side project",
+          "duration": 8,
+          "start": "2022-10-02T14:00:00",
+          "deadline": "2022-10-02T22:00:00",
+          "first_conflict_with": "1"
+        }
+      ]
     },
     {
-      "taskid": 45,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 8,
-      "start": "2022-10-14T08:00:00",
-      "deadline": "2022-10-14T22:00:00",
-      "first_conflict_with": "3"
+      "day": "2022-10-03",
+      "outputs": []
     },
     {
-      "taskid": 46,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 8,
-      "start": "2022-10-14T08:00:00",
-      "deadline": "2022-10-14T22:00:00",
-      "first_conflict_with": "3"
+      "day": "2022-10-04",
+      "outputs": []
     },
     {
-      "taskid": 47,
-      "goalid": "1",
-      "title": "side project",
-      "duration": 8,
-      "start": "2022-10-14T08:00:00",
-      "deadline": "2022-10-14T22:00:00",
-      "first_conflict_with": "3"
+      "day": "2022-10-05",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-06",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-07",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-08",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-09",
+      "outputs": [
+        {
+          "taskid": 44,
+          "goalid": "1",
+          "title": "side project",
+          "duration": 8,
+          "start": "2022-10-09T14:00:00",
+          "deadline": "2022-10-09T22:00:00",
+          "first_conflict_with": "1"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-10",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-11",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-12",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-13",
+      "outputs": []
     }
   ]
 }

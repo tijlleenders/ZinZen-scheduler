@@ -62,5 +62,10 @@
       ]
     }
   ],
-  "impossible": []
+  "impossible": [
+    {
+      "day": "2022-09-01",
+      "outputs": []
+    }
+  ]
 }
