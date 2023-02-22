@@ -232,7 +232,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     for goal in goals.iter() {
         goal_map.insert(goal.id.to_owned(), goal.to_owned());
     }
-    let mut parent_goals = goals
+    let parent_goals = goals
         .iter()
         .filter(|goal| goal.children.is_some())
         .cloned()
@@ -253,12 +253,14 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         }
         child.title.push_str(" filler");
         if child.duration.1.is_some() {
-            let new_max = child.duration.1.unwrap() - children_duration;
+            let mut new_max = child.duration.1.unwrap() - children_duration;
             child.duration.0 -= children_duration;
+            new_max -= child.duration.0;
             child.duration.1 = Some(new_max);
             filler_stack.push(child);
         } else {
             child.duration.0 -= children_duration;
+            child.duration.1 = Some(child.duration.0);
             filler_stack.push(child);
         }
     }
