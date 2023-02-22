@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Output {
     taskid: usize,
     goalid: String,
