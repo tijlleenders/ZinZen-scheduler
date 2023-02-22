@@ -87,8 +87,8 @@
         },
         {
           "taskid": 9,
-          "goalid": "1",
-          "title": "work filler",
+          "goalid": "3",
+          "title": "Project B filler",
           "duration": 6,
           "start": "2018-01-03T10:00:00",
           "deadline": "2018-01-03T16:00:00"
@@ -116,18 +116,18 @@
         },
         {
           "taskid": 12,
-          "goalid": "1",
-          "title": "work filler",
-          "duration": 1,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 5,
           "start": "2018-01-04T06:00:00",
-          "deadline": "2018-01-04T07:00:00"
+          "deadline": "2018-01-04T11:00:00"
         },
         {
           "taskid": 13,
-          "goalid": "3",
-          "title": "Project B filler",
-          "duration": 9,
-          "start": "2018-01-04T07:00:00",
+          "goalid": "1",
+          "title": "work filler",
+          "duration": 5,
+          "start": "2018-01-04T11:00:00",
           "deadline": "2018-01-04T16:00:00"
         },
         {
@@ -153,8 +153,8 @@
         },
         {
           "taskid": 16,
-          "goalid": "3",
-          "title": "Project B filler",
+          "goalid": "1",
+          "title": "work filler",
           "duration": 2,
           "start": "2018-01-05T06:00:00",
           "deadline": "2018-01-05T08:00:00"
