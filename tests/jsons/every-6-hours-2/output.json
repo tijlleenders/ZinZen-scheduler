@@ -32,13 +32,18 @@
   ],
   "impossible": [
     {
-      "taskid": 3,
-      "goalid": "1",
-      "title": "backup data",
-      "duration": 4,
-      "start": "2022-11-19T21:00:00",
-      "deadline": "2022-11-20T00:00:00",
-      "first_conflict_with": "Passes Deadline"
+      "day": "2022-11-19",
+      "outputs": [
+        {
+          "taskid": 3,
+          "goalid": "1",
+          "title": "backup data",
+          "duration": 4,
+          "start": "2022-11-19T21:00:00",
+          "deadline": "2022-11-20T00:00:00",
+          "firstConflictWith": "Passes Deadline"
+        }
+      ]
     }
   ]
 }

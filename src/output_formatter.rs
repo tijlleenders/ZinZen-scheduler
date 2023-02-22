@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Output {
     taskid: usize,
     goalid: String,
@@ -42,14 +43,14 @@ impl PartialOrd for Output {
     }
 }
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
-pub struct ScheduledOutput {
+pub struct DayOutputFormat {
     pub day: NaiveDate,
     pub outputs: Vec<Output>,
 }
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct FinalOutput {
-    pub scheduled: Vec<ScheduledOutput>,
-    pub impossible: Vec<Output>,
+    pub scheduled: Vec<DayOutputFormat>,
+    pub impossible: Vec<DayOutputFormat>,
 }
 
 pub fn output_formatter(
@@ -115,7 +116,7 @@ pub fn output_formatter(
     //create final output object
     let final_ouput = FinalOutput {
         scheduled: get_output_with_date(scheduled_outputs, calender_start, calender_end),
-        impossible: impossible_outputs,
+        impossible: get_output_with_date(impossible_outputs, calender_start, calender_end),
     };
 
     Ok(final_ouput)
@@ -221,15 +222,13 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
 }
 
 fn get_output_with_date(
-    scheduled: Vec<Output>,
+    output: Vec<Output>,
     start: NaiveDateTime,
     end: NaiveDateTime,
-) -> Vec<ScheduledOutput> {
-    let scheduled = scheduled;
-
-    let mut scheduled_output = vec![];
+) -> Vec<DayOutputFormat> {
+    let mut result = vec![];
     for day in get_calender_days(start, end).iter() {
-        let mut outputs = scheduled
+        let mut outputs = output
             .iter()
             .filter(|&e| day.eq(&e.start.date()))
             .cloned()
@@ -237,13 +236,13 @@ fn get_output_with_date(
         outputs.sort_by(|a, b| a.start.cmp(&b.start));
 
         combine(&mut outputs);
-        scheduled_output.push(ScheduledOutput {
+        result.push(DayOutputFormat {
             day: day.to_owned(),
             outputs,
         })
     }
 
-    scheduled_output
+    result
 }
 
 fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: NaiveDateTime) {

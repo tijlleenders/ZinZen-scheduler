@@ -38,5 +38,10 @@
       ]
     }
   ],
-  "impossible": []
+  "impossible": [
+    {
+      "day": "2022-11-19",
+      "outputs": []
+    }
+  ]
 }

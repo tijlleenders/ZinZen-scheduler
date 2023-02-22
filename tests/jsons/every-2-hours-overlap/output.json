@@ -115,5 +115,14 @@
       ]
     }
   ],
-  "impossible": []
+  "impossible": [
+    {
+      "day": "2022-11-21",
+      "outputs": []
+    },
+    {
+      "day": "2022-11-22",
+      "outputs": []
+    }
+  ]
 }
