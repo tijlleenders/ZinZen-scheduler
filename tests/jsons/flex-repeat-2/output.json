@@ -1519,7 +1519,7 @@
           "duration": 8,
           "start": "2022-10-31T20:00:00",
           "deadline": "2022-10-31T22:00:00",
-          "first_conflict_with": "5"
+          "firstConflictWith": "5"
         }
       ]
     }
