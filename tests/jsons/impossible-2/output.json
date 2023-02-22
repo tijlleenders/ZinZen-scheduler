@@ -215,7 +215,7 @@
           "duration": 1,
           "start": "2022-11-28T09:00:00",
           "deadline": "2022-11-28T18:00:00",
-          "first_conflict_with": "1"
+          "firstConflictWith": "1"
         }
       ]
     },
@@ -229,7 +229,7 @@
           "duration": 1,
           "start": "2022-11-29T09:00:00",
           "deadline": "2022-11-29T18:00:00",
-          "first_conflict_with": "1"
+          "firstConflictWith": "1"
         }
       ]
     },
@@ -243,7 +243,7 @@
           "duration": 1,
           "start": "2022-11-30T09:00:00",
           "deadline": "2022-11-30T18:00:00",
-          "first_conflict_with": "1"
+          "firstConflictWith": "1"
         }
       ]
     },
@@ -257,7 +257,7 @@
           "duration": 1,
           "start": "2022-12-01T09:00:00",
           "deadline": "2022-12-01T18:00:00",
-          "first_conflict_with": "1"
+          "firstConflictWith": "1"
         }
       ]
     },
@@ -271,7 +271,7 @@
           "duration": 1,
           "start": "2022-12-02T09:00:00",
           "deadline": "2022-12-02T18:00:00",
-          "first_conflict_with": "1"
+          "firstConflictWith": "1"
         }
       ]
     },
