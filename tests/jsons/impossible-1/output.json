@@ -65,7 +65,7 @@
           "duration": 1,
           "start": "2022-01-01T10:00:00",
           "deadline": "2022-01-01T11:00:00",
-          "first_conflict_with": "2"
+          "firstConflictWith": "2"
         }
       ]
     }

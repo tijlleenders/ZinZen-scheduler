@@ -862,7 +862,7 @@
           "duration": 35,
           "start": "2022-10-02T17:00:00",
           "deadline": "2022-10-14T18:00:00",
-          "first_conflict_with": "1"
+          "firstConflictWith": "1"
         }
       ]
     },
