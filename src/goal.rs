@@ -218,25 +218,21 @@ pub enum Tag {
     FlexDur,
     DoNotSort,
 }
-pub trait Durable {
-    fn duration(&self) -> usize;
-}
-impl Durable for Goal {
-    fn duration(&self) -> usize {
-        self.duration.0
-    }
-}
 
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
-    let mut goal_map = HashMap::new();
-    for goal in goals.iter() {
-        goal_map.insert(goal.id.to_owned(), goal.to_owned());
-    }
-    let parent_goals = goals
+    let mut parent_goals = goals
         .iter()
         .filter(|goal| goal.children.is_some())
         .cloned()
         .collect::<Vec<Goal>>();
+    if parent_goals.is_empty() {
+        return goals;
+    }
+    let mut goal_map = HashMap::new();
+    for goal in goals.iter() {
+        goal_map.insert(goal.id.to_owned(), goal.to_owned());
+    }
+
     let mut children_goals = vec![];
     let mut filler_stack = vec![];
 
@@ -253,9 +249,9 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         }
         child.title.push_str(" filler");
         if child.duration.1.is_some() {
-            let mut new_max = child.duration.1.unwrap() - children_duration;
+            let boundary_diff = child.duration.1.unwrap() - child.duration.0;
             child.duration.0 -= children_duration;
-            new_max -= child.duration.0;
+            let new_max = child.duration.0 + boundary_diff;
             child.duration.1 = Some(new_max);
             filler_stack.push(child);
         } else {
