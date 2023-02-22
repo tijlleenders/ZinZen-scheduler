@@ -206,49 +206,82 @@
   ],
   "impossible": [
     {
-      "taskid": 21,
-      "goalid": "2",
-      "title": "gym",
-      "duration": 1,
-      "start": "2022-11-28T09:00:00",
-      "deadline": "2022-11-28T18:00:00",
-      "first_conflict_with": "1"
+      "day": "2022-11-28",
+      "outputs": [
+        {
+          "taskid": 21,
+          "goalid": "2",
+          "title": "gym",
+          "duration": 1,
+          "start": "2022-11-28T09:00:00",
+          "deadline": "2022-11-28T18:00:00",
+          "first_conflict_with": "1"
+        }
+      ]
     },
     {
-      "taskid": 22,
-      "goalid": "2",
-      "title": "gym",
-      "duration": 1,
-      "start": "2022-11-29T09:00:00",
-      "deadline": "2022-11-29T18:00:00",
-      "first_conflict_with": "1"
+      "day": "2022-11-29",
+      "outputs": [
+        {
+          "taskid": 22,
+          "goalid": "2",
+          "title": "gym",
+          "duration": 1,
+          "start": "2022-11-29T09:00:00",
+          "deadline": "2022-11-29T18:00:00",
+          "first_conflict_with": "1"
+        }
+      ]
     },
     {
-      "taskid": 23,
-      "goalid": "2",
-      "title": "gym",
-      "duration": 1,
-      "start": "2022-11-30T09:00:00",
-      "deadline": "2022-11-30T18:00:00",
-      "first_conflict_with": "1"
+      "day": "2022-11-30",
+      "outputs": [
+        {
+          "taskid": 23,
+          "goalid": "2",
+          "title": "gym",
+          "duration": 1,
+          "start": "2022-11-30T09:00:00",
+          "deadline": "2022-11-30T18:00:00",
+          "first_conflict_with": "1"
+        }
+      ]
     },
     {
-      "taskid": 24,
-      "goalid": "2",
-      "title": "gym",
-      "duration": 1,
-      "start": "2022-12-01T09:00:00",
-      "deadline": "2022-12-01T18:00:00",
-      "first_conflict_with": "1"
+      "day": "2022-12-01",
+      "outputs": [
+        {
+          "taskid": 24,
+          "goalid": "2",
+          "title": "gym",
+          "duration": 1,
+          "start": "2022-12-01T09:00:00",
+          "deadline": "2022-12-01T18:00:00",
+          "first_conflict_with": "1"
+        }
+      ]
     },
     {
-      "taskid": 25,
-      "goalid": "2",
-      "title": "gym",
-      "duration": 1,
-      "start": "2022-12-02T09:00:00",
-      "deadline": "2022-12-02T18:00:00",
-      "first_conflict_with": "1"
+      "day": "2022-12-02",
+      "outputs": [
+        {
+          "taskid": 25,
+          "goalid": "2",
+          "title": "gym",
+          "duration": 1,
+          "start": "2022-12-02T09:00:00",
+          "deadline": "2022-12-02T18:00:00",
+          "first_conflict_with": "1"
+        }
+      ]
+    },
+    {
+      "day": "2022-12-03",
+      "outputs": []
+    },
+    {
+      "day": "2022-12-04",
+      "outputs": []
     }
   ]
 }
