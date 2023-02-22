@@ -110,5 +110,10 @@
       ]
     }
   ],
-  "impossible": []
+  "impossible": [
+    {
+      "day": "2022-01-01",
+      "outputs": []
+    }
+  ]
 }
