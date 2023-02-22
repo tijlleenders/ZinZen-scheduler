@@ -1,4 +1,3 @@
-use crate::goal;
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
@@ -7,7 +6,7 @@ use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
 use serde::*;
 use serde::{Deserialize, Serialize};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::fmt;
 use std::option::Option;
 
@@ -220,7 +219,7 @@ pub enum Tag {
 }
 
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
-    let mut parent_goals = goals
+    let parent_goals = goals
         .iter()
         .filter(|goal| goal.children.is_some())
         .cloned()
