@@ -6,12 +6,13 @@ use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
 use serde::*;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fmt;
 use std::option::Option;
 
 /// Represents a Goal passed in by the user from the front end.
 /// Goals are converted into [Task](../task/index.html)s by the scheduler.
-#[derive(Deserialize, Debug, Default, Clone)]
+#[derive(Deserialize, Debug, Default, Clone, PartialEq)]
 pub struct Goal {
     pub id: String,
     pub title: String,
@@ -223,35 +224,43 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         .filter(|goal| goal.children.is_some())
         .cloned()
         .collect::<Vec<Goal>>();
+    if parent_goals.is_empty() {
+        return goals;
+    }
+    let mut goal_map = HashMap::new();
+    for goal in goals.iter() {
+        goal_map.insert(goal.id.to_owned(), goal.to_owned());
+    }
 
-    let mut children_goals = goals
-        .iter()
-        .filter(|goal| goal.children.is_none())
-        .cloned()
-        .collect::<Vec<Goal>>();
+    let mut children_goals = vec![];
+    let mut filler_stack = vec![];
 
     for p in parent_goals {
         let mut children_duration = 0;
         let mut child = p.clone();
         let child_ids = p.children.unwrap();
-
-        for goal in children_goals.iter_mut() {
-            if child_ids.contains(&goal.id) {
-                children_duration += goal.duration.0;
-                goal.duration.1 = Some(goal.duration.0);
+        for id in child_ids.iter() {
+            children_duration += goal_map.get(id).unwrap().duration.0;
+            goal_map.get_mut(id).unwrap().duration.1 = Some(goal_map.get(id).unwrap().duration.0);
+            if goal_map.get(id).unwrap().children.is_none() {
+                children_goals.push(goal_map.get(id).unwrap().to_owned());
             }
         }
         child.title.push_str(" filler");
         if child.duration.1.is_some() {
-            let new_max = child.duration.1.unwrap() - children_duration;
+            let boundary_diff = child.duration.1.unwrap() - child.duration.0;
             child.duration.0 -= children_duration;
+            let new_max = child.duration.0 + boundary_diff;
             child.duration.1 = Some(new_max);
-            children_goals.push(child);
+            filler_stack.push(child);
         } else {
             child.duration.0 -= children_duration;
-            children_goals.push(child);
+            child.duration.1 = Some(child.duration.0);
+            filler_stack.push(child);
         }
     }
+    filler_stack.reverse();
+    children_goals.extend(filler_stack);
     children_goals
 }
 
