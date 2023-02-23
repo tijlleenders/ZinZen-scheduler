@@ -18,13 +18,20 @@ for (const dirEntry of tests) {
   }
   const input_path =testFolder+`${dirEntry.name}`+"/input.json";
   const output_path =testFolder+`${dirEntry.name}`+"/input.json";
-  if (dirEntry.isDirectory && existsSync(input_path) && existsSync(output_path)){
+  
+  if (dirEntry.isDirectory ) {
+    if ( existsSync(input_path) && existsSync(output_path)){
     const entry = `${dirEntry.name}`;
-  Deno.test(`${entry}`, () => {
-      const [inputFile, outputFile] = getFiles(`${entry}`);
-      assertEquals(
-        schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
-    });
+    Deno.test(`${entry}`, () => {
+        const [inputFile, outputFile] = getFiles(`${entry}`);
+        assertEquals(
+          schedule(JSON.parse(inputFile)),JSON.parse(outputFile));
+      });
+    }
+    else {
+      console.log('%cWARN Empty directory : '+`${dirEntry.name}`+' Or one of input.json & output.json not exist ', 'background: #222; color: #bada55')
+    }
+  
   }
 }
 
