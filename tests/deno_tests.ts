@@ -29,7 +29,7 @@ for (const dirEntry of tests) {
       });
     }
     else {
-      console.log('%cWARN Empty directory : '+`${dirEntry.name}`+' Or one of input.json & output.json not exist ', 'background: #222; color: #bada55')
+      console.log('%cWARN Empty directory : {'+`${dirEntry.name}`+'} Or one of input.json & output.json not exist ', 'background: #222; color: #bada55')
     }
   
   }
