@@ -20,7 +20,7 @@ fn test_template(test_dir: &str, is_warn: bool) -> String {
     if is_warn {
         result.push(format!("\n{}SimpleLogger::new().init().unwrap();", space()));
         result.push(format!(
-            "\n{}log::warn!(\"Empty directory Or one of input.json & output.json not exist: {{}}\", \"{:}\");",
+            "\n{}log::warn!(\n{0}{0}\"Empty directory Or one of input.json & output.json not exist: {{}}\",\n{0}{0}\"{:}\"\n{0});",
             space(),
             test_dir
         ));
