@@ -1,4 +1,6 @@
 extern crate scheduler;
+use simple_logger::SimpleLogger;
+extern crate soft;
 mod common;
 #[cfg(test)]
 use pretty_assertions::assert_eq;
@@ -27,6 +29,13 @@ fn split_3() {
 fn basic_1() {
     let (actual_output, desired_output) = run_test("basic-1");
     assert_eq!(actual_output, desired_output);
+}
+#[test]
+fn empty() {
+    SimpleLogger::new().init().unwrap();
+    log::warn!("Empty directory : {}", "empty");
+    let (actual_output, desired_output) = run_test("empty");
+    soft::assert_eq!(actual_output, desired_output).unwrap();
 }
 #[test]
 fn every_wednesday_1() {
