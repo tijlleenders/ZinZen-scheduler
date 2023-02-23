@@ -13,18 +13,34 @@ fn get_test_dirs() -> Result<Vec<PathBuf>, std::io::Error> {
     Ok(dirs)
 }
 
-fn test_template(test_name: &str, test_dir: &str) -> String {
+fn test_template(test_dir: &str, is_warn: bool) -> String {
+    let test_name = test_dir.replace('-', "_");
     let mut result = vec!["\n#[test]\n".to_string()];
     result.push(format!("fn {}() {{", test_name));
+    if is_warn {
+        result.push(format!("\n{}SimpleLogger::new().init().unwrap();", space()));
+        result.push(format!(
+            "\n{}log::warn!(\"Empty directory : {{}}\", \"{:}\");",
+            space(),
+            test_dir
+        ));
+    }
     result.push(format!(
         "\n{}let (actual_output, desired_output) = run_test(\"{}\");",
         space(),
         test_dir
     ));
-    result.push(format!(
-        "\n{}assert_eq!(actual_output, desired_output);\n}}",
-        space()
-    ));
+    if is_warn {
+        result.push(format!(
+            "\n{}soft::assert_eq!(actual_output, desired_output).unwrap();\n}}",
+            space()
+        ));
+    } else {
+        result.push(format!(
+            "\n{}assert_eq!(actual_output, desired_output);\n}}",
+            space()
+        ));
+    }
     result.join("")
 }
 fn space() -> String {
@@ -32,36 +48,43 @@ fn space() -> String {
 }
 fn get_imports() -> String {
     let mut result = vec!["extern crate scheduler;".to_string()];
+    // result.push("\n#[macro_use]".to_string());
+    result.push("\nuse simple_logger::SimpleLogger;".to_string());
+    result.push("\nextern crate soft;".to_string());
     result.push("\nmod common;".to_string());
     result.push("\n#[cfg(test)]".to_string());
     result.push("\nuse pretty_assertions::assert_eq;".to_string());
     result.push("\nuse scheduler::{FinalOutput, Input};".to_string());
     result.push("\nuse std::path::Path;\n\n".to_string());
+    // result.push("\nuse soft::assert_eq;\n".to_string());
+    //result.push("\nuse log::warn;\n\n".to_string());
     result.join("")
 }
 
 fn main() -> Result<(), std::io::Error> {
     let out_dir = String::from("./tests/");
     let mut dirs = get_test_dirs().expect("Unable to read tests directory");
-    dirs.retain(|d| !d.file_name().unwrap().eq("benchmark-tests") && (d.is_dir()));
-    let mut dirs_to_remove = vec![];
-    for d in dirs.iter() {
-        if let Ok(mut dir) = d.read_dir() {
-            if dir.next().is_none() {
-                dirs_to_remove.push(d.file_name().unwrap().to_str().unwrap());
-            }
-        }
-    }
-    let mut dirs_vec = dirs
-        .iter()
-        .map(|d| d.file_name().unwrap().to_str().unwrap())
-        .collect::<Vec<_>>();
-    dirs_vec.retain(|d| !dirs_to_remove.contains(d));
     let mut result = vec!["".to_string()];
     result.push(get_imports());
     result.push(get_run_test());
-    for dir in dirs_vec.iter() {
-        result.push(test_template(dir.replace('-', "_").as_str(), dir));
+    dirs.retain(|d| !d.file_name().unwrap().eq("benchmark-tests") && (d.is_dir()));
+
+    for d in dirs.iter() {
+        if let Ok(mut dir) = d.read_dir() {
+            if dir.next().is_none() {
+                // println!("Warning !! Empty directory {:}",d.file_name().unwrap().to_str().unwrap()); // warning: take more care
+                //dirs_to_remove.push(d.file_name().unwrap().to_str().unwrap());
+                result.push(test_template(
+                    d.file_name().unwrap().to_str().unwrap(),
+                    true,
+                ))
+            } else {
+                result.push(test_template(
+                    d.file_name().unwrap().to_str().unwrap(),
+                    false,
+                ));
+            }
+        }
     }
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
