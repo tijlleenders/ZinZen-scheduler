@@ -20,7 +20,7 @@ fn test_template(test_dir: &str, is_warn: bool) -> String {
     if is_warn {
         result.push(format!("\n{}SimpleLogger::new().init().unwrap();", space()));
         result.push(format!(
-            "\n{}log::warn!(\"Empty directory : {{}}\", \"{:}\");",
+            "\n{}log::warn!(\"Empty directory Or one of input.json & output.json not exist: {{}}\", \"{:}\");",
             space(),
             test_dir
         ));
@@ -48,7 +48,7 @@ fn space() -> String {
 }
 fn get_imports() -> String {
     let mut result = vec!["extern crate scheduler;".to_string()];
-    // result.push("\n#[macro_use]".to_string());
+
     result.push("\nuse simple_logger::SimpleLogger;".to_string());
     result.push("\nextern crate soft;".to_string());
     result.push("\nmod common;".to_string());
@@ -56,8 +56,7 @@ fn get_imports() -> String {
     result.push("\nuse pretty_assertions::assert_eq;".to_string());
     result.push("\nuse scheduler::{FinalOutput, Input};".to_string());
     result.push("\nuse std::path::Path;\n\n".to_string());
-    // result.push("\nuse soft::assert_eq;\n".to_string());
-    //result.push("\nuse log::warn;\n\n".to_string());
+
     result.join("")
 }
 
@@ -72,8 +71,6 @@ fn main() -> Result<(), std::io::Error> {
     for d in dirs.iter() {
         if let Ok(mut dir) = d.read_dir() {
             if dir.next().is_none() {
-                // println!("Warning !! Empty directory {:}",d.file_name().unwrap().to_str().unwrap()); // warning: take more care
-                //dirs_to_remove.push(d.file_name().unwrap().to_str().unwrap());
                 result.push(test_template(
                     d.file_name().unwrap().to_str().unwrap(),
                     true,
