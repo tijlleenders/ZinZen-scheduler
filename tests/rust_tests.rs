@@ -33,7 +33,7 @@ fn basic_1() {
 #[test]
 fn empty() {
     SimpleLogger::new().init().unwrap();
-    log::warn!("Empty directory : {}", "empty");
+    log::warn!("Empty directory Or one of input.json & output.json not exist: {}", "empty");
     let (actual_output, desired_output) = run_test("empty");
     soft::assert_eq!(actual_output, desired_output).unwrap();
 }
