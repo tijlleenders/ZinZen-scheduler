@@ -219,11 +219,12 @@ pub enum Tag {
 }
 
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
-    let parent_goals = goals
+    let mut parent_goals = goals
         .iter()
         .filter(|goal| goal.children.is_some())
         .cloned()
         .collect::<Vec<Goal>>();
+
     if parent_goals.is_empty() {
         return goals;
     }
@@ -235,14 +236,15 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     let mut children_goals = vec![];
     let mut filler_stack = vec![];
 
-    for p in parent_goals {
+    for p in parent_goals.iter_mut() {
+        p.repeat = goal_map.get(&p.id).unwrap().repeat;
         let mut children_duration = 0;
         let mut child = p.clone();
-        let child_ids = p.children.unwrap();
+        let child_ids = p.children.to_owned().unwrap();
         for id in child_ids.iter() {
             children_duration += goal_map.get(id).unwrap().duration.0;
             goal_map.get_mut(id).unwrap().duration.1 = Some(goal_map.get(id).unwrap().duration.0);
-            goal_map.get_mut(id).unwrap().repeat = goal_map.get(id).unwrap().repeat;
+            goal_map.get_mut(id).unwrap().repeat = p.repeat;
             if goal_map.get(id).unwrap().children.is_none() {
                 children_goals.push(goal_map.get(id).unwrap().to_owned());
             }
