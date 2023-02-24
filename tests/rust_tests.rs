@@ -186,6 +186,11 @@ fn every_2_hours() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
+fn children_with_over_duration() {
+    let (actual_output, desired_output) = run_test("children-with-over-duration");
+    assert_eq!(actual_output, desired_output);
+}
+#[test]
 fn planned_goals_hierarchy() {
     let (actual_output, desired_output) = run_test("planned-goals-hierarchy");
     assert_eq!(actual_output, desired_output);
