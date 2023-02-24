@@ -242,6 +242,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         for id in child_ids.iter() {
             children_duration += goal_map.get(id).unwrap().duration.0;
             goal_map.get_mut(id).unwrap().duration.1 = Some(goal_map.get(id).unwrap().duration.0);
+            goal_map.get_mut(id).unwrap().repeat = goal_map.get(id).unwrap().repeat;
             if goal_map.get(id).unwrap().children.is_none() {
                 children_goals.push(goal_map.get(id).unwrap().to_owned());
             }
@@ -252,10 +253,17 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
         if child.duration.1.is_some() {
             boundary_diff = child.duration.1.unwrap() - child.duration.0;
         }
-        child.duration.0 -= children_duration;
-        let new_max = child.duration.0 + boundary_diff;
-        child.duration.1 = Some(new_max);
-        filler_stack.push(child);
+        if children_duration <= child.duration.0 + boundary_diff {
+            if children_duration <= child.duration.0 {
+                child.duration.0 -= children_duration;
+                let new_max = child.duration.0 + boundary_diff;
+                child.duration.1 = Some(new_max);
+            } else {
+                child.duration.0 = 0;
+                child.duration.1 = Some(child.duration.1.unwrap() - children_duration);
+            }
+            filler_stack.push(child);
+        }
     }
     filler_stack.reverse();
     children_goals.extend(filler_stack);
