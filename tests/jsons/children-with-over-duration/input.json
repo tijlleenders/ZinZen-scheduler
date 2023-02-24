@@ -1,6 +1,6 @@
 {
     "startDate": "2018-01-01T00:00:00",
-    "endDate": "2018-01-16T00:00:00",
+    "endDate": "2018-01-07T00:00:00",
     "goals": [
       {
         "id": "1",
@@ -14,7 +14,7 @@
       {
         "id": "2",
         "title": "Project A",
-        "duration": "48",
+        "duration": "38",
         "after_time": 6,
         "before_time": 16
       },
