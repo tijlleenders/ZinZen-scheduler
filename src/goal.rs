@@ -247,17 +247,15 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
             }
         }
         child.title.push_str(" filler");
+        let mut boundary_diff: usize = 0;
+
         if child.duration.1.is_some() {
-            let boundary_diff = child.duration.1.unwrap() - child.duration.0;
-            child.duration.0 -= children_duration;
-            let new_max = child.duration.0 + boundary_diff;
-            child.duration.1 = Some(new_max);
-            filler_stack.push(child);
-        } else {
-            child.duration.0 -= children_duration;
-            child.duration.1 = Some(child.duration.0);
-            filler_stack.push(child);
+            boundary_diff = child.duration.1.unwrap() - child.duration.0;
         }
+        child.duration.0 -= children_duration;
+        let new_max = child.duration.0 + boundary_diff;
+        child.duration.1 = Some(new_max);
+        filler_stack.push(child);
     }
     filler_stack.reverse();
     children_goals.extend(filler_stack);
