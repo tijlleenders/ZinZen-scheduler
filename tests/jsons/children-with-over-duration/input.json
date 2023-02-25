@@ -1,28 +1,28 @@
 {
-    "startDate": "2018-01-01T00:00:00",
-    "endDate": "2018-01-07T00:00:00",
+    "startDate": "2018-03-03T00:00:00",
+    "endDate": "2018-03-18T00:00:00",
     "goals": [
       {
         "id": "1",
         "title": "work",
         "duration": "38-45h",
         "repeat": "weekly",
-        "after_time": 4,
-        "before_time": 20,
+        "after_time": 8,
+        "before_time": 16,
         "children": ["2","3"]
       },
       {
         "id": "2",
         "title": "Project A",
-        "duration": "38",
-        "after_time": 6,
+        "duration": "35",
+        "after_time": 8,
         "before_time": 16
       },
       {
         "id": "3",
         "title": "Project B",
         "duration": "15",
-        "after_time": 6,
+        "after_time": 8,
         "before_time": 16,
         "children": ["4","5"]
       },
@@ -30,14 +30,14 @@
         "id": "4",
         "title": "Research",
         "duration": "3",
-        "after_time": 6,
+        "after_time": 8,
         "before_time": 16
       },
       {
         "id": "5",
         "title": "Write report",
         "duration": "1",
-        "after_time": 6,
+        "after_time": 8,
         "before_time": 16
       }
   ]

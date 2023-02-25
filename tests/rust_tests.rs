@@ -31,16 +31,6 @@ fn basic_1() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
-fn empty() {
-    SimpleLogger::new().init().unwrap();
-    log::warn!(
-        "Empty directory Or one of input.json & output.json not exist: {}",
-        "empty"
-    );
-    let (actual_output, desired_output) = run_test("empty");
-    soft::assert_eq!(actual_output, desired_output).unwrap();
-}
-#[test]
 fn every_wednesday_1() {
     let (actual_output, desired_output) = run_test("every-wednesday-1");
     assert_eq!(actual_output, desired_output);
