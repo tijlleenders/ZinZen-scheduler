@@ -22,7 +22,7 @@ pub mod task_generator;
 pub mod task_placer;
 pub mod time_slot_iterator;
 mod util;
-
+mod budget;
 // Test
 #[cfg(test)]
 mod unit_tests;
