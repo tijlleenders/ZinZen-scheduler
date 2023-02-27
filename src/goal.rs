@@ -239,7 +239,6 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     for p in parent_goals.iter_mut() {
         p.repeat = goal_map.get(&p.id).unwrap().repeat;
         let mut children_duration = 0;
-        let mut child = p.clone();
         let child_ids = p.children.to_owned().unwrap();
         for id in child_ids.iter() {
             children_duration += goal_map.get(id).unwrap().duration.0;
@@ -249,22 +248,22 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
                 children_goals.push(goal_map.get(id).unwrap().to_owned());
             }
         }
-        child.title.push_str(" filler");
+        p.title.push_str(" filler");
         let mut boundary_diff: usize = 0;
 
-        if child.duration.1.is_some() {
-            boundary_diff = child.duration.1.unwrap() - child.duration.0;
+        if p.duration.1.is_some() {
+            boundary_diff = p.duration.1.unwrap() - p.duration.0;
         }
-        if children_duration <= child.duration.0 + boundary_diff {
-            if children_duration <= child.duration.0 {
-                child.duration.0 -= children_duration;
-                let new_max = child.duration.0 + boundary_diff;
-                child.duration.1 = Some(new_max);
+        if children_duration <= p.duration.0 + boundary_diff {
+            if children_duration <= p.duration.0 {
+                p.duration.0 -= children_duration;
+                let new_max = p.duration.0 + boundary_diff;
+                p.duration.1 = Some(new_max);
             } else {
-                child.duration.0 = 0;
-                child.duration.1 = Some(child.duration.1.unwrap() - children_duration);
+                p.duration.0 = 0;
+                p.duration.1 = Some(p.duration.1.unwrap() - children_duration);
             }
-            filler_stack.push(child);
+            filler_stack.push(p.to_owned());
         }
     }
     filler_stack.reverse();
