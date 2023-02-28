@@ -1,14 +1,17 @@
+use crate::output_formatter::get_calender_days;
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
-use chrono::NaiveDateTime;
+use crate::{slot, Slot};
+use chrono::{Datelike, Days, NaiveDateTime, NaiveTime, Weekday};
 use serde::de::{self, Visitor};
 use serde::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt;
 use std::option::Option;
+use wasm_bindgen::__rt::Start;
 
 /// Represents a Goal passed in by the user from the front end.
 /// Goals are converted into [Task](../task/index.html)s by the scheduler.
@@ -216,6 +219,37 @@ pub enum Tag {
     Optional,
     FlexDur,
     DoNotSort,
+}
+
+pub fn get_weeks_as_slots(calendar_start: NaiveDateTime, calender_end: NaiveDateTime) -> Vec<Slot> {
+    let calendar_days = get_calender_days(
+        calendar_start.checked_add_days(Days::new(1)).unwrap(),
+        calender_end,
+    );
+    let mut weeks = vec![];
+    let t = NaiveTime::from_hms_milli_opt(00, 00, 00, 00).unwrap();
+    let mut start = calendar_start;
+    for day in calendar_days.iter() {
+        if day.weekday() == Weekday::Mon {
+            weeks.push(Slot {
+                start,
+                end: day.and_time(t),
+            });
+            start = day.and_time(t);
+        }
+    }
+    if calender_end.weekday() != Weekday::Mon {
+        let start = weeks
+            .last()
+            .unwrap_or(&Slot {
+                start,
+                end: calender_end,
+            })
+            .end;
+        let end = calender_end;
+        weeks.push(Slot { start, end });
+    }
+    weeks
 }
 
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
