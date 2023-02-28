@@ -232,7 +232,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     for goal in goals.iter() {
         goal_map.insert(goal.id.to_owned(), goal.to_owned());
     }
-
+    let mut result_goals = vec![];
     let mut children_goals = vec![];
     let mut filler_stack = vec![];
 
@@ -246,6 +246,7 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
             goal_map.get_mut(id).unwrap().repeat = p.repeat;
             if goal_map.get(id).unwrap().children.is_none() {
                 children_goals.push(goal_map.get(id).unwrap().to_owned());
+                goal_map.remove(id);
             }
         }
         p.title.push_str(" filler");
@@ -265,10 +266,16 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
             }
             filler_stack.push(p.to_owned());
         }
+        goal_map.remove(&p.id);
     }
+    let remaining_goals = goal_map.iter().map(|g| g.1.to_owned()).collect::<Vec<_>>();
     filler_stack.reverse();
-    children_goals.extend(filler_stack);
-    children_goals
+
+    result_goals.extend(children_goals);
+    result_goals.extend(remaining_goals);
+    result_goals.extend(filler_stack);
+
+    result_goals
 }
 
 // pub fn handle_dependency(goals: Vec<Goal>) -> Vec<Goal> {
