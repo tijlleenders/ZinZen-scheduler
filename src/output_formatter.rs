@@ -122,7 +122,7 @@ pub fn output_formatter(
     Ok(final_ouput)
 }
 
-fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
+pub fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
     let mut date = start.date();
     let days_num = Slot { start, end }.num_hours() / 24;
     let mut days = vec![];
