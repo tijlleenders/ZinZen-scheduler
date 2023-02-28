@@ -146,6 +146,11 @@ fn flex_repeat_2() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
+fn sleep_as_child() {
+    let (actual_output, desired_output) = run_test("sleep-as-child");
+    assert_eq!(actual_output, desired_output);
+}
+#[test]
 fn x_per_day_4() {
     let (actual_output, desired_output) = run_test("x-per-day-4");
     assert_eq!(actual_output, desired_output);
