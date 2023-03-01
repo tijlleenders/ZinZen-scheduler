@@ -179,12 +179,28 @@
           "taskid": 19,
           "goalid": "d7fddb3d-2c3b-4a50-aadd-739d60a96378",
           "title": "Work filler",
-          "duration": 10,
+          "duration": 1,
           "start": "2023-03-05T06:00:00",
-          "deadline": "2023-03-05T16:00:00"
+          "deadline": "2023-03-05T07:00:00"
         },
         {
           "taskid": 20,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2023-03-05T07:00:00",
+          "deadline": "2023-03-05T08:00:00"
+        },
+        {
+          "taskid": 21,
+          "goalid": "d7fddb3d-2c3b-4a50-aadd-739d60a96378",
+          "title": "Work filler",
+          "duration": 8,
+          "start": "2023-03-05T08:00:00",
+          "deadline": "2023-03-05T16:00:00"
+        },
+        {
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
           "duration": 6,
@@ -192,7 +208,7 @@
           "deadline": "2023-03-05T22:00:00"
         },
         {
-          "taskid": 21,
+          "taskid": 23,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 2,
@@ -205,7 +221,7 @@
       "day": "2023-03-06",
       "outputs": [
         {
-          "taskid": 22,
+          "taskid": 24,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 6,
@@ -213,23 +229,31 @@
           "deadline": "2023-03-06T06:00:00"
         },
         {
-          "taskid": 23,
-          "goalid": "1429f3f4-0315-4e72-a7e4-19b05b38884c",
-          "title": "Project A",
-          "duration": 10,
-          "start": "2023-03-06T06:00:00",
-          "deadline": "2023-03-06T16:00:00"
-        },
-        {
-          "taskid": 24,
+          "taskid": 25,
           "goalid": "free",
           "title": "free",
+          "duration": 2,
+          "start": "2023-03-06T06:00:00",
+          "deadline": "2023-03-06T08:00:00"
+        },
+        {
+          "taskid": 26,
+          "goalid": "d7fddb3d-2c3b-4a50-aadd-739d60a96378",
+          "title": "Work filler",
           "duration": 6,
-          "start": "2023-03-06T16:00:00",
+          "start": "2023-03-06T08:00:00",
+          "deadline": "2023-03-06T14:00:00"
+        },
+        {
+          "taskid": 27,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2023-03-06T14:00:00",
           "deadline": "2023-03-06T22:00:00"
         },
         {
-          "taskid": 25,
+          "taskid": 28,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 2,
@@ -242,7 +266,7 @@
       "day": "2023-03-07",
       "outputs": [
         {
-          "taskid": 26,
+          "taskid": 29,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 6,
@@ -250,23 +274,15 @@
           "deadline": "2023-03-07T06:00:00"
         },
         {
-          "taskid": 27,
-          "goalid": "1429f3f4-0315-4e72-a7e4-19b05b38884c",
-          "title": "Project A",
-          "duration": 10,
-          "start": "2023-03-07T06:00:00",
-          "deadline": "2023-03-07T16:00:00"
-        },
-        {
-          "taskid": 28,
+          "taskid": 30,
           "goalid": "free",
           "title": "free",
-          "duration": 6,
-          "start": "2023-03-07T16:00:00",
+          "duration": 16,
+          "start": "2023-03-07T06:00:00",
           "deadline": "2023-03-07T22:00:00"
         },
         {
-          "taskid": 29,
+          "taskid": 31,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 2,
@@ -299,17 +315,7 @@
     },
     {
       "day": "2023-03-06",
-      "outputs": [
-        {
-          "taskid": 30,
-          "goalid": "d7fddb3d-2c3b-4a50-aadd-739d60a96378",
-          "title": "Work filler",
-          "duration": 18,
-          "start": "2023-03-06T06:00:00",
-          "deadline": "2023-03-06T07:00:00",
-          "firstConflictWith": "09e198d9-613f-4f17-a23c-4e38d3c5d529"
-        }
-      ]
+      "outputs": []
     },
     {
       "day": "2023-03-07",
