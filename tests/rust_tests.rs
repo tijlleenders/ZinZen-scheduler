@@ -101,6 +101,11 @@ fn options_1() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
+fn different_repetition_goals() {
+    let (actual_output, desired_output) = run_test("different-repetition-goals");
+    assert_eq!(actual_output, desired_output);
+}
+#[test]
 fn every_8_hours() {
     let (actual_output, desired_output) = run_test("every-8-hours");
     assert_eq!(actual_output, desired_output);
