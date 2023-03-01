@@ -42,7 +42,7 @@ simple_logger = "4.0.0"
 # soft assertions without panic
 soft = "0.1.1"
 
-
+slab_tree = "0.3.2"
 
 # used to generate tests
 [build-dependencies]
