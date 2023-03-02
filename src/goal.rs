@@ -190,11 +190,7 @@ impl Goal {
                         t.status = TaskStatus::UNScheduled;
                     }
                 }
-                if let Some(Repetition::Weekly(_)) = self.repeat {
-                    if !self.tags.contains(&Tag::FlexDur) {
-                        t.tags.push(Tag::Weekly);
-                    }
-                }
+
                 tasks.push(t);
             }
         }
