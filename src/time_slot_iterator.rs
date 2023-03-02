@@ -84,9 +84,8 @@ impl Iterator for TimeSlotIterator {
                 }
                 let start = self.start;
                 let mut end = self.start;
-                //while end.weekday().to_string() != "Sun" && end <= self.end {
-
-                while end <= self.end {
+                while end.weekday().to_string() != "Sun" && end <= self.end {
+                    // while end <= self.end {
                     end += Duration::days(1);
                 }
                 if end >= self.end {
