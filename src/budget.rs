@@ -1,33 +1,44 @@
 use std::collections::HashMap;
 
-use crate::task::Task;
+use chrono::Weekday;
+use serde::Deserialize;
+
+use crate::{slot, task::Task, Slot};
 /// An event type.
 #[derive(PartialEq, Eq, Hash, Clone)]
 pub enum Event {
     Schedule,
 }
 
-/// Budget sends events to Tasks (listeners).
-#[derive(Default)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Budget {
-    events: HashMap<Event, Vec<Task>>,
+    budgets_per_week: Vec<BudgetPerWeek>,
+}
+#[derive(Deserialize, Debug, Clone)]
+pub struct BudgetPerWeek {
+    min_hours: usize,
+    max_hours: Option<usize>,
+    week: Slot,
+    schduled: Vec<Slot>,
 }
 
-impl Budget {
-    pub fn subscribe(&mut self, event_type: Event, listener: Task) {
-        self.events.entry(event_type.clone()).or_default();
-        self.events.get_mut(&event_type).unwrap().push(listener);
-    }
-
-    pub fn unsubscribe(&mut self, event_type: Event, listener: Task) {
-        self.events
-            .get_mut(&event_type)
-            .unwrap()
-            .retain(|x| x.id != listener.id);
-    }
-
-    pub fn notify(&self, event_type: Event) {
-        let Tasks = self.events.get(&event_type).unwrap();
-        for Task in Tasks {}
+pub fn intersection() {}
+impl BudgetPerWeek {
+    fn new_from_week() {}
+    fn reduce_available_hours(self, filled_hours: usize) {
+        self.min_hours -= filled_hours;
+        if self.max_hours.is_some() {
+            self.max_hours = Some(self.max_hours.unwrap() - filled_hours);
+        }
     }
 }
+
+// impl Budget {
+//    fn get_allowed_slot(desired:Slot)->Slot{
+//     divive slot/Week ->vec(slot)=week
+//     foreach week find the budget/week :
+//     - cannot find : continue
+//         allowed.push(budgetPer_week_found.get_intersection(desired))
+//     -
+// }
+//}
