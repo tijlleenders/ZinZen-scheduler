@@ -1,4 +1,4 @@
-use crate::goal::{handle_hierarchy, Goal, Tag};
+use crate::goal::{ Goal, Tag, add_filler};
 use crate::input::{GeneratedTasks, Input};
 use crate::Repetition;
 
@@ -13,7 +13,7 @@ pub fn task_generator(
 ) -> GeneratedTasks {
     let mut counter: usize = 0;
     let mut tasks = vec![];
-    let goals = handle_hierarchy(goals);
+    let goals = add_filler(goals);
     for goal in goals {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:

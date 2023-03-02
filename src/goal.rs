@@ -211,7 +211,7 @@ pub enum Tag {
     DoNotSort,
 }
 
-pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
+pub fn add_filler(goals: Vec<Goal>) -> Vec<Goal> {
     let mut parent_goals = goals
         .iter()
         .filter(|goal| goal.children.is_some())
