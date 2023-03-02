@@ -8,7 +8,6 @@ use chrono::{Datelike, Days, NaiveDateTime, NaiveTime, Weekday};
 use serde::de::{self, Visitor};
 use serde::*;
 use serde::{Deserialize, Serialize};
-use slab_tree::*;
 use std::collections::HashMap;
 use std::fmt;
 use std::option::Option;
@@ -266,86 +265,6 @@ pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     for goal in goals.iter() {
         goal_map.insert(goal.id.to_owned(), goal.to_owned());
     }
-    //let mut trees = vec![];
-    for pgoal in parent_goals.iter_mut() {
-        let mut tree = TreeBuilder::new().with_root(pgoal.to_owned()).build();
-        //let mut tree = TreeBuilder::new().with_root("hello").build();
-        let root_id = tree.root_id().expect("root doesn't exist?");
-        let mut parent = tree.get_mut(root_id).unwrap();
-        let child_ids = pgoal.children.to_owned().unwrap();
-        for id in child_ids.iter() {
-            // goal_map.get_mut(id).unwrap().repeat = pgoal.repeat;
-            let mut child_goal = goal_map.get(id).unwrap().to_owned();
-            child_goal.repeat = pgoal.repeat;
-            parent.append(child_goal.to_owned());
-            goal_map.remove(id);
-            goal_map.remove(&pgoal.id);
-        }
-        println!("{:#?}", tree);
-    }
-    let remaining_goals = goal_map.iter().map(|g| g.1.to_owned()).collect::<Vec<_>>();
-
-    remaining_goals
-    // let mut result_goals = vec![];
-    // let mut children_goals = vec![];
-    // let mut filler_stack = vec![];
-
-    // for p in parent_goals.iter_mut() {
-    //     p.repeat = goal_map.get(&p.id).unwrap().repeat;
-    //     let mut children_duration = 0;
-    //     let child_ids = p.children.to_owned().unwrap();
-    //     for id in child_ids.iter() {
-    //         children_duration += goal_map.get(id).unwrap().duration.0;
-    //         goal_map.get_mut(id).unwrap().duration.1 = Some(goal_map.get(id).unwrap().duration.0);
-    //         goal_map.get_mut(id).unwrap().repeat = p.repeat;
-    //         if goal_map.get(id).unwrap().children.is_none() {
-    //             children_goals.push(goal_map.get(id).unwrap().to_owned());
-    //             goal_map.remove(id);
-    //         }
-    //     }
-    //     p.title.push_str(" filler");
-    //     let mut boundary_diff: usize = 0;
-
-    //     if p.duration.1.is_some() {
-    //         boundary_diff = p.duration.1.unwrap() - p.duration.0;
-    //     }
-    //     if children_duration <= p.duration.0 + boundary_diff {
-    //         if children_duration <= p.duration.0 {
-    //             p.duration.0 -= children_duration;
-    //             let new_max = p.duration.0 + boundary_diff;
-    //             p.duration.1 = Some(new_max);
-    //         } else {
-    //             p.duration.0 = 0;
-    //             p.duration.1 = Some(p.duration.1.unwrap() - children_duration);
-    //         }
-    //         filler_stack.push(p.to_owned());
-    //     }
-    //     goal_map.remove(&p.id);
-    // }
-    // let remaining_goals = goal_map.iter().map(|g| g.1.to_owned()).collect::<Vec<_>>();
-    // filler_stack.reverse();
-
-    // result_goals.extend(children_goals);
-    // result_goals.extend(remaining_goals);
-    // result_goals.extend(filler_stack);
-
-    // result_goals
-}
-
-pub fn hierarchy_goals(goals: Vec<Goal>) -> Vec<Goal> {
-    let mut parent_goals = goals
-        .iter()
-        .filter(|goal| goal.children.is_some())
-        .cloned()
-        .collect::<Vec<Goal>>();
-
-    if parent_goals.is_empty() {
-        return goals;
-    }
-    let mut goal_map = HashMap::new();
-    for goal in goals.iter() {
-        goal_map.insert(goal.id.to_owned(), goal.to_owned());
-    }
     let mut result_goals = vec![];
     let mut children_goals = vec![];
     let mut filler_stack = vec![];
@@ -391,68 +310,3 @@ pub fn hierarchy_goals(goals: Vec<Goal>) -> Vec<Goal> {
 
     result_goals
 }
-
-// pub fn handle_dependency(goals: Vec<Goal>) -> Vec<Goal> {
-//     let mut is_dependency = false;
-//     for g in goals.iter() {
-//         if g.after_goals.is_some() {
-//             is_dependency = true;
-//             break;
-//         }
-//     }
-//     if is_dependency {
-//         return sort_goals(goals);
-//     }
-//     goals
-// }
-
-// pub fn sort_goals(goals: Vec<Goal>) -> Vec<Goal> {
-//     let graph_info = get_graph_info(&goals);
-//     let mut ordered_ids = DAG::new_dag_vec(graph_info);
-//     ordered_ids.reverse();
-//     let mut orderd_goals = vec![];
-//     for id in ordered_ids {
-//         orderd_goals.push(
-//             goals
-//                 .iter()
-//                 .find(|&x| x.id.parse::<usize>().unwrap() == id)
-//                 .unwrap()
-//                 .clone(),
-//         )
-//     }
-
-//     orderd_goals
-// }
-
-// pub fn get_graph_info(goals: &[Goal]) -> Vec<(usize, Option<usize>)> {
-//     let dependent_goals = goals
-//         .iter()
-//         .map(|goal| {
-//             (
-//                 goal.id.to_string(),
-//                 goal.after_goals.to_owned().unwrap_or_default(),
-//             )
-//         })
-//         .collect::<Vec<_>>();
-
-//     let mut dependancy_graph_info = vec![];
-//     for g in dependent_goals.iter() {
-//         if g.1.is_empty() {
-//             dependancy_graph_info.push((g.0.parse::<usize>().unwrap_or_default(), None));
-//         } else {
-//             let dependent_graph_info =
-//                 g.1.iter()
-//                     .map(|goal| {
-//                         (
-//                             g.0.parse::<usize>().unwrap_or_default(),
-//                             Some(goal.parse::<usize>().unwrap_or_default()),
-//                         )
-//                     })
-//                     .collect::<Vec<_>>();
-
-//             dependancy_graph_info.extend(dependent_graph_info);
-//         }
-//     }
-
-//     dependancy_graph_info
-// }
