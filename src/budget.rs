@@ -4,32 +4,25 @@ use chrono::Weekday;
 use serde::Deserialize;
 
 use crate::{slot, task::Task, Slot};
-/// An event type.
-#[derive(PartialEq, Eq, Hash, Clone)]
-pub enum Event {
-    Schedule,
-}
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct Budget {
     budgets_per_week: Vec<BudgetPerWeek>,
 }
+
+// we don't need the min hours since placer will check if task exceeds the max hours
 #[derive(Deserialize, Debug, Clone)]
 pub struct BudgetPerWeek {
-    min_hours: usize,
-    max_hours: Option<usize>,
+    max_hours: usize,
     week: Slot,
-    schduled: Vec<Slot>,
+    schduled: usize,
 }
 
 pub fn intersection() {}
 impl BudgetPerWeek {
     fn new_from_week() {}
     fn reduce_available_hours(&mut self, filled_hours: usize) {
-        self.min_hours -= filled_hours;
-        if self.max_hours.is_some() {
-            self.max_hours = Some(self.max_hours.unwrap() - filled_hours);
-        }
+        self.max_hours -= filled_hours;
     }
 }
 
