@@ -208,7 +208,7 @@ pub enum Tag {
     Weekly,
     Optional,
     FlexDur,
-    DoNotSort,
+    Remove,
 }
 
 pub fn add_filler(goals: Vec<Goal>) -> Vec<Goal> {

@@ -49,7 +49,7 @@ fn add_repeat( goals: &mut Vec<Goal>){
             (goal2.duration.0, goal2.duration.1) =
                 ((goal.duration.1.unwrap() - goal.duration.0), None);
             goal2.tags.push(Tag::Optional);
-            goal2.tags.push(Tag::FlexDur);
+            goal.tags.push(Tag::Remove);
             //turn into 1hr goals
             let mut goals: Vec<Goal> = vec![];
             let g = get_1_hr_goals(goal.to_owned());
@@ -58,7 +58,7 @@ fn add_repeat( goals: &mut Vec<Goal>){
             goals.extend(g.into_iter());
         }
     }
-    //goals
+    goals.retain(|g|!g.tags.contains(&Tag::Remove));
 }
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
