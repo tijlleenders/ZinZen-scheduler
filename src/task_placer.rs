@@ -97,19 +97,8 @@ fn schedule(
             tasks[i].schedule(desired_time);
             //since the task was scheduled, remove this time from other tasks' slots (except for those already scheduled)
             for k in 0..tasks.len() {
-                //if the other task is a weekly task and is of the same goal id, remove the entire day from the
-                //other task's slots. else remove just the time that this task has been scheduled at.
-                //this is to prevent weekly tasks from combining all on on one day.
-                if tasks[k].tags.contains(&Tag::Weekly) && tasks[k].goal_id == tasks[i].goal_id {
-                    let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
-                    let slot = Slot {
-                        start: day,
-                        end: day + Duration::days(1),
-                    };
-                    tasks[k].remove_slot(slot);
-                } else {
-                    tasks[k].remove_slot(desired_time);
-                }
+                tasks[k].remove_slot(desired_time);
+
                 //if the removal has rendered the other task Impossible, add this task to that task's conflicts
                 if tasks[k].status == TaskStatus::Impossible {
                     let goal_id = tasks[i].goal_id.to_owned();
