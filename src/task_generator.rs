@@ -28,7 +28,7 @@ pub fn task_generator(
 }
 
 fn add_repeat(goals: Vec<Goal>) -> Vec<Goal> {
-    for goal in goals {
+    for goal in goals.iter() {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
             //If given a goal with 3-5/week, create two goals: One with 3/week and another
