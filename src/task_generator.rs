@@ -14,7 +14,7 @@ pub fn task_generator(
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let mut goals = add_filler(goals);
-    add_repeat(& mut goals);
+    add_repeat(&mut goals);
 
     for goal in goals {
         let goals_vec = goal.generate_tasks(calendar_start, calendar_end, &mut counter);
@@ -27,8 +27,9 @@ pub fn task_generator(
     }
 }
 
-fn add_repeat( goals: &mut Vec<Goal>){
-    for goal in goals.clone().iter_mut(){
+fn add_repeat(goals: &mut Vec<Goal>) {
+    let mut generated_goals = vec![];
+    for goal in goals.iter_mut() {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
             //If given a goal with 3-5/week, create two goals: One with 3/week and another
@@ -38,29 +39,34 @@ fn add_repeat( goals: &mut Vec<Goal>){
             goal.repeat = Some(Repetition::Weekly(min));
             goal2.repeat = Some(Repetition::Weekly(max - min));
             goal2.tags.push(Tag::Optional);
-            goals.push(goal2.to_owned());
+            generated_goals.push(goal2.to_owned());
         } else if goal.duration.1.is_some() {
             //if this is a flex duration e.g. '35-40h weekly', create two goals: One with 35/week
             //and another with 5/week. The 5/week goal should be tagged optional. Then turn each
             //of these goals into 1hr goals and generate tasks from each.
+            goal.tags.push(Tag::FlexDur);
+            goal.tags.push(Tag::Weekly);
             let mut goal2 = goal.clone();
             (goal.duration.0, goal.duration.1) = (goal.duration.0, None);
-            goal.tags.push(Tag::FlexDur);
             
+
             (goal2.duration.0, goal2.duration.1) =
                 ((goal2.duration.1.unwrap() - goal2.duration.0), None);
             goal2.tags.push(Tag::Optional);
-            goal2.tags.push(Tag::FlexDur);
-            goal.tags.push(Tag::Remove);
+       
+
             //turn into 1hr goals
-            let mut goals: Vec<Goal> = vec![];
+            // let mut goals: Vec<Goal> = vec![];
             let g = get_1_hr_goals(goal.to_owned());
-            goals.extend(g.into_iter());
+            generated_goals.extend(g.into_iter());
             let g = get_1_hr_goals(goal2);
-            goals.extend(g.into_iter());
+            goal.tags.push(Tag::Remove);
+            generated_goals.extend(g.into_iter());
         }
     }
-    goals.retain(|g|!g.tags.contains(&Tag::Remove));
+
+    goals.retain(|g| !g.tags.contains(&Tag::Remove));
+    goals.extend(generated_goals);
 }
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
