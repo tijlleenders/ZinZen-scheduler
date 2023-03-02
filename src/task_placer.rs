@@ -94,6 +94,8 @@ fn schedule(
 
         //check if it is possible to schedule this task
         if let Some(desired_time) = can_schedule(i, tasks) {
+            //tasks[i].schedule(task[i].budget.get_allowed_slot(desired_time));
+
             tasks[i].schedule(desired_time);
             //since the task was scheduled, remove this time from other tasks' slots (except for those already scheduled)
             for k in 0..tasks.len() {
