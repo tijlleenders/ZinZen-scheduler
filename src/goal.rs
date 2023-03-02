@@ -220,37 +220,6 @@ pub enum Tag {
     DoNotSort,
 }
 
-pub fn get_weeks_as_slots(calendar_start: NaiveDateTime, calender_end: NaiveDateTime) -> Vec<Slot> {
-    let calendar_days = get_calender_days(
-        calendar_start.checked_add_days(Days::new(1)).unwrap(),
-        calender_end,
-    );
-    let mut weeks = vec![];
-    let t = NaiveTime::from_hms_milli_opt(00, 00, 00, 00).unwrap();
-    let mut start = calendar_start;
-    for day in calendar_days.iter() {
-        if day.weekday() == Weekday::Mon {
-            weeks.push(Slot {
-                start,
-                end: day.and_time(t),
-            });
-            start = day.and_time(t);
-        }
-    }
-    if calender_end.weekday() != Weekday::Mon {
-        let start = weeks
-            .last()
-            .unwrap_or(&Slot {
-                start,
-                end: calender_end,
-            })
-            .end;
-        let end = calender_end;
-        weeks.push(Slot { start, end });
-    }
-    weeks
-}
-
 pub fn handle_hierarchy(goals: Vec<Goal>) -> Vec<Goal> {
     let mut parent_goals = goals
         .iter()
