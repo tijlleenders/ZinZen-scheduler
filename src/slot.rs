@@ -113,4 +113,21 @@ impl Slot {
     pub fn contains_hour_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
     }
+    pub fn get_intersection(&self, other: &Slot) -> Slot {
+        if (other.start >= self.start) && (other.end <= self.end) {
+            return other.to_owned();
+        } else if (other.start <= self.start) && (other.end < self.end) {
+            return Slot {
+                start: self.start,
+                end: other.end,
+            };
+        } else if (other.start > self.start) && (other.end >= self.end) {
+            return Slot {
+                start: other.start,
+                end: self.end,
+            };
+        } else {
+            return self.to_owned();
+        }
+    }
 }
