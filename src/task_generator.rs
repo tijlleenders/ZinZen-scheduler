@@ -43,12 +43,14 @@ fn add_repeat( goals: &mut Vec<Goal>){
             //if this is a flex duration e.g. '35-40h weekly', create two goals: One with 35/week
             //and another with 5/week. The 5/week goal should be tagged optional. Then turn each
             //of these goals into 1hr goals and generate tasks from each.
+            let mut goal2 = goal.clone();
             (goal.duration.0, goal.duration.1) = (goal.duration.0, None);
             goal.tags.push(Tag::FlexDur);
-            let mut goal2 = goal.clone();
+            
             (goal2.duration.0, goal2.duration.1) =
-                ((goal.duration.1.unwrap() - goal.duration.0), None);
+                ((goal2.duration.1.unwrap() - goal2.duration.0), None);
             goal2.tags.push(Tag::Optional);
+            goal2.tags.push(Tag::FlexDur);
             goal.tags.push(Tag::Remove);
             //turn into 1hr goals
             let mut goals: Vec<Goal> = vec![];
