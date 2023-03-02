@@ -25,7 +25,7 @@ pub struct BudgetPerWeek {
 pub fn intersection() {}
 impl BudgetPerWeek {
     fn new_from_week() {}
-    fn reduce_available_hours(self, filled_hours: usize) {
+    fn reduce_available_hours(&mut self, filled_hours: usize) {
         self.min_hours -= filled_hours;
         if self.max_hours.is_some() {
             self.max_hours = Some(self.max_hours.unwrap() - filled_hours);
