@@ -162,7 +162,7 @@ impl Task {
         }
     }
 
-    fn calculate_flexibility(&mut self) {
+    pub fn calculate_flexibility(&mut self) {
         let mut flexibility = 0;
         for slot in &self.slots {
             if slot.num_hours() < self.duration {

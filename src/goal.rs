@@ -182,14 +182,7 @@ impl Goal {
                     t.conflicts
                         .push((t.slots[0], "Passes Deadline".to_string()));
                 } else {
-                    //calculate flexibility and mark it as unscheduled.
-                    let mut flexibility = 0;
-                    for slot in &t.slots {
-                        if slot.num_hours() >= (self.duration.0) {
-                            flexibility += slot.num_hours() - self.duration.0 + 1;
-                        }
-                    }
-                    t.flexibility = flexibility;
+                    t.calculate_flexibility();
                     if t.after_goals.is_some() {
                         t.status = TaskStatus::Waiting;
                     }
