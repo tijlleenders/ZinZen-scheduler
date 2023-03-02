@@ -184,7 +184,7 @@ impl Goal {
                     t.conflicts
                         .push((t.slots[0], "Passes Deadline".to_string()));
                 } else {
-                    //calculate flexibility and mark it as unscheduled.
+                    //calculate flexibility and mark it as ReadyToSchedule.
                     let mut flexibility = 0;
                     for slot in &t.slots {
                         if slot.num_hours() >= (self.duration.0) {
@@ -193,10 +193,10 @@ impl Goal {
                     }
                     t.flexibility = flexibility;
                     if t.after_goals.is_some() {
-                        t.status = TaskStatus::Waiting;
+                        t.status = TaskStatus::Blocked;
                     }
                     if t.after_goals.is_none() {
-                        t.status = TaskStatus::UNScheduled;
+                        t.status = TaskStatus::ReadyToSchedule;
                     }
                 }
                 if let Some(Repetition::Weekly(_)) = self.repeat {

@@ -220,7 +220,7 @@ impl Task {
                 calender_end: self.calender_end,
             };
             task.calculate_flexibility();
-            task.status = TaskStatus::UNScheduled;
+            task.status = TaskStatus::ReadyToSchedule;
             *counter += 1;
             tasks.push(task);
         }
@@ -263,7 +263,7 @@ impl Task {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
-        if self.status == TaskStatus::Waiting {
+        if self.status == TaskStatus::Blocked {
             Self::remove_taken_slots(self, s);
         }
         //if no more slots left, this is an impossible task - mark it as such and return
@@ -305,10 +305,9 @@ impl Task {
 }
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum TaskStatus {
-    UNScheduled,
     Scheduled,
     Impossible,
     Uninitialized,
-    Waiting,
-    Allowed,
+    Blocked,
+    ReadyToSchedule,
 }

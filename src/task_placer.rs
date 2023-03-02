@@ -6,7 +6,7 @@ use crate::errors::Error;
 use crate::goal::Tag;
 use crate::input::{GeneratedTasks, PlacedTasks};
 use crate::slot::Slot;
-use crate::task::TaskStatus::{Scheduled, UNScheduled};
+use crate::task::TaskStatus::Scheduled;
 use crate::task::{Task, TaskStatus};
 use std::collections::VecDeque;
 
@@ -18,11 +18,11 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
     let mut scheduled_tasks: Vec<Task> = Vec::new();
     let mut waiting_tasks = tasks
         .iter()
-        .filter(|task| task.status == TaskStatus::Waiting)
+        .filter(|task| task.status == TaskStatus::Blocked)
         .cloned()
         .collect::<Vec<Task>>();
     let mut allowed_tasks: VecDeque<Task> = VecDeque::new();
-    tasks.retain(|task| task.status != TaskStatus::Waiting);
+    tasks.retain(|task| task.status != TaskStatus::Blocked);
     //first pass of scheduler while tasks are unsplit
     schedule(
         &mut tasks,
@@ -33,7 +33,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
     waiting_tasks.sort();
     while !waiting_tasks.is_empty() {
         //remove non-waiting or allowed_tasks
-        waiting_tasks.retain(|task| task.status == TaskStatus::Waiting);
+        waiting_tasks.retain(|task| task.status == TaskStatus::Blocked);
         while !allowed_tasks.is_empty() {
             tasks.push(allowed_tasks.pop_front().unwrap());
             let mut counter = tasks[tasks.len() - 1].id + 1;
@@ -134,7 +134,7 @@ fn schedule(
                         if new_after.is_empty() {
                             waiting_tasks[k].after_goals = None;
 
-                            waiting_tasks[k].status = TaskStatus::Allowed;
+                            waiting_tasks[k].status = TaskStatus::ReadyToSchedule;
                             waiting_tasks.retain(|x| x.id != tasks[k].id);
                             allowed_tasks.push_back(waiting_tasks[k].clone());
                         }
@@ -150,7 +150,7 @@ fn schedule(
                         if new_after.is_empty() {
                             waiting_tasks[k].after_goals = None;
 
-                            waiting_tasks[k].status = TaskStatus::Allowed;
+                            waiting_tasks[k].status = TaskStatus::ReadyToSchedule;
                             allowed_tasks.push_back(waiting_tasks[k].clone());
                             //waiting_tasks.retain(|x| x.id != tasks[k].id);
                         }
@@ -218,9 +218,7 @@ fn split_unscheduled_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     let mut new_tasks = Vec::new();
     let mut ids_to_remove = Vec::new();
     for task in tasks.iter_mut() {
-        if (task.status == UNScheduled || task.status == TaskStatus::Allowed)
-            && !task.tags.contains(&Tag::Optional)
-        {
+        if (task.status == TaskStatus::ReadyToSchedule) && !task.tags.contains(&Tag::Optional) {
             match task.split(counter) {
                 Err(Error::CannotSplit) | Err(_) => {}
                 Ok(mut one_hour_tasks) => {
