@@ -18,7 +18,6 @@ pub struct BudgetPerWeek {
     schduled: usize,
 }
 
-pub fn intersection() {}
 impl BudgetPerWeek {
     fn new_from_week() {}
     fn reduce_available_hours(&mut self, filled_hours: usize) {
@@ -26,15 +25,15 @@ impl BudgetPerWeek {
     }
 }
 
-// impl Budget {
-//    fn get_allowed_slot(desired:Slot)->Slot{
-//     divive slot/Week ->vec(slot)=week
-//     foreach week find the budget/week :
-//     - cannot find : continue
-//         allowed.push(budgetPer_week_found.get_intersection(desired))
-//     -
-// }
-//}
+impl Budget {
+    fn get_allowed_slot(desired: Slot) -> Slot {
+        //     divive slot/Week ->vec(slot)=week
+        //     foreach week find the budget/week :
+        //     - cannot find : continue
+        //         allowed.push(budgetPer_week_found.get_intersection(desired))
+        //     -
+    }
+}
 
 // pub fn slot_per_day(calendar_start: NaiveDateTime, calender_end: NaiveDateTime) -> Vec<Slot> {
 
