@@ -28,35 +28,33 @@ pub fn task_generator(
 }
 
 fn add_repeat(goals: Vec<Goal>) -> Vec<Goal> {
-    for goal in goals.iter() {
+    for goal in goals.iter_mut() {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
             //If given a goal with 3-5/week, create two goals: One with 3/week and another
             //with 2/week. The 2/week goal will be tagged optional so won't show up in impossible
             //tasks in case any aren't scheduled.
-            let mut goal1 = goal.clone();
-            goal1.repeat = Some(Repetition::Weekly(min));
             let mut goal2 = goal.clone();
+            goal.repeat = Some(Repetition::Weekly(min));
             goal2.repeat = Some(Repetition::Weekly(max - min));
             goal2.tags.push(Tag::Optional);
+            goals.push(goal2);
         } else if goal.duration.1.is_some() {
             //if this is a flex duration e.g. '35-40h weekly', create two goals: One with 35/week
             //and another with 5/week. The 5/week goal should be tagged optional. Then turn each
             //of these goals into 1hr goals and generate tasks from each.
-            let mut goal1 = goal.clone();
-            (goal1.duration.0, goal1.duration.1) = (goal.duration.0, None);
-            goal1.tags.push(Tag::FlexDur);
+            (goal.duration.0, goal.duration.1) = (goal.duration.0, None);
+            goal.tags.push(Tag::FlexDur);
             let mut goal2 = goal.clone();
             (goal2.duration.0, goal2.duration.1) =
                 ((goal.duration.1.unwrap() - goal.duration.0), None);
             goal2.tags.push(Tag::Optional);
             goal2.tags.push(Tag::FlexDur);
-
             //turn into 1hr goals
             let mut goals: Vec<Goal> = vec![];
-            let g = get_1_hr_goals(goal1);
+            let g = get_1_hr_goals(goal.to_owned());
             goals.extend(g.into_iter());
-            let g = get_1_hr_goals(goal2);
+            let g = get_1_hr_goals(goal2.to_owned());
             goals.extend(g.into_iter());
         }
     }
