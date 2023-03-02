@@ -1,4 +1,4 @@
-use crate::goal::{ Goal, Tag, add_filler};
+use crate::goal::{add_filler, Goal, Tag};
 use crate::input::{GeneratedTasks, Input};
 use crate::Repetition;
 
@@ -14,6 +14,20 @@ pub fn task_generator(
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let goals = add_filler(goals);
+    let goals = add_repeat(goals);
+
+    for goal in goals {
+        let goals_vec = goal.generate_tasks(calendar_start, calendar_end, &mut counter);
+        tasks.extend(goals_vec);
+    }
+    GeneratedTasks {
+        calendar_start,
+        calendar_end,
+        tasks,
+    }
+}
+
+fn add_repeat(goals: Vec<Goal>) -> Vec<Goal> {
     for goal in goals {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
@@ -25,8 +39,6 @@ pub fn task_generator(
             let mut goal2 = goal.clone();
             goal2.repeat = Some(Repetition::Weekly(max - min));
             goal2.tags.push(Tag::Optional);
-            tasks.extend(goal1.generate_tasks(calendar_start, calendar_end, &mut counter));
-            tasks.extend(goal2.generate_tasks(calendar_start, calendar_end, &mut counter));
         } else if goal.duration.1.is_some() {
             //if this is a flex duration e.g. '35-40h weekly', create two goals: One with 35/week
             //and another with 5/week. The 5/week goal should be tagged optional. Then turn each
@@ -46,19 +58,9 @@ pub fn task_generator(
             goals.extend(g.into_iter());
             let g = get_1_hr_goals(goal2);
             goals.extend(g.into_iter());
-            for goal in goals {
-                tasks.extend(goal.generate_tasks(calendar_start, calendar_end, &mut counter));
-            }
-        } else {
-            let goals_vec = goal.generate_tasks(calendar_start, calendar_end, &mut counter);
-            tasks.extend(goals_vec);
         }
     }
-    GeneratedTasks {
-        calendar_start,
-        calendar_end,
-        tasks,
-    }
+    goals
 }
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
