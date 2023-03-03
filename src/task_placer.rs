@@ -34,12 +34,12 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
 }
 
 fn schedule(mut tasks_to_place: &mut TasksToPlace) {
-    'find_task_ready_to_schedule: loop {
+    loop {
         tasks_to_place.sort_on_flexibility();
 
         match find_best_slot(&tasks_to_place.tasks) {
             Some(chosen_slot) => do_the_scheduling(&mut tasks_to_place.tasks, chosen_slot),
-            None => todo!(),
+            None => break,
         }
     }
 }
