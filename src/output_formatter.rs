@@ -54,27 +54,21 @@ pub struct FinalOutput {
     pub impossible: Vec<DayOutputFormat>,
 }
 
-pub fn output_formatter(
-    mut placed_tasks: PlacedTasks
-) -> Result<FinalOutput, Error> {
-    let mut scheduled_outputs: Vec<Output> = Vec::new();
-    let mut impossible_outputs: Vec<Output> = Vec::new();
-
-    //prevent deadline end from exceeding calender end and update duration
-    for task in scheduled.iter_mut() {
-        if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-            return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-        }
-        //prevent slot end from exceeding calender end
-        if task.confirmed_deadline.unwrap() > calender_end {
-            task.confirmed_deadline = Some(calender_end);
-            task.duration = Slot {
-                start: task.confirmed_start.unwrap(),
-                end: task.confirmed_deadline.unwrap(),
+pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Error> {
+    for task in placed_tasks.tasks.iter_mut() {
+        match task.status {
+            TaskStatus::Scheduled => {}
+            TaskStatus::Impossible => todo!(),
+            TaskStatus::Uninitialized => {
+                panic!("no uninitialized tasks should be present in placed_tasks")
             }
-            .num_hours();
+            TaskStatus::Blocked => todo!(),
+            TaskStatus::ReadyToSchedule => todo!(),
         }
     }
+
+    let mut scheduled_outputs: Vec<Output> = Vec::new();
+    let mut impossible_outputs: Vec<Output> = Vec::new();
 
     //convert scheduled tasks to output objects and add to scheduled_outputs vec
     for task in scheduled {

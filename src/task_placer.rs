@@ -63,6 +63,22 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
 
 fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, task_index: usize, desired_slot: Slot) {
     tasks_to_place.tasks[task_index].schedule(desired_slot);
+        //REFACTOR!!
+        // //prevent deadline end from exceeding calender end and update duration
+        // for task in scheduled.iter_mut() {
+        //     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+        //         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+        //     }
+        //     //prevent slot end from exceeding calender end
+        //     if task.confirmed_deadline.unwrap() > calender_end {
+        //         task.confirmed_deadline = Some(calender_end);
+        //         task.duration = Slot {
+        //             start: task.confirmed_start.unwrap(),
+        //             end: task.confirmed_deadline.unwrap(),
+        //         }
+        //         .num_hours();
+        //     }
+        // }
     for task in tasks_to_place.tasks.iter_mut() {
         task.remove_slot(desired_slot);
         task.remove_from_blocked_by(task.goal_id);
