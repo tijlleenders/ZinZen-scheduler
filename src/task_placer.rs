@@ -4,7 +4,7 @@ use chrono::Duration;
 
 use crate::errors::Error;
 use crate::goal::Tag;
-use crate::input::{TasksToPlace, PlacedTasks};
+use crate::input::{PlacedTasks, TasksToPlace};
 use crate::slot::Slot;
 use crate::task::{Task, TaskStatus};
 
@@ -33,10 +33,6 @@ pub fn task_placer(tasks_to_place: TasksToPlace) -> PlacedTasks {
     }
 }
 
-fn get_slot_possibilities(task: Task) -> SlotPossibilities {
-    SlotPossibilities::new
-}
-
 fn schedule(tasks_to_place: &mut TasksToPlace) {
     'find_ready_to_schedule: loop {
         tasks_to_place.sort_on_flexibility();
@@ -46,8 +42,8 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
                     continue;
                 }
                 TaskStatus::ReadyToSchedule => {
-                    let slot_possibilities = get_slot_possibilities(*task);
-                    match slot_possibilities.get_best() {
+                    let slot_finder = SlotFinder::new(*task, tasks_to_place);
+                    match slot_finder.find_best_slot() {
                         Some(slot) => {
                             do_the_scheduling(tasks_to_place, 1, slot);
                         }
@@ -97,10 +93,20 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     tasks.extend_from_slice(&new_tasks[..]);
 }
 
-pub struct SlotPossibilities {
-    pub slot_possibilities: Vec<(Slot, u32)>,
+pub struct SlotFinder {
+    slot_finder: Vec<(Slot, u32)>,
+    tasks_to_place: TasksToPlace,
 }
 
-impl SlotPossibilities {
-    pub fn get_slot_possibilities(task: Task) -> Slot {}
+impl SlotFinder {
+    fn new(task: Task, &mut tasks_to_place: &mut TasksToPlace) -> SlotFinder {
+        SlotFinder {
+            slot_finder: vec![],
+            tasks_to_place: tasks_to_place,
+        }
+    }
+
+    fn find_best_slot(&self) -> Option<Slot> {
+        todo!()
+    }
 }
