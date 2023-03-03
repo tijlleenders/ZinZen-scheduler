@@ -11,7 +11,7 @@ use crate::task::{Task, TaskStatus};
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible tasks.
-pub fn task_placer(tasks_to_place: TasksToPlace) -> PlacedTasks {
+pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks_to_place);
 
@@ -34,6 +34,7 @@ pub fn task_placer(tasks_to_place: TasksToPlace) -> PlacedTasks {
 }
 
 fn schedule(tasks_to_place: &mut TasksToPlace) {
+    
     'find_task_ready_to_schedule: loop {
         tasks_to_place.sort_on_flexibility();
         for task in tasks_to_place.tasks.iter_mut() {
@@ -42,8 +43,8 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
                     continue;
                 }
                 TaskStatus::ReadyToSchedule => {
-                    let slot_finder = SlotFinder::new(*task, tasks_to_place);
-                    match slot_finder.find_best_slot() {
+                    let slot_finder = find_best_slot(*task, &tasks_to_place.tasks);
+                    match slot_finder {
                         Some(slot) => {
                             do_the_scheduling(tasks_to_place, 1, slot);
                         }
@@ -109,20 +110,11 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     tasks.extend_from_slice(&new_tasks[..]);
 }
 
-pub struct SlotFinder {
-    slot_finder: Vec<(Slot, u32)>,
-    tasks_to_place: TasksToPlace,
-}
 
-impl SlotFinder {
-    fn new(task: Task, &mut tasks_to_place: &mut TasksToPlace) -> SlotFinder {
-        SlotFinder {
-            slot_finder: vec![],
-            tasks_to_place: tasks_to_place,
-        }
-    }
 
-    fn find_best_slot(&self) -> Option<Slot> {
+    fn find_best_slot(task:Task, tasks_to_place:&Vec<Task>) -> Option<Slot> {
+        let slot_conflicts: Vec<(Slot, u32)>;
+        let tasks_to_place: TasksToPlace;
         todo!()
     }
-}
+
