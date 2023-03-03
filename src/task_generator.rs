@@ -1,5 +1,5 @@
 use crate::goal::{add_filler, Goal, Tag};
-use crate::input::{GeneratedTasks, Input};
+use crate::input::{TasksToPlace, Input};
 use crate::Repetition;
 
 /// # Task Generator
@@ -10,7 +10,7 @@ pub fn task_generator(
         calendar_end,
         goals,
     }: Input,
-) -> GeneratedTasks {
+) -> TasksToPlace {
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let mut goals = add_filler(goals);
@@ -20,7 +20,7 @@ pub fn task_generator(
         let goals_vec = goal.generate_tasks(calendar_start, calendar_end, &mut counter);
         tasks.extend(goals_vec);
     }
-    GeneratedTasks {
+    TasksToPlace {
         calendar_start,
         calendar_end,
         tasks,
