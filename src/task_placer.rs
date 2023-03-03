@@ -15,7 +15,7 @@ use std::collections::VecDeque;
 pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
     let mut tasks = generated_tasks.tasks;
     let mut scheduled_tasks: Vec<Task> = Vec::new();
-    let mut waiting_tasks = tasks
+    let mut blocked_tasks = tasks
         .iter()
         .filter(|task| task.status == TaskStatus::Blocked)
         .cloned()
@@ -26,13 +26,12 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
     schedule(
         &mut tasks,
         &mut scheduled_tasks,
-        &mut waiting_tasks,
+        &mut blocked_tasks,
         &mut allowed_tasks,
     );
-    waiting_tasks.sort();
-    while !waiting_tasks.is_empty() {
-        //remove non-waiting or allowed_tasks
-        waiting_tasks.retain(|task| task.status == TaskStatus::Blocked);
+    blocked_tasks.sort();
+    while !blocked_tasks.is_empty() {
+        blocked_tasks.retain(|task| task.status == TaskStatus::Blocked);
         while !allowed_tasks.is_empty() {
             tasks.push(allowed_tasks.pop_front().unwrap());
             let mut counter = tasks[tasks.len() - 1].id + 1;
@@ -41,7 +40,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
             schedule(
                 &mut tasks,
                 &mut scheduled_tasks,
-                &mut waiting_tasks,
+                &mut blocked_tasks,
                 &mut allowed_tasks,
             );
         }
@@ -58,7 +57,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
         schedule(
             &mut tasks,
             &mut scheduled_tasks,
-            &mut waiting_tasks,
+            &mut blocked_tasks,
             &mut allowed_tasks,
         );
     }
@@ -78,7 +77,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
 fn schedule(
     tasks: &mut Vec<Task>,
     scheduled_tasks: &mut Vec<Task>,
-    waiting_tasks: &mut Vec<Task>,
+    blocked_tasks: &mut Vec<Task>,
     allowed_tasks: &mut VecDeque<Task>,
 ) {
     let mut i = 0; //index that points to a task in the collection of tasks
@@ -104,44 +103,43 @@ fn schedule(
                     tasks[k].conflicts.push((desired_time, goal_id));
                 }
             }
-            for k in 0..waiting_tasks.len() {
-                if waiting_tasks[k].tags.contains(&Tag::Weekly)
-                    && waiting_tasks[k].goal_id == tasks[i].goal_id
+            for k in 0..blocked_tasks.len() {
+                if blocked_tasks[k].tags.contains(&Tag::Weekly)
+                    && blocked_tasks[k].goal_id == tasks[i].goal_id
                 {
                     let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
                     let slot = Slot {
                         start: day,
                         end: day + Duration::days(1),
                     };
-                    waiting_tasks[k].remove_slot(slot);
-                    if waiting_tasks[k].after_goals.is_some() {
-                        let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
+                    blocked_tasks[k].remove_slot(slot);
+                    if blocked_tasks[k].after_goals.is_some() {
+                        let mut new_after = blocked_tasks[k].after_goals.as_ref().unwrap().clone();
                         new_after.retain(|x| !x.eq(&tasks[i].goal_id));
                         if new_after.is_empty() {
-                            waiting_tasks[k].after_goals = None;
+                            blocked_tasks[k].after_goals = None;
 
-                            waiting_tasks[k].status = TaskStatus::ReadyToSchedule;
-                            waiting_tasks.retain(|x| x.id != tasks[k].id);
-                            allowed_tasks.push_back(waiting_tasks[k].clone());
+                            blocked_tasks[k].status = TaskStatus::ReadyToSchedule;
+                            blocked_tasks.retain(|x| x.id != tasks[k].id);
+                            allowed_tasks.push_back(blocked_tasks[k].clone());
                         }
                         if !new_after.is_empty() {
-                            waiting_tasks[k].after_goals = Some(new_after);
+                            blocked_tasks[k].after_goals = Some(new_after);
                         }
                     }
                 } else {
-                    waiting_tasks[k].remove_slot(desired_time);
-                    if waiting_tasks[k].after_goals.is_some() {
-                        let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
+                    blocked_tasks[k].remove_slot(desired_time);
+                    if blocked_tasks[k].after_goals.is_some() {
+                        let mut new_after = blocked_tasks[k].after_goals.as_ref().unwrap().clone();
                         new_after.retain(|x| !x.eq(&tasks[i].goal_id));
                         if new_after.is_empty() {
-                            waiting_tasks[k].after_goals = None;
+                            blocked_tasks[k].after_goals = None;
 
-                            waiting_tasks[k].status = TaskStatus::ReadyToSchedule;
-                            allowed_tasks.push_back(waiting_tasks[k].clone());
-                            //waiting_tasks.retain(|x| x.id != tasks[k].id);
+                            blocked_tasks[k].status = TaskStatus::ReadyToSchedule;
+                            allowed_tasks.push_back(blocked_tasks[k].clone());
                         }
                         if !new_after.is_empty() {
-                            waiting_tasks[k].after_goals = Some(new_after);
+                            blocked_tasks[k].after_goals = Some(new_after);
                         }
                     }
                 }
