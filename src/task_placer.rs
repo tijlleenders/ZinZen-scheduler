@@ -34,7 +34,7 @@ pub fn task_placer(tasks_to_place: TasksToPlace) -> PlacedTasks {
 }
 
 fn schedule(tasks_to_place: &mut TasksToPlace) {
-    'find_ready_to_schedule: loop {
+    'find_task_ready_to_schedule: loop {
         tasks_to_place.sort_on_flexibility();
         for task in tasks_to_place.tasks.iter_mut() {
             match task.status {
@@ -54,7 +54,7 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
                 }
                 TaskStatus::Uninitialized => panic!("no uninitialized tasks should be present"),
                 TaskStatus::Impossible | TaskStatus::Scheduled => {
-                    break 'find_ready_to_schedule;
+                    break 'find_task_ready_to_schedule;
                 }
             }
         }
