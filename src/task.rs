@@ -220,7 +220,7 @@ impl Task {
                 calender_end: self.calender_end,
             };
             task.calculate_flexibility();
-            task.status = TaskStatus::UNScheduled;
+            task.status = TaskStatus::ReadyToSchedule;
             *counter += 1;
             tasks.push(task);
         }
@@ -305,10 +305,9 @@ impl Task {
 }
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum TaskStatus {
-    UNScheduled,
     Scheduled,
     Impossible,
     Uninitialized,
     Blocked,
-    Allowed,
+    ReadyToSchedule,
 }

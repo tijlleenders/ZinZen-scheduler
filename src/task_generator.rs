@@ -3,7 +3,7 @@ use crate::input::{GeneratedTasks, Input};
 use crate::Repetition;
 
 /// # Task Generator
-/// Takes an [Input](../input/index.html) and outputs a vector of Unscheduled [Tasks](../task/index.html).
+/// Takes an [Input](../input/index.html) and outputs a vector of TaskStatus::Blocked and TaskStatus::ReadyToSchedule [Tasks](../task/index.html).
 pub fn task_generator(
     Input {
         calendar_start,

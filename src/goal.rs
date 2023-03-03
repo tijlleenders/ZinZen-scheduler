@@ -187,7 +187,7 @@ impl Goal {
                         t.status = TaskStatus::Blocked;
                     }
                     if t.after_goals.is_none() {
-                        t.status = TaskStatus::UNScheduled;
+                        t.status = TaskStatus::ReadyToSchedule;
                     }
                 }
 
