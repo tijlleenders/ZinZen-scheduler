@@ -6,7 +6,6 @@ use crate::errors::Error;
 use crate::goal::Tag;
 use crate::input::{GeneratedTasks, PlacedTasks};
 use crate::slot::Slot;
-use crate::task::TaskStatus::{Scheduled, UNScheduled};
 use crate::task::{Task, TaskStatus};
 use std::collections::VecDeque;
 
@@ -121,7 +120,7 @@ fn schedule(
                         if new_after.is_empty() {
                             waiting_tasks[k].after_goals = None;
 
-                            waiting_tasks[k].status = TaskStatus::Allowed;
+                            waiting_tasks[k].status = TaskStatus::ReadyToSchedule;
                             waiting_tasks.retain(|x| x.id != tasks[k].id);
                             allowed_tasks.push_back(waiting_tasks[k].clone());
                         }
@@ -137,7 +136,7 @@ fn schedule(
                         if new_after.is_empty() {
                             waiting_tasks[k].after_goals = None;
 
-                            waiting_tasks[k].status = TaskStatus::Allowed;
+                            waiting_tasks[k].status = TaskStatus::ReadyToSchedule;
                             allowed_tasks.push_back(waiting_tasks[k].clone());
                             //waiting_tasks.retain(|x| x.id != tasks[k].id);
                         }
@@ -179,7 +178,7 @@ pub fn can_schedule(i: usize, tasks: &mut Vec<Task>) -> Option<Slot> {
             return Some(desired_time);
         }
         'inner: for k in 0..tasks.len() {
-            if tasks[k].status == Scheduled || tasks[k].goal_id == tasks[i].goal_id {
+            if tasks[k].status == TaskStatus::Scheduled || tasks[k].goal_id == tasks[i].goal_id {
                 continue 'inner;
             }
             for slot in &tasks[k].slots {
@@ -205,7 +204,7 @@ fn split_unscheduled_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     let mut new_tasks = Vec::new();
     let mut ids_to_remove = Vec::new();
     for task in tasks.iter_mut() {
-        if (task.status == UNScheduled || task.status == TaskStatus::Allowed)
+        if (task.status == TaskStatus::ReadyToSchedule)
             && !task.tags.contains(&Tag::Optional)
         {
             match task.split(counter) {
