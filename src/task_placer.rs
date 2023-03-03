@@ -78,9 +78,20 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
 
 fn find_best_slot(tasks_to_place: &Vec<Task>) -> Option<Slot> {
     let slot_conflicts: Vec<(Slot, u32)>;
-    let tasks_to_place: TasksToPlace;
+    let task = tasks_to_place[0];
+    
+    for slot in task.slots {
+        let diff = slot.length - task.duration;
+        if diff >=0 {
+            for 0 ... diff {
+                //loop through the positions from start of slot +1h each time
+                //find and record number of conflicts with other tasks
+            }
+        }
+    }
 
-    todo!()
+    //return the slot with lowest number of conflicts in slot_conflicts
+
     //REFACTOR!!
     // //prevent deadline end from exceeding calender end and update duration
     // for task in scheduled.iter_mut() {
@@ -97,4 +108,4 @@ fn find_best_slot(tasks_to_place: &Vec<Task>) -> Option<Slot> {
     //         .num_hours();
     //     }
     // }
-}
+
