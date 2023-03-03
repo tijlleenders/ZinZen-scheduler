@@ -2,6 +2,7 @@ use crate::Slot;
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
 use crate::goal::Tag;
+use crate::input::PlacedTasks;
 use crate::task::{ScheduleOption, Task};
 use crate::{errors::Error, task::TaskStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
@@ -54,10 +55,7 @@ pub struct FinalOutput {
 }
 
 pub fn output_formatter(
-    mut scheduled: Vec<Task>,
-    impossible: Vec<Task>,
-    calender_start: NaiveDateTime,
-    calender_end: NaiveDateTime,
+    mut placed_tasks: PlacedTasks
 ) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();

@@ -47,12 +47,8 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     let input: Input = from_value(input.clone()).unwrap();
     let tasks = task_generator(input);
     let placed_tasks = task_placer(tasks);
-    let (scheduled_tasks, impossible_tasks) = placed_tasks.tasks;
     let output = match output_formatter(
-        scheduled_tasks,
-        impossible_tasks,
-        placed_tasks.calendar_start,
-        placed_tasks.calendar_end,
+        placed_tasks
     ) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
@@ -66,6 +62,8 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     Ok(to_value(&output)?)
 }
 
+
+//Todo why is there a schedule function and a run_scheduler function?
 pub fn run_scheduler(input: Input) -> FinalOutput {
     use errors::Error;
     use output_formatter::*;

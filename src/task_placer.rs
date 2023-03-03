@@ -14,72 +14,31 @@ use std::collections::VecDeque;
 /// The scheduler optimizes for the minimum amount of Impossible tasks.
 pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
     let mut tasks = generated_tasks.tasks;
-    let mut scheduled_tasks: Vec<Task> = Vec::new();
-    let mut blocked_tasks = tasks
-        .iter()
-        .filter(|task| task.status == TaskStatus::Blocked)
-        .cloned()
-        .collect::<Vec<Task>>();
-    let mut ready_to_schedule_tasks: VecDeque<Task> = VecDeque::new();
-    tasks.retain(|task| task.status != TaskStatus::Blocked); //Todo why not retain ReadyToSchedule? Probably some uninitialized or impossible in there. Why split into different collections and then still retain the whole tasks collection?
     //first pass of scheduler while tasks are unsplit
-    schedule(
-        &mut tasks,
-        &mut scheduled_tasks,
-        &mut blocked_tasks,
-        &mut ready_to_schedule_tasks,
-    );
-    blocked_tasks.sort();
-    while !blocked_tasks.is_empty() {
-        blocked_tasks.retain(|task| task.status == TaskStatus::Blocked);
-        while !ready_to_schedule_tasks.is_empty() {
-            tasks.push(ready_to_schedule_tasks.pop_front().unwrap());
-            let mut counter = tasks[tasks.len() - 1].id + 1;
-            split_remaining_tasks(&mut tasks, &mut counter);
-            tasks.sort();
-            schedule(
-                &mut tasks,
-                &mut scheduled_tasks,
-                &mut blocked_tasks,
-                &mut ready_to_schedule_tasks,
-            );
-        }
-    }
-    //if tasks is not empty, it means some tasks were unable to be scheduled
-    //so we split the tasks and do another schedule run
-    if !tasks.is_empty() {
-        //we have some unschedulable tasks. so split them, and attempt to
-        //schedule again
-        let mut counter = tasks[tasks.len() - 1].id + 1;
-        split_remaining_tasks(&mut tasks, &mut counter);
-        tasks.sort();
-        //schedule again
-        schedule(
-            &mut tasks,
-            &mut scheduled_tasks,
-            &mut blocked_tasks,
-            &mut ready_to_schedule_tasks,
-        );
-    }
+    schedule(&mut tasks);
 
-    //if tasks is still not empty, these are impossible to schedule tasks
-    for task in &mut tasks {
-        task.status = TaskStatus::Impossible;
-    }
+    //second pass of scheduler with anything remaining split
+    // let mut counter = tasks[tasks.len() - 1].id + 1;
+    // split_remaining_tasks(&mut tasks, &mut counter);
+    schedule(&mut tasks);
+
+    //if tasks is not empty, it means some tasks were unable to be scheduled
+    //so we split the tasks and do a third schedule run
+    // let mut counter = tasks[tasks.len() - 1].id + 1;
+    // split_remaining_tasks(&mut tasks, &mut counter);
+    schedule(&mut tasks);
+
+    // set any remaining TaskStatus::ReadyToSchedule to TaskStatus::Impossible;
+    !todo!();
 
     PlacedTasks {
         calendar_start: generated_tasks.calendar_start,
         calendar_end: generated_tasks.calendar_end,
-        tasks: (scheduled_tasks, tasks),
+        tasks: tasks,
     }
 }
 
-fn schedule(
-    tasks: &mut Vec<Task>,
-    scheduled_tasks: &mut Vec<Task>,
-    blocked_tasks: &mut Vec<Task>,
-    ready_to_schedule_tasks: &mut VecDeque<Task>,
-) {
+fn schedule(tasks: &mut Vec<Task>) {
     let mut i = 0; //index that points to a task in the collection of tasks
     tasks.sort();
 
@@ -202,9 +161,7 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     let mut new_tasks = Vec::new();
     let mut ids_to_remove = Vec::new();
     for task in tasks.iter_mut() {
-        if (task.status == TaskStatus::ReadyToSchedule)
-            && !task.tags.contains(&Tag::Optional)
-        {
+        if (task.status == TaskStatus::ReadyToSchedule) && !task.tags.contains(&Tag::Optional) {
             match task.split(counter) {
                 Err(Error::CannotSplit) | Err(_) => {}
                 Ok(mut one_hour_tasks) => {
