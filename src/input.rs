@@ -30,15 +30,28 @@ impl Input {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct GeneratedTasks {
+pub struct TasksToPlace {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
     pub tasks: Vec<Task>,
+}
+
+impl TasksToPlace {
+    pub fn sort_on_flexibility(mut self) {
+        self.calculate_flexibilities();
+        self.tasks.sort();
+    }
+
+    fn calculate_flexibilities(mut self) {
+        for task in self.tasks.iter_mut() {
+            task.calculate_flexibility();
+        }
+    }
 }
 
 #[derive(Deserialize, Debug)]
 pub struct PlacedTasks {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
-    pub tasks: (Vec<Task>, Vec<Task>),
+    pub tasks: Vec<Task>,
 }
