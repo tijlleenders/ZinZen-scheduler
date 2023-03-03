@@ -263,7 +263,7 @@ impl Task {
             new_slots.extend(*slot - s);
         }
         self.slots = new_slots;
-        if self.status == TaskStatus::Waiting {
+        if self.status == TaskStatus::Blocked {
             Self::remove_taken_slots(self, s);
         }
         //if no more slots left, this is an impossible task - mark it as such and return
@@ -309,6 +309,6 @@ pub enum TaskStatus {
     Scheduled,
     Impossible,
     Uninitialized,
-    Waiting,
+    Blocked,
     Allowed,
 }

@@ -18,11 +18,11 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
     let mut scheduled_tasks: Vec<Task> = Vec::new();
     let mut waiting_tasks = tasks
         .iter()
-        .filter(|task| task.status == TaskStatus::Waiting)
+        .filter(|task| task.status == TaskStatus::Blocked)
         .cloned()
         .collect::<Vec<Task>>();
     let mut allowed_tasks: VecDeque<Task> = VecDeque::new();
-    tasks.retain(|task| task.status != TaskStatus::Waiting);
+    tasks.retain(|task| task.status != TaskStatus::Blocked);
     //first pass of scheduler while tasks are unsplit
     schedule(
         &mut tasks,
@@ -33,7 +33,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
     waiting_tasks.sort();
     while !waiting_tasks.is_empty() {
         //remove non-waiting or allowed_tasks
-        waiting_tasks.retain(|task| task.status == TaskStatus::Waiting);
+        waiting_tasks.retain(|task| task.status == TaskStatus::Blocked);
         while !allowed_tasks.is_empty() {
             tasks.push(allowed_tasks.pop_front().unwrap());
             let mut counter = tasks[tasks.len() - 1].id + 1;
