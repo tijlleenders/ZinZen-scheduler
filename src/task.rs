@@ -65,9 +65,8 @@ impl Ord for Task {
     fn cmp(&self, other: &Self) -> Ordering {
         if other.tags.contains(&Tag::Optional) && !self.tags.contains(&Tag::Optional) {
             Ordering::Less
-        } else if 
-            self.flexibility == other.flexibility {
-                Ordering::Equal
+        } else if self.flexibility == other.flexibility {
+            Ordering::Equal
         } else if !other.tags.contains(&Tag::Optional) && self.tags.contains(&Tag::Optional) {
             Ordering::Greater
         } else if self.flexibility == 1 {
