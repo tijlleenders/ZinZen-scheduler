@@ -36,7 +36,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
         while !allowed_tasks.is_empty() {
             tasks.push(allowed_tasks.pop_front().unwrap());
             let mut counter = tasks[tasks.len() - 1].id + 1;
-            split_unscheduled_tasks(&mut tasks, &mut counter);
+            split_remaining_tasks(&mut tasks, &mut counter);
             tasks.sort();
             schedule(
                 &mut tasks,
@@ -52,7 +52,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
         //we have some unschedulable tasks. so split them, and attempt to
         //schedule again
         let mut counter = tasks[tasks.len() - 1].id + 1;
-        split_unscheduled_tasks(&mut tasks, &mut counter);
+        split_remaining_tasks(&mut tasks, &mut counter);
         tasks.sort();
         //schedule again
         schedule(
@@ -199,8 +199,8 @@ pub fn can_schedule(i: usize, tasks: &mut Vec<Task>) -> Option<Slot> {
     None
 }
 
-//splits unscheduled tasks into 1hr tasks and modifies 'tasks' accordingly.
-fn split_unscheduled_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
+//splits remaining tasks into 1hr tasks and modifies 'tasks' accordingly.
+fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     let mut new_tasks = Vec::new();
     let mut ids_to_remove = Vec::new();
     for task in tasks.iter_mut() {
