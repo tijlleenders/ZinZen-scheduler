@@ -30,7 +30,6 @@ pub struct Task {
     pub slots: Vec<Slot>,
     pub confirmed_start: Option<NaiveDateTime>,
     pub confirmed_deadline: Option<NaiveDateTime>,
-    pub conflicts: Vec<(Slot, String)>,
     #[serde(default)]
     pub tags: Vec<Tag>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -153,7 +152,6 @@ impl Task {
             slots: Vec::new(),
             confirmed_start: None,
             confirmed_deadline: None,
-            conflicts: Vec::new(),
             tags: goal.tags.clone(),
             options: None,
             after_goals: goal.after_goals.clone(),
@@ -172,6 +170,9 @@ impl Task {
             flexibility += slot.num_hours() - self.duration + 1;
         }
         self.flexibility = flexibility;
+        if self.flexibility == 0 {
+            self.status = TaskStatus::Impossible
+        }
     }
 
     pub fn flexibility(&mut self) -> usize {
@@ -212,7 +213,6 @@ impl Task {
                 slots: self.get_slots(),
                 confirmed_start: None,
                 confirmed_deadline: None,
-                conflicts: Vec::new(),
                 tags: self.tags.clone(),
                 options: None,
                 after_goals: self.after_goals.clone(),
@@ -258,6 +258,11 @@ impl Task {
     }
 
     pub fn remove_slot(&mut self, s: Slot) {
+        //Todo: duplicate of remove_taken_slots?
+        if self.status == TaskStatus::Scheduled {
+            return;
+        }
+
         let mut new_slots = Vec::new();
         for slot in &mut self.slots {
             new_slots.extend(*slot - s);
@@ -266,14 +271,10 @@ impl Task {
         if self.status == TaskStatus::Blocked {
             Self::remove_taken_slots(self, s);
         }
-        //if no more slots left, this is an impossible task - mark it as such and return
-        if self.slots.is_empty() && self.status != TaskStatus::Scheduled {
-            self.status = TaskStatus::Impossible;
-            return;
-        }
-        //the flexibility should be recalculated
+
         self.calculate_flexibility();
     }
+
     pub fn remove_taken_slots(&mut self, s: Slot) {
         let mut new_slots = Vec::new();
         for slot in &mut self.slots {
@@ -301,6 +302,10 @@ impl Task {
         } else {
             hour >= self.after_time && hour < self.before_time
         }
+    }
+
+    pub(crate) fn remove_from_blocked_by(&self, id_string: String) {
+        todo!("remove this from self.after_goals and unblock if no more after_goals left")
     }
 }
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
