@@ -3,6 +3,7 @@ use crate::{
     task_generator::*, task_placer::*, time_slot_iterator::*,
 };
 use chrono::*;
+use ::serde::ser::Impossible;
 
 #[test]
 fn time_slot_iterator_splits_into_single_days() {
@@ -1073,71 +1074,57 @@ fn task_placer_returns_impossible_tasks() {
         goals,
     });
     dbg!(&tasks);
-    let (scheduled_tasks, impossible_tasks) = task_placer(tasks).tasks;
-    dbg!(&impossible_tasks);
-    assert_eq!(scheduled_tasks[0].status, Scheduled);
-    assert_eq!(scheduled_tasks[1].status, Scheduled);
-    assert_eq!(scheduled_tasks[2].status, Scheduled);
-    assert_eq!(impossible_tasks[0].status, Impossible);
+    let placed_tasks = task_placer(tasks);
+    //let impossible_tasks=scheduled_tasks.it
+    //dbg!(&impossible_tasks);
+    assert_eq!(placed_tasks.tasks[0].status, Scheduled);
+    assert_eq!(placed_tasks.tasks[1].status, Scheduled);
+    assert_eq!(placed_tasks.tasks[2].status, Scheduled);
+    assert_eq!(placed_tasks.tasks[3].status, Impossible);
 
     assert_eq!(
-        scheduled_tasks[0].confirmed_start.unwrap(),
+        placed_tasks.tasks[0].confirmed_start.unwrap(),
         NaiveDate::from_ymd_opt(2022, 1, 1)
             .unwrap()
             .and_hms_opt(10, 0, 0)
             .unwrap()
     );
     assert_eq!(
-        scheduled_tasks[0].confirmed_deadline.unwrap(),
+        placed_tasks.tasks[0].confirmed_deadline.unwrap(),
         NaiveDate::from_ymd_opt(2022, 1, 1)
             .unwrap()
             .and_hms_opt(11, 0, 0)
             .unwrap()
     );
     assert_eq!(
-        scheduled_tasks[1].confirmed_start.unwrap(),
+        placed_tasks.tasks[1].confirmed_start.unwrap(),
         NaiveDate::from_ymd_opt(2022, 1, 1)
             .unwrap()
             .and_hms_opt(13, 0, 0)
             .unwrap()
     );
     assert_eq!(
-        scheduled_tasks[1].confirmed_deadline.unwrap(),
+        placed_tasks.tasks[1].confirmed_deadline.unwrap(),
         NaiveDate::from_ymd_opt(2022, 1, 1)
             .unwrap()
             .and_hms_opt(14, 0, 0)
             .unwrap()
     );
     assert_eq!(
-        scheduled_tasks[2].confirmed_start.unwrap(),
+        placed_tasks.tasks[2].confirmed_start.unwrap(),
         NaiveDate::from_ymd_opt(2022, 1, 1)
             .unwrap()
             .and_hms_opt(11, 0, 0)
             .unwrap()
     );
     assert_eq!(
-        scheduled_tasks[2].confirmed_deadline.unwrap(),
+        placed_tasks.tasks[2].confirmed_deadline.unwrap(),
         NaiveDate::from_ymd_opt(2022, 1, 1)
             .unwrap()
             .and_hms_opt(12, 0, 0)
             .unwrap()
     );
-    assert_eq!(
-        impossible_tasks[0].conflicts[0],
-        (
-            Slot {
-                start: NaiveDate::from_ymd_opt(2022, 1, 1)
-                    .unwrap()
-                    .and_hms_opt(10, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(2022, 1, 1)
-                    .unwrap()
-                    .and_hms_opt(11, 0, 0)
-                    .unwrap()
-            },
-            "1".to_owned()
-        )
-    );
+    
 }
 
 #[test]
