@@ -37,12 +37,12 @@ pub struct TasksToPlace {
 }
 
 impl TasksToPlace {
-    pub fn sort_on_flexibility(mut self) {
+    pub fn sort_on_flexibility(&mut self) {
         self.calculate_flexibilities();
         self.tasks.sort();
     }
 
-    fn calculate_flexibilities(mut self) {
+    fn calculate_flexibilities(& mut self) {
         for task in self.tasks.iter_mut() {
             task.calculate_flexibility();
         }
