@@ -55,10 +55,26 @@ pub struct FinalOutput {
 }
 
 pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Error> {
+    let mut scheduled_outputs: Vec<Output> = Vec::new();
+    let mut impossible_outputs: Vec<Output> = Vec::new();
+
     for task in placed_tasks.tasks.iter_mut() {
         match task.status {
-            TaskStatus::Scheduled => {}
-            TaskStatus::Impossible => todo!(),
+            TaskStatus::Scheduled => {
+                //convert scheduled tasks to output objects and add to scheduled_outputs vec
+                if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+                    return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+                }
+                scheduled_outputs.push(get_output_from_task(&task));
+            }
+            TaskStatus::Impossible => {
+                //convert impossible tasks to output objects and add to impossible_outputs vec
+                //don't report optional tasks
+                if task.tags.contains(&Tag::Optional) {
+                    continue;
+                }
+                impossible_outputs.push(get_output_from_task(&task));
+            }
             TaskStatus::Uninitialized => {
                 panic!("no uninitialized tasks should be present in placed_tasks")
             }
@@ -67,30 +83,11 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
         }
     }
 
-    let mut scheduled_outputs: Vec<Output> = Vec::new();
-    let mut impossible_outputs: Vec<Output> = Vec::new();
-
-    //convert scheduled tasks to output objects and add to scheduled_outputs vec
-    for task in scheduled {
-        if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-            return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-        }
-        scheduled_outputs.push(get_output_from_task(&task));
-    }
-
-    //convert impossible tasks to output objects and add to impossible_outputs vec
-    for task in impossible {
-        //don't report optional tasks
-        if task.tags.contains(&Tag::Optional) {
-            continue;
-        }
-        impossible_outputs.push(get_output_from_task(&task));
-    }
     //sort and combine the scheduled outputs
     scheduled_outputs.sort();
     combine(&mut scheduled_outputs);
     split_cross_day_task(&mut scheduled_outputs);
-    generate_free_tasks(&mut scheduled_outputs, calender_start, calender_end);
+    generate_free_tasks(&mut scheduled_outputs, placed_tasks.calender_start, calender_end);
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
