@@ -23,7 +23,6 @@ pub struct Output {
     #[serde(skip)]
     before_time: usize,
     #[serde(skip_serializing_if = "Option::is_none")]
-    first_conflict_with: Option<String>,
     #[serde(skip)]
     tags: Vec<Tag>,
     #[serde(skip)]
@@ -87,7 +86,11 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
     scheduled_outputs.sort();
     combine(&mut scheduled_outputs);
     split_cross_day_task(&mut scheduled_outputs);
-    generate_free_tasks(&mut scheduled_outputs, placed_tasks.calender_start, calender_end);
+    generate_free_tasks(
+        &mut scheduled_outputs,
+        placed_tasks.calendar_start,
+        placed_tasks.calendar_end,
+    );
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
@@ -123,18 +126,12 @@ fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
 }
 
 fn get_output_from_task(task: &Task) -> Output {
-    let start = if task.status == TaskStatus::Scheduled {
-        task.confirmed_start
-            .expect("Checked for None above so should always be Some.")
-    } else {
-        task.conflicts[0].0.start
-    };
-    let deadline = if task.status == TaskStatus::Scheduled {
-        task.confirmed_deadline
-            .expect("Checked for None above so should always be Some.")
-    } else {
-        task.conflicts[0].0.end
-    };
+    let start = task
+        .confirmed_start
+        .expect("Checked for None above so should always be Some.");
+    let deadline = task
+        .confirmed_deadline
+        .expect("Checked for None above so should always be Some.");
     Output {
         taskid: task.id,
         goalid: task.goal_id.clone(),
@@ -142,11 +139,6 @@ fn get_output_from_task(task: &Task) -> Output {
         duration: task.duration,
         start,
         deadline,
-        first_conflict_with: if task.status == TaskStatus::Impossible {
-            Some(task.conflicts[0].1.to_owned())
-        } else {
-            None
-        },
         tags: task.tags.clone(),
         impossible: task.status == TaskStatus::Impossible,
         options: task.options.clone(),
@@ -264,7 +256,6 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
                 deadline: s.end,
                 after_time: 0,
                 before_time: 23,
-                first_conflict_with: None,
                 tags: vec![],
                 impossible: false,
                 options: None,
