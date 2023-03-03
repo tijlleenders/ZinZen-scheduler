@@ -107,8 +107,16 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
     }
     //create final output object
     let final_ouput = FinalOutput {
-        scheduled: get_output_with_date(scheduled_outputs, placed_tasks.calendar_start, placed_tasks.calendar_end),
-        impossible: get_output_with_date(impossible_outputs, placed_tasks.calendar_start, placed_tasks.calendar_end),
+        scheduled: get_output_with_date(
+            scheduled_outputs,
+            placed_tasks.calendar_start,
+            placed_tasks.calendar_end,
+        ),
+        impossible: get_output_with_date(
+            impossible_outputs,
+            placed_tasks.calendar_start,
+            placed_tasks.calendar_end,
+        ),
     };
 
     Ok(final_ouput)

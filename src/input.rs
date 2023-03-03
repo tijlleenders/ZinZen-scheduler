@@ -42,7 +42,7 @@ impl TasksToPlace {
         self.tasks.sort();
     }
 
-    fn calculate_flexibilities(& mut self) {
+    fn calculate_flexibilities(&mut self) {
         for task in self.tasks.iter_mut() {
             task.calculate_flexibility();
         }

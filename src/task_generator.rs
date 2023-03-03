@@ -1,5 +1,5 @@
 use crate::goal::{add_filler, Goal, Tag};
-use crate::input::{TasksToPlace, Input};
+use crate::input::{Input, TasksToPlace};
 use crate::Repetition;
 
 /// # Task Generator
@@ -48,12 +48,10 @@ fn add_repeat(goals: &mut Vec<Goal>) {
             goal.tags.push(Tag::Weekly);
             let mut goal2 = goal.clone();
             (goal.duration.0, goal.duration.1) = (goal.duration.0, None);
-            
 
             (goal2.duration.0, goal2.duration.1) =
                 ((goal2.duration.1.unwrap() - goal2.duration.0), None);
             goal2.tags.push(Tag::Optional);
-       
 
             //turn into 1hr goals
             // let mut goals: Vec<Goal> = vec![];

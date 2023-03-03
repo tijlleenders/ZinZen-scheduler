@@ -2,8 +2,8 @@ use crate::{
     goal::*, input::*, repetition::Repetition, slot::*, task::TaskStatus::*, task::*,
     task_generator::*, task_placer::*, time_slot_iterator::*,
 };
-use chrono::*;
 use ::serde::ser::Impossible;
+use chrono::*;
 
 #[test]
 fn time_slot_iterator_splits_into_single_days() {
@@ -1124,7 +1124,6 @@ fn task_placer_returns_impossible_tasks() {
             .and_hms_opt(12, 0, 0)
             .unwrap()
     );
-    
 }
 
 #[test]
