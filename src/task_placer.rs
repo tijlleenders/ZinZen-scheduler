@@ -20,20 +20,20 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
         .filter(|task| task.status == TaskStatus::Blocked)
         .cloned()
         .collect::<Vec<Task>>();
-    let mut allowed_tasks: VecDeque<Task> = VecDeque::new();
-    tasks.retain(|task| task.status != TaskStatus::Blocked);
+    let mut ready_to_schedule_tasks: VecDeque<Task> = VecDeque::new();
+    tasks.retain(|task| task.status != TaskStatus::Blocked); //Todo why not retain ReadyToSchedule? Probably some uninitialized or impossible in there. Why split into different collections and then still retain the whole tasks collection?
     //first pass of scheduler while tasks are unsplit
     schedule(
         &mut tasks,
         &mut scheduled_tasks,
         &mut blocked_tasks,
-        &mut allowed_tasks,
+        &mut ready_to_schedule_tasks,
     );
     blocked_tasks.sort();
     while !blocked_tasks.is_empty() {
         blocked_tasks.retain(|task| task.status == TaskStatus::Blocked);
-        while !allowed_tasks.is_empty() {
-            tasks.push(allowed_tasks.pop_front().unwrap());
+        while !ready_to_schedule_tasks.is_empty() {
+            tasks.push(ready_to_schedule_tasks.pop_front().unwrap());
             let mut counter = tasks[tasks.len() - 1].id + 1;
             split_remaining_tasks(&mut tasks, &mut counter);
             tasks.sort();
@@ -41,7 +41,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
                 &mut tasks,
                 &mut scheduled_tasks,
                 &mut blocked_tasks,
-                &mut allowed_tasks,
+                &mut ready_to_schedule_tasks,
             );
         }
     }
@@ -58,7 +58,7 @@ pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
             &mut tasks,
             &mut scheduled_tasks,
             &mut blocked_tasks,
-            &mut allowed_tasks,
+            &mut ready_to_schedule_tasks,
         );
     }
 
@@ -78,7 +78,7 @@ fn schedule(
     tasks: &mut Vec<Task>,
     scheduled_tasks: &mut Vec<Task>,
     blocked_tasks: &mut Vec<Task>,
-    allowed_tasks: &mut VecDeque<Task>,
+    ready_to_schedule_tasks: &mut VecDeque<Task>,
 ) {
     let mut i = 0; //index that points to a task in the collection of tasks
     tasks.sort();
@@ -121,7 +121,7 @@ fn schedule(
 
                             blocked_tasks[k].status = TaskStatus::ReadyToSchedule;
                             blocked_tasks.retain(|x| x.id != tasks[k].id);
-                            allowed_tasks.push_back(blocked_tasks[k].clone());
+                            ready_to_schedule_tasks.push_back(blocked_tasks[k].clone());
                         }
                         if !new_after.is_empty() {
                             blocked_tasks[k].after_goals = Some(new_after);
@@ -136,7 +136,7 @@ fn schedule(
                             blocked_tasks[k].after_goals = None;
 
                             blocked_tasks[k].status = TaskStatus::ReadyToSchedule;
-                            allowed_tasks.push_back(blocked_tasks[k].clone());
+                            ready_to_schedule_tasks.push_back(blocked_tasks[k].clone());
                         }
                         if !new_after.is_empty() {
                             blocked_tasks[k].after_goals = Some(new_after);
@@ -144,8 +144,8 @@ fn schedule(
                     }
                 }
             }
-            //start loop over allowed to remove taken slots
-            for t in allowed_tasks.iter_mut() {
+            //start loop over ready_to_schedule to remove taken slots
+            for t in ready_to_schedule_tasks.iter_mut() {
                 if t.tags.contains(&Tag::Weekly) && t.goal_id == tasks[i].goal_id {
                     let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
                     let slot = Slot {
@@ -157,7 +157,7 @@ fn schedule(
                     t.remove_slot(desired_time);
                 }
             }
-            //end of allowed
+            //end of ready_to_schedule
             //add the task to list of scheduled tasks
             scheduled_tasks.push(tasks.remove(i));
             i = 0;
