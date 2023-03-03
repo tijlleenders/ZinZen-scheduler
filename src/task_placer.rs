@@ -46,22 +46,6 @@ fn schedule(mut tasks_to_place: &mut TasksToPlace) {
 
 fn do_the_scheduling(tasks_to_place: &mut Vec<Task>, chosen_slot: Slot) {
     tasks_to_place[0].schedule(chosen_slot);
-    //REFACTOR!!
-    // //prevent deadline end from exceeding calender end and update duration
-    // for task in scheduled.iter_mut() {
-    //     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-    //         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-    //     }
-    //     //prevent slot end from exceeding calender end
-    //     if task.confirmed_deadline.unwrap() > calender_end {
-    //         task.confirmed_deadline = Some(calender_end);
-    //         task.duration = Slot {
-    //             start: task.confirmed_start.unwrap(),
-    //             end: task.confirmed_deadline.unwrap(),
-    //         }
-    //         .num_hours();
-    //     }
-    // }
     for task in tasks_to_place.iter_mut() {
         task.remove_slot(chosen_slot);
         task.remove_from_blocked_by(task.goal_id.clone());
@@ -95,5 +79,22 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
 fn find_best_slot(tasks_to_place: &Vec<Task>) -> Option<Slot> {
     let slot_conflicts: Vec<(Slot, u32)>;
     let tasks_to_place: TasksToPlace;
+
     todo!()
+    //REFACTOR!!
+    // //prevent deadline end from exceeding calender end and update duration
+    // for task in scheduled.iter_mut() {
+    //     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+    //         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+    //     }
+    //     //prevent slot end from exceeding calender end
+    //     if task.confirmed_deadline.unwrap() > calender_end {
+    //         task.confirmed_deadline = Some(calender_end);
+    //         task.duration = Slot {
+    //             start: task.confirmed_start.unwrap(),
+    //             end: task.confirmed_deadline.unwrap(),
+    //         }
+    //         .num_hours();
+    //     }
+    // }
 }
