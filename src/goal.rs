@@ -179,8 +179,6 @@ impl Goal {
                 //mark the task as impossible.
                 if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {
                     t.status = TaskStatus::Impossible;
-                    t.conflicts
-                        .push((t.slots[0], "Passes Deadline".to_string()));
                 } else {
                     t.calculate_flexibility();
                     if t.after_goals.is_some() {
