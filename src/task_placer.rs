@@ -1,12 +1,14 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 
+use std::cmp::Ordering;
+
 use chrono::Duration;
 
 use crate::errors::Error;
 use crate::goal::Tag;
 use crate::input::{PlacedTasks, TasksToPlace};
-use crate::slot::Slot;
 use crate::task::{Task, TaskStatus};
+use crate::{slot::*, task};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
@@ -37,17 +39,17 @@ fn schedule(mut tasks_to_place: &mut TasksToPlace) {
     loop {
         tasks_to_place.sort_on_flexibility();
 
-        match find_best_slot(&tasks_to_place.tasks) {
-            Some(chosen_slot) => do_the_scheduling(&mut tasks_to_place.tasks, chosen_slot),
+        match find_best_slots(&tasks_to_place.tasks) {
+            Some(chosen_slots) => do_the_scheduling(&mut tasks_to_place.tasks, chosen_slots),
             None => break,
         }
     }
 }
 
-fn do_the_scheduling(tasks_to_place: &mut Vec<Task>, chosen_slot: Slot) {
-    tasks_to_place[0].schedule(chosen_slot);
+fn do_the_scheduling(tasks_to_place: &mut Vec<Task>, chosen_slots: Vec<Slot>) {
+    tasks_to_place[0].schedule(chosen_slots);
     for task in tasks_to_place.iter_mut() {
-        task.remove_slot(chosen_slot);
+        task.remove_slot(chosen_slots);
         task.remove_from_blocked_by(task.goal_id.clone());
     }
 }
@@ -76,36 +78,49 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     tasks.extend_from_slice(&new_tasks[..]);
 }
 
-fn find_best_slot(tasks_to_place: &Vec<Task>) -> Option<Slot> {
-    let slot_conflicts: Vec<(Slot, u32)>;
+fn find_best_slots(tasks_to_place: &Vec<Task>) -> Vec<Slot> {
+    let mut slot_conflicts: Vec<(Slot, usize)>;
     let task = tasks_to_place[0];
-    
+
     for slot in task.slots {
-        let diff = slot.length - task.duration;
-        if diff >=0 {
-            for 0 ... diff {
-                //loop through the positions from start of slot +1h each time
-                //find and record number of conflicts with other tasks
+        for hour_slot in slot.get_1h_slots() {
+            let mut count: usize = 0;
+            for t in tasks_to_place {
+                if t.slots.contains(&hour_slot) {
+                    count += 1;
+                }
             }
+            slot_conflicts.push((hour_slot, count));
+        }
+    }
+    slot_conflicts.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+
+    let mut result = vec![];
+    for d in 0..task.duration {
+        match slot_conflicts.pop() {
+            Some(s) => result.push(s.0),
+            None => break,
         }
     }
 
-    //return the slot with lowest number of conflicts in slot_conflicts
+    Some(result)
+}
 
-    //REFACTOR!!
-    // //prevent deadline end from exceeding calender end and update duration
-    // for task in scheduled.iter_mut() {
-    //     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-    //         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-    //     }
-    //     //prevent slot end from exceeding calender end
-    //     if task.confirmed_deadline.unwrap() > calender_end {
-    //         task.confirmed_deadline = Some(calender_end);
-    //         task.duration = Slot {
-    //             start: task.confirmed_start.unwrap(),
-    //             end: task.confirmed_deadline.unwrap(),
-    //         }
-    //         .num_hours();
-    //     }
-    // }
+//return the slot with lowest number of conflicts in slot_conflicts
 
+//REFACTOR!!
+// //prevent deadline end from exceeding calender end and update duration
+// for task in scheduled.iter_mut() {
+//     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+//         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+//     }
+//     //prevent slot end from exceeding calender end
+//     if task.confirmed_deadline.unwrap() > calender_end {
+//         task.confirmed_deadline = Some(calender_end);
+//         task.duration = Slot {
+//             start: task.confirmed_start.unwrap(),
+//             end: task.confirmed_deadline.unwrap(),
+//         }
+//         .num_hours();
+//     }
+// }
