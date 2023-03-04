@@ -115,7 +115,7 @@ impl Slot {
     }
     pub fn get_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
-        for hour in 0..self.num_hours() + 1 {
+        for hour in 0..self.num_hours() {
             result.push(Slot {
                 start: self.start.with_hour(hour as u32).unwrap_or_default(),
                 end: self.start.with_hour((hour + 1) as u32).unwrap(),
