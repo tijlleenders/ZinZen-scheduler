@@ -47,10 +47,35 @@ fn schedule(mut tasks_to_place: &mut TasksToPlace) {
 }
 
 fn do_the_scheduling(tasks_to_place: &mut Vec<Task>, chosen_slots: Vec<Slot>) {
-    tasks_to_place[0].schedule(chosen_slots);
+    let mut new_task = tasks_to_place[0].clone();
+    new_task.status = TaskStatus::Scheduled;
+    new_task.duration = 1;
+
+    new_task.id = tasks_to_place.len();
+    new_task.slots.clear();
+    for slot in chosen_slots.iter() {
+        new_task.id += 1;
+        new_task.confirmed_start = Some(slot.start);
+        new_task.confirmed_deadline = Some(slot.end);
+        tasks_to_place.push(new_task.clone());
+    }
+    //check if all duration handle schedule
     for task in tasks_to_place.iter_mut() {
-        task.remove_slot(chosen_slots);
-        task.remove_from_blocked_by(task.goal_id.clone());
+        for slot in chosen_slots.iter() {
+            task.remove_slot(slot.to_owned());
+        }
+    }
+    let total_slots_duaration = chosen_slots.len();
+    let remaining_hours = tasks_to_place[0].duration - total_slots_duaration;
+    if remaining_hours > 0 {
+        tasks_to_place[0].duration = remaining_hours;
+        tasks_to_place[0].status = TaskStatus::Impossible;
+    } else {
+        let task_scheduled_goal_id = tasks_to_place[0].goal_id.clone();
+        tasks_to_place.remove(0);
+        for task in tasks_to_place {
+            task.remove_from_blocked_by(task_scheduled_goal_id.clone());
+        }
     }
 }
 
