@@ -104,9 +104,12 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
     for slot in task.slots.iter() {
         for hour_slot in slot.get_1h_slots() {
             let mut count: usize = 0;
-            for t in tasks_to_place {
-                if t.slots.contains(&hour_slot) {
-                    count += 1;
+            'outer: for t in tasks_to_place {
+                for s in t.slots.iter() {
+                    if s.is_intersect(&hour_slot) {
+                        count += 1;
+                        continue 'outer;
+                    }
                 }
             }
             slot_conflicts.push((hour_slot, count));
