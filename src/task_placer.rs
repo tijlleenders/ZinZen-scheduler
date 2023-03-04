@@ -104,10 +104,10 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
 }
 
 fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
-    let mut slot_conflicts: Vec<(Slot, usize)>;
-    let task = tasks_to_place[0];
+    let mut slot_conflicts: Vec<(Slot, usize)> = vec![];
+    let task = &tasks_to_place[0];
 
-    for slot in task.slots {
+    for slot in task.slots.iter() {
         for hour_slot in slot.get_1h_slots() {
             let mut count: usize = 0;
             for t in tasks_to_place {
