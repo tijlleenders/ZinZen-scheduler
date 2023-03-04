@@ -96,9 +96,13 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     }
     tasks.extend_from_slice(&new_tasks[..]);
 }
-
+#[derive(PartialEq, Eq, Clone)]
+struct SlotConflict {
+    slot: Slot,
+    num_conflicts: usize,
+}
 fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
-    let mut slot_conflicts: Vec<(Slot, usize)> = vec![];
+    let mut slot_conflicts: Vec<SlotConflict> = vec![];
     let task = &tasks_to_place[0];
 
     for slot in task.slots.iter() {
@@ -119,15 +123,20 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
                     }
                 }
             }
-            slot_conflicts.push((hour_slot, count));
+            slot_conflicts.push(SlotConflict {
+                slot: hour_slot,
+                num_conflicts: count,
+            });
         }
     }
-    slot_conflicts.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
+    slot_conflicts.sort_by(|a, b| b.slot.start.partial_cmp(&a.slot.start).unwrap());
+
+    slot_conflicts.sort_by(|a, b| b.num_conflicts.partial_cmp(&a.num_conflicts).unwrap());
 
     let mut result = vec![];
     for d in 0..task.duration {
         match slot_conflicts.pop() {
-            Some(s) => result.push(s.0),
+            Some(s) => result.push(s.slot),
             None => break,
         }
     }
@@ -135,6 +144,11 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
     Some(result)
 }
 
+// impl Ord for SlotConflict{
+//     fn cmp(&self, other: &Self) -> Ordering {
+
+//     }
+// }
 //return the slot with lowest number of conflicts in slot_conflicts
 
 //REFACTOR!!
