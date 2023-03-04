@@ -573,9 +573,8 @@
           "goalid": "1",
           "title": "work",
           "duration": 11,
-          "start": "2022-10-31T23:00:00",
-          "deadline": "2022-11-01T00:00:00",
-          "firstConflictWith": "1"
+          "start": "2022-10-31T00:00:00",
+          "deadline": "2022-11-01T00:00:00"
         }
       ]
     }
