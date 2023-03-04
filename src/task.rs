@@ -63,18 +63,30 @@ impl Ord for Task {
     //All tasks with flex 1 should be first, followed by task with highest flex to
     //task with lowest flex.
     fn cmp(&self, other: &Self) -> Ordering {
-        if other.tags.contains(&Tag::Optional) && !self.tags.contains(&Tag::Optional) {
+        if (self.status == TaskStatus::ReadyToSchedule)
+            && !(other.status == TaskStatus::ReadyToSchedule)
+        {
             Ordering::Less
+        } else if (other.status == TaskStatus::ReadyToSchedule)
+            && !(self.status == TaskStatus::ReadyToSchedule)
+        {
+            Ordering::Greater
+        } else if !self.tags.contains(&Tag::Optional) && other.tags.contains(&Tag::Optional) {
+            Ordering::Less
+        } else if self.tags.contains(&Tag::Optional) && !other.tags.contains(&Tag::Optional) {
+            Ordering::Greater
         } else if self.flexibility == other.flexibility {
             Ordering::Equal
-        } else if !other.tags.contains(&Tag::Optional) && self.tags.contains(&Tag::Optional) {
-            Ordering::Greater
         } else if self.flexibility == 1 {
             Ordering::Less
         } else if other.flexibility == 1 {
             Ordering::Greater
+        } else if self.flexibility > other.flexibility {
+            Ordering::Less
+        } else if other.flexibility > self.flexibility {
+            Ordering::Greater
         } else {
-            other.flexibility.cmp(&self.flexibility)
+            Ordering::Equal
         }
     }
 }
