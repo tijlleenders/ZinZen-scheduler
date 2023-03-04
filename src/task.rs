@@ -315,8 +315,22 @@ impl Task {
         }
     }
 
-    pub(crate) fn remove_from_blocked_by(&self, id_string: String) {
-        // todo!("remove this from self.after_goals and unblock if no more after_goals left")
+    pub fn remove_from_blocked_by(&mut self, id_string: String) {
+        if self.after_goals.is_none() {
+            return;
+        }
+
+        // let mut ids = self.after_goals.clone().unwrap();
+        // let index = ids.clone().iter().position(|x| x.eq(&id_string));
+        // if index.is_some() {
+        //     ids.remove(index.unwrap());
+        //     if ids.is_empty() {
+        //         self.after_goals = None;
+        //         self.status = TaskStatus::ReadyToSchedule;
+        //     } else {
+        //         self.after_goals = Some(ids);
+        //     }
+        // }
     }
 }
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
