@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::{NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::ops::{Add, Sub};
 
@@ -112,5 +112,15 @@ impl Slot {
     }
     pub fn contains_hour_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
+    }
+    pub fn get_1h_slots(&self) -> Vec<Slot> {
+        let mut result = vec![];
+        for hour in 0..self.num_hours() + 1 {
+            result.push(Slot {
+                start: self.start.with_hour(hour as u32).unwrap_or_default(),
+                end: self.start.with_hour((hour + 1) as u32).unwrap(),
+            })
+        }
+        result
     }
 }
