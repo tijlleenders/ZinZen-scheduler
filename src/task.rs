@@ -231,12 +231,6 @@ impl Task {
         StartDeadlineIterator::new(self.get_slots(), self.duration)
     }
 
-    pub fn schedule(&mut self, slot: Slot) {
-        self.set_confirmed_start(slot.start);
-        self.set_confirmed_deadline(slot.end);
-        self.status = TaskStatus::Scheduled;
-    }
-
     pub fn size_of_slots_to_be_assigned(&self) -> usize {
         if self.before_time > self.after_time {
             self.before_time - self.after_time
