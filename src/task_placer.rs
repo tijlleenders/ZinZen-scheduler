@@ -26,7 +26,7 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     schedule(&mut tasks_to_place);
 
     // set any remaining TaskStatus::ReadyToSchedule to TaskStatus::Impossible;
-    !todo!();
+    // !todo!();
 
     PlacedTasks {
         calendar_start: tasks_to_place.calendar_start,
@@ -38,7 +38,9 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
 fn schedule(mut tasks_to_place: &mut TasksToPlace) {
     loop {
         tasks_to_place.sort_on_flexibility();
-
+        if tasks_to_place.tasks[0].status != TaskStatus::ReadyToSchedule {
+            break;
+        }
         match find_best_slots(&tasks_to_place.tasks) {
             Some(chosen_slots) => do_the_scheduling(&mut tasks_to_place.tasks, chosen_slots),
             None => break,
