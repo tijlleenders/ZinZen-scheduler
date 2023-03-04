@@ -1,6 +1,9 @@
 use chrono::{Duration, NaiveDateTime, Timelike};
 use serde::Deserialize;
-use std::ops::{Add, Sub};
+use std::{
+    cmp::{max, min},
+    ops::{Add, Sub},
+};
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy, Deserialize)]
 pub struct Slot {
@@ -122,5 +125,9 @@ impl Slot {
             })
         }
         result
+    }
+    pub fn is_intersect(&self, other: &Slot) -> bool {
+        let overlap = min(self.end, other.end) - max(self.start, other.start);
+        overlap.num_hours() > 0
     }
 }
