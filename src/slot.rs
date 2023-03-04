@@ -1,4 +1,4 @@
-use chrono::{NaiveDateTime, Timelike};
+use chrono::{Duration, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::ops::{Add, Sub};
 
@@ -117,8 +117,8 @@ impl Slot {
         let mut result = vec![];
         for hour in 0..self.num_hours() {
             result.push(Slot {
-                start: self.start.with_hour(hour as u32).unwrap_or_default(),
-                end: self.start.with_hour((hour + 1) as u32).unwrap(),
+                start: self.start.add(chrono::Duration::hours(hour as i64)),
+                end: self.start.add(chrono::Duration::hours((hour + 1) as i64)),
             })
         }
         result
