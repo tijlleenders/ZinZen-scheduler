@@ -64,7 +64,7 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
                 if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
                     return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
                 }
-                scheduled_outputs.push(get_output_from_task(&task));
+                scheduled_outputs.push(get_output_from_task(task));
             }
             TaskStatus::Impossible => {
                 //convert impossible tasks to output objects and add to impossible_outputs vec
@@ -72,13 +72,15 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
                 if task.tags.contains(&Tag::Optional) {
                     continue;
                 }
-                impossible_outputs.push(get_output_from_task(&task));
+                impossible_outputs.push(get_output_from_task(task));
             }
             TaskStatus::Uninitialized => {
                 panic!("no uninitialized tasks should be present in placed_tasks")
             }
-            TaskStatus::Blocked => todo!(),
-            TaskStatus::ReadyToSchedule => todo!(),
+            TaskStatus::Blocked => panic!("no Blocked tasks should be present in placed_tasks"),
+            TaskStatus::ReadyToSchedule => {
+                panic!("no ReadyToSchedule tasks should be present in placed_tasks")
+            }
         }
     }
 
@@ -133,20 +135,23 @@ fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
     days
 }
 
-fn get_output_from_task(task: &Task) -> Output {
-    let start = task
-        .confirmed_start
-        .expect("Checked for None above so should always be Some.");
-    let deadline = task
-        .confirmed_deadline
-        .expect("Checked for None above so should always be Some.");
+fn get_output_from_task(task: &mut Task) -> Output {
+    if task.status == TaskStatus::Scheduled {
+        task.start = task
+            .confirmed_start
+            .expect("Checked for None above so should always be Some.");
+        task.deadline = task
+            .confirmed_deadline
+            .expect("Checked for None above so should always be Some.");
+    }
+
     Output {
         taskid: task.id,
         goalid: task.goal_id.clone(),
         title: task.title.clone(),
         duration: task.duration,
-        start,
-        deadline,
+        start: task.start,
+        deadline: task.deadline,
         tags: task.tags.clone(),
         impossible: task.status == TaskStatus::Impossible,
         options: task.options.clone(),
