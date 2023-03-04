@@ -108,6 +108,10 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
                 if t.status != TaskStatus::ReadyToSchedule {
                     continue;
                 }
+                if t.id == task.id {
+                    continue;
+                }
+
                 for s in t.slots.iter() {
                     if s.is_intersect(&hour_slot) {
                         count += 1;
