@@ -161,6 +161,9 @@ impl Task {
     }
 
     pub fn calculate_flexibility(&mut self) {
+        if self.status == TaskStatus::Scheduled {
+            return;
+        }
         let mut flexibility = 0;
         for slot in &self.slots {
             if slot.num_hours() < self.duration {
