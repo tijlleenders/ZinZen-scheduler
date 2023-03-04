@@ -78,7 +78,7 @@ fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
     tasks.extend_from_slice(&new_tasks[..]);
 }
 
-fn find_best_slots(tasks_to_place: &Vec<Task>) -> Vec<Slot> {
+fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
     let mut slot_conflicts: Vec<(Slot, usize)>;
     let task = tasks_to_place[0];
 
