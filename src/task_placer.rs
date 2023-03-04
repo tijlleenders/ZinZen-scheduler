@@ -17,14 +17,6 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks_to_place);
 
-    //second pass of scheduler with anything remaining split
-    // split_remaining_tasks(&mut tasks, &mut counter);
-    schedule(&mut tasks_to_place);
-
-    //if tasks is not empty, it means some tasks were unable to be scheduled
-    // split_remaining_tasks(&mut tasks, &mut counter);
-    schedule(&mut tasks_to_place);
-
     // set any remaining TaskStatus::ReadyToSchedule to TaskStatus::Impossible;
     // !todo!();
 
