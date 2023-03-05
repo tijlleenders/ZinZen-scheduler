@@ -161,36 +161,18 @@ impl Goal {
         );
 
         for time_period in time_periods {
-            for _ in 0..tasks_per_period {
-                let task_id = *counter;
-                *counter += 1;
-                let t = Task::new(
-                    task_id,
-                    time_period.start,
-                    time_period.end,
-                    &self,
-                    calendar_start,
-                    calendar_end,
-                );
-                //assign slots that are within the specified after_time and before_time
-                let mut t = slot_generator(t, &time_period, self.deadline);
+            let task_id = *counter;
+            *counter += 1;
+            let t = Task::new(
+                task_id,
+                time_period.start,
+                time_period.end,
+                &self,
+                calendar_start,
+                calendar_end,
+            );
 
-                //if only one slot was assigned and it is too short for the duration,
-                //mark the task as impossible.
-                if t.slots.len() == 1 && t.slots[0].num_hours() < t.duration {
-                    t.status = TaskStatus::Impossible;
-                } else {
-                    t.calculate_flexibility();
-                    if t.after_goals.is_some() {
-                        t.status = TaskStatus::Blocked;
-                    }
-                    if t.after_goals.is_none() {
-                        t.status = TaskStatus::ReadyToSchedule;
-                    }
-                }
-
-                tasks.push(t);
-            }
+            tasks.push(t);
         }
         tasks
     }
