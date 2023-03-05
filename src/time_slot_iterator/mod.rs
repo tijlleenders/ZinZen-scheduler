@@ -76,7 +76,35 @@ impl TimeSlotIterator {
 impl Iterator for TimeSlotIterator {
     type Item = Slot;
     fn next(&mut self) -> Option<Self::Item> {
-        None
+        match self.repetition {
+            Some(repetition) => match repetition {
+                Repetition::DAILY(_) => todo!(),
+                Repetition::HOURLY => todo!(),
+                Repetition::Weekly(_) => todo!(),
+                Repetition::WEEKDAYS => todo!(),
+                Repetition::WEEKENDS => todo!(),
+                Repetition::EveryXdays(_) => todo!(),
+                Repetition::EveryXhours(_) => todo!(),
+                Repetition::MONDAYS => todo!(),
+                Repetition::TUESDAYS => todo!(),
+                Repetition::WEDNESDAYS => todo!(),
+                Repetition::THURSDAYS => todo!(),
+                Repetition::FRIDAYS => todo!(),
+                Repetition::SATURDAYS => todo!(),
+                Repetition::SUNDAYS => todo!(),
+                Repetition::FlexDaily(_, _) => todo!(),
+                Repetition::FlexWeekly(_, _) => todo!(),
+            },
+            None => {
+                if self.timeline.len() > 0 {
+                    let result = Some(self.timeline[0].clone());
+                    self.timeline.remove(0);
+                    return result;
+                } else {
+                    return None;
+                };
+            }
+        }
     }
 }
 
