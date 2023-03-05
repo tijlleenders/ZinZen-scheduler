@@ -1,4 +1,4 @@
-use chrono::{Duration, NaiveDateTime, Timelike};
+use chrono::{Days, Duration, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::{
     cmp::{max, min},
@@ -139,9 +139,17 @@ impl Slot {
             } else {
                 result.push(Slot {
                     start: start_slider,
-                    end: start_slider.with_hour(24).unwrap(),
+                    end: start_slider
+                        .with_hour(0)
+                        .unwrap()
+                        .checked_add_days(Days::new(1))
+                        .unwrap(),
                 });
-                start_slider = start_slider.with_hour(24).unwrap();
+                start_slider = start_slider
+                    .with_hour(0)
+                    .unwrap()
+                    .checked_add_days(Days::new(1))
+                    .unwrap();
             }
         }
         result
