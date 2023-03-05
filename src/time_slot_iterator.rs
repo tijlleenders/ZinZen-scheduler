@@ -1,5 +1,6 @@
 use crate::repetition::Repetition;
 use crate::slot::Slot;
+use crate::time_filter::TimeFilter;
 use crate::util::MyDurationRound;
 use chrono::prelude::*;
 use chrono::Duration;
@@ -14,8 +15,7 @@ pub(crate) struct TimeSlotIterator {
     start: NaiveDateTime,
     end: NaiveDateTime,
     repetition: Option<Repetition>,
-    after_time: usize,
-    before_time: usize,
+    filters: Option<Vec<TimeFilter>>,
     slots: Vec<Slot>,
 }
 
@@ -24,20 +24,17 @@ impl TimeSlotIterator {
         start: NaiveDateTime,
         end: NaiveDateTime,
         repetition: Option<Repetition>,
-        after_time: usize,
-        before_time: usize,
+        filters: Option<Vec<TimeFilter>>,
     ) -> TimeSlotIterator {
-        let start = skip_to_after_time(start, after_time);
         TimeSlotIterator {
             start,
             end,
             repetition,
-            after_time,
-            before_time,
             slots: vec![Slot {
                 start: start,
                 end: end,
             }],
+            filters,
         }
     }
 }
@@ -159,16 +156,16 @@ impl Iterator for TimeSlotIterator {
                 if self.start >= self.end {
                     return None;
                 }
-                while !hour_is_within_bounds(
-                    self.after_time,
-                    self.before_time,
-                    self.start.hour() as usize,
-                ) {
-                    self.start += Duration::hours(1);
-                    if self.start >= self.end {
-                        return None;
-                    }
-                }
+                // while !hour_is_within_bounds(
+                //     self.after_time,
+                //     self.before_time,
+                //     self.start.hour() as usize,
+                // ) {
+                //     self.start += Duration::hours(1);
+                //     if self.start >= self.end {
+                //         return None;
+                //     }
+                // }
                 //we are now at an hour that is within the time bounds of the task
                 let start = self.start;
                 let end = self.start + Duration::hours(1);
