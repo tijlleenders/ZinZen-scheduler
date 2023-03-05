@@ -33,7 +33,7 @@ pub fn slot_generator(
         time_period.end,
         Some(Repetition::HOURLY),
         // Todo! 0-24
-        None,
+        vec![],
     );
 
     let mut slots: Vec<Slot> = Vec::new();
