@@ -17,7 +17,6 @@ pub mod options_generator;
 pub mod output_formatter;
 pub mod repetition;
 pub mod slot;
-pub mod slot_generator;
 pub mod task;
 pub mod task_generator;
 pub mod task_placer;

@@ -1,4 +1,3 @@
-use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::time_filter::TimeFilter;
 use crate::time_slot_iterator::TimeSlotsIterator;
