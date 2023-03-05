@@ -16,6 +16,7 @@ pub(crate) struct TimeSlotIterator {
     repetition: Option<Repetition>,
     after_time: usize,
     before_time: usize,
+    slots: Vec<Slot>,
 }
 
 impl TimeSlotIterator {
@@ -33,6 +34,10 @@ impl TimeSlotIterator {
             repetition,
             after_time,
             before_time,
+            slots: vec![Slot {
+                start: start,
+                end: end,
+            }],
         }
     }
 }
