@@ -21,6 +21,7 @@ pub mod slot_generator;
 pub mod task;
 pub mod task_generator;
 pub mod task_placer;
+pub mod time_filter;
 pub mod time_slot_iterator;
 mod util;
 // Test
