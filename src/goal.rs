@@ -152,7 +152,7 @@ impl Goal {
             time_filters.push(TimeFilter::new_after(the_after_time))
         }
 
-        let time_periods = TimeSlotsIterator::new(
+        let time_slots_iterator = TimeSlotsIterator::new(
             start,
             deadline,
             self.repeat,
@@ -160,19 +160,24 @@ impl Goal {
             // Todo! add self.before_time filter
         );
 
-        for time_period in time_periods {
+        for time_slots in time_slots_iterator {
             let task_id = *counter;
             *counter += 1;
-            let t = Task::new(
-                task_id,
-                time_period.start,
-                time_period.end,
-                &self,
-                calendar_start,
-                calendar_end,
-            );
-
-            tasks.push(t);
+            if time_slots.len() > 0 {
+                let t = Task::new(
+                    task_id,
+                    time_slots.first().unwrap().start,
+                    time_slots.last().unwrap().end,
+                    &self,
+                    calendar_start,
+                    calendar_end,
+                    //slots: time_slots,
+                );
+                tasks.push(t);
+            } else {
+                //Create impossible task
+                // tasks.push(t);
+            }
         }
         tasks
     }
