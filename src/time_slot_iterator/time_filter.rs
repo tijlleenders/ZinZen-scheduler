@@ -16,4 +16,10 @@ pub enum FilterType {
     Sundays,
 }
 
-impl TimeFilter {}
+impl TimeFilter {
+    pub(crate) fn new_after(_clone: usize) -> TimeFilter {
+        TimeFilter {
+            filter_type: FilterType::After,
+        }
+    }
+}

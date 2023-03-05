@@ -1,5 +1,7 @@
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
+use crate::time_slot_iterator::time_filter::TimeFilter;
+use crate::time_slot_iterator::TimeSlotIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
@@ -8,8 +10,6 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt;
 use std::option::Option;
-
-use crate::time_slot_iterator::TimeSlotIterator;
 
 /// Represents a Goal passed in by the user from the front end.
 /// Goals are converted into [Task](../task/index.html)s by the scheduler.
@@ -147,12 +147,16 @@ impl Goal {
          **the start and deadline.*/
         let start = self.start.unwrap_or(calendar_start);
         let deadline = self.deadline.unwrap_or(calendar_end);
+        let mut time_filters: Vec<TimeFilter> = vec![];
+        if let Some(the_after_time) = self.after_time {
+            time_filters.push(TimeFilter::new_after(the_after_time))
+        }
 
         let time_periods = TimeSlotIterator::new(
             start,
             deadline,
             self.repeat,
-            None,
+            time_filters,
             // Todo! after_time.unwrap_or(0)- self.before_time.unwrap_or(24)
         );
         let tasks_per_period = match self.repeat {
