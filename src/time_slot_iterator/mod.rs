@@ -1,7 +1,6 @@
 use self::time_filter::TimeFilter;
 use crate::repetition::Repetition;
 use crate::slot::Slot;
-use crate::util::MyDurationRound;
 use chrono::prelude::*;
 use chrono::Duration;
 
@@ -14,11 +13,9 @@ pub mod time_filter;
 /// e.g. iterate over all HOURS between 1st September 2022 and 30th September 2022.
 /// e.g. iterate over all 'every two hours' slots between times 10-21 for time period X-Y
 pub(crate) struct TimeSlotIterator {
-    start: NaiveDateTime,
-    end: NaiveDateTime,
+    timeline: Vec<Slot>,
     repetition: Option<Repetition>,
     filters: Vec<TimeFilter>,
-    slots: Vec<Slot>,
 }
 
 impl TimeSlotIterator {
@@ -28,16 +25,20 @@ impl TimeSlotIterator {
         repetition: Option<Repetition>,
         filters: Vec<TimeFilter>,
     ) -> TimeSlotIterator {
-        TimeSlotIterator {
-            start,
-            end,
-            repetition,
-            slots: vec![Slot {
+        let result = TimeSlotIterator {
+            timeline: vec![Slot {
                 start: start,
                 end: end,
             }],
+            repetition,
             filters,
-        }
+        };
+        result.apply_filters();
+        result
+    }
+
+    fn apply_filters(&self) {
+        todo!()
     }
 }
 
