@@ -94,7 +94,35 @@ impl Iterator for TimeSlotsIterator {
     fn next(&mut self) -> Option<Self::Item> {
         match self.repetition {
             Some(repetition) => match repetition {
-                Repetition::DAILY(_) => todo!(),
+                Repetition::DAILY(daily_repeat) => {
+                    let mut result = vec![];
+                    if self.timeline.len() == 0 {
+                        return None;
+                    }
+                    let next_start_position = self.timeline[0]
+                        .start
+                        .checked_add_signed(Duration::days(daily_repeat as i64))
+                        .unwrap();
+                    let mut indexes_to_delete_count: usize = 0;
+                    for slot in self.timeline.iter_mut() {
+                        if next_start_position.lt(&slot.end) {
+                            result.push(Slot {
+                                start: slot.start,
+                                end: next_start_position,
+                            });
+                            slot.start = next_start_position;
+                        } else if next_start_position.eq(&slot.end) {
+                            indexes_to_delete_count += 1;
+                            result.push(slot.clone());
+                        } else if next_start_position.gt(&slot.end) {
+                            continue;
+                        }
+                    }
+                    for _i in 1..=indexes_to_delete_count {
+                        self.timeline.remove(0);
+                    }
+                    return Some(result);
+                }
                 Repetition::HOURLY => todo!(),
                 Repetition::Weekly(_) => todo!(),
                 Repetition::WEEKDAYS => todo!(),
