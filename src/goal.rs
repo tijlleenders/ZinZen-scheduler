@@ -157,7 +157,7 @@ impl Goal {
             deadline,
             self.repeat,
             time_filters,
-            // Todo! after_time.unwrap_or(0)- self.before_time.unwrap_or(24)
+            // Todo! add self.before_time filter
         );
         let tasks_per_period = match self.repeat {
             Some(Repetition::Weekly(x)) => x,
