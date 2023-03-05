@@ -1,6 +1,6 @@
 #[test]
 fn time_slot_iterator_range_returns_all_tuesdays() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 30).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::TUESDAYS,
@@ -31,7 +31,7 @@ fn time_slot_iterator_range_returns_all_tuesdays() {
 
 #[test]
 fn time_slot_iterator_range_returns_all_wednesdays() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 30).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::WEDNESDAYS,
@@ -62,7 +62,7 @@ fn time_slot_iterator_range_returns_all_wednesdays() {
 
 #[test]
 fn time_slot_iterator_range_returns_all_thursdays() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 30).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::THURSDAYS,
@@ -97,7 +97,7 @@ fn time_slot_iterator_range_returns_all_thursdays() {
 
 #[test]
 fn time_slot_iterator_range_returns_all_fridays() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 30).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::FRIDAYS,
@@ -132,7 +132,7 @@ fn time_slot_iterator_range_returns_all_fridays() {
 
 #[test]
 fn time_slot_iterator_range_returns_all_saturdays() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 30).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::SATURDAYS,
@@ -163,7 +163,7 @@ fn time_slot_iterator_range_returns_all_saturdays() {
 
 #[test]
 fn time_slot_iterator_range_returns_all_sundays() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 30).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::SUNDAYS,
@@ -194,7 +194,7 @@ fn time_slot_iterator_range_returns_all_sundays() {
 
 #[test]
 fn time_slot_iterator_range_returns_all_weekdays() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 14).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::WEEKDAYS,
@@ -245,7 +245,7 @@ fn time_slot_iterator_range_returns_all_weekdays() {
 
 #[test]
 fn time_slot_iterator_range_returns_all_weekends() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 9, 30).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::WEEKENDS,
@@ -292,7 +292,7 @@ fn time_slot_iterator_range_returns_all_weekends() {
 
 #[test]
 fn time_slot_iterator_range_returns_weeks() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2022, 9, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2022, 10, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::Weekly,
@@ -327,7 +327,7 @@ fn time_slot_iterator_range_returns_weeks() {
 
 #[test]
 fn time_slot_iterator_range_returns_weeks_starting_on_a_sunday() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2023, 1, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2023, 2, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::Weekly,
@@ -366,7 +366,7 @@ fn time_slot_iterator_range_returns_weeks_starting_on_a_sunday() {
 
 #[test]
 fn time_slot_iterator_range_returns_weeks_ending_on_a_sunday() {
-    let r = TimeSlotIterator {
+    let r = TimeSlotsIterator {
         start: NaiveDate::from_ymd_opt(2023, 4, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         end: NaiveDate::from_ymd_opt(2023, 5, 1).unwrap().and_hms_opt(0, 0, 0).unwrap(),
         repetition: Repetition::Weekly,

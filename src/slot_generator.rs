@@ -5,7 +5,7 @@
 use crate::repetition::Repetition;
 use crate::slot::Slot;
 use crate::task::Task;
-use crate::time_slot_iterator::TimeSlotIterator;
+use crate::time_slot_iterator::TimeSlotsIterator;
 use chrono::{Duration, NaiveDateTime, Timelike};
 
 pub fn slot_generator(
@@ -28,7 +28,7 @@ pub fn slot_generator(
     //assign a slot starting from there up to the before_time of the task.
     //e.g. if the time_period is a day and aftertime is 10 and before time is 14,
     //we'll get to 10 and add a slot starting from 10 up until 14.
-    let hour_iterator = TimeSlotIterator::new(
+    let hour_iterator = TimeSlotsIterator::new(
         time_period.start,
         time_period.end,
         Some(Repetition::HOURLY),

@@ -1,7 +1,7 @@
 use crate::slot_generator::slot_generator;
 use crate::task::Task;
 use crate::time_slot_iterator::time_filter::TimeFilter;
-use crate::time_slot_iterator::TimeSlotIterator;
+use crate::time_slot_iterator::TimeSlotsIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
 use serde::de::{self, Visitor};
@@ -152,7 +152,7 @@ impl Goal {
             time_filters.push(TimeFilter::new_after(the_after_time))
         }
 
-        let time_periods = TimeSlotIterator::new(
+        let time_periods = TimeSlotsIterator::new(
             start,
             deadline,
             self.repeat,

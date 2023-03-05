@@ -13,20 +13,20 @@ pub mod time_filter;
 /// e.g. iterate over all DAYS between 1st September 2022 and 30th September 2022.
 /// e.g. iterate over all HOURS between 1st September 2022 and 30th September 2022.
 /// e.g. iterate over all 'every two hours' slots between times 10-21 for time period X-Y
-pub(crate) struct TimeSlotIterator {
+pub(crate) struct TimeSlotsIterator {
     timeline: Vec<Slot>,
     repetition: Option<Repetition>,
     filters: Vec<TimeFilter>,
 }
 
-impl TimeSlotIterator {
+impl TimeSlotsIterator {
     pub fn new(
         start: NaiveDateTime,
         end: NaiveDateTime,
         repetition: Option<Repetition>,
         filters: Vec<TimeFilter>,
-    ) -> TimeSlotIterator {
-        let mut result = TimeSlotIterator {
+    ) -> TimeSlotsIterator {
+        let mut result = TimeSlotsIterator {
             timeline: vec![Slot {
                 start: start,
                 end: end,
@@ -73,8 +73,8 @@ impl TimeSlotIterator {
     }
 }
 
-impl Iterator for TimeSlotIterator {
-    type Item = Slot;
+impl Iterator for TimeSlotsIterator {
+    type Item = Vec<Slot>;
     fn next(&mut self) -> Option<Self::Item> {
         match self.repetition {
             Some(repetition) => match repetition {
@@ -84,7 +84,25 @@ impl Iterator for TimeSlotIterator {
                 Repetition::WEEKDAYS => todo!(),
                 Repetition::WEEKENDS => todo!(),
                 Repetition::EveryXdays(_) => todo!(),
-                Repetition::EveryXhours(_) => todo!(),
+                Repetition::EveryXhours(repeat_hours) => {
+                    let result = vec![];
+                    let next_start_position = self.timeline[0]
+                        .start
+                        .checked_add_signed(Duration::hours(repeat_hours as i64))
+                        .unwrap();
+                    for slot in self.timeline.iter_mut() {
+                        if next_start_position.lt(&slot.end) {
+                            let result = Slot {
+                                start: slot.start,
+                                end: next_start_position,
+                            };
+                            slot.start = next_start_position;
+                            return Some(result);
+                        } else if next_start_position.eq(&slot.end) {
+                            self.timeline.remove(0);
+                        }
+                    }
+                }
                 Repetition::MONDAYS => todo!(),
                 Repetition::TUESDAYS => todo!(),
                 Repetition::WEDNESDAYS => todo!(),

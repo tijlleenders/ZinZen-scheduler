@@ -7,7 +7,7 @@ use chrono::*;
 
 #[test]
 fn time_slot_iterator_splits_into_single_days() {
-    let r = TimeSlotIterator::new(
+    let r = TimeSlotsIterator::new(
         NaiveDate::from_ymd_opt(2022, 1, 1)
             .unwrap()
             .and_hms_opt(0, 0, 0)
@@ -99,7 +99,7 @@ fn time_slot_iterator_splits_into_single_days() {
 
 #[test]
 fn time_slot_iterator_returns_all_mondays() {
-    let r = TimeSlotIterator::new(
+    let r = TimeSlotsIterator::new(
         NaiveDate::from_ymd_opt(2022, 9, 1)
             .unwrap()
             .and_hms_opt(0, 0, 0)
