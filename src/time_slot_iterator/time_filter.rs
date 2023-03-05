@@ -1,6 +1,6 @@
 pub struct TimeFilter {
-    filter_type: FilterType,
-    after_time: usize,
+    pub filter_type: FilterType,
+    pub after_time: usize,
 }
 
 pub enum FilterType {
