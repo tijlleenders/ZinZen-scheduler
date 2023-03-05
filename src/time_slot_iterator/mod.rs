@@ -86,6 +86,9 @@ impl Iterator for TimeSlotsIterator {
                 Repetition::EveryXdays(_) => todo!(),
                 Repetition::EveryXhours(repeat_hours) => {
                     let mut result = vec![];
+                    if self.timeline.len() == 0 {
+                        return None;
+                    }
                     let next_start_position = self.timeline[0]
                         .start
                         .checked_add_signed(Duration::hours(repeat_hours as i64))
