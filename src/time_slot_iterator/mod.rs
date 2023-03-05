@@ -1,9 +1,11 @@
+use self::time_filter::TimeFilter;
 use crate::repetition::Repetition;
 use crate::slot::Slot;
-use crate::time_filter::TimeFilter;
 use crate::util::MyDurationRound;
 use chrono::prelude::*;
 use chrono::Duration;
+
+mod time_filter;
 
 /// An iterator that returns slots that conform to a repetition,
 /// with optional filters (after/before/Mondays/Weekdays/Weekends/Bank holidays...)

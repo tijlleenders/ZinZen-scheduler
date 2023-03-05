@@ -17,8 +17,7 @@ fn time_slot_iterator_splits_into_single_days() {
             .and_hms_opt(23, 59, 59)
             .unwrap(),
         Some(Repetition::DAILY(1)),
-        0,
-        24,
+        None, // Todo! 0-24
     );
 
     assert_eq!(
@@ -110,8 +109,7 @@ fn time_slot_iterator_returns_all_mondays() {
             .and_hms_opt(0, 0, 0)
             .unwrap(),
         Some(Repetition::MONDAYS),
-        0,
-        24,
+        None, // Todo! 0-24
     );
 
     assert_eq!(
