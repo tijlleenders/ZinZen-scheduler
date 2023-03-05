@@ -119,6 +119,7 @@ impl Iterator for TimeSlotsIterator {
                             slot.start = next_start_position;
                         } else if next_start_position.eq(&slot.end) {
                             indexesToDeleteCount += 1;
+                            result.push(slot.clone()); 
                         } else if next_start_position.gt(&slot.end) {
                             continue;
                         }
