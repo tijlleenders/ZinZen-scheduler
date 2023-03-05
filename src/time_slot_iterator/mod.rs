@@ -2,6 +2,7 @@ use self::time_filter::TimeFilter;
 use crate::repetition::Repetition;
 use crate::slot::Slot;
 use chrono::prelude::*;
+use chrono::Days;
 use chrono::Duration;
 use chrono::NaiveDateTime;
 
@@ -124,7 +125,35 @@ impl Iterator for TimeSlotsIterator {
                     return Some(result);
                 }
                 Repetition::HOURLY => todo!(),
-                Repetition::Weekly(_) => todo!(),
+                Repetition::Weekly(_) => {
+                    let mut result = vec![];
+                    if self.timeline.len() == 0 {
+                        return None;
+                    }
+                    let next_start_position = self.timeline[0]
+                        .start
+                        .checked_add_signed(get_start_of_next_moday(&self.timeline[0].start))
+                        .unwrap();
+                    let mut indexes_to_delete_count: usize = 0;
+                    for slot in self.timeline.iter_mut() {
+                        if next_start_position.lt(&slot.end) {
+                            result.push(Slot {
+                                start: slot.start,
+                                end: next_start_position,
+                            });
+                            slot.start = next_start_position;
+                        } else if next_start_position.eq(&slot.end) {
+                            indexes_to_delete_count += 1;
+                            result.push(slot.clone());
+                        } else if next_start_position.gt(&slot.end) {
+                            continue;
+                        }
+                    }
+                    for _i in 1..=indexes_to_delete_count {
+                        self.timeline.remove(0);
+                    }
+                    return Some(result);
+                }
                 Repetition::WEEKDAYS => todo!(),
                 Repetition::WEEKENDS => todo!(),
                 Repetition::EveryXdays(_) => todo!(),
@@ -179,4 +208,17 @@ impl Iterator for TimeSlotsIterator {
             }
         }
     }
+}
+
+fn get_start_of_next_moday(date: &NaiveDateTime) -> Duration {
+    let mut distance: usize = 0;
+    let mut cdate = date.to_owned();
+    if cdate.weekday() == Weekday::Mon {
+        return Duration::days(0);
+    }
+    while cdate.weekday() != Weekday::Mon {
+        cdate = date.checked_add_days(Days::new(distance as u64)).unwrap();
+        distance += 1;
+    }
+    Duration::days(distance as i64)
 }
