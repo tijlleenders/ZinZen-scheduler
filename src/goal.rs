@@ -170,7 +170,8 @@ impl Goal {
                     &self,
                     calendar_start,
                     calendar_end,
-                    //slots: time_slots,
+                    time_slots,
+                    TaskStatus::ReadyToSchedule,
                 );
                 tasks.push(t);
             } else {
