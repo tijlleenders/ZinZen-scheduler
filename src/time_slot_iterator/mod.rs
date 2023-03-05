@@ -58,7 +58,23 @@ impl TimeSlotsIterator {
                     }
                     self.timeline = result;
                 }
-                time_filter::FilterType::Before => todo!(),
+                time_filter::FilterType::Before => {
+                    let mut result: Vec<Slot> = vec![];
+                    for slot in self.timeline.iter_mut() {
+                        let mut daily_slots = slot.divide_in_days();
+                        for daily_slot in daily_slots.iter_mut() {
+                            let before_datetime = daily_slot
+                                .start
+                                .with_hour(filter.before_time as u32)
+                                .unwrap();
+                            if daily_slot.end > before_datetime {
+                                daily_slot.end = before_datetime;
+                            }
+                            result.push(*daily_slot);
+                        }
+                    }
+                    self.timeline = result;
+                }
                 time_filter::FilterType::Weekdays => todo!(),
                 time_filter::FilterType::Weekends => todo!(),
                 time_filter::FilterType::Mondays => todo!(),

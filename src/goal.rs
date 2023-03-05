@@ -150,6 +150,9 @@ impl Goal {
         if let Some(the_after_time) = self.after_time {
             time_filters.push(TimeFilter::new_after(the_after_time))
         }
+        if let Some(the_before_time) = self.before_time {
+            time_filters.push(TimeFilter::new_before(the_before_time))
+        }
 
         let time_slots_iterator = TimeSlotsIterator::new(
             start,
