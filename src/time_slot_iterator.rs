@@ -5,10 +5,11 @@ use chrono::prelude::*;
 use chrono::Duration;
 
 /// An iterator that returns slots that conform to a repetition,
-/// within specified bounds.
-/// e.g. all MONDAYS between 1st September 2022 and 30th September 2022.
-/// e.g. all DAYS between 1st September 2022 and 30th September 2022.
-/// e.g. all HOURS between 1st September 2022 and 30th September 2022.
+/// with optional filters (after/before/Mondays/Weekdays/Weekends/Bank holidays...)
+/// e.g. iterate over all MONDAYS between 1st September 2022 and 30th September 2022.
+/// e.g. iterate over all DAYS between 1st September 2022 and 30th September 2022.
+/// e.g. iterate over all HOURS between 1st September 2022 and 30th September 2022.
+/// e.g. iterate over all 'every two hours' slots between times 10-21 for time period X-Y
 pub(crate) struct TimeSlotIterator {
     start: NaiveDateTime,
     end: NaiveDateTime,
