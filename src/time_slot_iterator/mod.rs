@@ -3,6 +3,7 @@ use crate::repetition::Repetition;
 use crate::slot::Slot;
 use chrono::prelude::*;
 use chrono::Duration;
+use chrono::NaiveDateTime;
 
 pub mod time_filter;
 
@@ -38,7 +39,37 @@ impl TimeSlotIterator {
     }
 
     fn apply_filters(&self) {
-        todo!()
+        for filter in self.filters.iter() {
+            match filter.filter_type {
+                time_filter::FilterType::After => {
+                    let result: Vec<Slot> = vec![];
+                    for slot in self.timeline.iter() {
+                        let daily_slots = slot.divide_in_days();
+                        for daily_slot in daily_slots.iter_mut() {
+                            let after_datetime = daily_slot
+                                .start
+                                .with_hour(filter.after_time as u32)
+                                .unwrap();
+                            if daily_slot.start < after_datetime {
+                                daily_slot.start = after_datetime;
+                            }
+                            result.push(daily_slot);
+                        }
+                    }
+                    self.timeline = result;
+                }
+                time_filter::FilterType::Before => todo!(),
+                time_filter::FilterType::Weekdays => todo!(),
+                time_filter::FilterType::Weekends => todo!(),
+                time_filter::FilterType::Mondays => todo!(),
+                time_filter::FilterType::Tuesdays => todo!(),
+                time_filter::FilterType::Wednesdays => todo!(),
+                time_filter::FilterType::Thursdays => todo!(),
+                time_filter::FilterType::Fridays => todo!(),
+                time_filter::FilterType::Saturdays => todo!(),
+                time_filter::FilterType::Sundays => todo!(),
+            }
+        }
     }
 }
 
