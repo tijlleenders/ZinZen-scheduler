@@ -21,7 +21,7 @@ fn time_slot_iterator_splits_into_single_days() {
     );
 
     assert_eq!(
-        r.into_iter().collect::<Vec<_>>(),
+        r.into_iter().collect(),
         vec![
             (Slot {
                 start: NaiveDate::from_ymd_opt(2022, 1, 1)
@@ -113,7 +113,7 @@ fn time_slot_iterator_returns_all_mondays() {
     );
 
     assert_eq!(
-        r.into_iter().collect::<Vec<_>>(),
+        r.into_iter().collect::<Vec<Slot>>().try_into().unwrap(),
         vec![
             (Slot {
                 start: NaiveDate::from_ymd_opt(2022, 9, 5)
