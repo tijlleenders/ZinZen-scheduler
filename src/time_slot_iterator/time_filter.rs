@@ -1,5 +1,6 @@
 pub struct TimeFilter {
     filter_type: FilterType,
+    after_time: usize,
 }
 
 pub enum FilterType {
@@ -17,9 +18,10 @@ pub enum FilterType {
 }
 
 impl TimeFilter {
-    pub(crate) fn new_after(_clone: usize) -> TimeFilter {
+    pub(crate) fn new_after(after_time: usize) -> TimeFilter {
         TimeFilter {
             filter_type: FilterType::After,
+            after_time,
         }
     }
 }
