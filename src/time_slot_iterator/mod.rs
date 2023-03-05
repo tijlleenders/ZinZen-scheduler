@@ -109,7 +109,7 @@ impl Iterator for TimeSlotsIterator {
                         .start
                         .checked_add_signed(Duration::hours(repeat_hours as i64))
                         .unwrap();
-                    let mut indexesToDeleteCount: usize = 0;
+                    let mut indexes_to_delete_count: usize = 0;
                     for slot in self.timeline.iter_mut() {
                         if next_start_position.lt(&slot.end) {
                             result.push(Slot {
@@ -118,13 +118,13 @@ impl Iterator for TimeSlotsIterator {
                             });
                             slot.start = next_start_position;
                         } else if next_start_position.eq(&slot.end) {
-                            indexesToDeleteCount += 1;
-                            result.push(slot.clone()); 
+                            indexes_to_delete_count += 1;
+                            result.push(slot.clone());
                         } else if next_start_position.gt(&slot.end) {
                             continue;
                         }
                     }
-                    for _i in 1..=indexesToDeleteCount {
+                    for _i in 1..=indexes_to_delete_count {
                         self.timeline.remove(0);
                     }
                     return Some(result);
