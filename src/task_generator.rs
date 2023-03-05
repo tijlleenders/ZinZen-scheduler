@@ -14,7 +14,7 @@ pub fn task_generator(
     let mut counter: usize = 0;
     let mut tasks = vec![];
     let mut goals = add_filler(goals);
-    add_repeat(&mut goals);
+    add_optional(&mut goals);
 
     for goal in goals {
         let goals_vec = goal.generate_tasks(calendar_start, calendar_end, &mut counter);
@@ -27,7 +27,7 @@ pub fn task_generator(
     }
 }
 
-fn add_repeat(goals: &mut Vec<Goal>) {
+fn add_optional(goals: &mut Vec<Goal>) {
     let mut generated_goals = vec![];
     for goal in goals.iter_mut() {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
