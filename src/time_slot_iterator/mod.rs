@@ -85,23 +85,29 @@ impl Iterator for TimeSlotsIterator {
                 Repetition::WEEKENDS => todo!(),
                 Repetition::EveryXdays(_) => todo!(),
                 Repetition::EveryXhours(repeat_hours) => {
-                    let result = vec![];
+                    let mut result = vec![];
                     let next_start_position = self.timeline[0]
                         .start
                         .checked_add_signed(Duration::hours(repeat_hours as i64))
                         .unwrap();
+                    let mut indexesToDeleteCount: usize = 0;
                     for slot in self.timeline.iter_mut() {
                         if next_start_position.lt(&slot.end) {
-                            let result = Slot {
+                            result.push(Slot {
                                 start: slot.start,
                                 end: next_start_position,
-                            };
+                            });
                             slot.start = next_start_position;
-                            return Some(result);
                         } else if next_start_position.eq(&slot.end) {
-                            self.timeline.remove(0);
+                            indexesToDeleteCount += 1;
+                        } else if next_start_position.gt(&slot.end) {
+                            continue;
                         }
                     }
+                    for _i in 1..=indexesToDeleteCount {
+                        self.timeline.remove(0);
+                    }
+                    return Some(result);
                 }
                 Repetition::MONDAYS => todo!(),
                 Repetition::TUESDAYS => todo!(),
@@ -114,10 +120,11 @@ impl Iterator for TimeSlotsIterator {
                 Repetition::FlexWeekly(_, _) => todo!(),
             },
             None => {
+                let mut result = vec![];
                 if self.timeline.len() > 0 {
-                    let result = Some(self.timeline[0].clone());
+                    result.push(self.timeline[0].clone());
                     self.timeline.remove(0);
-                    return result;
+                    return Some(result);
                 } else {
                     return None;
                 };
