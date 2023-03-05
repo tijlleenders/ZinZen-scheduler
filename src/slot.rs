@@ -126,6 +126,27 @@ impl Slot {
         }
         result
     }
+    pub fn divide_in_days(&self) -> Vec<Slot> {
+        let mut result = vec![];
+        let mut start_slider = self.start.clone();
+        while start_slider.lt(&self.end) {
+            if start_slider.date().eq(&self.end.date()) {
+                result.push(Slot {
+                    start: start_slider,
+                    end: self.end,
+                });
+                continue;
+            } else {
+                result.push(Slot {
+                    start: start_slider,
+                    end: start_slider.with_hour(24).unwrap(),
+                });
+                start_slider = start_slider.with_hour(24).unwrap();
+            }
+        }
+        result
+    }
+
     pub fn is_intersect(&self, other: &Slot) -> bool {
         let overlap = min(self.end, other.end) - max(self.start, other.start);
         overlap.num_hours() > 0

@@ -44,7 +44,7 @@ impl TimeSlotIterator {
                 time_filter::FilterType::After => {
                     let result: Vec<Slot> = vec![];
                     for slot in self.timeline.iter() {
-                        let daily_slots = slot.divide_in_days();
+                        let mut daily_slots = slot.divide_in_days();
                         for daily_slot in daily_slots.iter_mut() {
                             let after_datetime = daily_slot
                                 .start
@@ -53,7 +53,7 @@ impl TimeSlotIterator {
                             if daily_slot.start < after_datetime {
                                 daily_slot.start = after_datetime;
                             }
-                            result.push(daily_slot);
+                            result.push(*daily_slot);
                         }
                     }
                     self.timeline = result;
