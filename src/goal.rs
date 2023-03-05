@@ -159,11 +159,6 @@ impl Goal {
             time_filters,
             // Todo! add self.before_time filter
         );
-        let tasks_per_period = match self.repeat {
-            Some(Repetition::Weekly(x)) => x,
-            Some(Repetition::DAILY(x)) => x,
-            _ => 1,
-        };
 
         for time_period in time_periods {
             for _ in 0..tasks_per_period {
