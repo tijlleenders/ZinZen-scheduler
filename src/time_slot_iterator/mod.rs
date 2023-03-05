@@ -135,18 +135,3 @@ impl Iterator for TimeSlotsIterator {
         }
     }
 }
-
-fn hour_is_within_bounds(after_time: usize, before_time: usize, hour: usize) -> bool {
-    if before_time < after_time {
-        hour < before_time || hour >= after_time
-    } else {
-        hour >= after_time && hour < before_time
-    }
-}
-
-fn skip_to_after_time(mut original_time: NaiveDateTime, after_time: usize) -> NaiveDateTime {
-    while original_time.hour() < after_time as u32 {
-        original_time += Duration::hours(1);
-    }
-    original_time
-}
