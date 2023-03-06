@@ -130,10 +130,8 @@ impl Iterator for TimeSlotsIterator {
                     if self.timeline.len() == 0 {
                         return None;
                     }
-                    let next_start_position = self.timeline[0]
-                        .start
-                        .checked_add_signed(get_start_of_next_moday(&self.timeline[0].start))
-                        .unwrap();
+
+                    let next_start_position = get_start_of_next_monday(&self.timeline[0].start);
                     let mut indexes_to_delete_count: usize = 0;
                     for slot in self.timeline.iter_mut() {
                         if next_start_position.lt(&slot.end) {
@@ -210,15 +208,17 @@ impl Iterator for TimeSlotsIterator {
     }
 }
 
-fn get_start_of_next_moday(date: &NaiveDateTime) -> Duration {
+fn get_start_of_next_monday(date: &NaiveDateTime) -> NaiveDateTime {
     let mut distance: usize = 0;
     let mut cdate = date.to_owned();
     if cdate.weekday() == Weekday::Mon {
-        return Duration::days(0);
+        cdate = date.checked_add_days(Days::new(1)).unwrap();
     }
-    while cdate.weekday() != Weekday::Mon {
-        cdate = date.checked_add_days(Days::new(distance as u64)).unwrap();
-        distance += 1;
+    for _i in 0..8 {
+        if cdate.weekday() != Weekday::Mon {
+            cdate = cdate.checked_add_days(Days::new(distance as u64)).unwrap();
+            distance += 1;
+        }
     }
-    Duration::days(distance as i64)
+    cdate.with_hour(0).unwrap()
 }
