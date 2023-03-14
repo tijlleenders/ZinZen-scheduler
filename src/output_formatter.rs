@@ -2,7 +2,8 @@ use crate::Slot;
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
 use crate::goal::Tag;
-use crate::task::{ScheduleOption, Task};
+use crate::input::PlacedTasks;
+use crate::task::Task;
 use crate::{errors::Error, task::TaskStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
@@ -17,18 +18,11 @@ pub struct Output {
     duration: usize,
     start: NaiveDateTime,
     deadline: NaiveDateTime,
-    #[serde(skip)]
-    after_time: usize,
-    #[serde(skip)]
-    before_time: usize,
     #[serde(skip_serializing_if = "Option::is_none")]
-    first_conflict_with: Option<String>,
     #[serde(skip)]
     tags: Vec<Tag>,
     #[serde(skip)]
     impossible: bool,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    options: Option<Vec<ScheduleOption>>,
 }
 
 impl Ord for Output {
@@ -53,52 +47,60 @@ pub struct FinalOutput {
     pub impossible: Vec<DayOutputFormat>,
 }
 
-pub fn output_formatter(
-    mut scheduled: Vec<Task>,
-    impossible: Vec<Task>,
-    calender_start: NaiveDateTime,
-    calender_end: NaiveDateTime,
-) -> Result<FinalOutput, Error> {
+pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
 
-    //prevent deadline end from exceeding calender end and update duration
-    for task in scheduled.iter_mut() {
-        if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-            return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-        }
-        //prevent slot end from exceeding calender end
-        if task.confirmed_deadline.unwrap() > calender_end {
-            task.confirmed_deadline = Some(calender_end);
-            task.duration = Slot {
-                start: task.confirmed_start.unwrap(),
-                end: task.confirmed_deadline.unwrap(),
+    for task in placed_tasks.tasks.iter_mut() {
+        match task.status {
+            TaskStatus::Scheduled => {
+                //convert scheduled tasks to output objects and add to scheduled_outputs vec
+                if task.start.is_none() || task.deadline.is_none() {
+                    return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+                }
+                scheduled_outputs.push(get_output_from_task(
+                    task,
+                    placed_tasks.calendar_start,
+                    placed_tasks.calendar_end,
+                ));
             }
-            .num_hours();
+            TaskStatus::Impossible => {
+                //convert impossible tasks to output objects and add to impossible_outputs vec
+                //don't report optional tasks
+                if task.tags.contains(&Tag::Optional) {
+                    continue;
+                }
+                impossible_outputs.push(get_output_from_task(
+                    task,
+                    placed_tasks.calendar_start,
+                    placed_tasks.calendar_end,
+                ));
+            }
+            TaskStatus::Uninitialized => {
+                panic!("no uninitialized tasks should be present in placed_tasks")
+            }
+            TaskStatus::Blocked => panic!("no Blocked tasks should be present in placed_tasks"),
+            TaskStatus::ReadyToSchedule => {
+                panic!("no ReadyToSchedule tasks should be present in placed_tasks")
+            }
+            TaskStatus::BudgetMinWaitingForAdjustment => {
+                panic!("no BudgetMinWaitingForAdjustment tasks should be present in placed_tasks")
+            }
+            TaskStatus::BudgetMaxWaitingForAdjustment => {
+                panic!("no BudgetMaxWaitingForAdjustment tasks should be present in placed_tasks")
+            }
         }
     }
 
-    //convert scheduled tasks to output objects and add to scheduled_outputs vec
-    for task in scheduled {
-        if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-            return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-        }
-        scheduled_outputs.push(get_output_from_task(&task));
-    }
-
-    //convert impossible tasks to output objects and add to impossible_outputs vec
-    for task in impossible {
-        //don't report optional tasks
-        if task.tags.contains(&Tag::Optional) {
-            continue;
-        }
-        impossible_outputs.push(get_output_from_task(&task));
-    }
     //sort and combine the scheduled outputs
     scheduled_outputs.sort();
     combine(&mut scheduled_outputs);
     split_cross_day_task(&mut scheduled_outputs);
-    generate_free_tasks(&mut scheduled_outputs, calender_start, calender_end);
+    generate_free_tasks(
+        &mut scheduled_outputs,
+        placed_tasks.calendar_start,
+        placed_tasks.calendar_end,
+    );
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
@@ -115,9 +117,19 @@ pub fn output_formatter(
     }
     //create final output object
     let final_ouput = FinalOutput {
-        scheduled: get_output_with_date(scheduled_outputs, calender_start, calender_end),
-        impossible: get_output_with_date(impossible_outputs, calender_start, calender_end),
+        scheduled: get_output_with_date(
+            scheduled_outputs,
+            placed_tasks.calendar_start,
+            placed_tasks.calendar_end,
+        ),
+        impossible: get_output_with_date(
+            impossible_outputs,
+            placed_tasks.calendar_start,
+            placed_tasks.calendar_end,
+        ),
     };
+
+    print!("{}", serde_json::to_string_pretty(&final_ouput).unwrap());
 
     Ok(final_ouput)
 }
@@ -133,36 +145,37 @@ fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
     days
 }
 
-fn get_output_from_task(task: &Task) -> Output {
-    let start = if task.status == TaskStatus::Scheduled {
-        task.confirmed_start
-            .expect("Checked for None above so should always be Some.")
-    } else {
-        task.conflicts[0].0.start
-    };
-    let deadline = if task.status == TaskStatus::Scheduled {
-        task.confirmed_deadline
-            .expect("Checked for None above so should always be Some.")
-    } else {
-        task.conflicts[0].0.end
-    };
-    Output {
-        taskid: task.id,
-        goalid: task.goal_id.clone(),
-        title: task.title.clone(),
-        duration: task.duration,
-        start,
-        deadline,
-        first_conflict_with: if task.status == TaskStatus::Impossible {
-            Some(task.conflicts[0].1.to_owned())
-        } else {
-            None
+fn get_output_from_task(
+    task: &mut Task,
+    calendar_start: NaiveDateTime,
+    calendar_end: NaiveDateTime,
+) -> Output {
+    match task.status {
+        TaskStatus::Scheduled => Output {
+            taskid: task.id,
+            goalid: task.goal_id.clone(),
+            title: task.title.clone(),
+            duration: task.duration,
+            start: task.start.unwrap(),
+            deadline: task.deadline.unwrap(),
+            tags: task.tags.clone(),
+            impossible: false,
         },
-        tags: task.tags.clone(),
-        impossible: task.status == TaskStatus::Impossible,
-        options: task.options.clone(),
-        after_time: task.after_time,
-        before_time: task.before_time,
+        TaskStatus::Impossible => Output {
+            taskid: task.id,
+            goalid: task.goal_id.clone(),
+            title: task.title.clone(),
+            duration: task.duration,
+            start: calendar_start,
+            deadline: calendar_end,
+            tags: task.tags.clone(),
+            impossible: true,
+        },
+        TaskStatus::Uninitialized => todo!(),
+        TaskStatus::Blocked => todo!(),
+        TaskStatus::ReadyToSchedule => todo!(),
+        TaskStatus::BudgetMinWaitingForAdjustment => todo!(),
+        TaskStatus::BudgetMaxWaitingForAdjustment => todo!(),
     }
 }
 
@@ -273,12 +286,8 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
                 duration: s.num_hours(),
                 start: s.start,
                 deadline: s.end,
-                after_time: 0,
-                before_time: 23,
-                first_conflict_with: None,
                 tags: vec![],
                 impossible: false,
-                options: None,
             })
             .collect::<Vec<_>>();
         day_outputs.extend(free_outputs);

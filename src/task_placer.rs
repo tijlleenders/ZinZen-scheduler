@@ -1,238 +1,213 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
-
-use chrono::Duration;
-
 use crate::errors::Error;
 use crate::goal::Tag;
-use crate::input::{GeneratedTasks, PlacedTasks};
-use crate::slot::Slot;
-use crate::task::TaskStatus::{Scheduled, UNScheduled};
+use crate::input::{PlacedTasks, TasksToPlace};
 use crate::task::{Task, TaskStatus};
-use std::collections::VecDeque;
+use crate::task_budgets::TaskBudget;
+use crate::{slot::*, task};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible tasks.
-pub fn task_placer(generated_tasks: GeneratedTasks) -> PlacedTasks {
-    let mut tasks = generated_tasks.tasks;
-    let mut scheduled_tasks: Vec<Task> = Vec::new();
-    let mut waiting_tasks = tasks
-        .iter()
-        .filter(|task| task.status == TaskStatus::Waiting)
-        .cloned()
-        .collect::<Vec<Task>>();
-    let mut allowed_tasks: VecDeque<Task> = VecDeque::new();
-    tasks.retain(|task| task.status != TaskStatus::Waiting);
+pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     //first pass of scheduler while tasks are unsplit
-    schedule(
-        &mut tasks,
-        &mut scheduled_tasks,
-        &mut waiting_tasks,
-        &mut allowed_tasks,
-    );
-    waiting_tasks.sort();
-    while !waiting_tasks.is_empty() {
-        //remove non-waiting or allowed_tasks
-        waiting_tasks.retain(|task| task.status == TaskStatus::Waiting);
-        while !allowed_tasks.is_empty() {
-            tasks.push(allowed_tasks.pop_front().unwrap());
-            let mut counter = tasks[tasks.len() - 1].id + 1;
-            split_unscheduled_tasks(&mut tasks, &mut counter);
-            tasks.sort();
-            schedule(
-                &mut tasks,
-                &mut scheduled_tasks,
-                &mut waiting_tasks,
-                &mut allowed_tasks,
-            );
-        }
-    }
-    //if tasks is not empty, it means some tasks were unable to be scheduled
-    //so we split the tasks and do another schedule run
-    if !tasks.is_empty() {
-        //we have some unschedulable tasks. so split them, and attempt to
-        //schedule again
-        let mut counter = tasks[tasks.len() - 1].id + 1;
-        split_unscheduled_tasks(&mut tasks, &mut counter);
-        tasks.sort();
-        //schedule again
-        schedule(
-            &mut tasks,
-            &mut scheduled_tasks,
-            &mut waiting_tasks,
-            &mut allowed_tasks,
-        );
-    }
+    schedule(&mut tasks_to_place);
 
-    //if tasks is still not empty, these are impossible to schedule tasks
-    for task in &mut tasks {
-        task.status = TaskStatus::Impossible;
-    }
+    adjust_min_budget_tasks(&mut tasks_to_place); //TODO
+    schedule(&mut tasks_to_place); //TODO
 
     PlacedTasks {
-        calendar_start: generated_tasks.calendar_start,
-        calendar_end: generated_tasks.calendar_end,
-        tasks: (scheduled_tasks, tasks),
+        calendar_start: tasks_to_place.calendar_start,
+        calendar_end: tasks_to_place.calendar_end,
+        tasks: tasks_to_place.tasks,
     }
 }
 
-fn schedule(
-    tasks: &mut Vec<Task>,
-    scheduled_tasks: &mut Vec<Task>,
-    waiting_tasks: &mut Vec<Task>,
-    allowed_tasks: &mut VecDeque<Task>,
-) {
-    let mut i = 0; //index that points to a task in the collection of tasks
-    tasks.sort();
+fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
+    let mut tasks_to_add: Vec<Task> = Vec::new();
+    for index in 0..tasks_to_place.tasks.len() {
+        if tasks_to_place.tasks[index].status == TaskStatus::BudgetMinWaitingForAdjustment {
+            for slot_budget in &tasks_to_place
+                .task_budgets
+                .budget_id_to_budget
+                .get(&tasks_to_place.tasks[index].goal_id)
+                .unwrap()
+                .slot_budgets
+            {
+                //TODO If any remaining hours in slot_budget:
+                // Loop through BudgetTaskMinWaitingForAdjustment Task Vec<Slot> and chop off anything that is outside of the slot_budget Slot
+                // Make Task with those slots and remaining hours
+                // If not enough hours - mark impossible? No will happen during scheduling.
+                let mut task_slots_to_adjust = tasks_to_place.tasks[index].slots.clone();
+                for slot in task_slots_to_adjust.iter_mut() {
+                    if slot.start.lt(&slot_budget.slot.start) {
+                        slot.start = slot_budget.slot.start.clone();
+                    }
+                    if slot.end.lt(&slot_budget.slot.start) {
+                        slot.end = slot_budget.slot.start.clone();
+                    }
+                    if slot.end.gt(&slot_budget.slot.end) {
+                        slot.end = slot_budget.slot.end.clone();
+                    }
+                    if slot.start.gt(&slot_budget.slot.end) {
+                        slot.start = slot_budget.slot.end.clone();
+                    }
+                }
+                let mut result_slots: Vec<Slot> = Vec::new();
+                for task_slot in task_slots_to_adjust {
+                    if task_slot.start.ne(&task_slot.end) {
+                        result_slots.push(task_slot);
+                    }
+                }
+                tasks_to_place.tasks[index].tags.push(Tag::Remove);
 
-    while i < tasks.len() {
-        //if this task's status is Impossible, skip
-        if tasks[i].status == TaskStatus::Impossible {
-            i += 1;
+                let mut new_title = tasks_to_place.tasks[index].title.clone();
+                new_title.push_str(" min budget");
+                let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
+                let task_to_add = Task::new(
+                    tasks_to_place.tasks[index].id,
+                    tasks_to_place.tasks[index].goal_id.clone(),
+                    new_title,
+                    new_duration,
+                    None,
+                    None,
+                    tasks_to_place.tasks[index].calender_start,
+                    tasks_to_place.tasks[index].calender_end,
+                    result_slots,
+                    TaskStatus::ReadyToSchedule,
+                    tasks_to_place.tasks[index].tags.clone(),
+                    tasks_to_place.tasks[index].after_goals.clone(),
+                );
+                tasks_to_add.push(task_to_add);
+            }
+        }
+    }
+    tasks_to_place
+        .tasks
+        .retain(|x| !x.tags.contains(&Tag::Remove));
+    tasks_to_place.tasks.extend(tasks_to_add);
+}
+
+fn schedule(mut tasks_to_place: &mut TasksToPlace) {
+    loop {
+        tasks_to_place.sort_on_flexibility();
+        if tasks_to_place.tasks[0].status != TaskStatus::ReadyToSchedule {
+            break;
+        }
+        match find_best_slots(&tasks_to_place.tasks) {
+            Some(chosen_slots) => do_the_scheduling(&mut tasks_to_place, chosen_slots),
+            None => break,
+        }
+    }
+}
+
+fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>) {
+    let mut remaining_hours = tasks_to_place.tasks[0].duration;
+    let mut template_task = tasks_to_place.tasks[0].clone();
+    template_task.status = TaskStatus::Scheduled;
+    template_task.duration = 1;
+    template_task.id = tasks_to_place.tasks.len();
+    template_task.slots.clear();
+
+    for slot in chosen_slots.iter() {
+        let slot_allowed = tasks_to_place
+            .task_budgets
+            .decrement_budgets(slot, &template_task.goal_id);
+        if !slot_allowed {
             continue;
         }
-
-        //check if it is possible to schedule this task
-        if let Some(desired_time) = can_schedule(i, tasks) {
-            tasks[i].schedule(desired_time);
-            //since the task was scheduled, remove this time from other tasks' slots (except for those already scheduled)
-            for k in 0..tasks.len() {
-                //if the other task is a weekly task and is of the same goal id, remove the entire day from the
-                //other task's slots. else remove just the time that this task has been scheduled at.
-                //this is to prevent weekly tasks from combining all on on one day.
-                if tasks[k].tags.contains(&Tag::Weekly) && tasks[k].goal_id == tasks[i].goal_id {
-                    let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
-                    let slot = Slot {
-                        start: day,
-                        end: day + Duration::days(1),
-                    };
-                    tasks[k].remove_slot(slot);
-                } else {
-                    tasks[k].remove_slot(desired_time);
-                }
-                //if the removal has rendered the other task Impossible, add this task to that task's conflicts
-                if tasks[k].status == TaskStatus::Impossible {
-                    let goal_id = tasks[i].goal_id.to_owned();
-                    tasks[k].conflicts.push((desired_time, goal_id));
-                }
-            }
-            for k in 0..waiting_tasks.len() {
-                if waiting_tasks[k].tags.contains(&Tag::Weekly)
-                    && waiting_tasks[k].goal_id == tasks[i].goal_id
-                {
-                    let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
-                    let slot = Slot {
-                        start: day,
-                        end: day + Duration::days(1),
-                    };
-                    waiting_tasks[k].remove_slot(slot);
-                    if waiting_tasks[k].after_goals.is_some() {
-                        let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
-                        new_after.retain(|x| !x.eq(&tasks[i].goal_id));
-                        if new_after.is_empty() {
-                            waiting_tasks[k].after_goals = None;
-
-                            waiting_tasks[k].status = TaskStatus::Allowed;
-                            waiting_tasks.retain(|x| x.id != tasks[k].id);
-                            allowed_tasks.push_back(waiting_tasks[k].clone());
-                        }
-                        if !new_after.is_empty() {
-                            waiting_tasks[k].after_goals = Some(new_after);
-                        }
-                    }
-                } else {
-                    waiting_tasks[k].remove_slot(desired_time);
-                    if waiting_tasks[k].after_goals.is_some() {
-                        let mut new_after = waiting_tasks[k].after_goals.as_ref().unwrap().clone();
-                        new_after.retain(|x| !x.eq(&tasks[i].goal_id));
-                        if new_after.is_empty() {
-                            waiting_tasks[k].after_goals = None;
-
-                            waiting_tasks[k].status = TaskStatus::Allowed;
-                            allowed_tasks.push_back(waiting_tasks[k].clone());
-                            //waiting_tasks.retain(|x| x.id != tasks[k].id);
-                        }
-                        if !new_after.is_empty() {
-                            waiting_tasks[k].after_goals = Some(new_after);
-                        }
-                    }
-                }
-            }
-            //start loop over allowed to remove taken slots
-            for t in allowed_tasks.iter_mut() {
-                if t.tags.contains(&Tag::Weekly) && t.goal_id == tasks[i].goal_id {
-                    let day = desired_time.start.date().and_hms_opt(0, 0, 0).unwrap();
-                    let slot = Slot {
-                        start: day,
-                        end: day + Duration::days(1),
-                    };
-                    t.remove_slot(slot);
-                } else {
-                    t.remove_slot(desired_time);
-                }
-            }
-            //end of allowed
-            //add the task to list of scheduled tasks
-            scheduled_tasks.push(tasks.remove(i));
-            i = 0;
-            tasks.sort();
-        } else {
-            i += 1;
+        remaining_hours -= slot.num_hours();
+        template_task.id += 1;
+        template_task.start = Some(slot.start);
+        template_task.deadline = Some(slot.end);
+        tasks_to_place.tasks.push(template_task.clone());
+    }
+    for task in tasks_to_place.tasks.iter_mut() {
+        for slot in chosen_slots.iter() {
+            task.remove_slot(slot.to_owned());
+        }
+    }
+    //Todo remove chosen_slots from TaskBudgets
+    if remaining_hours > 0 {
+        tasks_to_place.tasks[0].duration = remaining_hours;
+        tasks_to_place.tasks[0].status = TaskStatus::Impossible;
+    } else {
+        let task_scheduled_goal_id = tasks_to_place.tasks[0].goal_id.clone();
+        tasks_to_place.tasks.remove(0);
+        for task in tasks_to_place.tasks.iter_mut() {
+            task.remove_from_blocked_by(task_scheduled_goal_id.clone());
         }
     }
 }
 
-pub fn can_schedule(i: usize, tasks: &mut Vec<Task>) -> Option<Slot> {
-    let start_deadline_iterator = tasks[i].start_deadline_iterator().unwrap();
-    'outer: for desired_time in start_deadline_iterator {
-        if tasks[i].flexibility == 1 {
-            //if task has flex 1, no need to check for conflicts with other tasks
-            return Some(desired_time);
-        }
-        'inner: for k in 0..tasks.len() {
-            if tasks[k].status == Scheduled || tasks[k].goal_id == tasks[i].goal_id {
-                continue 'inner;
-            }
-            for slot in &tasks[k].slots {
-                if desired_time.conflicts_with(slot) && !tasks[i].can_coexist_with(&tasks[k]) {
-                    //found a conflict so try another start/deadline combo
-                    //but save the conflict first
-                    let goal_id = tasks[k].goal_id.to_owned();
-                    tasks[i].conflicts.push((desired_time, goal_id));
-                    continue 'outer;
-                }
-            }
-        }
-        //if we're here it means no conflicts were found for this desired time (start/deadline) and we can schedule.
-        return Some(desired_time);
-    }
-    //there were conflicts for all possible start/deadline combos for this task
-    //so not possible to schedule
-    None
+#[derive(PartialEq, Eq, Clone)]
+struct SlotConflict {
+    slot: Slot,
+    num_conflicts: usize,
 }
+fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
+    let mut slot_conflicts: Vec<SlotConflict> = vec![];
+    let task = &tasks_to_place[0];
 
-//splits unscheduled tasks into 1hr tasks and modifies 'tasks' accordingly.
-fn split_unscheduled_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
-    let mut new_tasks = Vec::new();
-    let mut ids_to_remove = Vec::new();
-    for task in tasks.iter_mut() {
-        if (task.status == UNScheduled || task.status == TaskStatus::Allowed)
-            && !task.tags.contains(&Tag::Optional)
-        {
-            match task.split(counter) {
-                Err(Error::CannotSplit) | Err(_) => {}
-                Ok(mut one_hour_tasks) => {
-                    ids_to_remove.push(task.id);
-                    while !one_hour_tasks.is_empty() {
-                        new_tasks.push(one_hour_tasks.pop().unwrap());
+    for slot in task.slots.iter() {
+        for hour_slot in slot.get_1h_slots() {
+            let mut count: usize = 0;
+            'outer: for t in tasks_to_place {
+                if t.status != TaskStatus::ReadyToSchedule {
+                    continue;
+                }
+                if t.id == task.id {
+                    continue;
+                }
+
+                for s in t.slots.iter() {
+                    if s.is_intersect(&hour_slot) {
+                        count += 1;
+                        continue 'outer;
                     }
                 }
             }
+            slot_conflicts.push(SlotConflict {
+                slot: hour_slot,
+                num_conflicts: count,
+            });
         }
     }
-    //need to remove the 'original' tasks
-    for id in ids_to_remove {
-        tasks.retain(|x| x.id != id);
+    slot_conflicts.sort_by(|a, b| b.slot.start.partial_cmp(&a.slot.start).unwrap());
+
+    slot_conflicts.sort_by(|a, b| b.num_conflicts.partial_cmp(&a.num_conflicts).unwrap());
+
+    let mut result = vec![];
+    for d in 0..task.duration {
+        match slot_conflicts.pop() {
+            Some(s) => result.push(s.slot),
+            None => break,
+        }
     }
-    tasks.extend_from_slice(&new_tasks[..]);
+
+    Some(result)
 }
+
+// impl Ord for SlotConflict{
+//     fn cmp(&self, other: &Self) -> Ordering {
+
+//     }
+// }
+//return the slot with lowest number of conflicts in slot_conflicts
+
+//REFACTOR!!
+// //prevent deadline end from exceeding calender end and update duration
+// for task in scheduled.iter_mut() {
+//     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
+//         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
+//     }
+//     //prevent slot end from exceeding calender end
+//     if task.confirmed_deadline.unwrap() > calender_end {
+//         task.confirmed_deadline = Some(calender_end);
+//         task.duration = Slot {
+//             start: task.confirmed_start.unwrap(),
+//             end: task.confirmed_deadline.unwrap(),
+//         }
+//         .num_hours();
+//     }
+// }

@@ -1,5 +1,4 @@
 pub use goal::Goal;
-pub use graph_handler::DAG;
 pub use input::Input;
 pub use output_formatter::{output_formatter, FinalOutput};
 pub use repetition::Repetition;
@@ -7,21 +6,19 @@ use serde_wasm_bindgen::{from_value, to_value};
 pub use slot::Slot;
 use wasm_bindgen::prelude::*;
 
-mod budget;
 mod errors;
 /// API modules
 mod goal;
-mod graph_handler;
 pub mod input;
-pub mod options_generator;
 pub mod output_formatter;
 pub mod repetition;
 pub mod slot;
-pub mod slot_generator;
 pub mod task;
+pub mod task_budgets;
 pub mod task_generator;
 pub mod task_placer;
 pub mod time_slot_iterator;
+
 mod util;
 // Test
 #[cfg(test)]
@@ -47,13 +44,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     let input: Input = from_value(input.clone()).unwrap();
     let tasks = task_generator(input);
     let placed_tasks = task_placer(tasks);
-    let (scheduled_tasks, impossible_tasks) = placed_tasks.tasks;
-    let output = match output_formatter(
-        scheduled_tasks,
-        impossible_tasks,
-        placed_tasks.calendar_start,
-        placed_tasks.calendar_end,
-    ) {
+    let output = match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
         }
@@ -66,6 +57,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     Ok(to_value(&output)?)
 }
 
+//Todo why is there a schedule function and a run_scheduler function?
 pub fn run_scheduler(input: Input) -> FinalOutput {
     use errors::Error;
     use output_formatter::*;
@@ -73,13 +65,7 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
     use task_placer::*;
     let tasks = task_generator(input);
     let placed_tasks = task_placer(tasks);
-    let (scheduled_tasks, impossible_tasks) = placed_tasks.tasks;
-    match output_formatter(
-        scheduled_tasks,
-        impossible_tasks,
-        placed_tasks.calendar_start,
-        placed_tasks.calendar_end,
-    ) {
+    match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
         }

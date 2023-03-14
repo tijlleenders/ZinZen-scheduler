@@ -1,6 +1,9 @@
-use chrono::NaiveDateTime;
+use chrono::{Days, NaiveDateTime, Timelike};
 use serde::Deserialize;
-use std::ops::{Add, Sub};
+use std::{
+    cmp::{max, min},
+    ops::{Add, Sub},
+};
 
 #[derive(Debug, Eq, PartialEq, Clone, Copy, Deserialize)]
 pub struct Slot {
@@ -112,5 +115,53 @@ impl Slot {
     }
     pub fn contains_hour_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
+    }
+    pub fn get_1h_slots(&self) -> Vec<Slot> {
+        let mut result = vec![];
+        for hour in 0..self.num_hours() {
+            result.push(Slot {
+                start: self.start.add(chrono::Duration::hours(hour as i64)),
+                end: self.start.add(chrono::Duration::hours((hour + 1) as i64)),
+            })
+        }
+        result
+    }
+    pub fn divide_in_days(&self) -> Vec<Slot> {
+        let mut result = vec![];
+        let mut start_slider = self.start.clone();
+        while start_slider.lt(&self.end) {
+            if start_slider.date().eq(&self.end.date()) {
+                result.push(Slot {
+                    start: start_slider,
+                    end: self.end,
+                });
+                start_slider = start_slider
+                    .with_hour(0)
+                    .unwrap()
+                    .checked_add_days(Days::new(1))
+                    .unwrap();
+                continue;
+            } else {
+                result.push(Slot {
+                    start: start_slider,
+                    end: start_slider
+                        .with_hour(0)
+                        .unwrap()
+                        .checked_add_days(Days::new(1))
+                        .unwrap(),
+                });
+                start_slider = start_slider
+                    .with_hour(0)
+                    .unwrap()
+                    .checked_add_days(Days::new(1))
+                    .unwrap();
+            }
+        }
+        result
+    }
+
+    pub fn is_intersect(&self, other: &Slot) -> bool {
+        let overlap = min(self.end, other.end) - max(self.start, other.start);
+        overlap.num_hours() > 0
     }
 }

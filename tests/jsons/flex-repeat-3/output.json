@@ -417,7 +417,17 @@
     },
     {
       "day": "2022-10-02",
-      "outputs": []
+      "outputs": [
+        {
+          "taskid": 43,
+          "goalid": "1",
+          "title": "side project",
+          "duration": 8,
+          "start": "2022-10-02T14:00:00",
+          "deadline": "2022-10-02T22:00:00",
+          "firstConflictWith": "1"
+        }
+      ]
     },
     {
       "day": "2022-10-03",
@@ -445,7 +455,17 @@
     },
     {
       "day": "2022-10-09",
-      "outputs": []
+      "outputs": [
+        {
+          "taskid": 44,
+          "goalid": "1",
+          "title": "side project",
+          "duration": 8,
+          "start": "2022-10-09T14:00:00",
+          "deadline": "2022-10-09T22:00:00",
+          "firstConflictWith": "1"
+        }
+      ]
     },
     {
       "day": "2022-10-10",

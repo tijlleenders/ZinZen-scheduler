@@ -1,72 +1,154 @@
-use crate::goal::{handle_hierarchy, Goal, Tag};
-use crate::input::{GeneratedTasks, Input};
-use crate::Repetition;
+use std::collections::HashMap;
 
+use chrono::NaiveDateTime;
+
+use crate::goal::{Goal, Tag};
+use crate::input::{Input, TasksToPlace};
+use crate::task::Task;
+use crate::task_budgets::TaskBudgets;
+use crate::Repetition;
 /// # Task Generator
-/// Takes an [Input](../input/index.html) and outputs a vector of Unscheduled [Tasks](../task/index.html).
+/// Takes an [Input](../input/index.html) and outputs a vector of TaskStatus::Blocked and TaskStatus::ReadyToSchedule [Tasks](../task/index.html).
 pub fn task_generator(
     Input {
         calendar_start,
         calendar_end,
         goals,
     }: Input,
-) -> GeneratedTasks {
+) -> TasksToPlace {
     let mut counter: usize = 0;
-    let mut tasks = vec![];
-    let goals = handle_hierarchy(goals);
-    for goal in goals {
-        if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
-            //Flex repeat goals are handled as follows:
-            //If given a goal with 3-5/week, create two goals: One with 3/week and another
-            //with 2/week. The 2/week goal will be tagged optional so won't show up in impossible
-            //tasks in case any aren't scheduled.
-            let mut goal1 = goal.clone();
-            goal1.repeat = Some(Repetition::Weekly(min));
-            let mut goal2 = goal.clone();
-            goal2.repeat = Some(Repetition::Weekly(max - min));
-            goal2.tags.push(Tag::Optional);
-            tasks.extend(goal1.generate_tasks(calendar_start, calendar_end, &mut counter));
-            tasks.extend(goal2.generate_tasks(calendar_start, calendar_end, &mut counter));
-        } else if goal.duration.1.is_some() {
-            //if this is a flex duration e.g. '35-40h weekly', create two goals: One with 35/week
-            //and another with 5/week. The 5/week goal should be tagged optional. Then turn each
-            //of these goals into 1hr goals and generate tasks from each.
-            let mut goal1 = goal.clone();
-            (goal1.duration.0, goal1.duration.1) = (goal.duration.0, None);
-            goal1.tags.push(Tag::FlexDur);
-            let mut goal2 = goal.clone();
-            (goal2.duration.0, goal2.duration.1) =
-                ((goal.duration.1.unwrap() - goal.duration.0), None);
-            goal2.tags.push(Tag::Optional);
-            goal2.tags.push(Tag::FlexDur);
+    let mut tasks: Vec<Task> = vec![];
+    let mut goals: HashMap<String, Goal> =
+        add_start_and_end_where_none(goals, calendar_start, calendar_end);
+    add_filler_goals(&mut goals);
+    add_optional_flex_duration_regular_goals(&mut goals); //TODO
+    add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
 
-            //turn into 1hr goals
-            let mut goals: Vec<Goal> = vec![];
-            let g = get_1_hr_goals(goal1);
-            goals.extend(g.into_iter());
-            let g = get_1_hr_goals(goal2);
-            goals.extend(g.into_iter());
-            for goal in goals {
-                tasks.extend(goal.generate_tasks(calendar_start, calendar_end, &mut counter));
-            }
-        } else {
-            let goals_vec = goal.generate_tasks(calendar_start, calendar_end, &mut counter);
-            tasks.extend(goals_vec);
-        }
+    let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
+    task_budgets.create_task_budgets_config(&mut goals);
+    tasks.extend(task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter));
+
+    for goal in goals {
+        //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
+        let tasks_for_goal: Vec<Task> =
+            goal.1
+                .generate_tasks(calendar_start, calendar_end, &mut counter);
+        tasks.extend(tasks_for_goal);
     }
-    GeneratedTasks {
+    TasksToPlace {
         calendar_start,
         calendar_end,
         tasks,
+        task_budgets,
     }
+}
+
+fn add_start_and_end_where_none(
+    mut goals: HashMap<String, Goal>,
+    calendar_start: NaiveDateTime,
+    calendar_end: NaiveDateTime,
+) -> HashMap<String, Goal> {
+    for goal in goals.iter_mut() {
+        if goal.1.start.is_none() {
+            goal.1.start = Some(calendar_start);
+        }
+        if goal.1.deadline.is_none() {
+            goal.1.deadline = Some(calendar_end);
+        }
+    }
+    goals
+}
+
+fn add_optional_flex_duration_regular_goals(mut goals: &mut HashMap<String, Goal>) {
+    return;
+    todo!();
+}
+
+fn add_optional_flex_number_and_duration_habits_goals(mut goals: &mut HashMap<String, Goal>) {
+    let mut generated_goals: HashMap<String, Goal> = HashMap::new();
+    let mut goal_ids_to_remove: Vec<String> = Vec::new();
+    for goal in goals.iter_mut() {
+        if let Some(Repetition::FlexWeekly(min, max)) = goal.1.repeat {
+            //Flex repeat goals are handled as follows:
+            //If given a goal with 3-5x/week, create 3 goals and 2 extra optional goals
+            goal.1.repeat = Some(Repetition::Weekly(1));
+            for number in 1..min {
+                // 1.. because we're leaving the initial goal
+                let mut template_goal = goal.1.clone();
+                template_goal.id.push_str("-repeat-");
+                template_goal.id.push_str(&number.to_string());
+                generated_goals.insert(template_goal.id.clone(), template_goal);
+            }
+            for number in min..max - 1 {
+                let mut template_goal = goal.1.clone();
+                template_goal.id.push_str("-repeat-opt-");
+                template_goal.id.push_str(&number.to_string());
+                template_goal.tags.push(Tag::Optional);
+                generated_goals.insert(template_goal.id.clone(), template_goal);
+            }
+            generated_goals.insert(goal.0.to_owned(), goal.1.to_owned());
+        }
+    }
+
+    for id in goal_ids_to_remove {
+        goals.remove(&id);
+    }
+    goals.extend(generated_goals);
+}
+
+pub fn add_filler_goals(goals: &mut HashMap<String, Goal>) {
+    let mut results: HashMap<String, Goal> = HashMap::new();
+    let mut ignore: Vec<String> = Vec::new();
+    let mut children_to_add: Vec<(String, String)> = Vec::new();
+
+    for goal in goals.iter() {
+        if goal.1.children.is_some() {
+            if goal.1.budgets.is_none() {
+                let mut duration_of_children: usize = 0;
+                for child in goal.1.children.clone().unwrap().iter() {
+                    let child_goal = goals.get(child).unwrap();
+                    duration_of_children += child_goal.min_duration.unwrap();
+                }
+                let difference = goal.1.min_duration.unwrap() - duration_of_children;
+                if difference > 0 {
+                    let mut filler_goal = goal.1.clone();
+                    filler_goal.id.push_str("-filler");
+                    children_to_add.push((goal.1.id.clone(), filler_goal.id.clone()));
+                    filler_goal.title.push_str(" filler");
+                    filler_goal.min_duration = Some(difference);
+                    filler_goal.children = None;
+                    filler_goal.tags.push(Tag::Filler);
+                    results.insert(filler_goal.id.clone(), filler_goal);
+                    ignore.push(goal.1.id.clone());
+                }
+            }
+        }
+    }
+    for goal_id_to_ignore in ignore {
+        goals
+            .get_mut(&goal_id_to_ignore)
+            .unwrap()
+            .tags
+            .push(Tag::IgnoreForTaskGeneration);
+    }
+    for parent_child in children_to_add {
+        goals
+            .get_mut(&parent_child.0)
+            .unwrap()
+            .children
+            .as_mut()
+            .unwrap()
+            .push(parent_child.1.clone());
+    }
+    goals.extend(results);
 }
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     let mut goals = vec![];
-    let dur = goal.duration.0;
+    let dur = goal.min_duration.unwrap();
     for _ in 0..dur {
         let mut g = goal.clone();
-        g.duration.0 = 1;
+        g.min_duration = Some(1);
         goals.push(g);
     }
     goals

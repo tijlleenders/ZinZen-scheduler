@@ -63,9 +63,8 @@
           "goalid": "4",
           "title": "go to bank",
           "duration": 1,
-          "start": "2022-01-01T10:00:00",
-          "deadline": "2022-01-01T11:00:00",
-          "firstConflictWith": "2"
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-02T00:00:00"
         }
       ]
     }

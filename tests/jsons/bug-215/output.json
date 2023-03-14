@@ -5,8 +5,8 @@
       "outputs": [
         {
           "taskid": 0,
-          "goalid": "b669fc8f-a431-43e2-952d-285778b1d8ba",
-          "title": "Me time",
+          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b",
+          "title": "Sleep",
           "duration": 1,
           "start": "2023-01-03T00:00:00",
           "deadline": "2023-01-03T01:00:00"
@@ -21,14 +21,22 @@
         },
         {
           "taskid": 2,
-          "goalid": "free",
-          "title": "free",
-          "duration": 4,
+          "goalid": "db01411c-6b57-4191-8c8b-733ac3751da3",
+          "title": "hurdle",
+          "duration": 1,
           "start": "2023-01-03T02:00:00",
-          "deadline": "2023-01-03T06:00:00"
+          "deadline": "2023-01-03T03:00:00"
         },
         {
           "taskid": 3,
+          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b",
+          "title": "Sleep",
+          "duration": 3,
+          "start": "2023-01-03T03:00:00",
+          "deadline": "2023-01-03T06:00:00"
+        },
+        {
+          "taskid": 4,
           "goalid": "b5fa56c5-3619-41e4-a78f-b468cea90681",
           "title": "Breakfast",
           "duration": 1,
@@ -36,15 +44,31 @@
           "deadline": "2023-01-03T07:00:00"
         },
         {
-          "taskid": 4,
+          "taskid": 5,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 2,
           "start": "2023-01-03T07:00:00",
+          "deadline": "2023-01-03T09:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "b669fc8f-a431-43e2-952d-285778b1d8ba",
+          "title": "Me time",
+          "duration": 1,
+          "start": "2023-01-03T09:00:00",
+          "deadline": "2023-01-03T10:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-01-03T10:00:00",
           "deadline": "2023-01-03T12:00:00"
         },
         {
-          "taskid": 5,
+          "taskid": 8,
           "goalid": "b898414d-76d5-4955-891d-b7c4ed7aac62",
           "title": "Lunch",
           "duration": 1,
@@ -52,7 +76,7 @@
           "deadline": "2023-01-03T13:00:00"
         },
         {
-          "taskid": 6,
+          "taskid": 9,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -60,7 +84,7 @@
           "deadline": "2023-01-03T14:00:00"
         },
         {
-          "taskid": 7,
+          "taskid": 10,
           "goalid": "7f69d43e-727d-40b7-be8a-47ab2e619c19",
           "title": "Walk",
           "duration": 1,
@@ -68,7 +92,7 @@
           "deadline": "2023-01-03T15:00:00"
         },
         {
-          "taskid": 8,
+          "taskid": 11,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -76,7 +100,7 @@
           "deadline": "2023-01-03T18:00:00"
         },
         {
-          "taskid": 9,
+          "taskid": 12,
           "goalid": "6ff579f6-c1f7-4239-8179-db706856042f",
           "title": "Dinner",
           "duration": 1,
@@ -84,11 +108,19 @@
           "deadline": "2023-01-03T19:00:00"
         },
         {
-          "taskid": 10,
+          "taskid": 13,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 3,
           "start": "2023-01-03T19:00:00",
+          "deadline": "2023-01-03T22:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b",
+          "title": "Sleep",
+          "duration": 2,
+          "start": "2023-01-03T22:00:00",
           "deadline": "2023-01-04T00:00:00"
         }
       ]
@@ -97,7 +129,7 @@
       "day": "2023-01-04",
       "outputs": [
         {
-          "taskid": 11,
+          "taskid": 15,
           "goalid": "db01411c-6b57-4191-8c8b-733ac3751da3",
           "title": "hurdle",
           "duration": 1,
@@ -105,11 +137,27 @@
           "deadline": "2023-01-04T01:00:00"
         },
         {
-          "taskid": 12,
+          "taskid": 16,
           "goalid": "free",
           "title": "free",
-          "duration": 23,
+          "duration": 2,
           "start": "2023-01-04T01:00:00",
+          "deadline": "2023-01-04T03:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b",
+          "title": "Sleep",
+          "duration": 2,
+          "start": "2023-01-04T03:00:00",
+          "deadline": "2023-01-04T05:00:00"
+        },
+        {
+          "taskid": 18,
+          "goalid": "free",
+          "title": "free",
+          "duration": 19,
+          "start": "2023-01-04T05:00:00",
           "deadline": "2023-01-05T00:00:00"
         }
       ]
@@ -118,19 +166,11 @@
       "day": "2023-01-05",
       "outputs": [
         {
-          "taskid": 13,
-          "goalid": "db01411c-6b57-4191-8c8b-733ac3751da3",
-          "title": "hurdle",
-          "duration": 1,
-          "start": "2023-01-05T00:00:00",
-          "deadline": "2023-01-05T01:00:00"
-        },
-        {
-          "taskid": 14,
+          "taskid": 19,
           "goalid": "free",
           "title": "free",
-          "duration": 23,
-          "start": "2023-01-05T01:00:00",
+          "duration": 24,
+          "start": "2023-01-05T00:00:00",
           "deadline": "2023-01-06T00:00:00"
         }
       ]
@@ -139,7 +179,7 @@
       "day": "2023-01-06",
       "outputs": [
         {
-          "taskid": 15,
+          "taskid": 20,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -152,7 +192,7 @@
       "day": "2023-01-07",
       "outputs": [
         {
-          "taskid": 16,
+          "taskid": 21,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -165,7 +205,7 @@
       "day": "2023-01-08",
       "outputs": [
         {
-          "taskid": 17,
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -178,19 +218,11 @@
       "day": "2023-01-09",
       "outputs": [
         {
-          "taskid": 18,
+          "taskid": 23,
           "goalid": "free",
           "title": "free",
-          "duration": 22,
+          "duration": 24,
           "start": "2023-01-09T00:00:00",
-          "deadline": "2023-01-09T22:00:00"
-        },
-        {
-          "taskid": 19,
-          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b",
-          "title": "Sleep",
-          "duration": 2,
-          "start": "2023-01-09T22:00:00",
           "deadline": "2023-01-10T00:00:00"
         }
       ]

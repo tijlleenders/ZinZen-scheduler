@@ -121,7 +121,7 @@ impl<'de> Deserialize<'de> for Repetition {
 
 //The main reason Display is being implemented for repetition
 // is so that the string representation of Repetition::MONDAYS-SUNDAYS matches the
-//string representation of chrono::Weekday(). This makes it easy in the TimeSlotIterator to do
+//string representation of chrono::Weekday(). This makes it easy in the TimeSlotsIterator to do
 //If self.start.weekday().to_string() == self.repetition.unwrap().to_string().
 //see: https://docs.rs/chrono/latest/src/chrono/weekday.rs.html#141
 impl fmt::Display for Repetition {
