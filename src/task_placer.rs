@@ -1,13 +1,9 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
-
-use std::cmp::Ordering;
-
-use chrono::Duration;
-
 use crate::errors::Error;
 use crate::goal::Tag;
 use crate::input::{PlacedTasks, TasksToPlace};
 use crate::task::{Task, TaskStatus};
+use crate::task_budgets::TaskBudget;
 use crate::{slot::*, task};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
@@ -17,14 +13,79 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks_to_place);
 
-    // set any remaining TaskStatus::ReadyToSchedule to TaskStatus::Impossible;
-    // !todo!();
+    adjust_min_budget_tasks(&mut tasks_to_place); //TODO
+    schedule(&mut tasks_to_place); //TODO
 
     PlacedTasks {
         calendar_start: tasks_to_place.calendar_start,
         calendar_end: tasks_to_place.calendar_end,
         tasks: tasks_to_place.tasks,
     }
+}
+
+fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
+    let mut tasks_to_add: Vec<Task> = Vec::new();
+    for index in 0..tasks_to_place.tasks.len() {
+        if tasks_to_place.tasks[index].status == TaskStatus::BudgetMinWaitingForAdjustment {
+            for slot_budget in &tasks_to_place
+                .task_budgets
+                .budget_id_to_budget
+                .get(&tasks_to_place.tasks[index].goal_id)
+                .unwrap()
+                .slot_budgets
+            {
+                //TODO If any remaining hours in slot_budget:
+                // Loop through BudgetTaskMinWaitingForAdjustment Task Vec<Slot> and chop off anything that is outside of the slot_budget Slot
+                // Make Task with those slots and remaining hours
+                // If not enough hours - mark impossible? No will happen during scheduling.
+                let mut task_slots_to_adjust = tasks_to_place.tasks[index].slots.clone();
+                for slot in task_slots_to_adjust.iter_mut() {
+                    if slot.start.lt(&slot_budget.slot.start) {
+                        slot.start = slot_budget.slot.start.clone();
+                    }
+                    if slot.end.lt(&slot_budget.slot.start) {
+                        slot.end = slot_budget.slot.start.clone();
+                    }
+                    if slot.end.gt(&slot_budget.slot.end) {
+                        slot.end = slot_budget.slot.end.clone();
+                    }
+                    if slot.start.gt(&slot_budget.slot.end) {
+                        slot.start = slot_budget.slot.end.clone();
+                    }
+                }
+                let mut result_slots: Vec<Slot> = Vec::new();
+                for task_slot in task_slots_to_adjust {
+                    if task_slot.start.ne(&task_slot.end) {
+                        result_slots.push(task_slot);
+                    }
+                }
+                tasks_to_place.tasks[index].tags.push(Tag::Remove);
+
+                let mut new_title = tasks_to_place.tasks[index].title.clone();
+                new_title.push_str(" min budget");
+                let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
+                let task_to_add = Task::new(
+                    tasks_to_place.tasks[index].id,
+                    tasks_to_place.tasks[index].goal_id.clone(),
+                    new_title,
+                    new_duration,
+                    None,
+                    None,
+                    tasks_to_place.tasks[index].calender_start,
+                    tasks_to_place.tasks[index].calender_end,
+                    result_slots,
+                    TaskStatus::ReadyToSchedule,
+                    tasks_to_place.tasks[index].tags.clone(),
+                    tasks_to_place.tasks[index].after_goals.clone(),
+                );
+                tasks_to_add.push(task_to_add);
+            }
+        }
+    }
+    tasks_to_place
+        .tasks
+        .retain(|x| !x.tags.contains(&Tag::Remove));
+    tasks_to_place.tasks.extend(tasks_to_add);
 }
 
 fn schedule(mut tasks_to_place: &mut TasksToPlace) {
@@ -34,68 +95,51 @@ fn schedule(mut tasks_to_place: &mut TasksToPlace) {
             break;
         }
         match find_best_slots(&tasks_to_place.tasks) {
-            Some(chosen_slots) => do_the_scheduling(&mut tasks_to_place.tasks, chosen_slots),
+            Some(chosen_slots) => do_the_scheduling(&mut tasks_to_place, chosen_slots),
             None => break,
         }
     }
 }
 
-fn do_the_scheduling(tasks_to_place: &mut Vec<Task>, chosen_slots: Vec<Slot>) {
-    let mut new_task = tasks_to_place[0].clone();
-    new_task.status = TaskStatus::Scheduled;
-    new_task.duration = 1;
+fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>) {
+    let mut remaining_hours = tasks_to_place.tasks[0].duration;
+    let mut template_task = tasks_to_place.tasks[0].clone();
+    template_task.status = TaskStatus::Scheduled;
+    template_task.duration = 1;
+    template_task.id = tasks_to_place.tasks.len();
+    template_task.slots.clear();
 
-    new_task.id = tasks_to_place.len();
-    new_task.slots.clear();
     for slot in chosen_slots.iter() {
-        new_task.id += 1;
-        new_task.confirmed_start = Some(slot.start);
-        new_task.confirmed_deadline = Some(slot.end);
-        tasks_to_place.push(new_task.clone());
+        let slot_allowed = tasks_to_place
+            .task_budgets
+            .decrement_budgets(slot, &template_task.goal_id);
+        if !slot_allowed {
+            continue;
+        }
+        remaining_hours -= slot.num_hours();
+        template_task.id += 1;
+        template_task.start = Some(slot.start);
+        template_task.deadline = Some(slot.end);
+        tasks_to_place.tasks.push(template_task.clone());
     }
-    //check if all duration handle schedule
-    for task in tasks_to_place.iter_mut() {
+    for task in tasks_to_place.tasks.iter_mut() {
         for slot in chosen_slots.iter() {
             task.remove_slot(slot.to_owned());
         }
     }
-    let total_slots_duaration = chosen_slots.len();
-    let remaining_hours = tasks_to_place[0].duration - total_slots_duaration;
+    //Todo remove chosen_slots from TaskBudgets
     if remaining_hours > 0 {
-        tasks_to_place[0].duration = remaining_hours;
-        tasks_to_place[0].status = TaskStatus::Impossible;
+        tasks_to_place.tasks[0].duration = remaining_hours;
+        tasks_to_place.tasks[0].status = TaskStatus::Impossible;
     } else {
-        let task_scheduled_goal_id = tasks_to_place[0].goal_id.clone();
-        tasks_to_place.remove(0);
-        for task in tasks_to_place {
+        let task_scheduled_goal_id = tasks_to_place.tasks[0].goal_id.clone();
+        tasks_to_place.tasks.remove(0);
+        for task in tasks_to_place.tasks.iter_mut() {
             task.remove_from_blocked_by(task_scheduled_goal_id.clone());
         }
     }
 }
 
-//splits remaining tasks into 1hr tasks and modifies 'tasks' accordingly.
-fn split_remaining_tasks(tasks: &mut Vec<Task>, counter: &mut usize) {
-    let mut new_tasks = Vec::new();
-    let mut ids_to_remove = Vec::new();
-    for task in tasks.iter_mut() {
-        if (task.status == TaskStatus::ReadyToSchedule) && !task.tags.contains(&Tag::Optional) {
-            match task.split(counter) {
-                Err(Error::CannotSplit) | Err(_) => {}
-                Ok(mut one_hour_tasks) => {
-                    ids_to_remove.push(task.id);
-                    while !one_hour_tasks.is_empty() {
-                        new_tasks.push(one_hour_tasks.pop().unwrap());
-                    }
-                }
-            }
-        }
-    }
-    //need to remove the 'original' tasks
-    for id in ids_to_remove {
-        tasks.retain(|x| x.id != id);
-    }
-    tasks.extend_from_slice(&new_tasks[..]);
-}
 #[derive(PartialEq, Eq, Clone)]
 struct SlotConflict {
     slot: Slot,

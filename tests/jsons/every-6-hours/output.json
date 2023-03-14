@@ -41,7 +41,16 @@
   "impossible": [
     {
       "day": "2022-11-19",
-      "outputs": []
+      "outputs": [
+        {
+          "taskid": 4,
+          "goalid": "1",
+          "title": "backup data",
+          "duration": 1,
+          "start": "2022-11-19T00:00:00",
+          "deadline": "2022-11-20T00:00:00"
+        }
+      ]
     }
   ]
 }

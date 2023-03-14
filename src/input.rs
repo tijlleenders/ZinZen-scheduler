@@ -1,7 +1,9 @@
 use crate::goal::Goal;
 use crate::task::Task;
+use crate::task_budgets::TaskBudgets;
 use chrono::prelude::*;
 use serde::Deserialize;
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 /// The front end passes data into the scheduler via an Input object.
@@ -13,27 +15,15 @@ pub struct Input {
     pub calendar_start: NaiveDateTime,
     #[serde(rename = "endDate")]
     pub calendar_end: NaiveDateTime,
-    pub goals: Vec<Goal>,
+    pub goals: HashMap<String, Goal>,
 }
 
-#[cfg(test)]
-impl Input {
-    /// Create a new Input. Only useful for tests, otherwise input is
-    /// deserialized as the input function.
-    pub fn new(start: NaiveDateTime, end: NaiveDateTime, goals: Vec<Goal>) -> Self {
-        Self {
-            calendar_start: start,
-            calendar_end: end,
-            goals,
-        }
-    }
-}
-
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize)]
 pub struct TasksToPlace {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
     pub tasks: Vec<Task>,
+    pub task_budgets: TaskBudgets,
 }
 
 impl TasksToPlace {

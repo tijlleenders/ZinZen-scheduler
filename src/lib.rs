@@ -1,5 +1,4 @@
 pub use goal::Goal;
-pub use graph_handler::DAG;
 pub use input::Input;
 pub use output_formatter::{output_formatter, FinalOutput};
 pub use repetition::Repetition;
@@ -7,17 +6,15 @@ use serde_wasm_bindgen::{from_value, to_value};
 pub use slot::Slot;
 use wasm_bindgen::prelude::*;
 
-mod budget;
 mod errors;
 /// API modules
 mod goal;
-mod graph_handler;
 pub mod input;
-pub mod options_generator;
 pub mod output_formatter;
 pub mod repetition;
 pub mod slot;
 pub mod task;
+pub mod task_budgets;
 pub mod task_generator;
 pub mod task_placer;
 pub mod time_slot_iterator;

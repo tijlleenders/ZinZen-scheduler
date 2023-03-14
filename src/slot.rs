@@ -1,4 +1,4 @@
-use chrono::{Days, Duration, NaiveDateTime, Timelike};
+use chrono::{Days, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::{
     cmp::{max, min},
@@ -135,6 +135,11 @@ impl Slot {
                     start: start_slider,
                     end: self.end,
                 });
+                start_slider = start_slider
+                    .with_hour(0)
+                    .unwrap()
+                    .checked_add_days(Days::new(1))
+                    .unwrap();
                 continue;
             } else {
                 result.push(Slot {

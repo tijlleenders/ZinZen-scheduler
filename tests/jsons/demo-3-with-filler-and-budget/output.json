@@ -1,0 +1,278 @@
+{
+  "scheduled": [
+    {
+      "day": "2018-03-09",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-09T08:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 8,
+          "start": "2018-03-09T08:00:00",
+          "deadline": "2018-03-09T16:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-09T16:00:00",
+          "deadline": "2018-03-10T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-10",
+      "outputs": [
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-10T00:00:00",
+          "deadline": "2018-03-10T08:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 8,
+          "start": "2018-03-10T08:00:00",
+          "deadline": "2018-03-10T16:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-10T16:00:00",
+          "deadline": "2018-03-11T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-11",
+      "outputs": [
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-11T00:00:00",
+          "deadline": "2018-03-11T08:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 4,
+          "start": "2018-03-11T08:00:00",
+          "deadline": "2018-03-11T12:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "5",
+          "title": "Write report",
+          "duration": 1,
+          "start": "2018-03-11T12:00:00",
+          "deadline": "2018-03-11T13:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "4",
+          "title": "Research",
+          "duration": 3,
+          "start": "2018-03-11T13:00:00",
+          "deadline": "2018-03-11T16:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-11T16:00:00",
+          "deadline": "2018-03-12T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-12",
+      "outputs": [
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-12T00:00:00",
+          "deadline": "2018-03-12T08:00:00"
+        },
+        {
+          "taskid": 12,
+          "goalid": "3-filler",
+          "title": "Project B filler",
+          "duration": 8,
+          "start": "2018-03-12T08:00:00",
+          "deadline": "2018-03-12T16:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-12T16:00:00",
+          "deadline": "2018-03-13T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-13",
+      "outputs": [
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-13T00:00:00",
+          "deadline": "2018-03-13T08:00:00"
+        },
+        {
+          "taskid": 15,
+          "goalid": "3-filler",
+          "title": "Project B filler",
+          "duration": 3,
+          "start": "2018-03-13T08:00:00",
+          "deadline": "2018-03-13T11:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "1",
+          "title": "work min budget",
+          "duration": 5,
+          "start": "2018-03-13T11:00:00",
+          "deadline": "2018-03-13T16:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-13T16:00:00",
+          "deadline": "2018-03-14T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-14",
+      "outputs": [
+        {
+          "taskid": 18,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-14T00:00:00",
+          "deadline": "2018-03-14T08:00:00"
+        },
+        {
+          "taskid": 19,
+          "goalid": "1",
+          "title": "work min budget",
+          "duration": 8,
+          "start": "2018-03-14T08:00:00",
+          "deadline": "2018-03-14T16:00:00"
+        },
+        {
+          "taskid": 20,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-14T16:00:00",
+          "deadline": "2018-03-15T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-15",
+      "outputs": [
+        {
+          "taskid": 21,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-15T00:00:00",
+          "deadline": "2018-03-15T08:00:00"
+        },
+        {
+          "taskid": 22,
+          "goalid": "1",
+          "title": "work min budget",
+          "duration": 8,
+          "start": "2018-03-15T08:00:00",
+          "deadline": "2018-03-15T16:00:00"
+        },
+        {
+          "taskid": 23,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-15T16:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2018-03-09",
+      "outputs": [
+        {
+          "taskid": 24,
+          "goalid": "1",
+          "title": "work min budget",
+          "duration": 3,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 25,
+          "goalid": "1",
+          "title": "work min budget",
+          "duration": 11,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-10",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-11",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-12",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-13",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-14",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-15",
+      "outputs": []
+    }
+  ]
+}

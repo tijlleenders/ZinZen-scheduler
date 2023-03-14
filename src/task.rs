@@ -1,7 +1,6 @@
 use crate::errors::Error;
-use crate::goal::{Goal, Tag};
+use crate::goal::Tag;
 use crate::slot::Slot;
-use chrono::Duration;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
@@ -23,27 +22,15 @@ pub struct Task {
     pub duration: usize,
     pub status: TaskStatus,
     pub flexibility: usize,
-    pub start: NaiveDateTime,
-    pub deadline: NaiveDateTime,
-    pub after_time: usize,
-    pub before_time: usize,
+    pub start: Option<NaiveDateTime>,
+    pub deadline: Option<NaiveDateTime>,
     pub slots: Vec<Slot>,
-    pub confirmed_start: Option<NaiveDateTime>,
-    pub confirmed_deadline: Option<NaiveDateTime>,
     #[serde(default)]
     pub tags: Vec<Tag>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub options: Option<Vec<ScheduleOption>>,
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
     pub calender_start: NaiveDateTime,
     pub calender_end: NaiveDateTime,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
-pub struct ScheduleOption {
-    pub start: NaiveDateTime,
-    pub deadline: NaiveDateTime,
 }
 
 impl PartialEq for Task {
@@ -75,6 +62,10 @@ impl Ord for Task {
             Ordering::Less
         } else if self.tags.contains(&Tag::Optional) && !other.tags.contains(&Tag::Optional) {
             Ordering::Greater
+        } else if !self.tags.contains(&Tag::Filler) && other.tags.contains(&Tag::Filler) {
+            Ordering::Less
+        } else if self.tags.contains(&Tag::Filler) && !other.tags.contains(&Tag::Filler) {
+            Ordering::Greater
         } else if self.flexibility == other.flexibility {
             Ordering::Equal
         } else if self.flexibility == 1 {
@@ -91,84 +82,33 @@ impl Ord for Task {
     }
 }
 
-//An iterator for start/deadline combinations for the task.
-//e.g. if a task has duration of 2, and one slot with start 10 and end 14,
-//then the following start/deadline combinations are possible:
-//10-12, 11-13, and 12-14.
-//It also needs to handle scenarios where the task has multiple slots.
-pub struct StartDeadlineIterator {
-    slots: Vec<Slot>,
-    duration: usize,
-    marker: NaiveDateTime,
-    slot_index: usize,
-}
-
-impl StartDeadlineIterator {
-    fn new(slots: Vec<Slot>, duration: usize) -> Option<StartDeadlineIterator> {
-        if slots.is_empty() {
-            return None;
-        }
-        let marker = slots[0].start;
-        let slot_index = 0_usize;
-        Some(StartDeadlineIterator {
-            slots,
-            duration,
-            marker,
-            slot_index,
-        })
-    }
-}
-
-impl Iterator for StartDeadlineIterator {
-    type Item = Slot;
-    fn next(&mut self) -> Option<Self::Item> {
-        while self.slot_index < self.slots.len() {
-            if self.marker > self.slots[self.slot_index].end - Duration::hours(self.duration as i64)
-            {
-                if self.slot_index >= self.slots.len() - 1 {
-                    return None;
-                }
-                self.slot_index += 1;
-                self.marker = self.slots[self.slot_index].start;
-                continue;
-            }
-            let start = self.marker;
-            let end = self.marker + Duration::hours(self.duration as i64);
-            self.marker += Duration::hours(1);
-            return Some(Slot { start, end });
-        }
-        None
-    }
-}
-
 impl Task {
     pub fn new(
         id: usize,
-        start: NaiveDateTime,
-        deadline: NaiveDateTime,
-        goal: &Goal,
+        goal_id: String,
+        title: String,
+        duration: usize,
+        start: Option<NaiveDateTime>,
+        deadline: Option<NaiveDateTime>,
         calender_start: NaiveDateTime,
         calender_end: NaiveDateTime,
         slots: Vec<Slot>,
         status: TaskStatus,
+        tags: Vec<Tag>,
+        after_goals: Option<Vec<String>>,
     ) -> Self {
         Self {
             id,
-            goal_id: goal.id.clone(),
-            title: goal.title.clone(),
-            duration: goal.duration.0,
+            goal_id,
+            title,
+            duration,
             status: status,
             flexibility: 0,
             start,
             deadline,
-            after_time: goal.after_time.unwrap_or(0),
-            before_time: goal.before_time.unwrap_or(24),
             slots: slots,
-            confirmed_start: None,
-            confirmed_deadline: None,
-            tags: goal.tags.clone(),
-            options: None,
-            after_goals: goal.after_goals.clone(),
+            tags,
+            after_goals,
             calender_start,
             calender_end,
         }
@@ -184,6 +124,7 @@ impl Task {
                 flexibility += slot.num_hours();
                 continue;
             }
+            //todo check correctness
             flexibility += slot.num_hours() - self.duration + 1;
         }
         self.flexibility = flexibility;
@@ -194,14 +135,6 @@ impl Task {
 
     pub fn flexibility(&mut self) -> usize {
         self.flexibility
-    }
-
-    pub fn set_confirmed_start(&mut self, start: NaiveDateTime) {
-        self.confirmed_start = Some(start);
-    }
-
-    pub fn set_confirmed_deadline(&mut self, deadline: NaiveDateTime) {
-        self.confirmed_deadline = Some(deadline);
     }
 
     pub fn get_slots(&self) -> Vec<Slot> {
@@ -225,13 +158,8 @@ impl Task {
                 flexibility: 0,
                 start: self.start,
                 deadline: self.deadline,
-                after_time: self.after_time,
-                before_time: self.before_time,
                 slots: self.get_slots(),
-                confirmed_start: None,
-                confirmed_deadline: None,
                 tags: self.tags.clone(),
-                options: None,
                 after_goals: self.after_goals.clone(),
                 calender_start: self.calender_start,
                 calender_end: self.calender_end,
@@ -242,18 +170,6 @@ impl Task {
             tasks.push(task);
         }
         Ok(tasks)
-    }
-
-    pub fn start_deadline_iterator(&mut self) -> Option<StartDeadlineIterator> {
-        StartDeadlineIterator::new(self.get_slots(), self.duration)
-    }
-
-    pub fn size_of_slots_to_be_assigned(&self) -> usize {
-        if self.before_time > self.after_time {
-            self.before_time - self.after_time
-        } else {
-            self.before_time + (24 - self.after_time)
-        }
     }
 
     //Tasks of duration 1 with equal slots and flex > 1 should be allowed to eat into each other's
@@ -306,20 +222,11 @@ impl Task {
         self.slots = new_slots;
     }
 
-    pub fn bounds_contain(&self, hour: usize) -> bool {
-        //checks if the provided hour is within the time bounds of the task.
-        if self.before_time < self.after_time {
-            hour < self.before_time || hour >= self.after_time
-        } else {
-            hour >= self.after_time && hour < self.before_time
-        }
-    }
-
     pub fn remove_from_blocked_by(&mut self, id_string: String) {
         if self.after_goals.is_none() {
             return;
         }
-
+        // Todo!
         // let mut ids = self.after_goals.clone().unwrap();
         // let index = ids.clone().iter().position(|x| x.eq(&id_string));
         // if index.is_some() {
@@ -340,4 +247,6 @@ pub enum TaskStatus {
     Uninitialized,
     Blocked,
     ReadyToSchedule,
+    BudgetMinWaitingForAdjustment,
+    BudgetMaxWaitingForAdjustment,
 }
