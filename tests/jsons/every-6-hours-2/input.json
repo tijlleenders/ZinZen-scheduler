@@ -1,8 +1,8 @@
 {
   "startDate": "2022-11-19T00:00:00",
   "endDate": "2022-11-20T00:00:00",
-  "goals": [
-    {
+  "goals": {
+    "1": {
       "id": "1",
       "title": "backup data",
       "duration": "4",
@@ -10,5 +10,5 @@
       "deadline": "2022-11-20T00:00:00",
       "after_time": 15
     }
-  ]
+  }
 }

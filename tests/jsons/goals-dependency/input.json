@@ -1,8 +1,8 @@
 {
   "startDate": "2018-01-01T00:00:00",
   "endDate": "2018-01-06T00:00:00",
-  "goals": [
-    {
+  "goals": {
+    "1": {
       "id": "1",
       "title": "publish ZinZen app",
       "duration": "1",
@@ -10,9 +10,11 @@
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
       "before_time": 16,
-      "after_goals": ["2"]
+      "after_goals": [
+        "2"
+      ]
     },
-    {
+    "2": {
       "id": "2",
       "title": "program a ZinZen app in rust",
       "duration": "8",
@@ -20,9 +22,11 @@
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
       "before_time": 16,
-      "after_goals": ["3"]
+      "after_goals": [
+        "3"
+      ]
     },
-    {
+    "3": {
       "id": "3",
       "title": "learn rust programming",
       "duration": "8",
@@ -30,9 +34,11 @@
       "deadline": "2018-01-06T00:00:00",
       "after_time": 8,
       "before_time": 16,
-      "after_goals": ["4"]
+      "after_goals": [
+        "4"
+      ]
     },
-    {
+    "4": {
       "id": "4",
       "title": "find a good rust resource",
       "duration": "5",
@@ -41,5 +47,5 @@
       "after_time": 8,
       "before_time": 16
     }
-]
+  }
 }

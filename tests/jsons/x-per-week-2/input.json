@@ -1,15 +1,14 @@
 {
   "startDate": "2022-10-01T00:00:00",
   "endDate": "2022-11-02T00:00:00",
-  "goals": [
-    {
+  "goals": {
+    "1": {
       "id": "1",
       "title": "write blog article",
       "duration": "2",
       "repeat": "2/week",
       "after_time": 19,
-      "before_time":22 
-
+      "before_time": 22
     }
-  ]
+  }
 }

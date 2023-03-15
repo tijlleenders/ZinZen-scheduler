@@ -1,24 +1,24 @@
 {
-      "startDate": "2022-09-01T00:00:00",
-      "endDate": "2022-09-02T00:00:00",
-      "goals": [
-        {
-          "id": "1",
-          "title": "dentist",
-          "duration": "1",
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-09-02T00:00:00",
-          "after_time": 12,
-          "before_time": 14 
-        },
-        {
-          "id": "2",
-          "title": "work",
-          "duration": "8",
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-09-02T00:00:00",
-          "after_time": 8,
-          "before_time": 21 
-        }
-      ]
+  "startDate": "2022-09-01T00:00:00",
+  "endDate": "2022-09-02T00:00:00",
+  "goals": {
+    "1": {
+      "id": "1",
+      "title": "dentist",
+      "duration": "1",
+      "start": "2022-09-01T00:00:00",
+      "deadline": "2022-09-02T00:00:00",
+      "after_time": 12,
+      "before_time": 14
+    },
+    "2": {
+      "id": "2",
+      "title": "work",
+      "duration": "8",
+      "start": "2022-09-01T00:00:00",
+      "deadline": "2022-09-02T00:00:00",
+      "after_time": 8,
+      "before_time": 21
+    }
+  }
 }

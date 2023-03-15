@@ -1,14 +1,14 @@
 {
-    "startDate": "2022-11-21T00:00:00",
-    "endDate": "2022-11-23T00:00:00",
-    "goals": [
-      {
-        "id": "1",
-        "title": "check on baby",
-        "duration": "1",
-        "repeat": "every 2 hours",
-        "after_time": 22,
-        "before_time": 7 
-      }
-    ]
+  "startDate": "2022-11-21T00:00:00",
+  "endDate": "2022-11-23T00:00:00",
+  "goals": {
+    "1": {
+      "id": "1",
+      "title": "check on baby",
+      "duration": "1",
+      "repeat": "every 2 hours",
+      "after_time": 22,
+      "before_time": 7
+    }
   }
+}

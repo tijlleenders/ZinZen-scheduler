@@ -1,8 +1,8 @@
 {
    "startDate": "2022-09-01T00:00:00",
    "endDate": "2022-09-02T00:00:00",
-   "goals": [
-      {
+   "goals": {
+      "1": {
          "id": "1",
          "title": "work",
          "duration": "8",
@@ -11,7 +11,7 @@
          "after_time": 8,
          "before_time": 21
       },
-      {
+      "2": {
          "id": "2",
          "title": "dentist",
          "duration": "1",
@@ -20,7 +20,7 @@
          "after_time": 14,
          "before_time": 16
       },
-      {
+      "3": {
          "id": "3",
          "title": "walk",
          "duration": "1",
@@ -29,5 +29,5 @@
          "after_time": 14,
          "before_time": 16
       }
-   ]
+   }
 }

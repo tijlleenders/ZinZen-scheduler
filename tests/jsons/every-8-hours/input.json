@@ -1,12 +1,12 @@
 {
-    "startDate": "2022-11-19T00:00:00",
-    "endDate": "2022-11-22T00:00:00",
-    "goals": [
-      {
-        "id": "1",
-        "title": "drink water",
-        "duration": "1",
-        "repeat": "every 8 hours"
-      }
-    ]
+  "startDate": "2022-11-19T00:00:00",
+  "endDate": "2022-11-22T00:00:00",
+  "goals": {
+    "1": {
+      "id": "1",
+      "title": "drink water",
+      "duration": "1",
+      "repeat": "every 8 hours"
+    }
   }
+}
