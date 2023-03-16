@@ -4,10 +4,8 @@ use crate::Slot;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
 use core::time;
-use serde::de::{self, Visitor};
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::fmt;
 use std::option::Option;
 
 /// Represents a Goal passed in by the user from the front end.
@@ -17,7 +15,10 @@ pub struct Goal {
     pub id: String,
     pub title: String,
     /// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
-    pub duration: GoalDuration,
+    #[serde(default)]
+    pub min_duration: Option<usize>,
+    #[serde(default)]
+    pub max_duration: Option<usize>,
     #[serde(default)]
     pub budgets: Option<Vec<Budget>>,
     pub repeat: Option<Repetition>,
@@ -35,56 +36,6 @@ pub struct Goal {
     pub children: Option<Vec<String>>,
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
-}
-#[derive(Debug, Copy, Clone, PartialEq, Default)]
-pub struct GoalDuration {
-    pub min_duration: Option<usize>,
-    pub max_duration: Option<usize>,
-} //in case of flex-duration, the second value represents the upper bound of the duration
-struct GoalDurationVisitor;
-
-impl<'de> Visitor<'de> for GoalDurationVisitor {
-    type Value = GoalDuration;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            formatter,
-            "a string of either the duration or a flex duration."
-        )
-    }
-
-    fn visit_str<E>(self, s: &str) -> Result<Self::Value, E>
-    where
-        E: de::Error,
-    {
-        if s.contains('-') && s.contains('h') {
-            //e.g. '35-40h'
-            let split = s.split('-').collect::<Vec<&str>>();
-            let min = split[0];
-            let max = &split[1][0..split[1].len() - 1];
-            let min = min.parse::<usize>().expect("expected format to be x-yh");
-            let max = max.parse::<usize>().expect("expected format to be x-yh");
-            Ok(GoalDuration {
-                min_duration: Some(min),
-                max_duration: Some(max),
-            })
-        } else {
-            let duration = s.parse::<usize>().expect("expected format to be x-yh");
-            Ok(GoalDuration {
-                min_duration: Some(duration),
-                max_duration: None,
-            })
-        }
-    }
-}
-
-impl<'de> Deserialize<'de> for GoalDuration {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        deserializer.deserialize_string(GoalDurationVisitor)
-    }
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
@@ -125,7 +76,7 @@ impl Goal {
     }
 
     pub fn duration(mut self, min_duration: usize) -> Self {
-        self.duration.min_duration = Some(min_duration);
+        self.min_duration = Some(min_duration);
         self
     }
 
@@ -196,12 +147,12 @@ impl Goal {
         for time_slots in time_slots_iterator {
             let task_id = *counter;
             *counter += 1;
-            if time_slots.len() > 0 && self.duration.min_duration.is_some() {
+            if time_slots.len() > 0 && self.min_duration.is_some() {
                 let t = Task::new(
                     task_id,
                     self.id.clone(),
                     self.title.clone(),
-                    self.duration.min_duration.unwrap(),
+                    self.min_duration.unwrap(),
                     None,
                     None,
                     calendar_start,

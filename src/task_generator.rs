@@ -107,15 +107,15 @@ pub fn add_filler_goals(goals: &mut HashMap<String, Goal>) {
                 let mut duration_of_children: usize = 0;
                 for child in goal.1.children.clone().unwrap().iter() {
                     let child_goal = goals.get(child).unwrap();
-                    duration_of_children += child_goal.duration.min_duration.unwrap();
+                    duration_of_children += child_goal.min_duration.unwrap();
                 }
-                let difference = goal.1.duration.min_duration.unwrap() - duration_of_children;
+                let difference = goal.1.min_duration.unwrap() - duration_of_children;
                 if difference > 0 {
                     let mut filler_goal = goal.1.clone();
                     filler_goal.id.push_str("-filler");
                     children_to_add.push((goal.1.id.clone(), filler_goal.id.clone()));
                     filler_goal.title.push_str(" filler");
-                    filler_goal.duration.min_duration = Some(difference);
+                    filler_goal.min_duration = Some(difference);
                     filler_goal.children = None;
                     filler_goal.tags.push(Tag::Filler);
                     results.insert(filler_goal.id.clone(), filler_goal);
@@ -145,10 +145,10 @@ pub fn add_filler_goals(goals: &mut HashMap<String, Goal>) {
 
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     let mut goals = vec![];
-    let dur = goal.duration.min_duration.unwrap();
+    let dur = goal.min_duration.unwrap();
     for _ in 0..dur {
         let mut g = goal.clone();
-        g.duration.min_duration = Some(1);
+        g.min_duration = Some(1);
         goals.push(g);
     }
     goals
