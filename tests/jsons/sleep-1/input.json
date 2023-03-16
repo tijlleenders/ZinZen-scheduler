@@ -7,8 +7,10 @@
       "title": "sleep",
       "min_duration": "8",
       "repeat": "daily",
-      "after_time": 22,
-      "before_time": 6
+      "filters": {
+        "after_time": 22,
+        "before_time": 6
+      }
     }
   }
 }

@@ -6,8 +6,10 @@
       "id": "1",
       "title": "work",
       "min_duration": "5",
-      "after_time": 12,
-      "before_time": 18
+      "filters": {
+        "after_time": 12,
+        "before_time": 18
+      }
     },
     "2": {
       "id": "2",
@@ -15,8 +17,10 @@
       "min_duration": "2",
       "start": "2022-11-07T00:00:00",
       "deadline": "2022-11-08T00:00:00",
-      "after_time": 16,
-      "before_time": 18
+      "filters": {
+        "after_time": 16,
+        "before_time": 18
+      }
     },
     "3": {
       "id": "3",
@@ -24,8 +28,10 @@
       "min_duration": "2",
       "start": "2022-11-08T00:00:00",
       "deadline": "2022-11-09T00:00:00",
-      "after_time": 16,
-      "before_time": 18
+      "filters": {
+        "after_time": 16,
+        "before_time": 18
+      }
     },
     "4": {
       "id": "4",
@@ -33,8 +39,10 @@
       "min_duration": "2",
       "start": "2022-11-09T00:00:00",
       "deadline": "2022-11-10T00:00:00",
-      "after_time": 16,
-      "before_time": 18
+      "filters": {
+        "after_time": 16,
+        "before_time": 18
+      }
     }
   }
 }

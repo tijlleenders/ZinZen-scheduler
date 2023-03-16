@@ -8,8 +8,10 @@
       "min_duration": "1",
       "start": "2022-09-01T00:00:00",
       "deadline": "2022-09-02T00:00:00",
-      "after_time": 12,
-      "before_time": 14
+      "filters": {
+        "after_time": 12,
+        "before_time": 14
+      }
     },
     "2": {
       "id": "2",
@@ -17,8 +19,10 @@
       "min_duration": "8",
       "start": "2022-09-01T00:00:00",
       "deadline": "2022-09-02T00:00:00",
-      "after_time": 8,
-      "before_time": 21
+      "filters": {
+        "after_time": 8,
+        "before_time": 21
+      }
     }
   }
 }

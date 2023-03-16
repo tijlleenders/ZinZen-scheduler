@@ -8,7 +8,9 @@
       "min_duration": "4",
       "repeat": "every 6 hours",
       "deadline": "2022-11-20T00:00:00",
-      "after_time": 15
+      "filters": {
+        "after_time": 15
+      }
     }
   }
 }

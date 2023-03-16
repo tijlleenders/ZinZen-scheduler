@@ -7,8 +7,10 @@
             "title": "Work",
             "duration": "38-45h",
             "start": "2023-03-02T00:00:00",
-            "after_time": 6,
-            "before_time": 16,
+            "filters": {
+                "after_time": 6,
+                "before_time": 16
+            },
             "repeat": "weekly",
             "children": [
                 "1429f3f4-0315-4e72-a7e4-19b05b38884c"
@@ -19,15 +21,19 @@
             "title": "Project A",
             "min_duration": "20",
             "start": "2023-03-02T00:00:00",
-            "after_time": 6,
-            "before_time": 16
+            "filters": {
+                "after_time": 6,
+                "before_time": 16
+            }
         },
         "09e198d9-613f-4f17-a23c-4e38d3c5d529": {
             "id": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
             "title": "Sleep sleepingcrescent_moon",
             "min_duration": "8",
-            "after_time": 22,
-            "before_time": 8,
+            "filters": {
+                "after_time": 22,
+                "before_time": 8
+            },
             "repeat": "daily"
         }
     }

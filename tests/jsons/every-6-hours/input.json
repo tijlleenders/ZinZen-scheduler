@@ -7,7 +7,9 @@
       "title": "backup data",
       "min_duration": "4",
       "repeat": "every 6 hours",
-      "after_time": 15
+      "filters": {
+        "after_time": 15
+      }
     }
   }
 }
