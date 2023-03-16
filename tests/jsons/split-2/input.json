@@ -5,7 +5,7 @@
       "1": {
          "id": "1",
          "title": "work",
-         "duration": "8",
+         "min_duration": "8",
          "start": "2022-09-01T00:00:00",
          "deadline": "2022-09-02T00:00:00",
          "after_time": 8,
@@ -14,7 +14,7 @@
       "2": {
          "id": "2",
          "title": "dentist",
-         "duration": "1",
+         "min_duration": "1",
          "start": "2022-09-01T00:00:00",
          "deadline": "2022-09-02T00:00:00",
          "after_time": 14,
@@ -23,7 +23,7 @@
       "3": {
          "id": "3",
          "title": "walk",
-         "duration": "1",
+         "min_duration": "1",
          "start": "2022-09-01T00:00:00",
          "deadline": "2022-09-02T00:00:00",
          "after_time": 14,

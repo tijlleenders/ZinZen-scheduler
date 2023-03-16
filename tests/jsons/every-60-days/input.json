@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "clean garage",
-      "duration": "3",
+      "min_duration": "3",
       "repeat": "every 60 days",
       "after_time": 9,
       "before_time": 17

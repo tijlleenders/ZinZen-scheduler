@@ -5,21 +5,21 @@
     "1": {
       "id": "1",
       "title": "shopping",
-      "duration": "1",
+      "min_duration": "1",
       "after_time": 10,
       "before_time": 13
     },
     "2": {
       "id": "2",
       "title": "dentist",
-      "duration": "1",
+      "min_duration": "1",
       "after_time": 10,
       "before_time": 11
     },
     "3": {
       "id": "3",
       "title": "exercise",
-      "duration": "1",
+      "min_duration": "1",
       "after_time": 10,
       "before_time": 18
     }

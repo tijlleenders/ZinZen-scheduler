@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "piano practice",
-      "duration": "2",
+      "min_duration": "2",
       "repeat": "wednesdays",
       "after_time": 12,
       "before_time": 14

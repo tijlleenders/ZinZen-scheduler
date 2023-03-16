@@ -5,7 +5,7 @@
       "1": {
          "id": "1",
          "title": "group_discussion",
-         "duration": "3",
+         "min_duration": "3",
          "start": "2022-01-01T00:00:00",
          "deadline": "2022-01-02T00:00:00",
          "after_time": 13,
@@ -14,7 +14,7 @@
       "2": {
          "id": "2",
          "title": "presentation",
-         "duration": "1",
+         "min_duration": "1",
          "start": "2022-01-01T00:00:00",
          "deadline": "2022-01-02T00:00:00",
          "after_time": 8,
@@ -23,7 +23,7 @@
       "3": {
          "id": "3",
          "title": "swimming_class",
-         "duration": "2",
+         "min_duration": "2",
          "start": "2022-01-01T00:00:00",
          "deadline": "2022-01-02T00:00:00",
          "after_time": 8,

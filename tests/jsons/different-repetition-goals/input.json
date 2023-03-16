@@ -5,7 +5,7 @@
         "fc22a0d0-90f9-4c53-9d24-e99ce646b7b0": {
             "id": "fc22a0d0-90f9-4c53-9d24-e99ce646b7b0",
             "title": "Sleep sleepingcrescent_moon",
-            "duration": "8",
+            "min_duration": "8",
             "after_time": 22,
             "before_time": 8,
             "repeat": "daily"
@@ -13,7 +13,7 @@
         "a59bead6-4585-488c-abab-76aad3f0c686": {
             "id": "a59bead6-4585-488c-abab-76aad3f0c686",
             "title": "Lunch sandwich",
-            "duration": "1",
+            "min_duration": "1",
             "after_time": 12,
             "before_time": 14,
             "repeat": "daily"
@@ -21,7 +21,7 @@
         "9601497c-9cb4-4414-abb6-be104eca3d20": {
             "id": "9601497c-9cb4-4414-abb6-be104eca3d20",
             "title": "Me time 🧘🏽relieved",
-            "duration": "1",
+            "min_duration": "1",
             "after_time": 7,
             "before_time": 21,
             "repeat": "daily"
@@ -29,7 +29,7 @@
         "807b851a-76f8-4504-89bb-ba42eca796a1": {
             "id": "807b851a-76f8-4504-89bb-ba42eca796a1",
             "title": "Water the plants potted_plant indoors",
-            "duration": "1",
+            "min_duration": "1",
             "after_time": 7,
             "before_time": 21,
             "repeat": "every 3 days"
@@ -37,7 +37,7 @@
         "434ed33c-8ffe-499f-b699-d536d2f45000": {
             "id": "434ed33c-8ffe-499f-b699-d536d2f45000",
             "title": "Walk 🚶🏽",
-            "duration": "1",
+            "min_duration": "1",
             "after_time": 14,
             "before_time": 20,
             "repeat": "daily"
@@ -45,7 +45,7 @@
         "3752ab5d-5b29-43c0-b914-a5fa12d22e6b": {
             "id": "3752ab5d-5b29-43c0-b914-a5fa12d22e6b",
             "title": "Dinner plate_with_cutlery",
-            "duration": "1",
+            "min_duration": "1",
             "after_time": 18,
             "before_time": 21,
             "repeat": "daily"
@@ -53,7 +53,7 @@
         "09965429-6210-417d-8eff-27fa2eadd69b": {
             "id": "09965429-6210-417d-8eff-27fa2eadd69b",
             "title": "Breakfast croissantbowl_with_spoon",
-            "duration": "1",
+            "min_duration": "1",
             "after_time": 6,
             "before_time": 9,
             "repeat": "daily"

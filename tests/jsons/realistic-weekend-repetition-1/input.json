@@ -5,7 +5,7 @@
       "1": {
          "id": "1",
          "title": "work",
-         "duration": "6",
+         "min_duration": "6",
          "repeat": "weekends",
          "after_time": 6,
          "before_time": 18
@@ -13,7 +13,7 @@
       "2": {
          "id": "2",
          "title": "gym",
-         "duration": "2",
+         "min_duration": "2",
          "repeat": "weekends",
          "after_time": 5,
          "before_time": 8
@@ -21,7 +21,7 @@
       "3": {
          "id": "3",
          "title": "walk",
-         "duration": "1",
+         "min_duration": "1",
          "repeat": "weekends",
          "after_time": 17,
          "before_time": 19
@@ -29,7 +29,7 @@
       "4": {
          "id": "4",
          "title": "church",
-         "duration": "2",
+         "min_duration": "2",
          "repeat": "sundays",
          "after_time": 10,
          "before_time": 14
@@ -37,7 +37,7 @@
       "5": {
          "id": "5",
          "title": "dentist",
-         "duration": "1",
+         "min_duration": "1",
          "start": "2022-09-04T00:00:00",
          "deadline": "2022-09-05T00:00:00",
          "after_time": 11,

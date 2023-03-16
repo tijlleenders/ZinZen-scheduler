@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "run",
-      "duration": "1",
+      "min_duration": "1",
       "repeat": "weekends",
       "before_time": 6
     }

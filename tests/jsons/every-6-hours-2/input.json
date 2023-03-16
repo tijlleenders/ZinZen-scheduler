@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "backup data",
-      "duration": "4",
+      "min_duration": "4",
       "repeat": "every 6 hours",
       "deadline": "2022-11-20T00:00:00",
       "after_time": 15

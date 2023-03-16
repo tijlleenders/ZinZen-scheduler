@@ -17,14 +17,14 @@
     "2": {
       "id": "2",
       "title": "Project A",
-      "duration": "20",
+      "min_duration": "20",
       "after_time": 6,
       "before_time": 16
     },
     "3": {
       "id": "3",
       "title": "Project B",
-      "duration": "15",
+      "min_duration": "15",
       "after_time": 6,
       "before_time": 16,
       "children": [
@@ -35,14 +35,14 @@
     "4": {
       "id": "4",
       "title": "Research",
-      "duration": "3",
+      "min_duration": "3",
       "after_time": 6,
       "before_time": 16
     },
     "5": {
       "id": "5",
       "title": "Write report",
-      "duration": "1",
+      "min_duration": "1",
       "after_time": 6,
       "before_time": 16
     }

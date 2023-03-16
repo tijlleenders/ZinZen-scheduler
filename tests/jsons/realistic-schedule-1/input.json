@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "walk",
-      "duration": "1",
+      "min_duration": "1",
       "repeat": "daily",
       "after_time": 17,
       "before_time": 20
@@ -13,7 +13,7 @@
     "2": {
       "id": "2",
       "title": "read",
-      "duration": "1",
+      "min_duration": "1",
       "repeat": "daily",
       "after_time": 19,
       "before_time": 22
@@ -21,7 +21,7 @@
     "3": {
       "id": "3",
       "title": "piano practice",
-      "duration": "2",
+      "min_duration": "2",
       "repeat": "wednesdays",
       "after_time": 12,
       "before_time": 14
@@ -29,7 +29,7 @@
     "5": {
       "id": "4",
       "title": "gym",
-      "duration": "2",
+      "min_duration": "2",
       "repeat": "daily",
       "after_time": 5,
       "before_time": 7
@@ -37,7 +37,7 @@
     "5": {
       "id": "5",
       "title": "work",
-      "duration": "8",
+      "min_duration": "8",
       "repeat": "daily",
       "start": "2022-09-01T00:00:00",
       "deadline": "2022-09-07T00:00:00",
@@ -47,7 +47,7 @@
     "6": {
       "id": "6",
       "title": "dentist",
-      "duration": "1",
+      "min_duration": "1",
       "start": "2022-09-14T00:00:00",
       "deadline": "2022-09-15T00:00:00",
       "after_time": 10,
@@ -56,7 +56,7 @@
     "7": {
       "id": "7",
       "title": "shopping",
-      "duration": "2",
+      "min_duration": "2",
       "start": "2022-09-10T00:00:00",
       "deadline": "2022-09-11T00:00:00",
       "after_time": 12,
@@ -65,7 +65,7 @@
     "8": {
       "id": "8",
       "title": "repair sink",
-      "duration": "3",
+      "min_duration": "3",
       "start": "2022-09-25T00:00:00",
       "deadline": "2022-09-26T00:00:00"
     }
