@@ -7,7 +7,9 @@
       "title": "run",
       "min_duration": 1,
       "repeat": "weekends",
-      "before_time": 6
+      "filters": {
+        "before_time": 6
+      }
     }
   }
 }
