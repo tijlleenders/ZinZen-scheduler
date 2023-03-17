@@ -5,13 +5,13 @@
     "1": {
       "id": "1",
       "title": "side project",
-      "min_duration": "8",
+      "min_duration": 8,
       "repeat": "3-5/week"
     },
     "2": {
       "id": "2",
       "title": "sleep",
-      "min_duration": "10",
+      "min_duration": 10,
       "repeat": "daily",
       "filters": {
         "after_time": 22,
@@ -21,7 +21,7 @@
     "3": {
       "id": "3",
       "title": "work",
-      "min_duration": "14",
+      "min_duration": 14,
       "repeat": "weekdays",
       "filters": {
         "after_time": 8,
@@ -31,7 +31,7 @@
     "4": {
       "id": "4",
       "title": "family",
-      "min_duration": "6",
+      "min_duration": 6,
       "repeat": "weekends",
       "filters": {
         "after_time": 8,

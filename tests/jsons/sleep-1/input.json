@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "sleep",
-      "min_duration": "8",
+      "min_duration": 8,
       "repeat": "daily",
       "filters": {
         "after_time": 22,

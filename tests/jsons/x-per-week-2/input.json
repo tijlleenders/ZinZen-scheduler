@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "write blog article",
-      "min_duration": "2",
+      "min_duration": 2,
       "repeat": "2/week",
       "filters": {
         "after_time": 19,

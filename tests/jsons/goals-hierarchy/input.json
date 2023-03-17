@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "Day job",
-      "min_duration": "40",
+      "min_duration": 40,
       "start": "2018-01-01T00:00:00",
       "deadline": "2018-01-06T00:00:00",
       "filters": {
@@ -19,7 +19,7 @@
     "2": {
       "id": "2",
       "title": "Project X",
-      "min_duration": "10",
+      "min_duration": 10,
       "start": "2018-01-01T00:00:00",
       "deadline": "2018-01-06T00:00:00",
       "filters": {

@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "write blog article",
-      "min_duration": "2",
+      "min_duration": 2,
       "repeat": "2/week",
       "filters": {
         "after_time": 19,
@@ -15,7 +15,7 @@
     "2": {
       "id": "2",
       "title": "watch movie",
-      "min_duration": "3",
+      "min_duration": 3,
       "start": "2022-10-03T00:00:00",
       "deadline": "2022-10-04T00:00:00",
       "filters": {
@@ -26,7 +26,7 @@
     "3": {
       "id": "3",
       "title": "study",
-      "min_duration": "3",
+      "min_duration": 3,
       "start": "2022-10-11T00:00:00",
       "deadline": "2022-10-12T00:00:00",
       "filters": {

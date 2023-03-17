@@ -5,7 +5,7 @@
       "1": {
          "id": "1",
          "title": "community_cleanup",
-         "min_duration": "3",
+         "min_duration": 3,
          "repeat": "weekends",
          "filters": {
             "after_time": 10,

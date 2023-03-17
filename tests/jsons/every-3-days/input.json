@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "water plants",
-      "min_duration": "1",
+      "min_duration": 1,
       "repeat": "every 3 days",
       "filters": {
         "after_time": 13,

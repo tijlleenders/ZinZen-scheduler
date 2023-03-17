@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "backup data",
-      "min_duration": "4",
+      "min_duration": 4,
       "repeat": "every 6 hours",
       "filters": {
         "after_time": 15

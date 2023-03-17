@@ -5,7 +5,7 @@
     "1": {
       "id": "1",
       "title": "run 5km",
-      "min_duration": "1",
+      "min_duration": 1,
       "repeat": "1-3/week"
     }
   }

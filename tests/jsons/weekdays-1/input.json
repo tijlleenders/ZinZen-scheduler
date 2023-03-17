@@ -5,7 +5,7 @@
       "1": {
          "id": "1",
          "title": "work",
-         "min_duration": "8",
+         "min_duration": 8,
          "repeat": "weekdays",
          "filters": {
             "after_time": 8,
