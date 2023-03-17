@@ -5,13 +5,18 @@
         "d7fddb3d-2c3b-4a50-aadd-739d60a96378": {
             "id": "d7fddb3d-2c3b-4a50-aadd-739d60a96378",
             "title": "Work",
-            "duration": "38-45h",
+            "budgets": [
+                {
+                    "budget_type": "Weekly",
+                    "min": 38,
+                    "max": 45
+                }
+            ],
             "start": "2023-03-02T00:00:00",
             "filters": {
                 "after_time": 6,
                 "before_time": 16
             },
-            "repeat": "weekly",
             "children": [
                 "1429f3f4-0315-4e72-a7e4-19b05b38884c"
             ]
