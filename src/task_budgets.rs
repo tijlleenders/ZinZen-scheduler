@@ -1,13 +1,12 @@
 use crate::{
     goal::{BudgetType, Tag},
-    repetition,
     task::{Task, TaskStatus},
-    time_slot_iterator::{self, TimeSlotsIterator},
+    time_slot_iterator::TimeSlotsIterator,
     Goal, Repetition, Slot,
 };
-use chrono::{NaiveDate, NaiveDateTime};
+use chrono::NaiveDateTime;
 use serde::Deserialize;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 #[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
 pub struct TaskBudgets {
@@ -19,7 +18,7 @@ pub struct TaskBudgets {
 
 #[derive(Debug, Deserialize)]
 pub struct TaskBudget {
-    TaskBudgetType: BudgetType,
+    task_budget_type: BudgetType,
     pub slot_budgets: Vec<SlotBudget>,
     min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
     max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
@@ -61,7 +60,7 @@ impl TaskBudget {
 
     fn initialize(&mut self, budget_start: NaiveDateTime, budget_end: NaiveDateTime) {
         let mut repetition = Repetition::Weekly(1);
-        match self.TaskBudgetType {
+        match self.task_budget_type {
             BudgetType::Weekly => (),
             BudgetType::Daily => repetition = Repetition::DAILY(1),
         }
@@ -146,7 +145,7 @@ impl TaskBudgets {
     fn add(&mut self, goal: &Goal) {
         for budget in goal.budgets.clone().unwrap() {
             let budget = TaskBudget {
-                TaskBudgetType: budget.budget_type.clone(),
+                task_budget_type: budget.budget_type.clone(),
                 slot_budgets: Vec::new(),
                 min: budget.min.clone(),
                 max: budget.max.clone(),

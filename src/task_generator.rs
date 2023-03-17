@@ -66,7 +66,7 @@ fn add_optional_flex_duration_regular_goals(mut goals: &mut HashMap<String, Goal
 
 fn add_optional_flex_number_and_duration_habits_goals(mut goals: &mut HashMap<String, Goal>) {
     let mut generated_goals: HashMap<String, Goal> = HashMap::new();
-    let mut goal_ids_to_remove: Vec<String> = Vec::new();
+    let goal_ids_to_remove: Vec<String> = Vec::new();
     for goal in goals.iter_mut() {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.1.repeat {
             //Flex repeat goals are handled as follows:
