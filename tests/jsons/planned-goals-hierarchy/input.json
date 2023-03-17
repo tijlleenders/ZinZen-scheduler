@@ -7,8 +7,10 @@
       "title": "work",
       "min_duration": "30-40h",
       "repeat": "weekly",
-      "after_time": 6,
-      "before_time": 16,
+      "filters": {
+        "after_time": 6,
+        "before_time": 16
+      },
       "children": [
         "2"
       ]
@@ -17,8 +19,10 @@
       "id": "2",
       "title": "Project A",
       "min_duration": "10",
-      "after_time": 6,
-      "before_time": 16
+      "filters": {
+        "after_time": 6,
+        "before_time": 16
+      }
     }
   }
 }
