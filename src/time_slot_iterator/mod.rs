@@ -376,7 +376,7 @@ pub fn get_start_of_repeat_step(
         Repetition::WEEKENDS => {
             if result.weekday() == Weekday::Sat {
                 return result
-                    .checked_add_days(Days::new(2))
+                    .checked_add_days(Days::new(7))
                     .unwrap()
                     .with_hour(0)
                     .unwrap()
@@ -387,7 +387,7 @@ pub fn get_start_of_repeat_step(
             }
             if result.weekday() == Weekday::Sun {
                 return result
-                    .checked_add_days(Days::new(1))
+                    .checked_add_days(Days::new(6))
                     .unwrap()
                     .with_hour(0)
                     .unwrap()
