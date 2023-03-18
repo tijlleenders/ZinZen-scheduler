@@ -6,7 +6,7 @@ use crate::{
 };
 use chrono::NaiveDateTime;
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 #[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
 pub struct TaskBudgets {
@@ -93,7 +93,7 @@ impl TaskBudgets {
         }
     }
 
-    pub fn create_task_budgets_config(&mut self, mut goals: &mut HashMap<String, Goal>) {
+    pub fn create_task_budgets_config(&mut self, mut goals: &mut BTreeMap<String, Goal>) {
         // Todo: create a shadow tasks per budget period that have a tag so the won't be handled by initial call to schedule
         // Once all Tasks are scheduled, if a minimum budget per period is not reached,
         // give the task a duration to get to the minimum per period, remove don't schedule tag, mark ready to schedule and schedule
@@ -181,7 +181,7 @@ impl TaskBudgets {
 
     pub fn generate_budget_min_and_max_tasks(
         &mut self,
-        mut goals: &mut HashMap<String, Goal>,
+        mut goals: &mut BTreeMap<String, Goal>,
         counter: &mut usize,
     ) -> Vec<Task> {
         let mut tasks_result: Vec<Task> = Vec::new();
