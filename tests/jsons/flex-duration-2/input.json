@@ -1,30 +1,41 @@
 {
   "startDate": "2022-10-01T00:00:00",
   "endDate": "2022-10-15T00:00:00",
-  "goals": [
-    {
+  "goals": {
+    "1": {
       "id": "1",
       "title": "work",
-      "duration": "35-40h",
-      "repeat": "weekly",
-      "after_time": 8,
-      "before_time": 18 
+      "budgets": [
+        {
+          "budget_type": "Weekly",
+          "min": 35,
+          "max": 40
+        }
+      ],
+      "filters": {
+        "after_time": 8,
+        "before_time": 18
+      }
     },
-    {
+    "2": {
       "id": "2",
       "title": "exercise",
-      "duration": "5",
+      "min_duration": 5,
       "repeat": "daily",
-      "after_time": 11,
-      "before_time": 16
+      "filters": {
+        "after_time": 11,
+        "before_time": 16
+      }
     },
-    {
+    "3": {
       "id": "3",
       "title": "sleep",
-      "duration": "8",
+      "min_duration": 8,
       "repeat": "daily",
-      "after_time": 22,
-      "before_time": 6
+      "filters": {
+        "after_time": 22,
+        "before_time": 6
+      }
     }
-  ]
+  }
 }

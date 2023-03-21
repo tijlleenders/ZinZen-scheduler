@@ -1,44 +1,52 @@
 {
   "startDate": "2022-10-01T00:00:00",
   "endDate": "2022-11-01T00:00:00",
-  "goals": [
-    {
+  "goals": {
+    "1": {
       "id": "1",
       "title": "side project",
-      "duration": "8",
+      "min_duration": 8,
       "repeat": "1-3/week"
     },
-    {
+    "2": {
       "id": "2",
       "title": "sleep",
-      "duration": "10",
+      "min_duration": 10,
       "repeat": "daily",
-      "after_time": 22,
-      "before_time": 8
+      "filters": {
+        "after_time": 22,
+        "before_time": 8
+      }
     },
-    {
+    "3": {
       "id": "3",
       "title": "work",
-      "duration": "9",
+      "min_duration": 9,
       "repeat": "weekdays",
-      "after_time": 8,
-      "before_time": 17
+      "filters": {
+        "after_time": 8,
+        "before_time": 17
+      }
     },
-    {
+    "4": {
       "id": "4",
       "title": "exercise",
-      "duration": "3",
+      "min_duration": 3,
       "repeat": "weekdays",
-      "after_time": 17,
-      "before_time": 20
+      "filters": {
+        "after_time": 17,
+        "before_time": 20
+      }
     },
-    {
+    "5": {
       "id": "5",
       "title": "family time",
-      "duration": "2",
+      "min_duration": 2,
       "repeat": "daily",
-      "after_time": 20,
-      "before_time": 22
+      "filters": {
+        "after_time": 20,
+        "before_time": 22
+      }
     }
-  ]
+  }
 }

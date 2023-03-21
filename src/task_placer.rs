@@ -63,22 +63,25 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
 
                 let mut new_title = tasks_to_place.tasks[index].title.clone();
                 new_title.push_str(" min budget");
-                let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
-                let task_to_add = Task::new(
-                    tasks_to_place.tasks[index].id,
-                    tasks_to_place.tasks[index].goal_id.clone(),
-                    new_title,
-                    new_duration,
-                    None,
-                    None,
-                    tasks_to_place.tasks[index].calender_start,
-                    tasks_to_place.tasks[index].calender_end,
-                    result_slots,
-                    TaskStatus::ReadyToSchedule,
-                    tasks_to_place.tasks[index].tags.clone(),
-                    tasks_to_place.tasks[index].after_goals.clone(),
-                );
-                tasks_to_add.push(task_to_add);
+                if tasks_to_place.tasks[index].duration >= slot_budget.used {
+                    let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
+
+                    let task_to_add = Task::new(
+                        tasks_to_place.tasks[index].id,
+                        tasks_to_place.tasks[index].goal_id.clone(),
+                        new_title,
+                        new_duration,
+                        None,
+                        None,
+                        tasks_to_place.tasks[index].calender_start,
+                        tasks_to_place.tasks[index].calender_end,
+                        result_slots,
+                        TaskStatus::ReadyToSchedule,
+                        tasks_to_place.tasks[index].tags.clone(),
+                        tasks_to_place.tasks[index].after_goals.clone(),
+                    );
+                    tasks_to_add.push(task_to_add);
+                }
             }
         }
     }

@@ -43,7 +43,7 @@
         {
           "taskid": 4,
           "goalid": "1",
-          "title": "work filler",
+          "title": "work min budget",
           "duration": 10,
           "start": "2018-01-02T06:00:00",
           "deadline": "2018-01-02T16:00:00"
@@ -72,7 +72,7 @@
         {
           "taskid": 7,
           "goalid": "1",
-          "title": "work filler",
+          "title": "work min budget",
           "duration": 10,
           "start": "2018-01-03T06:00:00",
           "deadline": "2018-01-03T16:00:00"
@@ -94,24 +94,8 @@
           "taskid": 9,
           "goalid": "free",
           "title": "free",
-          "duration": 6,
+          "duration": 24,
           "start": "2018-01-04T00:00:00",
-          "deadline": "2018-01-04T06:00:00"
-        },
-        {
-          "taskid": 10,
-          "goalid": "1",
-          "title": "work filler",
-          "duration": 10,
-          "start": "2018-01-04T06:00:00",
-          "deadline": "2018-01-04T16:00:00"
-        },
-        {
-          "taskid": 11,
-          "goalid": "free",
-          "title": "free",
-          "duration": 8,
-          "start": "2018-01-04T16:00:00",
           "deadline": "2018-01-05T00:00:00"
         }
       ]
@@ -120,7 +104,7 @@
       "day": "2018-01-05",
       "outputs": [
         {
-          "taskid": 12,
+          "taskid": 10,
           "goalid": "free",
           "title": "free",
           "duration": 24,

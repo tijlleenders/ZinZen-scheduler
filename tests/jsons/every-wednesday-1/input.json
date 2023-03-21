@@ -1,14 +1,17 @@
 {
   "startDate": "2022-09-01T00:00:00",
   "endDate": "2022-10-01T00:00:00",
-  "goals": [
-    {
+  "goals": {
+    "1": {
       "id": "1",
       "title": "piano practice",
-      "duration": "2",
-      "repeat": "wednesdays",
-      "after_time": 12,
-      "before_time": 14
+      "min_duration": 2,
+      "repeat": "1/week",
+      "filters": {
+        "after_time": 12,
+        "before_time": 14,
+        "on_days": "Wednesdays"
+      }
     }
-  ]
+  }
 }

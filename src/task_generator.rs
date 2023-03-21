@@ -1,6 +1,5 @@
-use std::collections::HashMap;
-
 use chrono::NaiveDateTime;
+use std::collections::{BTreeMap, HashMap};
 
 use crate::goal::{Goal, Tag};
 use crate::input::{Input, TasksToPlace};
@@ -18,7 +17,7 @@ pub fn task_generator(
 ) -> TasksToPlace {
     let mut counter: usize = 0;
     let mut tasks: Vec<Task> = vec![];
-    let mut goals: HashMap<String, Goal> =
+    let mut goals: BTreeMap<String, Goal> =
         add_start_and_end_where_none(goals, calendar_start, calendar_end);
     add_filler_goals(&mut goals);
     add_optional_flex_duration_regular_goals(&mut goals); //TODO
@@ -44,10 +43,10 @@ pub fn task_generator(
 }
 
 fn add_start_and_end_where_none(
-    mut goals: HashMap<String, Goal>,
+    mut goals: BTreeMap<String, Goal>,
     calendar_start: NaiveDateTime,
     calendar_end: NaiveDateTime,
-) -> HashMap<String, Goal> {
+) -> BTreeMap<String, Goal> {
     for goal in goals.iter_mut() {
         if goal.1.start.is_none() {
             goal.1.start = Some(calendar_start);
@@ -59,14 +58,14 @@ fn add_start_and_end_where_none(
     goals
 }
 
-fn add_optional_flex_duration_regular_goals(mut goals: &mut HashMap<String, Goal>) {
+fn add_optional_flex_duration_regular_goals(mut goals: &mut BTreeMap<String, Goal>) {
     return;
     todo!();
 }
 
-fn add_optional_flex_number_and_duration_habits_goals(mut goals: &mut HashMap<String, Goal>) {
-    let mut generated_goals: HashMap<String, Goal> = HashMap::new();
-    let mut goal_ids_to_remove: Vec<String> = Vec::new();
+fn add_optional_flex_number_and_duration_habits_goals(mut goals: &mut BTreeMap<String, Goal>) {
+    let mut generated_goals: BTreeMap<String, Goal> = BTreeMap::new();
+    let goal_ids_to_remove: Vec<String> = Vec::new();
     for goal in goals.iter_mut() {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.1.repeat {
             //Flex repeat goals are handled as follows:
@@ -96,8 +95,8 @@ fn add_optional_flex_number_and_duration_habits_goals(mut goals: &mut HashMap<St
     goals.extend(generated_goals);
 }
 
-pub fn add_filler_goals(goals: &mut HashMap<String, Goal>) {
-    let mut results: HashMap<String, Goal> = HashMap::new();
+pub fn add_filler_goals(goals: &mut BTreeMap<String, Goal>) {
+    let mut results: BTreeMap<String, Goal> = BTreeMap::new();
     let mut ignore: Vec<String> = Vec::new();
     let mut children_to_add: Vec<(String, String)> = Vec::new();
 

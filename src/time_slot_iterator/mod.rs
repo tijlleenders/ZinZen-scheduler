@@ -326,7 +326,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Mon {
                     return result
@@ -376,7 +376,7 @@ pub fn get_start_of_repeat_step(
         Repetition::WEEKENDS => {
             if result.weekday() == Weekday::Sat {
                 return result
-                    .checked_add_days(Days::new(2))
+                    .checked_add_days(Days::new(7))
                     .unwrap()
                     .with_hour(0)
                     .unwrap()
@@ -387,7 +387,7 @@ pub fn get_start_of_repeat_step(
             }
             if result.weekday() == Weekday::Sun {
                 return result
-                    .checked_add_days(Days::new(1))
+                    .checked_add_days(Days::new(6))
                     .unwrap()
                     .with_hour(0)
                     .unwrap()
@@ -396,7 +396,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Sat {
                     return result
@@ -438,7 +438,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Mon {
                     return result
@@ -464,7 +464,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Tue {
                     return result
@@ -490,7 +490,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Wed {
                     return result
@@ -516,7 +516,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Thu {
                     return result
@@ -542,7 +542,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Fri {
                     return result
@@ -568,7 +568,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Sat {
                     return result
@@ -594,7 +594,7 @@ pub fn get_start_of_repeat_step(
                     .with_second(0)
                     .unwrap();
             }
-            for _days_to_add in 1..6 {
+            for _days_to_add in 1..=6 {
                 result = result.checked_add_days(Days::new(1)).unwrap();
                 if result.weekday() == Weekday::Sun {
                     return result

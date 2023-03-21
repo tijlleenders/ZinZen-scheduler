@@ -3,7 +3,7 @@ use crate::task::Task;
 use crate::task_budgets::TaskBudgets;
 use chrono::prelude::*;
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 #[derive(Deserialize, Debug)]
 /// The front end passes data into the scheduler via an Input object.
@@ -15,7 +15,7 @@ pub struct Input {
     pub calendar_start: NaiveDateTime,
     #[serde(rename = "endDate")]
     pub calendar_end: NaiveDateTime,
-    pub goals: HashMap<String, Goal>,
+    pub goals: BTreeMap<String, Goal>,
 }
 
 #[derive(Debug, Deserialize)]

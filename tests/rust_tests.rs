@@ -26,6 +26,11 @@ fn split_3() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
+fn demo_1_old() {
+    let (actual_output, desired_output) = run_test("demo-1-old");
+    assert_eq!(actual_output, desired_output);
+}
+#[test]
 fn basic_1() {
     let (actual_output, desired_output) = run_test("basic-1");
     assert_eq!(actual_output, desired_output);
@@ -68,6 +73,11 @@ fn after_12() {
 #[test]
 fn x_per_week_3() {
     let (actual_output, desired_output) = run_test("x-per-week-3");
+    assert_eq!(actual_output, desired_output);
+}
+#[test]
+fn demo_2_with_filler_without_budget() {
+    let (actual_output, desired_output) = run_test("demo-2-with-filler-without-budget");
     assert_eq!(actual_output, desired_output);
 }
 #[test]
@@ -276,8 +286,8 @@ fn x_per_day_2() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
-fn demo_test() {
-    let (actual_output, desired_output) = run_test("demo-test");
+fn demo_3_with_filler_and_budget() {
+    let (actual_output, desired_output) = run_test("demo-3-with-filler-and-budget");
     assert_eq!(actual_output, desired_output);
 }
 #[test]

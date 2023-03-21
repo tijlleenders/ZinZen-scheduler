@@ -15,16 +15,16 @@
           "taskid": 1,
           "goalid": "1",
           "title": "take medicine",
-          "duration": 3,
+          "duration": 1,
           "start": "2022-11-11T10:00:00",
-          "deadline": "2022-11-11T13:00:00"
+          "deadline": "2022-11-11T11:00:00"
         },
         {
           "taskid": 2,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-11-11T13:00:00",
+          "duration": 13,
+          "start": "2022-11-11T11:00:00",
           "deadline": "2022-11-12T00:00:00"
         }
       ]
@@ -44,12 +44,20 @@
           "taskid": 4,
           "goalid": "1",
           "title": "take medicine",
-          "duration": 2,
+          "duration": 1,
           "start": "2022-11-12T10:00:00",
-          "deadline": "2022-11-12T12:00:00"
+          "deadline": "2022-11-12T11:00:00"
         },
         {
           "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2022-11-12T11:00:00",
+          "deadline": "2022-11-12T12:00:00"
+        },
+        {
+          "taskid": 6,
           "goalid": "2",
           "title": "work",
           "duration": 3,
@@ -57,19 +65,11 @@
           "deadline": "2022-11-12T15:00:00"
         },
         {
-          "taskid": 6,
-          "goalid": "1",
-          "title": "take medicine",
-          "duration": 1,
-          "start": "2022-11-12T15:00:00",
-          "deadline": "2022-11-12T16:00:00"
-        },
-        {
           "taskid": 7,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-11-12T16:00:00",
+          "duration": 9,
+          "start": "2022-11-12T15:00:00",
           "deadline": "2022-11-13T00:00:00"
         }
       ]
@@ -89,16 +89,16 @@
           "taskid": 9,
           "goalid": "1",
           "title": "take medicine",
-          "duration": 3,
+          "duration": 1,
           "start": "2022-11-13T10:00:00",
-          "deadline": "2022-11-13T13:00:00"
+          "deadline": "2022-11-13T11:00:00"
         },
         {
           "taskid": 10,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-11-13T13:00:00",
+          "duration": 13,
+          "start": "2022-11-13T11:00:00",
           "deadline": "2022-11-14T00:00:00"
         }
       ]

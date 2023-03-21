@@ -1,11 +1,8 @@
 use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotsIterator;
-use crate::Slot;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
-use core::time;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::option::Option;
 
 /// Represents a Goal passed in by the user from the front end.

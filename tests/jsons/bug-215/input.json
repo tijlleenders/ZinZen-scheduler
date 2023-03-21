@@ -1,61 +1,75 @@
 {
     "startDate": "2023-01-03T00:00:00",
     "endDate": "2023-01-10T00:00:00",
-    "goals": [
-        {
+    "goals": {
+        "e100fe8e-0c19-4a6f-b638-ef82107ea13b": {
             "id": "e100fe8e-0c19-4a6f-b638-ef82107ea13b",
             "title": "Sleep",
-            "duration": "8",
-            "after_time": 22,
-            "before_time": 8
+            "min_duration": 8,
+            "filters": {
+                "after_time": 22,
+                "before_time": 8
+            }
         },
-        {
+        "db01411c-6b57-4191-8c8b-733ac3751da3": {
             "id": "db01411c-6b57-4191-8c8b-733ac3751da3",
             "title": "hurdle",
-            "duration": "2",
+            "min_duration": 2,
             "start": "2023-01-03T01:00:00",
-            "before_time": 3
+            "filters": {
+                "before_time": 3
+            }
         },
-        {
+        "b898414d-76d5-4955-891d-b7c4ed7aac62": {
             "id": "b898414d-76d5-4955-891d-b7c4ed7aac62",
             "title": "Lunch",
-            "duration": "1",
-            "after_time": 12,
-            "before_time": 14
+            "min_duration": 1,
+            "filters": {
+                "after_time": 12,
+                "before_time": 14
+            }
         },
-        {
+        "b669fc8f-a431-43e2-952d-285778b1d8ba": {
             "id": "b669fc8f-a431-43e2-952d-285778b1d8ba",
             "title": "Me time",
-            "duration": "1"
+            "min_duration": 1
         },
-        {
+        "b5fa56c5-3619-41e4-a78f-b468cea90681": {
             "id": "b5fa56c5-3619-41e4-a78f-b468cea90681",
             "title": "Breakfast",
-            "duration": "1",
+            "min_duration": 1,
+            "filters": {
             "after_time": 6,
             "before_time": 9
+        }
         },
-        {
+        "7f69d43e-727d-40b7-be8a-47ab2e619c19": {
             "id": "7f69d43e-727d-40b7-be8a-47ab2e619c19",
             "title": "Walk",
-            "duration": "1",
-            "after_time": 14,
-            "before_time": 20
+            "min_duration": 1,
+            "filters": {
+                "after_time": 14,
+                "before_time": 20
+            }
         },
-        {
+        "6ff579f6-c1f7-4239-8179-db706856042f": {
             "id": "6ff579f6-c1f7-4239-8179-db706856042f",
             "title": "Dinner",
-            "duration": "1",
-            "after_time": 18,
-            "before_time": 21
+            "min_duration": 1,
+            "filters": {
+                "after_time": 18,
+                "before_time": 21
+            }
         },
-        {
+        "2f8d406e-0df2-43ac-a7aa-6e65ff1c5c95": {
             "id": "2f8d406e-0df2-43ac-a7aa-6e65ff1c5c95",
             "title": "Water the plants indoors",
-            "duration": "1",
+            "min_duration": 1,
             "start": "2023-01-03T00:00:00",
-            "after_time": 1,
-            "before_time": 3
+            "filters": {
+                "after_time": 1,
+                "before_time": 3
+            }
         }
-    ]
+    }
 }

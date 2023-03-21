@@ -1,12 +1,17 @@
 {
   "startDate": "2022-10-01T00:00:00",
   "endDate": "2022-11-01T00:00:00",
-  "goals": [
-    {
+  "goals": {
+    "1": {
       "id": "1",
       "title": "work",
-      "duration": "35-40h",
-      "repeat": "weekly"
+      "budgets": [
+        {
+          "budget_type": "Weekly",
+          "min": 35,
+          "max": 40
+        }
+      ]
     }
-  ]
+  }
 }
