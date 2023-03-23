@@ -2,6 +2,36 @@
   "startDate": "2018-01-01T00:00:00",
   "endDate": "2018-01-08T00:00:00",
   "goals": {
+    "d7b56844-87eb-43b3-b0db-807128133e5d": {
+      "id": "d7b56844-87eb-43b3-b0db-807128133e5d",
+      "title": "Dinner 🍽️",
+      "filters": {
+        "after_time": 18,
+        "before_time": 21
+      },
+      "min_duration": 1,
+      "repeat": "daily"
+    },
+    "84bd2e15-9771-42b2-81f7-c83e6f25801b": {
+      "id": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+      "title": "Breakfast 🥐🥣",
+      "filters": {
+        "after_time": 6,
+        "before_time": 9
+      },
+      "min_duration": 1,
+      "repeat": "daily"
+    },
+    "749b306c-a025-4b1b-b945-71939189868d": {
+      "id": "749b306c-a025-4b1b-b945-71939189868d",
+      "title": "Sleep 😴🌙",
+      "filters": {
+        "after_time": 0,
+        "before_time": 6
+      },
+      "min_duration": 6,
+      "repeat": "daily"
+    },
     "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3": {
       "id": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
       "title": "Work",
@@ -12,6 +42,36 @@
           "min": 40
         }
       ]
+    },
+    "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8": {
+      "id": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+      "title": "Lunch 🥪",
+      "filters": {
+        "after_time": 12,
+        "before_time": 14
+      },
+      "min_duration": 1,
+      "repeat": "daily"
+    },
+    "0c37df98-dbd4-4226-bc74-47d7dc317bbf": {
+      "id": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+      "title": "Walk 🚶🏽",
+      "filters": {
+        "after_time": 14,
+        "before_time": 20
+      },
+      "min_duration": 1,
+      "repeat": "daily"
+    },
+    "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f": {
+      "id": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+      "title": "Me time 🧘🏽😌",
+      "filters": {
+        "after_time": 7,
+        "before_time": 21
+      },
+      "min_duration": 1,
+      "repeat": "daily"
     }
   }
 }
