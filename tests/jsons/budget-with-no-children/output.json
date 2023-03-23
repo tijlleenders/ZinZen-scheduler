@@ -1,0 +1,112 @@
+{
+  "scheduled": [
+    {
+      "day": "2022-01-01",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-01T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2022-01-01T06:00:00",
+          "deadline": "2022-01-01T07:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "title": "Work min budget",
+          "duration": 2,
+          "start": "2022-01-01T07:00:00",
+          "deadline": "2022-01-01T09:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2022-01-01T09:00:00",
+          "deadline": "2022-01-01T10:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "title": "Work min budget",
+          "duration": 2,
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T12:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2022-01-01T12:00:00",
+          "deadline": "2022-01-01T13:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "title": "Work min budget",
+          "duration": 1,
+          "start": "2022-01-01T13:00:00",
+          "deadline": "2022-01-01T14:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2022-01-01T14:00:00",
+          "deadline": "2022-01-01T15:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "title": "Work min budget",
+          "duration": 3,
+          "start": "2022-01-01T15:00:00",
+          "deadline": "2022-01-01T18:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2022-01-01T18:00:00",
+          "deadline": "2022-01-01T19:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "title": "Work min budget",
+          "duration": 5,
+          "start": "2022-01-01T19:00:00",
+          "deadline": "2022-01-02T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2022-01-01",
+      "outputs": [
+        {
+          "taskid": 11,
+          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "title": "Work min budget",
+          "duration": 27,
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-02T00:00:00"
+        }
+      ]
+    }
+  ]
+}
