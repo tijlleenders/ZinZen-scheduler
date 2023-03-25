@@ -62,7 +62,6 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 tasks_to_place.tasks[index].tags.push(Tag::Remove);
 
                 let mut new_title = tasks_to_place.tasks[index].title.clone();
-                new_title.push_str(" min budget");
                 if tasks_to_place.tasks[index].duration >= slot_budget.used {
                     let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
 

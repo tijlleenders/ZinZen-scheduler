@@ -86,6 +86,11 @@ fn every_6_hours_2() {
     assert_eq!(actual_output, desired_output);
 }
 #[test]
+fn budget_with_no_children() {
+    let (actual_output, desired_output) = run_test("budget-with-no-children");
+    assert_eq!(actual_output, desired_output);
+}
+#[test]
 fn weekdays_1() {
     let (actual_output, desired_output) = run_test("weekdays-1");
     assert_eq!(actual_output, desired_output);

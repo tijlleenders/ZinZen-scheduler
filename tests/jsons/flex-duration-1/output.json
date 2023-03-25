@@ -6,7 +6,7 @@
         {
           "taskid": 0,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 24,
           "start": "2022-10-01T00:00:00",
           "deadline": "2022-10-02T00:00:00"
@@ -19,7 +19,7 @@
         {
           "taskid": 1,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 11,
           "start": "2022-10-02T00:00:00",
           "deadline": "2022-10-02T11:00:00"
@@ -40,7 +40,7 @@
         {
           "taskid": 3,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 24,
           "start": "2022-10-03T00:00:00",
           "deadline": "2022-10-04T00:00:00"
@@ -53,7 +53,7 @@
         {
           "taskid": 4,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 11,
           "start": "2022-10-04T00:00:00",
           "deadline": "2022-10-04T11:00:00"
@@ -139,7 +139,7 @@
         {
           "taskid": 11,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 24,
           "start": "2022-10-10T00:00:00",
           "deadline": "2022-10-11T00:00:00"
@@ -152,7 +152,7 @@
         {
           "taskid": 12,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 11,
           "start": "2022-10-11T00:00:00",
           "deadline": "2022-10-11T11:00:00"
@@ -238,7 +238,7 @@
         {
           "taskid": 19,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 24,
           "start": "2022-10-17T00:00:00",
           "deadline": "2022-10-18T00:00:00"
@@ -251,7 +251,7 @@
         {
           "taskid": 20,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 11,
           "start": "2022-10-18T00:00:00",
           "deadline": "2022-10-18T11:00:00"
@@ -337,7 +337,7 @@
         {
           "taskid": 27,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 24,
           "start": "2022-10-24T00:00:00",
           "deadline": "2022-10-25T00:00:00"
@@ -350,7 +350,7 @@
         {
           "taskid": 28,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 11,
           "start": "2022-10-25T00:00:00",
           "deadline": "2022-10-25T11:00:00"
@@ -436,7 +436,7 @@
         {
           "taskid": 35,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 24,
           "start": "2022-10-31T00:00:00",
           "deadline": "2022-11-01T00:00:00"
@@ -451,7 +451,7 @@
         {
           "taskid": 36,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 11,
           "start": "2022-10-01T00:00:00",
           "deadline": "2022-11-01T00:00:00"

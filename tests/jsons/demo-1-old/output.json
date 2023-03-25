@@ -125,7 +125,7 @@
         {
           "taskid": 13,
           "goalid": "1",
-          "title": "work min budget",
+          "title": "work",
           "duration": 3,
           "start": "2018-01-04T11:00:00",
           "deadline": "2018-01-04T14:00:00"
