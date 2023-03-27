@@ -9,10 +9,10 @@ can talk big-O, add features or optimize hot loops.
 1. Clone repo
    ```shell
    # Go to Home Directory
-   $ cd ~ 
+   cd ~ 
 
    # You can clone into home directory or different directory
-   $ git clone https://github.com/tijlleenders/ZinZen-scheduler.git
+   git clone https://github.com/tijlleenders/ZinZen-scheduler.git
    ```  
 
 2. [Install Rust](https://www.rust-lang.org/tools/install)
@@ -20,24 +20,23 @@ can talk big-O, add features or optimize hot loops.
 3. Add target for wasm:
 
    ```shell
-   $ rustup target add wasm32-unknown-unknown  
+   rustup target add wasm32-unknown-unknown  
 
    # Go to project directory
-   $ cd ~/ZinZen-scheduler/
+   cd ~/ZinZen-scheduler/
    ```
 
 4. Install WASM dependencies 
    ```shell
-   $ cargo install wasm-bindgen-cli 
+   cargo install wasm-bindgen-cli 
    ```
    - Or [Install wasm-bindgen command line interface](https://rustwasm.github.io/wasm-bindgen/reference/cli.html) with any dependencies
    - If it fails (openssl, pkg-config) or
    ```shell
-   $ sudo apt-get install wabt
+   sudo apt-get install wabt binaryen
    # [... or DIY](https://github.com/WebAssembly/wabt)
-
-   $ sudo apt-get install binaryen
    ```
+   
 5. [Install deno](https://deno.land/manual/getting_started/installation)
 
 6. You can now run the test from javascript/deno or from `cargo` as below:
