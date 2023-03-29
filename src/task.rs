@@ -222,7 +222,7 @@ impl Task {
         self.slots = new_slots;
     }
 
-    pub fn remove_from_blocked_by(&mut self, id_string: String) {
+    pub fn remove_from_blocked_by(&mut self, _id_string: String) {
         if self.after_goals.is_none() {
             return;
         }

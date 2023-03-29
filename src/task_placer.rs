@@ -1,10 +1,8 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
-use crate::errors::Error;
 use crate::goal::Tag;
 use crate::input::{PlacedTasks, TasksToPlace};
+use crate::slot::*;
 use crate::task::{Task, TaskStatus};
-use crate::task_budgets::TaskBudget;
-use crate::{slot::*, task};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
@@ -61,7 +59,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 }
                 tasks_to_place.tasks[index].tags.push(Tag::Remove);
 
-                let mut new_title = tasks_to_place.tasks[index].title.clone();
+                let new_title = tasks_to_place.tasks[index].title.clone();
                 if tasks_to_place.tasks[index].duration >= slot_budget.used {
                     let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
 
@@ -180,7 +178,7 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
     slot_conflicts.sort_by(|a, b| b.num_conflicts.partial_cmp(&a.num_conflicts).unwrap());
 
     let mut result = vec![];
-    for d in 0..task.duration {
+    for _dur in 0..task.duration {
         match slot_conflicts.pop() {
             Some(s) => result.push(s.slot),
             None => break,

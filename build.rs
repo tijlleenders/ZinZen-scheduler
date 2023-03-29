@@ -49,7 +49,6 @@ fn space() -> String {
 fn get_imports() -> String {
     let mut result = vec!["extern crate scheduler;".to_string()];
 
-    result.push("\nuse simple_logger::SimpleLogger;".to_string());
     result.push("\nextern crate soft;".to_string());
     result.push("\nmod common;".to_string());
     result.push("\n#[cfg(test)]".to_string());

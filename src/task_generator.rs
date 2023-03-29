@@ -1,5 +1,5 @@
 use chrono::NaiveDateTime;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 
 use crate::goal::{Goal, Tag};
 use crate::input::{Input, TasksToPlace};
@@ -22,12 +22,12 @@ pub fn task_generator(
     add_filler_goals(&mut goals);
     add_optional_flex_duration_regular_goals(&mut goals); //TODO
     add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
-    
+
     let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
     task_budgets.create_task_budgets_config(&mut goals);
-    
+
     tasks.extend(task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter));
-    
+
     for goal in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
         let tasks_for_goal: Vec<Task> =
@@ -59,12 +59,12 @@ fn add_start_and_end_where_none(
     goals
 }
 
-fn add_optional_flex_duration_regular_goals(mut goals: &mut BTreeMap<String, Goal>) {
+fn add_optional_flex_duration_regular_goals(_goals: &mut BTreeMap<String, Goal>) {
+    // TODO todo!();
     return;
-    todo!();
 }
 
-fn add_optional_flex_number_and_duration_habits_goals(mut goals: &mut BTreeMap<String, Goal>) {
+fn add_optional_flex_number_and_duration_habits_goals(goals: &mut BTreeMap<String, Goal>) {
     let mut generated_goals: BTreeMap<String, Goal> = BTreeMap::new();
     let goal_ids_to_remove: Vec<String> = Vec::new();
     for goal in goals.iter_mut() {
@@ -143,6 +143,7 @@ pub fn add_filler_goals(goals: &mut BTreeMap<String, Goal>) {
     goals.extend(results);
 }
 
+#[allow(dead_code)]
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     let mut goals = vec![];
     let dur = goal.min_duration.unwrap();

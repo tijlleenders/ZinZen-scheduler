@@ -62,11 +62,11 @@ fn get_next_weekend() {
         .unwrap()
         .and_hms_opt(1, 33, 7)
         .unwrap();
-    let next_weekend_from_monday = NaiveDate::from_ymd_opt(2022, 10, 8)
+    let _next_weekend_from_monday = NaiveDate::from_ymd_opt(2022, 10, 8)
         .unwrap()
         .and_hms_opt(0, 0, 0)
         .unwrap();
-    let next_weekend_from_weekend = NaiveDate::from_ymd_opt(2022, 10, 15)
+    let _next_weekend_from_weekend = NaiveDate::from_ymd_opt(2022, 10, 15)
         .unwrap()
         .and_hms_opt(0, 0, 0)
         .unwrap();
