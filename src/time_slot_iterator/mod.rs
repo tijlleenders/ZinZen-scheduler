@@ -6,6 +6,8 @@ use chrono::Days;
 use chrono::Duration;
 use chrono::NaiveDateTime;
 
+// derive Debug for TimeSlotsIterator
+#[derive(Debug)]
 /// An iterator that returns slots that conform to a repetition,
 /// with optional filters (after/before/Mondays/Weekdays/Weekends/Bank holidays...)
 /// e.g. iterate over all MONDAYS between 1st September 2022 and 30th September 2022.
@@ -41,15 +43,46 @@ impl TimeSlotsIterator {
     }
 
     fn apply_filters(&mut self) {
+        println!(
+            " = TimeSlotsIterator.apply_filters.self.timeline: {:?}",
+            self.timeline
+        );
+        // time => days
+        // daytime => days
+
         match &self.filters {
             Some(time_filter) => {
                 if time_filter.after_time.is_some() || time_filter.before_time.is_some() {
                     let mut result: Vec<Slot> = vec![];
                     for slot in self.timeline.iter_mut() {
+                        println!(" = TimeSlotsIterator.apply_filters.slot: {:?}", slot);
                         let mut daily_slots = slot.divide_in_days();
+                        println!(
+                            " = TimeSlotsIterator.apply_filters.daily_slots: {:?}",
+                            daily_slots
+                        );
                         if time_filter.after_time.is_some() && time_filter.before_time.is_some() {
+                            println!(" = TimeSlotsIterator.apply_filters. before and after_time are is_some");
                             //after and before time
                             for daily_slot in daily_slots.iter_mut() {
+                                println!(
+                                    " = TimeSlotsIterator.apply_filters.daily_slot: {:?}",
+                                    daily_slot
+                                );
+
+                                // TODO Create test case to handle if before_time and after_time is the same.
+                                // check: https://github.com/tijlleenders/ZinZen-scheduler/issues/281
+
+                                // TODO check if time_filter.after_time > time_filter.before_time (OVERLAP CASE)
+                                // - Assign time_filter.before_time to the next day slot
+                                // - else do below:
+
+                                // if time_filter.before_time.unwrap() > time_filter.after_time.unwrap() {
+                                //     println!(" = TimeSlotsIterator.apply_filters.before_time > after_time");
+                                //     daily_slot.start = time_filter.before_time.unwrap();
+                                // } else {
+                                //     println!(" = TimeSlotsIterator.apply_filters.before_time < after_time");
+
                                 let before_datetime = daily_slot
                                     .start
                                     .with_hour(time_filter.before_time.unwrap() as u32)
@@ -58,22 +91,43 @@ impl TimeSlotsIterator {
                                     .start
                                     .with_hour(time_filter.after_time.unwrap() as u32)
                                     .unwrap();
+                                println!(
+                                    " = TimeSlotsIterator.apply_filters.before_datetime: {:?}",
+                                    before_datetime
+                                );
+                                println!(
+                                    " = TimeSlotsIterator.apply_filters.after_datetime: {:?}",
+                                    after_datetime
+                                );
+
                                 if after_datetime > before_datetime {
+                                    println!(" = TimeSlotsIterator.apply_filters.after_datetime > before_datetime");
                                     if daily_slot.start < before_datetime {
+                                        println!(" = TimeSlotsIterator.apply_filters.daily_slot.start {} < before_datetime {}",daily_slot.start, before_datetime);
                                         result.push({
                                             Slot {
                                                 start: daily_slot.start,
                                                 end: before_datetime,
                                             }
-                                        })
+                                        });
+                                        println!(
+                                            " = TimeSlotsIterator.apply_filters.result: {:?}",
+                                            result
+                                        )
                                     }
                                     if daily_slot.end > after_datetime {
+                                        println!(" = TimeSlotsIterator.apply_filters.daily_slot.end {} > after_datetime {}",daily_slot.end, after_datetime);
+
                                         result.push({
                                             Slot {
                                                 start: after_datetime,
                                                 end: daily_slot.end,
                                             }
-                                        })
+                                        });
+                                        println!(
+                                            " = TimeSlotsIterator.apply_filters.result: {:?}",
+                                            result
+                                        )
                                     }
                                 } else {
                                     result.push({
@@ -114,6 +168,8 @@ impl TimeSlotsIterator {
                     }
                     self.timeline = result;
                 }
+                
+                println!(" = TimeSlotsIterator.apply_filters.time_filter (before `match &time_filter.on_days`): {:?}", time_filter);
                 match &time_filter.on_days {
                     Some(on_days) => match on_days.as_str() {
                         "Weekdays" => {

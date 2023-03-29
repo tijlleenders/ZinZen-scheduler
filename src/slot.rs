@@ -127,9 +127,13 @@ impl Slot {
         result
     }
     pub fn divide_in_days(&self) -> Vec<Slot> {
+        // TODO print
+        println!(" = Slot.divide_in_days.self: {:?}", self);
         let mut result = vec![];
         let mut start_slider = self.start.clone();
+        println!(" = Slot.divide_in_days.start_slider: {:?}", start_slider);
         while start_slider.lt(&self.end) {
+            println!(" = Slot.divide_in_days.start_slider lt: {:?}", start_slider);
             if start_slider.date().eq(&self.end.date()) {
                 result.push(Slot {
                     start: start_slider,

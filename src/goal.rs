@@ -141,10 +141,14 @@ impl Goal {
             self.filters,
             // Todo! add self.before_time filter
         );
+        println!(" = Goal.generate_tasks.time_slots_iterator.new(): {:#?}", time_slots_iterator);
         for time_slots in time_slots_iterator {
             let task_id = *counter;
             *counter += 1;
+            println!(" = Goal.generate_tasks.task_id: {:#?}", task_id);
+            println!("Goal.generate_tasks.time_slots.len(): {:?}", time_slots.len());
             if time_slots.len() > 0 && self.min_duration.is_some() {
+                println!("Goal.generate_tasks.time_slots: {:?}", time_slots);
                 let t = Task::new(
                     task_id,
                     self.id.clone(),
@@ -160,13 +164,17 @@ impl Goal {
                     self.after_goals.clone(),
                 );
                 tasks.push(t);
-            } else {
-                panic!("time_slots expected")
-            }
+            } 
+            // else {
+            //     // TODO FIX It seems panic is not accurate, it shouldn't panic but end iteration
+            //     panic!("time_slots expected")
+            // }
         }
-
+        print!("Goal.generate_tasks.tasks before end fn generate_tasks: {:?}", tasks);
         tasks
+
     }
+
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
