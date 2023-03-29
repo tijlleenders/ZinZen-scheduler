@@ -33,6 +33,22 @@ pub struct Task {
     pub calender_end: NaiveDateTime,
 }
 
+#[derive(Deserialize, Debug, Clone)]
+pub struct TaskDTO {
+    pub id: usize,
+    pub goal_id: String,
+    pub title: String,
+    pub duration: usize,
+    pub start: Option<NaiveDateTime>,
+    pub deadline: Option<NaiveDateTime>,
+    pub calender_start: NaiveDateTime,
+    pub calender_end: NaiveDateTime,
+    pub slots: Vec<Slot>,
+    pub status: TaskStatus,
+    pub tags: Vec<Tag>,
+    pub after_goals: Option<Vec<String>>,
+}
+
 impl PartialEq for Task {
     fn eq(&self, other: &Self) -> bool {
         self.flexibility == other.flexibility
@@ -83,34 +99,21 @@ impl Ord for Task {
 }
 
 impl Task {
-    pub fn new(
-        id: usize,
-        goal_id: String,
-        title: String,
-        duration: usize,
-        start: Option<NaiveDateTime>,
-        deadline: Option<NaiveDateTime>,
-        calender_start: NaiveDateTime,
-        calender_end: NaiveDateTime,
-        slots: Vec<Slot>,
-        status: TaskStatus,
-        tags: Vec<Tag>,
-        after_goals: Option<Vec<String>>,
-    ) -> Self {
+    pub fn new(dto: TaskDTO) -> Self {
         Self {
-            id,
-            goal_id,
-            title,
-            duration,
-            status: status,
+            id: dto.id,
+            goal_id: dto.goal_id,
+            title: dto.title,
+            duration: dto.duration,
+            status: dto.status,
+            start: dto.start,
+            deadline: dto.deadline,
+            slots: dto.slots,
+            tags: dto.tags,
+            after_goals: dto.after_goals,
+            calender_start: dto.calender_start,
+            calender_end: dto.calender_end,
             flexibility: 0,
-            start,
-            deadline,
-            slots: slots,
-            tags,
-            after_goals,
-            calender_start,
-            calender_end,
         }
     }
 
@@ -223,10 +226,10 @@ impl Task {
     }
 
     pub fn remove_from_blocked_by(&mut self, _id_string: String) {
-        if self.after_goals.is_none() {
-            return;
-        }
         // Todo!
+        // if self.after_goals.is_none() {
+        //     return;
+        // }
         // let mut ids = self.after_goals.clone().unwrap();
         // let index = ids.clone().iter().position(|x| x.eq(&id_string));
         // if index.is_some() {

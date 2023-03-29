@@ -29,10 +29,7 @@ impl TimeSlotsIterator {
         filters: Option<TimeFilter>,
     ) -> TimeSlotsIterator {
         let mut result = TimeSlotsIterator {
-            timeline: vec![Slot {
-                start: start,
-                end: end,
-            }],
+            timeline: vec![Slot { start, end }],
             repetition,
             filters,
             current_start_position: start, //override after applying filters

@@ -1,6 +1,6 @@
 use crate::{
     goal::{BudgetType, Tag},
-    task::{Task, TaskStatus},
+    task::{Task, TaskDTO, TaskStatus},
     time_slot_iterator::TimeSlotsIterator,
     Goal, Repetition, Slot,
 };
@@ -47,12 +47,12 @@ impl TaskBudget {
     fn test_decrement(&self, slot: &Slot) -> bool {
         let mut result = true;
         for slot_budget in self.slot_budgets.iter() {
-            if slot.start.ge(&slot_budget.slot.start) && slot.end.le(&slot_budget.slot.end) {
-                if slot_budget.max.is_some()
-                    && slot_budget.used + slot.num_hours() > slot_budget.max.unwrap()
-                {
-                    result = false;
-                }
+            if slot.start.ge(&slot_budget.slot.start)
+                && slot.end.le(&slot_budget.slot.end)
+                && slot_budget.max.is_some()
+                && slot_budget.used + slot.num_hours() > slot_budget.max.unwrap()
+            {
+                result = false;
             }
         }
         result
@@ -200,21 +200,21 @@ impl TaskBudgets {
                 let task_id = *counter;
                 *counter += 1;
                 if time_slots.len() > 0 {
-                    let t = Task::new(
-                        task_id,
-                        goal.id.clone(),
-                        goal.title.clone(),
-                        task_budget.1.min.unwrap(),
-                        None,
-                        None,
-                        goal.start.unwrap(),
-                        goal.deadline.unwrap(),
-                        time_slots,
-                        TaskStatus::BudgetMinWaitingForAdjustment,
-                        goal.tags.clone(),
-                        goal.after_goals.clone(),
-                    );
-                    tasks_result.push(t);
+                    let task = Task::new(TaskDTO {
+                        id: task_id,
+                        goal_id: goal.id.clone(),
+                        title: goal.title.clone(),
+                        duration: task_budget.1.min.unwrap(),
+                        start: None,
+                        deadline: None,
+                        calender_start: goal.start.unwrap(),
+                        calender_end: goal.deadline.unwrap(),
+                        slots: time_slots,
+                        status: TaskStatus::BudgetMinWaitingForAdjustment,
+                        tags: goal.tags.clone(),
+                        after_goals: goal.after_goals.clone(),
+                    });
+                    tasks_result.push(task);
                 } else {
                     panic!("time_slots expected")
                 }

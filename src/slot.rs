@@ -128,7 +128,7 @@ impl Slot {
     }
     pub fn divide_in_days(&self) -> Vec<Slot> {
         let mut result = vec![];
-        let mut start_slider = self.start.clone();
+        let mut start_slider = self.start;
         while start_slider.lt(&self.end) {
             if start_slider.date().eq(&self.end.date()) {
                 result.push(Slot {

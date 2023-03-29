@@ -2,7 +2,7 @@
 use crate::goal::Tag;
 use crate::input::{PlacedTasks, TasksToPlace};
 use crate::slot::*;
-use crate::task::{Task, TaskStatus};
+use crate::task::{Task, TaskStatus, TaskDTO};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
@@ -63,20 +63,20 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 if tasks_to_place.tasks[index].duration >= slot_budget.used {
                     let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
 
-                    let task_to_add = Task::new(
-                        tasks_to_place.tasks[index].id,
-                        tasks_to_place.tasks[index].goal_id.clone(),
-                        new_title,
-                        new_duration,
-                        None,
-                        None,
-                        tasks_to_place.tasks[index].calender_start,
-                        tasks_to_place.tasks[index].calender_end,
-                        result_slots,
-                        TaskStatus::ReadyToSchedule,
-                        tasks_to_place.tasks[index].tags.clone(),
-                        tasks_to_place.tasks[index].after_goals.clone(),
-                    );
+                    let task_to_add = Task::new(TaskDTO {
+                        id: tasks_to_place.tasks[index].id,
+                        goal_id: tasks_to_place.tasks[index].goal_id.clone(),
+                        title: new_title,
+                        duration: new_duration,
+                        start: None,
+                        deadline: None,
+                        calender_start: tasks_to_place.tasks[index].calender_start,
+                        calender_end: tasks_to_place.tasks[index].calender_end,
+                        slots: result_slots,
+                        status: TaskStatus::ReadyToSchedule,
+                        tags: tasks_to_place.tasks[index].tags.clone(),
+                        after_goals: tasks_to_place.tasks[index].after_goals.clone(),
+                    });
                     tasks_to_add.push(task_to_add);
                 }
             }

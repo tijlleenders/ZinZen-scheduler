@@ -1,4 +1,4 @@
-use crate::task::Task;
+use crate::task::{Task, TaskDTO};
 use crate::time_slot_iterator::TimeSlotsIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
@@ -145,22 +145,22 @@ impl Goal {
         for time_slots in time_slots_iterator {
             let task_id = *counter;
             *counter += 1;
-            if time_slots.len() > 0 && self.min_duration.is_some() {
-                let t = Task::new(
-                    task_id,
-                    self.id.clone(),
-                    self.title.clone(),
-                    self.min_duration.unwrap(),
-                    None,
-                    None,
-                    calendar_start,
-                    calendar_end,
-                    time_slots,
-                    TaskStatus::ReadyToSchedule,
-                    self.tags.clone(),
-                    self.after_goals.clone(),
-                );
-                tasks.push(t);
+            if !time_slots.is_empty() && self.min_duration.is_some() {
+                let task = Task::new(TaskDTO {
+                    id: task_id,
+                    goal_id: self.id.clone(),
+                    title: self.title.clone(),
+                    duration: self.min_duration.unwrap(),
+                    start: None,
+                    deadline: None,
+                    calender_start: calendar_start,
+                    calender_end: calendar_end,
+                    slots: time_slots,
+                    status: TaskStatus::ReadyToSchedule,
+                    tags: self.tags.clone(),
+                    after_goals: self.after_goals.clone(),
+                });
+                tasks.push(task);
             }
         }
         tasks
