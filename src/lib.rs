@@ -63,7 +63,7 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
     use output_formatter::*;
     use task_generator::task_generator;
     use task_placer::*;
-    
+
     let tasks = task_generator(input);
     let placed_tasks = task_placer(tasks);
     match output_formatter(placed_tasks) {
