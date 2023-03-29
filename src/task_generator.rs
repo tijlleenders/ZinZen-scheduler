@@ -61,7 +61,6 @@ fn add_start_and_end_where_none(
 
 fn add_optional_flex_duration_regular_goals(_goals: &mut BTreeMap<String, Goal>) {
     // TODO todo!();
-    return;
 }
 
 fn add_optional_flex_number_and_duration_habits_goals(goals: &mut BTreeMap<String, Goal>) {

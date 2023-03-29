@@ -236,10 +236,10 @@ impl TimeSlotsIterator {
                             panic!("Missing branch in on_days filter?")
                         }
                     },
-                    None => return,
+                    None => (),
                 }
             }
-            None => return,
+            None => (),
         }
     }
 }
@@ -247,7 +247,7 @@ impl TimeSlotsIterator {
 impl Iterator for TimeSlotsIterator {
     type Item = Vec<Slot>;
     fn next(&mut self) -> Option<Self::Item> {
-        if self.timeline.len() == 0 {
+        if self.timeline.is_empty() {
             return None;
         }
         match self.repetition {
@@ -274,7 +274,7 @@ impl Iterator for TimeSlotsIterator {
                     } else if next_start_position.gt(&slot.end) {
                         //next_start_position is 'past' the current slot
                         indexes_to_delete_count += 1;
-                        result.push(slot.clone());
+                        result.push(*slot);
                     } else {
                         //next_start_position is 'before' the current slot
                         self.current_start_position = next_start_position;
@@ -284,12 +284,12 @@ impl Iterator for TimeSlotsIterator {
                 for _i in 1..=indexes_to_delete_count {
                     self.timeline.remove(0);
                 }
-                return Some(result);
+                Some(result)
             }
             None => {
                 let result = self.timeline.clone();
                 self.timeline.clear();
-                return Some(result);
+                Some(result)
             }
         }
     }
@@ -299,22 +299,18 @@ pub fn get_start_of_repeat_step(
     current_date_time: &NaiveDateTime,
     repeat: Repetition,
 ) -> NaiveDateTime {
-    let mut result = current_date_time.clone();
+    let mut result = *current_date_time;
     match repeat {
-        Repetition::DAILY(_) => {
-            return result
-                .checked_add_days(Days::new(1))
-                .unwrap()
-                .with_hour(0)
-                .unwrap()
-                .with_minute(0)
-                .unwrap()
-                .with_second(0)
-                .unwrap()
-        }
-        Repetition::HOURLY => {
-            return result.checked_add_signed(Duration::hours(1)).unwrap();
-        }
+        Repetition::DAILY(_) => result
+            .checked_add_days(Days::new(1))
+            .unwrap()
+            .with_hour(0)
+            .unwrap()
+            .with_minute(0)
+            .unwrap()
+            .with_second(0)
+            .unwrap(),
+        Repetition::HOURLY => result.checked_add_signed(Duration::hours(1)).unwrap(),
         Repetition::Weekly(_) => {
             if result.weekday() == Weekday::Mon {
                 return result
@@ -342,8 +338,8 @@ pub fn get_start_of_repeat_step(
             panic!("shouldn't reach")
         }
         Repetition::WEEKDAYS => {
-            if result.weekday() == Weekday::Sat {
-                return result
+            match result.weekday() {
+                Weekday::Sat => result
                     .checked_add_days(Days::new(2))
                     .unwrap()
                     .with_hour(0)
@@ -351,9 +347,8 @@ pub fn get_start_of_repeat_step(
                     .with_minute(0)
                     .unwrap()
                     .with_second(0)
-                    .unwrap();
-            } else if result.weekday() == Weekday::Sun {
-                return result
+                    .unwrap(),
+                Weekday::Sun => result
                     .checked_add_days(Days::new(1))
                     .unwrap()
                     .with_hour(0)
@@ -361,9 +356,8 @@ pub fn get_start_of_repeat_step(
                     .with_minute(0)
                     .unwrap()
                     .with_second(0)
-                    .unwrap();
-            } else {
-                return result
+                    .unwrap(),
+                _ => result
                     .checked_add_days(Days::new(1))
                     .unwrap()
                     .with_hour(0)
@@ -371,8 +365,40 @@ pub fn get_start_of_repeat_step(
                     .with_minute(0)
                     .unwrap()
                     .with_second(0)
-                    .unwrap();
+                    .unwrap(),
             }
+
+            // if result.weekday() == Weekday::Sat {
+            //     return result
+            //         .checked_add_days(Days::new(2))
+            //         .unwrap()
+            //         .with_hour(0)
+            //         .unwrap()
+            //         .with_minute(0)
+            //         .unwrap()
+            //         .with_second(0)
+            //         .unwrap();
+            // } else if result.weekday() == Weekday::Sun {
+            //     return result
+            //         .checked_add_days(Days::new(1))
+            //         .unwrap()
+            //         .with_hour(0)
+            //         .unwrap()
+            //         .with_minute(0)
+            //         .unwrap()
+            //         .with_second(0)
+            //         .unwrap();
+            // } else {
+            //     return result
+            //         .checked_add_days(Days::new(1))
+            //         .unwrap()
+            //         .with_hour(0)
+            //         .unwrap()
+            //         .with_minute(0)
+            //         .unwrap()
+            //         .with_second(0)
+            //         .unwrap();
+            // }
         }
         Repetition::WEEKENDS => {
             if result.weekday() == Weekday::Sat {
@@ -411,22 +437,18 @@ pub fn get_start_of_repeat_step(
             }
             panic!("Shouldn't reach this");
         }
-        Repetition::EveryXdays(day_interval) => {
-            return result
-                .checked_add_days(Days::new(day_interval.try_into().unwrap()))
-                .unwrap()
-                .with_hour(0)
-                .unwrap()
-                .with_minute(0)
-                .unwrap()
-                .with_second(0)
-                .unwrap()
-        }
-        Repetition::EveryXhours(hour_interval) => {
-            return result
-                .checked_add_signed(Duration::hours(hour_interval.try_into().unwrap()))
-                .unwrap();
-        }
+        Repetition::EveryXdays(day_interval) => result
+            .checked_add_days(Days::new(day_interval.try_into().unwrap()))
+            .unwrap()
+            .with_hour(0)
+            .unwrap()
+            .with_minute(0)
+            .unwrap()
+            .with_second(0)
+            .unwrap(),
+        Repetition::EveryXhours(hour_interval) => result
+            .checked_add_signed(Duration::hours(hour_interval.try_into().unwrap()))
+            .unwrap(),
         Repetition::MONDAYS => {
             if result.weekday() == Weekday::Mon {
                 return result

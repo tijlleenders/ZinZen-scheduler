@@ -2,7 +2,7 @@
 use crate::goal::Tag;
 use crate::input::{PlacedTasks, TasksToPlace};
 use crate::slot::*;
-use crate::task::{Task, TaskStatus, TaskDTO};
+use crate::task::{Task, TaskDTO, TaskStatus};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
@@ -39,16 +39,16 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 let mut task_slots_to_adjust = tasks_to_place.tasks[index].slots.clone();
                 for slot in task_slots_to_adjust.iter_mut() {
                     if slot.start.lt(&slot_budget.slot.start) {
-                        slot.start = slot_budget.slot.start.clone();
+                        slot.start = slot_budget.slot.start;
                     }
                     if slot.end.lt(&slot_budget.slot.start) {
-                        slot.end = slot_budget.slot.start.clone();
+                        slot.end = slot_budget.slot.start;
                     }
                     if slot.end.gt(&slot_budget.slot.end) {
-                        slot.end = slot_budget.slot.end.clone();
+                        slot.end = slot_budget.slot.end;
                     }
                     if slot.start.gt(&slot_budget.slot.end) {
-                        slot.start = slot_budget.slot.end.clone();
+                        slot.start = slot_budget.slot.end;
                     }
                 }
                 let mut result_slots: Vec<Slot> = Vec::new();
@@ -88,14 +88,14 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
     tasks_to_place.tasks.extend(tasks_to_add);
 }
 
-fn schedule(mut tasks_to_place: &mut TasksToPlace) {
+fn schedule(tasks_to_place: &mut TasksToPlace) {
     loop {
         tasks_to_place.sort_on_flexibility();
         if tasks_to_place.tasks[0].status != TaskStatus::ReadyToSchedule {
             break;
         }
         match find_best_slots(&tasks_to_place.tasks) {
-            Some(chosen_slots) => do_the_scheduling(&mut tasks_to_place, chosen_slots),
+            Some(chosen_slots) => do_the_scheduling(tasks_to_place, chosen_slots),
             None => break,
         }
     }
