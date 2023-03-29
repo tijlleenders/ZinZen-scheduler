@@ -63,11 +63,8 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
     use output_formatter::*;
     use task_generator::task_generator;
     use task_placer::*;
-    println!("");
-    println!("===| run_scheduler |===\n");
-    println!("= run_scheduler.input: {:#?}", input);
+    
     let tasks = task_generator(input);
-    println!("= run_scheduler.tasks: {:#?}", tasks);
     let placed_tasks = task_placer(tasks);
     match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {

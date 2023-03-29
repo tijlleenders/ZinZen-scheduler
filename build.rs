@@ -91,21 +91,12 @@ fn main() -> Result<(), std::io::Error> {
 
 fn get_run_test() -> String {
     "fn run_test(directory: &str) -> (String, String) {
-    println!(\"  \");
-    println!(\" ======= \");
-    println!(\" ======= \");
-    println!(\"===| TEST: '{}' |===\", directory.clone());
     let i = format!(\"./tests/jsons/{}/input.json\", directory);
-    println!(\"-> run_test.input: {}\", i.clone());
     let o = format!(\"./tests/jsons/{}/output.json\", directory);
-    println!(\"-> run_test.output: {}\", o.clone());
     let input_path = Path::new(&i[..]);
-    println!(\"-> run_test.input_path: {:?}\", input_path.clone());
     let output_path = Path::new(&o[..]);
-    println!(\"-> run_test.output_path: {:?}\", output_path.clone());
     let input: Input = common::get_input_from_json(input_path).unwrap();
     let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
-    println!(\"-> run_test.desired_output: {:#?}\", desired_output.clone());
     let output: FinalOutput = scheduler::run_scheduler(input);
     (
         serde_json::to_string_pretty(&output).unwrap(),

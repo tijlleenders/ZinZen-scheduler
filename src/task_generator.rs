@@ -15,38 +15,19 @@ pub fn task_generator(
         goals,
     }: Input,
 ) -> TasksToPlace {
-    println!("");
-    println!("===| task_generator |===\n");
-
     let mut counter: usize = 0;
     let mut tasks: Vec<Task> = vec![];
     let mut goals: BTreeMap<String, Goal> =
         add_start_and_end_where_none(goals, calendar_start, calendar_end);
-    println!("= task_generator.goals: {:#?}", goals);
     add_filler_goals(&mut goals);
-    println!("= add_filler_goals");
-    println!("= task_generator.goals: {:#?}", goals);
     add_optional_flex_duration_regular_goals(&mut goals); //TODO
-    println!("= add_optional_flex_duration_regular_goals");
-    println!("= task_generator.goals: {:#?}", goals);
     add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
-    println!("= add_optional_flex_number_and_duration_habits_goals");
-    println!("= task_generator.goals: {:#?}", goals);
-
+    
     let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
-    println!("= task_generator.task_budgets: {:#?}", task_budgets);
     task_budgets.create_task_budgets_config(&mut goals);
-    println!("= task_budgets.create_task_budgets_config");
-    println!("= task_generator.goals: {:#?}", goals);
-    println!("= task_generator.tasks: {:#?}", tasks);
-    println!("= task_generator.task_budgets: {:#?}", task_budgets);
-
+    
     tasks.extend(task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter));
-    println!("= task_budgets.generate_budget_min_and_max_tasks");
-    println!("= task_generator.goals: {:#?}", goals);
-    println!("= task_generator.tasks: {:#?}", tasks);
-    println!("= task_generator.task_budgets: {:#?}", task_budgets);
-
+    
     for goal in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
         let tasks_for_goal: Vec<Task> =
