@@ -84,7 +84,7 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
-    write_test(&mut rust_tests_file, &mut result.join("\n").as_str())?;
+    write_test(&mut rust_tests_file, &mut result.join("\n").to_owned())?;
     Ok(())
 }
 
