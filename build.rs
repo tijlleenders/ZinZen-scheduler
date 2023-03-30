@@ -84,7 +84,8 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
-    write_test(&mut rust_tests_file, &mut result.join(""))?;
+    let mut formated_result = format_rust_code(result.join("\n").as_str()).unwrap();
+    write_test(&mut rust_tests_file, &mut formated_result)?;
     Ok(())
 }
 
@@ -105,4 +106,30 @@ fn get_run_test() -> String {
     }
     "
     .to_string()
+}
+
+
+fn format_rust_code(code: &str) -> std::io::Result<String> {
+    let mut rustfmt = std::process::Command::new("rustfmt")
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()?;
+
+    let mut stdin = rustfmt.stdin.take().unwrap();
+    stdin.write_all(code.as_bytes())?;
+    drop(stdin);
+
+    let mut stdout = rustfmt.stdout.take().unwrap();
+    let mut data = vec![];
+    std::io::Read::read_to_end(&mut stdout, &mut data)?;
+
+    let status = rustfmt.wait()?;
+    if !status.success() {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            format!("`rustfmt` exited with status {}", status),
+        ));
+    }
+
+    Ok(String::from_utf8(data).expect("rustfmt always writs utf-8 to stdout"))
 }
