@@ -84,7 +84,7 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
-    let mut formated_result = format_rust_code(result.join("\n").as_str()).unwrap();
+    let mut formated_result = format_rust_code(result.join("").as_str()).unwrap();
     write_test(&mut rust_tests_file, &mut formated_result)?;
     Ok(())
 }
