@@ -89,18 +89,20 @@ fn main() -> Result<(), std::io::Error> {
 }
 
 fn get_run_test() -> String {
-    "fn run_test(directory: &str) -> (String, String) {
-    let i = format!(\"./tests/jsons/{}/input.json\", directory);
-    let o = format!(\"./tests/jsons/{}/output.json\", directory);
-    let input_path = Path::new(&i[..]);
-    let output_path = Path::new(&o[..]);
-    let input: Input = common::get_input_from_json(input_path).unwrap();
-    let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
-    let output: FinalOutput = scheduler::run_scheduler(input);
-    (
-        serde_json::to_string_pretty(&output).unwrap(),
-        desired_output,
-    )
-    }"
+    "
+    fn run_test(directory: &str) -> (String, String) {
+        let i = format!("./tests/jsons/{}/input.json", directory);
+        let o = format!("./tests/jsons/{}/output.json", directory);
+        let input_path = Path::new(&i[..]);
+        let output_path = Path::new(&o[..]);
+        let input: Input = common::get_input_from_json(input_path).unwrap();
+        let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
+        let output: FinalOutput = scheduler::run_scheduler(input);
+        (
+            serde_json::to_string_pretty(&output).unwrap(),
+            desired_output,
+        )
+    }
+    "
     .to_string()
 }
