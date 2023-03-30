@@ -1,6 +1,6 @@
 use crate::{
     goal::{BudgetType, Tag},
-    task::{Task, TaskDTO, TaskStatus},
+    task::{Task, TaskStatus},
     time_slot_iterator::TimeSlotsIterator,
     Goal, Repetition, Slot,
 };
@@ -196,7 +196,7 @@ impl TaskBudgets {
                 let task_id = *counter;
                 *counter += 1;
                 if !time_slots.is_empty() {
-                    let task = Task::new(TaskDTO {
+                    let task = Task {
                         id: task_id,
                         goal_id: goal.id.clone(),
                         title: goal.title.clone(),
@@ -209,7 +209,8 @@ impl TaskBudgets {
                         status: TaskStatus::BudgetMinWaitingForAdjustment,
                         tags: goal.tags.clone(),
                         after_goals: goal.after_goals.clone(),
-                    });
+                        flexibility: 0,
+                    };
                     tasks_result.push(task);
                 } else {
                     panic!("time_slots expected")

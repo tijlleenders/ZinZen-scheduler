@@ -2,7 +2,7 @@
 use crate::goal::Tag;
 use crate::input::{PlacedTasks, TasksToPlace};
 use crate::slot::*;
-use crate::task::{Task, TaskDTO, TaskStatus};
+use crate::task::{Task, TaskStatus};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
@@ -63,7 +63,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 if tasks_to_place.tasks[index].duration >= slot_budget.used {
                     let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
 
-                    let task_to_add = Task::new(TaskDTO {
+                    let task_to_add = Task {
                         id: tasks_to_place.tasks[index].id,
                         goal_id: tasks_to_place.tasks[index].goal_id.clone(),
                         title: new_title,
@@ -76,7 +76,8 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                         status: TaskStatus::ReadyToSchedule,
                         tags: tasks_to_place.tasks[index].tags.clone(),
                         after_goals: tasks_to_place.tasks[index].after_goals.clone(),
-                    });
+                        flexibility: 0,
+                    };
                     tasks_to_add.push(task_to_add);
                 }
             }

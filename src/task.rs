@@ -33,22 +33,6 @@ pub struct Task {
     pub calender_end: NaiveDateTime,
 }
 
-#[derive(Deserialize, Debug, Clone)]
-pub struct TaskDTO {
-    pub id: usize,
-    pub goal_id: String,
-    pub title: String,
-    pub duration: usize,
-    pub start: Option<NaiveDateTime>,
-    pub deadline: Option<NaiveDateTime>,
-    pub calender_start: NaiveDateTime,
-    pub calender_end: NaiveDateTime,
-    pub slots: Vec<Slot>,
-    pub status: TaskStatus,
-    pub tags: Vec<Tag>,
-    pub after_goals: Option<Vec<String>>,
-}
-
 impl PartialEq for Task {
     fn eq(&self, other: &Self) -> bool {
         self.flexibility == other.flexibility
@@ -99,23 +83,7 @@ impl Ord for Task {
 }
 
 impl Task {
-    pub fn new(dto: TaskDTO) -> Self {
-        Self {
-            id: dto.id,
-            goal_id: dto.goal_id,
-            title: dto.title,
-            duration: dto.duration,
-            status: dto.status,
-            start: dto.start,
-            deadline: dto.deadline,
-            slots: dto.slots,
-            tags: dto.tags,
-            after_goals: dto.after_goals,
-            calender_start: dto.calender_start,
-            calender_end: dto.calender_end,
-            flexibility: 0,
-        }
-    }
+    
 
     pub fn calculate_flexibility(&mut self) {
         if self.status == TaskStatus::Scheduled {
