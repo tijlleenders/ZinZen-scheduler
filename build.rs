@@ -91,8 +91,8 @@ fn main() -> Result<(), std::io::Error> {
 fn get_run_test() -> String {
     "
     fn run_test(directory: &str) -> (String, String) {
-        let i = format!("./tests/jsons/{}/input.json", directory);
-        let o = format!("./tests/jsons/{}/output.json", directory);
+        let i = format!(\"./tests/jsons/{}/input.json\", directory);
+        let o = format!(\"./tests/jsons/{}/output.json\", directory);
         let input_path = Path::new(&i[..]);
         let output_path = Path::new(&o[..]);
         let input: Input = common::get_input_from_json(input_path).unwrap();
