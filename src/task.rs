@@ -83,8 +83,6 @@ impl Ord for Task {
 }
 
 impl Task {
-    
-
     pub fn calculate_flexibility(&mut self) {
         if self.status == TaskStatus::Scheduled {
             return;
