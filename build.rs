@@ -108,7 +108,6 @@ fn get_run_test() -> String {
     .to_string()
 }
 
-
 fn format_rust_code(code: &str) -> std::io::Result<String> {
     let mut rustfmt = std::process::Command::new("rustfmt")
         .stdin(std::process::Stdio::piped())
