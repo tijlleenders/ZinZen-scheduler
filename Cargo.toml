@@ -42,6 +42,8 @@ simple_logger = "4.0.0"
 # soft assertions without panic
 soft = "0.1.1"
 
+rustfmt = "0.10.0"
+
 
 
 # used to generate tests
