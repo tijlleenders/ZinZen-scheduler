@@ -84,51 +84,25 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
-    let mut formated_result = format_rust_code(result.join("").as_str()).unwrap();
-    write_test(&mut rust_tests_file, &mut formated_result)?;
+    write_test(&mut rust_tests_file, &mut result.join("\n").as_str())?;
     Ok(())
 }
 
 fn get_run_test() -> String {
     "
-    fn run_test(directory: &str) -> (String, String) {
-        let i = format!(\"./tests/jsons/{}/input.json\", directory);
-        let o = format!(\"./tests/jsons/{}/output.json\", directory);
-        let input_path = Path::new(&i[..]);
-        let output_path = Path::new(&o[..]);
-        let input: Input = common::get_input_from_json(input_path).unwrap();
-        let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
-        let output: FinalOutput = scheduler::run_scheduler(input);
-        (
-            serde_json::to_string_pretty(&output).unwrap(),
-            desired_output,
-        )
-    }
+fn run_test(directory: &str) -> (String, String) {
+    let i = format!(\"./tests/jsons/{}/input.json\", directory);
+    let o = format!(\"./tests/jsons/{}/output.json\", directory);
+    let input_path = Path::new(&i[..]);
+    let output_path = Path::new(&o[..]);
+    let input: Input = common::get_input_from_json(input_path).unwrap();
+    let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
+    let output: FinalOutput = scheduler::run_scheduler(input);
+    (
+        serde_json::to_string_pretty(&output).unwrap(),
+        desired_output,
+    )
+}
     "
     .to_string()
-}
-
-fn format_rust_code(code: &str) -> std::io::Result<String> {
-    let mut rustfmt = std::process::Command::new("rustfmt")
-        .stdin(std::process::Stdio::piped())
-        .stdout(std::process::Stdio::piped())
-        .spawn()?;
-
-    let mut stdin = rustfmt.stdin.take().unwrap();
-    stdin.write_all(code.as_bytes())?;
-    drop(stdin);
-
-    let mut stdout = rustfmt.stdout.take().unwrap();
-    let mut data = vec![];
-    std::io::Read::read_to_end(&mut stdout, &mut data)?;
-
-    let status = rustfmt.wait()?;
-    if !status.success() {
-        return Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("`rustfmt` exited with status {}", status),
-        ));
-    }
-
-    Ok(String::from_utf8(data).expect("rustfmt always writs utf-8 to stdout"))
 }
