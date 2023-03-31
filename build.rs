@@ -2,7 +2,7 @@ use std::io::Write;
 use std::path::PathBuf;
 
 fn write_test(file: &mut std::fs::File, content: &mut str) -> Result<(), std::io::Error> {
-    writeln!(file, "{}", content)?;
+    write!(file, "{}\n", content)?;
     Ok(())
 }
 
@@ -49,13 +49,12 @@ fn space() -> String {
 fn get_imports() -> String {
     let mut result = vec!["extern crate scheduler;".to_string()];
 
-    result.push("\nuse simple_logger::SimpleLogger;".to_string());
     result.push("\nextern crate soft;".to_string());
     result.push("\nmod common;".to_string());
     result.push("\n#[cfg(test)]".to_string());
     result.push("\nuse pretty_assertions::assert_eq;".to_string());
     result.push("\nuse scheduler::{FinalOutput, Input};".to_string());
-    result.push("\nuse std::path::Path;\n\n".to_string());
+    result.push("\nuse std::path::Path;".to_string());
 
     result.join("")
 }
@@ -85,12 +84,16 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
-    write_test(&mut rust_tests_file, &mut result.join(""))?;
+    write_test(
+        &mut rust_tests_file,
+        &mut result.join("\n").trim().to_owned(),
+    )?;
     Ok(())
 }
 
 fn get_run_test() -> String {
-    "fn run_test(directory: &str) -> (String, String) {
+    "
+fn run_test(directory: &str) -> (String, String) {
     let i = format!(\"./tests/jsons/{}/input.json\", directory);
     let o = format!(\"./tests/jsons/{}/output.json\", directory);
     let input_path = Path::new(&i[..]);

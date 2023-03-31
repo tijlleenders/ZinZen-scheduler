@@ -47,12 +47,12 @@ impl TaskBudget {
     fn test_decrement(&self, slot: &Slot) -> bool {
         let mut result = true;
         for slot_budget in self.slot_budgets.iter() {
-            if slot.start.ge(&slot_budget.slot.start) && slot.end.le(&slot_budget.slot.end) {
-                if slot_budget.max.is_some()
-                    && slot_budget.used + slot.num_hours() > slot_budget.max.unwrap()
-                {
-                    result = false;
-                }
+            if slot.start.ge(&slot_budget.slot.start)
+                && slot.end.le(&slot_budget.slot.end)
+                && slot_budget.max.is_some()
+                && slot_budget.used + slot.num_hours() > slot_budget.max.unwrap()
+            {
+                result = false;
             }
         }
         result
@@ -64,16 +64,12 @@ impl TaskBudget {
             BudgetType::Weekly => (),
             BudgetType::Daily => repetition = Repetition::DAILY(1),
         }
-        let mut time_slot_iterator = TimeSlotsIterator::new(
-            budget_start.clone(),
-            budget_end.clone(),
-            Some(repetition),
-            None,
-        );
-        while let Some(slots) = time_slot_iterator.next() {
+        let time_slot_iterator =
+            TimeSlotsIterator::new(budget_start, budget_end, Some(repetition), None);
+        for slots in time_slot_iterator {
             for slot in slots {
                 self.slot_budgets.push(SlotBudget {
-                    slot: slot.clone(),
+                    slot,
                     min: self.min,
                     max: self.max,
                     used: 0,
@@ -86,21 +82,21 @@ impl TaskBudget {
 impl TaskBudgets {
     pub fn new(calendar_start: &NaiveDateTime, calendar_end: &NaiveDateTime) -> Self {
         Self {
-            calendar_start: calendar_start.clone(),
-            calendar_end: calendar_end.clone(),
+            calendar_start: *calendar_start,
+            calendar_end: *calendar_end,
             goal_id_to_budget_ids: HashMap::new(),
             budget_id_to_budget: HashMap::new(),
         }
     }
 
-    pub fn create_task_budgets_config(&mut self, mut goals: &mut BTreeMap<String, Goal>) {
+    pub fn create_task_budgets_config(&mut self, goals: &mut BTreeMap<String, Goal>) {
         // Todo: create a shadow tasks per budget period that have a tag so the won't be handled by initial call to schedule
         // Once all Tasks are scheduled, if a minimum budget per period is not reached,
         // give the task a duration to get to the minimum per period, remove don't schedule tag, mark ready to schedule and schedule
         // ! How to avoid overlapping budgets? Go from inner to outer budgets (/day first => then /week)
         // This way of shadowing is required so that the min budget scheduling at the end also takes into account the relevant filters and what slots have been taken already
         // It is also necessary to make the tasks being scheduled earlier (Regular and Filler) aware of the slots the budget_min is 'vying for' so they can try to 'keep away'
-        if goals.len() == 0 {
+        if goals.is_empty() {
             panic!("expected goals for making TaskBudgets");
         }
 
@@ -120,13 +116,13 @@ impl TaskBudgets {
             let mut parents_to_go: Vec<String> = vec![budget.0.clone()]; //start with the goal that initiates the budget
             self.goal_id_to_budget_ids
                 .insert(budget.0.clone(), vec![budget.0.clone()]); //add itself for when budget filler min-max need to be checked with budget
-            while parents_to_go.len() > 0 {
+            while !parents_to_go.is_empty() {
                 let children = &goals.get(&parents_to_go[0]).unwrap().children;
                 if children.is_some() {
                     for child_id in children.as_ref().unwrap() {
                         let temp_to_update = self.goal_id_to_budget_ids.get_mut(child_id);
-                        if temp_to_update.is_some() {
-                            temp_to_update.unwrap().push(budget.0.clone());
+                        if let Some(temp) = temp_to_update {
+                            temp.push(budget.0.clone());
                         } else {
                             self.goal_id_to_budget_ids
                                 .insert(child_id.clone(), vec![budget.0.clone()]);
@@ -137,7 +133,7 @@ impl TaskBudgets {
                 parents_to_go.remove(0);
             }
         }
-        for (budget_id, budget) in &mut self.budget_id_to_budget {
+        for budget in self.budget_id_to_budget.values_mut() {
             budget.initialize(self.calendar_start, self.calendar_end);
         }
     }
@@ -147,8 +143,8 @@ impl TaskBudgets {
             let budget = TaskBudget {
                 task_budget_type: budget.budget_type.clone(),
                 slot_budgets: Vec::new(),
-                min: budget.min.clone(),
-                max: budget.max.clone(),
+                min: budget.min,
+                max: budget.max,
             };
             self.budget_id_to_budget.insert(goal.id.clone(), budget);
         }
@@ -164,14 +160,14 @@ impl TaskBudgets {
         let mut decrement_all = true;
         for budget_id in budget_ids.unwrap().iter() {
             let budget = self.budget_id_to_budget.get_mut(budget_id).unwrap();
-            if budget.test_decrement(slot) == false {
+            if !budget.test_decrement(slot) {
                 decrement_all = false;
                 break;
             }
         }
         if decrement_all {
             for budget_id in budget_ids.unwrap().iter() {
-                let mut budget = self.budget_id_to_budget.get_mut(budget_id).unwrap();
+                let budget = self.budget_id_to_budget.get_mut(budget_id).unwrap();
                 budget.decrement(slot);
             }
             result = true;
@@ -181,7 +177,7 @@ impl TaskBudgets {
 
     pub fn generate_budget_min_and_max_tasks(
         &mut self,
-        mut goals: &mut BTreeMap<String, Goal>,
+        goals: &mut BTreeMap<String, Goal>,
         counter: &mut usize,
     ) -> Vec<Task> {
         let mut tasks_result: Vec<Task> = Vec::new();
@@ -199,22 +195,23 @@ impl TaskBudgets {
             for time_slots in time_slots_iterator {
                 let task_id = *counter;
                 *counter += 1;
-                if time_slots.len() > 0 {
-                    let t = Task::new(
-                        task_id,
-                        goal.id.clone(),
-                        goal.title.clone(),
-                        task_budget.1.min.unwrap(),
-                        None,
-                        None,
-                        goal.start.unwrap(),
-                        goal.deadline.unwrap(),
-                        time_slots,
-                        TaskStatus::BudgetMinWaitingForAdjustment,
-                        goal.tags.clone(),
-                        goal.after_goals.clone(),
-                    );
-                    tasks_result.push(t);
+                if !time_slots.is_empty() {
+                    let task = Task {
+                        id: task_id,
+                        goal_id: goal.id.clone(),
+                        title: goal.title.clone(),
+                        duration: task_budget.1.min.unwrap(),
+                        start: None,
+                        deadline: None,
+                        calender_start: goal.start.unwrap(),
+                        calender_end: goal.deadline.unwrap(),
+                        slots: time_slots,
+                        status: TaskStatus::BudgetMinWaitingForAdjustment,
+                        tags: goal.tags.clone(),
+                        after_goals: goal.after_goals.clone(),
+                        flexibility: 0,
+                    };
+                    tasks_result.push(task);
                 } else {
                     panic!("time_slots expected")
                 }

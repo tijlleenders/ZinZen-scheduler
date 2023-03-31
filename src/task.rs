@@ -83,37 +83,6 @@ impl Ord for Task {
 }
 
 impl Task {
-    pub fn new(
-        id: usize,
-        goal_id: String,
-        title: String,
-        duration: usize,
-        start: Option<NaiveDateTime>,
-        deadline: Option<NaiveDateTime>,
-        calender_start: NaiveDateTime,
-        calender_end: NaiveDateTime,
-        slots: Vec<Slot>,
-        status: TaskStatus,
-        tags: Vec<Tag>,
-        after_goals: Option<Vec<String>>,
-    ) -> Self {
-        Self {
-            id,
-            goal_id,
-            title,
-            duration,
-            status: status,
-            flexibility: 0,
-            start,
-            deadline,
-            slots: slots,
-            tags,
-            after_goals,
-            calender_start,
-            calender_end,
-        }
-    }
-
     pub fn calculate_flexibility(&mut self) {
         if self.status == TaskStatus::Scheduled {
             return;
@@ -222,11 +191,11 @@ impl Task {
         self.slots = new_slots;
     }
 
-    pub fn remove_from_blocked_by(&mut self, id_string: String) {
-        if self.after_goals.is_none() {
-            return;
-        }
+    pub fn remove_from_blocked_by(&mut self, _id_string: String) {
         // Todo!
+        // if self.after_goals.is_none() {
+        //     return;
+        // }
         // let mut ids = self.after_goals.clone().unwrap();
         // let index = ids.clone().iter().position(|x| x.eq(&id_string));
         // if index.is_some() {

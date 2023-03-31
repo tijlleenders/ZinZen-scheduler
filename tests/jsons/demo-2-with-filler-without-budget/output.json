@@ -116,7 +116,7 @@
         },
         {
           "taskid": 12,
-          "goalid": "3-filler",
+          "goalid": "3",
           "title": "Project B filler",
           "duration": 8,
           "start": "2018-03-12T08:00:00",
@@ -145,7 +145,7 @@
         },
         {
           "taskid": 15,
-          "goalid": "3-filler",
+          "goalid": "3",
           "title": "Project B filler",
           "duration": 3,
           "start": "2018-03-13T08:00:00",

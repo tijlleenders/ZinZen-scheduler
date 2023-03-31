@@ -1,5 +1,5 @@
 use chrono::NaiveDateTime;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 
 use crate::goal::{Goal, Tag};
 use crate::input::{Input, TasksToPlace};
@@ -25,6 +25,7 @@ pub fn task_generator(
 
     let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
     task_budgets.create_task_budgets_config(&mut goals);
+
     tasks.extend(task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter));
 
     for goal in goals {
@@ -58,12 +59,11 @@ fn add_start_and_end_where_none(
     goals
 }
 
-fn add_optional_flex_duration_regular_goals(mut goals: &mut BTreeMap<String, Goal>) {
-    return;
-    todo!();
+fn add_optional_flex_duration_regular_goals(_goals: &mut BTreeMap<String, Goal>) {
+    // TODO todo!();
 }
 
-fn add_optional_flex_number_and_duration_habits_goals(mut goals: &mut BTreeMap<String, Goal>) {
+fn add_optional_flex_number_and_duration_habits_goals(goals: &mut BTreeMap<String, Goal>) {
     let mut generated_goals: BTreeMap<String, Goal> = BTreeMap::new();
     let goal_ids_to_remove: Vec<String> = Vec::new();
     for goal in goals.iter_mut() {
@@ -99,27 +99,22 @@ pub fn add_filler_goals(goals: &mut BTreeMap<String, Goal>) {
     let mut results: BTreeMap<String, Goal> = BTreeMap::new();
     let mut ignore: Vec<String> = Vec::new();
     let mut children_to_add: Vec<(String, String)> = Vec::new();
-
     for goal in goals.iter() {
-        if goal.1.children.is_some() {
-            if goal.1.budgets.is_none() {
-                let mut duration_of_children: usize = 0;
-                for child in goal.1.children.clone().unwrap().iter() {
-                    let child_goal = goals.get(child).unwrap();
-                    duration_of_children += child_goal.min_duration.unwrap();
-                }
-                let difference = goal.1.min_duration.unwrap() - duration_of_children;
-                if difference > 0 {
-                    let mut filler_goal = goal.1.clone();
-                    filler_goal.id.push_str("-filler");
-                    children_to_add.push((goal.1.id.clone(), filler_goal.id.clone()));
-                    filler_goal.title.push_str(" filler");
-                    filler_goal.min_duration = Some(difference);
-                    filler_goal.children = None;
-                    filler_goal.tags.push(Tag::Filler);
-                    results.insert(filler_goal.id.clone(), filler_goal);
-                    ignore.push(goal.1.id.clone());
-                }
+        if goal.1.children.is_some() && goal.1.budgets.is_none() {
+            let mut duration_of_children: usize = 0;
+            for child in goal.1.children.clone().unwrap().iter() {
+                let child_goal = goals.get(child).unwrap();
+                duration_of_children += child_goal.min_duration.unwrap();
+            }
+            let difference = goal.1.min_duration.unwrap() - duration_of_children;
+            if difference > 0 {
+                let mut filler_goal = goal.1.clone();
+                children_to_add.push((goal.1.id.clone(), filler_goal.id.clone()));
+                filler_goal.title.push_str(" filler");
+                filler_goal.min_duration = Some(difference);
+                filler_goal.tags.push(Tag::Filler);
+                results.insert(filler_goal.id.clone(), filler_goal);
+                ignore.push(goal.1.id.clone());
             }
         }
     }
@@ -142,6 +137,7 @@ pub fn add_filler_goals(goals: &mut BTreeMap<String, Goal>) {
     goals.extend(results);
 }
 
+#[allow(dead_code)]
 fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     let mut goals = vec![];
     let dur = goal.min_duration.unwrap();
