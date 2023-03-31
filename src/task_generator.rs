@@ -99,7 +99,6 @@ pub fn add_filler_goals(goals: &mut BTreeMap<String, Goal>) {
     let mut results: BTreeMap<String, Goal> = BTreeMap::new();
     let mut ignore: Vec<String> = Vec::new();
     let mut children_to_add: Vec<(String, String)> = Vec::new();
-
     for goal in goals.iter() {
         if goal.1.children.is_some() && goal.1.budgets.is_none() {
             let mut duration_of_children: usize = 0;
@@ -110,11 +109,9 @@ pub fn add_filler_goals(goals: &mut BTreeMap<String, Goal>) {
             let difference = goal.1.min_duration.unwrap() - duration_of_children;
             if difference > 0 {
                 let mut filler_goal = goal.1.clone();
-                filler_goal.id.push_str("-filler");
                 children_to_add.push((goal.1.id.clone(), filler_goal.id.clone()));
                 filler_goal.title.push_str(" filler");
                 filler_goal.min_duration = Some(difference);
-                filler_goal.children = None;
                 filler_goal.tags.push(Tag::Filler);
                 results.insert(filler_goal.id.clone(), filler_goal);
                 ignore.push(goal.1.id.clone());
