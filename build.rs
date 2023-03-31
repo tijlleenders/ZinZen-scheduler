@@ -2,7 +2,7 @@ use std::io::Write;
 use std::path::PathBuf;
 
 fn write_test(file: &mut std::fs::File, content: &mut str) -> Result<(), std::io::Error> {
-    write!(file, "{}", content)?;
+    write!(file, "{}\n", content)?;
     Ok(())
 }
 
@@ -54,7 +54,7 @@ fn get_imports() -> String {
     result.push("\n#[cfg(test)]".to_string());
     result.push("\nuse pretty_assertions::assert_eq;".to_string());
     result.push("\nuse scheduler::{FinalOutput, Input};".to_string());
-    result.push("\nuse std::path::Path;\n\n".to_string());
+    result.push("\nuse std::path::Path;".to_string());
 
     result.join("")
 }
@@ -84,7 +84,10 @@ fn main() -> Result<(), std::io::Error> {
     }
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
-    write_test(&mut rust_tests_file, &mut result.join("\n").to_owned())?;
+    write_test(
+        &mut rust_tests_file,
+        &mut result.join("\n").trim().to_owned(),
+    )?;
     Ok(())
 }
 
@@ -102,7 +105,6 @@ fn run_test(directory: &str) -> (String, String) {
         serde_json::to_string_pretty(&output).unwrap(),
         desired_output,
     )
-}
-    "
+}"
     .to_string()
 }
