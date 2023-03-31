@@ -25,9 +25,16 @@ jobs:
       with:
           toolchain: nightly
           override: true
-          components: rustfmt
+          components: rustfmt clippy
     - name: Run rust fmt
       uses: actions-rs/cargo@v1
       with:
           command: fmt
           args: --all -- --check
+    - name: Run rust clippy
+      uses: actions-rs/cargo@v1
+      with:
+          command: clippy
+          args: --release -- -D warnings
+
+
