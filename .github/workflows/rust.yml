@@ -31,3 +31,12 @@ jobs:
       with:
           command: fmt
           args: --all -- --check
+    - name: Install clippy component
+      run: rustup component add clippy
+    - name: Run rust clippy
+      uses: actions-rs/cargo@v1
+      with:
+          command: clippy
+          args: --release -- -D warnings
+
+

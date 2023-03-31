@@ -2,7 +2,7 @@ use std::io::Write;
 use std::path::PathBuf;
 
 fn write_test(file: &mut std::fs::File, content: &mut str) -> Result<(), std::io::Error> {
-    write!(file, "{}\n", content)?;
+    writeln!(file, "{}", content)?;
     Ok(())
 }
 
