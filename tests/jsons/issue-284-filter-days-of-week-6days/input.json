@@ -9,7 +9,7 @@
       "filters": {
         "after_time": 8,
         "before_time": 12,
-        "on_days": ["Thursdays","Fridays", "Saturdays", "Sundays", "Mondays", "Tuesdays"]
+        "on_days": ["Thu","Fri", "Sat", "Sun", "Mon", "Tue"]
       }
     }
   }
