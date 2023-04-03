@@ -1,0 +1,16 @@
+{
+  "startDate": "2023-03-09T00:00:00",
+  "endDate": "2023-03-20T00:00:00",
+  "goals": {
+    "1": {
+      "id": "1",
+      "title": "learn rust",
+      "min_duration": 2,
+      "filters": {
+        "after_time": 8,
+        "before_time": 12,
+        "on_days": ["Fridays", "Saturdays", "Sundays", "Mondays"]
+      }
+    }
+  }
+}
