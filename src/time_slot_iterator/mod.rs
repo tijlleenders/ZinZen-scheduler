@@ -116,126 +116,41 @@ impl TimeSlotsIterator {
                 }
 
                 match &time_filter.on_days {
-                    Some(on_days) => match on_days.as_str() {
-                        "Weekdays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Mon
-                                        || slot.start.weekday() == Weekday::Tue
-                                        || slot.start.weekday() == Weekday::Wed
-                                        || slot.start.weekday() == Weekday::Thu
-                                        || slot.start.weekday() == Weekday::Fri
-                                    {
-                                        result.push(*daily_slot);
-                                    }
+                    Some(on_days) => {
+                        let mut result: Vec<Slot> = vec![];
+                        let weekday = match on_days.as_str() {
+                            "Weekdays" => vec![
+                                Weekday::Mon,
+                                Weekday::Tue,
+                                Weekday::Wed,
+                                Weekday::Thu,
+                                Weekday::Fri,
+                            ],
+                            "Weekends" => vec![Weekday::Sat, Weekday::Sun],
+                            "Mondays" => vec![Weekday::Mon],
+                            "Tuesdays" => vec![Weekday::Tue],
+                            "Wednesdays" => vec![Weekday::Wed],
+                            "Thursdays" => vec![Weekday::Thu],
+                            "Fridays" => vec![Weekday::Fri],
+                            "Saturdays" => vec![Weekday::Sat],
+                            "Sundays" => vec![Weekday::Sun],
+                            _ => panic!("Missing branch in on_days filter?"), // Added missing branch for default case.
+                        };
+
+                        for slot in self.timeline.iter_mut() {
+                            let mut daily_slots = slot.divide_in_days();
+
+                            for daily_slot in daily_slots.iter_mut() {
+                                // Check if the weekday matches with the given on days filter value
+                                //  and push it to result vector if true.
+                                if weekday.contains(&slot.start.weekday()) {
+                                    result.push(*daily_slot);
                                 }
                             }
-                            self.timeline = result;
                         }
-                        "Weekends" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Sat
-                                        || slot.start.weekday() == Weekday::Sun
-                                    {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        "Mondays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Mon {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        "Tuesdays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Tue {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        "Wednesdays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Wed {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        "Thursdays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Thu {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        "Fridays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Fri {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        "Saturdays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Sat {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        "Sundays" => {
-                            let mut result: Vec<Slot> = vec![];
-                            for slot in self.timeline.iter_mut() {
-                                let mut daily_slots = slot.divide_in_days();
-                                for daily_slot in daily_slots.iter_mut() {
-                                    if slot.start.weekday() == Weekday::Sun {
-                                        result.push(*daily_slot);
-                                    }
-                                }
-                            }
-                            self.timeline = result;
-                        }
-                        _ => {
-                            panic!("Missing branch in on_days filter?")
-                        }
-                    },
+
+                        self.timeline = result;
+                    }
                     None => (),
                 }
             }
