@@ -120,25 +120,6 @@ impl TimeSlotsIterator {
                     Some(on_days) => {
                         // Todo 2023-04-04  | make sure that on_days is not duplicated items
                         let mut result: Vec<Slot> = vec![];
-                        // let active_days = match on_days.as_str() {
-                        //     "Weekdays" => vec![
-                        //         Weekday::Mon,
-                        //         Weekday::Tue,
-                        //         Weekday::Wed,
-                        //         Weekday::Thu,
-                        //         Weekday::Fri,
-                        //     ],
-                        //     "Weekends" => vec![Weekday::Sat, Weekday::Sun],
-                        //     "Mondays" => vec![Weekday::Mon],
-                        //     "Tuesdays" => vec![Weekday::Tue],
-                        //     "Wednesdays" => vec![Weekday::Wed],
-                        //     "Thursdays" => vec![Weekday::Thu],
-                        //     "Fridays" => vec![Weekday::Fri],
-                        //     "Saturdays" => vec![Weekday::Sat],
-                        //     "Sundays" => vec![Weekday::Sun],
-                        //     _ => panic!("Missing branch in on_days filter?"), // Added missing branch for default case.
-                        // };
-
                         for slot in self.timeline.iter_mut() {
                             let mut daily_slots = slot.divide_in_days();
 
