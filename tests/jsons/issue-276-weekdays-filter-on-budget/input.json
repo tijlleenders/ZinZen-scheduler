@@ -15,7 +15,7 @@
       "filters": {
         "after_time": 8,
         "before_time": 16,
-        "on_days": "Weekdays"
+        "on_days": ["Weekdays"]
       }
     }
   }

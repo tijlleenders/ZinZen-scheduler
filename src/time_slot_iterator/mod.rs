@@ -1,3 +1,4 @@
+use crate::goal::Day;
 use crate::goal::TimeFilter;
 use crate::repetition::Repetition;
 use crate::slot::Slot;
@@ -117,25 +118,26 @@ impl TimeSlotsIterator {
 
                 match &time_filter.on_days {
                     Some(on_days) => {
+                        // Todo 2023-04-04  | make sure that on_days is not duplicated items
                         let mut result: Vec<Slot> = vec![];
-                        let weekday = match on_days.as_str() {
-                            "Weekdays" => vec![
-                                Weekday::Mon,
-                                Weekday::Tue,
-                                Weekday::Wed,
-                                Weekday::Thu,
-                                Weekday::Fri,
-                            ],
-                            "Weekends" => vec![Weekday::Sat, Weekday::Sun],
-                            "Mondays" => vec![Weekday::Mon],
-                            "Tuesdays" => vec![Weekday::Tue],
-                            "Wednesdays" => vec![Weekday::Wed],
-                            "Thursdays" => vec![Weekday::Thu],
-                            "Fridays" => vec![Weekday::Fri],
-                            "Saturdays" => vec![Weekday::Sat],
-                            "Sundays" => vec![Weekday::Sun],
-                            _ => panic!("Missing branch in on_days filter?"), // Added missing branch for default case.
-                        };
+                        // let active_days = match on_days.as_str() {
+                        //     "Weekdays" => vec![
+                        //         Weekday::Mon,
+                        //         Weekday::Tue,
+                        //         Weekday::Wed,
+                        //         Weekday::Thu,
+                        //         Weekday::Fri,
+                        //     ],
+                        //     "Weekends" => vec![Weekday::Sat, Weekday::Sun],
+                        //     "Mondays" => vec![Weekday::Mon],
+                        //     "Tuesdays" => vec![Weekday::Tue],
+                        //     "Wednesdays" => vec![Weekday::Wed],
+                        //     "Thursdays" => vec![Weekday::Thu],
+                        //     "Fridays" => vec![Weekday::Fri],
+                        //     "Saturdays" => vec![Weekday::Sat],
+                        //     "Sundays" => vec![Weekday::Sun],
+                        //     _ => panic!("Missing branch in on_days filter?"), // Added missing branch for default case.
+                        // };
 
                         for slot in self.timeline.iter_mut() {
                             let mut daily_slots = slot.divide_in_days();
@@ -143,7 +145,8 @@ impl TimeSlotsIterator {
                             for daily_slot in daily_slots.iter_mut() {
                                 // Check if the weekday matches with the given on days filter value
                                 //  and push it to result vector if true.
-                                if weekday.contains(&slot.start.weekday()) {
+                                let start_day: String = slot.start.weekday().to_string();
+                                if on_days.contains(&Day::from(start_day)) {
                                     result.push(*daily_slot);
                                 }
                             }

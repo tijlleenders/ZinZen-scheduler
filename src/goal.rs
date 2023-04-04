@@ -37,63 +37,63 @@ pub struct Goal {
 }
 
 #[derive(Deserialize, Debug, Clone, PartialEq)]
-pub enum Days {
-    Fridays,
-    Saturdays,
-    Sundays,
-    Mondays,
-    Tuesdays,
-    Wednesdays,
-    Thurdsdays,
+pub enum Day {
+    Fri,
+    Sat,
+    Sun,
+    Mon,
+    Tue,
+    Wed,
+    Thu,
 }
 
-impl From<String> for Days {
+impl From<String> for Day {
     fn from(day: String) -> Self {
         info!("From<String> day-string: {:?}", day);
 
         match day.to_lowercase().as_str() {
-            "fri" => Days::Fridays,
-            "sat" => Days::Saturdays,
-            "sun" => Days::Sundays,
-            "mon" => Days::Mondays,
-            "tue" => Days::Tuesdays,
-            "wed" => Days::Wednesdays,
-            "thu" => Days::Thurdsdays,
+            "fri" => Day::Fri,
+            "sat" => Day::Sat,
+            "sun" => Day::Sun,
+            "mon" => Day::Mon,
+            "tue" => Day::Tue,
+            "wed" => Day::Wed,
+            "thu" => Day::Thu,
             _ => panic!("Invalid day selection"),
         }
     }
 }
 
-impl From<Days> for String {
-    fn from(day: Days) -> Self {
+impl From<Day> for String {
+    fn from(day: Day) -> Self {
         info!("From<Days> day: {:?}", day);
         match day {
-            Days::Fridays => "Fri".into(),
-            Days::Saturdays => "Sat".into(),
-            Days::Sundays => "Sun".into(),
-            Days::Mondays => "Mon".into(),
-            Days::Tuesdays => "Tue".into(),
-            Days::Wednesdays => "Wed".into(),
-            Days::Thurdsdays => "Thu".into(),
+            Day::Fri => "Fri".into(),
+            Day::Sat => "Sat".into(),
+            Day::Sun => "Sun".into(),
+            Day::Mon => "Mon".into(),
+            Day::Tue => "Tue".into(),
+            Day::Wed => "Wed".into(),
+            Day::Thu => "Thu".into(),
         }
     }
 }
 
 #[test]
 fn test_convert_day_object_from_string() {
-    let day: Days = Days::from("Tue".to_string());
-    assert_eq!(day, Days::Tuesdays);
+    let day: Day = Day::from("Tue".to_string());
+    assert_eq!(day, Day::Tue);
 
-    let day: Days = Days::from("tue".to_string());
-    assert_eq!(day, Days::Tuesdays);
+    let day: Day = Day::from("tue".to_string());
+    assert_eq!(day, Day::Tue);
 
-    let day: Days = Days::from("thu".to_string());
-    assert_eq!(day, Days::Thurdsdays);
+    let day: Day = Day::from("thu".to_string());
+    assert_eq!(day, Day::Thu);
 }
 
 #[test]
 fn test_convert_day_object_into_string() {
-    let fri_converted: String = Days::Fridays.into();
+    let fri_converted: String = Day::Fri.into();
 
     let fri_str: String = "Fri".to_string();
     assert_eq!(fri_str, fri_converted);
@@ -106,7 +106,7 @@ fn test_convert_day_object_into_string() {
 pub struct TimeFilter {
     pub after_time: Option<usize>,
     pub before_time: Option<usize>,
-    pub on_days: Option<String>,
+    pub on_days: Option<Vec<Day>>,
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
