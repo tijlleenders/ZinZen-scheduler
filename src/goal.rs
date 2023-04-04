@@ -2,6 +2,7 @@ use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotsIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
+use log::info;
 use serde::{Deserialize, Serialize};
 use std::option::Option;
 
@@ -33,6 +34,72 @@ pub struct Goal {
     pub children: Option<Vec<String>>,
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
+}
+
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+pub enum Days {
+    Fridays,
+    Saturdays,
+    Sundays,
+    Mondays,
+    Tuesdays,
+    Wednesdays,
+    Thurdsdays,
+}
+
+impl From<String> for Days {
+    fn from(day: String) -> Self {
+        info!("From<String> day-string: {:?}", day);
+
+        match day.to_lowercase().as_str() {
+            "fri" => Days::Fridays,
+            "sat" => Days::Saturdays,
+            "sun" => Days::Sundays,
+            "mon" => Days::Mondays,
+            "tue" => Days::Tuesdays,
+            "wed" => Days::Wednesdays,
+            "thu" => Days::Thurdsdays,
+            _ => panic!("Invalid day selection"),
+        }
+    }
+}
+
+impl From<Days> for String {
+    fn from(day: Days) -> Self {
+        info!("From<Days> day: {:?}", day);
+        match day {
+            Days::Fridays => "Fri".into(),
+            Days::Saturdays => "Sat".into(),
+            Days::Sundays => "Sun".into(),
+            Days::Mondays => "Mon".into(),
+            Days::Tuesdays => "Tue".into(),
+            Days::Wednesdays => "Wed".into(),
+            Days::Thurdsdays => "Thu".into(),
+        }
+    }
+}
+
+#[test]
+fn test_convert_day_object_from_string() {
+    let day: Days = Days::from("Tue".to_string());
+    assert_eq!(day, Days::Tuesdays);
+
+    let day: Days = Days::from("tue".to_string());
+    assert_eq!(day, Days::Tuesdays);
+
+    let day: Days = Days::from("thu".to_string());
+    assert_eq!(day, Days::Thurdsdays);
+}
+
+#[test]
+fn test_convert_day_object_into_string() {
+    let fri_converted: String = Days::Fridays.into();
+
+    let fri_str: String = "Fri".to_string();
+    assert_eq!(fri_str, fri_converted);
+
+    let fri_str: String = "FRI".to_string();
+    assert_ne!(fri_str, fri_converted);
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
