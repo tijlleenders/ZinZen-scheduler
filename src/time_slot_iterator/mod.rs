@@ -118,7 +118,6 @@ impl TimeSlotsIterator {
 
                 match &time_filter.on_days {
                     Some(on_days) => {
-                        // Todo 2023-04-04  | make sure that on_days is not duplicated items
                         let mut result: Vec<Slot> = vec![];
                         for slot in self.timeline.iter_mut() {
                             let mut daily_slots = slot.divide_in_days();
