@@ -1,6 +1,6 @@
-use crate::task::Task;
-use crate::time_slot_iterator::TimeSlotsIterator;
-use crate::{repetition::Repetition, task::TaskStatus};
+use crate::models::{
+    repetition::Repetition, slot_iterator::TimeSlotsIterator, task::Task, task::TaskStatus,
+};
 use chrono::NaiveDateTime;
 use log::info;
 use serde::{Deserialize, Serialize};

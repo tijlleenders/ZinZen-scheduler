@@ -1,6 +1,6 @@
-use crate::goal::Goal;
-use crate::task::Task;
-use crate::task_budgets::TaskBudgets;
+use crate::models::goal::Goal;
+use crate::models::task::Task;
+use crate::models::task_budgets::TaskBudgets;
 use chrono::prelude::*;
 use serde::Deserialize;
 use std::collections::BTreeMap;

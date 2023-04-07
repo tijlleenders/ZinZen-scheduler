@@ -1,9 +1,6 @@
-use crate::Slot;
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
-use crate::goal::Tag;
-use crate::input::PlacedTasks;
-use crate::task::{Task, TaskStatus};
+use crate::models::goal::Tag;
 use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
