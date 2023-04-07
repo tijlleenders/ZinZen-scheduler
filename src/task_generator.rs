@@ -19,6 +19,9 @@ pub fn task_generator(
     let mut tasks: Vec<Task> = vec![];
     let mut goals: BTreeMap<String, Goal> =
         add_start_and_end_where_none(goals, calendar_start, calendar_end);
+    
+    validate_mixed_budgets(&mut goals);
+    
     add_filler_goals(&mut goals);
     add_optional_flex_duration_regular_goals(&mut goals); //TODO
     add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
@@ -41,6 +44,28 @@ pub fn task_generator(
         tasks,
         task_budgets,
     }
+}
+
+fn validate_mixed_budgets(goals: &mut BTreeMap<String, Goal>) {
+    /*  
+    Todo 2023-04-07 | Issue 287
+    Rules:
+    - Only one children of type sub-budget
+    - children goal not allowed to have childrens 
+    - will consider only 3 fields for this type of children: [id, title, budgets]
+
+    Algorithm:
+    loop over goals:
+        if goal have a childrens:
+            PANIC if more than one children of type sub-budget
+            let children = goal.children[type:SubBudget]
+            PANIC if children have childrens
+            process:
+            - insert budget of children into goal.budgets
+            - remove children from goals
+            
+
+    */
 }
 
 fn add_start_and_end_where_none(

@@ -1,0 +1,38 @@
+{
+    "startDate": "2022-10-01T00:00:00",
+    "endDate": "2022-11-01T00:00:00",
+    "goals": {
+        "1": {
+            "id": "1",
+            "title": "work",
+            "filters": {
+                "after_time": 6,
+                "before_time": 16
+            },
+            "budgets": [
+                {
+                    "budget_type": "Weekly",
+                    "min": 35,
+                    "max": 40
+                }
+            ],
+            "children": [
+                {
+                    "goal_id": "2",
+                    "type": "sub-budget"
+                }
+            ]
+        },
+        "2": {
+            "id": "2",
+            "title": "sub-budget",
+            "budgets": [
+                {
+                    "budget_type": "Daily",
+                    "min": 5,
+                    "max": 10
+                }
+            ]
+        }
+    }
+}

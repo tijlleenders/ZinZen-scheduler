@@ -35,6 +35,28 @@ pub struct Goal {
     pub after_goals: Option<Vec<String>>,
 }
 
+/*
+Todo 2023-04-07 | Issue 287
+- Change children from Option<Vec<String>> to Option<Vec<Children>>
+- Children struct as below:
+
+    pub struct Children {
+        goal_id: String,
+        // Default is ChildType::SubTask if it is None
+        type: Option<ChildType>, 
+    }
+
+    pub enum ChildType {
+        /// Type of task which is sub task for another one
+        SubTask,
+        /// Type of task which used as mixing of weekly and daily budgets.
+        /// When type select, parent task will not be in schedule but will be in budget.
+        SubBudget,
+    }
+
+*/
+
+
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct TimeFilter {
     pub after_time: Option<usize>,
