@@ -1,5 +1,5 @@
 extern crate scheduler;
-use scheduler::Input;
+use scheduler::models::input::Input;
 use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;

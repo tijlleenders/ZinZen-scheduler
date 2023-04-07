@@ -1,19 +1,15 @@
-pub use goal::Goal;
-pub use input::Input;
-pub use output_formatter::{output_formatter, FinalOutput};
-pub use repetition::Repetition;
+use models::input::Input;
+use models::output::FinalOutput;
 use serde_wasm_bindgen::{from_value, to_value};
-pub use slot::Slot;
 use wasm_bindgen::prelude::*;
+
+use crate::services::output::output_formatter;
+use crate::services::{task_generator, task_placer};
 
 mod errors;
 /// API modules
 pub mod models;
-pub mod task_generator;
-pub mod task_placer;
-
-mod util;
-// Test
+pub mod services;
 #[cfg(test)]
 mod tests;
 

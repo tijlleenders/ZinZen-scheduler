@@ -53,7 +53,7 @@ fn get_imports() -> String {
     result.push("\nmod common;".to_string());
     result.push("\n#[cfg(test)]".to_string());
     result.push("\nuse pretty_assertions::assert_eq;".to_string());
-    result.push("\nuse scheduler::{FinalOutput, Input};".to_string());
+    result.push("\nuse scheduler::models::{input::Input, output::FinalOutput};".to_string());
     result.push("\nuse std::path::Path;".to_string());
 
     result.join("")
