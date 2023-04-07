@@ -3,7 +3,7 @@
 use crate::errors::Error;
 use crate::models::goal::Tag;
 use crate::models::input::PlacedTasks;
-use crate::models::output::{Output, DayOutputFormat, FinalOutput};
+use crate::models::output::{DayOutputFormat, FinalOutput, Output};
 use crate::models::slot::Slot;
 use crate::models::task::{Task, TaskStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
