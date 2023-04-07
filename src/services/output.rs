@@ -3,10 +3,10 @@
 use crate::errors::Error;
 use crate::models::goal::Tag;
 use crate::models::input::PlacedTasks;
-use crate::models::output::Output;
+use crate::models::output::{Output, DayOutputFormat, FinalOutput};
 use crate::models::slot::Slot;
 use crate::models::task::{Task, TaskStatus};
-use chrono::{Days, NaiveDate, NaiveDateTime, Timelike};
+use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 
 pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();

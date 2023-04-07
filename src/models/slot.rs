@@ -12,9 +12,9 @@ pub struct Slot {
 }
 
 #[derive(PartialEq, Eq, Clone)]
-struct SlotConflict {
-    slot: Slot,
-    num_conflicts: usize,
+pub struct SlotConflict {
+    pub slot: Slot,
+    pub num_conflicts: usize,
 }
 
 impl Sub for Slot {

@@ -1,8 +1,8 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
-use crate::goal::Tag;
-use crate::input::{PlacedTasks, TasksToPlace};
-use crate::slot::*;
-use crate::task::{Task, TaskStatus};
+use crate::models::goal::Tag;
+use crate::models::input::{PlacedTasks, TasksToPlace};
+use crate::models::slot::{Slot, SlotConflict};
+use crate::models::task::{Task, TaskStatus};
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
