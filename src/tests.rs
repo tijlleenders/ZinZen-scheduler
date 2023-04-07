@@ -2,13 +2,16 @@
 //     goal::*, input::*, repetition::Repetition, slot::*, task::TaskStatus::*, task::*,
 //     task_generator::*, task_placer::*,
 // };
-use crate::{repetition::Repetition, slot::*};
+use crate::{
+    models::repetition::Repetition,
+    models::{goal::Day, slot::*},
+};
 use chrono::*;
 
 #[cfg(test)]
 #[test]
 fn get_next_monday() {
-    use crate::time_slot_iterator::get_start_of_repeat_step;
+    use crate::models::slot_iterator::get_start_of_repeat_step;
 
     let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
         .unwrap()
@@ -44,7 +47,7 @@ fn get_next_monday() {
 
 #[test]
 fn get_next_weekend() {
-    use crate::time_slot_iterator::get_start_of_repeat_step;
+    use crate::models::slot_iterator::get_start_of_repeat_step;
 
     let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
         .unwrap()
@@ -172,4 +175,27 @@ fn divide_half_a_day_in_days() {
     }];
     let result = slot_of_half_a_day.divide_in_days();
     assert_eq!(half_a_day_split_in_days, result);
+}
+
+#[test]
+fn test_convert_day_object_from_string() {
+    let day: Day = Day::from("Tue".to_string());
+    assert_eq!(day, Day::Tue);
+
+    let day: Day = Day::from("tue".to_string());
+    assert_eq!(day, Day::Tue);
+
+    let day: Day = Day::from("thu".to_string());
+    assert_eq!(day, Day::Thu);
+}
+
+#[test]
+fn test_convert_day_object_into_string() {
+    let fri_converted: String = Day::Fri.into();
+
+    let fri_str: String = "Fri".to_string();
+    assert_eq!(fri_str, fri_converted);
+
+    let fri_str: String = "FRI".to_string();
+    assert_ne!(fri_str, fri_converted);
 }
