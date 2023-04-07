@@ -1,0 +1,257 @@
+{
+    "scheduled": [
+        {
+            "day": "2023-03-09",
+            "outputs": [
+                {
+                    "taskid": 0,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 8,
+                    "start": "2023-03-09T00:00:00",
+                    "deadline": "2023-03-09T08:00:00"
+                },
+                {
+                    "taskid": 1,
+                    "goalid": "1",
+                    "title": "learn rust",
+                    "duration": 2,
+                    "start": "2023-03-09T08:00:00",
+                    "deadline": "2023-03-09T10:00:00"
+                },
+                {
+                    "taskid": 2,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 14,
+                    "start": "2023-03-09T10:00:00",
+                    "deadline": "2023-03-10T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-10",
+            "outputs": [
+                {
+                    "taskid": 3,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 8,
+                    "start": "2023-03-10T00:00:00",
+                    "deadline": "2023-03-10T08:00:00"
+                },
+                {
+                    "taskid": 4,
+                    "goalid": "1",
+                    "title": "learn rust",
+                    "duration": 2,
+                    "start": "2023-03-10T08:00:00",
+                    "deadline": "2023-03-10T10:00:00"
+                },
+                {
+                    "taskid": 5,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 14,
+                    "start": "2023-03-10T10:00:00",
+                    "deadline": "2023-03-11T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-11",
+            "outputs": [
+                {
+                    "taskid": 6,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2023-03-11T00:00:00",
+                    "deadline": "2023-03-12T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-12",
+            "outputs": [
+                {
+                    "taskid": 7,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2023-03-12T00:00:00",
+                    "deadline": "2023-03-13T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-13",
+            "outputs": [
+                {
+                    "taskid": 8,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2023-03-13T00:00:00",
+                    "deadline": "2023-03-14T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-14",
+            "outputs": [
+                {
+                    "taskid": 9,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2023-03-14T00:00:00",
+                    "deadline": "2023-03-15T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-15",
+            "outputs": [
+                {
+                    "taskid": 10,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2023-03-15T00:00:00",
+                    "deadline": "2023-03-16T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-16",
+            "outputs": [
+                {
+                    "taskid": 11,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 8,
+                    "start": "2023-03-16T00:00:00",
+                    "deadline": "2023-03-16T08:00:00"
+                },
+                {
+                    "taskid": 12,
+                    "goalid": "1",
+                    "title": "learn rust",
+                    "duration": 2,
+                    "start": "2023-03-16T08:00:00",
+                    "deadline": "2023-03-16T10:00:00"
+                },
+                {
+                    "taskid": 13,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 14,
+                    "start": "2023-03-16T10:00:00",
+                    "deadline": "2023-03-17T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-17",
+            "outputs": [
+                {
+                    "taskid": 14,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 8,
+                    "start": "2023-03-17T00:00:00",
+                    "deadline": "2023-03-17T08:00:00"
+                },
+                {
+                    "taskid": 15,
+                    "goalid": "1",
+                    "title": "learn rust",
+                    "duration": 2,
+                    "start": "2023-03-17T08:00:00",
+                    "deadline": "2023-03-17T10:00:00"
+                },
+                {
+                    "taskid": 16,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 14,
+                    "start": "2023-03-17T10:00:00",
+                    "deadline": "2023-03-18T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-18",
+            "outputs": [
+                {
+                    "taskid": 17,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2023-03-18T00:00:00",
+                    "deadline": "2023-03-19T00:00:00"
+                }
+            ]
+        },
+        {
+            "day": "2023-03-19",
+            "outputs": [
+                {
+                    "taskid": 18,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2023-03-19T00:00:00",
+                    "deadline": "2023-03-20T00:00:00"
+                }
+            ]
+        }
+    ],
+    "impossible": [
+        {
+            "day": "2023-03-09",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-10",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-11",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-12",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-13",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-14",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-15",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-16",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-17",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-18",
+            "outputs": []
+        },
+        {
+            "day": "2023-03-19",
+            "outputs": []
+        }
+    ]
+}

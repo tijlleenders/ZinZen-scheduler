@@ -2,6 +2,7 @@ use crate::task::Task;
 use crate::time_slot_iterator::TimeSlotsIterator;
 use crate::{repetition::Repetition, task::TaskStatus};
 use chrono::NaiveDateTime;
+use log::info;
 use serde::{Deserialize, Serialize};
 use std::option::Option;
 
@@ -35,11 +36,77 @@ pub struct Goal {
     pub after_goals: Option<Vec<String>>,
 }
 
+#[derive(Deserialize, Debug, Clone, PartialEq)]
+pub enum Day {
+    Fri,
+    Sat,
+    Sun,
+    Mon,
+    Tue,
+    Wed,
+    Thu,
+}
+
+impl From<String> for Day {
+    fn from(day: String) -> Self {
+        info!("From<String> day-string: {:?}", day);
+
+        match day.to_lowercase().as_str() {
+            "fri" => Day::Fri,
+            "sat" => Day::Sat,
+            "sun" => Day::Sun,
+            "mon" => Day::Mon,
+            "tue" => Day::Tue,
+            "wed" => Day::Wed,
+            "thu" => Day::Thu,
+            _ => panic!("Invalid day selection"),
+        }
+    }
+}
+
+impl From<Day> for String {
+    fn from(day: Day) -> Self {
+        info!("From<Days> day: {:?}", day);
+        match day {
+            Day::Fri => "Fri".into(),
+            Day::Sat => "Sat".into(),
+            Day::Sun => "Sun".into(),
+            Day::Mon => "Mon".into(),
+            Day::Tue => "Tue".into(),
+            Day::Wed => "Wed".into(),
+            Day::Thu => "Thu".into(),
+        }
+    }
+}
+
+#[test]
+fn test_convert_day_object_from_string() {
+    let day: Day = Day::from("Tue".to_string());
+    assert_eq!(day, Day::Tue);
+
+    let day: Day = Day::from("tue".to_string());
+    assert_eq!(day, Day::Tue);
+
+    let day: Day = Day::from("thu".to_string());
+    assert_eq!(day, Day::Thu);
+}
+
+#[test]
+fn test_convert_day_object_into_string() {
+    let fri_converted: String = Day::Fri.into();
+
+    let fri_str: String = "Fri".to_string();
+    assert_eq!(fri_str, fri_converted);
+
+    let fri_str: String = "FRI".to_string();
+    assert_ne!(fri_str, fri_converted);
+}
+
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct TimeFilter {
     pub after_time: Option<usize>,
     pub before_time: Option<usize>,
-    pub on_days: Option<String>,
+    pub on_days: Option<Vec<Day>>,
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
