@@ -8,21 +8,14 @@ use wasm_bindgen::prelude::*;
 
 mod errors;
 /// API modules
-mod goal;
-pub mod input;
-pub mod output_formatter;
-pub mod repetition;
-pub mod slot;
-pub mod task;
-pub mod task_budgets;
+pub mod models;
 pub mod task_generator;
 pub mod task_placer;
-pub mod time_slot_iterator;
 
 mod util;
 // Test
 #[cfg(test)]
-mod unit_tests;
+mod tests;
 
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"

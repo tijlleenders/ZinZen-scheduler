@@ -141,11 +141,6 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     }
 }
 
-#[derive(PartialEq, Eq, Clone)]
-struct SlotConflict {
-    slot: Slot,
-    num_conflicts: usize,
-}
 fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
     let mut slot_conflicts: Vec<SlotConflict> = vec![];
     let task = &tasks_to_place[0];
