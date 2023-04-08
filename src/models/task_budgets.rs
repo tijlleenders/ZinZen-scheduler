@@ -1,8 +1,9 @@
 use crate::{
-    goal::{BudgetType, Tag},
-    task::{Task, TaskStatus},
-    time_slot_iterator::TimeSlotsIterator,
-    Goal, Repetition, Slot,
+    models::goal::{BudgetType, Goal, Tag},
+    models::repetition::Repetition,
+    models::slot::Slot,
+    models::slot_iterator::TimeSlotsIterator,
+    models::task::{Task, TaskStatus},
 };
 use chrono::NaiveDateTime;
 use serde::Deserialize;

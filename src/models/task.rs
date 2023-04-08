@@ -1,6 +1,6 @@
 use crate::errors::Error;
-use crate::goal::Tag;
-use crate::slot::Slot;
+use crate::models::goal::Tag;
+use crate::models::slot::Slot;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;

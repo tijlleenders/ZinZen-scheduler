@@ -1,6 +1,4 @@
-extern crate scheduler;
-use scheduler::input::Input;
-use scheduler::output_formatter::FinalOutput;
+use scheduler::models::{input::Input, output::FinalOutput};
 use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;

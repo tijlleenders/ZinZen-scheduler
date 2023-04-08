@@ -1,11 +1,11 @@
 use chrono::NaiveDateTime;
 use std::collections::BTreeMap;
 
-use crate::goal::{Goal, Tag};
-use crate::input::{Input, TasksToPlace};
-use crate::task::Task;
-use crate::task_budgets::TaskBudgets;
-use crate::Repetition;
+use crate::models::goal::{Goal, Tag};
+use crate::models::input::{Input, TasksToPlace};
+use crate::models::repetition::Repetition;
+use crate::models::task::Task;
+use crate::models::task_budgets::TaskBudgets;
 /// # Task Generator
 /// Takes an [Input](../input/index.html) and outputs a vector of TaskStatus::Blocked and TaskStatus::ReadyToSchedule [Tasks](../task/index.html).
 pub fn task_generator(
@@ -19,6 +19,7 @@ pub fn task_generator(
     let mut tasks: Vec<Task> = vec![];
     let mut goals: BTreeMap<String, Goal> =
         add_start_and_end_where_none(goals, calendar_start, calendar_end);
+
     add_filler_goals(&mut goals);
     add_optional_flex_duration_regular_goals(&mut goals); //TODO
     add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO

@@ -1,51 +1,12 @@
-use crate::Slot;
 //new module for outputting the result of task_placer in
 //whichever format required by front-end
-use crate::goal::Tag;
-use crate::input::PlacedTasks;
-use crate::task::Task;
-use crate::{errors::Error, task::TaskStatus};
+use crate::errors::Error;
+use crate::models::goal::Tag;
+use crate::models::input::PlacedTasks;
+use crate::models::output::{DayOutputFormat, FinalOutput, Output};
+use crate::models::slot::Slot;
+use crate::models::task::{Task, TaskStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
-use serde::{Deserialize, Serialize};
-use std::cmp::Ordering;
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct Output {
-    taskid: usize,
-    goalid: String,
-    title: String,
-    duration: usize,
-    start: NaiveDateTime,
-    deadline: NaiveDateTime,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(skip)]
-    tags: Vec<Tag>,
-    #[serde(skip)]
-    impossible: bool,
-}
-
-impl Ord for Output {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.start.cmp(&other.start)
-    }
-}
-
-impl PartialOrd for Output {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
-pub struct DayOutputFormat {
-    pub day: NaiveDate,
-    pub outputs: Vec<Output>,
-}
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
-pub struct FinalOutput {
-    pub scheduled: Vec<DayOutputFormat>,
-    pub impossible: Vec<DayOutputFormat>,
-}
 
 pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();

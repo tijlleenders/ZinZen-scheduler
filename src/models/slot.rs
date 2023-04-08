@@ -11,6 +11,12 @@ pub struct Slot {
     pub end: NaiveDateTime,
 }
 
+#[derive(PartialEq, Eq, Clone)]
+pub struct SlotConflict {
+    pub slot: Slot,
+    pub num_conflicts: usize,
+}
+
 impl Sub for Slot {
     type Output = Vec<Slot>;
 

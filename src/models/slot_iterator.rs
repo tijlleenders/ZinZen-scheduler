@@ -1,7 +1,6 @@
-use crate::goal::Day;
-use crate::goal::TimeFilter;
-use crate::repetition::Repetition;
-use crate::slot::Slot;
+use crate::models::goal::{Day, TimeFilter};
+use crate::models::repetition::Repetition;
+use crate::models::slot::Slot;
 use chrono::prelude::*;
 use chrono::Days;
 use chrono::Duration;

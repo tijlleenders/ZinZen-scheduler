@@ -1,6 +1,6 @@
-use crate::task::Task;
-use crate::time_slot_iterator::TimeSlotsIterator;
-use crate::{repetition::Repetition, task::TaskStatus};
+use crate::models::{
+    repetition::Repetition, slot_iterator::TimeSlotsIterator, task::Task, task::TaskStatus,
+};
 use chrono::NaiveDateTime;
 use log::info;
 use serde::{Deserialize, Serialize};
@@ -77,29 +77,6 @@ impl From<Day> for String {
             Day::Thu => "Thu".into(),
         }
     }
-}
-
-#[test]
-fn test_convert_day_object_from_string() {
-    let day: Day = Day::from("Tue".to_string());
-    assert_eq!(day, Day::Tue);
-
-    let day: Day = Day::from("tue".to_string());
-    assert_eq!(day, Day::Tue);
-
-    let day: Day = Day::from("thu".to_string());
-    assert_eq!(day, Day::Thu);
-}
-
-#[test]
-fn test_convert_day_object_into_string() {
-    let fri_converted: String = Day::Fri.into();
-
-    let fri_str: String = "Fri".to_string();
-    assert_eq!(fri_str, fri_converted);
-
-    let fri_str: String = "FRI".to_string();
-    assert_ne!(fri_str, fri_converted);
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
