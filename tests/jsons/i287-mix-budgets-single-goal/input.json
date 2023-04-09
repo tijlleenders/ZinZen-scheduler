@@ -5,8 +5,7 @@
         "1": {
             "id": "1",
             "title": "work",
-            "budgets": [
-                {
+            "budgets": [{
                     "budget_type": "Weekly",
                     "min": 35,
                     "max": 40
