@@ -1,0 +1,36 @@
+{
+    "startDate": "2022-10-01T00:00:00",
+    "endDate": "2022-11-01T00:00:00",
+    "goals": {
+        "1": {
+            "id": "1",
+            "title": "work",
+            "budgets": [{
+                    "budget_type": "Weekly",
+                    "min": 35,
+                    "max": 40
+                },
+                {
+                    "budget_type": "Daily",
+                    "min": 5,
+                    "max": 10
+                }
+            ]
+        },
+        "2": {
+            "id": "2",
+            "title": "learn rust",
+            "budgets": [{
+                    "budget_type": "Weekly",
+                    "min": 10,
+                    "max": 20
+                },
+                {
+                    "budget_type": "Daily",
+                    "min": 2,
+                    "max": 5
+                }
+            ]
+        }
+    }
+}
