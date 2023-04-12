@@ -1,47 +1,42 @@
 /// Related to #289 https://github.com/tijlleenders/ZinZen-scheduler/issues/289
-/// System by default will not split consequent slots which have been split by date.
-/// For example for sleep goal from 10pm to 8am, it will be serpated into 2 slots as below:
+/// System by default will split a task in two consecutive tasks in the output - since output is per day.
+/// For example for sleep goal from 10pm to 8am the next day, will be split into 2 tasks in output as below:
 ///     Task: 1
 ///     Slot: sleep
 ///     Start: 2022-04-01 22:00
-///     End: 2022-04-01 23:59
+///     End: 2022-04-02 00:00
 /// 
 ///     Task: 1
 ///     Slot: sleep
 ///     Start: 2022-04-02 00:00
 ///     End: 2022-04-02 08:00
 /// 
-/// New functionality will change the default behvavior, so it will glue slots 
-///  which are consequent to each other. So previous exmaple will be one slot:
-///     Task: 1
-///     Slot: sleep
-///     Start: 2022-04-01 22:00
-///     End: 2022-04-02 08:00
-
+/// BEFORE reaching the output formatter this should be one Task.
+/// To achieve this the Tasks time slots need to be merged after they are split by filters etc...
+/// So the two Tasks above will be one Task before going to the output formatter to be split.
 // ===
 
 
 /*
 TODO 2023-04-12
 # Algorithm
-- Check check consequent tasks for each goal
-- If found consequent tasks:
-    - merge them into single task
-    - remove 2nd task
+- Check check consecutive time slots within each Task
+- When? After task_generator and before task_placer
+- If found consecutive time slots in a Task:
+    - merge them into single time slot
+    - remove 2nd time slot
     
-# Consequent tasks criteria
-Tasks considered to be consequent if they meet below criteria:
-    - The same task.name for 1st and 2nd consequent task
-    - The end-date of 1st task is the same start-date for the 2nd task
+# consecutive tasks criteria
+Time slots are considered to be consecutive if they meet below criteria:
+    - time_slot.end == time_slot2.start
     
 # Initial Pseudo Code
-- for each goal in goals
-    - if found consequent tasks
-        - merge them into single task
-            TODO 2023-04-12 Can we implment a trait to add, subtract tasks from each other
-            - Add duration of 2nd task to 1st task
-            - Edit 1st task end-date to be 2nd task end-date
-        - remove 2nd task
+- for each task in tasks
+    - if found consecutive time slots
+        - merge them into single time slot
+            TODO 2023-04-12 Can we implment a trait to add, subtract time slots from each other
+            Yes there is some initial code for this by Eric...
+        - remove 2nd time slot
         
 
 */
