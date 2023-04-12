@@ -5,21 +5,20 @@
 ///     Slot: sleep
 ///     Start: 2022-04-01 22:00
 ///     End: 2022-04-01 23:59
-/// 
+///
 ///     Task: 1
 ///     Slot: sleep
 ///     Start: 2022-04-02 00:00
 ///     End: 2022-04-02 08:00
-/// 
-/// New functionality will change the default behvavior, so it will glue slots 
+///
+/// New functionality will change the default behvavior, so it will glue slots
 ///  which are consequent to each other. So previous exmaple will be one slot:
 ///     Task: 1
 ///     Slot: sleep
 ///     Start: 2022-04-01 22:00
 ///     End: 2022-04-02 08:00
-
+mod glue_slots {}
 // ===
-
 
 /*
 TODO 2023-04-12
@@ -28,12 +27,12 @@ TODO 2023-04-12
 - If found consequent tasks:
     - merge them into single task
     - remove 2nd task
-    
+
 # Consequent tasks criteria
 Tasks considered to be consequent if they meet below criteria:
     - The same task.name for 1st and 2nd consequent task
     - The end-date of 1st task is the same start-date for the 2nd task
-    
+
 # Initial Pseudo Code
 - for each goal in goals
     - if found consequent tasks
@@ -42,6 +41,4 @@ Tasks considered to be consequent if they meet below criteria:
             - Add duration of 2nd task to 1st task
             - Edit 1st task end-date to be 2nd task end-date
         - remove 2nd task
-        
-
 */
