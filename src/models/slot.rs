@@ -105,8 +105,16 @@ impl Add for Slot {
         } else {
             //for now any other scenario doesn't change self, we're using add for combining
             //slots that are adjacent to each other
+            // TODO 2023-04-14 | should result Result to avoid irrelevant resul when not added
             return self;
         }
+    }
+}
+
+// imple Display for Slot
+impl std::fmt::Display for Slot {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Slot: [ {} - {} ]", self.start, self.end)
     }
 }
 
