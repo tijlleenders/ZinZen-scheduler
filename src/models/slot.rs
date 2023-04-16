@@ -2,6 +2,7 @@ use chrono::{Days, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::{
     cmp::{max, min},
+    fmt::Display,
     ops::{Add, Sub},
 };
 
@@ -9,6 +10,12 @@ use std::{
 pub struct Slot {
     pub start: NaiveDateTime,
     pub end: NaiveDateTime,
+}
+
+impl Display for Slot {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Slot - start: {} - end: {}", self.start, self.end)
+    }
 }
 
 #[derive(PartialEq, Eq, Clone)]
