@@ -1,6 +1,7 @@
 use errors::Error;
 use models::input::Input;
 use models::output::FinalOutput;
+use models::task::Task;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
 use services::{task_generator::task_generator, task_placer::task_placer};
@@ -45,6 +46,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 //Todo why is there a schedule function and a run_scheduler function?
 pub fn run_scheduler(input: Input) -> FinalOutput {
     let tasks = task_generator(input);
+    print_tasks(&tasks.tasks);
     let placed_tasks = task_placer(tasks);
     match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
@@ -55,4 +57,20 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
         }
         Ok(output) => output,
     }
+}
+
+fn print_tasks(tasks: &Vec<Task>) {
+    let mut timings: Vec<String> = vec![];
+    for task in tasks.iter() {
+        let _task_id = task.id.clone();
+        for slot in task.slots.iter() {
+            let slot_timing: String = format!(" [ Start: {} , End: {} ] ", slot.start, slot.end);
+            timings.push(slot_timing);
+        }
+
+        let _num = 0;
+    }
+
+    let _done =true;
+    
 }

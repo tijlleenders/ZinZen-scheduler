@@ -84,6 +84,7 @@ pub struct TimeFilter {
     pub after_time: Option<usize>,
     pub before_time: Option<usize>,
     pub on_days: Option<Vec<Day>>,
+    // pub not_on: Option<Vec<Slot>>
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
@@ -91,6 +92,7 @@ pub struct Budget {
     pub budget_type: BudgetType,
     pub min: Option<usize>,
     pub max: Option<usize>,
+    
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
