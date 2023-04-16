@@ -6,6 +6,8 @@ use log::info;
 use serde::{Deserialize, Serialize};
 use std::option::Option;
 
+use super::slot::Slot;
+
 /// Represents a Goal passed in by the user from the front end.
 /// Goals are converted into [Task](../task/index.html)s by the scheduler.
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]
@@ -84,6 +86,7 @@ pub struct TimeFilter {
     pub after_time: Option<usize>,
     pub before_time: Option<usize>,
     pub on_days: Option<Vec<Day>>,
+    pub not_on: Option<Vec<Slot>>,
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
