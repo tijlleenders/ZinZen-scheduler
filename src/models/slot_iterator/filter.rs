@@ -9,14 +9,12 @@ impl TimeSlotsIterator {
             Some(time_filter) => {
                 let _time_filter_str: String = time_filter.to_string();
 
-                match apply_timing_filter(self, &time_filter) {
-                    Some(slots) => self.timeline = slots,
-                    None => {}
+                if let Some(slots) = apply_timing_filter(self, time_filter) {
+                    self.timeline = slots
                 }
 
-                match apply_on_days_filter(&self, &time_filter) {
-                    Some(slots) => self.timeline = slots,
-                    None => {}
+                if let Some(slots) = apply_on_days_filter(self, time_filter) {
+                    self.timeline = slots
                 }
             }
             None => (),
