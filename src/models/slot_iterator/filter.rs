@@ -1,6 +1,7 @@
+use chrono::{Timelike, Datelike};
+
 use super::{Slot, TimeSlotsIterator};
 use crate::models::goal::{Day, TimeFilter};
-use chrono::{Datelike, Timelike};
 
 impl TimeSlotsIterator {
     pub(crate) fn apply_filters(&mut self) {

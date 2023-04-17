@@ -1,5 +1,5 @@
 use crate::models::{
-    repetition::Repetition, slot::TimeSlotsIterator, task::Task, task::TaskStatus,
+    repetition::Repetition, slot_iterator::TimeSlotsIterator, task::Task, task::TaskStatus,
 };
 use chrono::NaiveDateTime;
 use log::info;

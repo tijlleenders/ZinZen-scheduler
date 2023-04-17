@@ -1,7 +1,8 @@
 use crate::{
     models::goal::{BudgetType, Goal, Tag},
     models::repetition::Repetition,
-    models::slot::{Slot, TimeSlotsIterator},
+    models::slot::Slot,
+    models::slot_iterator::TimeSlotsIterator,
     models::task::{Task, TaskStatus},
 };
 use chrono::NaiveDateTime;
