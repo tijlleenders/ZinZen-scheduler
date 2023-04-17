@@ -89,6 +89,17 @@ pub struct TimeFilter {
     pub not_on: Option<Vec<Slot>>,
 }
 
+// imple Disply for TimeFilter
+impl std::fmt::Display for TimeFilter {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "TimeFilter [ after_time: {:?}, before_time: {:?}, on_days: {:?}, not_on: {:?} ]",
+            self.after_time, self.before_time, self.on_days, self.not_on
+        )
+    }
+}
+
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct Budget {
     pub budget_type: BudgetType,
