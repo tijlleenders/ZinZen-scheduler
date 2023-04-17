@@ -1,13 +1,11 @@
-use super::filter;
+use super::{Slot, TimeSlotsIterator};
+use crate::models::{goal::TimeFilter, repetition::Repetition};
 use chrono::{Days, NaiveDateTime, Timelike};
-use serde::Deserialize;
 use std::{
     cmp::{max, min},
     fmt::Display,
     ops::{Add, Sub},
 };
-
-use super::{Slot, TimeSlotsIterator};
 
 impl TimeSlotsIterator {
     pub fn new(

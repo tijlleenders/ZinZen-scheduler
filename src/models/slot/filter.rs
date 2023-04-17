@@ -1,7 +1,8 @@
-use super::TimeSlotsIterator;
+use chrono::{Datelike, Timelike};
+
+use super::{Slot, TimeSlotsIterator};
 
 impl TimeSlotsIterator {
-   
     pub(crate) fn apply_filters(&mut self) {
         match &self.filters {
             Some(time_filter) => {
