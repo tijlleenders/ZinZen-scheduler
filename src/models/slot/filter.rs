@@ -1,22 +1,24 @@
 use chrono::{Datelike, Timelike};
 
+use crate::models::goal::Day;
+
 use super::{Slot, TimeSlotsIterator};
 
 impl TimeSlotsIterator {
     pub(crate) fn apply_filters(&mut self) {
         match &self.filters {
             Some(time_filter) => {
-                let time_filter_str: String = time_filter.to_string();
+                let _time_filter_str: String = time_filter.to_string();
 
                 if time_filter.after_time.is_some() || time_filter.before_time.is_some() {
                     let mut result: Vec<Slot> = vec![];
                     for slot in self.timeline.iter_mut() {
-                        let slot_str = slot.to_string();
+                        let _slot_str = slot.to_string();
                         let mut daily_slots = slot.divide_in_days();
                         if time_filter.after_time.is_some() && time_filter.before_time.is_some() {
                             //after and before time
                             for daily_slot in daily_slots.iter_mut() {
-                                let daily_slot_str = daily_slot.to_string();
+                                let _daily_slot_str = daily_slot.to_string();
 
                                 let before_datetime = daily_slot
                                     .start
@@ -27,8 +29,8 @@ impl TimeSlotsIterator {
                                     .with_hour(time_filter.after_time.unwrap() as u32)
                                     .unwrap();
 
-                                let after_datetime_str = after_datetime.to_string();
-                                let before_datetime_str = before_datetime.to_string();
+                                let _after_datetime_str = after_datetime.to_string();
+                                let _before_datetime_str = before_datetime.to_string();
 
                                 if after_datetime > before_datetime {
                                     if daily_slot.start < before_datetime {
