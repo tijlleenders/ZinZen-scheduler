@@ -1,4 +1,4 @@
-use chrono::{Timelike, Datelike};
+use chrono::{Datelike, Timelike};
 
 use super::{Slot, TimeSlotsIterator};
 use crate::models::goal::{Day, TimeFilter};
