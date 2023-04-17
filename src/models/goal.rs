@@ -86,6 +86,7 @@ pub struct TimeFilter {
     pub after_time: Option<usize>,
     pub before_time: Option<usize>,
     pub on_days: Option<Vec<Day>>,
+    /// Used for postpone slots
     pub not_on: Option<Vec<Slot>>,
 }
 
