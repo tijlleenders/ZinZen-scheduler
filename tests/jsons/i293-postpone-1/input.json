@@ -1,0 +1,21 @@
+{
+  "startDate": "2023-04-01T00:00:00",
+  "endDate": "2023-04-07T00:00:00",
+  "goals": {
+    "1": {
+      "id": "1",
+      "title": "study Rust",
+      "min_duration": 3,
+      "repeat": "daily",
+      "filters": {
+        "after_time": 0,
+        "not_on": [
+          {
+            "start": "2023-04-01T00:00:00",
+            "end": "2023-04-01T03:00:00"
+          }
+        ]
+      }
+    }
+  }
+}
