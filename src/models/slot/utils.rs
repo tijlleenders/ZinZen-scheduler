@@ -1,3 +1,4 @@
+use super::filter;
 use chrono::{Days, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::{
@@ -6,22 +7,31 @@ use std::{
     ops::{Add, Sub},
 };
 
-#[derive(Debug, Eq, PartialEq, Clone, Copy, Deserialize)]
-pub struct Slot {
-    pub start: NaiveDateTime,
-    pub end: NaiveDateTime,
+use super::{Slot, TimeSlotsIterator};
+
+impl TimeSlotsIterator {
+    pub fn new(
+        start: NaiveDateTime,
+        end: NaiveDateTime,
+        repetition: Option<Repetition>,
+        filters: Option<TimeFilter>,
+    ) -> TimeSlotsIterator {
+        let mut result = TimeSlotsIterator {
+            timeline: vec![Slot { start, end }],
+            repetition,
+            filters,
+            current_start_position: start, //override after applying filters
+        };
+        result.apply_filters();
+        result.current_start_position = result.timeline[0].start;
+        result
+    }
 }
 
 impl Display for Slot {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Slot - start: {} - end: {}", self.start, self.end)
     }
-}
-
-#[derive(PartialEq, Eq, Clone)]
-pub struct SlotConflict {
-    pub slot: Slot,
-    pub num_conflicts: usize,
 }
 
 impl Sub for Slot {
