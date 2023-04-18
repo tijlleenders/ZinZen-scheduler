@@ -1,7 +1,3 @@
-// use crate::{
-//     goal::*, input::*, repetition::Repetition, slot::*, task::TaskStatus::*, task::*,
-//     task_generator::*, task_placer::*,
-// };
 use crate::{
     models::repetition::Repetition,
     models::{goal::Day, slot::*},
@@ -11,7 +7,7 @@ use chrono::*;
 #[cfg(test)]
 #[test]
 fn get_next_monday() {
-    use crate::models::slot_iterator::get_start_of_repeat_step;
+    use crate::models::slot_iterator::utils::get_start_of_repeat_step;
 
     let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
         .unwrap()
@@ -47,7 +43,7 @@ fn get_next_monday() {
 
 #[test]
 fn get_next_weekend() {
-    use crate::models::slot_iterator::get_start_of_repeat_step;
+    use crate::models::slot_iterator::utils::get_start_of_repeat_step;
 
     let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
         .unwrap()
