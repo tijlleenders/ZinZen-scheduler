@@ -67,7 +67,7 @@ fn apply_on_days_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> 
             Some(on_days) => {
                 let mut result: Vec<Slot> = vec![];
                 for slot in slot_iterator.timeline.iter() {
-                    let daily_slots = slot.divide_in_days();
+                    let daily_slots = slot.divide_into_days();
 
                     for daily_slot in daily_slots.iter() {
                         // Check if the weekday matches with the given on days filter value
@@ -95,7 +95,7 @@ fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
             let mut result: Vec<Slot> = vec![];
             for slot in slot_iterator.timeline.iter() {
                 let _slot_str = slot.to_string();
-                let mut daily_slots = slot.divide_in_days();
+                let mut daily_slots = slot.divide_into_days();
                 if time_filter.after_time.is_some() && time_filter.before_time.is_some() {
                     //after and before time
                     for daily_slot in daily_slots.iter() {

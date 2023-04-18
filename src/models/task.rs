@@ -89,12 +89,12 @@ impl Task {
         }
         let mut flexibility = 0;
         for slot in &self.slots {
-            if slot.num_hours() < self.duration {
-                flexibility += slot.num_hours();
+            if slot.calc_duration_in_hours() < self.duration {
+                flexibility += slot.calc_duration_in_hours();
                 continue;
             }
             //todo check correctness
-            flexibility += slot.num_hours() - self.duration + 1;
+            flexibility += slot.calc_duration_in_hours() - self.duration + 1;
         }
         self.flexibility = flexibility;
         if self.flexibility == 0 {

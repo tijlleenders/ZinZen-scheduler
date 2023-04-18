@@ -107,44 +107,89 @@ impl Add for Slot {
 }
 
 impl Slot {
-    pub fn num_hours(&self) -> usize {
+    pub fn calc_duration_in_hours(&self) -> usize {
         (self.end - self.start).num_hours() as usize
     }
 
-    pub fn conflicts_with(&self, other_slot: &Slot) -> bool {
+    pub fn is_conflicts_with(&self, other_slot: &Slot) -> bool {
         !((self.start < other_slot.start && self.end <= other_slot.start)
             || (self.start >= other_slot.end && self.end > other_slot.end))
     }
 
-    pub fn contains_hour_slot(&self, other: &Slot) -> bool {
+    pub fn is_contains_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
     }
 
-    pub fn get_1h_slots(&self) -> Vec<Slot> {
+    /// Divide a Slot into list of slots with 1 hour interval
+    /// If you pass a Slot for 5 hours, then it will splitted
+    ///  into 5 slots with 1 hour interval:
+    /// ```
+    /// Param:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-01 05:00:00 ]
+    ///     Duration: 5 hours
+    ///
+    /// Returns:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-01 01:00:00 ]
+    ///     Slot [ 2022-01-01 01:00:00 - 2022-01-01 02:00:00 ]
+    ///     Slot [ 2022-01-01 02:00:00 - 2022-01-01 03:00:00 ]
+    ///     Slot [ 2022-01-01 03:00:00 - 2022-01-01 04:00:00 ]
+    ///     Slot [ 2022-01-01 04:00:00 - 2022-01-01 05:00:00 ]
+    ///
+    /// ```
+    pub fn divide_into_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
-        for hour in 0..self.num_hours() {
+        let duration = self.calc_duration_in_hours();
+        dbg!(duration);
+
+        for hour in 0..duration {
+            dbg!(hour);
             result.push(Slot {
                 start: self.start.add(chrono::Duration::hours(hour as i64)),
                 end: self.start.add(chrono::Duration::hours((hour + 1) as i64)),
-            })
+            });
+
+            dbg!(&result);
         }
+        dbg!(&result);
         result
     }
 
-    pub fn divide_in_days(&self) -> Vec<Slot> {
+    /// Divide a Slot into list of slots with 1 day interval
+    /// If you pass a Slot for a week, then it will splitted
+    ///  into 7 slots for each day of the week:
+    /// ```
+    /// Param:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-08 00:00:00 ]
+    ///
+    /// Returns:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-02 00:00:00 ]
+    ///     Slot [ 2022-01-02 00:00:00 - 2022-01-03 00:00:00 ]
+    ///     Slot [ 2022-01-03 00:00:00 - 2022-01-04 00:00:00 ]
+    ///     Slot [ 2022-01-04 00:00:00 - 2022-01-05 00:00:00 ]
+    ///     Slot [ 2022-01-05 00:00:00 - 2022-01-06 00:00:00 ]
+    ///     Slot [ 2022-01-06 00:00:00 - 2022-01-07 00:00:00 ]
+    ///     Slot [ 2022-01-07 00:00:00 - 2022-01-08 00:00:00 ]
+    /// ```
+    pub fn divide_into_days(&self) -> Vec<Slot> {
         let mut result = vec![];
         let mut start_slider = self.start;
+        dbg!(start_slider);
+        dbg!(self.end);
+
         while start_slider.lt(&self.end) {
             if start_slider.date().eq(&self.end.date()) {
                 result.push(Slot {
                     start: start_slider,
                     end: self.end,
                 });
+                dbg!(&result);
+
                 start_slider = start_slider
                     .with_hour(0)
                     .unwrap()
                     .checked_add_days(Days::new(1))
                     .unwrap();
+                dbg!(start_slider);
                 continue;
             } else {
                 result.push(Slot {
@@ -155,17 +200,21 @@ impl Slot {
                         .checked_add_days(Days::new(1))
                         .unwrap(),
                 });
+                dbg!(&result);
+
                 start_slider = start_slider
                     .with_hour(0)
                     .unwrap()
                     .checked_add_days(Days::new(1))
                     .unwrap();
+                dbg!(start_slider);
             }
         }
+        dbg!(&result);
         result
     }
 
-    pub fn is_intersect(&self, other: &Slot) -> bool {
+    pub fn is_intersect_with_slot(&self, other: &Slot) -> bool {
         let overlap = min(self.end, other.end) - max(self.start, other.start);
         overlap.num_hours() > 0
     }

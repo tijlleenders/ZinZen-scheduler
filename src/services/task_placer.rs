@@ -117,7 +117,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         if !slot_allowed {
             continue;
         }
-        remaining_hours -= slot.num_hours();
+        remaining_hours -= slot.calc_duration_in_hours();
         template_task.id += 1;
         template_task.start = Some(slot.start);
         template_task.deadline = Some(slot.end);
@@ -146,7 +146,7 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
     let task = &tasks_to_place[0];
 
     for slot in task.slots.iter() {
-        for hour_slot in slot.get_1h_slots() {
+        for hour_slot in slot.divide_into_1h_slots() {
             let mut count: usize = 0;
             'outer: for t in tasks_to_place {
                 if t.status != TaskStatus::ReadyToSchedule {
@@ -157,7 +157,7 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
                 }
 
                 for s in t.slots.iter() {
-                    if s.is_intersect(&hour_slot) {
+                    if s.is_intersect_with_slot(&hour_slot) {
                         count += 1;
                         continue 'outer;
                     }
