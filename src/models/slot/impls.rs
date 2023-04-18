@@ -1,20 +1,15 @@
-use chrono::{Days, NaiveDateTime, Timelike};
-use serde::Deserialize;
+use super::Slot;
+use chrono::{Days, Timelike};
 use std::{
     cmp::{max, min},
+    fmt::Display,
     ops::{Add, Sub},
 };
 
-#[derive(Debug, Eq, PartialEq, Clone, Copy, Deserialize)]
-pub struct Slot {
-    pub start: NaiveDateTime,
-    pub end: NaiveDateTime,
-}
-
-#[derive(PartialEq, Eq, Clone)]
-pub struct SlotConflict {
-    pub slot: Slot,
-    pub num_conflicts: usize,
+impl Display for Slot {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Slot - start: {} - end: {}", self.start, self.end)
+    }
 }
 
 impl Sub for Slot {
@@ -119,9 +114,11 @@ impl Slot {
         !((self.start < other_slot.start && self.end <= other_slot.start)
             || (self.start >= other_slot.end && self.end > other_slot.end))
     }
+
     pub fn contains_hour_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
     }
+
     pub fn get_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
         for hour in 0..self.num_hours() {
@@ -132,6 +129,7 @@ impl Slot {
         }
         result
     }
+
     pub fn divide_in_days(&self) -> Vec<Slot> {
         let mut result = vec![];
         let mut start_slider = self.start;

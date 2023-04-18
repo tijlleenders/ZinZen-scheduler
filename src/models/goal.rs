@@ -6,6 +6,8 @@ use log::info;
 use serde::{Deserialize, Serialize};
 use std::option::Option;
 
+use super::slot::Slot;
+
 /// Represents a Goal passed in by the user from the front end.
 /// Goals are converted into [Task](../task/index.html)s by the scheduler.
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]
@@ -84,6 +86,19 @@ pub struct TimeFilter {
     pub after_time: Option<usize>,
     pub before_time: Option<usize>,
     pub on_days: Option<Vec<Day>>,
+    /// Used for postpone slots
+    pub not_on: Option<Vec<Slot>>,
+}
+
+// imple Disply for TimeFilter
+impl std::fmt::Display for TimeFilter {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "TimeFilter [ after_time: {:?}, before_time: {:?}, on_days: {:?}, not_on: {:?} ]",
+            self.after_time, self.before_time, self.on_days, self.not_on
+        )
+    }
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
