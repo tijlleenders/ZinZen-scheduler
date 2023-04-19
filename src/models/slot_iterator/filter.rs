@@ -1,7 +1,8 @@
+use std::ops::Add;
+
 use super::{Slot, TimeSlotsIterator};
 use crate::models::{goal::Day, slot::utils::convert_into_1h_slots};
 use chrono::{Datelike, Timelike};
-use log::info;
 
 impl TimeSlotsIterator {
     pub(crate) fn apply_filters(&mut self) {
@@ -166,10 +167,49 @@ fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
                     }
                 }
             }
+
+            // TODO 2023-04-19 | develop a functionality to glue consequent slots together.
+            if let Some(merged) = merge_consequent_slots(&result) {
+                dbg!(&merged);
+                dbg!(&merged.len());
+                dbg!(&result.len());
+                return Some(merged);
+            }
+
             return Some(result);
         }
         None
     } else {
         None
     }
+}
+
+// function merge_consequent_slots
+fn merge_consequent_slots(slots: &Vec<Slot>) -> Option<Vec<Slot>> {
+    dbg!(&slots);
+    dbg!(&slots.len());
+
+    if slots.is_empty() {
+        return None;
+    }
+
+    let mut result: Vec<Slot> = vec![];
+
+    for (index, slot) in slots.iter().enumerate() {
+        // check if there is next slot?
+        if index < slots.len() - 1 {
+            let next_slot = slots[index + 1].clone();
+            dbg!(&next_slot);
+
+            // add next_slot to slot
+            if let Some(merged_slot) = slot.add(next_slot) {
+                dbg!(merged_slot);
+                result.push(merged_slot);
+            }
+        }
+        // if let Some(next_slot) = slot.next() {
+
+        // }
+    }
+    Some(result)
 }
