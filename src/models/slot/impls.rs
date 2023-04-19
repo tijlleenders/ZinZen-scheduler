@@ -80,29 +80,34 @@ impl Sub for Slot {
     }
 }
 
+/// Add a slot if they are consequent. If not, will return None
 impl Add for Slot {
-    type Output = Slot;
+    type Output = Option<Slot>;
 
     fn add(self, other: Self) -> Self::Output {
+        dbg!(&self);
+        dbg!(&other);
+
         if (other.start < self.start) && (other.end == self.start) {
             //other is before self and touching it
-            Slot {
+            let slot = Slot {
                 start: other.start,
                 end: self.end,
-            }
-        } else if (other.start == self.end) && (other.end > self.end) {
+            };
+            dbg!(&slot);
+            return Some(slot);
+        }
+        if (other.start == self.end) && (other.end > self.end) {
             //other is after self and touching it
             let slot = Slot {
                 start: self.start,
                 end: other.end,
             };
-            return slot;
-        } else {
-            //for now any other scenario doesn't change self, we're using add for combining
-            //slots that are adjacent to each other
-            // TODO 2023-04-14 | should result Result to avoid irrelevant resul when not added
-            return self;
+            dbg!(&slot);
+            return Some(slot);
         }
+
+        None
     }
 }
 
