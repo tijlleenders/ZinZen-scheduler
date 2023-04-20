@@ -106,7 +106,6 @@ pub struct Budget {
     pub budget_type: BudgetType,
     pub min: Option<usize>,
     pub max: Option<usize>,
-    
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq)]
@@ -201,8 +200,10 @@ impl Goal {
             self.filters,
             // Todo! add self.before_time filter
         );
+        dbg!(&time_slots_iterator);
 
         for time_slots in time_slots_iterator {
+            dbg!(&time_slots);
             let task_id = *counter;
             *counter += 1;
             if !time_slots.is_empty() && self.min_duration.is_some() {
@@ -221,9 +222,11 @@ impl Goal {
                     after_goals: self.after_goals.clone(),
                     flexibility: 0,
                 };
+                dbg!(&task);
                 tasks.push(task);
             }
         }
+        dbg!(&tasks);
         tasks
     }
 }
