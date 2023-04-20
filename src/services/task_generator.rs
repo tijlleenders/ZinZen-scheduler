@@ -6,6 +6,7 @@ use crate::models::input::{Input, TasksToPlace};
 use crate::models::repetition::Repetition;
 use crate::models::task::Task;
 use crate::models::task_budgets::TaskBudgets;
+
 /// # Task Generator
 /// Takes an [Input](../input/index.html) and outputs a vector of TaskStatus::Blocked and TaskStatus::ReadyToSchedule [Tasks](../task/index.html).
 pub fn task_generator(
