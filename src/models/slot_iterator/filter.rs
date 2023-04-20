@@ -207,9 +207,9 @@ fn merge_consequent_slots(slots: &Vec<Slot>) -> Option<Vec<Slot>> {
                 result.push(merged_slot);
             }
         }
-        // if let Some(next_slot) = slot.next() {
-
-        // }
+    }
+    if result.is_empty() {
+        return None;
     }
     Some(result)
 }
