@@ -200,7 +200,7 @@ fn _merge_consequent_slots(slots: &Vec<Slot>) -> Option<Vec<Slot>> {
     for (index, slot) in slots.iter().enumerate() {
         // check if there is next slot?
         if index < slots.len() - 1 {
-            let next_slot = slots[index + 1].clone();
+            let next_slot = slots[index + 1];
             dbg!(&next_slot);
 
             // add next_slot to slot

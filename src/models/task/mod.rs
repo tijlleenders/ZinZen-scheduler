@@ -1,7 +1,7 @@
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
-use super::{slot::Slot, goal::Tag};
+use super::{goal::Tag, slot::Slot};
 
 pub mod impls;
 

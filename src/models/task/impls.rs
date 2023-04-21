@@ -1,6 +1,9 @@
 use std::cmp::Ordering;
 
-use crate::{models::{goal::Tag, slot::Slot}, errors::Error};
+use crate::{
+    errors::Error,
+    models::{goal::Tag, slot::Slot},
+};
 
 use super::{Task, TaskStatus};
 

@@ -6,7 +6,7 @@ use super::{goal::TimeFilter, repetition::Repetition, slot::Slot};
 use chrono::NaiveDateTime;
 
 /* TODO 2023-04-20
-Below proposed to resolving https://github.com/tijlleenders/ZinZen-scheduler/issues/289 
+Below proposed to resolving https://github.com/tijlleenders/ZinZen-scheduler/issues/289
 - Will add a field in TimeSlotsIterator as below:
     ```rust
         /// Decide if slots can be split or will be a solid slot
@@ -25,7 +25,7 @@ Below proposed to resolving https://github.com/tijlleenders/ZinZen-scheduler/iss
         }
     }
     ```
-    
+
 */
 
 // derive Debug for TimeSlotsIterator

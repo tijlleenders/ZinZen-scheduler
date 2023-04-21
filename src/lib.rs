@@ -60,10 +60,10 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
     }
 }
 
-fn print_tasks(tasks: &Vec<Task>) {
+fn print_tasks(tasks: &[Task]) {
     let mut timings: Vec<String> = vec![];
     for task in tasks.iter() {
-        dbg!(task.id.clone());
+        dbg!(task.id);
         for slot in task.slots.iter() {
             let slot_timing: String = format!(" [ Start: {} , End: {} ] ", slot.start, slot.end);
             timings.push(slot_timing);
