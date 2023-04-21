@@ -128,7 +128,7 @@ impl Slot {
     /// Divide a Slot into list of slots with 1 hour interval
     /// If you pass a Slot for 5 hours, then it will splitted
     ///  into 5 slots with 1 hour interval:
-    /// ```
+    /// ```markdown
     /// Param:
     ///     Slot [ 2022-01-01 00:00:00 - 2022-01-01 05:00:00 ]
     ///     Duration: 5 hours
@@ -162,7 +162,7 @@ impl Slot {
     /// Divide a Slot into list of slots with 1 day interval
     /// If you pass a Slot for a week, then it will splitted
     ///  into 7 slots for each day of the week:
-    /// ```
+    /// ```markdown
     /// Param:
     ///     Slot [ 2022-01-01 00:00:00 - 2022-01-08 00:00:00 ]
     ///
