@@ -168,13 +168,15 @@ fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
                 }
             }
 
-            // TODO 2023-04-19 | develop a functionality to glue consequent slots together.
-            if let Some(merged) = merge_consequent_slots(&result) {
-                dbg!(&merged);
-                dbg!(&merged.len());
-                dbg!(&result.len());
-                return Some(merged);
-            }
+            // TODO 2023-04-21
+            //  As agreed in meeting on 2023-04-21 to avoid merge_consequent_slots
+            // and implementing new feature Timeline
+            // if let Some(merged) = merge_consequent_slots(&result) {
+            //     dbg!(&merged);
+            //     dbg!(&merged.len());
+            //     dbg!(&result.len());
+            //     return Some(merged);
+            // }
 
             return Some(result);
         }
@@ -185,7 +187,7 @@ fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
 }
 
 // function merge_consequent_slots
-fn merge_consequent_slots(slots: &Vec<Slot>) -> Option<Vec<Slot>> {
+fn _merge_consequent_slots(slots: &Vec<Slot>) -> Option<Vec<Slot>> {
     dbg!(&slots);
     dbg!(&slots.len());
 
