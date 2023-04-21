@@ -5,7 +5,7 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::option::Option;
 
-use super::slot::Slot;
+use super::{budget::Budget, slot::Slot};
 
 /// Represents a Goal passed in by the user from the front end.
 /// Goals are converted into [Task](../task/index.html)s by the scheduler.
@@ -55,19 +55,6 @@ pub struct TimeFilter {
     pub on_days: Option<Vec<Day>>,
     /// Used for postpone slots
     pub not_on: Option<Vec<Slot>>,
-}
-
-#[derive(Debug, Deserialize, Clone, PartialEq)]
-pub struct Budget {
-    pub budget_type: BudgetType,
-    pub min: Option<usize>,
-    pub max: Option<usize>,
-}
-
-#[derive(Debug, Deserialize, Clone, PartialEq)]
-pub enum BudgetType {
-    Weekly,
-    Daily,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]

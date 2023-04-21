@@ -1,37 +1,14 @@
-use crate::{
-    models::goal::{BudgetType, Goal, Tag},
-    models::repetition::Repetition,
-    models::slot::Slot,
-    models::slot_iterator::TimeSlotsIterator,
-    models::task::{Task, TaskStatus},
-};
-use chrono::NaiveDateTime;
-use serde::Deserialize;
 use std::collections::{BTreeMap, HashMap};
 
-#[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
-pub struct TaskBudgets {
-    calendar_start: NaiveDateTime,
-    calendar_end: NaiveDateTime,
-    goal_id_to_budget_ids: HashMap<String, Vec<String>>,
-    pub budget_id_to_budget: HashMap<String, TaskBudget>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct TaskBudget {
-    task_budget_type: BudgetType,
-    pub slot_budgets: Vec<SlotBudget>,
-    min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
-    max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
-}
-
-#[derive(Debug, Deserialize)]
-pub struct SlotBudget {
-    pub slot: Slot,
-    pub min: Option<usize>,
-    pub max: Option<usize>,
-    pub used: usize,
-}
+use super::{BudgetType, SlotBudget, TaskBudget, TaskBudgets};
+use crate::models::{
+    goal::{Goal, Tag},
+    repetition::Repetition,
+    slot::Slot,
+    slot_iterator::TimeSlotsIterator,
+    task::{TaskStatus, Task},
+};
+use chrono::NaiveDateTime;
 
 impl TaskBudget {
     fn decrement(&mut self, slot: &Slot) {
