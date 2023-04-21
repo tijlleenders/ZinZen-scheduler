@@ -3,9 +3,11 @@ pub mod impls;
 use crate::models::repetition::Repetition;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use std::option::Option;
+use std::{collections::BTreeMap, option::Option};
 
 use super::{budget::Budget, slot::Slot};
+
+pub type GoalsMap = BTreeMap<String, Goal>;
 
 /// Represents a Goal passed in by the user from the front end.
 /// Goals are converted into [Task](../task/index.html)s by the scheduler.

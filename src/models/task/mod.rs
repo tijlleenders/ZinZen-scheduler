@@ -29,8 +29,8 @@ pub struct Task {
     pub tags: Vec<Tag>,
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
-    pub calender_start: NaiveDateTime,
-    pub calender_end: NaiveDateTime,
+    pub calendar_start: NaiveDateTime,
+    pub calendar_end: NaiveDateTime,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]

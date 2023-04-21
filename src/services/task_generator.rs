@@ -1,34 +1,25 @@
 use chrono::NaiveDateTime;
 use std::collections::BTreeMap;
 
-use crate::models::goal::{Goal, Tag};
+use crate::models::budget::TaskBudgets;
+use crate::models::goal::{Goal, GoalsMap, Tag};
 use crate::models::input::{Input, TasksToPlace};
 use crate::models::repetition::Repetition;
 use crate::models::task::Task;
-use crate::models::budget::TaskBudgets;
 
-/// # Task Generator
-/// Takes an [Input](../input/index.html) and outputs a vector of TaskStatus::Blocked and TaskStatus::ReadyToSchedule [Tasks](../task/index.html).
-pub fn task_generator(
-    Input {
-        calendar_start,
-        calendar_end,
-        goals,
-    }: Input,
-) -> TasksToPlace {
-    let mut counter: usize = 0;
-    let mut tasks: Vec<Task> = vec![];
-    let mut goals: BTreeMap<String, Goal> =
-        add_start_and_end_where_none(goals, calendar_start, calendar_end);
+/// Generate tasks ready to be placed by the replacer (TasksToPlace) from Input
+pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
+    let calendar_start = input.calendar_start;
+    let calendar_end = input.calendar_end;
 
-    add_filler_goals(&mut goals);
-    add_optional_flex_duration_regular_goals(&mut goals); //TODO
-    add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
+    let mut goals = manipulate_input_goals(input);
 
     let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
     task_budgets.create_task_budgets_config(&mut goals);
 
-    tasks.extend(task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter));
+    let mut counter: usize = 0;
+    let mut tasks: Vec<Task> =
+        task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter);
 
     for goal in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
@@ -37,6 +28,7 @@ pub fn task_generator(
                 .generate_tasks(calendar_start, calendar_end, &mut counter);
         tasks.extend(tasks_for_goal);
     }
+
     TasksToPlace {
         calendar_start,
         calendar_end,
@@ -45,29 +37,40 @@ pub fn task_generator(
     }
 }
 
-fn add_start_and_end_where_none(
-    mut goals: BTreeMap<String, Goal>,
+/// Manipulate input which contains goals with start and end dates.
+/// Returns list of Goals after manipulation
+fn manipulate_input_goals(input: Input) -> GoalsMap {
+    let calendar_start = input.calendar_start;
+    let calendar_end = input.calendar_end;
+    let goals = input.goals;
+
+    let mut goals: GoalsMap = populate_goal_dates(goals, calendar_start, calendar_end);
+
+    add_filler_goals(&mut goals);
+    add_optional_flex_duration_regular_goals(&mut goals); //TODO
+    add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
+
+    goals
+}
+
+fn populate_goal_dates(
+    mut goals: GoalsMap,
     calendar_start: NaiveDateTime,
     calendar_end: NaiveDateTime,
-) -> BTreeMap<String, Goal> {
+) -> GoalsMap {
     for goal in goals.iter_mut() {
-        if goal.1.start.is_none() {
-            goal.1.start = Some(calendar_start);
-        }
-        if goal.1.deadline.is_none() {
-            goal.1.deadline = Some(calendar_end);
-        }
+        goal.1.start.get_or_insert(calendar_start);
+        goal.1.deadline.get_or_insert(calendar_end);
     }
     goals
 }
 
-fn add_optional_flex_duration_regular_goals(_goals: &mut BTreeMap<String, Goal>) {
+fn add_optional_flex_duration_regular_goals(_goals: &mut GoalsMap) {
     // TODO todo!();
 }
 
-fn add_optional_flex_number_and_duration_habits_goals(goals: &mut BTreeMap<String, Goal>) {
-    let mut generated_goals: BTreeMap<String, Goal> = BTreeMap::new();
-    let goal_ids_to_remove: Vec<String> = Vec::new();
+fn add_optional_flex_number_and_duration_habits_goals(goals: &mut GoalsMap) {
+    let mut generated_goals: GoalsMap = BTreeMap::new();
     for goal in goals.iter_mut() {
         if let Some(Repetition::FlexWeekly(min, max)) = goal.1.repeat {
             //Flex repeat goals are handled as follows:
@@ -91,14 +94,11 @@ fn add_optional_flex_number_and_duration_habits_goals(goals: &mut BTreeMap<Strin
         }
     }
 
-    for id in goal_ids_to_remove {
-        goals.remove(&id);
-    }
     goals.extend(generated_goals);
 }
 
-pub fn add_filler_goals(goals: &mut BTreeMap<String, Goal>) {
-    let mut results: BTreeMap<String, Goal> = BTreeMap::new();
+pub fn add_filler_goals(goals: &mut GoalsMap) {
+    let mut results: GoalsMap = BTreeMap::new();
     let mut ignore: Vec<String> = Vec::new();
     let mut children_to_add: Vec<(String, String)> = Vec::new();
     for goal in goals.iter() {

@@ -95,7 +95,7 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
     Ok(final_ouput)
 }
 
-fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
+fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
     let mut date = start.date();
     let days_num = Slot { start, end }.calc_duration_in_hours() / 24;
     let mut days = vec![];
@@ -201,7 +201,7 @@ fn get_output_with_date(
     end: NaiveDateTime,
 ) -> Vec<DayOutputFormat> {
     let mut result = vec![];
-    for day in get_calender_days(start, end).iter() {
+    for day in get_calendar_days(start, end).iter() {
         let mut outputs = output
             .iter()
             .filter(|&e| day.eq(&e.start.date()))
@@ -221,7 +221,7 @@ fn get_output_with_date(
 
 fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: NaiveDateTime) {
     let mut new_outputs = vec![];
-    for day in get_calender_days(start, end).iter() {
+    for day in get_calendar_days(start, end).iter() {
         let mut day_outputs = outputs
             .iter()
             .filter(|&e| day.eq(&e.start.date()))

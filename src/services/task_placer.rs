@@ -70,8 +70,8 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                         duration: new_duration,
                         start: None,
                         deadline: None,
-                        calender_start: tasks_to_place.tasks[index].calender_start,
-                        calender_end: tasks_to_place.tasks[index].calender_end,
+                        calendar_start: tasks_to_place.tasks[index].calendar_start,
+                        calendar_end: tasks_to_place.tasks[index].calendar_end,
                         slots: result_slots,
                         status: TaskStatus::ReadyToSchedule,
                         tags: tasks_to_place.tasks[index].tags.clone(),
@@ -192,14 +192,14 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
 //return the slot with lowest number of conflicts in slot_conflicts
 
 //REFACTOR!!
-// //prevent deadline end from exceeding calender end and update duration
+// //prevent deadline end from exceeding calendar end and update duration
 // for task in scheduled.iter_mut() {
 //     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
 //         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
 //     }
-//     //prevent slot end from exceeding calender end
-//     if task.confirmed_deadline.unwrap() > calender_end {
-//         task.confirmed_deadline = Some(calender_end);
+//     //prevent slot end from exceeding calendar end
+//     if task.confirmed_deadline.unwrap() > calendar_end {
+//         task.confirmed_deadline = Some(calendar_end);
 //         task.duration = Slot {
 //             start: task.confirmed_start.unwrap(),
 //             end: task.confirmed_deadline.unwrap(),
