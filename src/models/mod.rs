@@ -6,3 +6,4 @@ pub mod repetition;
 pub mod slot;
 pub mod slot_iterator;
 pub mod task;
+pub mod timeline;
