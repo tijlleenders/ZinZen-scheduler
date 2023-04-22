@@ -195,3 +195,34 @@ fn test_convert_day_object_into_string() {
     let fri_str: String = "FRI".to_string();
     assert_ne!(fri_str, fri_converted);
 }
+
+#[test]
+fn test_subtract_2_slots() {
+    // Test Trait Sub for Slot to make sure it is working properly
+    let slot1 = Slot {
+        start: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 2)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+    };
+    dbg!(slot1);
+
+    let slot2 = Slot {
+        start: NaiveDate::from_ymd_opt(2022, 10, 2)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 3)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+    };
+    dbg!(slot2);
+
+    let sub_res = slot1 - slot2;
+    dbg!(sub_res);
+}

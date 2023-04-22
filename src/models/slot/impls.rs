@@ -18,9 +18,9 @@ impl Sub for Slot {
     fn sub(self, other: Self) -> Self::Output {
         let mut result = Vec::new();
         if (other.start < self.start) && (other.end <= self.start)
-            || (other.start >= self.end) && (other.end > self.end)
+        || (other.start >= self.end) && (other.end > self.end)
         {
-            //other is completely before self
+            //other slot before self OR other slot after self
             result.push(self);
             result
         } else if (other.start == self.start) && (other.end < self.end) {
@@ -54,10 +54,18 @@ impl Sub for Slot {
             result
         } else if (other.start <= self.start) && (other.end >= self.end) {
             //other engulfs self
+
+            // TODO 2023-04-22 | fix this which seems unlogical or unnecessary
+            
             result
         } else if (other.start < self.start) && (other.end > self.start) && (other.end <= self.end)
         {
             //other starts before self and ends in-between self or when self ends
+            
+            // TODO 2023-04-22 | fix this which should have 2 slots:
+            // slot1 [start: other.start, end: self.start]
+            // slot2 [start: other.end, end: slef.end] IF other.end != self.end
+            
             let slot = Slot {
                 start: other.end,
                 end: self.end,
