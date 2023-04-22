@@ -199,30 +199,102 @@ fn test_convert_day_object_into_string() {
 #[test]
 fn test_subtract_2_slots() {
     // Test Trait Sub for Slot to make sure it is working properly
+
+    // slot1: [2022-10-01 05:00:00 --- 2022-10-01 10:00:00]
     let slot1 = Slot {
         start: NaiveDate::from_ymd_opt(2022, 10, 1)
             .unwrap()
-            .and_hms_opt(0, 0, 0)
+            .and_hms_opt(05, 0, 0)
             .unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 10, 2)
+        end: NaiveDate::from_ymd_opt(2022, 10, 1)
             .unwrap()
-            .and_hms_opt(0, 0, 0)
+            .and_hms_opt(10, 0, 0)
             .unwrap(),
     };
-    dbg!(slot1);
 
+    // slot2: [2022-10-01 09:00:00 --- 2022-10-01 02:00:00]
     let slot2 = Slot {
-        start: NaiveDate::from_ymd_opt(2022, 10, 2)
+        start: NaiveDate::from_ymd_opt(2022, 10, 1)
             .unwrap()
-            .and_hms_opt(0, 0, 0)
+            .and_hms_opt(9, 0, 0)
             .unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 10, 3)
+        end: NaiveDate::from_ymd_opt(2022, 10, 1)
             .unwrap()
-            .and_hms_opt(0, 0, 0)
+            .and_hms_opt(14, 0, 0)
             .unwrap(),
     };
-    dbg!(slot2);
 
-    let sub_res = slot1 - slot2;
-    dbg!(sub_res);
+    // expected result: [2022-10-01 09:00:00 --- 2022-10-01 10:00:00]
+    let expected = vec![Slot {
+        start: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(5, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(09, 0, 0)
+            .unwrap(),
+    }];
+
+    let result = slot1 - slot2;
+
+    assert_eq!(expected, result);
+}
+
+#[test]
+fn test_compare_2_slots() {
+    // Test comparing Slots
+
+    // slot1: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
+    let slot1 = Slot {
+        start: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(05, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(20, 0, 0)
+            .unwrap(),
+    };
+
+    // slot2: [2022-10-01 09:00:00 --- 2022-10-01 02:00:00]
+    let slot2 = Slot {
+        start: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(9, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(14, 0, 0)
+            .unwrap(),
+    };
+
+    // expected result: [2022-10-01 09:00:00 --- 2022-10-01 10:00:00]
+    let expected = vec![Slot {
+        start: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(5, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(09, 0, 0)
+            .unwrap(),
+    }];
+
+    if slot1 > slot2 {
+        dbg!("slot1 > slot2");
+    } else if slot1 < slot2 {
+        dbg!("slot1 < slot2");
+    } else if slot1 == slot2 {
+        dbg!("slot1 == slot2");
+    } else {
+        dbg!("slot1 != slot2");
+    }
+
+    let max = std::cmp::max(slot1, slot2);
+    dbg!(max);
+    let min = std::cmp::min(slot1, slot2);
+    dbg!(min);
+
+    assert!(true);
 }

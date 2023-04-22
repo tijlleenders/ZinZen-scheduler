@@ -16,6 +16,9 @@ impl Sub for Slot {
     type Output = Vec<Slot>;
 
     fn sub(self, other: Self) -> Self::Output {
+        dbg!(&self);
+        dbg!(&other);
+        
         let mut result = Vec::new();
         if (other.start < self.start) && (other.end <= self.start)
         || (other.start >= self.end) && (other.end > self.end)

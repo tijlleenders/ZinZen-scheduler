@@ -4,7 +4,7 @@ pub mod utils;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 
-#[derive(Debug, Eq, PartialEq, Clone, Copy, Deserialize)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone, Copy, Deserialize)]
 pub struct Slot {
     pub start: NaiveDateTime,
     pub end: NaiveDateTime,
