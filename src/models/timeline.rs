@@ -37,7 +37,7 @@ pub trait TimelineOperations {
     /// Insert list of slots to the Timeline
     /// - It guerantees that slots are sorted, and not duplicated
     /// - If it the timeline is empty, will initialize it then insert
-    fn insert(new_slots: Vec<Slot>);
+    fn insert_slots(&mut self, new_slots: Vec<Slot>) -> Option<()>;
     /// Remove list of slots
     /// - ? Should remove similar slots, or remove from each slot in timeline!!
     /// - ? Remove from each slot in the timeline means remove one slot from many
@@ -60,7 +60,7 @@ impl TimelineOperations for Timeline {
         // }
     }
 
-    fn insert(_new_slots: Vec<Slot>) {
+    fn insert_slots(&mut self, _new_slots: Vec<Slot>) -> Option<()> {
         todo!("Implement insert")
     }
 }

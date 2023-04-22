@@ -7,10 +7,11 @@ use crate::{
         slot::*,
         timeline::{Timeline, TimelineOperations},
     },
+    tests::utils::get_slot_2,
 };
 use chrono::*;
 
-use self::utils::{get_2_slots, get_slot};
+use self::utils::{get_2_slots, get_slot_1};
 
 #[cfg(test)]
 #[test]
@@ -268,7 +269,7 @@ fn test_compare_2_slots() {
 
 #[test]
 fn test_initialize_timeline() {
-    let sample_slot = get_slot();
+    let sample_slot = get_slot_1();
 
     let expected_slot_in_timeline = Slot {
         start: sample_slot.start,
@@ -289,8 +290,7 @@ fn test_initialize_timeline() {
 
 #[test]
 fn test_remove_from_timeline() {
-    let (slot1, slot2) = utils::get_2_slots();
-    let sample_slot = get_slot();
+    let sample_slot = get_slot_1();
 
     if let Some(mut timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
         let (slot_to_remove, _) = get_2_slots();
@@ -313,6 +313,32 @@ fn test_remove_from_timeline() {
             assert_eq!(expected_result, result);
         } else {
             assert!(false);
+        }
+    } else {
+        assert!(false);
+    }
+}
+
+#[test]
+fn test_insert_into_timeline() {
+    let sample_slot = get_slot_1();
+
+    if let Some(mut timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
+        let slot_to_insert = get_slot_2();
+        dbg!(&slot_to_insert);
+
+        match timeline.insert_slots(vec![slot_to_insert]) {
+            Some(_) => {
+                let expected_result = Timeline {
+                    slots: vec![sample_slot, slot_to_insert].into_iter().collect(),
+                };
+                dbg!(&expected_result);
+
+                dbg!(&timeline);
+
+                assert_eq!(expected_result, timeline);
+            }
+            None => assert!(false),
         }
     } else {
         assert!(false);
@@ -356,7 +382,7 @@ mod utils {
 
     /// Get a slot
     /// slot: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
-    pub fn get_slot() -> Slot {
+    pub fn get_slot_1() -> Slot {
         // slot: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
 
         let start = NaiveDate::from_ymd_opt(2022, 10, 1)
@@ -366,6 +392,21 @@ mod utils {
         let end = NaiveDate::from_ymd_opt(2022, 10, 1)
             .unwrap()
             .and_hms_opt(20, 0, 0)
+            .unwrap();
+
+        Slot { start, end }
+    }
+
+    pub fn get_slot_2() -> Slot {
+        // slot: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
+
+        let start = NaiveDate::from_ymd_opt(2022, 10, 1)
+            .unwrap()
+            .and_hms_opt(20, 0, 0)
+            .unwrap();
+        let end = NaiveDate::from_ymd_opt(2022, 10, 2)
+            .unwrap()
+            .and_hms_opt(00, 0, 0)
             .unwrap();
 
         Slot { start, end }
