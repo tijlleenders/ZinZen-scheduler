@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, vec};
 
 use crate::{
     models::repetition::Repetition,
@@ -340,6 +340,23 @@ fn test_insert_into_timeline() {
             }
             None => assert!(false),
         }
+    } else {
+        assert!(false);
+    }
+}
+
+#[test]
+fn test_get_next_timeline() {
+    let ((slot1, slot2), slot3, slot4) = (get_2_slots(), get_slot_1(), get_slot_2());
+
+    let timeline = Timeline {
+        slots: vec![slot1, slot2, slot3, slot4].into_iter().collect(),
+    };
+    dbg!(&timeline);
+
+    if let Some(next_slot) = timeline.get_slot(1) {
+        dbg!(&next_slot);
+        assert_eq!(slot2, next_slot);
     } else {
         assert!(false);
     }

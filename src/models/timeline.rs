@@ -42,8 +42,9 @@ pub trait TimelineOperations {
     /// - ? Should remove similar slots, or remove from each slot in timeline!!
     /// - ? Remove from each slot in the timeline means remove one slot from many
     fn remove_slots(&mut self, slots: Vec<Slot>) -> Option<Vec<Slot>>;
-    /// Get next slot of timeline based on index
-    fn get_next_slot(&self, index: usize) -> Option<Slot>;
+    /// Get a slot of timeline based on index
+    /// - If index is out of range, return None
+    fn get_slot(&self, index: usize) -> Option<Slot>;
 }
 
 impl TimelineOperations for Timeline {
@@ -51,7 +52,8 @@ impl TimelineOperations for Timeline {
         todo!("Implement remove_slots")
     }
 
-    fn get_next_slot(&self, _index: usize) -> Option<Slot> {
+    fn get_slot(&self, _index: usize) -> Option<Slot> {
+        // TODO 2023-04-22 | change return type to Result to show error index out of range when happened
         todo!("Implement get_next_slot")
         // if index < self.slots.len() {
         //     Some(self.slots[index as usize].clone())
