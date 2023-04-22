@@ -1,6 +1,8 @@
+use std::collections::BTreeSet;
+
 use crate::{
     models::repetition::Repetition,
-    models::{goal::Day, slot::*},
+    models::{goal::Day, slot::*, timeline::Timeline},
 };
 use chrono::*;
 
@@ -297,4 +299,32 @@ fn test_compare_2_slots() {
     dbg!(min);
 
     assert!(true);
+}
+
+#[test]
+fn test_initialize_timeline() {
+    let timeline_start = NaiveDate::from_ymd_opt(2022, 10, 1)
+        .unwrap()
+        .and_hms_opt(05, 0, 0)
+        .unwrap();
+    let timeline_end = NaiveDate::from_ymd_opt(2022, 10, 1)
+        .unwrap()
+        .and_hms_opt(20, 0, 0)
+        .unwrap();
+
+    let expected_slot_in_timeline = Slot {
+        start: timeline_start,
+        end: timeline_end,
+    };
+    let mut expected_collection_in_timeline = BTreeSet::new();
+    expected_collection_in_timeline.insert(expected_slot_in_timeline);
+    let expected_timeline = Timeline {
+        slots: expected_collection_in_timeline,
+    };
+
+    if let Some(timeline) = Timeline::initialize(timeline_start, timeline_end) {
+        assert_eq!(expected_timeline, timeline);
+    } else {
+        assert!(false);
+    }
 }
