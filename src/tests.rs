@@ -238,7 +238,7 @@ fn test_compare_2_slots() {
     let (slot1, slot2) = utils::get_2_slots();
 
     // expected result: [2022-10-01 09:00:00 --- 2022-10-01 10:00:00]
-    let expected = vec![Slot {
+    let _expected = vec![Slot {
         start: NaiveDate::from_ymd_opt(2022, 10, 1)
             .unwrap()
             .and_hms_opt(5, 0, 0)
@@ -290,9 +290,11 @@ fn test_initialize_timeline() {
 
 #[test]
 fn test_remove_from_timeline() {
+    // sample_slot: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
     let sample_slot = get_slot_1();
 
     if let Some(mut timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
+        // slot_to_remove: [2022-10-01 05:00:00 --- 2022-10-01 10:00:00]
         let (slot_to_remove, _) = get_2_slots();
         dbg!(&slot_to_remove);
 
@@ -368,10 +370,10 @@ mod utils {
     use crate::models::slot::Slot;
 
     /// Get 2 timeslots:
-    /// slot1: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
+    /// slot1: [2022-10-01 05:00:00 --- 2022-10-01 10:00:00]
     /// slot2: [2022-10-01 09:00:00 --- 2022-10-01 02:00:00]
     pub fn get_2_slots() -> (Slot, Slot) {
-        // slot1: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
+        // slot1: [2022-10-01 05:00:00 --- 2022-10-01 10:00:00]
         let slot1 = Slot {
             start: NaiveDate::from_ymd_opt(2022, 10, 1)
                 .unwrap()
