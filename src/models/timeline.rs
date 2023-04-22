@@ -63,8 +63,13 @@ impl TimelineOperations for Timeline {
         }
     }
 
-    fn insert_slots(&mut self, _new_slots: Vec<Slot>) -> Option<()> {
-        todo!("Implement insert")
+    fn insert_slots(&mut self, new_slots: Vec<Slot>) -> Option<()> {
+        for slot in new_slots {
+            if !self.slots.insert(slot) {
+                return None;
+            }
+        }
+        Some(())
     }
 }
 
