@@ -51,7 +51,7 @@ impl TimelineOperations for Timeline {
         todo!("Implement remove_slots")
     }
 
-    fn get_next_slot(&self, index: usize) -> Option<Slot> {
+    fn get_next_slot(&self, _index: usize) -> Option<Slot> {
         todo!("Implement get_next_slot")
         // if index < self.slots.len() {
         //     Some(self.slots[index as usize].clone())
@@ -60,7 +60,7 @@ impl TimelineOperations for Timeline {
         // }
     }
 
-    fn insert(new_slots: Vec<Slot>) {
+    fn insert(_new_slots: Vec<Slot>) {
         todo!("Implement insert")
     }
 }
