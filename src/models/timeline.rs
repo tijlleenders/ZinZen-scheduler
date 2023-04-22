@@ -20,10 +20,7 @@ pub struct Timeline {
 impl Timeline {
     /// Initialize a new timeline
     pub fn initialize(start: NaiveDateTime, end: NaiveDateTime) -> Option<Timeline> {
-        let init_slot: Slot = Slot {
-            start: start,
-            end: end,
-        };
+        let init_slot: Slot = Slot { start, end };
         let mut collection: BTreeSet<Slot> = BTreeSet::new();
 
         if collection.insert(init_slot) {
@@ -58,7 +55,7 @@ impl TimelineOperations for Timeline {
 
         // Remove similar slots from Timeline
         for slot in &to_remove {
-            self.slots.remove(&slot);
+            self.slots.remove(slot);
         }
 
         // Remove from each slot in the timeline
@@ -68,7 +65,7 @@ impl TimelineOperations for Timeline {
         let mut subtracted_slots: BTreeSet<Slot> = BTreeSet::new();
         for current_slot in self.slots.iter() {
             for slot_to_remove in &to_remove {
-                subtracted_slots.extend(current_slot.clone() - slot_to_remove.clone());
+                subtracted_slots.extend(*current_slot - *slot_to_remove);
             }
         }
         self.slots = subtracted_slots.clone();
@@ -80,7 +77,7 @@ impl TimelineOperations for Timeline {
 
         if index < self.slots.len() {
             let slot = self.slots.iter().nth(2).unwrap();
-            Some(slot.clone())
+            Some(*slot)
         } else {
             None
         }
