@@ -52,14 +52,15 @@ impl TimelineOperations for Timeline {
         todo!("Implement remove_slots")
     }
 
-    fn get_slot(&self, _index: usize) -> Option<Slot> {
+    fn get_slot(&self, index: usize) -> Option<Slot> {
         // TODO 2023-04-22 | change return type to Result to show error index out of range when happened
-        todo!("Implement get_next_slot")
-        // if index < self.slots.len() {
-        //     Some(self.slots[index as usize].clone())
-        // } else {
-        //     None
-        // }
+
+        if index < self.slots.len() {
+            let slot = self.slots.iter().nth(2).unwrap();
+            Some(slot.clone())
+        } else {
+            None
+        }
     }
 
     fn insert_slots(&mut self, _new_slots: Vec<Slot>) -> Option<()> {
