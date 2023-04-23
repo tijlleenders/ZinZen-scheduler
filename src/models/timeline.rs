@@ -4,6 +4,8 @@ use super::slot::Slot;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 
+pub type TimelineSlotsType = BTreeSet<Slot>;
+
 //TODO 2023-04-21
 // - Implement Display for Timeline
 // - If possible to develop divide timeline into hours, days, weeks, months, years
@@ -14,14 +16,14 @@ use serde::Deserialize;
 /// 2. get next slot of timeline
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct Timeline {
-    pub slots: BTreeSet<Slot>,
+    pub slots: TimelineSlotsType,
 }
 
 impl Timeline {
     /// Initialize a new timeline
     pub fn initialize(start: NaiveDateTime, end: NaiveDateTime) -> Option<Timeline> {
         let init_slot: Slot = Slot { start, end };
-        let mut collection: BTreeSet<Slot> = BTreeSet::new();
+        let mut collection: TimelineSlotsType = BTreeSet::new();
 
         if collection.insert(init_slot) {
             Some(Timeline { slots: collection })
@@ -50,7 +52,7 @@ impl TimelineOperations for Timeline {
             return None;
         }
 
-        let mut to_remove: BTreeSet<Slot> = BTreeSet::new();
+        let mut to_remove: TimelineSlotsType = BTreeSet::new();
         to_remove.extend(slots_to_remove);
 
         // Remove similar slots from Timeline
@@ -62,7 +64,7 @@ impl TimelineOperations for Timeline {
         // Alogritm:
         // - Subtract each slot in timeline from each slot in to_remove, results in subtracted_slots
         // - Remove all items in timeline and insert sutracted_slots
-        let mut subtracted_slots: BTreeSet<Slot> = BTreeSet::new();
+        let mut subtracted_slots: TimelineSlotsType = BTreeSet::new();
         for current_slot in self.slots.iter() {
             for slot_to_remove in &to_remove {
                 subtracted_slots.extend(*current_slot - *slot_to_remove);
