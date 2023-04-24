@@ -19,7 +19,7 @@ fn test_initialize() {
     let mut expected_collection_in_timeline = BTreeSet::new();
     expected_collection_in_timeline.insert(expected_slot_in_timeline);
     let expected_timeline = Timeline {
-        slots: expected_collection_in_timeline,
+        slots: vec![expected_slot_in_timeline].into_iter().collect(),
     };
 
     if let Some(timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
@@ -47,32 +47,6 @@ fn test_remove_from() {
             assert_eq!(expected_result, result);
         } else {
             assert!(false);
-        }
-    } else {
-        assert!(false);
-    }
-}
-
-#[test]
-fn test_insert_into() {
-    let sample_slot = get_slot(Duration::hours(15), 2022, 10, 1, 05, 0);
-
-    if let Some(mut timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
-        let slot_to_insert = get_slot(Duration::hours(4), 2022, 10, 1, 20, 0);
-        dbg!(&slot_to_insert);
-
-        match timeline.insert_slots(vec![slot_to_insert]) {
-            Some(_) => {
-                let expected_result = Timeline {
-                    slots: vec![sample_slot, slot_to_insert].into_iter().collect(),
-                };
-                dbg!(&expected_result);
-
-                dbg!(&timeline);
-
-                assert_eq!(expected_result, timeline);
-            }
-            None => assert!(false),
         }
     } else {
         assert!(false);

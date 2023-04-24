@@ -1,4 +1,4 @@
-use std::{collections::BTreeSet, ops::Sub};
+use std::collections::BTreeSet;
 
 use super::slot::Slot;
 use chrono::NaiveDateTime;
@@ -33,10 +33,6 @@ impl Timeline {
     }
 }
 pub trait TimelineOperations {
-    /// Insert list of slots to the Timeline
-    /// - It guerantees that slots are sorted, and not duplicated
-    /// - If it the timeline is empty, will initialize it then insert
-    fn insert_slots(&mut self, new_slots: Vec<Slot>) -> Option<()>;
     /// Remove list of slots
     /// - ? Should remove similar slots, or remove from each slot in timeline!!
     /// - ? Remove from each slot in the timeline means remove one slot from many
@@ -83,23 +79,5 @@ impl TimelineOperations for Timeline {
         } else {
             None
         }
-    }
-
-    fn insert_slots(&mut self, new_slots: Vec<Slot>) -> Option<()> {
-        for slot in new_slots {
-            if !self.slots.insert(slot) {
-                return None;
-            }
-        }
-        Some(())
-    }
-}
-
-/// Subtracting two timelines from each other
-impl Sub for Timeline {
-    type Output = Timeline;
-
-    fn sub(self, _other: Self) -> Self::Output {
-        todo!("Implement sub for Timeline")
     }
 }
