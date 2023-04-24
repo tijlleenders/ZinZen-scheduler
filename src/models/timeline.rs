@@ -78,7 +78,7 @@ impl TimelineOperations for Timeline {
         // TODO 2023-04-22 | chainsertnge return type to Result to show error index out of range when happened
 
         if index < self.slots.len() {
-            let slot = self.slots.iter().nth(2).unwrap();
+            let slot = self.slots.iter().nth(index).unwrap();
             Some(*slot)
         } else {
             None

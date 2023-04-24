@@ -4,6 +4,7 @@ pub mod utils;
 use crate::{
     models::goal::Day,
     models::{repetition::Repetition, slot::Slot},
+    tests::utils::get_slot,
 };
 use chrono::*;
 use std::vec;
@@ -204,20 +205,14 @@ fn test_convert_day_object_into_string() {
 fn test_subtract_2_slots() {
     // Test Trait Sub for Slot to make sure it is working properly
 
-    let (slot1, slot2) = utils::get_2_slots();
+    let (slot1, slot2) = (
+        get_slot(Duration::hours(5), 2022, 10, 1, 05, 0),
+        get_slot(Duration::hours(5), 2022, 10, 1, 09, 0),
+    );
     dbg!(slot1, slot2);
 
     // expected result: [2022-10-01 09:00:00 --- 2022-10-01 10:00:00]
-    let expected = vec![Slot {
-        start: NaiveDate::from_ymd_opt(2022, 10, 1)
-            .unwrap()
-            .and_hms_opt(5, 0, 0)
-            .unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 10, 1)
-            .unwrap()
-            .and_hms_opt(09, 0, 0)
-            .unwrap(),
-    }];
+    let expected = vec![get_slot(Duration::hours(4), 2022, 10, 1, 05, 0)];
     dbg!(&expected);
 
     let result = slot1 - slot2;
@@ -230,19 +225,11 @@ fn test_subtract_2_slots() {
 fn test_compare_2_slots() {
     // Test comparing Slots
 
-    let (slot1, slot2) = utils::get_2_slots();
-
-    // expected result: [2022-10-01 09:00:00 --- 2022-10-01 10:00:00]
-    let _expected = vec![Slot {
-        start: NaiveDate::from_ymd_opt(2022, 10, 1)
-            .unwrap()
-            .and_hms_opt(5, 0, 0)
-            .unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 10, 1)
-            .unwrap()
-            .and_hms_opt(09, 0, 0)
-            .unwrap(),
-    }];
+    let (slot1, slot2) = (
+        get_slot(Duration::hours(5), 2022, 10, 1, 05, 0),
+        get_slot(Duration::hours(5), 2022, 10, 1, 09, 0),
+    );
+    dbg!(slot1, slot2);
 
     if slot1 > slot2 {
         dbg!("slot1 > slot2");
