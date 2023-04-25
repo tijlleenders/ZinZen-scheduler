@@ -14,7 +14,7 @@ pub type TimelineSlotsType = BTreeSet<Slot>;
 /// Provide 2 public functionalities:
 /// 1. remove timeline which is a list of slots
 /// 2. get next slot of timeline
-#[derive(Debug, Deserialize, PartialEq)]
+#[derive(Debug, Deserialize, PartialEq, Clone)]
 pub struct Timeline {
     pub slots: TimelineSlotsType,
 }

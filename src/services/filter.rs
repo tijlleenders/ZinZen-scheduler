@@ -1,8 +1,10 @@
 use crate::models::{
     goal::{Day, TimeFilter},
     slot::Slot,
-    timeline::Timeline,
+    timeline::{Timeline, TimelineOperations},
 };
+
+// TODO 2023-04-25 | Develop Error handling here
 
 /// Applies time filter on the given timeline, then return filtered timeline
 pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
@@ -34,6 +36,14 @@ pub fn filter_on_days(timeline: &Timeline, days: &Vec<Day>) -> Timeline {
 }
 
 /// Filtering timeline based on not_on field in TimeFilter
-pub fn filter_not_on(timeline: &Timeline, slots: &Vec<Slot>) -> Timeline {
-    todo!("filter_not_on")
+pub fn filter_not_on(timeline: &Timeline, slots_to_filter: &Vec<Slot>) -> Timeline {
+    dbg!(&slots_to_filter);
+    let mut timeline = timeline.clone();
+
+    if let Some(()) = timeline.remove_slots(slots_to_filter.clone()) {
+        dbg!(&timeline);
+        timeline
+    } else {
+        timeline
+    }
 }

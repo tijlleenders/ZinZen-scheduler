@@ -37,7 +37,6 @@ fn test_filter_after_5am() {
     };
     dbg!(&expected_result);
 
-    // apply time filtertodo!("test_apply_timefilter");
     let filtered_timeline = apply_filter(
         &timeline,
         &TimeFilter {
@@ -155,5 +154,4 @@ fn test_fn_filter_not_on() {
     dbg!(&filtered_timeline);
 
     assert_eq!(filtered_timeline, expected_result);
-    todo!("test_filter_not_on");
 }
