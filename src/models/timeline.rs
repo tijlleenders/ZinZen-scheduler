@@ -40,23 +40,9 @@ impl Timeline {
         }
         Timeline { slots: new_slots }
     }
-}
-pub trait TimelineOperations {
-    /// Remove list of slots
-    /// - ? Should remove similar slots, or remove from each slot in timeline!!
-    /// - ? Remove from each slot in the timeline means remove one slot from many
-    fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) -> Option<()>;
-    /// Get a slot of timeline based on index
-    /// - If index is out of range, return None
-    fn get_slot(&self, index: usize) -> Option<Slot>;
-}
 
-impl TimelineOperations for Timeline {
-    fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) -> Option<()> {
-        if slots_to_remove.is_empty() {
-            return None;
-        }
-
+    /// Remove list of slots from timeline
+    pub fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) {
         let mut to_remove: TimelineSlotsType = BTreeSet::new();
         to_remove.extend(slots_to_remove);
 
@@ -76,11 +62,12 @@ impl TimelineOperations for Timeline {
             }
         }
         self.slots = subtracted_slots.clone();
-        Some(())
     }
 
-    fn get_slot(&self, index: usize) -> Option<Slot> {
-        // TODO 2023-04-22 | chainsertnge return type to Result to show error index out of range when happened
+    /// Get a slot of timeline based on index
+    /// - If index is out of range, return None
+    pub fn get_slot(&self, index: usize) -> Option<Slot> {
+        // TODO 2023-04-22 | change return type to Result to show error index out of range when happened
 
         if index < self.slots.len() {
             let slot = self.slots.iter().nth(index).unwrap();

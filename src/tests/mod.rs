@@ -1,6 +1,6 @@
+pub mod filter;
 pub mod timeline;
 pub mod utils;
-pub mod filter;
 
 use crate::{
     models::goal::Day,

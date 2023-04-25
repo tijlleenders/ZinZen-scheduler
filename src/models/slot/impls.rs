@@ -16,9 +16,6 @@ impl Sub for Slot {
     type Output = Vec<Slot>;
 
     fn sub(self, other: Self) -> Self::Output {
-        dbg!(&self);
-        dbg!(&other);
-
         let mut result = Vec::new();
         if (other.start < self.start) && (other.end <= self.start)
             || (other.start >= self.end) && (other.end > self.end)
@@ -96,16 +93,12 @@ impl Add for Slot {
     type Output = Option<Slot>;
 
     fn add(self, other: Self) -> Self::Output {
-        dbg!(&self);
-        dbg!(&other);
-
         if (other.start < self.start) && (other.end == self.start) {
             //other is before self and touching it
             let slot = Slot {
                 start: other.start,
                 end: self.end,
             };
-            dbg!(&slot);
             return Some(slot);
         }
         if (other.start == self.end) && (other.end > self.end) {
@@ -114,7 +107,6 @@ impl Add for Slot {
                 start: self.start,
                 end: other.end,
             };
-            dbg!(&slot);
             return Some(slot);
         }
 
@@ -155,18 +147,13 @@ impl Slot {
     pub fn divide_into_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
         let duration = self.calc_duration_in_hours();
-        dbg!(duration);
 
         for hour in 0..duration {
-            dbg!(hour);
             result.push(Slot {
                 start: self.start.add(chrono::Duration::hours(hour as i64)),
                 end: self.start.add(chrono::Duration::hours((hour + 1) as i64)),
             });
-
-            dbg!(&result);
         }
-        dbg!(&result);
         result
     }
 
@@ -189,8 +176,6 @@ impl Slot {
     pub fn divide_into_days(&self) -> Vec<Slot> {
         let mut result = vec![];
         let mut start_slider = self.start;
-        dbg!(start_slider);
-        dbg!(self.end);
 
         while start_slider.lt(&self.end) {
             if start_slider.date().eq(&self.end.date()) {
@@ -198,14 +183,12 @@ impl Slot {
                     start: start_slider,
                     end: self.end,
                 });
-                dbg!(&result);
 
                 start_slider = start_slider
                     .with_hour(0)
                     .unwrap()
                     .checked_add_days(Days::new(1))
                     .unwrap();
-                dbg!(start_slider);
                 continue;
             } else {
                 result.push(Slot {
@@ -216,17 +199,14 @@ impl Slot {
                         .checked_add_days(Days::new(1))
                         .unwrap(),
                 });
-                dbg!(&result);
 
                 start_slider = start_slider
                     .with_hour(0)
                     .unwrap()
                     .checked_add_days(Days::new(1))
                     .unwrap();
-                dbg!(start_slider);
             }
         }
-        dbg!(&result);
         result
     }
 

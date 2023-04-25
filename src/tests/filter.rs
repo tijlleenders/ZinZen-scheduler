@@ -1,5 +1,3 @@
-use chrono::{Duration, NaiveDate};
-
 use crate::{
     models::{
         goal::{Day, TimeFilter},
@@ -9,9 +7,10 @@ use crate::{
     services::filter::{apply_filter, filter_not_on, filter_on_days, filter_timing},
     tests::utils::{get_slot, get_timeline, get_timeline_days},
 };
+use chrono::{Duration, NaiveDate};
 
 #[test]
-fn test_filter_after_5am() {
+fn test_fn_apply_filter_after_5am() {
     let init_year = 2022;
     let init_month = 1;
     let init_day = 1;
@@ -141,12 +140,12 @@ fn test_fn_filter_on_days_timeline_is_not_splitted() {
 
     let expected_result = Timeline {
         slots: vec![
-            get_slot(duration, init_year, init_month, 2, hour, minute),
-            get_slot(duration, init_year, init_month, 4, hour, minute),
-            get_slot(duration, init_year, init_month, 7, hour, minute),
-            get_slot(duration, init_year, init_month, 9, hour, minute),
-            get_slot(duration, init_year, init_month, 11, hour, minute),
-            get_slot(duration, init_year, init_month, 14, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 2, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 4, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 7, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 9, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 11, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 14, hour, minute),
         ]
         .into_iter()
         .collect(),
