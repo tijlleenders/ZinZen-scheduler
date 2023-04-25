@@ -39,7 +39,7 @@ pub struct Goal {
     pub after_goals: Option<Vec<String>>,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq)]
+#[derive(Deserialize, Debug, Clone, PartialEq, PartialOrd, Ord, Eq)]
 pub enum Day {
     Fri,
     Sat,
