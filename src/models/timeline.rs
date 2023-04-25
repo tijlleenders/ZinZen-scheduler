@@ -36,14 +36,14 @@ pub trait TimelineOperations {
     /// Remove list of slots
     /// - ? Should remove similar slots, or remove from each slot in timeline!!
     /// - ? Remove from each slot in the timeline means remove one slot from many
-    fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) -> Option<Vec<Slot>>;
+    fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) -> Option<()>;
     /// Get a slot of timeline based on index
     /// - If index is out of range, return None
     fn get_slot(&self, index: usize) -> Option<Slot>;
 }
 
 impl TimelineOperations for Timeline {
-    fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) -> Option<Vec<Slot>> {
+    fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) -> Option<()> {
         if slots_to_remove.is_empty() {
             return None;
         }
@@ -67,7 +67,7 @@ impl TimelineOperations for Timeline {
             }
         }
         self.slots = subtracted_slots.clone();
-        Some(subtracted_slots.into_iter().collect())
+        Some(())
     }
 
     fn get_slot(&self, index: usize) -> Option<Slot> {

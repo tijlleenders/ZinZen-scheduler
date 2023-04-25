@@ -31,15 +31,14 @@ fn test_initialize() {
 
 #[test]
 fn test_remove_from() {
-    // sample_slot: [2022-10-01 05:00:00 --- 2022-10-01 20:00:00]
     let sample_slot = get_slot(Duration::hours(15), 2022, 10, 1, 05, 0);
 
     if let Some(mut timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
-        // slot_to_remove: [2022-10-01 05:00:00 --- 2022-10-01 10:00:00]
         let slot_to_remove = get_slot(Duration::hours(5), 2022, 10, 1, 05, 0);
         dbg!(&slot_to_remove);
 
-        if let Some(result) = timeline.remove_slots(vec![slot_to_remove]) {
+        if let Some(()) = timeline.remove_slots(vec![slot_to_remove]) {
+            let result: Vec<Slot> = timeline.slots.clone().into_iter().collect();
             let expected_result = vec![get_slot(Duration::hours(10), 2022, 10, 1, 10, 0)];
             dbg!(&expected_result);
             dbg!(&result);
@@ -55,7 +54,6 @@ fn test_remove_from() {
 
 #[test]
 fn test_get_next() {
-    // let ((slot1, slot2), slot3, slot4) = (get_2_slots(), get_slot_1(), get_slot_2());
     let (slot1, slot2, slot3, slot4) = (
         get_slot(Duration::hours(2), 2022, 10, 1, 01, 0),
         get_slot(Duration::hours(3), 2022, 10, 1, 03, 0),
@@ -92,7 +90,8 @@ fn test_remove_halfday_from_fullday() {
     dbg!(&slot_halfday_night);
     dbg!(&expected_result);
 
-    if let Some(result) = timeline.remove_slots(vec![slot_halfday_night]) {
+    if let Some(()) = timeline.remove_slots(vec![slot_halfday_night]) {
+        let result: Vec<Slot> = timeline.slots.clone().into_iter().collect();
         dbg!(&result);
 
         assert_eq!(expected_result, result);
@@ -119,7 +118,8 @@ fn test_remove_afternoon_hours_from_fullday() {
     dbg!(&slot_afternoon);
     dbg!(&expected_result);
 
-    if let Some(result) = timeline_fullday.remove_slots(vec![slot_afternoon]) {
+    if let Some(()) = timeline_fullday.remove_slots(vec![slot_afternoon]) {
+        let result: Vec<Slot> = timeline_fullday.slots.clone().into_iter().collect();
         dbg!(&result);
 
         assert_eq!(expected_result, result);
