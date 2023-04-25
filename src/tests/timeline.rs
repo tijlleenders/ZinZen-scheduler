@@ -127,3 +127,33 @@ fn test_remove_afternoon_hours_from_fullday() {
         assert!(false);
     }
 }
+
+#[test]
+fn test_split_into_days() {
+    let init_year = 2022;
+    let init_month = 1;
+    let init_day = 1;
+    let hour: u32 = 0;
+    let minute: u32 = 0;
+    let days_count: i64 = 5;
+    let duration = Duration::days(days_count);
+
+    let timeline = get_timeline(duration, init_year, init_month, init_day);
+
+    let expected_result = Timeline {
+        slots: vec![
+            get_slot(Duration::days(1), init_year, init_month, 1, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 2, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 3, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 4, hour, minute),
+            get_slot(Duration::days(1), init_year, init_month, 5, hour, minute),
+        ]
+        .into_iter()
+        .collect(),
+    };
+
+    let splitted_timeline = timeline.split_into_days();
+
+    dbg!(&splitted_timeline);
+    assert_eq!(expected_result, splitted_timeline);
+}

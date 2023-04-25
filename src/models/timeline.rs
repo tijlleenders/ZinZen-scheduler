@@ -31,6 +31,15 @@ impl Timeline {
             None
         }
     }
+
+    /// Split timeline into slots with 1 day interval
+    pub fn split_into_days(&self) -> Timeline {
+        let mut new_slots: TimelineSlotsType = BTreeSet::new();
+        for slot in self.slots.iter() {
+            new_slots.extend(slot.divide_into_days());
+        }
+        Timeline { slots: new_slots }
+    }
 }
 pub trait TimelineOperations {
     /// Remove list of slots
