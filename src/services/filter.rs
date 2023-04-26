@@ -1,8 +1,12 @@
 use std::collections::BTreeSet;
 
-use chrono::{ Datelike, Timelike };
+use chrono::{Datelike, Timelike};
 
-use crate::models::{ goal::{ Day, TimeFilter }, slot::Slot, timeline::Timeline };
+use crate::models::{
+    goal::{Day, TimeFilter},
+    slot::Slot,
+    timeline::Timeline,
+};
 
 // TODO 2023-04-25 | Develop Error handling here
 
@@ -15,16 +19,13 @@ pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
     - if not None TimeFilter.on_days
         - apply on_days filter
     - if not None TimeFilter.not_on
-        - apply not_on filter  
+        - apply not_on filter
     */
     let mut filtered_timeline = timeline.clone();
 
     if filter.after_time.is_some() || filter.before_time.is_some() {
-        filtered_timeline = filter_timing(
-            &filtered_timeline,
-            filter.before_time,
-            filter.after_time
-        );
+        filtered_timeline =
+            filter_timing(&filtered_timeline, filter.before_time, filter.after_time);
     }
     if let Some(days) = &filter.on_days {
         filtered_timeline = filter_on_days(&filtered_timeline, days);
@@ -40,7 +41,7 @@ pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
 pub fn filter_timing(
     timeline: &Timeline,
     before_time: Option<usize>,
-    after_time: Option<usize>
+    after_time: Option<usize>,
 ) -> Timeline {
     dbg!(&timeline);
     dbg!(before_time, after_time);
@@ -94,10 +95,7 @@ pub fn filter_timing(
                 }
             }
         }
-        // let slot_filtered = Slot {
-        //     start: daily_slot.start,
-        //     end: daily_slot.end,
-        // };
+
         dbg!(&slot_filtered);
 
         filtered_slots.push(slot_filtered);
