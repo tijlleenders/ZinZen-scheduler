@@ -1,12 +1,8 @@
 use std::collections::BTreeSet;
 
-use chrono::{Datelike, Timelike};
+use chrono::{ Datelike, Timelike };
 
-use crate::models::{
-    goal::{Day, TimeFilter},
-    slot::Slot,
-    timeline::Timeline,
-};
+use crate::models::{ goal::{ Day, TimeFilter }, slot::Slot, timeline::Timeline };
 
 // TODO 2023-04-25 | Develop Error handling here
 
@@ -29,17 +25,8 @@ pub fn apply_filter(_timeline: &Timeline, _filter: &TimeFilter) -> Timeline {
 pub fn filter_timing(
     timeline: &Timeline,
     before_time: Option<usize>,
-    after_time: Option<usize>,
+    after_time: Option<usize>
 ) -> Timeline {
-    /*
-    Algorithm:
-    - split timeline into days
-    - for each slot in timeline:
-        - if after_time has value: subtract from slot [start_of_day till after_time]
-        - if before_time has value: subtract from slot [from before_time till end_of_day]
-    - return timeline
-    */
-
     dbg!(&timeline);
     dbg!(before_time, after_time);
 
@@ -55,32 +42,47 @@ pub fn filter_timing(
 
     let mut filtered_slots: Vec<Slot> = vec![];
 
-    for mut daily_slot in daily_timeline.slots.into_iter() {
+    for daily_slot in daily_timeline.slots.into_iter() {
         dbg!(&daily_slot);
+
+        let mut slot_filtered = Slot {
+            start: daily_slot.start,
+            end: daily_slot.end,
+        };
+        dbg!(&slot_filtered);
 
         if let Some(after_time) = after_time {
             let after_datetime = daily_slot.start.with_hour(after_time as u32).unwrap();
             dbg!(&after_datetime);
             if daily_slot.start < after_datetime {
-                daily_slot.start = after_datetime;
-                dbg!(&daily_slot);
+                slot_filtered.start = after_datetime;
+                dbg!(&slot_filtered);
             }
         }
         if let Some(before_time) = before_time {
-            // if before_time before after_time
-            // if before_time < after_time
-
             let before_datetime = daily_slot.start.with_hour(before_time as u32).unwrap();
             dbg!(&before_datetime);
+
             if daily_slot.end > before_datetime {
-                daily_slot.end = before_datetime;
-                dbg!(&daily_slot);
+                // if before_time before after_time
+                if after_time.is_some() && before_time < after_time.unwrap() {
+                    let new_slot = Slot {
+                        start: daily_slot.start,
+                        end: before_datetime,
+                    };
+                    dbg!(&new_slot);
+                    filtered_slots.push(new_slot);
+                    dbg!(&filtered_slots);
+                } else {
+                    slot_filtered.end = before_datetime;
+                    dbg!(&slot_filtered);
+                }
             }
         }
-        let slot_filtered = Slot {
-            start: daily_slot.start,
-            end: daily_slot.end,
-        };
+        // let slot_filtered = Slot {
+        //     start: daily_slot.start,
+        //     end: daily_slot.end,
+        // };
         dbg!(&slot_filtered);
 
         filtered_slots.push(slot_filtered);
