@@ -14,12 +14,18 @@ pub type TimelineSlotsType = BTreeSet<Slot>;
 /// Provide 2 public functionalities:
 /// 1. remove timeline which is a list of slots
 /// 2. get next slot of timeline
-#[derive(Debug, Deserialize, PartialEq, Clone)]
+#[derive(Debug, Deserialize, PartialEq, Clone, Default)]
 pub struct Timeline {
     pub slots: TimelineSlotsType,
 }
 
 impl Timeline {
+    /// Create new empty timeline
+    pub fn new() -> Timeline {
+        let collection: TimelineSlotsType = BTreeSet::new();
+        Timeline { slots: collection }
+    }
+
     /// Initialize a new timeline
     pub fn initialize(start: NaiveDateTime, end: NaiveDateTime) -> Option<Timeline> {
         let init_slot: Slot = Slot { start, end };
@@ -34,6 +40,9 @@ impl Timeline {
 
     /// Split timeline into slots with 1 day interval
     pub fn split_into_days(&self) -> Timeline {
+        // TODO 2023-04-25 | test scenario:
+        //  - when slots in timeline are not full days!!!! Is the split
+        // will return full day or will respect the tha slot not full day!!
         let mut new_slots: TimelineSlotsType = BTreeSet::new();
         for slot in self.slots.iter() {
             new_slots.extend(slot.divide_into_days());
