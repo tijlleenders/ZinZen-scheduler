@@ -6,7 +6,10 @@ use crate::{
 use chrono::{Duration, NaiveDate};
 
 #[test]
-fn test_fn_filter_timing_aftertime() {
+fn test_aftertime_only() {
+    let before_time = None;
+    let after_time = Some(5);
+
     let init_year = 2022;
     let init_month = 1;
     let init_day = 1;
@@ -30,9 +33,6 @@ fn test_fn_filter_timing_aftertime() {
     };
     dbg!(&expected_result);
 
-    let before_time = None;
-    let after_time = Some(5);
-
     let filtered_timeline = filter_timing(&timeline, before_time, after_time);
     dbg!(&filtered_timeline);
 
@@ -40,7 +40,10 @@ fn test_fn_filter_timing_aftertime() {
 }
 
 #[test]
-fn test_fn_filter_timing_beforetime() {
+fn test_beforetime_only() {
+    let before_time = Some(20);
+    let after_time = None;
+
     let init_year = 2022;
     let init_month = 1;
     let init_day = 1;
@@ -64,9 +67,6 @@ fn test_fn_filter_timing_beforetime() {
     };
     dbg!(&expected_result);
 
-    let before_time = Some(20);
-    let after_time = None;
-
     let filtered_timeline = filter_timing(&timeline, before_time, after_time);
     dbg!(&filtered_timeline);
 
@@ -74,7 +74,10 @@ fn test_fn_filter_timing_beforetime() {
 }
 
 #[test]
-fn test_fn_filter_timing_both_before_and_after() {
+fn test_both_beforetime_and_aftertime() {
+    let before_time = Some(20);
+    let after_time = Some(5);
+
     let init_year = 2022;
     let init_month = 1;
     let init_day = 1;
@@ -98,9 +101,6 @@ fn test_fn_filter_timing_both_before_and_after() {
     };
     dbg!(&expected_result);
 
-    let before_time = Some(20);
-    let after_time = Some(5);
-
     let filtered_timeline = filter_timing(&timeline, before_time, after_time);
     dbg!(&filtered_timeline);
 
@@ -108,8 +108,11 @@ fn test_fn_filter_timing_both_before_and_after() {
 }
 
 #[test]
-fn test_fn_filter_timing_beforetime_is_before_aftertime() {
+fn test_beforetime_is_before_aftertime() {
     // Testing when before_time before after_time
+    let before_time = Some(5);
+    let after_time = Some(20);
+
     let init_year = 2022;
     let init_month = 1;
     let init_day = 1;
@@ -144,9 +147,6 @@ fn test_fn_filter_timing_beforetime_is_before_aftertime() {
         .collect(),
     };
     dbg!(&expected_result);
-
-    let before_time = Some(5);
-    let after_time = Some(20);
 
     let filtered_timeline = filter_timing(&timeline, before_time, after_time);
     dbg!(&filtered_timeline);

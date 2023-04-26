@@ -6,7 +6,7 @@ use crate::{
 use chrono::Duration;
 
 #[test]
-fn test_fn_filter_not_on() {
+fn test_simple() {
     let init_year = 2022;
     let init_month = 1;
     let init_day = 1;

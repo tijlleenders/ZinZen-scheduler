@@ -6,7 +6,7 @@ use crate::{
 use chrono::Duration;
 
 #[test]
-fn test_fn_filter_on_days() {
+fn test_splitted_timeline() {
     // 2022-01-01 is a Saturday
 
     let init_year = 2022;
@@ -43,7 +43,7 @@ fn test_fn_filter_on_days() {
 }
 
 #[test]
-fn test_fn_filter_on_days_timeline_is_not_splitted() {
+fn test_unsplitted_timeline() {
     // 2022-01-01 is a Saturday
     // TODO this test is not working
     let init_year = 2022;
