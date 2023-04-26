@@ -7,18 +7,33 @@ use crate::models::{ goal::{ Day, TimeFilter }, slot::Slot, timeline::Timeline }
 // TODO 2023-04-25 | Develop Error handling here
 
 /// Applies time filter on the given timeline, then return filtered timeline
-pub fn apply_filter(_timeline: &Timeline, _filter: &TimeFilter) -> Timeline {
-    // Algorithm
-    // - apply ontime filter (before_time and after_time fields)
-    // - apply on_days filter
-    // - apply not_on filter
+pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
+    /*
+    Algorithm
+    - if not None TimeFilter.after_time OR TimeFilter.after_time
+        - apply ontime filter
+    - if not None TimeFilter.on_days
+        - apply on_days filter
+    - if not None TimeFilter.not_on
+        - apply not_on filter  
+    */
+    let mut filtered_timeline = timeline.clone();
 
-    // - loop over timeline
-    // -
+    if filter.after_time.is_some() || filter.before_time.is_some() {
+        filtered_timeline = filter_timing(
+            &filtered_timeline,
+            filter.before_time,
+            filter.after_time
+        );
+    }
+    if let Some(days) = &filter.on_days {
+        filtered_timeline = filter_on_days(&filtered_timeline, days);
+    }
+    if let Some(not_on) = &filter.not_on {
+        filtered_timeline = filter_not_on(&filtered_timeline, not_on);
+    }
 
-    // filter_timing(timeline, before_time, after_time);
-
-    todo!()
+    filtered_timeline
 }
 
 /// Filtering timeline based on before_time and after_time fields in TimeFilter
