@@ -1,7 +1,7 @@
 use crate::{
     models::{slot::Slot, timeline::Timeline},
     services::filter::filter_timing,
-    tests::utils::get_timeline,
+    tests::utils::get_timeline_single_slot,
 };
 use chrono::{Duration, NaiveDate};
 
@@ -14,7 +14,7 @@ fn test_aftertime_only() {
     let init_month = 1;
     let init_day = 1;
     let init_duration = Duration::days(1);
-    let timeline = get_timeline(init_duration, init_year, init_month, init_day);
+    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let expected_result = Timeline {
@@ -48,7 +48,7 @@ fn test_beforetime_only() {
     let init_month = 1;
     let init_day = 1;
     let init_duration = Duration::days(1);
-    let timeline = get_timeline(init_duration, init_year, init_month, init_day);
+    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let expected_result = Timeline {
@@ -82,7 +82,7 @@ fn test_both_beforetime_and_aftertime() {
     let init_month = 1;
     let init_day = 1;
     let init_duration = Duration::days(1);
-    let timeline = get_timeline(init_duration, init_year, init_month, init_day);
+    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let expected_result = Timeline {
@@ -117,7 +117,7 @@ fn test_beforetime_is_before_aftertime() {
     let init_month = 1;
     let init_day = 1;
     let init_duration = Duration::days(1);
-    let timeline = get_timeline(init_duration, init_year, init_month, init_day);
+    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let expected_result = Timeline {

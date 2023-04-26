@@ -19,7 +19,8 @@ pub fn get_slot(
     Slot { start, end }
 }
 
-pub fn get_timeline(duration: Duration, year: i32, month: u32, day: u32) -> Timeline {
+/// Utility function to return a timeline with a single slot with respect to duration
+pub fn get_timeline_single_slot(duration: Duration, year: i32, month: u32, day: u32) -> Timeline {
     let slot = get_slot(duration, year, month, day, 0, 0);
     Timeline {
         slots: vec![slot].into_iter().collect(),

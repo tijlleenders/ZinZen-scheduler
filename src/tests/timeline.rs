@@ -126,7 +126,7 @@ fn test_split_into_days() {
     let days_count: i64 = 5;
     let duration = Duration::days(days_count);
 
-    let timeline = get_timeline(duration, init_year, init_month, init_day);
+    let timeline = get_timeline_single_slot(duration, init_year, init_month, init_day);
 
     let expected_result = Timeline {
         slots: vec![

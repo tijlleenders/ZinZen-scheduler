@@ -1,7 +1,7 @@
 use crate::{
     models::{goal::Day, timeline::Timeline},
     services::filter::filter_on_days,
-    tests::utils::{get_slot, get_timeline, get_timeline_days},
+    tests::utils::{get_slot, get_timeline_days, get_timeline_single_slot},
 };
 use chrono::Duration;
 
@@ -54,7 +54,7 @@ fn test_unsplitted_timeline() {
     let hour: u32 = 0;
     let minute: u32 = 0;
 
-    let timeline = get_timeline(duration, init_year, init_month, init_day);
+    let timeline = get_timeline_single_slot(duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let days_to_filter: Vec<Day> = vec![Day::Sun, Day::Tue, Day::Fri];

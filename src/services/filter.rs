@@ -12,6 +12,9 @@ use crate::models::{
 
 /// Applies time filter on the given timeline, then return filtered timeline
 pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
+    dbg!(&timeline);
+    dbg!(&filter);
+
     /*
     Algorithm
     - if not None TimeFilter.after_time OR TimeFilter.after_time
@@ -22,17 +25,24 @@ pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
         - apply not_on filter
     */
     let mut filtered_timeline = timeline.clone();
+    dbg!(&filtered_timeline);
 
     if filter.after_time.is_some() || filter.before_time.is_some() {
         filtered_timeline =
             filter_timing(&filtered_timeline, filter.before_time, filter.after_time);
     }
+    dbg!(&filtered_timeline);
+
     if let Some(days) = &filter.on_days {
         filtered_timeline = filter_on_days(&filtered_timeline, days);
     }
+    dbg!(&filtered_timeline);
+
     if let Some(not_on) = &filter.not_on {
+        dbg!(&not_on);
         filtered_timeline = filter_not_on(&filtered_timeline, not_on);
     }
+    dbg!(&filtered_timeline);
 
     filtered_timeline
 }

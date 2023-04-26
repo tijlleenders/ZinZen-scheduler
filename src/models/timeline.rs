@@ -54,11 +54,14 @@ impl Timeline {
     pub fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) {
         let mut to_remove: TimelineSlotsType = BTreeSet::new();
         to_remove.extend(slots_to_remove);
+        dbg!(&self);
+        dbg!(&to_remove);
 
         // Remove similar slots from Timeline
         for slot in &to_remove {
             self.slots.remove(slot);
         }
+        dbg!(&self);
 
         // Remove from each slot in the timeline
         // Alogritm:
@@ -67,9 +70,14 @@ impl Timeline {
         let mut subtracted_slots: TimelineSlotsType = BTreeSet::new();
         for current_slot in self.slots.iter() {
             for slot_to_remove in &to_remove {
-                subtracted_slots.extend(*current_slot - *slot_to_remove);
+                dbg!(&current_slot, &slot_to_remove);
+                let subtracted_slot = *current_slot - *slot_to_remove;
+                dbg!(&subtracted_slot);
+                subtracted_slots.extend(subtracted_slot);
+                dbg!(&subtracted_slots);
             }
         }
+        dbg!(&subtracted_slots);
         self.slots = subtracted_slots.clone();
     }
 
