@@ -45,7 +45,7 @@ fn test_after_5am() {
 
     let filtered_timeline = apply_filter(
         &timeline,
-        &(TimeFilter {
+        &Some(TimeFilter {
             before_time,
             after_time,
             on_days,
@@ -166,7 +166,7 @@ fn test_normal_workday() {
 
     let filtered_timeline = apply_filter(
         &timeline,
-        &(TimeFilter {
+        &Some(TimeFilter {
             before_time,
             after_time,
             on_days,
@@ -177,3 +177,5 @@ fn test_normal_workday() {
 
     assert_eq!(filtered_timeline, expected_result);
 }
+
+// TODO 2023-04-27 | This is a core functionlity and need a massive more test cases to guarantee it is working properly

@@ -2,7 +2,9 @@ pub mod filter;
 pub mod iterator;
 pub mod utils;
 
-use super::{goal::TimeFilter, repetition::Repetition, slot::Slot};
+use crate::services;
+
+use super::{goal::TimeFilter, repetition::Repetition, slot::Slot, timeline::Timeline};
 use chrono::NaiveDateTime;
 
 /* TODO 2023-04-20
@@ -38,7 +40,7 @@ Below proposed to resolving https://github.com/tijlleenders/ZinZen-scheduler/iss
 /// e.g. iterate over all 'every two hours' slots between times 10-21 for time period X-Y
 /// e.g. iterate in 24h steps over a time period that has certain filters applied, starting at after filter time value on day of the first available slot.
 pub(crate) struct TimeSlotsIterator {
-    timeline: Vec<Slot>,
+    timeline: Timeline,
     repetition: Option<Repetition>,
     filters: Option<TimeFilter>,
     current_start_position: NaiveDateTime,
@@ -52,13 +54,13 @@ impl TimeSlotsIterator {
         filters: Option<TimeFilter>,
     ) -> TimeSlotsIterator {
         let mut result = TimeSlotsIterator {
-            timeline: vec![Slot { start, end }],
+            timeline: Timeline::initialize(start, end).unwrap(),
             repetition,
             filters,
             current_start_position: start, //override after applying filters
         };
-        result.apply_filters();
-        result.current_start_position = result.timeline[0].start;
+        result.timeline = services::filter::apply_filter(&result.timeline, &result.filters);
+        result.current_start_position = result.timeline.slots.first().unwrap().start;
         result
     }
 }

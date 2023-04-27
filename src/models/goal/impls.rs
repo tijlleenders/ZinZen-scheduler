@@ -130,11 +130,11 @@ impl Goal {
         );
         dbg!(&time_slots_iterator);
 
-        for time_slots in time_slots_iterator {
-            dbg!(&time_slots);
+        for timeline in time_slots_iterator {
+            dbg!(&timeline);
             let task_id = *counter;
             *counter += 1;
-            if !time_slots.is_empty() && self.min_duration.is_some() {
+            if !timeline.slots.is_empty() && self.min_duration.is_some() {
                 let task = Task {
                     id: task_id,
                     goal_id: self.id.clone(),
@@ -144,7 +144,7 @@ impl Goal {
                     deadline: None,
                     calendar_start,
                     calendar_end,
-                    slots: time_slots,
+                    slots: timeline.slots.into_iter().collect(),
                     status: TaskStatus::ReadyToSchedule,
                     tags: self.tags.clone(),
                     after_goals: self.after_goals.clone(),

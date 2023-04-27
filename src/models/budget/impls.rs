@@ -44,8 +44,8 @@ impl TaskBudget {
         }
         let time_slot_iterator =
             TimeSlotsIterator::new(budget_start, budget_end, Some(repetition), None);
-        for slots in time_slot_iterator {
-            for slot in slots {
+        for timeline in time_slot_iterator {
+            for slot in timeline.slots {
                 self.slot_budgets.push(SlotBudget {
                     slot,
                     min: self.min,
@@ -170,10 +170,10 @@ impl TaskBudgets {
             let time_slots_iterator =
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
-            for time_slots in time_slots_iterator {
+            for timeline in time_slots_iterator {
                 let task_id = *counter;
                 *counter += 1;
-                if !time_slots.is_empty() {
+                if !timeline.slots.is_empty() {
                     let task = Task {
                         id: task_id,
                         goal_id: goal.id.clone(),
@@ -183,7 +183,7 @@ impl TaskBudgets {
                         deadline: None,
                         calendar_start: goal.start.unwrap(),
                         calendar_end: goal.deadline.unwrap(),
-                        slots: time_slots,
+                        slots: timeline.slots.into_iter().collect(),
                         status: TaskStatus::BudgetMinWaitingForAdjustment,
                         tags: goal.tags.clone(),
                         after_goals: goal.after_goals.clone(),

@@ -1,22 +1,23 @@
 use super::{utils::get_start_of_repeat_step, Slot, TimeSlotsIterator};
+use crate::models::timeline::Timeline;
 
 impl Iterator for TimeSlotsIterator {
-    type Item = Vec<Slot>;
+    type Item = Timeline;
     fn next(&mut self) -> Option<Self::Item> {
-        if self.timeline.is_empty() {
+        if self.timeline.slots.is_empty() {
             return None;
         }
         match self.repetition {
             Some(repetition) => {
-                let mut result = vec![];
+                let mut result = Timeline::new();
 
                 let next_start_position =
                     get_start_of_repeat_step(&self.current_start_position, repetition);
                 let mut indexes_to_delete_count: usize = 0;
-                for slot in self.timeline.iter_mut() {
+                for mut slot in self.timeline.slots.clone().into_iter() {
                     if next_start_position.le(&slot.end) && next_start_position.gt(&slot.start) {
                         //next_start_position is 'on' the current slot
-                        result.push(Slot {
+                        result.slots.insert(Slot {
                             start: slot.start,
                             end: next_start_position,
                         });
@@ -30,7 +31,7 @@ impl Iterator for TimeSlotsIterator {
                     } else if next_start_position.gt(&slot.end) {
                         //next_start_position is 'past' the current slot
                         indexes_to_delete_count += 1;
-                        result.push(*slot);
+                        result.slots.insert(slot);
                     } else {
                         //next_start_position is 'before' the current slot
                         self.current_start_position = next_start_position;
@@ -38,13 +39,13 @@ impl Iterator for TimeSlotsIterator {
                     }
                 }
                 for _i in 1..=indexes_to_delete_count {
-                    self.timeline.remove(0);
+                    self.timeline.slots.pop_first();
                 }
                 Some(result)
             }
             None => {
                 let result = self.timeline.clone();
-                self.timeline.clear();
+                self.timeline.slots.clear();
                 Some(result)
             }
         }

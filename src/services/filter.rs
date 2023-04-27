@@ -12,12 +12,13 @@ use crate::models::{
 // TODO 2023-04-27 | Solve issue: when not_on is covering full day and timing of slots is part of the day
 
 /// Applies time filter on the given timeline, then return filtered timeline
-pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
+pub fn apply_filter(timeline: &Timeline, filter: &Option<TimeFilter>) -> Timeline {
     dbg!(&timeline);
     dbg!(&filter);
 
     /*
     Algorithm
+    - if filter is None, just return same timeline
     - if not None TimeFilter.after_time OR TimeFilter.after_time
         - apply ontime filter
     - if not None TimeFilter.on_days
@@ -25,27 +26,34 @@ pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {
     - if not None TimeFilter.not_on
         - apply not_on filter
     */
-    let mut filtered_timeline = timeline.clone();
-    dbg!(&filtered_timeline);
 
-    if filter.after_time.is_some() || filter.before_time.is_some() {
-        filtered_timeline =
-            filter_timing(&filtered_timeline, filter.before_time, filter.after_time);
+    if let Some(filter) = filter {
+        dbg!(&filter);
+
+        let mut filtered_timeline = timeline.clone();
+        dbg!(&filtered_timeline);
+
+        if filter.after_time.is_some() || filter.before_time.is_some() {
+            filtered_timeline =
+                filter_timing(&filtered_timeline, filter.before_time, filter.after_time);
+        }
+        dbg!(&filtered_timeline);
+
+        if let Some(days) = &filter.on_days {
+            filtered_timeline = filter_on_days(&filtered_timeline, days);
+        }
+        dbg!(&filtered_timeline);
+
+        if let Some(not_on) = &filter.not_on {
+            dbg!(&not_on);
+            filtered_timeline = filter_not_on(&filtered_timeline, not_on);
+        }
+        dbg!(&filtered_timeline);
+
+        filtered_timeline
+    } else {
+        timeline.clone()
     }
-    dbg!(&filtered_timeline);
-
-    if let Some(days) = &filter.on_days {
-        filtered_timeline = filter_on_days(&filtered_timeline, days);
-    }
-    dbg!(&filtered_timeline);
-
-    if let Some(not_on) = &filter.not_on {
-        dbg!(&not_on);
-        filtered_timeline = filter_not_on(&filtered_timeline, not_on);
-    }
-    dbg!(&filtered_timeline);
-
-    filtered_timeline
 }
 
 /// Filtering timeline based on before_time and after_time fields in TimeFilter

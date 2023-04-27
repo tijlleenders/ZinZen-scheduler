@@ -24,6 +24,7 @@ pub struct Task {
     pub flexibility: usize,
     pub start: Option<NaiveDateTime>,
     pub deadline: Option<NaiveDateTime>,
+    // TODO 2023-04-27: Change this to Timeline
     pub slots: Vec<Slot>,
     #[serde(default)]
     pub tags: Vec<Tag>,
