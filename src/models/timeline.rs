@@ -78,7 +78,10 @@ impl Timeline {
             }
         }
         dbg!(&subtracted_slots);
-        self.slots = subtracted_slots.clone();
+        if !subtracted_slots.is_empty() {
+            self.slots = subtracted_slots;
+        }
+        dbg!(&self);
     }
 
     /// Get a slot of timeline based on index

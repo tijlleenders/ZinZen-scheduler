@@ -40,10 +40,10 @@ Below proposed to resolving https://github.com/tijlleenders/ZinZen-scheduler/iss
 /// e.g. iterate over all 'every two hours' slots between times 10-21 for time period X-Y
 /// e.g. iterate in 24h steps over a time period that has certain filters applied, starting at after filter time value on day of the first available slot.
 pub(crate) struct TimeSlotsIterator {
-    timeline: Timeline,
-    repetition: Option<Repetition>,
-    filters: Option<TimeFilter>,
-    current_start_position: NaiveDateTime,
+    pub timeline: Timeline,
+    pub repetition: Option<Repetition>,
+    pub filters: Option<TimeFilter>,
+    pub current_start_position: NaiveDateTime,
 }
 
 impl TimeSlotsIterator {
