@@ -68,3 +68,45 @@ fn test_subtract_fullday_from_few_hours() {
 
     assert_eq!(expected_result, result);
 }
+
+#[test]
+fn test_subtract_same_datetime() {
+    let year = 2022;
+    let month = 1;
+    let day = 1;
+    let hour: u32 = 0;
+    let min: u32 = 0;
+    let duration = Duration::hours(10);
+
+    let slot1 = get_slot(duration, year, month, day, hour, min);
+    let slot2 = get_slot(duration, year, month, day, hour, min);
+
+    let expected_result: Vec<Slot> = vec![];
+    dbg!(&expected_result);
+
+    let result = slot1 - slot2;
+    dbg!(&result);
+
+    assert_eq!(expected_result, result);
+}
+
+#[test]
+fn test_subtract_when_no_overlap() {
+    let year = 2022;
+    let month = 1;
+    let day = 1;
+    let hour: u32 = 0;
+    let min: u32 = 0;
+    let duration = Duration::hours(10);
+
+    let slot1 = get_slot(duration, year, month, day, hour, min);
+    let slot2 = get_slot(duration, year, month, day + 1, hour, min);
+
+    let expected_result: Vec<Slot> = vec![slot1];
+    dbg!(&expected_result);
+
+    let result = slot1 - slot2;
+    dbg!(&result);
+
+    assert_eq!(expected_result, result);
+}

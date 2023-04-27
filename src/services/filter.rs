@@ -9,6 +9,7 @@ use crate::models::{
 };
 
 // TODO 2023-04-25 | Develop Error handling here
+// TODO 2023-04-27 | Solve issue: when not_on is covering full day and timing of slots is part of the day
 
 /// Applies time filter on the given timeline, then return filtered timeline
 pub fn apply_filter(timeline: &Timeline, filter: &TimeFilter) -> Timeline {

@@ -63,14 +63,23 @@ fn test_normal_workday() {
     let init_month = 1;
     let init_day = 1;
     let init_duration = Duration::days(15);
+    let start_time: u32 = 5;
+    let end_time: u32 = 15;
 
-    let before_time: Option<usize> = Some(15);
-    let after_time: Option<usize> = Some(5);
+    let before_time: Option<usize> = Some(end_time as usize);
+    let after_time: Option<usize> = Some(start_time as usize);
     let on_days: Option<Vec<Day>> = Some(vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu]);
     let not_on: Option<Vec<Slot>> = Some(vec![
-        get_slot(Duration::days(1), init_year, init_month, 2, 0, 0),
-        get_slot(Duration::days(1), init_year, init_month, 6, 0, 0),
-        get_slot(Duration::days(1), init_year, init_month, 11, 0, 0),
+        get_slot(Duration::hours(10), init_year, init_month, 2, start_time, 0),
+        get_slot(Duration::hours(10), init_year, init_month, 6, start_time, 0),
+        get_slot(
+            Duration::hours(10),
+            init_year,
+            init_month,
+            11,
+            start_time,
+            0,
+        ),
     ]);
 
     // intiate a sample timeline

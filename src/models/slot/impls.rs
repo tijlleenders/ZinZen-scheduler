@@ -23,8 +23,11 @@ impl Sub for Slot {
             result.push(self);
             return result;
         }
-
-        if rhs.start <= self.start && rhs.end >= self.end {
+        if rhs.start == self.start && rhs.end == self.end {
+            // If rhs is the same as self, just return empty
+            return result;
+        }
+        if rhs.start < self.start && rhs.end > self.end {
             // If rhs completely encompasses self, then swap self and rhs,
             //and subtract from each other
             let swap_subtract = rhs - self;
