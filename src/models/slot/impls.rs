@@ -12,114 +12,23 @@ impl Display for Slot {
     }
 }
 
-// impl Sub for Slot {
-//     type Output = Vec<Slot>;
-
-//     fn sub(self, other: Self) -> Self::Output {
-//         dbg!(&self, &other);
-
-//         let mut result = Vec::new();
-//         if (other.start < self.start) && (other.end <= self.start)
-//             || (other.start >= self.end) && (other.end > self.end)
-//         {
-//             //other slot before self OR other slot after self
-//             result.push(self);
-//             dbg!(&result);
-//             result
-//         } else if (other.start == self.start) && (other.end < self.end) {
-//             //other starts same time as self and ends before self ends
-//             let slot = Slot {
-//                 start: other.end,
-//                 end: self.end,
-//             };
-//             dbg!(&slot);
-
-//             result.push(slot);
-//             dbg!(&result);
-//             result
-//         } else if (other.start > self.start) && (other.end < self.end) {
-//             //other is inside self. starts after and ends before
-//             let slot1 = Slot {
-//                 start: self.start,
-//                 end: other.start,
-//             };
-//             let slot2 = Slot {
-//                 start: other.end,
-//                 end: self.end,
-//             };
-//             dbg!(&slot1, &slot2);
-
-//             result.push(slot1);
-//             result.push(slot2);
-//             dbg!(&result);
-//             result
-//         } else if (other.start > self.start) && (other.end == self.end) {
-//             //other is inside self but end is same as self end
-//             let slot = Slot {
-//                 start: self.start,
-//                 end: other.start,
-//             };
-//             dbg!(&slot);
-
-//             result.push(slot);
-//             dbg!(&result);
-//             result
-//         } else if (other.start <= self.start) && (other.end >= self.end) {
-//             //other engulfs self
-
-//             // TODO 2023-04-22 | fix this which seems unlogical or unnecessary
-//             dbg!(&result);
-//             result
-//         } else if (other.start < self.start) && (other.end > self.start) && (other.end <= self.end)
-//         {
-//             //other starts before self and ends in-between self or when self ends
-
-//             // TODO 2023-04-22 | fix this which should have 2 slots:
-//             // slot1 [start: other.start, end: self.start]
-//             // slot2 [start: other.end, end: slef.end] IF other.end != self.end
-
-//             let slot = Slot {
-//                 start: other.end,
-//                 end: self.end,
-//             };
-//             dbg!(&slot);
-//             if slot.start != slot.end {
-//                 result.push(slot);
-//             }
-//             dbg!(&result);
-
-//             result
-//         } else {
-//             //other starts in-between self or when self starts and ends after self ends
-//             let slot = Slot {
-//                 start: self.start,
-//                 end: other.start,
-//             };
-//             dbg!(&slot);
-
-//             if slot.start != slot.end {
-//                 result.push(slot);
-//             }
-//             dbg!(&result);
-
-//             result
-//         }
-//     }
-// }
-
 impl Sub for Slot {
     type Output = Vec<Slot>;
 
     fn sub(self, rhs: Slot) -> Vec<Slot> {
         let mut result = Vec::new();
+
         if rhs.start > self.end || rhs.end < self.start {
             // If the two slots don't overlap, just return the original slot
-            result.push(self.clone());
+            result.push(self);
             return result;
         }
 
         if rhs.start <= self.start && rhs.end >= self.end {
-            // If rhs completely encompasses self, then return an empty vector
+            // If rhs completely encompasses self, then swap self and rhs,
+            //and subtract from each other
+            let swap_subtract = rhs - self;
+            result.extend(swap_subtract);
             return result;
         }
 
@@ -166,10 +75,7 @@ impl Add for Slot {
 
 impl Slot {
     pub fn new(start: NaiveDateTime, end: NaiveDateTime) -> Slot {
-        Slot {
-            start: start,
-            end: end,
-        }
+        Slot { start, end }
     }
 
     pub fn calc_duration_in_hours(&self) -> usize {
