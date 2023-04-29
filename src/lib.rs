@@ -1,3 +1,4 @@
+/// crate docz
 use errors::Error;
 use models::input::Input;
 use models::output::FinalOutput;
@@ -7,8 +8,9 @@ use services::{task_generator::task_generator, task_placer::task_placer};
 use wasm_bindgen::prelude::*;
 
 mod errors;
-/// API modules
+/// The data structures
 pub mod models;
+/// The services handling the data structures
 pub mod services;
 #[cfg(test)]
 mod tests;
@@ -23,6 +25,7 @@ interface Input {
 "#;
 
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
+/// The main wasm function to call
 #[wasm_bindgen]
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     // JsError implements From<Error>, so we can just use `?` on any Error
@@ -43,6 +46,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 }
 
 //Todo why is there a schedule function and a run_scheduler function?
+/// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalOutput {
     let tasks = task_generator(input);
     let placed_tasks = task_placer(tasks);
