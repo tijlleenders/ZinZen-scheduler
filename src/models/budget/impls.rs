@@ -128,7 +128,7 @@ impl TaskBudgets {
         }
     }
 
-    pub(crate) fn decrement_budgets(&mut self, slot: &Slot, goal_id: &String) -> bool {
+    pub(crate) fn is_allowed_by_budget(&mut self, slot: &Slot, goal_id: &String) -> bool {
         let mut result: bool = false;
         let budget_ids = self.goal_id_to_budget_ids.get(goal_id);
         //decrement all budgets or none => check first - then do
@@ -195,6 +195,7 @@ impl TaskBudgets {
                 }
             }
         }
+        dbg!(&tasks_result);
         tasks_result
     }
 }

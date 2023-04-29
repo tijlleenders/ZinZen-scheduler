@@ -27,6 +27,7 @@ pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
             goal.1
                 .generate_tasks(calendar_start, calendar_end, &mut counter);
         tasks.extend(tasks_for_goal);
+        dbg!(&tasks);
     }
 
     TasksToPlace {

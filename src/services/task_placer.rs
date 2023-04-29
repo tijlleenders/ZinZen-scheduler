@@ -10,9 +10,16 @@ use crate::models::task::{Task, TaskStatus};
 pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks_to_place);
+    dbg!(&tasks_to_place);
+
+    // TODO 2023-04-29: Fix function adjust_min_budget_tasks based on debug feedback check:
+    // https://github.com/tijlleenders/ZinZen-scheduler/issues/300#issuecomment-1528727445
 
     adjust_min_budget_tasks(&mut tasks_to_place); //TODO
+    dbg!(&tasks_to_place);
+
     schedule(&mut tasks_to_place); //TODO
+    dbg!(&tasks_to_place);
 
     PlacedTasks {
         calendar_start: tasks_to_place.calendar_start,
@@ -23,6 +30,8 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
 
 fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
     let mut tasks_to_add: Vec<Task> = Vec::new();
+    dbg!(&tasks_to_place);
+
     for index in 0..tasks_to_place.tasks.len() {
         if tasks_to_place.tasks[index].status == TaskStatus::BudgetMinWaitingForAdjustment {
             for slot_budget in &tasks_to_place
@@ -62,7 +71,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 let new_title = tasks_to_place.tasks[index].title.clone();
                 if tasks_to_place.tasks[index].duration >= slot_budget.used {
                     let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
-
+                    // TODO 2023-04-28 | shouldn't add tasks in task_placer. Refactor this (conceptually in task_generator).
                     let task_to_add = Task {
                         id: tasks_to_place.tasks[index].id,
                         goal_id: tasks_to_place.tasks[index].goal_id.clone(),
@@ -113,7 +122,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     for slot in chosen_slots.iter() {
         let slot_allowed = tasks_to_place
             .task_budgets
-            .decrement_budgets(slot, &template_task.goal_id);
+            .is_allowed_by_budget(slot, &template_task.goal_id);
         if !slot_allowed {
             continue;
         }
@@ -183,27 +192,3 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
 
     Some(result)
 }
-
-// impl Ord for SlotConflict{
-//     fn cmp(&self, other: &Self) -> Ordering {
-
-//     }
-// }
-//return the slot with lowest number of conflicts in slot_conflicts
-
-//REFACTOR!!
-// //prevent deadline end from exceeding calendar end and update duration
-// for task in scheduled.iter_mut() {
-//     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-//         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-//     }
-//     //prevent slot end from exceeding calendar end
-//     if task.confirmed_deadline.unwrap() > calendar_end {
-//         task.confirmed_deadline = Some(calendar_end);
-//         task.duration = Slot {
-//             start: task.confirmed_start.unwrap(),
-//             end: task.confirmed_deadline.unwrap(),
-//         }
-//         .num_hours();
-//     }
-// }

@@ -47,7 +47,8 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 //Todo why is there a schedule function and a run_scheduler function?
 pub fn run_scheduler(input: Input) -> FinalOutput {
     let tasks = generate_tasks_to_place(input);
-    print_tasks(&tasks.tasks);
+    dbg!(&tasks);
+    // _print_tasks(&tasks.tasks);
     let placed_tasks = task_placer(tasks);
     match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
@@ -60,7 +61,7 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
     }
 }
 
-fn print_tasks(tasks: &[Task]) {
+fn _print_tasks(tasks: &[Task]) {
     let mut timings: Vec<String> = vec![];
     for task in tasks.iter() {
         dbg!(task.id);
