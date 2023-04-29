@@ -37,7 +37,6 @@ console_error_panic_hook = "0.1.7"
 
 # display logs
 log = "0.4.17"
-simple_logger = "4.0.0"
 
 # soft assertions without panic
 soft = "0.1.1"
