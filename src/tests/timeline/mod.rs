@@ -74,7 +74,7 @@ fn test_split_into_days() {
         .collect(),
     };
 
-    let splitted_timeline = timeline.split_into_days();
+    let splitted_timeline = timeline.get_split_into_days();
 
     dbg!(&splitted_timeline);
     assert_eq!(expected_result, splitted_timeline);

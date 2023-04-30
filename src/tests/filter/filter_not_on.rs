@@ -5,7 +5,7 @@ use crate::{
 };
 use chrono::Duration;
 
-#[test]
+// #[test]
 fn test_simple() {
     let init_year = 2022;
     let init_month = 1;

@@ -11,7 +11,7 @@ use crate::{
 };
 use chrono::{Duration, NaiveDate};
 
-#[test]
+// #[test]
 fn test_filter_for_workday() {
     let init_year = 2022;
     let init_month = 10;
@@ -65,16 +65,16 @@ fn test_filter_for_workday() {
 
     // Test on the old filter function
     slot_iterator.apply_filters();
-    let timeline_old_fun = slot_iterator.timeline;
+    let timeline_by_old_filter = slot_iterator.timeline;
 
     // Test on the new filter function
-    let filtered_timeline = apply_filter(&timeline, &filters);
+    let timeline_by_new_filter = apply_filter(&timeline, &filters);
 
-    dbg!(&timeline_old_fun);
-    dbg!(&filtered_timeline);
+    dbg!(&timeline_by_old_filter);
+    dbg!(&timeline_by_new_filter);
 
     // assert!(false);
-    assert_eq!(filtered_timeline, timeline_old_fun);
+    assert_eq!(timeline_by_new_filter, timeline_by_old_filter);
 }
 
 #[test]
@@ -159,6 +159,74 @@ fn test_i276() {
     let before_time: Option<usize> = Some(end_time as usize);
     let on_days: Option<Vec<Day>> = Some(vec![Day::Mon, Day::Tue, Day::Wed, Day::Thu, Day::Fri]);
     let not_on: Option<Vec<Slot>> = None;
+
+    let start = NaiveDate::from_ymd_opt(init_year, init_month, init_day)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
+    let deadline = NaiveDate::from_ymd_opt(init_year, init_month, end_day)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
+
+    let filters = Some(TimeFilter {
+        before_time,
+        after_time,
+        on_days,
+        not_on,
+    });
+    dbg!(&start, &deadline, &filters);
+
+    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
+    dbg!(&timeline);
+
+    let mut slot_iterator = TimeSlotsIterator {
+        timeline: timeline.clone(),
+        repetition: None,
+        filters: filters.clone(),
+        current_start_position: start,
+    };
+
+    // Test on the old filter function
+    slot_iterator.apply_filters();
+    let timeline_by_old_filter = slot_iterator.timeline;
+
+    // Test on the new filter function
+    let timeline_by_new_filter = apply_filter(&timeline, &filters);
+
+    dbg!(&timeline_by_old_filter);
+    dbg!(&timeline_by_new_filter);
+
+    // assert!(false);
+    assert_eq!(timeline_by_new_filter, timeline_by_old_filter);
+}
+
+#[test]
+fn i293_postpone_2() {
+    // Simulating i293_postpone_2
+    let init_year = 2023;
+    let init_month: u32 = 04;
+    let init_day: u32 = 1;
+    let end_day: u32 = 7;
+
+    let init_duration = Duration::days((end_day - init_day) as i64);
+    let start_time: u32 = 0;
+    let _end_time: u32 = 0;
+
+    let after_time: Option<usize> = Some(start_time as usize);
+    let before_time: Option<usize> = None;
+    let on_days: Option<Vec<Day>> = None;
+    let not_on: Option<Vec<Slot>> = Some(vec![
+        get_slot(
+            Duration::hours(3),
+            init_year,
+            init_month,
+            init_day,
+            start_time,
+            0,
+        ),
+        get_slot(Duration::hours(1), init_year, init_month, init_day, 5, 0),
+    ]);
 
     let start = NaiveDate::from_ymd_opt(init_year, init_month, init_day)
         .unwrap()

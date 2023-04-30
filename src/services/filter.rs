@@ -72,7 +72,7 @@ pub fn filter_timing(
     validate_time(before_time, "before_time");
     validate_time(after_time, "after_time");
 
-    let daily_timeline = timeline.split_into_days();
+    let daily_timeline = timeline.get_split_into_days();
     dbg!(&daily_timeline);
 
     let mut filtered_slots: Vec<Slot> = vec![];
@@ -142,7 +142,7 @@ pub fn filter_on_days(timeline: &Timeline, days_to_filter: &[Day]) -> Timeline {
 
     dbg!(&timeline);
     // Get new timeline based ont splitting into days
-    let mut timeline = timeline.split_into_days();
+    let mut timeline = timeline.get_split_into_days();
     dbg!(&timeline);
 
     for slot in timeline.slots.iter() {
@@ -166,11 +166,24 @@ pub fn filter_on_days(timeline: &Timeline, days_to_filter: &[Day]) -> Timeline {
 /// Filtering timeline based on not_on field in TimeFilter
 pub fn filter_not_on(timeline: &Timeline, slots_to_filter: &Vec<Slot>) -> Timeline {
     dbg!(&slots_to_filter);
-    let mut timeline = timeline.clone();
+    let mut timeline_as_hours = timeline.get_split_into_hours();
+    dbg!(&timeline_as_hours);
+    // split slots_to_filter into 1 hours slot
 
-    timeline.remove_slots(slots_to_filter.clone());
-    dbg!(&timeline);
-    timeline
+    let splitted_slots_to_filter: Vec<Slot> = Timeline::get_split_into_hours(&Timeline {
+        slots: slots_to_filter.clone().into_iter().collect(),
+    })
+    .slots
+    .into_iter()
+    .collect();
+    dbg!(&splitted_slots_to_filter);
+
+    // timeline_as_hours.remove_slots(splitted_slots_to_filter);
+    timeline_as_hours
+        .slots
+        .retain(|slot| !splitted_slots_to_filter.contains(slot));
+    dbg!(&timeline_as_hours);
+    timeline_as_hours
 }
 
 fn validate_time(time: Option<usize>, time_name: &str) {

@@ -57,7 +57,7 @@ fn apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
 
                 timeline_as_hours.retain(|slot| !not_on_slots_as_hours.contains(slot));
                 dbg!(&timeline_as_hours);
-
+                // let timeline_merged = _merge_consequent_slots(&timeline_as_hours)?;
                 Some(timeline_as_hours)
             }
             None => None,
