@@ -15,7 +15,7 @@ pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
     let mut goals = manipulate_input_goals(input);
 
     let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
-    task_budgets.create_task_budgets_config(&mut goals);
+    task_budgets.configure_budgets(&mut goals);
 
     let mut counter: usize = 0;
     let mut tasks: Vec<Task> =
