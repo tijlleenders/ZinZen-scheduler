@@ -11,7 +11,7 @@ use crate::{
 };
 use chrono::{Duration, NaiveDate};
 
-// #[test]
+#[test]
 fn test_filter_for_workday() {
     let init_year = 2022;
     let init_month = 10;
@@ -64,7 +64,7 @@ fn test_filter_for_workday() {
     };
 
     // Test on the old filter function
-    slot_iterator.apply_filters();
+    slot_iterator._apply_filters();
     let timeline_by_old_filter = slot_iterator.timeline;
 
     // Test on the new filter function
@@ -130,7 +130,7 @@ fn test_i284_7days() {
     };
 
     // Test on the old filter function
-    slot_iterator.apply_filters();
+    slot_iterator._apply_filters();
     let timeline_by_old_filter = slot_iterator.timeline;
 
     // Test on the new filter function
@@ -188,7 +188,7 @@ fn test_i276() {
     };
 
     // Test on the old filter function
-    slot_iterator.apply_filters();
+    slot_iterator._apply_filters();
     let timeline_by_old_filter = slot_iterator.timeline;
 
     // Test on the new filter function
@@ -204,6 +204,8 @@ fn test_i276() {
 #[test]
 fn i293_postpone_2() {
     // Simulating i293_postpone_2
+    // Here issue related to divide slots into hours inside function `filter_not_on`
+    //which not wasn't implemented in the new filter functionlity.
     let init_year = 2023;
     let init_month: u32 = 04;
     let init_day: u32 = 1;
@@ -256,7 +258,7 @@ fn i293_postpone_2() {
     };
 
     // Test on the old filter function
-    slot_iterator.apply_filters();
+    slot_iterator._apply_filters();
     let timeline_by_old_filter = slot_iterator.timeline;
 
     // Test on the new filter function

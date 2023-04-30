@@ -5,27 +5,27 @@ use crate::models::{goal::Day, slot::utils::convert_into_1h_slots, timeline::Tim
 use chrono::{Datelike, Timelike};
 
 impl TimeSlotsIterator {
-    pub(crate) fn apply_filters(&mut self) {
+    pub(crate) fn _apply_filters(&mut self) {
         match &self.filters {
             Some(time_filter) => {
                 dbg!(&self.timeline);
                 dbg!(&time_filter);
 
-                if let Some(slots) = apply_timing_filter(self) {
+                if let Some(slots) = _apply_timing_filter(self) {
                     self.timeline = Timeline {
                         slots: slots.into_iter().collect(),
                     }
                 }
                 dbg!(&self.timeline);
 
-                if let Some(slots) = apply_on_days_filter(self) {
+                if let Some(slots) = _apply_on_days_filter(self) {
                     self.timeline = Timeline {
                         slots: slots.into_iter().collect(),
                     }
                 }
                 dbg!(&self.timeline);
 
-                if let Some(slots) = apply_not_on_filter(self) {
+                if let Some(slots) = _apply_not_on_filter(self) {
                     self.timeline = Timeline {
                         slots: slots.into_iter().collect(),
                     }
@@ -38,7 +38,7 @@ impl TimeSlotsIterator {
 }
 
 /// Applies postpone feature for the given slot iterator.
-fn apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
+fn _apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     if let Some(time_filter) = &slot_iterator.filters {
         dbg!(&time_filter);
         match &time_filter.not_on {
@@ -67,7 +67,7 @@ fn apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     }
 }
 
-fn apply_on_days_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
+fn _apply_on_days_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     if let Some(time_filter) = &slot_iterator.filters {
         dbg!(&time_filter);
         match &time_filter.on_days {
@@ -95,7 +95,7 @@ fn apply_on_days_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> 
     }
 }
 
-fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
+fn _apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     if let Some(time_filter) = &slot_iterator.filters {
         dbg!(time_filter);
         if time_filter.after_time.is_some() || time_filter.before_time.is_some() {

@@ -57,7 +57,7 @@ fn test_after_5am() {
     assert_eq!(filtered_timeline, expected_result);
 }
 
-// #[test]
+#[test]
 fn test_normal_workday() {
     let init_year = 2022;
     let init_month = 1;
@@ -86,81 +86,98 @@ fn test_normal_workday() {
     let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
+    let mut expected_slots: Vec<Slot> = Slot {
+        start: NaiveDate::from_ymd_opt(init_year, init_month, 3)
+            .unwrap()
+            .and_hms_opt(5, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(init_year, init_month, 3)
+            .unwrap()
+            .and_hms_opt(15, 0, 0)
+            .unwrap(),
+    }
+    .divide_into_1h_slots();
+    expected_slots.append(
+        &mut Slot {
+            start: NaiveDate::from_ymd_opt(init_year, init_month, 4)
+                .unwrap()
+                .and_hms_opt(5, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(init_year, init_month, 4)
+                .unwrap()
+                .and_hms_opt(15, 0, 0)
+                .unwrap(),
+        }
+        .divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut Slot {
+            start: NaiveDate::from_ymd_opt(init_year, init_month, 5)
+                .unwrap()
+                .and_hms_opt(5, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(init_year, init_month, 5)
+                .unwrap()
+                .and_hms_opt(15, 0, 0)
+                .unwrap(),
+        }
+        .divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut Slot {
+            start: NaiveDate::from_ymd_opt(init_year, init_month, 9)
+                .unwrap()
+                .and_hms_opt(5, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(init_year, init_month, 9)
+                .unwrap()
+                .and_hms_opt(15, 0, 0)
+                .unwrap(),
+        }
+        .divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut Slot {
+            start: NaiveDate::from_ymd_opt(init_year, init_month, 10)
+                .unwrap()
+                .and_hms_opt(5, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(init_year, init_month, 10)
+                .unwrap()
+                .and_hms_opt(15, 0, 0)
+                .unwrap(),
+        }
+        .divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut Slot {
+            start: NaiveDate::from_ymd_opt(init_year, init_month, 12)
+                .unwrap()
+                .and_hms_opt(5, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(init_year, init_month, 12)
+                .unwrap()
+                .and_hms_opt(15, 0, 0)
+                .unwrap(),
+        }
+        .divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut Slot {
+            start: NaiveDate::from_ymd_opt(init_year, init_month, 13)
+                .unwrap()
+                .and_hms_opt(5, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(init_year, init_month, 13)
+                .unwrap()
+                .and_hms_opt(15, 0, 0)
+                .unwrap(),
+        }
+        .divide_into_1h_slots(),
+    );
+
     let expected_result = Timeline {
-        slots: vec![
-            Slot {
-                start: NaiveDate::from_ymd_opt(init_year, init_month, 3)
-                    .unwrap()
-                    .and_hms_opt(5, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(init_year, init_month, 3)
-                    .unwrap()
-                    .and_hms_opt(15, 0, 0)
-                    .unwrap(),
-            },
-            Slot {
-                start: NaiveDate::from_ymd_opt(init_year, init_month, 4)
-                    .unwrap()
-                    .and_hms_opt(5, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(init_year, init_month, 4)
-                    .unwrap()
-                    .and_hms_opt(15, 0, 0)
-                    .unwrap(),
-            },
-            Slot {
-                start: NaiveDate::from_ymd_opt(init_year, init_month, 5)
-                    .unwrap()
-                    .and_hms_opt(5, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(init_year, init_month, 5)
-                    .unwrap()
-                    .and_hms_opt(15, 0, 0)
-                    .unwrap(),
-            },
-            Slot {
-                start: NaiveDate::from_ymd_opt(init_year, init_month, 9)
-                    .unwrap()
-                    .and_hms_opt(5, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(init_year, init_month, 9)
-                    .unwrap()
-                    .and_hms_opt(15, 0, 0)
-                    .unwrap(),
-            },
-            Slot {
-                start: NaiveDate::from_ymd_opt(init_year, init_month, 10)
-                    .unwrap()
-                    .and_hms_opt(5, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(init_year, init_month, 10)
-                    .unwrap()
-                    .and_hms_opt(15, 0, 0)
-                    .unwrap(),
-            },
-            Slot {
-                start: NaiveDate::from_ymd_opt(init_year, init_month, 12)
-                    .unwrap()
-                    .and_hms_opt(5, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(init_year, init_month, 12)
-                    .unwrap()
-                    .and_hms_opt(15, 0, 0)
-                    .unwrap(),
-            },
-            Slot {
-                start: NaiveDate::from_ymd_opt(init_year, init_month, 13)
-                    .unwrap()
-                    .and_hms_opt(5, 0, 0)
-                    .unwrap(),
-                end: NaiveDate::from_ymd_opt(init_year, init_month, 13)
-                    .unwrap()
-                    .and_hms_opt(15, 0, 0)
-                    .unwrap(),
-            },
-        ]
-        .into_iter()
-        .collect(),
+        slots: expected_slots.into_iter().collect(),
     };
     dbg!(&expected_result);
 

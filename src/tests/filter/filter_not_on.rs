@@ -5,8 +5,10 @@ use crate::{
 };
 use chrono::Duration;
 
-// #[test]
+#[test]
 fn test_simple() {
+    // Timeline have 5 days
+    // slot to filter out for a single day which is the 2nd
     let init_year = 2022;
     let init_month = 1;
     let init_day = 1;
@@ -21,15 +23,23 @@ fn test_simple() {
     let slots_to_filter: Vec<Slot> =
         vec![get_slot(duration, init_year, init_month, 2, hour, minute)];
 
+    let mut expected_slots: Vec<Slot> = vec![];
+    expected_slots.append(
+        &mut get_slot(duration, init_year, init_month, init_day, hour, minute)
+            .divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut get_slot(duration, init_year, init_month, 3, hour, minute).divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut get_slot(duration, init_year, init_month, 4, hour, minute).divide_into_1h_slots(),
+    );
+    expected_slots.append(
+        &mut get_slot(duration, init_year, init_month, 5, hour, minute).divide_into_1h_slots(),
+    );
+
     let expected_result = Timeline {
-        slots: vec![
-            get_slot(duration, init_year, init_month, init_day, hour, minute),
-            get_slot(duration, init_year, init_month, 3, hour, minute),
-            get_slot(duration, init_year, init_month, 4, hour, minute),
-            get_slot(duration, init_year, init_month, 5, hour, minute),
-        ]
-        .into_iter()
-        .collect(),
+        slots: expected_slots.into_iter().collect(),
     };
     dbg!(&expected_result);
 
