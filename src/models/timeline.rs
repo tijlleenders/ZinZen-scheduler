@@ -1,4 +1,4 @@
-use std::{collections::BTreeSet, ops::Add};
+use std::collections::BTreeSet;
 
 use super::slot::Slot;
 use chrono::NaiveDateTime;
@@ -67,11 +67,11 @@ impl Timeline {
         - get sorted list of slots incoming_slots (done by BTreeSet)
         - init new list for merged_slots (BTreeSet)
         - loop over slots in incoming_slots iter
-            - get last item in merged_slots list to merge it with new slot 
+            - get last item in merged_slots list to merge it with new slot
             - add last item in merged_slots with new slot
             - if addition done:
-                - replace last item in the merged_slots list with 
-                new merged_slot 
+                - replace last item in the merged_slots list with
+                new merged_slot
             - if addition not done:
                 - add incoming_slot to the merged_slots list
         */
@@ -87,11 +87,11 @@ impl Timeline {
         let incoming_slots = &self.slots;
         let mut merged_slots: TimelineSlotsType = BTreeSet::new();
         let mut incoming_slots_iter = incoming_slots.iter();
-        merged_slots.insert(incoming_slots_iter.next().unwrap().clone());
+        merged_slots.insert(*incoming_slots_iter.next().unwrap());
 
-        while let Some(incoming_slot) = incoming_slots_iter.next() {
-            let last_merged_slot = merged_slots.last().unwrap().clone();
-            
+        for incoming_slot in incoming_slots_iter {
+            let last_merged_slot = *merged_slots.last().unwrap();
+
             match last_merged_slot + *incoming_slot {
                 Some(merged_slot) => {
                     if merged_slots.pop_last().is_some() {
@@ -99,14 +99,14 @@ impl Timeline {
                     }
                 }
                 None => {
-                    merged_slots.insert(incoming_slot.clone());
+                    merged_slots.insert(*incoming_slot);
                 }
             }
+        }
 
-        let merged_timeline = Timeline {
+        Timeline {
             slots: merged_slots,
-        };
-        merged_timeline
+        }
     }
 
     /// Remove list of slots from timeline
@@ -114,12 +114,12 @@ impl Timeline {
         // TODO 2023-04-30 | Apply `retain` to remove slots after splitting into 1 hour slots
         let mut to_remove: TimelineSlotsType = BTreeSet::new();
         to_remove.extend(slots_to_remove);
-        
+
         // Remove similar slots from Timeline
         for slot in &to_remove {
             self.slots.remove(slot);
         }
-    
+
         // Remove from each slot in the timeline
         // Alogritm:
         // - Subtract each slot in timeline from each slot in to_remove, results in subtracted_slots
@@ -131,7 +131,7 @@ impl Timeline {
                 subtracted_slots.extend(subtracted_slot);
             }
         }
-        
+
         if !subtracted_slots.is_empty() {
             self.slots = subtracted_slots;
         }
