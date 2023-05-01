@@ -5,31 +5,40 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
-/// Tasks are generated from Goals, and represent a concrete activity of a
-/// specified duration, that is to be carried out at a specific time.
-/// A task can be in a number of different Task Statuses.  
+/// Tasks/Increments are generated to achieve a Goal in one or more Increments.
 /// A Goal can generate one or more Tasks.
-/// # Examples (greatly simplified to highlight the concept)
-/// | User Enters | Goal | Task(s) |
-/// | ----------- | ---- | ------- |
-/// | 'Dentist 1hr after 10 before 11' | Goal {..., after_time: 10, before_time: 11} | Task {..., id: 1, confirmed_start: 2023-01-23T10:00:00 , confirmed_deadline: 2023-01-23T11:00:00} |
-/// | 'Read 1hr daily' | Goal {..., repeat: daily} | Task {..., id: 1, confirmed_start: 2023-01-23T17:00:00, confirmed_deadline: 2023-01-23T18:00:00 }, Task {..., id: 2, confirmed_start: 2023-01-24T17:00:00, confirmed_deadline: 2024-01-24T18:00:00 }  
 #[derive(Deserialize, Debug, Eq, Clone)]
 pub struct Task {
+    /// Only used by the scheduler.
+    /// Unstable between scheduler runs if input changes.
     pub id: usize,
+    /// Reference to the Goal a Taks/Increment was generated from.
     pub goal_id: String,
+    /// Title of the Goal the Task/Increment was generated from.
+    /// Duplicated for ease of debugging and simplicity of code.
     pub title: String,
+    /// Duration the Task/Increment wants to claim on the Calendar.
+    /// This duration is equal or part of the Goal duration.
     pub duration: usize,
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility, after_goals and Tags.
     pub status: TaskStatus,
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment Status, after_goals and Tags.
     pub flexibility: usize,
+    /// Final start time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
     pub start: Option<NaiveDateTime>,
+    /// Final end time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
     pub deadline: Option<NaiveDateTime>,
+    /// The places on Calendar that could potentially be used given the Goal constraints - and what other scheduled Tasks/Increments already have consumed.
     pub slots: Vec<Slot>,
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility, after_goals, and Status.
     #[serde(default)]
     pub tags: Vec<Tag>,
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment tags, flexibility and Status.
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
+    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
     pub calender_start: NaiveDateTime,
+    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
     pub calender_end: NaiveDateTime,
 }
 
@@ -46,9 +55,34 @@ impl PartialOrd for Task {
 }
 
 impl Ord for Task {
-    //Custom ordering for collections of Tasks:
-    //All tasks with flex 1 should be first, followed by task with highest flex to
-    //task with lowest flex.
+    /// ### Custom ordering for collections of Tasks:
+    ///
+    /// TODO!: Rething Tags/Statusses to simplify and make this easier to understand
+    ///
+    /// **Careful!:** Recalculate flexibilities and re-sort after every Task/Increment placement
+    /// This is required because finalizing the place(s) on the Calendar of Task/Increment makes
+    /// those Slots unavailable for other Task/Increments, thus changing their flexibility. Also,
+    /// some Tasks are waiting for others to be placed, and at some point they are ready to go too.
+    ///
+    /// 0. Exclude the following Tasks/Increments from being picked:
+    /// - Scheduled
+    /// - Impossible
+    /// - Uninitialized (should not be there - panic if you find it!)
+    /// - Blocked
+    /// - BudgetMinWaitingForAdjustment
+    /// - ReadyToSchedule with Remove Tag
+    ///
+    /// 1. Sort on Task/Increment Status first using following order:
+    /// - ReadyToSchedule without Optional Tag,  without Filler Tag
+    /// - ReadyToSchedule without Optional Tag, with Filler Tag
+    /// - BudgetMinWaitingForAdjustment - should always be without Optional Tag
+    /// - ReadyToSchedule with Optional Tag - with or without FlexDur/FlexNumber Tag
+    /// - BudgetMaxWaitingForAdjustment
+    ///
+    ///
+    /// 2. Then apply custom sort on flexibility within the Tasks/Increments with highest Status:
+    /// - If there is a Tasks/Increments with flexibility 1, pick that one
+    /// - If there are no more Tasks/Increments with flexibility 1 - pick the Task/Increment with **highest** flexibility
     fn cmp(&self, other: &Self) -> Ordering {
         if (self.status == TaskStatus::ReadyToSchedule)
             && !(other.status == TaskStatus::ReadyToSchedule)
@@ -197,12 +231,20 @@ impl Task {
         // }
     }
 }
+
+/// Used to decide in which order to schedule tasks, together with their flexibility
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum TaskStatus {
+    /// Task is scheduled and can't be modified any more.
     Scheduled,
+    /// Task is impossible - its MaybeSlots Timeline is removed.
     Impossible,
+    /// Task is waiting for something to be properly initialized.
     Uninitialized,
+    /// Task is waiting for another Goal to be scheduled first.
     Blocked,
+    /// Task is available for scheduling, but its relative flexibility and Tags will determine if it gets picked first
     ReadyToSchedule,
+    /// Special Task that will try to fill in any missing hours to reach the minimum budget for a time period.
     BudgetMinWaitingForAdjustment,
 }
