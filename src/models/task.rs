@@ -20,9 +20,9 @@ pub struct Task {
     /// Duration the Task/Increment wants to claim on the Calendar.
     /// This duration is equal or part of the Goal duration.
     pub duration: usize,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility, after_goals and Tags.
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Tags.
     pub status: TaskStatus,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment Status, after_goals and Tags.
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment Status and Tags.
     pub flexibility: usize,
     /// Final start time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
     pub start: Option<NaiveDateTime>,
@@ -30,10 +30,10 @@ pub struct Task {
     pub deadline: Option<NaiveDateTime>,
     /// The places on Calendar that could potentially be used given the Goal constraints - and what other scheduled Tasks/Increments already have consumed.
     pub slots: Vec<Slot>,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility, after_goals, and Status.
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Status.
     #[serde(default)]
     pub tags: Vec<Tag>,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment tags, flexibility and Status.
+    /// Used for adding Blocked Task/Increment Tag, used in finding next Task/Increment to be scheduled.
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
     /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
