@@ -1,3 +1,4 @@
+pub mod merge_slots;
 pub mod remove_slots;
 
 use crate::{
