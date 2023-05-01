@@ -183,7 +183,7 @@ pub fn filter_not_on(timeline: &Timeline, slots_to_filter: &Vec<Slot>) -> Timeli
         .slots
         .retain(|slot| !splitted_slots_to_filter.contains(slot));
     dbg!(&timeline_as_hours);
-    timeline_as_hours
+    timeline_as_hours.get_merged_slots()
 }
 
 fn validate_time(time: Option<usize>, time_name: &str) {
