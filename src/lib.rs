@@ -5,7 +5,6 @@
 //! Output: A calendar that successfully allocates all Goals - or the maximum amount of Goals in that time period.  
 //!
 //! ```
-//! extern crate scheduler;
 //! use scheduler::models::input::Input;
 //!
 //! fn main() {

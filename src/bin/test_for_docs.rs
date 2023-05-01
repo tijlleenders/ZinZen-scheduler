@@ -1,4 +1,3 @@
-extern crate scheduler;
 use scheduler::models::input::Input;
 
 fn main() {
