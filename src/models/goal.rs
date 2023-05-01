@@ -132,6 +132,7 @@ pub enum BudgetType {
 }
 
 //#[cfg(test)]
+/// Todo: Check all these setters - Why are they needed? Why public?
 impl Goal {
     pub fn new(id: usize) -> Self {
         Self {
@@ -140,8 +141,6 @@ impl Goal {
             ..Default::default()
         }
     }
-
-    // Todo: Check all these setters - Why are they needed? Why public?
 
     pub fn title(mut self, title: &str) -> Self {
         self.title = title.to_string();
@@ -168,37 +167,21 @@ impl Goal {
         self
     }
 
+    /// Generates a Task/Increment from a Processed Goal
+    /// **Caution!:*** This can only be done after the Goals have been pre-processed!
+    /// Creates and splits the Goal Timeline into one or more segments, making a Task/Increment for each.
+    /// Depending on the Goal Tag, Task/Increments will also get Tags to help with scheduling order:
+    /// - Optional Tag // Todo! add Regular Tag to simplify?
+    /// - Filler Tag
+    /// - FlexDur Tag
+    /// - FlexNum Tag
+    /// - Budget Tag
     pub fn generate_tasks(
         self,
         calendar_start: NaiveDateTime,
         calendar_end: NaiveDateTime,
         counter: &mut usize,
     ) -> Vec<Task> {
-        /*There are four type of Tasks:
-        **1. Regular tasks: If the repetition is NONE, only one task will be generated for the period between
-        ** the start and deadline. These are scheduled first by making them first in the sort order of Task::Ord.
-
-        **2. Habits are Tasks made from a goal that has a repeat (hourly/(flex)daily,(flex)weekly, every mon/.../week/weekend/mon-...).
-        ** If the repetition of the goal is DAILY, a different task will be generated for each day between
-        ** the start and deadline.
-        **If the repetition is MONDAYS, a different task will be generated for each monday
-        **between the start and deadline.
-        **If the repetition is Weekly, a different task will be generated for each mon-sun
-        **period between the start and deadline. etc...(to see all handled scenarios see time_slot_iterator.rs.)
-
-        ** 3. Budget tasks will get a task per time period - per day or per week - with the minimum duration
-        ** The minimum duration of budget tasks will be adjusted by the TaskBudgets object after Regular and Filler goals are scheduled.
-
-        ** 4. Optional tasks are tasks that don't HAVE to be scheduled - but nice to do so.
-        ** They can come from two places : flex Habits and flex Budgets
-        ** Optional tasks represent the duration between the minimum and maximum for a flex Habit or a flex Budget
-
-        ** Before placing a task, the task_placer has to check with the TaskBudgets object to see:
-        ** - if they are allowed to be scheduled (no max budgets exceeded)
-        ** - and so that any budgets are adjusted
-
-        */
-
         let mut tasks: Vec<Task> = Vec::new();
         if self.tags.contains(&Tag::IgnoreForTaskGeneration) {
             return tasks;
@@ -245,6 +228,7 @@ impl Goal {
 }
 
 /// Helper tags for the algorithm - should not be public
+/// ... and think hard about if we can remove them as it complicates the logic
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Tag {
     Donotsplit,
