@@ -141,18 +141,6 @@ impl Task {
         Ok(tasks)
     }
 
-    //Tasks of duration 1 with equal slots and flex > 1 should be allowed to eat into each other's
-    //slots. This happens for example after splitting tasks to 1hr tasks.
-    //Without this condition, these tasks would never get scheduled.
-    //e.g. walk 1hr with slot (10-12) and dentist 1hr with slot (10-12).
-    //The scheduler should allow walk to be scheduled at 10-11 and dentist at 11-12.
-    pub fn can_coexist_with(&self, other_task: &Task) -> bool {
-        (self.duration == 1 && other_task.duration == 1)
-            && self.flexibility > 1
-            && other_task.flexibility > 1
-            && self.slots == other_task.slots
-    }
-
     pub fn remove_slot(&mut self, s: Slot) {
         //Todo: duplicate of remove_taken_slots?
         if self.status == TaskStatus::Scheduled {
@@ -217,5 +205,4 @@ pub enum TaskStatus {
     Blocked,
     ReadyToSchedule,
     BudgetMinWaitingForAdjustment,
-    BudgetMaxWaitingForAdjustment,
 }
