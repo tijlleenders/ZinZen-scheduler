@@ -8,36 +8,47 @@ use std::option::Option;
 
 use super::slot::Slot;
 
-/// Represents a Goal passed in by the user from the front end.
-/// Goals are converted into [Task](../task/index.html)s by the scheduler.
+/// An aim or desired result someone wants to reach.  
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]
 pub struct Goal {
+    /// The id passed by the frontend, usually a uuid.
     pub id: String,
+    /// The title given to the Goal, ie "Run", "Read a book" or "Become a nuclear scientist".
     pub title: String,
-    /// How much total time should a user put into their goal, eg "I want to learn how to code, and I want to code 6 hours per day"
+    /// The minimum duration per increment towards the Goal.
     #[serde(default)]
     pub min_duration: Option<usize>,
+    /// The maximum duration, if the other Goals allow for it.
     #[serde(default)]
     pub max_duration: Option<usize>,
+    /// Budgets that apply to this Goal, and all of its subGoals - if any.
     #[serde(default)]
     pub budgets: Option<Vec<Budget>>,
+    /// Repetition like 'daily' or 'weekly'.
     pub repeat: Option<Repetition>,
-    /// start date bound for this Goal's Tasks
+    /// Schedule on calender after this datetime only.
     #[serde(default)]
     pub start: Option<NaiveDateTime>,
-    /// deadline date bound for this Goal's Tasks
+    /// Goal has to be achieved by this datetime.
     #[serde(default)]
     pub deadline: Option<NaiveDateTime>,
+    /// Internal - should be private
     #[serde(default)]
     pub tags: Vec<Tag>,
+    /// Filters that reduce where on the Timeline Increments for this Goal can be scheduled.
+    /// Examples: After 8, Weekends, not this afternoon
     #[serde(default)]
     pub filters: Option<TimeFilter>,
+    /// Ids of the subGoals this Goal has - if any.
+    /// Example: Goal 'Work' has subGoal 'ProjectA', which has subGoals 'Prepare for meeting', 'Meeting', etc...
     #[serde(default)]
     pub children: Option<Vec<String>>,
+    /// If there is a specific order, this Goal can only be scheduled after certain other Goals complete.
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
 }
 
+/// Mon Tue Wed Thu Fri Sat Sun
 #[derive(Deserialize, Debug, Clone, PartialEq)]
 pub enum Day {
     Fri,
@@ -81,12 +92,16 @@ impl From<Day> for String {
     }
 }
 
+/// Filters used to reduce the Timeline on which a Goal can be scheduled.
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct TimeFilter {
+    /// Whatever day this Goal gets scheduled on - only schedule it after this time.
     pub after_time: Option<usize>,
+    /// Whatever day this Goal gets scheduled on - only schedule it before this time.
     pub before_time: Option<usize>,
+    /// Only schedule this Goal on these days of the week.
     pub on_days: Option<Vec<Day>>,
-    /// Used for postpone slots
+    /// For whatever reason - don't schedule the Goal during these time slots.
     pub not_on: Option<Vec<Slot>>,
 }
 
@@ -101,6 +116,7 @@ impl std::fmt::Display for TimeFilter {
     }
 }
 
+/// Keeps track of the min and max time allowed and scheduled per time period for a collection of Increments/Tasks.
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct Budget {
     pub budget_type: BudgetType,
@@ -108,6 +124,7 @@ pub struct Budget {
     pub max: Option<usize>,
 }
 
+/// weekly or daily
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub enum BudgetType {
     Weekly,
@@ -115,6 +132,7 @@ pub enum BudgetType {
 }
 
 //#[cfg(test)]
+/// Todo: Check all these setters - Why are they needed? Why public?
 impl Goal {
     pub fn new(id: usize) -> Self {
         Self {
@@ -123,8 +141,6 @@ impl Goal {
             ..Default::default()
         }
     }
-
-    // Todo: Check all these setters - Why are they needed? Why public?
 
     pub fn title(mut self, title: &str) -> Self {
         self.title = title.to_string();
@@ -151,37 +167,21 @@ impl Goal {
         self
     }
 
+    /// Generates a Task/Increment from a Processed Goal
+    /// **Caution!:*** This can only be done after the Goals have been pre-processed!
+    /// Creates and splits the Goal Timeline into one or more segments, making a Task/Increment for each.
+    /// Depending on the Goal Tag, Task/Increments will also get Tags to help with scheduling order:
+    /// - Optional Tag // Todo! add Regular Tag to simplify?
+    /// - Filler Tag
+    /// - FlexDur Tag
+    /// - FlexNum Tag
+    /// - Budget Tag
     pub fn generate_tasks(
         self,
         calendar_start: NaiveDateTime,
         calendar_end: NaiveDateTime,
         counter: &mut usize,
     ) -> Vec<Task> {
-        /*There are four type of Tasks:
-        **1. Regular tasks: If the repetition is NONE, only one task will be generated for the period between
-        ** the start and deadline. These are scheduled first by making them first in the sort order of Task::Ord.
-
-        **2. Habits are Tasks made from a goal that has a repeat (hourly/(flex)daily,(flex)weekly, every mon/.../week/weekend/mon-...).
-        ** If the repetition of the goal is DAILY, a different task will be generated for each day between
-        ** the start and deadline.
-        **If the repetition is MONDAYS, a different task will be generated for each monday
-        **between the start and deadline.
-        **If the repetition is Weekly, a different task will be generated for each mon-sun
-        **period between the start and deadline. etc...(to see all handled scenarios see time_slot_iterator.rs.)
-
-        ** 3. Budget tasks will get a task per time period - per day or per week - with the minimum duration
-        ** The minimum duration of budget tasks will be adjusted by the TaskBudgets object after Regular and Filler goals are scheduled.
-
-        ** 4. Optional tasks are tasks that don't HAVE to be scheduled - but nice to do so.
-        ** They can come from two places : flex Habits and flex Budgets
-        ** Optional tasks represent the duration between the minimum and maximum for a flex Habit or a flex Budget
-
-        ** Before placing a task, the task_placer has to check with the TaskBudgets object to see:
-        ** - if they are allowed to be scheduled (no max budgets exceeded)
-        ** - and so that any budgets are adjusted
-
-        */
-
         let mut tasks: Vec<Task> = Vec::new();
         if self.tags.contains(&Tag::IgnoreForTaskGeneration) {
             return tasks;
@@ -227,6 +227,8 @@ impl Goal {
     }
 }
 
+/// Helper tags for the algorithm - should not be public
+/// ... and think hard about if we can remove them as it complicates the logic
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Tag {
     Donotsplit,

@@ -7,7 +7,15 @@ use crate::models::repetition::Repetition;
 use crate::models::task::Task;
 use crate::models::task_budgets::TaskBudgets;
 /// # Task Generator
-/// Takes an [Input](../input/index.html) and outputs a vector of TaskStatus::Blocked and TaskStatus::ReadyToSchedule [Tasks](../task/index.html).
+/// Todo! Move preprocessing Goals into separate module(s) - generating Tasks then becomes simple
+/// Preprocesses the hierarchy of goals, then for each Goal call Goal.generate_tasks
+/// Preprocessing involves a number of steps:
+/// - add_start_and_end_where_none
+/// - add_filler_goals
+/// - add_optional_flex_duration_regular_goals
+/// - add_optional_flex_number_and_duration_habits_goals
+/// - create min and max budgets (task_budgets.create_task_budgets_config)
+/// - task_budgets.generate_budget_min_and_max_tasks
 pub fn task_generator(
     Input {
         calendar_start,

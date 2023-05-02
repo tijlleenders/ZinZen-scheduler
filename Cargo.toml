@@ -1,20 +1,24 @@
 [package]
 name = "zinzen"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "AGPL-3.0"
 keywords = ["zinzen", "scheduler", "todo"]
 description = "Algorithm for auto-scheduling time-constrained tasks on a timeline"
-homepage = "https://github.com/tijlleenders/ZinZen-scheduler/wiki"
+homepage = "https://github.com/tijlleenders/ZinZen-scheduler"
 repository = "https://github.com/tijlleenders/ZinZen-scheduler"
 readme = "README.md"
 categories = ["algorithms", "date-and-time", "wasm"]
-default-run = "main"
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095
 crate-type = ['cdylib', 'lib']
 name = 'scheduler'
+path = "src/lib.rs"
+
+[[bin]]
+name = "scheduler-bin"
+path = "src/bin/main.rs"
 
 [profile.release]
 lto = true
@@ -37,7 +41,6 @@ console_error_panic_hook = "0.1.7"
 
 # display logs
 log = "0.4.17"
-simple_logger = "4.0.0"
 
 # soft assertions without panic
 soft = "0.1.1"
@@ -48,5 +51,3 @@ cc = "1.0"
 
 [dev-dependencies]
 pretty_assertions = "1.3.0"
-
-
