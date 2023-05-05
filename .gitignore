@@ -3,4 +3,3 @@ Cargo.lock
 .cargo
 outputformat.txt
 target/
-tests/rust_tests.rs

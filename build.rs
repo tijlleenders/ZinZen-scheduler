@@ -7,9 +7,10 @@ fn write_test(file: &mut std::fs::File, content: &mut str) -> Result<(), std::io
 }
 
 fn get_test_dirs() -> Result<Vec<PathBuf>, std::io::Error> {
-    let dirs = std::fs::read_dir("./tests/jsons")?
+    let mut dirs = std::fs::read_dir("./tests/jsons")?
         .map(|res| res.map(|e| e.path()))
         .collect::<Result<Vec<_>, std::io::Error>>()?;
+    dirs.sort();
     Ok(dirs)
 }
 
