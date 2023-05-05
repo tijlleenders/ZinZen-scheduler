@@ -178,8 +178,7 @@ fn test_normal_workday() {
 
     let expected_result = Timeline {
         slots: expected_slots.into_iter().collect(),
-    }
-    .get_merged_slots();
+    };
     dbg!(&expected_result);
 
     let filtered_timeline = apply_filter(

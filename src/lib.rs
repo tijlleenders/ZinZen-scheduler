@@ -1,7 +1,6 @@
 use errors::Error;
 use models::input::Input;
 use models::output::FinalOutput;
-use models::task::Task;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
 use services::task_generator::generate_tasks_to_place;
@@ -59,18 +58,4 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
         }
         Ok(output) => output,
     }
-}
-
-fn _print_tasks(tasks: &[Task]) {
-    let mut timings: Vec<String> = vec![];
-    for task in tasks.iter() {
-        dbg!(task.id);
-        for slot in task.slots.iter() {
-            let slot_timing: String = format!(" [ Start: {} , End: {} ] ", slot.start, slot.end);
-            timings.push(slot_timing);
-        }
-
-        dbg!(&timings);
-    }
-    dbg!(&timings);
 }

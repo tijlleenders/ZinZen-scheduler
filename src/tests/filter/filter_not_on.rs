@@ -40,8 +40,7 @@ fn test_simple() {
 
     let expected_result = Timeline {
         slots: expected_slots.into_iter().collect(),
-    }
-    .get_merged_slots();
+    };
 
     let filtered_timeline = filter_not_on(&timeline, &slots_to_filter);
     dbg!(&filtered_timeline, &expected_result);

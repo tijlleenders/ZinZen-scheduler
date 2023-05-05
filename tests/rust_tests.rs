@@ -21,14 +21,50 @@ fn run_test(directory: &str) -> (String, String) {
 }
 
 #[test]
-fn slot_reduced_1() {
-    let (actual_output, desired_output) = run_test("slot-reduced-1");
+fn after_12() {
+    let (actual_output, desired_output) = run_test("after-12");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn non_midnight_start_deadline() {
-    let (actual_output, desired_output) = run_test("non-midnight-start-deadline");
+fn basic_1() {
+    let (actual_output, desired_output) = run_test("basic-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn basic_2() {
+    let (actual_output, desired_output) = run_test("basic-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn before_7() {
+    let (actual_output, desired_output) = run_test("before-7");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn budget_with_no_children() {
+    let (actual_output, desired_output) = run_test("budget-with-no-children");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn bug_215() {
+    let (actual_output, desired_output) = run_test("bug-215");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn bug_236() {
+    let (actual_output, desired_output) = run_test("bug-236");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn children_with_over_duration() {
+    let (actual_output, desired_output) = run_test("children-with-over-duration");
     assert_eq!(actual_output, desired_output);
 }
 
@@ -39,32 +75,116 @@ fn demo_1_old() {
 }
 
 #[test]
-fn split_3() {
-    let (actual_output, desired_output) = run_test("split-3");
+fn demo_2_with_filler_without_budget() {
+    let (actual_output, desired_output) = run_test("demo-2-with-filler-without-budget");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn issue_284_filter_days_of_week_3days() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-3days");
+fn demo_3_with_filler_and_budget() {
+    let (actual_output, desired_output) = run_test("demo-3-with-filler-and-budget");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn i287_mix_budgets_single_goal() {
-    let (actual_output, desired_output) = run_test("i287-mix-budgets-single-goal");
+fn different_repetition_goals() {
+    let (actual_output, desired_output) = run_test("different-repetition-goals");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn issue_284_filter_days_of_week_duplicated_days() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-duplicated-days");
+fn every_2_days() {
+    let (actual_output, desired_output) = run_test("every-2-days");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn repetition_daily_1() {
-    let (actual_output, desired_output) = run_test("repetition-daily-1");
+fn every_2_hours() {
+    let (actual_output, desired_output) = run_test("every-2-hours");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_2_hours_overlap() {
+    let (actual_output, desired_output) = run_test("every-2-hours-overlap");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_21_days() {
+    let (actual_output, desired_output) = run_test("every-21-days");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_3_days() {
+    let (actual_output, desired_output) = run_test("every-3-days");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_6_hours() {
+    let (actual_output, desired_output) = run_test("every-6-hours");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_6_hours_2() {
+    let (actual_output, desired_output) = run_test("every-6-hours-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_60_days() {
+    let (actual_output, desired_output) = run_test("every-60-days");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_8_hours() {
+    let (actual_output, desired_output) = run_test("every-8-hours");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn every_wednesday_1() {
+    let (actual_output, desired_output) = run_test("every-wednesday-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn flex_duration_1() {
+    let (actual_output, desired_output) = run_test("flex-duration-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn flex_duration_2() {
+    let (actual_output, desired_output) = run_test("flex-duration-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn flex_repeat_1() {
+    let (actual_output, desired_output) = run_test("flex-repeat-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn flex_repeat_2() {
+    let (actual_output, desired_output) = run_test("flex-repeat-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn flex_repeat_3() {
+    let (actual_output, desired_output) = run_test("flex-repeat-3");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn goals_dependency() {
+    let (actual_output, desired_output) = run_test("goals-dependency");
     assert_eq!(actual_output, desired_output);
 }
 
@@ -75,26 +195,140 @@ fn goals_dependency_2() {
 }
 
 #[test]
+fn goals_hierarchy() {
+    let (actual_output, desired_output) = run_test("goals-hierarchy");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn i287_mix_budgets_many_goals() {
+    let (actual_output, desired_output) = run_test("i287-mix-budgets-many-goals");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn i287_mix_budgets_single_goal() {
+    let (actual_output, desired_output) = run_test("i287-mix-budgets-single-goal");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn i293_postpone_1() {
+    let (actual_output, desired_output) = run_test("i293-postpone-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn i293_postpone_2() {
+    let (actual_output, desired_output) = run_test("i293-postpone-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn i293_postpone_3() {
+    let (actual_output, desired_output) = run_test("i293-postpone-3");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn impossible_1() {
+    let (actual_output, desired_output) = run_test("impossible-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn impossible_2() {
+    let (actual_output, desired_output) = run_test("impossible-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_276_weekdays_filter_on_budget() {
+    let (actual_output, desired_output) = run_test("issue-276-weekdays-filter-on-budget");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_284_filter_days_of_week_1day() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-1day");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_284_filter_days_of_week_2days() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-2days");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_284_filter_days_of_week_3days() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-3days");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
 fn issue_284_filter_days_of_week_4days() {
     let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-4days");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn split_4() {
-    let (actual_output, desired_output) = run_test("split-4");
+fn issue_284_filter_days_of_week_5days() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-5days");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn after_12() {
-    let (actual_output, desired_output) = run_test("after-12");
+fn issue_284_filter_days_of_week_6days() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-6days");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn bug_215() {
-    let (actual_output, desired_output) = run_test("bug-215");
+fn issue_284_filter_days_of_week_7days() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-7days");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_284_filter_days_of_week_duplicated_days() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-duplicated-days");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_284_filter_days_of_week_with_impossible() {
+    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-with-impossible");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_284_no_repeat_large_dur_and_timespan() {
+    let (actual_output, desired_output) = run_test("issue-284-no-repeat-large-dur-and-timespan");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn issue_284_no_repeat_large_dur_with_impossible() {
+    let (actual_output, desired_output) = run_test("issue-284-no-repeat-large-dur-with-impossible");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn non_midnight_start_deadline() {
+    let (actual_output, desired_output) = run_test("non-midnight-start-deadline");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn non_rep_bounds_multipledays_1() {
+    let (actual_output, desired_output) = run_test("non-rep-bounds-multipledays-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn options_1() {
+    let (actual_output, desired_output) = run_test("options-1");
     assert_eq!(actual_output, desired_output);
 }
 
@@ -111,254 +345,14 @@ fn realistic_schedule_1() {
 }
 
 #[test]
-fn issue_284_no_repeat_large_dur_with_impossible() {
-    let (actual_output, desired_output) = run_test("issue-284-no-repeat-large-dur-with-impossible");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn issue_284_no_repeat_large_dur_and_timespan() {
-    let (actual_output, desired_output) = run_test("issue-284-no-repeat-large-dur-and-timespan");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn budget_with_no_children() {
-    let (actual_output, desired_output) = run_test("budget-with-no-children");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn weekdays_1() {
-    let (actual_output, desired_output) = run_test("weekdays-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn issue_284_filter_days_of_week_5days() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-5days");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn issue_284_filter_days_of_week_2days() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-2days");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn goals_dependency() {
-    let (actual_output, desired_output) = run_test("goals-dependency");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_wednesday_1() {
-    let (actual_output, desired_output) = run_test("every-wednesday-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn repetition_weekends_1() {
-    let (actual_output, desired_output) = run_test("repetition-weekends-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn non_rep_bounds_multipledays_1() {
-    let (actual_output, desired_output) = run_test("non-rep-bounds-multipledays-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn issue_284_filter_days_of_week_with_impossible() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-with-impossible");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn x_per_day_3() {
-    let (actual_output, desired_output) = run_test("x-per-day-3");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn flex_repeat_3() {
-    let (actual_output, desired_output) = run_test("flex-repeat-3");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_60_days() {
-    let (actual_output, desired_output) = run_test("every-60-days");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_6_hours_2() {
-    let (actual_output, desired_output) = run_test("every-6-hours-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn x_per_week_3() {
-    let (actual_output, desired_output) = run_test("x-per-week-3");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn x_per_day_4() {
-    let (actual_output, desired_output) = run_test("x-per-day-4");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn show_sleep() {
-    let (actual_output, desired_output) = run_test("show-sleep");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_2_hours() {
-    let (actual_output, desired_output) = run_test("every-2-hours");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn different_repetition_goals() {
-    let (actual_output, desired_output) = run_test("different-repetition-goals");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn children_with_over_duration() {
-    let (actual_output, desired_output) = run_test("children-with-over-duration");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn demo_3_with_filler_and_budget() {
-    let (actual_output, desired_output) = run_test("demo-3-with-filler-and-budget");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
 fn realistic_weekend_repetition_1() {
     let (actual_output, desired_output) = run_test("realistic-weekend-repetition-1");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn every_2_days() {
-    let (actual_output, desired_output) = run_test("every-2-days");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn ui_test_case_without_start_or_deadline() {
-    let (actual_output, desired_output) = run_test("ui-test-case-without-start-or-deadline");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn flex_duration_2() {
-    let (actual_output, desired_output) = run_test("flex-duration-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn i287_mix_budgets_many_goals() {
-    let (actual_output, desired_output) = run_test("i287-mix-budgets-many-goals");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn issue_284_filter_days_of_week_1day() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-1day");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn impossible_2() {
-    let (actual_output, desired_output) = run_test("impossible-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn options_1() {
-    let (actual_output, desired_output) = run_test("options-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn issue_284_filter_days_of_week_6days() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-6days");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn split_2() {
-    let (actual_output, desired_output) = run_test("split-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_8_hours() {
-    let (actual_output, desired_output) = run_test("every-8-hours");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn x_per_week_1() {
-    let (actual_output, desired_output) = run_test("x-per-week-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn flex_repeat_1() {
-    let (actual_output, desired_output) = run_test("flex-repeat-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn x_per_day_1() {
-    let (actual_output, desired_output) = run_test("x-per-day-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_21_days() {
-    let (actual_output, desired_output) = run_test("every-21-days");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn weekly_1() {
-    let (actual_output, desired_output) = run_test("weekly-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn issue_276_weekdays_filter_on_budget() {
-    let (actual_output, desired_output) = run_test("issue-276-weekdays-filter-on-budget");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn basic_2() {
-    let (actual_output, desired_output) = run_test("basic-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn demo_2_with_filler_without_budget() {
-    let (actual_output, desired_output) = run_test("demo-2-with-filler-without-budget");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn flex_duration_1() {
-    let (actual_output, desired_output) = run_test("flex-duration-1");
+fn repetition_daily_1() {
+    let (actual_output, desired_output) = run_test("repetition-daily-1");
     assert_eq!(actual_output, desired_output);
 }
 
@@ -369,80 +363,14 @@ fn repetition_daily_bounds_1() {
 }
 
 #[test]
-fn goals_hierarchy() {
-    let (actual_output, desired_output) = run_test("goals-hierarchy");
+fn repetition_weekends_1() {
+    let (actual_output, desired_output) = run_test("repetition-weekends-1");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn bug_236() {
-    let (actual_output, desired_output) = run_test("bug-236");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn impossible_1() {
-    let (actual_output, desired_output) = run_test("impossible-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn sleep_1() {
-    let (actual_output, desired_output) = run_test("sleep-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn split_1() {
-    let (actual_output, desired_output) = run_test("split-1");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_6_hours() {
-    let (actual_output, desired_output) = run_test("every-6-hours");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_3_days() {
-    let (actual_output, desired_output) = run_test("every-3-days");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn x_per_day_2() {
-    let (actual_output, desired_output) = run_test("x-per-day-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn flex_repeat_2() {
-    let (actual_output, desired_output) = run_test("flex-repeat-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn x_per_week_2() {
-    let (actual_output, desired_output) = run_test("x-per-week-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn before_7() {
-    let (actual_output, desired_output) = run_test("before-7");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn weekly_2() {
-    let (actual_output, desired_output) = run_test("weekly-2");
-    assert_eq!(actual_output, desired_output);
-}
-
-#[test]
-fn every_2_hours_overlap() {
-    let (actual_output, desired_output) = run_test("every-2-hours-overlap");
+fn show_sleep() {
+    let (actual_output, desired_output) = run_test("show-sleep");
     assert_eq!(actual_output, desired_output);
 }
 
@@ -453,13 +381,103 @@ fn singleday_manygoals_1() {
 }
 
 #[test]
-fn issue_284_filter_days_of_week_7days() {
-    let (actual_output, desired_output) = run_test("issue-284-filter-days-of-week-7days");
+fn sleep_1() {
+    let (actual_output, desired_output) = run_test("sleep-1");
     assert_eq!(actual_output, desired_output);
 }
 
 #[test]
-fn basic_1() {
-    let (actual_output, desired_output) = run_test("basic-1");
+fn slot_reduced_1() {
+    let (actual_output, desired_output) = run_test("slot-reduced-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn split_1() {
+    let (actual_output, desired_output) = run_test("split-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn split_2() {
+    let (actual_output, desired_output) = run_test("split-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn split_3() {
+    let (actual_output, desired_output) = run_test("split-3");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn split_4() {
+    let (actual_output, desired_output) = run_test("split-4");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn ui_test_case_without_start_or_deadline() {
+    let (actual_output, desired_output) = run_test("ui-test-case-without-start-or-deadline");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn weekdays_1() {
+    let (actual_output, desired_output) = run_test("weekdays-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn weekly_1() {
+    let (actual_output, desired_output) = run_test("weekly-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn weekly_2() {
+    let (actual_output, desired_output) = run_test("weekly-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_day_1() {
+    let (actual_output, desired_output) = run_test("x-per-day-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_day_2() {
+    let (actual_output, desired_output) = run_test("x-per-day-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_day_3() {
+    let (actual_output, desired_output) = run_test("x-per-day-3");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_day_4() {
+    let (actual_output, desired_output) = run_test("x-per-day-4");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_week_1() {
+    let (actual_output, desired_output) = run_test("x-per-week-1");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_week_2() {
+    let (actual_output, desired_output) = run_test("x-per-week-2");
+    assert_eq!(actual_output, desired_output);
+}
+
+#[test]
+fn x_per_week_3() {
+    let (actual_output, desired_output) = run_test("x-per-week-3");
     assert_eq!(actual_output, desired_output);
 }
