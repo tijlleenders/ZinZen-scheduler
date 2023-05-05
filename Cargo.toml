@@ -45,7 +45,6 @@ log = "0.4.17"
 # soft assertions without panic
 soft = "0.1.1"
 
-[build-dependencies]
 
 [dev-dependencies]
 pretty_assertions = "1.3.0"
