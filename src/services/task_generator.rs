@@ -7,7 +7,7 @@ use crate::models::input::{Input, TasksToPlace};
 use crate::models::repetition::Repetition;
 use crate::models::task::Task;
 
-/// Todo! Move preprocessing Goals into separate module(s) - generating Tasks then becomes simple
+// Todo 2023-05-05  | Move preprocessing Goals into separate module(s) - generating Tasks then becomes simple
 /// Preprocesses the hierarchy of goals, then for each Goal call Goal.generate_tasks
 /// Preprocessing involves a number of steps:
 /// - add_start_and_end_where_none

@@ -5,41 +5,57 @@ use super::{goal::Tag, slot::Slot};
 
 pub mod impls;
 
-/// Tasks are generated from Goals, and represent a concrete activity of a
-/// specified duration, that is to be carried out at a specific time.
-/// A task can be in a number of different Task Statuses.  
+/// Tasks/Increments are generated to achieve a Goal in one or more Increments.
 /// A Goal can generate one or more Tasks.
-/// # Examples (greatly simplified to highlight the concept)
-/// | User Enters | Goal | Task(s) |
-/// | ----------- | ---- | ------- |
-/// | 'Dentist 1hr after 10 before 11' | Goal {..., after_time: 10, before_time: 11} | Task {..., id: 1, confirmed_start: 2023-01-23T10:00:00 , confirmed_deadline: 2023-01-23T11:00:00} |
-/// | 'Read 1hr daily' | Goal {..., repeat: daily} | Task {..., id: 1, confirmed_start: 2023-01-23T17:00:00, confirmed_deadline: 2023-01-23T18:00:00 }, Task {..., id: 2, confirmed_start: 2023-01-24T17:00:00, confirmed_deadline: 2024-01-24T18:00:00 }  
 #[derive(Deserialize, Debug, Eq, Clone)]
 pub struct Task {
+    /// Only used by the scheduler.
+    /// Unstable between scheduler runs if input changes.
     pub id: usize,
+    /// Reference to the Goal a Taks/Increment was generated from.
     pub goal_id: String,
+    /// Title of the Goal the Task/Increment was generated from.
+    /// Duplicated for ease of debugging and simplicity of code.
     pub title: String,
+    /// Duration the Task/Increment wants to claim on the Calendar.
+    /// This duration is equal or part of the Goal duration.
     pub duration: usize,
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Tags.
     pub status: TaskStatus,
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment Status and Tags.
     pub flexibility: usize,
+    /// Final start time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
     pub start: Option<NaiveDateTime>,
+    /// Final end time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
     pub deadline: Option<NaiveDateTime>,
-    // TODO 2023-04-27: Change this to Timeline
+    /// The places on Calendar that could potentially be used given the Goal constraints - and what other scheduled Tasks/Increments already have consumed.
     pub slots: Vec<Slot>,
+    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Status.
     #[serde(default)]
     pub tags: Vec<Tag>,
+    /// Used for adding Blocked Task/Increment Tag, used in finding next Task/Increment to be scheduled.
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
+    // TODO 2023-05-05  | remove below fields called "calender_start" and "calender_end"
+    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
     pub calendar_start: NaiveDateTime,
+    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
     pub calendar_end: NaiveDateTime,
 }
 
+/// Used to decide in which order to schedule tasks, together with their flexibility
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum TaskStatus {
+    /// Task is scheduled and can't be modified any more.
     Scheduled,
+    /// Task is impossible - its MaybeSlots Timeline is removed.
     Impossible,
+    /// Task is waiting for something to be properly initialized.
     Uninitialized,
+    /// Task is waiting for another Goal to be scheduled first.
     Blocked,
+    /// Task is available for scheduling, but its relative flexibility and Tags will determine if it gets picked first
     ReadyToSchedule,
+    /// Special Task that will try to fill in any missing hours to reach the minimum budget for a time period.
     BudgetMinWaitingForAdjustment,
 }

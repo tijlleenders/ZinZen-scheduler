@@ -20,9 +20,34 @@ impl PartialOrd for Task {
 }
 
 impl Ord for Task {
-    //Custom ordering for collections of Tasks:
-    //All tasks with flex 1 should be first, followed by task with highest flex to
-    //task with lowest flex.
+    /// ### Custom ordering for collections of Tasks:
+    ///
+    /// TODO!: Rething Tags/Statusses to simplify and make this easier to understand
+    ///
+    /// **Careful!:** Recalculate flexibilities and re-sort after every Task/Increment placement
+    /// This is required because finalizing the place(s) on the Calendar of Task/Increment makes
+    /// those Slots unavailable for other Task/Increments, thus changing their flexibility. Also,
+    /// some Tasks are waiting for others to be placed, and at some point they are ready to go too.
+    ///
+    /// 0. Exclude the following Tasks/Increments from being picked:
+    /// - Scheduled
+    /// - Impossible
+    /// - Uninitialized (should not be there - panic if you find it!)
+    /// - Blocked
+    /// - BudgetMinWaitingForAdjustment
+    /// - ReadyToSchedule with Remove Tag
+    ///
+    /// 1. Sort on Task/Increment Status first using following order:
+    /// - ReadyToSchedule without Optional Tag,  without Filler Tag
+    /// - ReadyToSchedule without Optional Tag, with Filler Tag
+    /// - BudgetMinWaitingForAdjustment - should always be without Optional Tag
+    /// - ReadyToSchedule with Optional Tag - with or without FlexDur/FlexNumber Tag
+    /// - BudgetMaxWaitingForAdjustment
+    ///
+    ///
+    /// 2. Then apply custom sort on flexibility within the Tasks/Increments with highest Status:
+    /// - If there is a Tasks/Increments with flexibility 1, pick that one
+    /// - If there are no more Tasks/Increments with flexibility 1 - pick the Task/Increment with **highest** flexibility
     fn cmp(&self, other: &Self) -> Ordering {
         if (self.status == TaskStatus::ReadyToSchedule)
             && !(other.status == TaskStatus::ReadyToSchedule)
@@ -113,18 +138,6 @@ impl Task {
             tasks.push(task);
         }
         Ok(tasks)
-    }
-
-    //Tasks of duration 1 with equal slots and flex > 1 should be allowed to eat into each other's
-    //slots. This happens for example after splitting tasks to 1hr tasks.
-    //Without this condition, these tasks would never get scheduled.
-    //e.g. walk 1hr with slot (10-12) and dentist 1hr with slot (10-12).
-    //The scheduler should allow walk to be scheduled at 10-11 and dentist at 11-12.
-    pub fn can_coexist_with(&self, other_task: &Task) -> bool {
-        (self.duration == 1 && other_task.duration == 1)
-            && self.flexibility > 1
-            && other_task.flexibility > 1
-            && self.slots == other_task.slots
     }
 
     pub fn remove_slot(&mut self, s: Slot) {
