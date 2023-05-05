@@ -45,7 +45,6 @@ log = "0.4.17"
 # soft assertions without panic
 soft = "0.1.1"
 
-# used to generate tests
 [build-dependencies]
 
 [dev-dependencies]
