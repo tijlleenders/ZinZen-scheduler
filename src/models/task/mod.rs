@@ -42,5 +42,4 @@ pub enum TaskStatus {
     Blocked,
     ReadyToSchedule,
     BudgetMinWaitingForAdjustment,
-    BudgetMaxWaitingForAdjustment,
 }

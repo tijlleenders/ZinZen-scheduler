@@ -5,8 +5,8 @@ use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 fn main() {
-    let path = Path::new("./tests/jsons/benchmark-tests/one-year-realistic.json");
-    let path2 = Path::new("./tests/jsons/benchmark-tests/one-year-flex-repeat.json");
+    let path = Path::new("./tests/jsons/after-12/input.json");
+    let path2 = Path::new("./tests/jsons/before-7/input.json");
     let paths = vec![path, path2];
     for path in paths {
         let input: Input = get_input_from_json(path).unwrap();

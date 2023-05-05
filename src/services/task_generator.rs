@@ -7,7 +7,15 @@ use crate::models::input::{Input, TasksToPlace};
 use crate::models::repetition::Repetition;
 use crate::models::task::Task;
 
-/// Generate tasks ready to be placed by the replacer (TasksToPlace) from Input
+/// Todo! Move preprocessing Goals into separate module(s) - generating Tasks then becomes simple
+/// Preprocesses the hierarchy of goals, then for each Goal call Goal.generate_tasks
+/// Preprocessing involves a number of steps:
+/// - add_start_and_end_where_none
+/// - add_filler_goals
+/// - add_optional_flex_duration_regular_goals
+/// - add_optional_flex_number_and_duration_habits_goals
+/// - create min and max budgets (task_budgets.create_task_budgets_config)
+/// - task_budgets.generate_budget_min_and_max_tasks
 pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
     let calendar_start = input.calendar_start;
     let calendar_end = input.calendar_end;

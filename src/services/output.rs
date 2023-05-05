@@ -47,9 +47,6 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
             TaskStatus::BudgetMinWaitingForAdjustment => {
                 panic!("no BudgetMinWaitingForAdjustment tasks should be present in placed_tasks")
             }
-            TaskStatus::BudgetMaxWaitingForAdjustment => {
-                panic!("no BudgetMaxWaitingForAdjustment tasks should be present in placed_tasks")
-            }
         }
     }
 
@@ -136,7 +133,6 @@ fn get_output_from_task(
         TaskStatus::Blocked => todo!(),
         TaskStatus::ReadyToSchedule => todo!(),
         TaskStatus::BudgetMinWaitingForAdjustment => todo!(),
-        TaskStatus::BudgetMaxWaitingForAdjustment => todo!(),
     }
 }
 
