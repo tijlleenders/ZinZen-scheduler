@@ -174,19 +174,18 @@ impl TaskBudgets {
                 let task_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
-                    let task = Task {
-                        id: task_id,
-                        goal_id: goal.id.clone(),
-                        title: goal.title.clone(),
-                        duration: task_budget.1.min.unwrap(),
-                        start: None,
-                        deadline: None,
-                        slots: timeline.slots.into_iter().collect(),
-                        status: TaskStatus::BudgetMinWaitingForAdjustment,
-                        tags: goal.tags.clone(),
-                        after_goals: goal.after_goals.clone(),
-                        flexibility: 0,
-                    };
+                    let duration = task_budget.1.min.unwrap();
+
+                    let task = Task::new(
+                        task_id,
+                        &goal.title,
+                        duration,
+                        goal,
+                        &timeline,
+                        &TaskStatus::BudgetMinWaitingForAdjustment,
+                        None,
+                    );
+
                     tasks_result.push(task);
                 } else {
                     panic!("time_slots expected")

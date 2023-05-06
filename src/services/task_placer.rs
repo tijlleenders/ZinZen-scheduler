@@ -1,8 +1,9 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
-use crate::models::goal::Tag;
+use crate::models::goal::{Goal, Tag};
 use crate::models::input::{PlacedTasks, TasksToPlace};
 use crate::models::slot::{Slot, SlotConflict};
 use crate::models::task::{Task, TaskStatus};
+use crate::models::timeline::Timeline;
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
@@ -71,20 +72,28 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 let new_title = tasks_to_place.tasks[index].title.clone();
                 if tasks_to_place.tasks[index].duration >= slot_budget.used {
                     let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
-                    // TODO 2023-04-28 | shouldn't add tasks in task_placer. Refactor this (conceptually in task_generator).
-                    let task_to_add = Task {
-                        id: tasks_to_place.tasks[index].id,
-                        goal_id: tasks_to_place.tasks[index].goal_id.clone(),
-                        title: new_title,
-                        duration: new_duration,
-                        start: None,
-                        deadline: None,
-                        slots: result_slots,
-                        status: TaskStatus::ReadyToSchedule,
+                    let task_id = tasks_to_place.tasks[index].id;
+                    let goal = Goal {
+                        id: tasks_to_place.tasks[index].goal_id.clone(),
+                        title: new_title.clone(),
                         tags: tasks_to_place.tasks[index].tags.clone(),
                         after_goals: tasks_to_place.tasks[index].after_goals.clone(),
-                        flexibility: 0,
+                        ..Default::default()
                     };
+                    let timeline = Timeline {
+                        slots: result_slots.into_iter().collect(),
+                    };
+
+                    let task_to_add = Task::new(
+                        task_id,
+                        &new_title,
+                        new_duration,
+                        &goal,
+                        &timeline,
+                        &TaskStatus::ReadyToSchedule,
+                        None,
+                    );
+
                     tasks_to_add.push(task_to_add);
                 }
             }

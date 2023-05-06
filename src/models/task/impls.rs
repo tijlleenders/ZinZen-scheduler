@@ -1,8 +1,14 @@
 use std::cmp::Ordering;
 
+use chrono::NaiveDateTime;
+
 use crate::{
     errors::Error,
-    models::{goal::Tag, slot::Slot},
+    models::{
+        goal::{Goal, Tag},
+        slot::Slot,
+        timeline::Timeline,
+    },
 };
 
 use super::{Task, TaskStatus};
@@ -82,6 +88,47 @@ impl Ord for Task {
 }
 
 impl Task {
+    /// Create new task
+    /// ## Parmeters:
+    /// - task_id: id of the task
+    /// - title: title of the task
+    /// - duration: duration of the task
+    /// - goal: goal of the task
+    /// - timeline: timeline of the task
+    /// - status: status of the task
+    /// - timeframe: Start and deadline of a task
+    pub fn new(
+        task_id: usize,
+        title: &str,
+        duration: usize,
+        goal: &Goal,
+        timeline: &Timeline,
+        status: &TaskStatus,
+        timeframe: Option<Slot>,
+    ) -> Task {
+        let (mut start, mut deadline): (Option<NaiveDateTime>, Option<NaiveDateTime>) =
+            (None, None);
+
+        if let Some(timeframe) = timeframe {
+            start = Some(timeframe.start);
+            deadline = Some(timeframe.end);
+        }
+
+        Task {
+            id: task_id,
+            goal_id: goal.id.clone(),
+            title: title.to_string(),
+            duration,
+            status: status.clone(),
+            flexibility: 0,
+            start,
+            deadline,
+            slots: timeline.slots.clone().into_iter().collect(),
+            tags: goal.tags.clone(),
+            after_goals: goal.after_goals.clone(),
+        }
+    }
+
     pub fn calculate_flexibility(&mut self) {
         if self.status == TaskStatus::Scheduled {
             return;
@@ -115,21 +162,27 @@ impl Task {
             return Err(Error::CannotSplit);
         }
         let mut tasks = Vec::new();
-
+        let timeline = Timeline {
+            slots: self.get_slots().into_iter().collect(),
+        };
+        let goal = Goal {
+            id: self.goal_id.clone(),
+            title: self.title.clone(),
+            tags: self.tags.clone(),
+            after_goals: self.after_goals.clone(),
+            ..Default::default()
+        };
         for _ in 0..self.duration {
-            let mut task = Task {
-                id: *counter,
-                goal_id: self.goal_id.clone(),
-                title: self.title.clone(),
-                duration: 1,
-                status: TaskStatus::Uninitialized,
-                flexibility: 0,
-                start: self.start,
-                deadline: self.deadline,
-                slots: self.get_slots(),
-                tags: self.tags.clone(),
-                after_goals: self.after_goals.clone(),
-            };
+            let mut task = Task::new(
+                *counter,
+                &self.title,
+                1,
+                &goal,
+                &timeline,
+                &TaskStatus::Uninitialized,
+                None,
+            );
+
             task.calculate_flexibility();
             task.status = TaskStatus::ReadyToSchedule;
             *counter += 1;

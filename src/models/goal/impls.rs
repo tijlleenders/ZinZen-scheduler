@@ -107,7 +107,7 @@ impl Goal {
             start,
             deadline,
             self.repeat,
-            self.filters,
+            self.filters.clone(),
             // Todo! add self.before_time filter
         );
         dbg!(&time_slots_iterator);
@@ -116,20 +116,20 @@ impl Goal {
             dbg!(&timeline);
             let task_id = *counter;
             *counter += 1;
+            // TODO 2023-05-06  | apply Task::new(...)
             if !timeline.slots.is_empty() && self.min_duration.is_some() {
-                let task = Task {
-                    id: task_id,
-                    goal_id: self.id.clone(),
-                    title: self.title.clone(),
-                    duration: self.min_duration.unwrap(),
-                    start: None,
-                    deadline: None,
-                    slots: timeline.slots.into_iter().collect(),
-                    status: TaskStatus::ReadyToSchedule,
-                    tags: self.tags.clone(),
-                    after_goals: self.after_goals.clone(),
-                    flexibility: 0,
-                };
+                let duration = self.min_duration.unwrap();
+
+                let task = Task::new(
+                    task_id,
+                    &self.title,
+                    duration,
+                    &self,
+                    &timeline,
+                    &TaskStatus::ReadyToSchedule,
+                    None,
+                );
+
                 dbg!(&task);
                 tasks.push(task);
             }
