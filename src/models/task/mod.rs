@@ -36,11 +36,6 @@ pub struct Task {
     /// Used for adding Blocked Task/Increment Tag, used in finding next Task/Increment to be scheduled.
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
-    // TODO 2023-05-05  | remove below fields called "calender_start" and "calender_end"
-    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
-    pub calendar_start: NaiveDateTime,
-    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
-    pub calendar_end: NaiveDateTime,
 }
 
 /// Used to decide in which order to schedule tasks, together with their flexibility

@@ -129,8 +129,6 @@ impl Task {
                 slots: self.get_slots(),
                 tags: self.tags.clone(),
                 after_goals: self.after_goals.clone(),
-                calendar_start: self.calendar_start,
-                calendar_end: self.calendar_end,
             };
             task.calculate_flexibility();
             task.status = TaskStatus::ReadyToSchedule;

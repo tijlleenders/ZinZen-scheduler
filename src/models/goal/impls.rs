@@ -124,8 +124,6 @@ impl Goal {
                     duration: self.min_duration.unwrap(),
                     start: None,
                     deadline: None,
-                    calendar_start,
-                    calendar_end,
                     slots: timeline.slots.into_iter().collect(),
                     status: TaskStatus::ReadyToSchedule,
                     tags: self.tags.clone(),

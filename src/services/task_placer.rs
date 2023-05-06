@@ -79,8 +79,6 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                         duration: new_duration,
                         start: None,
                         deadline: None,
-                        calendar_start: tasks_to_place.tasks[index].calendar_start,
-                        calendar_end: tasks_to_place.tasks[index].calendar_end,
                         slots: result_slots,
                         status: TaskStatus::ReadyToSchedule,
                         tags: tasks_to_place.tasks[index].tags.clone(),

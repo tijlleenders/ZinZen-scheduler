@@ -181,8 +181,6 @@ impl TaskBudgets {
                         duration: task_budget.1.min.unwrap(),
                         start: None,
                         deadline: None,
-                        calendar_start: goal.start.unwrap(),
-                        calendar_end: goal.deadline.unwrap(),
                         slots: timeline.slots.into_iter().collect(),
                         status: TaskStatus::BudgetMinWaitingForAdjustment,
                         tags: goal.tags.clone(),
