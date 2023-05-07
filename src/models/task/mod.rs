@@ -1,7 +1,11 @@
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
-use super::{goal::Tag, slot::Slot};
+use super::{
+    goal::{Goal, Tag},
+    slot::Slot,
+    timeline::Timeline,
+};
 
 pub mod impls;
 
@@ -53,4 +57,15 @@ pub enum TaskStatus {
     ReadyToSchedule,
     /// Special Task that will try to fill in any missing hours to reach the minimum budget for a time period.
     BudgetMinWaitingForAdjustment,
+}
+
+#[derive(Debug)]
+pub struct NewTask {
+    pub task_id: usize,
+    pub title: String,
+    pub duration: usize,
+    pub goal: Goal,
+    pub timeline: Timeline,
+    pub status: TaskStatus,
+    pub timeframe: Option<Slot>,
 }

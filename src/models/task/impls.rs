@@ -11,7 +11,7 @@ use crate::{
     },
 };
 
-use super::{Task, TaskStatus};
+use super::{NewTask, Task, TaskStatus};
 
 impl PartialEq for Task {
     fn eq(&self, other: &Self) -> bool {
@@ -89,43 +89,22 @@ impl Ord for Task {
 
 impl Task {
     /// Create new task
-    /// ## Parmeters:
-    /// - task_id: id of the task
-    /// - title: title of the task
-    /// - duration: duration of the task
-    /// - goal: goal of the task
-    /// - timeline: timeline of the task
-    /// - status: status of the task
-    /// - timeframe: Start and deadline of a task
-    pub fn new(
-        task_id: usize,
-        title: &str,
-        duration: usize,
-        goal: &Goal,
-        timeline: &Timeline,
-        status: &TaskStatus,
-        timeframe: Option<Slot>,
-    ) -> Task {
-        let (mut start, mut deadline): (Option<NaiveDateTime>, Option<NaiveDateTime>) =
-            (None, None);
-
-        if let Some(timeframe) = timeframe {
-            start = Some(timeframe.start);
-            deadline = Some(timeframe.end);
-        }
+    pub fn new(new_task: NewTask) -> Task {
+        let start = new_task.timeframe.map(|time| time.start);
+        let deadline = new_task.timeframe.map(|time| time.end);
 
         Task {
-            id: task_id,
-            goal_id: goal.id.clone(),
-            title: title.to_string(),
-            duration,
-            status: status.clone(),
+            id: new_task.task_id,
+            goal_id: new_task.goal.id,
+            title: new_task.title,
+            duration: new_task.duration,
+            status: new_task.status,
             flexibility: 0,
             start,
             deadline,
-            slots: timeline.slots.clone().into_iter().collect(),
-            tags: goal.tags.clone(),
-            after_goals: goal.after_goals.clone(),
+            slots: new_task.timeline.slots.into_iter().collect(),
+            tags: new_task.goal.tags,
+            after_goals: new_task.goal.after_goals,
         }
     }
 
