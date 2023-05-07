@@ -1,6 +1,6 @@
 use crate::{
     models::goal::Day,
-    models::{ repetition::Repetition, slot::Slot },
+    models::{repetition::Repetition, slot::Slot},
     tests::utils::get_slot,
 };
 use chrono::*;
@@ -10,8 +10,14 @@ use std::vec;
 fn get_next_monday() {
     use crate::models::slot_iterator::utils::get_start_of_repeat_step;
 
-    let monday = NaiveDate::from_ymd_opt(2022, 09, 26).unwrap().and_hms_opt(0, 0, 0).unwrap();
-    let saturday = NaiveDate::from_ymd_opt(2022, 10, 1).unwrap().and_hms_opt(0, 0, 0).unwrap();
+    let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
+    let saturday = NaiveDate::from_ymd_opt(2022, 10, 1)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     let monday_with_time = NaiveDate::from_ymd_opt(2022, 09, 26)
         .unwrap()
         .and_hms_opt(1, 33, 7)
@@ -20,17 +26,16 @@ fn get_next_monday() {
         .unwrap()
         .and_hms_opt(1, 33, 7)
         .unwrap();
-    let next_monday = NaiveDate::from_ymd_opt(2022, 10, 3).unwrap().and_hms_opt(0, 0, 0).unwrap();
+    let next_monday = NaiveDate::from_ymd_opt(2022, 10, 3)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     let next_monday_from_monday = get_start_of_repeat_step(&monday, Repetition::Weekly(1));
     let next_monday_from_saturday = get_start_of_repeat_step(&saturday, Repetition::Weekly(1));
-    let next_monday_from_monday_with_time = get_start_of_repeat_step(
-        &monday_with_time,
-        Repetition::Weekly(1)
-    );
-    let next_monday_from_saturday_with_time = get_start_of_repeat_step(
-        &saturday_with_time,
-        Repetition::Weekly(1)
-    );
+    let next_monday_from_monday_with_time =
+        get_start_of_repeat_step(&monday_with_time, Repetition::Weekly(1));
+    let next_monday_from_saturday_with_time =
+        get_start_of_repeat_step(&saturday_with_time, Repetition::Weekly(1));
     assert_eq!(next_monday_from_monday, next_monday);
     assert_eq!(next_monday_from_saturday, next_monday);
     assert_eq!(next_monday_from_monday_with_time, next_monday);
@@ -41,8 +46,14 @@ fn get_next_monday() {
 fn get_next_weekend() {
     use crate::models::slot_iterator::utils::get_start_of_repeat_step;
 
-    let monday = NaiveDate::from_ymd_opt(2022, 09, 26).unwrap().and_hms_opt(0, 0, 0).unwrap();
-    let saturday = NaiveDate::from_ymd_opt(2022, 10, 1).unwrap().and_hms_opt(0, 0, 0).unwrap();
+    let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
+    let saturday = NaiveDate::from_ymd_opt(2022, 10, 1)
+        .unwrap()
+        .and_hms_opt(0, 0, 0)
+        .unwrap();
     let monday_with_time = NaiveDate::from_ymd_opt(2022, 09, 26)
         .unwrap()
         .and_hms_opt(1, 33, 7)
@@ -61,29 +72,40 @@ fn get_next_weekend() {
         .unwrap();
     let next_weekend_from_monday = get_start_of_repeat_step(&monday, Repetition::WEEKENDS);
     let next_weekend_from_saturday = get_start_of_repeat_step(&saturday, Repetition::WEEKENDS);
-    let next_weekend_from_monday_with_time = get_start_of_repeat_step(
-        &monday_with_time,
-        Repetition::WEEKENDS
-    );
-    let next_weekend_from_saturday_with_time = get_start_of_repeat_step(
-        &saturday_with_time,
-        Repetition::WEEKENDS
-    );
+    let next_weekend_from_monday_with_time =
+        get_start_of_repeat_step(&monday_with_time, Repetition::WEEKENDS);
+    let next_weekend_from_saturday_with_time =
+        get_start_of_repeat_step(&saturday_with_time, Repetition::WEEKENDS);
     assert_eq!(next_weekend_from_monday, next_weekend_from_monday);
     assert_eq!(next_weekend_from_saturday, next_weekend_from_saturday);
     assert_eq!(next_weekend_from_monday_with_time, next_weekend_from_monday);
-    assert_eq!(next_weekend_from_saturday_with_time, next_weekend_from_saturday);
+    assert_eq!(
+        next_weekend_from_saturday_with_time,
+        next_weekend_from_saturday
+    );
 }
 
 #[test]
 fn divide_a_day_in_days() {
     let slot_of_exactly_a_day = Slot {
-        start: NaiveDate::from_ymd_opt(2022, 09, 26).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 09, 27).unwrap().and_hms_opt(0, 0, 0).unwrap(),
+        start: NaiveDate::from_ymd_opt(2022, 09, 26)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 09, 27)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
     };
     let exact_day_split_in_days: Vec<Slot> = vec![Slot {
-        start: NaiveDate::from_ymd_opt(2022, 09, 26).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 09, 27).unwrap().and_hms_opt(0, 0, 0).unwrap(),
+        start: NaiveDate::from_ymd_opt(2022, 09, 26)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 09, 27)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
     }];
     let result = slot_of_exactly_a_day.divide_into_days();
     assert_eq!(exact_day_split_in_days, result);
@@ -91,18 +113,36 @@ fn divide_a_day_in_days() {
 #[test]
 fn divide_two_days_in_days() {
     let slot_of_exactly_two_day = Slot {
-        start: NaiveDate::from_ymd_opt(2022, 09, 26).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 09, 28).unwrap().and_hms_opt(0, 0, 0).unwrap(),
+        start: NaiveDate::from_ymd_opt(2022, 09, 26)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 09, 28)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
     };
     let exactly_two_days_split_in_days: Vec<Slot> = vec![
         Slot {
-            start: NaiveDate::from_ymd_opt(2022, 09, 26).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-            end: NaiveDate::from_ymd_opt(2022, 09, 27).unwrap().and_hms_opt(0, 0, 0).unwrap(),
+            start: NaiveDate::from_ymd_opt(2022, 09, 26)
+                .unwrap()
+                .and_hms_opt(0, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(2022, 09, 27)
+                .unwrap()
+                .and_hms_opt(0, 0, 0)
+                .unwrap(),
         },
         Slot {
-            start: NaiveDate::from_ymd_opt(2022, 09, 27).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-            end: NaiveDate::from_ymd_opt(2022, 09, 28).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-        }
+            start: NaiveDate::from_ymd_opt(2022, 09, 27)
+                .unwrap()
+                .and_hms_opt(0, 0, 0)
+                .unwrap(),
+            end: NaiveDate::from_ymd_opt(2022, 09, 28)
+                .unwrap()
+                .and_hms_opt(0, 0, 0)
+                .unwrap(),
+        },
     ];
     let result = slot_of_exactly_two_day.divide_into_days();
     assert_eq!(exactly_two_days_split_in_days, result);
@@ -111,12 +151,24 @@ fn divide_two_days_in_days() {
 #[test]
 fn divide_half_a_day_in_days() {
     let slot_of_half_a_day = Slot {
-        start: NaiveDate::from_ymd_opt(2022, 10, 01).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 10, 01).unwrap().and_hms_opt(6, 0, 0).unwrap(),
+        start: NaiveDate::from_ymd_opt(2022, 10, 01)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 01)
+            .unwrap()
+            .and_hms_opt(6, 0, 0)
+            .unwrap(),
     };
     let half_a_day_split_in_days: Vec<Slot> = vec![Slot {
-        start: NaiveDate::from_ymd_opt(2022, 10, 01).unwrap().and_hms_opt(0, 0, 0).unwrap(),
-        end: NaiveDate::from_ymd_opt(2022, 10, 01).unwrap().and_hms_opt(6, 0, 0).unwrap(),
+        start: NaiveDate::from_ymd_opt(2022, 10, 01)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap(),
+        end: NaiveDate::from_ymd_opt(2022, 10, 01)
+            .unwrap()
+            .and_hms_opt(6, 0, 0)
+            .unwrap(),
     }];
     let result = slot_of_half_a_day.divide_into_days();
     assert_eq!(half_a_day_split_in_days, result);
