@@ -2,7 +2,7 @@
 use crate::models::goal::{Goal, Tag};
 use crate::models::input::{PlacedTasks, TasksToPlace};
 use crate::models::slot::{Slot, SlotConflict};
-use crate::models::task::{Task, TaskStatus};
+use crate::models::task::{NewTask, Task, TaskStatus};
 use crate::models::timeline::Timeline;
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
@@ -84,15 +84,17 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                         slots: result_slots.into_iter().collect(),
                     };
 
-                    let task_to_add = Task::new(
+                    let new_task = NewTask {
                         task_id,
-                        &new_title,
-                        new_duration,
-                        &goal,
-                        &timeline,
-                        &TaskStatus::ReadyToSchedule,
-                        None,
-                    );
+                        title: new_title,
+                        duration: new_duration,
+                        goal,
+                        timeline,
+                        status: TaskStatus::ReadyToSchedule,
+                        timeframe: None,
+                    };
+
+                    let task_to_add = Task::new(new_task);
 
                     tasks_to_add.push(task_to_add);
                 }

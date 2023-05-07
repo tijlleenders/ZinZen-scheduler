@@ -5,7 +5,7 @@ use crate::models::{
     goal::Tag,
     repetition::Repetition,
     slot_iterator::TimeSlotsIterator,
-    task::{Task, TaskStatus},
+    task::{NewTask, Task, TaskStatus},
 };
 
 use super::{Day, Goal, TimeFilter};
@@ -118,17 +118,20 @@ impl Goal {
             *counter += 1;
             // TODO 2023-05-06  | apply Task::new(...)
             if !timeline.slots.is_empty() && self.min_duration.is_some() {
+                let title = self.title.clone();
                 let duration = self.min_duration.unwrap();
 
-                let task = Task::new(
+                let new_task = NewTask {
                     task_id,
-                    &self.title,
+                    title,
                     duration,
-                    &self,
-                    &timeline,
-                    &TaskStatus::ReadyToSchedule,
-                    None,
-                );
+                    goal: self.clone(),
+                    timeline,
+                    status: TaskStatus::ReadyToSchedule,
+                    timeframe: None,
+                };
+
+                let task = Task::new(new_task);
 
                 dbg!(&task);
                 tasks.push(task);

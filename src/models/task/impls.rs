@@ -1,7 +1,4 @@
-use std::cmp::Ordering;
-
-use chrono::NaiveDateTime;
-
+use super::{NewTask, Task, TaskStatus};
 use crate::{
     errors::Error,
     models::{
@@ -10,8 +7,7 @@ use crate::{
         timeline::Timeline,
     },
 };
-
-use super::{NewTask, Task, TaskStatus};
+use std::cmp::Ordering;
 
 impl PartialEq for Task {
     fn eq(&self, other: &Self) -> bool {
@@ -151,16 +147,18 @@ impl Task {
             after_goals: self.after_goals.clone(),
             ..Default::default()
         };
+        let new_task = NewTask {
+            task_id: *counter,
+            title: self.title.clone(),
+            duration: 1,
+            goal,
+            timeline,
+            status: TaskStatus::Uninitialized,
+            timeframe: None,
+        };
+
         for _ in 0..self.duration {
-            let mut task = Task::new(
-                *counter,
-                &self.title,
-                1,
-                &goal,
-                &timeline,
-                &TaskStatus::Uninitialized,
-                None,
-            );
+            let mut task = Task::new(new_task.clone());
 
             task.calculate_flexibility();
             task.status = TaskStatus::ReadyToSchedule;

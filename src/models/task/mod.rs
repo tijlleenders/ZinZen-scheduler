@@ -59,7 +59,7 @@ pub enum TaskStatus {
     BudgetMinWaitingForAdjustment,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NewTask {
     pub task_id: usize,
     pub title: String,

@@ -6,7 +6,7 @@ use crate::models::{
     repetition::Repetition,
     slot::Slot,
     slot_iterator::TimeSlotsIterator,
-    task::{Task, TaskStatus},
+    task::{NewTask, Task, TaskStatus},
 };
 use chrono::NaiveDateTime;
 
@@ -176,15 +176,17 @@ impl TaskBudgets {
                 if !timeline.slots.is_empty() {
                     let duration = task_budget.1.min.unwrap();
 
-                    let task = Task::new(
+                    let new_task = NewTask {
                         task_id,
-                        &goal.title,
+                        title: goal.title.clone(),
                         duration,
-                        goal,
-                        &timeline,
-                        &TaskStatus::BudgetMinWaitingForAdjustment,
-                        None,
-                    );
+                        goal: goal.clone(),
+                        timeline,
+                        status: TaskStatus::BudgetMinWaitingForAdjustment,
+                        timeframe: None,
+                    };
+
+                    let task = Task::new(new_task);
 
                     tasks_result.push(task);
                 } else {
