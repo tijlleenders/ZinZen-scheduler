@@ -5,7 +5,7 @@ use crate::models::{
     goal::{Goal, Tag},
     repetition::Repetition,
     slot::Slot,
-    slot_iterator::TimeSlotsIterator,
+    slots_iterator::TimeSlotsIterator,
     task::{NewTask, Task, TaskStatus},
 };
 use chrono::NaiveDateTime;

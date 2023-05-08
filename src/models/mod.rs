@@ -11,7 +11,7 @@ pub mod repetition;
 /// A period of time defined by a start datetime and an end datetime.
 pub mod slot;
 /// The logic of partitioning a Goal Timeline into [MECE parts](https://en.wikipedia.org/wiki/MECE_principle).
-pub mod slot_iterator;
+pub mod slots_iterator;
 /// An Increment for the realization of a Goal.
 pub mod task;
 

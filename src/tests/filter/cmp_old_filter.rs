@@ -4,7 +4,7 @@ use crate::{
     models::{
         goal::{Day, TimeFilter},
         slot::Slot,
-        slot_iterator::TimeSlotsIterator,
+        slots_iterator::TimeSlotsIterator,
     },
     services::filter::apply_filter,
     tests::utils::{get_slot, get_timeline_single_slot},

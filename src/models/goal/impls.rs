@@ -4,7 +4,7 @@ use log::info;
 use crate::models::{
     goal::Tag,
     repetition::Repetition,
-    slot_iterator::TimeSlotsIterator,
+    slots_iterator::TimeSlotsIterator,
     task::{NewTask, Task, TaskStatus},
 };
 
