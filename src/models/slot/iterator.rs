@@ -79,7 +79,8 @@ mod tests {
     }
 
     #[test]
-    fn test_interval_count_as_1_day() {
+    fn test_interval_count_as_interval_duration_1_day() {
+        let interval_duration = Duration::days(1);
         let expected_count: usize = 4;
 
         let slot = Slot {
@@ -87,7 +88,7 @@ mod tests {
                 .unwrap(),
             end: NaiveDateTime::parse_from_str("2023-04-30T00:00:00", "%Y-%m-%dT%H:%M:%S").unwrap(),
         };
-        let slot_iterator = SlotIterator::new(slot, Duration::days(1));
+        let slot_iterator = SlotIterator::new(slot, interval_duration);
         dbg!(&slot, &slot_iterator);
 
         let result = slot_iterator.interval_count();
@@ -96,7 +97,8 @@ mod tests {
     }
 
     #[test]
-    fn test_interval_count_as_1_minute() {
+    fn test_interval_count_as_interval_duration_1_mintue() {
+        let interval_duration = Duration::minutes(1);
         let expected_count: usize = 5760;
 
         let slot = Slot {
@@ -104,7 +106,29 @@ mod tests {
                 .unwrap(),
             end: NaiveDateTime::parse_from_str("2023-04-30T00:00:00", "%Y-%m-%dT%H:%M:%S").unwrap(),
         };
-        let slot_iterator = SlotIterator::new(slot, Duration::minutes(1));
+        let slot_iterator = SlotIterator::new(slot, interval_duration);
+        dbg!(&slot, &slot_iterator);
+
+        let mut results: Vec<NaiveDateTime> = vec![];
+        for pointer in slot_iterator {
+            dbg!(pointer);
+            results.push(pointer)
+        }
+
+        assert_eq!(expected_count, results.len());
+    }
+
+    #[test]
+    fn test_interval_count_as_interval_duration_1_hour() {
+        let interval_duration = Duration::hours(1);
+        let expected_count: usize = 5760;
+
+        let slot = Slot {
+            start: NaiveDateTime::parse_from_str("2023-04-26T00:00:00", "%Y-%m-%dT%H:%M:%S")
+                .unwrap(),
+            end: NaiveDateTime::parse_from_str("2023-04-30T00:00:00", "%Y-%m-%dT%H:%M:%S").unwrap(),
+        };
+        let slot_iterator = SlotIterator::new(slot, interval_duration);
         dbg!(&slot, &slot_iterator);
 
         let mut results: Vec<NaiveDateTime> = vec![];
