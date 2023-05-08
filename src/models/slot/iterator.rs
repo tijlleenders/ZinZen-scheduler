@@ -40,13 +40,10 @@ impl Iterator for SlotIterator {
     type Item = NaiveDateTime;
 
     fn next(&mut self) -> Option<Self::Item> {
-        dbg!(&self);
-
         if self.pointer >= self.slot.end {
             return None;
         }
-        self.pointer = self.pointer.checked_add_signed(self.interval).unwrap();
-        dbg!(&self.pointer);
+        self.pointer += self.interval;
         Some(self.pointer)
     }
 }
@@ -109,19 +106,16 @@ mod tests {
         let slot_iterator = SlotIterator::new(slot, interval_duration);
         dbg!(&slot, &slot_iterator);
 
-        let mut results: Vec<NaiveDateTime> = vec![];
-        for pointer in slot_iterator {
-            dbg!(pointer);
-            results.push(pointer)
-        }
+        let result = slot_iterator.interval_count();
+        dbg!(&result);
 
-        assert_eq!(expected_count, results.len());
+        assert_eq!(expected_count, result);
     }
 
     #[test]
     fn test_interval_count_as_interval_duration_1_hour() {
         let interval_duration = Duration::hours(1);
-        let expected_count: usize = 5760;
+        let expected_count: usize = 96;
 
         let slot = Slot {
             start: NaiveDateTime::parse_from_str("2023-04-26T00:00:00", "%Y-%m-%dT%H:%M:%S")
@@ -131,12 +125,9 @@ mod tests {
         let slot_iterator = SlotIterator::new(slot, interval_duration);
         dbg!(&slot, &slot_iterator);
 
-        let mut results: Vec<NaiveDateTime> = vec![];
-        for pointer in slot_iterator {
-            dbg!(pointer);
-            results.push(pointer)
-        }
+        let result = slot_iterator.interval_count();
+        dbg!(&result);
 
-        assert_eq!(expected_count, results.len());
+        assert_eq!(expected_count, result);
     }
 }
