@@ -31,7 +31,7 @@ impl SlotIterator {
     /// Get count between slot.start and slot.end based on Duration interval
     pub fn interval_count(&self) -> usize {
         let mut count = 0;
-        self.clone().into_iter().for_each(|_| count += 1);
+        self.clone().for_each(|_| count += 1);
         count
     }
 }
@@ -47,7 +47,7 @@ impl Iterator for SlotIterator {
         }
         self.pointer = self.pointer.checked_add_signed(self.interval).unwrap();
         dbg!(&self.pointer);
-        return Some(self.pointer);
+        Some(self.pointer)
     }
 }
 
