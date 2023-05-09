@@ -56,6 +56,17 @@ pub fn apply_filter(timeline: &Timeline, filter: &Option<TimeFilter>) -> Timelin
     }
 }
 
+/*
+
+Slot start: end 1 month:
+    - before_time: 00:00:00
+    - after_time: 23:59:59
+
+Pointer -> read 1
+
+    -
+*/
+
 /// Filtering timeline based on before_time and after_time fields in TimeFilter
 pub fn filter_timing(
     timeline: &Timeline,

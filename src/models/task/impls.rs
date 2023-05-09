@@ -1,7 +1,4 @@
-use std::cmp::Ordering;
-
-use chrono::NaiveDateTime;
-
+use super::{NewTask, Task, TaskStatus};
 use crate::{
     errors::Error,
     models::{
@@ -10,8 +7,7 @@ use crate::{
         timeline::Timeline,
     },
 };
-
-use super::{Task, TaskStatus};
+use std::cmp::Ordering;
 
 impl PartialEq for Task {
     fn eq(&self, other: &Self) -> bool {
@@ -89,43 +85,22 @@ impl Ord for Task {
 
 impl Task {
     /// Create new task
-    /// ## Parmeters:
-    /// - task_id: id of the task
-    /// - title: title of the task
-    /// - duration: duration of the task
-    /// - goal: goal of the task
-    /// - timeline: timeline of the task
-    /// - status: status of the task
-    /// - timeframe: Start and deadline of a task
-    pub fn new(
-        task_id: usize,
-        title: &str,
-        duration: usize,
-        goal: &Goal,
-        timeline: &Timeline,
-        status: &TaskStatus,
-        timeframe: Option<Slot>,
-    ) -> Task {
-        let (mut start, mut deadline): (Option<NaiveDateTime>, Option<NaiveDateTime>) =
-            (None, None);
-
-        if let Some(timeframe) = timeframe {
-            start = Some(timeframe.start);
-            deadline = Some(timeframe.end);
-        }
+    pub fn new(new_task: NewTask) -> Task {
+        let start = new_task.timeframe.map(|time| time.start);
+        let deadline = new_task.timeframe.map(|time| time.end);
 
         Task {
-            id: task_id,
-            goal_id: goal.id.clone(),
-            title: title.to_string(),
-            duration,
-            status: status.clone(),
+            id: new_task.task_id,
+            goal_id: new_task.goal.id,
+            title: new_task.title,
+            duration: new_task.duration,
+            status: new_task.status,
             flexibility: 0,
             start,
             deadline,
-            slots: timeline.slots.clone().into_iter().collect(),
-            tags: goal.tags.clone(),
-            after_goals: goal.after_goals.clone(),
+            slots: new_task.timeline.slots.into_iter().collect(),
+            tags: new_task.goal.tags,
+            after_goals: new_task.goal.after_goals,
         }
     }
 
@@ -172,16 +147,18 @@ impl Task {
             after_goals: self.after_goals.clone(),
             ..Default::default()
         };
+        let new_task = NewTask {
+            task_id: *counter,
+            title: self.title.clone(),
+            duration: 1,
+            goal,
+            timeline,
+            status: TaskStatus::Uninitialized,
+            timeframe: None,
+        };
+
         for _ in 0..self.duration {
-            let mut task = Task::new(
-                *counter,
-                &self.title,
-                1,
-                &goal,
-                &timeline,
-                &TaskStatus::Uninitialized,
-                None,
-            );
+            let mut task = Task::new(new_task.clone());
 
             task.calculate_flexibility();
             task.status = TaskStatus::ReadyToSchedule;

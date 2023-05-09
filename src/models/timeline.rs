@@ -109,6 +109,8 @@ impl Timeline {
         }
     }
 
+    pub fn remove_slots_by_timing() {}
+
     /// Remove list of slots from timeline
     pub fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) {
         // TODO 2023-04-30 | Apply `retain` to remove slots after splitting into 1 hour slots
