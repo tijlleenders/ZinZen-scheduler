@@ -29,6 +29,8 @@ impl SlotIterator {
     }
 
     /// Get count between slot.start and slot.end based on Duration interval
+    /// Example: if duration interval is 1 min, so it will count minutes
+    ///  between slot.start and slot.end
     pub fn interval_count(&self) -> usize {
         let mut count = 0;
         self.clone().for_each(|_| count += 1);

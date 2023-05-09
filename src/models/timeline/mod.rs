@@ -1,8 +1,9 @@
-use std::collections::BTreeSet;
+pub mod iterator;
 
 use super::slot::Slot;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
+use std::collections::BTreeSet;
 
 pub type TimelineSlotsType = BTreeSet<Slot>;
 
