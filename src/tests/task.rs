@@ -1,10 +1,8 @@
-use crate::{
-    models::{
-        goal::{Goal, Tag},
-        task::{NewTask, Task, TaskStatus},
-        timeline::Timeline,
-    },
-    tests::utils::get_slot,
+use crate::models::{
+    goal::{Goal, Tag},
+    slot::Slot,
+    task::{NewTask, Task, TaskStatus},
+    timeline::Timeline,
 };
 use chrono::Duration;
 
@@ -22,7 +20,7 @@ fn new_task() {
     };
     let timeline = Timeline::new();
     let status = TaskStatus::ReadyToSchedule;
-    let timeframe = Some(get_slot(Duration::days(2), 2023, 05, 01, 0, 0));
+    let timeframe = Some(Slot::mock(Duration::days(2), 2023, 05, 01, 0, 0));
 
     let new_task = NewTask {
         task_id,

@@ -75,6 +75,8 @@ use services::task_placer::task_placer;
 use wasm_bindgen::prelude::*;
 
 mod errors;
+/// Mocking module to generate objects for testing
+pub mod mocking;
 /// The data structures
 pub mod models;
 /// The services handling the data structures

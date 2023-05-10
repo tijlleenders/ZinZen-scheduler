@@ -1,16 +1,13 @@
 pub mod merge_slots;
 pub mod remove_slots;
 
-use crate::{
-    models::{slot::Slot, timeline::Timeline},
-    tests::utils::*,
-};
+use crate::models::{slot::Slot, timeline::Timeline};
 use chrono::Duration;
 use std::collections::BTreeSet;
 
 #[test]
 fn test_initialize() {
-    let sample_slot = get_slot(Duration::hours(15), 2022, 10, 1, 05, 0);
+    let sample_slot = Slot::mock(Duration::hours(15), 2022, 10, 1, 05, 0);
 
     let expected_slot_in_timeline = Slot {
         start: sample_slot.start,
@@ -32,10 +29,10 @@ fn test_initialize() {
 #[test]
 fn test_get_next() {
     let (slot1, slot2, slot3, slot4) = (
-        get_slot(Duration::hours(2), 2022, 10, 1, 01, 0),
-        get_slot(Duration::hours(3), 2022, 10, 1, 03, 0),
-        get_slot(Duration::hours(4), 2022, 10, 1, 07, 0),
-        get_slot(Duration::hours(10), 2022, 10, 1, 12, 0),
+        Slot::mock(Duration::hours(2), 2022, 10, 1, 01, 0),
+        Slot::mock(Duration::hours(3), 2022, 10, 1, 03, 0),
+        Slot::mock(Duration::hours(4), 2022, 10, 1, 07, 0),
+        Slot::mock(Duration::hours(10), 2022, 10, 1, 12, 0),
     );
     dbg!(&(slot1, slot2, slot3, slot4));
     let timeline = Timeline {
@@ -61,15 +58,15 @@ fn test_split_into_days() {
     let days_count: i64 = 5;
     let duration = Duration::days(days_count);
 
-    let timeline = get_timeline_single_slot(duration, init_year, init_month, init_day);
+    let timeline = Timeline::mock(duration, init_year, init_month, init_day);
 
     let expected_result = Timeline {
         slots: vec![
-            get_slot(Duration::days(1), init_year, init_month, 1, hour, minute),
-            get_slot(Duration::days(1), init_year, init_month, 2, hour, minute),
-            get_slot(Duration::days(1), init_year, init_month, 3, hour, minute),
-            get_slot(Duration::days(1), init_year, init_month, 4, hour, minute),
-            get_slot(Duration::days(1), init_year, init_month, 5, hour, minute),
+            Slot::mock(Duration::days(1), init_year, init_month, 1, hour, minute),
+            Slot::mock(Duration::days(1), init_year, init_month, 2, hour, minute),
+            Slot::mock(Duration::days(1), init_year, init_month, 3, hour, minute),
+            Slot::mock(Duration::days(1), init_year, init_month, 4, hour, minute),
+            Slot::mock(Duration::days(1), init_year, init_month, 5, hour, minute),
         ]
         .into_iter()
         .collect(),

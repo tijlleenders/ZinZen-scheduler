@@ -1,7 +1,6 @@
 use crate::{
     models::{slot::Slot, timeline::Timeline},
     services::filter::filter_not_on,
-    tests::utils::{get_slot, get_timeline_days},
 };
 use chrono::Duration;
 
@@ -17,25 +16,25 @@ fn test_simple() {
     let hour: u32 = 0;
     let minute: u32 = 0;
 
-    let timeline = get_timeline_days(days_count, init_year, init_month, init_day);
+    let timeline = Timeline::mock_as_days(days_count, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let slots_to_filter: Vec<Slot> =
-        vec![get_slot(duration, init_year, init_month, 2, hour, minute)];
+        vec![Slot::mock(duration, init_year, init_month, 2, hour, minute)];
 
     let mut expected_slots: Vec<Slot> = vec![];
     expected_slots.append(
-        &mut get_slot(duration, init_year, init_month, init_day, hour, minute)
+        &mut Slot::mock(duration, init_year, init_month, init_day, hour, minute)
             .divide_into_1h_slots(),
     );
     expected_slots.append(
-        &mut get_slot(duration, init_year, init_month, 3, hour, minute).divide_into_1h_slots(),
+        &mut Slot::mock(duration, init_year, init_month, 3, hour, minute).divide_into_1h_slots(),
     );
     expected_slots.append(
-        &mut get_slot(duration, init_year, init_month, 4, hour, minute).divide_into_1h_slots(),
+        &mut Slot::mock(duration, init_year, init_month, 4, hour, minute).divide_into_1h_slots(),
     );
     expected_slots.append(
-        &mut get_slot(duration, init_year, init_month, 5, hour, minute).divide_into_1h_slots(),
+        &mut Slot::mock(duration, init_year, init_month, 5, hour, minute).divide_into_1h_slots(),
     );
 
     let expected_result = Timeline {

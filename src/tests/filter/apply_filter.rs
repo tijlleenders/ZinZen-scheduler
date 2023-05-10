@@ -7,7 +7,6 @@ use crate::{
         timeline::Timeline,
     },
     services::filter::apply_filter,
-    tests::utils::{get_slot, get_timeline_single_slot},
 };
 use chrono::{Duration, NaiveDate};
 
@@ -24,7 +23,7 @@ fn test_after_5am() {
     let not_on: Option<Vec<Slot>> = None;
 
     // intiate a sample timeline
-    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
+    let timeline = Timeline::mock(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let expected_result = Timeline {
@@ -70,9 +69,9 @@ fn test_normal_workday() {
     let after_time: Option<usize> = Some(start_time as usize);
     let on_days: Option<Vec<Day>> = Some(vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu]);
     let not_on: Option<Vec<Slot>> = Some(vec![
-        get_slot(Duration::hours(10), init_year, init_month, 2, start_time, 0),
-        get_slot(Duration::hours(10), init_year, init_month, 6, start_time, 0),
-        get_slot(
+        Slot::mock(Duration::hours(10), init_year, init_month, 2, start_time, 0),
+        Slot::mock(Duration::hours(10), init_year, init_month, 6, start_time, 0),
+        Slot::mock(
             Duration::hours(10),
             init_year,
             init_month,
@@ -83,7 +82,7 @@ fn test_normal_workday() {
     ]);
 
     // intiate a sample timeline
-    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
+    let timeline = Timeline::mock(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let mut expected_slots: Vec<Slot> = Slot {

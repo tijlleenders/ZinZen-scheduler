@@ -103,14 +103,13 @@ impl Iterator for TimelineIterator {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::tests::utils::{get_slot, get_timeline_single_slot};
 
     #[test]
     fn test_timeline_iterator() {
         let interval_duration = Duration::days(1);
 
-        let slot1 = get_slot(Duration::days(2), 2023, 05, 1, 0, 0);
-        let slot2 = get_slot(Duration::days(4), 2023, 05, 4, 0, 0);
+        let slot1 = Slot::mock(Duration::days(2), 2023, 05, 1, 0, 0);
+        let slot2 = Slot::mock(Duration::days(4), 2023, 05, 4, 0, 0);
         let timeline = Timeline {
             slots: vec![slot1, slot2].into_iter().collect(),
         };
@@ -130,7 +129,7 @@ mod tests {
         let interval_duration = Duration::days(1);
         let expected_count: usize = 5;
 
-        let timeline = get_timeline_single_slot(Duration::days(5), 2023, 05, 1);
+        let timeline = Timeline::mock(Duration::days(5), 2023, 05, 1);
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
         dbg!(&timeline, &timeline_iterator);
 
@@ -150,8 +149,8 @@ mod tests {
         let interval_duration = Duration::days(1);
         let expected_count: usize = 10;
 
-        let slot1 = get_slot(Duration::days(4), 2023, 05, 1, 0, 0);
-        let slot2 = get_slot(Duration::days(6), 2023, 05, 10, 0, 0);
+        let slot1 = Slot::mock(Duration::days(4), 2023, 05, 1, 0, 0);
+        let slot2 = Slot::mock(Duration::days(6), 2023, 05, 10, 0, 0);
         let timeline = Timeline {
             slots: vec![slot1, slot2].into_iter().collect(),
         };
@@ -175,9 +174,9 @@ mod tests {
         let interval_duration = Duration::days(1);
         let expected_count: usize = 76;
 
-        let slot1 = get_slot(Duration::days(60), 2023, 3, 1, 0, 0);
-        let slot2 = get_slot(Duration::days(6), 2023, 05, 1, 0, 0);
-        let slot3 = get_slot(Duration::days(10), 2023, 08, 10, 0, 0);
+        let slot1 = Slot::mock(Duration::days(60), 2023, 3, 1, 0, 0);
+        let slot2 = Slot::mock(Duration::days(6), 2023, 05, 1, 0, 0);
+        let slot3 = Slot::mock(Duration::days(10), 2023, 08, 10, 0, 0);
         let timeline = Timeline {
             slots: vec![slot1, slot2, slot3].into_iter().collect(),
         };

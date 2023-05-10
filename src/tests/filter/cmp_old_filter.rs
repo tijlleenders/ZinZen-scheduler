@@ -5,9 +5,9 @@ use crate::{
         goal::{Day, TimeFilter},
         slot::Slot,
         slots_iterator::TimeSlotsIterator,
+        timeline::Timeline,
     },
     services::filter::apply_filter,
-    tests::utils::{get_slot, get_timeline_single_slot},
 };
 use chrono::{Duration, NaiveDate};
 
@@ -27,9 +27,9 @@ fn _test_filter_for_workday() {
     let after_time: Option<usize> = Some(start_time as usize);
     let on_days: Option<Vec<Day>> = Some(vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu]);
     let not_on: Option<Vec<Slot>> = Some(vec![
-        get_slot(Duration::hours(10), init_year, init_month, 2, start_time, 0),
-        get_slot(Duration::hours(10), init_year, init_month, 6, start_time, 0),
-        get_slot(
+        Slot::mock(Duration::hours(10), init_year, init_month, 2, start_time, 0),
+        Slot::mock(Duration::hours(10), init_year, init_month, 6, start_time, 0),
+        Slot::mock(
             Duration::hours(10),
             init_year,
             init_month,
@@ -56,7 +56,7 @@ fn _test_filter_for_workday() {
     });
     dbg!(&start, &deadline);
 
-    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
+    let timeline = Timeline::mock(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let mut slot_iterator = TimeSlotsIterator {
@@ -122,7 +122,7 @@ fn test_i284_7days() {
     });
     dbg!(&start, &deadline, &filters);
 
-    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
+    let timeline = Timeline::mock(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let mut slot_iterator = TimeSlotsIterator {
@@ -180,7 +180,7 @@ fn test_i276() {
     });
     dbg!(&start, &deadline, &filters);
 
-    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
+    let timeline = Timeline::mock(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let mut slot_iterator = TimeSlotsIterator {
@@ -225,7 +225,7 @@ fn _test_i293_postpone_2() {
     let before_time: Option<usize> = None;
     let on_days: Option<Vec<Day>> = None;
     let not_on: Option<Vec<Slot>> = Some(vec![
-        get_slot(
+        Slot::mock(
             Duration::hours(3),
             init_year,
             init_month,
@@ -233,7 +233,7 @@ fn _test_i293_postpone_2() {
             start_time,
             0,
         ),
-        get_slot(Duration::hours(1), init_year, init_month, init_day, 5, 0),
+        Slot::mock(Duration::hours(1), init_year, init_month, init_day, 5, 0),
     ]);
 
     let start = NaiveDate::from_ymd_opt(init_year, init_month, init_day)
@@ -253,7 +253,7 @@ fn _test_i293_postpone_2() {
     });
     dbg!(&start, &deadline, &filters);
 
-    let timeline = get_timeline_single_slot(init_duration, init_year, init_month, init_day);
+    let timeline = Timeline::mock(init_duration, init_year, init_month, init_day);
     dbg!(&timeline);
 
     let mut slot_iterator = TimeSlotsIterator {

@@ -3,7 +3,7 @@
 
 use chrono::Duration;
 
-use crate::{models::slot::Slot, tests::utils::get_slot};
+use crate::models::slot::Slot;
 
 #[test]
 fn test_subtract_few_hours_from_fullday() {
@@ -22,12 +22,12 @@ fn test_subtract_few_hours_from_fullday() {
     let month = 1;
     let day = 1;
 
-    let slot_few_hours = get_slot(Duration::hours(10), year, month, day, 5, 0);
-    let slot_full_day = get_slot(Duration::days(1), year, month, day, 0, 0);
+    let slot_few_hours = Slot::mock(Duration::hours(10), year, month, day, 5, 0);
+    let slot_full_day = Slot::mock(Duration::days(1), year, month, day, 0, 0);
 
     let expected_result: Vec<Slot> = vec![
-        get_slot(Duration::hours(5), year, month, day, 0, 0),
-        get_slot(Duration::hours(9), year, month, day, 15, 0),
+        Slot::mock(Duration::hours(5), year, month, day, 0, 0),
+        Slot::mock(Duration::hours(9), year, month, day, 15, 0),
     ];
     dbg!(&expected_result);
 
@@ -54,12 +54,12 @@ fn test_subtract_fullday_from_few_hours() {
     let month = 1;
     let day = 1;
 
-    let slot_full_day = get_slot(Duration::days(1), year, month, day, 0, 0);
-    let slot_few_hours = get_slot(Duration::hours(10), year, month, day, 5, 0);
+    let slot_full_day = Slot::mock(Duration::days(1), year, month, day, 0, 0);
+    let slot_few_hours = Slot::mock(Duration::hours(10), year, month, day, 5, 0);
 
     let expected_result: Vec<Slot> = vec![
-        get_slot(Duration::hours(5), year, month, day, 0, 0),
-        get_slot(Duration::hours(9), year, month, day, 15, 0),
+        Slot::mock(Duration::hours(5), year, month, day, 0, 0),
+        Slot::mock(Duration::hours(9), year, month, day, 15, 0),
     ];
     dbg!(&expected_result);
 
@@ -78,8 +78,8 @@ fn test_subtract_same_datetime() {
     let min: u32 = 0;
     let duration = Duration::hours(10);
 
-    let slot1 = get_slot(duration, year, month, day, hour, min);
-    let slot2 = get_slot(duration, year, month, day, hour, min);
+    let slot1 = Slot::mock(duration, year, month, day, hour, min);
+    let slot2 = Slot::mock(duration, year, month, day, hour, min);
 
     let expected_result: Vec<Slot> = vec![];
     dbg!(&expected_result);
@@ -99,8 +99,8 @@ fn test_subtract_when_no_overlap() {
     let min: u32 = 0;
     let duration = Duration::hours(10);
 
-    let slot1 = get_slot(duration, year, month, day, hour, min);
-    let slot2 = get_slot(duration, year, month, day + 1, hour, min);
+    let slot1 = Slot::mock(duration, year, month, day, hour, min);
+    let slot2 = Slot::mock(duration, year, month, day + 1, hour, min);
 
     let expected_result: Vec<Slot> = vec![slot1];
     dbg!(&expected_result);
@@ -120,10 +120,10 @@ fn test_is_conflicts_with() {
     let min: u32 = 0;
     let duration = Duration::hours(10);
 
-    let base_slot = get_slot(duration, year, month, day, hour, min);
-    let conflicted_last_of_base = get_slot(duration, year, month, day, 09, min);
-    let conflicted_start_of_base = get_slot(duration, year, month, day - 1, 20, min);
-    let not_conflicted_with_base = get_slot(duration, year, month, day + 1, hour, min);
+    let base_slot = Slot::mock(duration, year, month, day, hour, min);
+    let conflicted_last_of_base = Slot::mock(duration, year, month, day, 09, min);
+    let conflicted_start_of_base = Slot::mock(duration, year, month, day - 1, 20, min);
+    let not_conflicted_with_base = Slot::mock(duration, year, month, day + 1, hour, min);
     dbg!(
         &base_slot,
         &conflicted_last_of_base,
@@ -155,12 +155,12 @@ fn test_is_contains_slot() {
     let min: u32 = 0;
     let duration = Duration::hours(10);
 
-    let base_slot = get_slot(duration, year, month, day, hour, min);
-    let contained_in_base = get_slot(Duration::hours(3), year, month, day, 02, min);
-    let equal_to_base = get_slot(duration, year, month, day, hour, min);
-    let overflow_base_from_start = get_slot(Duration::hours(3), year, month, day - 1, 23, min);
-    let overflow_base_from_end = get_slot(Duration::hours(3), year, month, day, 09, min);
-    let not_contained_in_base = get_slot(duration, year, month, day + 1, hour, min);
+    let base_slot = Slot::mock(duration, year, month, day, hour, min);
+    let contained_in_base = Slot::mock(Duration::hours(3), year, month, day, 02, min);
+    let equal_to_base = Slot::mock(duration, year, month, day, hour, min);
+    let overflow_base_from_start = Slot::mock(Duration::hours(3), year, month, day - 1, 23, min);
+    let overflow_base_from_end = Slot::mock(Duration::hours(3), year, month, day, 09, min);
+    let not_contained_in_base = Slot::mock(duration, year, month, day + 1, hour, min);
     dbg!(
         &base_slot,
         &contained_in_base,
@@ -201,10 +201,10 @@ fn test_is_intersect_with_slot() {
     let min: u32 = 0;
     let duration = Duration::hours(10);
 
-    let base_slot = get_slot(duration, year, month, day, hour, min);
-    let intersected_last_of_base = get_slot(duration, year, month, day, 09, min);
-    let intersected_start_of_base = get_slot(duration, year, month, day - 1, 20, min);
-    let not_intersected_with_base = get_slot(duration, year, month, day + 1, hour, min);
+    let base_slot = Slot::mock(duration, year, month, day, hour, min);
+    let intersected_last_of_base = Slot::mock(duration, year, month, day, 09, min);
+    let intersected_start_of_base = Slot::mock(duration, year, month, day - 1, 20, min);
+    let not_intersected_with_base = Slot::mock(duration, year, month, day + 1, hour, min);
     dbg!(
         &base_slot,
         &intersected_last_of_base,
