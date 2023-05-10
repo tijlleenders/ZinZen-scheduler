@@ -37,7 +37,7 @@ impl TaskBudget {
     }
 
     fn initialize(&mut self, budget_start: NaiveDateTime, budget_end: NaiveDateTime) {
-        let mut repetition = Repetition::Weekly(1);
+        let mut repetition: Repetition = Repetition::Weekly(1);
         match self.task_budget_type {
             BudgetType::Weekly => (),
             BudgetType::Daily => repetition = Repetition::DAILY(1),
@@ -196,5 +196,39 @@ impl TaskBudgets {
         }
         dbg!(&tasks_result);
         tasks_result
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::Duration;
+
+    #[test]
+    fn test_initialize_weekly_for_a_month() {
+        // Test that the weekly budget is initialized correctly
+        //for a month with 5 weeks
+
+        let mut task_budget = TaskBudget {
+            task_budget_type: BudgetType::Weekly,
+            max: Some(10),
+            min: Some(1),
+            slot_budgets: vec![],
+        };
+        let timeframe = Slot::mock(Duration::days(31), 2023, 5, 1, 0, 0);
+        dbg!(&timeframe);
+        let start_date = timeframe.start;
+        let end_date = timeframe.end;
+
+        dbg!(&task_budget);
+        task_budget.initialize(start_date, end_date);
+        dbg!(&task_budget);
+
+        assert_eq!(task_budget.slot_budgets.len(), 5);
+        for slot_budget in task_budget.slot_budgets.iter() {
+            assert_eq!(slot_budget.used, 0);
+            assert_eq!(slot_budget.min, Some(1));
+            assert_eq!(slot_budget.max, Some(10));
+        }
     }
 }
