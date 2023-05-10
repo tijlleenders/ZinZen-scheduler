@@ -4,3 +4,4 @@ pub mod slot;
 pub mod task;
 pub mod timeline;
 pub mod utils;
+pub mod slots_iterator;

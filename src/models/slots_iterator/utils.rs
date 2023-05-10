@@ -325,28 +325,13 @@ pub fn get_start_of_repeat_step(
 
 /// Get next week for a current datetime
 pub(crate) fn next_week(result: &mut NaiveDateTime) -> NaiveDateTime {
-    if result.weekday() == Weekday::Mon {
-        return result
-            .checked_add_days(Days::new(7))
-            .unwrap()
-            .with_hour(0)
-            .unwrap()
-            .with_minute(0)
-            .unwrap()
-            .with_second(0)
-            .unwrap();
-    }
-    for _days_to_add in 1..=6 {
-        *result = result.checked_add_days(Days::new(1)).unwrap();
-        if result.weekday() == Weekday::Mon {
-            return result
-                .with_hour(0)
-                .unwrap()
-                .with_minute(0)
-                .unwrap()
-                .with_second(0)
-                .unwrap();
-        }
-    }
-    panic!("shouldn't reach")
+    return result
+        .checked_add_days(Days::new(7))
+        .unwrap()
+        .with_hour(0)
+        .unwrap()
+        .with_minute(0)
+        .unwrap()
+        .with_second(0)
+        .unwrap();
 }
