@@ -82,20 +82,10 @@ impl Iterator for TimelineIterator {
             self.pointer += 1;
             dbg!(&self);
 
-            Some(slot.clone())
+            Some(*slot)
         } else {
-            return None;
+            None
         }
-
-        // match self.timeline.slots.iter().next() {
-        //     Some(slot) => {
-        //         dbg!(&slot);
-        //         self.pointer = slot.clone();
-        //         dbg!(&self);
-        //         Some(self.pointer)
-        //     }
-        //     None => None,
-        // }
     }
 }
 
