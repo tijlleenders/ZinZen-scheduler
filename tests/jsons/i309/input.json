@@ -1,0 +1,98 @@
+{
+    "startDate": "2023-05-10T00:00:00",
+    "endDate": "2023-05-17T00:00:00",
+    "goals": {
+        "f704cdd6-c02c-465a-bfbd-37b7f2d54823": {
+            "id": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+            "title": "Breakfast 🥐🥣",
+            "filters": {
+                "after_time": 6,
+                "before_time": 9
+            },
+            "min_duration": 1,
+            "repeat": "daily"
+        },
+        "ebc34193-e5ff-4fc4-9dab-de6f29c3bf34": {
+            "id": "ebc34193-e5ff-4fc4-9dab-de6f29c3bf34",
+            "title": "Presentation",
+            "min_duration": 2
+        },
+        "dc914376-3313-41b3-aed4-d3c1cda3e01c": {
+            "id": "dc914376-3313-41b3-aed4-d3c1cda3e01c",
+            "title": "Work",
+            "budgets": [
+                {
+                    "budget_type": "Weekly",
+                    "min": 45
+                }
+            ],
+            "children": [
+                "8abeb0b6-dc36-4c74-9f56-935de7b4eb19",
+                "a7992b3e-6f51-42ec-98ad-c0d5dc633b67"
+            ]
+        },
+        "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b": {
+            "id": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+            "title": "Walk 🚶🏽",
+            "filters": {
+                "after_time": 14,
+                "before_time": 20
+            },
+            "min_duration": 1,
+            "repeat": "daily"
+        },
+        "a7992b3e-6f51-42ec-98ad-c0d5dc633b67": {
+            "id": "a7992b3e-6f51-42ec-98ad-c0d5dc633b67",
+            "title": "Project B",
+            "min_duration": 10,
+            "children": [
+                "ebc34193-e5ff-4fc4-9dab-de6f29c3bf34"
+            ]
+        },
+        "9e65959b-4645-4b19-b4d4-b5896afa00a1": {
+            "id": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+            "title": "Lunch 🥪",
+            "filters": {
+                "after_time": 12,
+                "before_time": 14
+            },
+            "min_duration": 2,
+            "repeat": "daily"
+        },
+        "95438911-95ee-47bc-ba4f-090a560f46e2": {
+            "id": "95438911-95ee-47bc-ba4f-090a560f46e2",
+            "title": "Sleep 😴🌙",
+            "filters": {
+                "after_time": 0,
+                "before_time": 6
+            },
+            "min_duration": 6,
+            "repeat": "daily"
+        },
+        "900dfa10-6fe0-486c-af98-f160360f81b9": {
+            "id": "900dfa10-6fe0-486c-af98-f160360f81b9",
+            "title": "Me time 🧘🏽😌",
+            "filters": {
+                "after_time": 7,
+                "before_time": 21
+            },
+            "min_duration": 1,
+            "repeat": "daily"
+        },
+        "8abeb0b6-dc36-4c74-9f56-935de7b4eb19": {
+            "id": "8abeb0b6-dc36-4c74-9f56-935de7b4eb19",
+            "title": "Project A",
+            "min_duration": 20
+        },
+        "713c5d0e-c91a-4324-83d7-9e53aaae572d": {
+            "id": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+            "title": "Dinner 🍽️",
+            "filters": {
+                "after_time": 18,
+                "before_time": 21
+            },
+            "min_duration": 1,
+            "repeat": "daily"
+        }
+    }
+}
