@@ -16,7 +16,8 @@ forcing to split slots into hours, or similar.
 -
 */
 
-/// Iterator for a `Timeline` and provide some functionalities like count per duration interval
+/// Iterator for a `Timeline` and provide functionalities to walk through
+/// slots in a `Timeline` based on custom interval duration
 #[derive(Debug, Clone)]
 pub struct TimelineIterator {
     timeline: Timeline,
@@ -51,38 +52,35 @@ impl TimelineIterator {
             panic!("Timeline slots are empty")
         }
     }
-
-    /// Get count between start and end for all slots in
-    /// timeline based on Duration interval
-    pub fn interval_count(&self) -> usize {
-        let mut count = 0;
-        dbg!(count);
-        self.clone().for_each(|slot| {
-            dbg!(&slot);
-            let slot_iterator = SlotIterator::new(slot, self.interval);
-            dbg!(&slot_iterator);
-            count += slot_iterator.interval_count();
-            dbg!(&count);
-        });
-
-        dbg!(&count);
-        count
-    }
 }
 
+/// Walk through list of slots in timeline based on custom interval duration
 impl Iterator for TimelineIterator {
-    type Item = Slot;
+    type Item = Vec<Slot>;
 
     fn next(&mut self) -> Option<Self::Item> {
         dbg!(&self);
 
+        if self.timeline.slots.is_empty() {
+            return None;
+        }
+
         if let Some(slot) = self.timeline.slots.iter().nth(self.pointer) {
             dbg!(&slot);
+
+            let slot_iterator = SlotIterator::new(*slot, self.interval);
+            dbg!(&slot_iterator);
+
+            let mut walking_slots: Vec<Slot> = vec![];
+            for slot in slot_iterator {
+                walking_slots.push(slot);
+            }
+            dbg!(&walking_slots);
 
             self.pointer += 1;
             dbg!(&self);
 
-            Some(*slot)
+            Some(walking_slots)
         } else {
             None
         }
@@ -94,89 +92,82 @@ impl Iterator for TimelineIterator {
 mod tests {
     use super::*;
 
+    /// Testing walk through a Timeline as below:
+    /// - Single Slot with 5 days
+    /// - walk through each day
+    /// Expected to return list of 5 days slots
     #[test]
-    fn test_timeline_iterator() {
+    fn test_walk_through_single_slot() {
+        let timeline_duration = Duration::days(5);
         let interval_duration = Duration::days(1);
 
-        let slot1 = Slot::mock(Duration::days(2), 2023, 05, 1, 0, 0);
-        let slot2 = Slot::mock(Duration::days(4), 2023, 05, 4, 0, 0);
-        let timeline = Timeline {
-            slots: vec![slot1, slot2].into_iter().collect(),
-        };
+        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        dbg!(&timeline);
 
-        let mut iterator = TimelineIterator::new(timeline, interval_duration);
-
-        assert_eq!(iterator.next(), Some(slot1));
-        assert_eq!(iterator.next(), Some(slot2));
-        assert_eq!(iterator.next(), None);
-    }
-
-    #[test]
-    fn test_inteval_count_for_single_slot_timeline() {
-        // interval_count
-        // interval duration: 1 day
-        // timeline: single slot for 5 days
-        let interval_duration = Duration::days(1);
-        let expected_count: usize = 5;
-
-        let timeline = Timeline::mock(Duration::days(5), 2023, 05, 1);
-        let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
-        dbg!(&timeline, &timeline_iterator);
-
-        let result = timeline_iterator.interval_count();
-        dbg!(&result);
-
-        assert_eq!(expected_count, result);
-    }
-
-    #[test]
-    fn test_inteval_count_for_multiple_slot_timeline_1() {
-        // interval_count
-        // interval duration: 1 day
-        // timeline: mutlipe slots (1st: 4 days, 2nd:6 days)
-        // expected: 10 days
-
-        let interval_duration = Duration::days(1);
-        let expected_count: usize = 10;
-
-        let slot1 = Slot::mock(Duration::days(4), 2023, 05, 1, 0, 0);
-        let slot2 = Slot::mock(Duration::days(6), 2023, 05, 10, 0, 0);
-        let timeline = Timeline {
-            slots: vec![slot1, slot2].into_iter().collect(),
-        };
+        let expected_result: Vec<Slot> = vec![
+            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 2, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+        ];
+        dbg!(&expected_result);
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
         dbg!(&timeline, &timeline_iterator);
 
-        let result = timeline_iterator.interval_count();
-        dbg!(&result);
+        let mut result: Vec<Slot> = vec![];
 
-        assert_eq!(expected_count, result);
+        for walking_slots in timeline_iterator {
+            dbg!(&walking_slots);
+            result.extend(walking_slots);
+        }
+        dbg!(&expected_result, &result);
+
+        assert_eq!(expected_result, result);
     }
 
+    /// Testing walk through a Timeline as below:
+    /// - Multiple Slot {slot1: 5 days, slot2: 3 days}
+    /// - walk through each day
+    /// Expected to return list of 8 days slots
     #[test]
-    fn test_inteval_count_for_multiple_slot_timeline_2() {
-        // interval_count
-        // interval duration: 1 day
-        // timeline: mutlipe slots (1st: 2 months, 2nd: 6 days, 3rd: 10 days )
-        // expected: 76 days
-
+    fn test_walk_through_mutliple_slots() {
         let interval_duration = Duration::days(1);
-        let expected_count: usize = 76;
 
-        let slot1 = Slot::mock(Duration::days(60), 2023, 3, 1, 0, 0);
-        let slot2 = Slot::mock(Duration::days(6), 2023, 05, 1, 0, 0);
-        let slot3 = Slot::mock(Duration::days(10), 2023, 08, 10, 0, 0);
         let timeline = Timeline {
-            slots: vec![slot1, slot2, slot3].into_iter().collect(),
+            slots: vec![
+                Slot::mock(Duration::days(5), 2023, 05, 1, 0, 0),
+                Slot::mock(Duration::days(3), 2023, 06, 1, 0, 0),
+            ]
+            .into_iter()
+            .collect(),
         };
+        dbg!(&timeline);
+
+        let expected_result: Vec<Slot> = vec![
+            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 2, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 06, 1, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 06, 2, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 06, 3, 0, 0),
+        ];
+        dbg!(&expected_result);
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
         dbg!(&timeline, &timeline_iterator);
 
-        let result = timeline_iterator.interval_count();
-        dbg!(&result);
+        let mut result: Vec<Slot> = vec![];
 
-        assert_eq!(expected_count, result);
+        for walking_slots in timeline_iterator {
+            dbg!(&walking_slots);
+            result.extend(walking_slots);
+        }
+        dbg!(&expected_result, &result);
+
+        assert_eq!(expected_result, result);
     }
 }
