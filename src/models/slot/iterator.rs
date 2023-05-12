@@ -128,28 +128,6 @@ mod tests {
     }
 
     #[test]
-    fn test_count_interval_by_iterator_for_4_days() {
-        todo!("test not implemented");
-        // let expected_count: usize = 4;
-
-        // let slot = Slot {
-        //     start: NaiveDateTime::parse_from_str("2023-04-26T00:00:00", "%Y-%m-%dT%H:%M:%S")
-        //         .unwrap(),
-        //     end: NaiveDateTime::parse_from_str("2023-04-30T00:00:00", "%Y-%m-%dT%H:%M:%S").unwrap(),
-        // };
-        // let slot_iterator = SlotIterator::initialize(slot);
-        // dbg!(&slot, &slot_iterator);
-
-        // let mut results: Vec<NaiveDateTime> = vec![];
-        // for pointer in slot_iterator {
-        //     dbg!(pointer);
-        //     results.push(pointer)
-        // }
-
-        // assert_eq!(expected_count, results.len());
-    }
-
-    #[test]
     fn test_interval_count_as_interval_duration_1_day() {
         let interval_duration = Duration::days(1);
         let expected_count: usize = 4;
