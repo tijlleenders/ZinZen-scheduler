@@ -117,4 +117,41 @@ mod tests {
 
         assert_eq!(expected_result, result);
     }
+
+    /// Test editing slots generated from SlotIterator as below:
+    /// - Single Slot with 5 days
+    /// - walk through each day
+    /// - edit each day hours to be from 0 - 10AM
+    /// Expected to return list of 5 days slots with edited hours
+    #[test]
+    fn test_edit_slot_from_iterator() {
+        let slot_duration = Duration::days(5);
+        let interval_duration = Duration::days(1);
+
+        let slot = Slot::mock(slot_duration, 2023, 05, 1, 0, 0);
+        dbg!(&slot);
+
+        let expected_result: Vec<Slot> = vec![
+            Slot::mock(Duration::hours(10), 2023, 05, 1, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 2, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 3, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 4, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 5, 0, 0),
+        ];
+        dbg!(&expected_result);
+
+        let slot_iterator = SlotIterator::new(slot, interval_duration);
+        dbg!(&slot, &slot_iterator);
+
+        let mut result: Vec<Slot> = vec![];
+
+        for mut slot in slot_iterator {
+            dbg!(&slot);
+            slot.end = slot.end - Duration::hours(14);
+            dbg!(&slot);
+            result.push(slot);
+        }
+        dbg!(&expected_result, &result);
+        assert_eq!(expected_result, result);
+    }
 }

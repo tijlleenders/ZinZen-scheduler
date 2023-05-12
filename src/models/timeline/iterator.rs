@@ -170,4 +170,45 @@ mod tests {
 
         assert_eq!(expected_result, result);
     }
+
+    /// Test editing slots generated from TimelineIterator as below:
+    /// - Single Slot with 5 days
+    /// - walk through each day
+    /// - edit each day hours to be from 0 - 10AM
+    /// Expected to return list of 5 days slots with edited hours
+    #[test]
+    fn test_edit_slot_from_iterator() {
+        let timeline_duration = Duration::days(5);
+        let interval_duration = Duration::days(1);
+
+        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        dbg!(&timeline);
+
+        let expected_result: Vec<Slot> = vec![
+            Slot::mock(Duration::hours(10), 2023, 05, 1, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 2, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 3, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 4, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 05, 5, 0, 0),
+        ];
+        dbg!(&expected_result);
+
+        let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
+        dbg!(&timeline, &timeline_iterator);
+
+        let mut result: Vec<Slot> = vec![];
+
+        for mut walking_slots in timeline_iterator {
+            dbg!(&walking_slots);
+            walking_slots.iter_mut().for_each(|mut slot| {
+                slot.end = slot.end - Duration::hours(14);
+            });
+            dbg!(&walking_slots);
+
+            result.extend(walking_slots);
+        }
+        dbg!(&expected_result, &result);
+
+        assert_eq!(expected_result, result);
+    }
 }
