@@ -5,3 +5,5 @@ pub mod output;
 pub mod task_generator;
 /// For each Task, reduce the MaybeSlots Timeline into a FinalSlots Timeline, where the next Task to pick is calculated anew after every handled Task
 pub mod task_placer;
+/// Services for Timeline like filter slos by Timefilter
+pub mod timeline;
