@@ -10,17 +10,17 @@ impl Timeline {
     }
 
     /// Filtering timeline based on before_time and after_time fields in TimeFilter
-    pub fn filter_timing(&mut self, _before_time: Option<usize>, _after_time: Option<usize>) {
+    fn _filter_timing(&mut self, _before_time: Option<usize>, _after_time: Option<usize>) {
         todo!("filter_timing not implemented");
     }
 
     /// Filtering timeline based on on_days field in TimeFilter
-    pub fn filter_on_days(&mut self, _days_to_filter: &[Day]) {
+    fn _filter_on_days(&mut self, _days_to_filter: &[Day]) {
         todo!("filter_on_days not implemented");
     }
 
     /// Filtering timeline based on not_on field in TimeFilter
-    pub fn filter_not_on(&mut self, _slots_to_filter: &[Slot]) {
+    fn _filter_not_on(&mut self, _slots_to_filter: &[Slot]) {
         todo!("filter_not_on not implemented");
     }
 }
