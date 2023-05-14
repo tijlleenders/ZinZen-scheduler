@@ -15,7 +15,9 @@ fn filter_timing(
     if timeline.slots.is_empty() || (after_time.is_none() && before_time.is_none()) {
         return timeline;
     }
-
+    // Some validations
+    validate_time(after_time, "after_time");
+    validate_time(before_time, "before_time");
     dbg!(&timeline, &before_time, &after_time);
 
     let mut expected_timeline = Timeline::new();
@@ -41,6 +43,15 @@ fn filter_timing(
     expected_timeline.slots = slots.into_iter().collect();
 
     expected_timeline
+}
+
+/// Validate that a given value is valid time number which must be between 0 and 24
+fn validate_time(time: Option<usize>, time_name: &str) {
+    if let Some(time) = time {
+        if time > 24 {
+            panic!("{} must be between 0 and 24", time_name);
+        }
+    }
 }
 
 #[cfg(test)]
