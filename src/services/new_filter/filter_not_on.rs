@@ -1,36 +1,34 @@
 use crate::models::{slot::Slot, timeline::Timeline};
 
+// TODO 2023-05-15  | Need more test cases to cover all possible unexpected situations
+// Examples: partial overlap, no overlap, etc
+
 /// Filtering timeline based on not_on field in TimeFilter
-fn filter_not_on(timeline: Timeline, slots_to_filter: &[Slot]) -> Timeline {
-    // return the same timeline if timeline is empty or slots_to_filter is empty
+fn filter_not_on(mut timeline: Timeline, slots_to_filter: &[Slot]) -> Timeline {
     if timeline.slots.is_empty() || slots_to_filter.is_empty() {
         return timeline;
     }
 
-    dbg!(&timeline, &slots_to_filter);
+    let mut slots_to_add = Vec::new();
 
-    let mut result_timeline = Timeline::new();
+    timeline.slots.retain(|slot| {
+        let mut should_remove = false;
 
-    for slot in timeline.slots {
-        dbg!(&slot);
-        slots_to_filter.iter().for_each(|slot_to_filter| {
-            dbg!(&slot_to_filter);
+        for slot_to_filter in slots_to_filter {
             if slot.is_contains_slot(slot_to_filter) {
-                let slot_sub = slot - *slot_to_filter;
-                dbg!(&slot_sub);
-                result_timeline.slots.extend(slot_sub);
-                dbg!(&result_timeline);
-            } else {
-                result_timeline.slots.insert(slot);
-                dbg!(&result_timeline);
+                let slot_sub = *slot - *slot_to_filter;
+                slots_to_add.extend(slot_sub.into_iter());
+                should_remove = true;
             }
-        });
-    }
+        }
 
-    dbg!(&result_timeline);
-    result_timeline
+        !should_remove
+    });
+
+    timeline.slots.extend(slots_to_add.into_iter());
+
+    timeline
 }
-
 #[cfg(test)]
 mod tests {
     use chrono::Duration;
