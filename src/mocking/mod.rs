@@ -1,6 +1,9 @@
 use chrono::{Duration, NaiveDate, NaiveDateTime};
 
-use crate::models::{slot::Slot, timeline::Timeline};
+use crate::models::{
+    slot::{iterator::SlotIterator, Slot},
+    timeline::Timeline,
+};
 
 pub struct DateTime {
     pub datetime: NaiveDateTime,
@@ -57,6 +60,9 @@ impl Timeline {
         start_month: u32,
         start_day: u32,
     ) -> Timeline {
+        if days_count < 1 {
+            return Timeline::new();
+        }
         let init_slot = Slot::mock(
             Duration::days(days_count),
             start_year,
@@ -65,7 +71,13 @@ impl Timeline {
             0,
             0,
         );
-        let slots_days = init_slot.divide_into_days();
+
+        let slot_iter = SlotIterator::new(init_slot, Duration::days(1));
+
+        let mut slots_days: Vec<Slot> = vec![];
+        for slot in slot_iter {
+            slots_days.push(slot);
+        }
 
         Timeline {
             slots: slots_days.into_iter().collect(),
@@ -128,5 +140,38 @@ mod tests {
         assert_eq!(slot.end.day(), day + 1);
         assert_eq!(slot.end.hour(), hour);
         assert_eq!(slot.end.minute(), minute);
+    }
+
+    #[test]
+    fn test_mock_as_days() {
+        // Test for days_count = 0
+        let timeline = Timeline::mock_as_days(0, 2023, 5, 1);
+        assert_eq!(timeline, Timeline::new());
+
+        // Test for days_count = 1
+        let timeline = Timeline::mock_as_days(1, 2023, 5, 1);
+        assert_eq!(
+            timeline,
+            Timeline {
+                slots: vec![Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0)]
+                    .into_iter()
+                    .collect()
+            }
+        );
+
+        // Test for days_count = 3
+        let timeline = Timeline::mock_as_days(3, 2023, 5, 1);
+        assert_eq!(
+            timeline,
+            Timeline {
+                slots: vec![
+                    Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+                    Slot::mock(Duration::days(1), 2023, 5, 2, 0, 0),
+                    Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+                ]
+                .into_iter()
+                .collect()
+            }
+        );
     }
 }
