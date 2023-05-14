@@ -9,7 +9,7 @@ use crate::models::{
 };
 
 /// Filtering timeline based on on_days field in TimeFilter
-fn filter_on_days(timeline: Timeline, days_to_filter: &[Day]) -> Timeline {
+pub(crate) fn filter_on_days(timeline: Timeline, days_to_filter: &[Day]) -> Timeline {
     // TODO 2023-04-25 | Need heavy test cases to confirm functionality.
     // Examples are scenarios like below:
     // - if timeline is not splitted

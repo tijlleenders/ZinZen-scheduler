@@ -4,7 +4,7 @@ use crate::models::{slot::Slot, timeline::Timeline};
 // Examples: partial overlap, no overlap, etc
 
 /// Filtering timeline based on not_on field in TimeFilter
-fn filter_not_on(mut timeline: Timeline, slots_to_filter: &[Slot]) -> Timeline {
+pub(crate) fn filter_not_on(mut timeline: Timeline, slots_to_filter: &[Slot]) -> Timeline {
     if timeline.slots.is_empty() || slots_to_filter.is_empty() {
         return timeline;
     }

@@ -6,7 +6,7 @@ use crate::models::{
 };
 
 /// Filtering timeline based on before_time and after_time fields in TimeFilter
-fn filter_timing(
+pub(crate) fn filter_timing(
     timeline: Timeline,
     after_time: Option<usize>,
     before_time: Option<usize>,
