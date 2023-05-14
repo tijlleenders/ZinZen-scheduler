@@ -1,20 +1,12 @@
+mod filter_on_days;
 mod filter_timing;
 
-use crate::models::{
-    goal::{Day, TimeFilter},
-    slot::Slot,
-    timeline::Timeline,
-};
+use crate::models::{goal::TimeFilter, slot::Slot, timeline::Timeline};
 
 impl Timeline {
     pub fn apply_filter(&mut self, _filter: &Option<TimeFilter>) -> Timeline {
         todo!("apply_filter not implemented");
     }
-}
-
-/// Filtering timeline based on on_days field in TimeFilter
-fn _filter_on_days(_timeline: Timeline, _days_to_filter: &[Day]) {
-    todo!("filter_on_days not implemented");
 }
 
 /// Filtering timeline based on not_on field in TimeFilter

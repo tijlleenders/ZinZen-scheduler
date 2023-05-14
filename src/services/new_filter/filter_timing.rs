@@ -45,7 +45,7 @@ fn filter_timing(
 
 #[cfg(test)]
 mod tests {
-    use chrono::{Duration, NaiveDate};
+    use chrono::Duration;
 
     use crate::{
         models::{slot::Slot, timeline::Timeline},
