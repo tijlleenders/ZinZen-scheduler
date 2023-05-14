@@ -80,3 +80,53 @@ impl Timeline {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use chrono::{Datelike, Timelike};
+
+    use super::*;
+
+    #[test]
+    fn test_mock_slot() {
+        let duration = Duration::hours(1);
+        let year = 2023;
+        let month = 05;
+        let day = 1;
+        let hour = 5;
+        let minute = 0;
+
+        let slot = Slot::mock(duration, year, month, day, hour, minute);
+
+        assert_eq!(slot.start.year(), year);
+        assert_eq!(slot.start.month(), month);
+        assert_eq!(slot.start.day(), day);
+        assert_eq!(slot.start.hour(), hour);
+        assert_eq!(slot.start.minute(), minute);
+
+        assert_eq!(slot.end.hour(), hour + 1);
+        assert_eq!(slot.end.minute(), minute);
+    }
+
+    #[test]
+    fn test_mock_slot_for_day() {
+        let duration = Duration::days(1);
+        let year = 2023;
+        let month = 05;
+        let day = 1;
+        let hour = 5;
+        let minute = 0;
+
+        let slot = Slot::mock(duration, year, month, day, hour, minute);
+
+        assert_eq!(slot.start.year(), year);
+        assert_eq!(slot.start.month(), month);
+        assert_eq!(slot.start.day(), day);
+        assert_eq!(slot.start.hour(), hour);
+        assert_eq!(slot.start.minute(), minute);
+
+        assert_eq!(slot.end.day(), day + 1);
+        assert_eq!(slot.end.hour(), hour);
+        assert_eq!(slot.end.minute(), minute);
+    }
+}
