@@ -118,7 +118,7 @@ mod tests {
     /// - days_to_filter: Mon Fri
     /// - Expected list of 10 days
     #[test]
-    fn test_unsplitted_timeline() {
+    fn test_when_timeline_have_single_slot() {
         let days_to_filter: Vec<Day> = vec![Day::Mon, Day::Fri];
 
         let timeline = Timeline::mock(Duration::days(15), 2023, 05, 1);
