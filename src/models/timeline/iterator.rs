@@ -229,10 +229,8 @@ mod tests {
     /// Expected ??? TODO
     #[test]
     fn test_iterate_when_interval_dur_more_than_slot_duration() {
-        let timeline_duration = Duration::days(5);
         let interval_duration = Duration::days(1);
         let year = 2023;
-        let month = 5;
         let start_time: u32 = 5;
 
         let timeline = Timeline {

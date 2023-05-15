@@ -45,7 +45,7 @@ impl Timeline {
 
 #[cfg(test)]
 mod tests {
-    use chrono::{Duration, NaiveDate};
+    use chrono::Duration;
 
     use crate::models::{
         goal::{Day, TimeFilter},
