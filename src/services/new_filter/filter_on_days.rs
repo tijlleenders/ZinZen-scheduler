@@ -146,4 +146,63 @@ mod tests {
 
         assert_eq!(expected_result, result);
     }
+
+    /// Test filter_on_days function when normal workday which appeared when
+    /// testing apply_filter
+    /// - timeline: 15 days from 5am to 3pm
+    /// - days_to_filter: Mon Fri
+    /// - Expected list of 10 days
+    #[test]
+    fn test_normal_workday_issue() {
+        let year = 2023;
+        let month = 5;
+
+        let start_time: u32 = 5;
+
+        let days_to_filter: Vec<Day> = vec![Day::Fri, Day::Sat];
+
+        let timeline = Timeline {
+            slots: vec![
+                Slot::mock(Duration::hours(10), year, 05, 1, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 2, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 3, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 4, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 5, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 6, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 7, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 8, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 9, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 10, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 11, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 12, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 13, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 14, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 05, 15, start_time, 0),
+            ]
+            .into_iter()
+            .collect(),
+        };
+        dbg!(&timeline);
+
+        let expected_result: Timeline = Timeline {
+            slots: vec![
+                Slot::mock(Duration::hours(10), year, month, 1, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 3, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 4, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 7, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 8, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 9, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 10, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 14, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 15, start_time, 0),
+            ]
+            .into_iter()
+            .collect(),
+        };
+        dbg!(&expected_result);
+
+        let result = filter_on_days(timeline, &days_to_filter);
+
+        assert_eq!(expected_result, result);
+    }
 }

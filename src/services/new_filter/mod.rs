@@ -38,9 +38,7 @@ impl Timeline {
             dbg!(&filtered_timeline);
 
             *self = filtered_timeline;
-            return;
         } else {
-            return;
         }
     }
 }
@@ -87,7 +85,7 @@ mod tests {
     /// - filters:
     ///     - after_time: 5am
     ///     - before_time: 3pm
-    ///     - on_days: Sun, Mon, Tue, Wed, Thu
+    ///     - on_days: Fri, Sat
     ///     - not_on: [
     ///                 2023-05-02 05 to 15 ,
     ///                 2023-05-06 05 to 15 ,
@@ -106,8 +104,7 @@ mod tests {
         let after_time: Option<usize> = Some(start_time as usize);
         let end_time: u32 = 15;
         let before_time: Option<usize> = Some(end_time as usize);
-        let on_days: Option<Vec<Day>> =
-            Some(vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu]);
+        let on_days: Option<Vec<Day>> = Some(vec![Day::Fri, Day::Sat]);
         let not_on: Option<Vec<Slot>> = Some(vec![
             Slot::mock(Duration::hours(10), year, month, 2, start_time, 0),
             Slot::mock(Duration::hours(10), year, month, 6, start_time, 0),
