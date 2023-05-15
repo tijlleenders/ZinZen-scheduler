@@ -40,7 +40,7 @@ pub(crate) fn filter_on_days(timeline: Timeline, days_to_filter: &[Day]) -> Time
         let day = slot.start.weekday().to_string();
         dbg!(&day);
 
-        if days_to_filter.contains(&Day::from(day)) {
+        if !days_to_filter.contains(&Day::from(day)) {
             days_to_remove.push(slot);
             dbg!(&days_to_remove);
         }
@@ -82,7 +82,7 @@ mod tests {
     /// Test filter_on_days function when timeline have many slots
     /// - timeline: 15 days (Starting Mon 2023-05-01 to Mon 2023-05-15)
     /// - days_to_filter: Mon Fri
-    /// - Expected list of 10 days
+    /// - Expected list of 5 days (Mon, Fri) between Mon 2023-05-01 to Mon 2023-05-15
     #[test]
     fn test_when_timeline_have_many_slots() {
         let days_to_filter: Vec<Day> = vec![Day::Mon, Day::Fri];
@@ -92,16 +92,11 @@ mod tests {
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::days(1), 2023, 05, 2, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 6, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 7, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 9, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 10, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 11, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 13, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 14, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 05, 8, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 05, 12, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 05, 15, 0, 0),
             ]
             .into_iter()
             .collect(),
@@ -115,26 +110,20 @@ mod tests {
 
     /// Test filter_on_days function when timeline single slot
     /// - timeline: single slot for 15 days (Starting Mon 2023-05-01 to Mon 2023-05-15)
-    /// - days_to_filter: Mon Fri
-    /// - Expected list of 10 days
+    /// - days_to_filter: Sun THu
+    /// - Expected list of 4 days (Sun, Thu) between Mon 2023-05-01 to Mon 2023-05-15
     #[test]
     fn test_when_timeline_have_single_slot() {
-        let days_to_filter: Vec<Day> = vec![Day::Mon, Day::Fri];
+        let days_to_filter: Vec<Day> = vec![Day::Sun, Day::Thu];
 
         let timeline = Timeline::mock(Duration::days(15), 2023, 05, 1);
         dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::days(1), 2023, 05, 2, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
                 Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 6, 0, 0),
                 Slot::mock(Duration::days(1), 2023, 05, 7, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 9, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 10, 0, 0),
                 Slot::mock(Duration::days(1), 2023, 05, 11, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 13, 0, 0),
                 Slot::mock(Duration::days(1), 2023, 05, 14, 0, 0),
             ]
             .into_iter()
@@ -150,8 +139,9 @@ mod tests {
     /// Test filter_on_days function when normal workday which appeared when
     /// testing apply_filter
     /// - timeline: 15 days from 5am to 3pm
-    /// - days_to_filter: Mon Fri
-    /// - Expected list of 10 days
+    /// - days_to_filter: Sun, Mon, Tue, Wed, Thu
+    /// - Expected list of 11 days (Sun, Mon, Tue, Wed, Thu) between
+    ///  Mon 2023-05-01 to Mon 2023-05-15
     #[test]
     fn test_normal_workday_issue() {
         let year = 2023;
@@ -159,7 +149,7 @@ mod tests {
 
         let start_time: u32 = 5;
 
-        let days_to_filter: Vec<Day> = vec![Day::Fri, Day::Sat];
+        let days_to_filter: Vec<Day> = vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu];
 
         let timeline = Timeline {
             slots: vec![
@@ -187,12 +177,14 @@ mod tests {
         let expected_result: Timeline = Timeline {
             slots: vec![
                 Slot::mock(Duration::hours(10), year, month, 1, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 2, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 3, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 4, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 7, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 8, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 9, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 10, start_time, 0),
+                Slot::mock(Duration::hours(10), year, month, 11, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 14, start_time, 0),
                 Slot::mock(Duration::hours(10), year, month, 15, start_time, 0),
             ]
@@ -202,7 +194,7 @@ mod tests {
         dbg!(&expected_result);
 
         let result = filter_on_days(timeline, &days_to_filter);
-
+        dbg!(&expected_result, &result);
         assert_eq!(expected_result, result);
     }
 }

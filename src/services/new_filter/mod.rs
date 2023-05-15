@@ -95,8 +95,8 @@ mod tests {
     /// in addition to  2nd, 6th, and 11th May-2023
     #[test]
     fn test_normal_workday() {
-        let year = 2022;
-        let month = 1;
+        let year = 2023;
+        let month = 5;
         let day = 1;
         let timeline_duration = Duration::days(15);
 
@@ -104,7 +104,8 @@ mod tests {
         let after_time: Option<usize> = Some(start_time as usize);
         let end_time: u32 = 15;
         let before_time: Option<usize> = Some(end_time as usize);
-        let on_days: Option<Vec<Day>> = Some(vec![Day::Fri, Day::Sat]);
+        let on_days: Option<Vec<Day>> =
+            Some(vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu]);
         let not_on: Option<Vec<Slot>> = Some(vec![
             Slot::mock(Duration::hours(10), year, month, 2, start_time, 0),
             Slot::mock(Duration::hours(10), year, month, 6, start_time, 0),
