@@ -28,12 +28,24 @@ pub(crate) fn filter_timing(
     for mut walking_slots in timeline_iterator {
         dbg!(&walking_slots);
         walking_slots.iter_mut().for_each(|mut slot| {
+            dbg!(&slot);
+
+            if after_time.is_some() && before_time.is_some() {}
+            let slot_duration = slot.end.signed_duration_since(slot.start);
+            dbg!(&slot_duration);
             if let Some(start_time) = after_time {
                 slot.start = slot.start.with_hour(start_time as u32).unwrap();
             }
+            dbg!(&slot);
 
             if let Some(end_time) = before_time {
-                slot.end = slot.end.with_hour(end_time as u32).unwrap() - Duration::days(1);
+                if after_time.is_some() && end_time < after_time.unwrap() {
+                    slot.end = slot.end.with_hour(end_time as u32).unwrap();
+                    dbg!(&slot);
+                } else {
+                    slot.end = slot.end.with_hour(end_time as u32).unwrap() - Duration::days(1);
+                    dbg!(&slot);
+                }
             }
         });
         dbg!(&walking_slots);
@@ -184,19 +196,44 @@ mod tests {
         };
         dbg!(&expected_result);
 
-        let result = filter_timing(timeline, None, Some(end_time as usize));
-
+        let result = filter_timing(timeline, Some(start_time as usize), Some(end_time as usize));
+        dbg!(&expected_result, &result);
         assert_eq!(expected_result, result);
     }
 
-    /// Test filter_timing function when both after_time and before_time are provided
-    /// but before_time less than after_time
+    /// Test filter_timing function when both after_time and before_tNoneime are provided
+    /// but before_time(end_time) less than after_time (start_time)
     /// - timeline: 5 days
     /// - after_time (start_time): 20 (8pm)
     /// - before_time (end_time): 05 (5am)
-    /// - Expected list of 5 days starting time from 05 and end at 20 for each day
+    /// - Expected list of 5 days starting time from 8pm and end at 5am next day
     #[test]
     fn test_beforetime_is_before_aftertime() {
-        todo!("Test test_beforetime_is_before_aftertime not implemented");
+        let timeline_duration = Duration::days(5);
+        let start_time: u32 = 20;
+        let end_time: u32 = 5;
+
+        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        dbg!(&timeline);
+
+        let expected_result: Timeline = Timeline {
+            slots: vec![
+                Slot::mock(Duration::hours(9), 2023, 05, 1, start_time, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 2, start_time, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 3, start_time, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 4, start_time, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 5, start_time, 0),
+            ]
+            .into_iter()
+            .collect(),
+        };
+        dbg!(&expected_result);
+
+        let result = filter_timing(timeline, Some(start_time as usize), Some(end_time as usize));
+        dbg!(&expected_result, &result);
+        assert_eq!(expected_result, result);
     }
+
+    //TODO  2023-05-15  | create a test scenario like test_beforetime_is_before_aftertime but
+    // slots passed in timeline not fullday
 }
