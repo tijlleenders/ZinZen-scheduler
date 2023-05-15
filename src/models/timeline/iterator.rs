@@ -21,7 +21,6 @@ forcing to split slots into hours, or similar.
 #[derive(Debug, Clone)]
 pub struct TimelineIterator {
     timeline: Timeline,
-    pointer: usize,
     /// Duration interval for pointer to corss over timeline timelines
     interval: Duration,
 }
@@ -32,7 +31,6 @@ impl TimelineIterator {
         if let Some(_pionter_start) = timeline.slots.first() {
             TimelineIterator {
                 timeline: timeline.clone(),
-                pointer: 0,
                 interval: Duration::days(1),
             }
         } else {
@@ -45,7 +43,6 @@ impl TimelineIterator {
         if let Some(_pionter_start) = timeline.slots.first() {
             TimelineIterator {
                 timeline: timeline.clone(),
-                pointer: 0,
                 interval: interval_duration,
             }
         } else {
