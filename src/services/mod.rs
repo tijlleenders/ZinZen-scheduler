@@ -1,6 +1,5 @@
-pub mod filter;
 /// New filter functions which using SlotIterator and TimelineItertor
-pub mod new_filter;
+pub mod filter;
 /// Merges all FinalSlots Timelines from all Tasks into a single Timeline, formatted for the frontend
 pub mod output;
 /// Generates Tasks from Goals, giving each Task their [MECE part](https://en.wikipedia.org/wiki/MECE_principle) of the Goal MaybeSlots Timeline

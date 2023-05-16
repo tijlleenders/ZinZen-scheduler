@@ -72,7 +72,7 @@ mod tests {
 
     use crate::{
         models::{slot::Slot, timeline::Timeline},
-        services::new_filter::filter_timing::filter_timing,
+        services::filter::filter_timing::filter_timing,
     };
 
     /// Test filter_timing when Timeline.slots is empty
@@ -234,6 +234,7 @@ mod tests {
         assert_eq!(expected_result, result);
     }
 
-    //TODO  2023-05-15  | create a test scenario like test_beforetime_is_before_aftertime but
-    // slots passed in timeline not fullday
+    // TODO 2023-05-15  | create a test scenario like test_beforetime_is_before_aftertime but slots passed in timeline not fullday
+    // TODO 2023-04-25  | Remove panic and use error handling for below validations
+    // TODO 2023-04-26  | Create test scenarios: when slot is not a complete day
 }

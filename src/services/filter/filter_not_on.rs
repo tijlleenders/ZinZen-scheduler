@@ -35,7 +35,7 @@ mod tests {
 
     use crate::{
         models::{slot::Slot, timeline::Timeline},
-        services::new_filter::filter_not_on::filter_not_on,
+        services::filter::filter_not_on::filter_not_on,
     };
 
     #[test]

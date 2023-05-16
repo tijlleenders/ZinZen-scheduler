@@ -4,6 +4,10 @@ mod filter_timing;
 
 use crate::models::{goal::TimeFilter, timeline::Timeline};
 
+// TODO 2023-04-25 | Develop Error handling here
+// TODO 2023-04-27 | Solve issue: when not_on is covering full day and timing of slots is part of the day
+// TODO 2023-04-27 | This is a core functionlity and need a massive more test cases to guarantee it is working properly
+
 impl Timeline {
     /// Applies time filter on the given timeline
     pub fn apply_filter(&mut self, filter: &Option<TimeFilter>) {

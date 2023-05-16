@@ -2,8 +2,6 @@ pub mod filter;
 pub mod iterator;
 pub mod utils;
 
-use crate::services;
-
 use super::{goal::TimeFilter, repetition::Repetition, slot::Slot, timeline::Timeline};
 use chrono::NaiveDateTime;
 
@@ -36,7 +34,7 @@ impl TimeSlotsIterator {
             filters,
             current_start_position: start, //override after applying filters
         };
-        result.timeline = services::filter::apply_filter(&result.timeline, &result.filters);
+        result.timeline.apply_filter(&result.filters);
         result.current_start_position = result.timeline.slots.first().unwrap().start;
         result
     }

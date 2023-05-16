@@ -58,7 +58,7 @@ mod tests {
 
     use crate::{
         models::{goal::Day, slot::Slot, timeline::Timeline},
-        services::new_filter::filter_on_days::filter_on_days,
+        services::filter::filter_on_days::filter_on_days,
     };
 
     #[test]
