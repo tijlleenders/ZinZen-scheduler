@@ -104,16 +104,16 @@ mod tests {
         let day = 1;
         let timeline_duration = Duration::days(15);
 
-        let start_time: u32 = 5;
-        let after_time: Option<usize> = Some(start_time as usize);
-        let end_time: u32 = 15;
-        let before_time: Option<usize> = Some(end_time as usize);
+        let after: u32 = 5;
+        let after_time: Option<usize> = Some(after as usize);
+        let before: u32 = 15;
+        let before_time: Option<usize> = Some(before as usize);
         let on_days: Option<Vec<Day>> =
             Some(vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu]);
         let not_on: Option<Vec<Slot>> = Some(vec![
-            Slot::mock(Duration::hours(10), year, month, 2, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 6, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 11, start_time, 0),
+            Slot::mock(Duration::hours(10), year, month, 2, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 6, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 11, after, 0),
         ]);
 
         // intiate a sample timeline
@@ -121,15 +121,15 @@ mod tests {
         dbg!(&timeline);
 
         let expected_slots: Vec<Slot> = vec![
-            Slot::mock(Duration::hours(10), year, month, 1, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 3, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 4, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 7, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 8, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 9, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 10, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 14, start_time, 0),
-            Slot::mock(Duration::hours(10), year, month, 15, start_time, 0),
+            Slot::mock(Duration::hours(10), year, month, 1, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 3, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 4, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 7, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 8, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 9, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 10, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 14, after, 0),
+            Slot::mock(Duration::hours(10), year, month, 15, after, 0),
         ];
         dbg!(&expected_slots);
 

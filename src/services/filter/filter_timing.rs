@@ -33,17 +33,17 @@ pub(crate) fn filter_timing(
             if after_time.is_some() && before_time.is_some() {}
             let slot_duration = slot.end.signed_duration_since(slot.start);
             dbg!(&slot_duration);
-            if let Some(start_time) = after_time {
-                slot.start = slot.start.with_hour(start_time as u32).unwrap();
+            if let Some(after) = after_time {
+                slot.start = slot.start.with_hour(after as u32).unwrap();
             }
             dbg!(&slot);
 
-            if let Some(end_time) = before_time {
-                if after_time.is_some() && end_time < after_time.unwrap() {
-                    slot.end = slot.end.with_hour(end_time as u32).unwrap();
+            if let Some(before) = before_time {
+                if after_time.is_some() && before < after_time.unwrap() {
+                    slot.end = slot.end.with_hour(before as u32).unwrap();
                     dbg!(&slot);
                 } else {
-                    slot.end = slot.end.with_hour(end_time as u32).unwrap() - Duration::days(1);
+                    slot.end = slot.end.with_hour(before as u32).unwrap() - Duration::days(1);
                     dbg!(&slot);
                 }
             }
@@ -109,44 +109,44 @@ mod tests {
 
     /// Test filter_timing function if only after_time provided
     /// - timeline: 5 days
-    /// - after_time (start_time): 5
+    /// - after_time: 5
     /// - before_time: None
     /// - Expected list of 5 days starting time from 5am for each day
     #[test]
     fn test_filter_aftertime_only() {
         let timeline_duration = Duration::days(5);
-        let start_time: u32 = 5;
+        let after: u32 = 5;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
         dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 1, start_time, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 2, start_time, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 3, start_time, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 4, start_time, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 5, start_time, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 05, 1, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 05, 2, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 05, 3, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 05, 4, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 05, 5, after, 0),
             ]
             .into_iter()
             .collect(),
         };
         dbg!(&expected_result);
 
-        let result = filter_timing(timeline, Some(start_time as usize), None);
+        let result = filter_timing(timeline, Some(after as usize), None);
 
         assert_eq!(expected_result, result);
     }
 
     /// Test filter_timing function if only before_time provided
     /// - timeline: 5 days
-    /// - after_time (start_time): None
-    /// - before_time (end_time): 20 (8pm)
+    /// - after_time: None
+    /// - before_time: 20 (8pm)
     /// - Expected list of 5 days starting time from 00 and end at 20 for each day
     #[test]
     fn test_filter_beforetime_only() {
         let timeline_duration = Duration::days(5);
-        let end_time: u32 = 20;
+        let before: u32 = 20;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
         dbg!(&timeline);
@@ -164,39 +164,39 @@ mod tests {
         };
         dbg!(&expected_result);
 
-        let result = filter_timing(timeline, None, Some(end_time as usize));
+        let result = filter_timing(timeline, None, Some(before as usize));
 
         assert_eq!(expected_result, result);
     }
 
     /// Test filter_timing function when both after_time and before_time are provided
     /// - timeline: 5 days
-    /// - after_time (start_time): 5 (5am)
-    /// - before_time (end_time): 20 (8pm)
+    /// - after_time: 5 (5am)
+    /// - before_time: 20 (8pm)
     /// - Expected list of 5 days starting time from 05 and end at 20 for each day
     #[test]
     fn test_filter_with_both_beforetime_and_aftertime() {
         let timeline_duration = Duration::days(5);
-        let start_time: u32 = 5;
-        let end_time: u32 = 20;
+        let after: u32 = 5;
+        let before: u32 = 20;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
         dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(15), 2023, 05, 1, start_time, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 2, start_time, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 3, start_time, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 4, start_time, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 5, start_time, 0),
+                Slot::mock(Duration::hours(15), 2023, 05, 1, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 05, 2, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 05, 3, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 05, 4, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 05, 5, after, 0),
             ]
             .into_iter()
             .collect(),
         };
         dbg!(&expected_result);
 
-        let result = filter_timing(timeline, Some(start_time as usize), Some(end_time as usize));
+        let result = filter_timing(timeline, Some(after as usize), Some(before as usize));
         dbg!(&expected_result, &result);
         assert_eq!(expected_result, result);
     }
@@ -204,32 +204,32 @@ mod tests {
     /// Test filter_timing function when both after_time and before_tNoneime are provided
     /// but before_time(end_time) less than after_time (start_time)
     /// - timeline: 5 days
-    /// - after_time (start_time): 20 (8pm)
-    /// - before_time (end_time): 05 (5am)
+    /// - after_time: 20 (8pm)
+    /// - before_time: 05 (5am)
     /// - Expected list of 5 days starting time from 8pm and end at 5am next day
     #[test]
     fn test_beforetime_is_before_aftertime() {
         let timeline_duration = Duration::days(5);
-        let start_time: u32 = 20;
-        let end_time: u32 = 5;
+        let after: u32 = 20;
+        let before: u32 = 5;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
         dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(9), 2023, 05, 1, start_time, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 2, start_time, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 3, start_time, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 4, start_time, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 5, start_time, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 1, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 2, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 3, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 4, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 05, 5, after, 0),
             ]
             .into_iter()
             .collect(),
         };
         dbg!(&expected_result);
 
-        let result = filter_timing(timeline, Some(start_time as usize), Some(end_time as usize));
+        let result = filter_timing(timeline, Some(after as usize), Some(before as usize));
         dbg!(&expected_result, &result);
         assert_eq!(expected_result, result);
     }
