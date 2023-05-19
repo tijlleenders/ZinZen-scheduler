@@ -107,3 +107,39 @@ fn test_based_on_i284_7days() {
 
     assert_eq!(expected_result, result);
 }
+
+/// Test based on edge case in funciton filter_not_on when timeline have many slots and
+/// have many slots to filter
+/// - timeline: 5 days (Starting Mon 2023-05-01 to Fri 2023-05-05)
+/// - slots_to_filter: 2023-05-02 00 to 05 and 2023-05-04 13 to 17
+/// - Expected list of all 5 days except first 5 hours of 2023-05-02 and
+/// except hours from 13 to 17 in 2023-05-04
+#[test]
+fn test_based_on_edge_case_in_filter_not_on() {
+    let slots_to_filter: Vec<Slot> = vec![
+        Slot::mock(Duration::hours(5), 2023, 05, 2, 0, 0),
+        Slot::mock(Duration::hours(4), 2023, 05, 4, 13, 0),
+    ];
+
+    let mut timeline = Timeline::mock_as_days(5, 2023, 05, 1);
+    dbg!(&timeline);
+
+    let expected_result: Timeline = Timeline {
+        slots: vec![
+            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
+            Slot::mock(Duration::hours(19), 2023, 05, 2, 05, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
+            Slot::mock(Duration::hours(13), 2023, 05, 4, 0, 0),
+            Slot::mock(Duration::hours(7), 2023, 05, 4, 17, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+        ]
+        .into_iter()
+        .collect(),
+    };
+    dbg!(&expected_result);
+
+    timeline.remove_slots(slots_to_filter);
+
+    dbg!(&expected_result, &timeline);
+    assert_eq!(expected_result, timeline);
+}

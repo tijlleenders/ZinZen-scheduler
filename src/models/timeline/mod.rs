@@ -114,14 +114,13 @@ impl Timeline {
 
     /// Remove list of slots from timeline
     pub fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) {
-        // TODO 2023-04-30 | Apply `retain` to remove slots after splitting into 1 hour slots
+        dbg!(&self);
         let mut to_remove: TimelineSlotsType = BTreeSet::new();
         to_remove.extend(slots_to_remove);
-
+        dbg!(&to_remove);
         // Remove similar slots from Timeline
-        for slot in &to_remove {
-            self.slots.remove(slot);
-        }
+        self.slots.retain(|slot| !to_remove.contains(slot));
+        dbg!(&self);
 
         // Remove from each slot in the timeline
         // Alogritm:
@@ -129,9 +128,23 @@ impl Timeline {
         // - Remove all items in timeline and insert sutracted_slots
         let mut subtracted_slots: TimelineSlotsType = BTreeSet::new();
         for current_slot in self.slots.iter() {
+            let mut is_slot_subtracted = false;
             for slot_to_remove in &to_remove {
-                let subtracted_slot = *current_slot - *slot_to_remove;
-                subtracted_slots.extend(subtracted_slot);
+                dbg!(&current_slot, &slot_to_remove);
+                if current_slot.is_contains_slot(slot_to_remove) {
+                    let subtracted_slot = *current_slot - *slot_to_remove;
+                    dbg!(&subtracted_slot);
+                    subtracted_slots.extend(subtracted_slot);
+                    dbg!(&subtracted_slots);
+                    // TODO 2023-05-23  | remove slot_to_remove from the to_remove list
+                    // BUt this is related to non-lexical lifetime check link: https://stackoverflow.com/questions/47618823/cannot-borrow-as-mutable-because-it-is-also-borrowed-as-immutable
+                    is_slot_subtracted = true;
+                    break;
+                }
+            }
+            if !is_slot_subtracted {
+                subtracted_slots.insert(*current_slot);
+                dbg!(&subtracted_slots);
             }
         }
 

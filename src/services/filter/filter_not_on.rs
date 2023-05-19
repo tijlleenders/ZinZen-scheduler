@@ -9,24 +9,11 @@ pub(crate) fn filter_not_on(mut timeline: Timeline, slots_to_filter: &[Slot]) ->
         return timeline;
     }
 
-    let mut slots_to_add = Vec::new();
+    dbg!(&timeline, &slots_to_filter);
 
-    timeline.slots.retain(|slot| {
-        let mut should_remove = false;
+    timeline.remove_slots(slots_to_filter.to_vec());
 
-        for slot_to_filter in slots_to_filter {
-            if slot.is_contains_slot(slot_to_filter) {
-                let slot_sub = *slot - *slot_to_filter;
-                slots_to_add.extend(slot_sub.into_iter());
-                should_remove = true;
-            }
-        }
-
-        !should_remove
-    });
-
-    timeline.slots.extend(slots_to_add.into_iter());
-
+    dbg!(&timeline);
     timeline
 }
 #[cfg(test)]
@@ -116,7 +103,41 @@ mod tests {
         dbg!(&expected_result);
 
         let result = filter_not_on(timeline, &slots_to_filter);
-
+        dbg!(&expected_result, &result);
         assert_eq!(expected_result, result);
     }
+
+    // /// Test filter_not_on function for test case i293_postpone_2
+    // /// - timeline: 6 days (Starting Sat 2023-04-01 to Fri 2023-04-07)
+    // /// - slots_to_filter: 2023-04-01 00 to 03 and 05 to 06
+    // /// - Expected list of all 6 days:
+    // ///     - can't assign slot to 2023-04-01 90 to 03 and 05 to 06
+    // #[test]
+    // fn test_i293_postpone_2() {
+    //     let slots_to_filter: Vec<Slot> = vec![
+    //         Slot::mock(Duration::hours(3), 2023, 04, 2, 0, 0),
+    //         Slot::mock(Duration::hours(4), 2023, 04, 4, 13, 0),
+    //     ];
+
+    //     let timeline = Timeline::mock_as_days(5, 2023, 05, 1);
+    //     dbg!(&timeline);
+
+    //     let expected_result: Timeline = Timeline {
+    //         slots: vec![
+    //             Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
+    //             Slot::mock(Duration::hours(19), 2023, 05, 2, 05, 0),
+    //             Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
+    //             Slot::mock(Duration::hours(13), 2023, 05, 4, 0, 0),
+    //             Slot::mock(Duration::hours(7), 2023, 05, 4, 17, 0),
+    //             Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+    //         ]
+    //         .into_iter()
+    //         .collect(),
+    //     };
+    //     dbg!(&expected_result);
+
+    //     let result = filter_not_on(timeline, &slots_to_filter);
+
+    //     assert_eq!(expected_result, result);
+    // }
 }
