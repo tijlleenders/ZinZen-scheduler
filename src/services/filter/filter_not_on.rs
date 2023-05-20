@@ -107,37 +107,38 @@ mod tests {
         assert_eq!(expected_result, result);
     }
 
-    // /// Test filter_not_on function for test case i293_postpone_2
-    // /// - timeline: 6 days (Starting Sat 2023-04-01 to Fri 2023-04-07)
-    // /// - slots_to_filter: 2023-04-01 00 to 03 and 05 to 06
-    // /// - Expected list of all 6 days:
-    // ///     - can't assign slot to 2023-04-01 90 to 03 and 05 to 06
-    // #[test]
-    // fn test_i293_postpone_2() {
-    //     let slots_to_filter: Vec<Slot> = vec![
-    //         Slot::mock(Duration::hours(3), 2023, 04, 2, 0, 0),
-    //         Slot::mock(Duration::hours(4), 2023, 04, 4, 13, 0),
-    //     ];
+    /// Test filter_not_on function for failed test case i293_postpone_2
+    /// - timeline: 6 days (Starting Sat 2023-04-01 to Fri 2023-04-07)
+    /// - slots_to_filter: 2023-04-01 00 to 03 and 05 to 06
+    /// - Expected list of all 6 days except:
+    ///     - 2023-04-01 from 00 to 03 and from 05 to 06
+    #[test]
+    fn test_i293_postpone_2() {
+        let slots_to_filter: Vec<Slot> = vec![
+            Slot::mock(Duration::hours(3), 2023, 04, 1, 0, 0),
+            Slot::mock(Duration::hours(1), 2023, 04, 1, 5, 0),
+        ];
+        dbg!(&slots_to_filter);
 
-    //     let timeline = Timeline::mock_as_days(5, 2023, 05, 1);
-    //     dbg!(&timeline);
+        let timeline = Timeline::mock_as_days(6, 2023, 4, 1);
+        dbg!(&timeline);
 
-    //     let expected_result: Timeline = Timeline {
-    //         slots: vec![
-    //             Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-    //             Slot::mock(Duration::hours(19), 2023, 05, 2, 05, 0),
-    //             Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-    //             Slot::mock(Duration::hours(13), 2023, 05, 4, 0, 0),
-    //             Slot::mock(Duration::hours(7), 2023, 05, 4, 17, 0),
-    //             Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
-    //         ]
-    //         .into_iter()
-    //         .collect(),
-    //     };
-    //     dbg!(&expected_result);
+        let expected_result: Timeline = Timeline {
+            slots: vec![
+                Slot::mock(Duration::hours(2), 2023, 04, 1, 3, 0),
+                Slot::mock(Duration::hours(18), 2023, 04, 1, 6, 0),
+                Slot::mock(Duration::days(1), 2023, 04, 2, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 04, 3, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 04, 4, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 04, 5, 0, 0),
+            ]
+            .into_iter()
+            .collect(),
+        };
+        dbg!(&expected_result);
 
-    //     let result = filter_not_on(timeline, &slots_to_filter);
-
-    //     assert_eq!(expected_result, result);
-    // }
+        let result = filter_not_on(timeline, &slots_to_filter);
+        dbg!(&expected_result, &result);
+        assert_eq!(expected_result, result);
+    }
 }
