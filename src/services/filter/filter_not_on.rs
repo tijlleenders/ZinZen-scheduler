@@ -16,6 +16,59 @@ pub(crate) fn filter_not_on(mut timeline: Timeline, slots_to_filter: &[Slot]) ->
     dbg!(&timeline);
     timeline
 }
+
+/*
+
+pub(crate) fn filter_not_on(mut timeline: Timeline, slots_to_filter: &[Slot]) -> Timeline {
+    if timeline.slots.is_empty() || slots_to_filter.is_empty() {
+        return timeline;
+    }
+
+    let slots_to_filter: BTreeSet<Slot> = BTreeSet::from_iter(slots_to_filter.iter().cloned());
+    dbg!(&timeline, &slots_to_filter);
+
+    let timeline_iterator = TimelineIterator::new(timeline, Duration::days(1));
+    let mut slots: Vec<Slot> = vec![];
+
+    for mut walking_daily_slots in timeline_iterator {
+        walking_daily_slots.iter_mut().for_each(|mut daily_slot| {
+            dbg!(&daily_slot);
+            // get the date of daily_slot
+            // get list of slots in slots_to_filter on this date
+            // If there are slots -> subtract each of slot from daily_slot
+            // in slots_to_filter same day of this daily_slot:
+            //  -
+
+            let daily_slot_date = daily_slot.start.date();
+            dbg!(&daily_slot_date);
+
+            let slots_same_date = slots_to_filter
+                .iter()
+                .filter(|slot| {
+                    dbg!(&slot, &daily_slot_date);
+                    slot.start.date() == daily_slot_date
+                })
+                .for_each(|slot| {
+                    dbg!(&slot);
+                    let subtracted_slots = *daily_slot - *slot;
+                    dbg!(&subtracted_slots);
+                    slots.extend(subtracted_slots);
+                });
+            dbg!(&slots_same_date, &slots);
+
+            // daily_slot.start = daily_slot
+            //     .start
+            //     .with_hour(after_time.unwrap() as u32)
+            //     .unwrap();
+            // daily_slot.end = daily_slot
+            //     .end
+            //     .with_hour(before_time.unwrap() as u32)
+            //     .unwrap()
+            //     - Duration::days(1);
+            // slots.push(*daily_slot);
+        });
+    }
+ */
 #[cfg(test)]
 mod tests {
     use chrono::Duration;

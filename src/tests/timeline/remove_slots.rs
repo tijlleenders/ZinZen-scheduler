@@ -143,3 +143,49 @@ fn test_based_on_edge_case_in_filter_not_on() {
     dbg!(&expected_result, &timeline);
     assert_eq!(expected_result, timeline);
 }
+
+/// Test based on edge case when asking to remove many slots same day
+/// - timeline: 5 days (Starting Mon 2023-05-01 to Fri 2023-05-05)
+/// - slots_to_filter:
+///     - 2023-05-02 00 to 05
+///     - 2023-05-02 20 to 22
+///     - 2023-05-04 13 to 17
+/// - Expected list
+///     - 2023-05-01 full day
+///     - 2023-05-02 05 to 20
+///     - 2023-05-02 22 to 00
+///     - 2023-05-03 full day
+///     - 2023-05-04 00 to 13
+///     - 2023-05-04 17 to 00
+///     - 2023-05-05 full day
+#[test]
+fn test_many_filters_same_day() {
+    let slots_to_filter: Vec<Slot> = vec![
+        Slot::mock(Duration::hours(5), 2023, 05, 2, 0, 0),
+        Slot::mock(Duration::hours(2), 2023, 05, 2, 20, 0),
+        Slot::mock(Duration::hours(4), 2023, 05, 4, 13, 0),
+    ];
+
+    let mut timeline = Timeline::mock_as_days(5, 2023, 05, 1);
+    dbg!(&timeline);
+
+    let expected_result: Timeline = Timeline {
+        slots: vec![
+            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
+            Slot::mock(Duration::hours(15), 2023, 05, 2, 05, 0),
+            Slot::mock(Duration::hours(2), 2023, 05, 2, 22, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
+            Slot::mock(Duration::hours(13), 2023, 05, 4, 0, 0),
+            Slot::mock(Duration::hours(7), 2023, 05, 4, 17, 0),
+            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+        ]
+        .into_iter()
+        .collect(),
+    };
+    dbg!(&expected_result);
+
+    timeline.remove_slots(slots_to_filter);
+
+    dbg!(&expected_result, &timeline);
+    assert_eq!(expected_result, timeline);
+}

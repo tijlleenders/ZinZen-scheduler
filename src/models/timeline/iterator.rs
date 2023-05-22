@@ -2,8 +2,10 @@ use super::Timeline;
 use crate::models::slot::{iterator::SlotIterator, Slot};
 use chrono::Duration;
 
-/*
+// TODO 2023-05-20  | create edge cases to test behavior when first slot start time in the timeline is not 00 (midnight)
+// - Test idea to froce make the start of the timeline from 00 (midnight) of the first whatever even if it is other time in the same day
 
+/*
 TimelineIterator goals:
 - ability to cros over timeline slots like SlotIterator through interval duration
     - cross over timeline by 1 day duration

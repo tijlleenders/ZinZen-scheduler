@@ -122,35 +122,64 @@ impl Timeline {
         self.slots.retain(|slot| !to_remove.contains(slot));
         dbg!(&self);
 
-        // Remove from each slot in the timeline
-        // Alogritm:
-        // - Subtract each slot in timeline from each slot in to_remove, results in subtracted_slots
-        // - Remove all items in timeline and insert sutracted_slots
-        let mut subtracted_slots: TimelineSlotsType = BTreeSet::new();
-        for current_slot in self.slots.iter() {
-            let mut is_slot_subtracted = false;
-            for slot_to_remove in &to_remove {
-                dbg!(&current_slot, &slot_to_remove);
-                if current_slot.is_contains_slot(slot_to_remove) {
-                    let subtracted_slot = *current_slot - *slot_to_remove;
-                    dbg!(&subtracted_slot);
-                    subtracted_slots.extend(subtracted_slot);
-                    dbg!(&subtracted_slots);
-                    // TODO 2023-05-23  | remove slot_to_remove from the to_remove list
-                    // BUt this is related to non-lexical lifetime check link: https://stackoverflow.com/questions/47618823/cannot-borrow-as-mutable-because-it-is-also-borrowed-as-immutable
-                    is_slot_subtracted = true;
-                    break;
+        /*
+        =========
+        Algorithm - V2 - 2023-05-22
+
+        - for each slot_to_filter in slots_to_remove
+            - iterate over timeline_slots and get first slot which overlaps with slot_to_filter
+            - subtract ovelapped_timeline_slot from slot to remove and assign it to slots_after_subtraction
+            - remove overlapped_timeline_slot from timeline
+            - push slots_after_subtraction to the timeline_slots
+        */
+        for slot_to_filter in to_remove {
+            dbg!(&slot_to_filter);
+            let timeline_slots = self.slots.clone();
+            match timeline_slots
+                .iter()
+                .find(|slot| slot.is_contains_slot(&slot_to_filter))
+            {
+                Some(overlapped_timeline_slot) => {
+                    dbg!(&overlapped_timeline_slot);
+
+                    let slots_after_subtraction = *overlapped_timeline_slot - slot_to_filter;
+                    dbg!(&slots_after_subtraction);
+
+                    self.slots.retain(|slot| slot != overlapped_timeline_slot);
+                    self.slots.extend(slots_after_subtraction);
+                    dbg!(&self);
                 }
-            }
-            if !is_slot_subtracted {
-                subtracted_slots.insert(*current_slot);
-                dbg!(&subtracted_slots);
-            }
+                None => continue,
+            };
         }
 
-        if !subtracted_slots.is_empty() {
-            self.slots = subtracted_slots;
-        }
+        dbg!(&self);
+
+        // let mut subtracted_slots: TimelineSlotsType = BTreeSet::new();
+        // for current_slot in self.slots.iter() {
+        //     let mut is_slot_subtracted = false;
+        //     for slot_to_remove in &to_remove {
+        //         dbg!(&current_slot, &slot_to_remove);
+        //         if current_slot.is_contains_slot(slot_to_remove) {
+        //             let subtracted_slot = *current_slot - *slot_to_remove;
+        //             dbg!(&subtracted_slot);
+        //             subtracted_slots.extend(subtracted_slot);
+        //             dbg!(&subtracted_slots);
+        //             // TODO 2023-05-23  | remove slot_to_remove from the to_remove list
+        //             // BUt this is related to non-lexical lifetime check link: https://stackoverflow.com/questions/47618823/cannot-borrow-as-mutable-because-it-is-also-borrowed-as-immutable
+        //             is_slot_subtracted = true;
+        //             break;
+        //         }
+        //     }
+        //     if !is_slot_subtracted {
+        //         subtracted_slots.insert(*current_slot);
+        //         dbg!(&subtracted_slots);
+        //     }
+        // }
+
+        // if !subtracted_slots.is_empty() {
+        //     self.slots = subtracted_slots;
+        // }
     }
 
     /// Get a slot of timeline based on index
