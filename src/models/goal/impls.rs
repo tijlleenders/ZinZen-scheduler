@@ -117,7 +117,7 @@ impl Goal {
             let task_id = *counter;
             *counter += 1;
             // TODO 2023-05-06  | apply Task::new(...)
-            if !timeline.slots.is_empty() && self.min_duration.is_some() {
+            if timeline.slots.len() > 0 && self.min_duration.is_some() {
                 let title = self.title.clone();
                 let duration = self.min_duration.unwrap();
 
