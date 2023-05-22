@@ -184,6 +184,7 @@ mod tests {
                 Slot::mock(Duration::days(1), 2023, 04, 3, 0, 0),
                 Slot::mock(Duration::days(1), 2023, 04, 4, 0, 0),
                 Slot::mock(Duration::days(1), 2023, 04, 5, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 04, 6, 0, 0),
             ]
             .into_iter()
             .collect(),
