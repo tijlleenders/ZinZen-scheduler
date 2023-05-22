@@ -154,32 +154,6 @@ impl Timeline {
         }
 
         dbg!(&self);
-
-        // let mut subtracted_slots: TimelineSlotsType = BTreeSet::new();
-        // for current_slot in self.slots.iter() {
-        //     let mut is_slot_subtracted = false;
-        //     for slot_to_remove in &to_remove {
-        //         dbg!(&current_slot, &slot_to_remove);
-        //         if current_slot.is_contains_slot(slot_to_remove) {
-        //             let subtracted_slot = *current_slot - *slot_to_remove;
-        //             dbg!(&subtracted_slot);
-        //             subtracted_slots.extend(subtracted_slot);
-        //             dbg!(&subtracted_slots);
-        //             // TODO 2023-05-23  | remove slot_to_remove from the to_remove list
-        //             // BUt this is related to non-lexical lifetime check link: https://stackoverflow.com/questions/47618823/cannot-borrow-as-mutable-because-it-is-also-borrowed-as-immutable
-        //             is_slot_subtracted = true;
-        //             break;
-        //         }
-        //     }
-        //     if !is_slot_subtracted {
-        //         subtracted_slots.insert(*current_slot);
-        //         dbg!(&subtracted_slots);
-        //     }
-        // }
-
-        // if !subtracted_slots.is_empty() {
-        //     self.slots = subtracted_slots;
-        // }
     }
 
     /// Get a slot of timeline based on index
