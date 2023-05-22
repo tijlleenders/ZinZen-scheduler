@@ -858,7 +858,16 @@
   "impossible": [
     {
       "day": "2022-10-01",
-      "outputs": []
+      "outputs": [
+        {
+          "taskid": 98,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-01T00:00:00",
+          "deadline": "2022-10-15T00:00:00"
+        }
+      ]
     },
     {
       "day": "2022-10-02",
