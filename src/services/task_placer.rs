@@ -1,8 +1,9 @@
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
-use crate::models::goal::Tag;
+use crate::models::goal::{Goal, Tag};
 use crate::models::input::{PlacedTasks, TasksToPlace};
 use crate::models::slot::{Slot, SlotConflict};
-use crate::models::task::{Task, TaskStatus};
+use crate::models::task::{NewTask, Task, TaskStatus};
+use crate::models::timeline::Timeline;
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
@@ -10,9 +11,16 @@ use crate::models::task::{Task, TaskStatus};
 pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks_to_place);
+    dbg!(&tasks_to_place);
+
+    // TODO 2023-04-29: Fix function adjust_min_budget_tasks based on debug feedback check:
+    // https://github.com/tijlleenders/ZinZen-scheduler/issues/300#issuecomment-1528727445
 
     adjust_min_budget_tasks(&mut tasks_to_place); //TODO
+    dbg!(&tasks_to_place);
+
     schedule(&mut tasks_to_place); //TODO
+    dbg!(&tasks_to_place);
 
     PlacedTasks {
         calendar_start: tasks_to_place.calendar_start,
@@ -23,6 +31,8 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
 
 fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
     let mut tasks_to_add: Vec<Task> = Vec::new();
+    dbg!(&tasks_to_place);
+
     for index in 0..tasks_to_place.tasks.len() {
         if tasks_to_place.tasks[index].status == TaskStatus::BudgetMinWaitingForAdjustment {
             for slot_budget in &tasks_to_place
@@ -62,22 +72,30 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 let new_title = tasks_to_place.tasks[index].title.clone();
                 if tasks_to_place.tasks[index].duration >= slot_budget.used {
                     let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
-
-                    let task_to_add = Task {
-                        id: tasks_to_place.tasks[index].id,
-                        goal_id: tasks_to_place.tasks[index].goal_id.clone(),
-                        title: new_title,
-                        duration: new_duration,
-                        start: None,
-                        deadline: None,
-                        calender_start: tasks_to_place.tasks[index].calender_start,
-                        calender_end: tasks_to_place.tasks[index].calender_end,
-                        slots: result_slots,
-                        status: TaskStatus::ReadyToSchedule,
+                    let task_id = tasks_to_place.tasks[index].id;
+                    let goal = Goal {
+                        id: tasks_to_place.tasks[index].goal_id.clone(),
+                        title: new_title.clone(),
                         tags: tasks_to_place.tasks[index].tags.clone(),
                         after_goals: tasks_to_place.tasks[index].after_goals.clone(),
-                        flexibility: 0,
+                        ..Default::default()
                     };
+                    let timeline = Timeline {
+                        slots: result_slots.into_iter().collect(),
+                    };
+
+                    let new_task = NewTask {
+                        task_id,
+                        title: new_title,
+                        duration: new_duration,
+                        goal,
+                        timeline,
+                        status: TaskStatus::ReadyToSchedule,
+                        timeframe: None,
+                    };
+
+                    let task_to_add = Task::new(new_task);
+
                     tasks_to_add.push(task_to_add);
                 }
             }
@@ -113,11 +131,11 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     for slot in chosen_slots.iter() {
         let slot_allowed = tasks_to_place
             .task_budgets
-            .decrement_budgets(slot, &template_task.goal_id);
+            .is_allowed_by_budget(slot, &template_task.goal_id);
         if !slot_allowed {
             continue;
         }
-        remaining_hours -= slot.num_hours();
+        remaining_hours -= slot.calc_duration_in_hours();
         template_task.id += 1;
         template_task.start = Some(slot.start);
         template_task.deadline = Some(slot.end);
@@ -146,7 +164,7 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
     let task = &tasks_to_place[0];
 
     for slot in task.slots.iter() {
-        for hour_slot in slot.get_1h_slots() {
+        for hour_slot in slot.divide_into_1h_slots() {
             let mut count: usize = 0;
             'outer: for t in tasks_to_place {
                 if t.status != TaskStatus::ReadyToSchedule {
@@ -157,7 +175,7 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
                 }
 
                 for s in t.slots.iter() {
-                    if s.is_intersect(&hour_slot) {
+                    if s.is_intersect_with_slot(&hour_slot) {
                         count += 1;
                         continue 'outer;
                     }
@@ -183,27 +201,3 @@ fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
 
     Some(result)
 }
-
-// impl Ord for SlotConflict{
-//     fn cmp(&self, other: &Self) -> Ordering {
-
-//     }
-// }
-//return the slot with lowest number of conflicts in slot_conflicts
-
-//REFACTOR!!
-// //prevent deadline end from exceeding calender end and update duration
-// for task in scheduled.iter_mut() {
-//     if task.confirmed_start.is_none() || task.confirmed_deadline.is_none() {
-//         return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
-//     }
-//     //prevent slot end from exceeding calender end
-//     if task.confirmed_deadline.unwrap() > calender_end {
-//         task.confirmed_deadline = Some(calender_end);
-//         task.duration = Slot {
-//             start: task.confirmed_start.unwrap(),
-//             end: task.confirmed_deadline.unwrap(),
-//         }
-//         .num_hours();
-//     }
-// }

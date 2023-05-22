@@ -92,9 +92,9 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
     Ok(final_ouput)
 }
 
-fn get_calender_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
+fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
     let mut date = start.date();
-    let days_num = Slot { start, end }.num_hours() / 24;
+    let days_num = Slot { start, end }.calc_duration_in_hours() / 24;
     let mut days = vec![];
     for _i in 0..days_num {
         days.push(date);
@@ -177,7 +177,7 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
                 start: task.start,
                 end: task.deadline,
             }
-            .num_hours();
+            .calc_duration_in_hours();
             task2.duration -= task.duration;
             new_outputs.push(task.clone());
             if task2.duration > 0 {
@@ -197,7 +197,7 @@ fn get_output_with_date(
     end: NaiveDateTime,
 ) -> Vec<DayOutputFormat> {
     let mut result = vec![];
-    for day in get_calender_days(start, end).iter() {
+    for day in get_calendar_days(start, end).iter() {
         let mut outputs = output
             .iter()
             .filter(|&e| day.eq(&e.start.date()))
@@ -217,7 +217,7 @@ fn get_output_with_date(
 
 fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: NaiveDateTime) {
     let mut new_outputs = vec![];
-    for day in get_calender_days(start, end).iter() {
+    for day in get_calendar_days(start, end).iter() {
         let mut day_outputs = outputs
             .iter()
             .filter(|&e| day.eq(&e.start.date()))
@@ -232,7 +232,7 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
             .collect::<Vec<_>>();
         let mut day_slot = day_hour_slots(day);
         for slot in filled_slots.iter() {
-            day_slot.retain(|ds| !slot.contains_hour_slot(ds));
+            day_slot.retain(|ds| !slot.is_contains_slot(ds));
         }
         let free_outputs = day_slot
             .iter()
@@ -240,7 +240,7 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
                 taskid: 0,
                 goalid: "free".to_string(),
                 title: "free".to_string(),
-                duration: s.num_hours(),
+                duration: s.calc_duration_in_hours(),
                 start: s.start,
                 deadline: s.end,
                 tags: vec![],

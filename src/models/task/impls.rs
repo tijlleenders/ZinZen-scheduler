@@ -1,46 +1,13 @@
-use crate::errors::Error;
-use crate::models::goal::Tag;
-use crate::models::slot::Slot;
-use chrono::NaiveDateTime;
-use serde::{Deserialize, Serialize};
+use super::{NewTask, Task, TaskStatus};
+use crate::{
+    errors::Error,
+    models::{
+        goal::{Goal, Tag},
+        slot::Slot,
+        timeline::Timeline,
+    },
+};
 use std::cmp::Ordering;
-
-/// Tasks/Increments are generated to achieve a Goal in one or more Increments.
-/// A Goal can generate one or more Tasks.
-#[derive(Deserialize, Debug, Eq, Clone)]
-pub struct Task {
-    /// Only used by the scheduler.
-    /// Unstable between scheduler runs if input changes.
-    pub id: usize,
-    /// Reference to the Goal a Taks/Increment was generated from.
-    pub goal_id: String,
-    /// Title of the Goal the Task/Increment was generated from.
-    /// Duplicated for ease of debugging and simplicity of code.
-    pub title: String,
-    /// Duration the Task/Increment wants to claim on the Calendar.
-    /// This duration is equal or part of the Goal duration.
-    pub duration: usize,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Tags.
-    pub status: TaskStatus,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment Status and Tags.
-    pub flexibility: usize,
-    /// Final start time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
-    pub start: Option<NaiveDateTime>,
-    /// Final end time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
-    pub deadline: Option<NaiveDateTime>,
-    /// The places on Calendar that could potentially be used given the Goal constraints - and what other scheduled Tasks/Increments already have consumed.
-    pub slots: Vec<Slot>,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Status.
-    #[serde(default)]
-    pub tags: Vec<Tag>,
-    /// Used for adding Blocked Task/Increment Tag, used in finding next Task/Increment to be scheduled.
-    #[serde(default)]
-    pub after_goals: Option<Vec<String>>,
-    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
-    pub calender_start: NaiveDateTime,
-    /// Duplicated info from Input - can be removed as Goal has already been adjusted to Calendar bounds?
-    pub calender_end: NaiveDateTime,
-}
 
 impl PartialEq for Task {
     fn eq(&self, other: &Self) -> bool {
@@ -117,18 +84,38 @@ impl Ord for Task {
 }
 
 impl Task {
+    /// Create new task
+    pub fn new(new_task: NewTask) -> Task {
+        let start = new_task.timeframe.map(|time| time.start);
+        let deadline = new_task.timeframe.map(|time| time.end);
+
+        Task {
+            id: new_task.task_id,
+            goal_id: new_task.goal.id,
+            title: new_task.title,
+            duration: new_task.duration,
+            status: new_task.status,
+            flexibility: 0,
+            start,
+            deadline,
+            slots: new_task.timeline.slots.into_iter().collect(),
+            tags: new_task.goal.tags,
+            after_goals: new_task.goal.after_goals,
+        }
+    }
+
     pub fn calculate_flexibility(&mut self) {
         if self.status == TaskStatus::Scheduled {
             return;
         }
         let mut flexibility = 0;
         for slot in &self.slots {
-            if slot.num_hours() < self.duration {
-                flexibility += slot.num_hours();
+            if slot.calc_duration_in_hours() < self.duration {
+                flexibility += slot.calc_duration_in_hours();
                 continue;
             }
             //todo check correctness
-            flexibility += slot.num_hours() - self.duration + 1;
+            flexibility += slot.calc_duration_in_hours() - self.duration + 1;
         }
         self.flexibility = flexibility;
         if self.flexibility == 0 {
@@ -150,23 +137,29 @@ impl Task {
             return Err(Error::CannotSplit);
         }
         let mut tasks = Vec::new();
+        let timeline = Timeline {
+            slots: self.get_slots().into_iter().collect(),
+        };
+        let goal = Goal {
+            id: self.goal_id.clone(),
+            title: self.title.clone(),
+            tags: self.tags.clone(),
+            after_goals: self.after_goals.clone(),
+            ..Default::default()
+        };
+        let new_task = NewTask {
+            task_id: *counter,
+            title: self.title.clone(),
+            duration: 1,
+            goal,
+            timeline,
+            status: TaskStatus::Uninitialized,
+            timeframe: None,
+        };
 
         for _ in 0..self.duration {
-            let mut task = Task {
-                id: *counter,
-                goal_id: self.goal_id.clone(),
-                title: self.title.clone(),
-                duration: 1,
-                status: TaskStatus::Uninitialized,
-                flexibility: 0,
-                start: self.start,
-                deadline: self.deadline,
-                slots: self.get_slots(),
-                tags: self.tags.clone(),
-                after_goals: self.after_goals.clone(),
-                calender_start: self.calender_start,
-                calender_end: self.calender_end,
-            };
+            let mut task = Task::new(new_task.clone());
+
             task.calculate_flexibility();
             task.status = TaskStatus::ReadyToSchedule;
             *counter += 1;
@@ -230,21 +223,4 @@ impl Task {
         //     }
         // }
     }
-}
-
-/// Used to decide in which order to schedule tasks, together with their flexibility
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
-pub enum TaskStatus {
-    /// Task is scheduled and can't be modified any more.
-    Scheduled,
-    /// Task is impossible - its MaybeSlots Timeline is removed.
-    Impossible,
-    /// Task is waiting for something to be properly initialized.
-    Uninitialized,
-    /// Task is waiting for another Goal to be scheduled first.
-    Blocked,
-    /// Task is available for scheduling, but its relative flexibility and Tags will determine if it gets picked first
-    ReadyToSchedule,
-    /// Special Task that will try to fill in any missing hours to reach the minimum budget for a time period.
-    BudgetMinWaitingForAdjustment,
 }

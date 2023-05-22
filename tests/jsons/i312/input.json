@@ -1,0 +1,77 @@
+{
+    "startDate": "2023-05-11T00:00:00",
+    "endDate": "2023-05-18T00:00:00",
+    "goals": {
+        "b810f26f-d576-474e-be44-b0586168f95f": {
+            "id": "b810f26f-d576-474e-be44-b0586168f95f",
+            "title": "Me time 🧘🏽😌",
+            "filters": {
+                "after_time": 7,
+                "before_time": 21
+            },
+            "not_on": [],
+            "min_duration": 1,
+            "repeat": "daily"
+        },
+        "b2709032-3e35-41b9-bfa1-01a43bb22ff8": {
+            "id": "b2709032-3e35-41b9-bfa1-01a43bb22ff8",
+            "title": "Breakfast 🥐🥣",
+            "filters": {
+                "after_time": 6,
+                "before_time": 9,
+                "not_on": [
+                    {
+                        "start": "2023-05-11T06:00:00",
+                        "end": "2023-05-11T07:00:00"
+                    }
+                ]
+            },
+            "min_duration": 1,
+            "repeat": "daily"
+        },
+        "737d0830-c7b0-4707-ad42-2b1c31617d88": {
+            "id": "737d0830-c7b0-4707-ad42-2b1c31617d88",
+            "title": "Walk 🚶🏽",
+            "filters": {
+                "after_time": 14,
+                "before_time": 20
+            },
+            "not_on": [],
+            "min_duration": 1,
+            "repeat": "daily"
+        },
+        "571adecf-d1e8-4861-a323-a1cafa20f70d": {
+            "id": "571adecf-d1e8-4861-a323-a1cafa20f70d",
+            "title": "Lunch 🥪",
+            "filters": {
+                "after_time": 12,
+                "before_time": 14
+            },
+            "not_on": [],
+            "min_duration": 1,
+            "repeat": "daily"
+        },
+        "4f030fa4-1897-4478-9f5f-f282f0d8f958": {
+            "id": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
+            "title": "Sleep 😴🌙",
+            "filters": {
+                "after_time": 0,
+                "before_time": 6
+            },
+            "not_on": [],
+            "min_duration": 6,
+            "repeat": "daily"
+        },
+        "25db3bf3-c6a4-49c3-af32-914aff107c92": {
+            "id": "25db3bf3-c6a4-49c3-af32-914aff107c92",
+            "title": "Dinner 🍽️",
+            "filters": {
+                "after_time": 18,
+                "before_time": 21
+            },
+            "not_on": [],
+            "min_duration": 1,
+            "repeat": "daily"
+        }
+    }
+}

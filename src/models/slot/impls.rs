@@ -1,5 +1,5 @@
 use super::Slot;
-use chrono::{Days, Timelike};
+use chrono::{Days, NaiveDateTime, Timelike};
 use std::{
     cmp::{max, min},
     fmt::Display,
@@ -15,130 +15,141 @@ impl Display for Slot {
 impl Sub for Slot {
     type Output = Vec<Slot>;
 
-    fn sub(self, other: Self) -> Self::Output {
+    fn sub(self, rhs: Slot) -> Vec<Slot> {
         let mut result = Vec::new();
-        if (other.start < self.start) && (other.end <= self.start)
-            || (other.start >= self.end) && (other.end > self.end)
-        {
-            //other is completely before self
+
+        if rhs.start > self.end || rhs.end < self.start {
+            // If the two slots don't overlap, just return the original slot
             result.push(self);
-            result
-        } else if (other.start == self.start) && (other.end < self.end) {
-            //other starts same time as self and ends before self ends
-            let slot = Slot {
-                start: other.end,
-                end: self.end,
-            };
-            result.push(slot);
-            result
-        } else if (other.start > self.start) && (other.end < self.end) {
-            //other is inside self. starts after and ends before
-            let slot1 = Slot {
-                start: self.start,
-                end: other.start,
-            };
-            let slot2 = Slot {
-                start: other.end,
-                end: self.end,
-            };
-            result.push(slot1);
-            result.push(slot2);
-            result
-        } else if (other.start > self.start) && (other.end == self.end) {
-            //other is inside self but end is same as self end
-            let slot = Slot {
-                start: self.start,
-                end: other.start,
-            };
-            result.push(slot);
-            result
-        } else if (other.start <= self.start) && (other.end >= self.end) {
-            //other engulfs self
-            result
-        } else if (other.start < self.start) && (other.end > self.start) && (other.end <= self.end)
-        {
-            //other starts before self and ends in-between self or when self ends
-            let slot = Slot {
-                start: other.end,
-                end: self.end,
-            };
-            if slot.start != slot.end {
-                result.push(slot);
-            }
-            result
-        } else {
-            //other starts in-between self or when self starts and ends after self ends
-            let slot = Slot {
-                start: self.start,
-                end: other.start,
-            };
-            if slot.start != slot.end {
-                result.push(slot);
-            }
-            result
+            return result;
         }
+        if rhs.start == self.start && rhs.end == self.end {
+            // If rhs is the same as self, just return empty
+            return result;
+        }
+        if rhs.start < self.start && rhs.end > self.end {
+            // If rhs completely encompasses self, then swap self and rhs,
+            //and subtract from each other
+            let swap_subtract = rhs - self;
+            result.extend(swap_subtract);
+            return result;
+        }
+
+        if rhs.start > self.start {
+            result.push(Slot::new(self.start, rhs.start));
+        }
+
+        if rhs.end < self.end {
+            result.push(Slot::new(rhs.end, self.end));
+        }
+
+        result
     }
 }
 
+// ===========================
+// ===========================
+
+/// Add a slot if they are consequent. If not, will return None
 impl Add for Slot {
-    type Output = Slot;
+    type Output = Option<Slot>;
 
     fn add(self, other: Self) -> Self::Output {
         if (other.start < self.start) && (other.end == self.start) {
             //other is before self and touching it
-            Slot {
+            let slot = Slot {
                 start: other.start,
                 end: self.end,
-            }
-        } else if (other.start == self.end) && (other.end > self.end) {
+            };
+            return Some(slot);
+        }
+        if (other.start == self.end) && (other.end > self.end) {
             //other is after self and touching it
             let slot = Slot {
                 start: self.start,
                 end: other.end,
             };
-            return slot;
-        } else {
-            //for now any other scenario doesn't change self, we're using add for combining
-            //slots that are adjacent to each other
-            return self;
+            return Some(slot);
         }
+
+        None
     }
 }
 
 impl Slot {
-    pub fn num_hours(&self) -> usize {
+    pub fn new(start: NaiveDateTime, end: NaiveDateTime) -> Slot {
+        Slot { start, end }
+    }
+
+    pub fn calc_duration_in_hours(&self) -> usize {
         (self.end - self.start).num_hours() as usize
     }
 
-    pub fn conflicts_with(&self, other_slot: &Slot) -> bool {
+    pub fn is_conflicts_with(&self, other_slot: &Slot) -> bool {
         !((self.start < other_slot.start && self.end <= other_slot.start)
             || (self.start >= other_slot.end && self.end > other_slot.end))
     }
 
-    pub fn contains_hour_slot(&self, other: &Slot) -> bool {
+    pub fn is_contains_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
     }
 
-    pub fn get_1h_slots(&self) -> Vec<Slot> {
+    /// Divide a Slot into list of slots with 1 hour interval
+    /// If you pass a Slot for 5 hours, then it will splitted
+    ///  into 5 slots with 1 hour interval:
+    /// ```markdown
+    /// Param:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-01 05:00:00 ]
+    ///     Duration: 5 hours
+    ///
+    /// Returns:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-01 01:00:00 ]
+    ///     Slot [ 2022-01-01 01:00:00 - 2022-01-01 02:00:00 ]
+    ///     Slot [ 2022-01-01 02:00:00 - 2022-01-01 03:00:00 ]
+    ///     Slot [ 2022-01-01 03:00:00 - 2022-01-01 04:00:00 ]
+    ///     Slot [ 2022-01-01 04:00:00 - 2022-01-01 05:00:00 ]
+    ///
+    /// ```
+    pub fn divide_into_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
-        for hour in 0..self.num_hours() {
+        let duration = self.calc_duration_in_hours();
+
+        for hour in 0..duration {
             result.push(Slot {
                 start: self.start.add(chrono::Duration::hours(hour as i64)),
                 end: self.start.add(chrono::Duration::hours((hour + 1) as i64)),
-            })
+            });
         }
         result
     }
 
-    pub fn divide_in_days(&self) -> Vec<Slot> {
+    /// Divide a Slot into list of slots with 1 day interval
+    /// If you pass a Slot for a week, then it will splitted
+    ///  into 7 slots for each day of the week:
+    /// ```markdown
+    /// Param:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-08 00:00:00 ]
+    ///
+    /// Returns:
+    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-02 00:00:00 ]
+    ///     Slot [ 2022-01-02 00:00:00 - 2022-01-03 00:00:00 ]
+    ///     Slot [ 2022-01-03 00:00:00 - 2022-01-04 00:00:00 ]
+    ///     Slot [ 2022-01-04 00:00:00 - 2022-01-05 00:00:00 ]
+    ///     Slot [ 2022-01-05 00:00:00 - 2022-01-06 00:00:00 ]
+    ///     Slot [ 2022-01-06 00:00:00 - 2022-01-07 00:00:00 ]
+    ///     Slot [ 2022-01-07 00:00:00 - 2022-01-08 00:00:00 ]
+    /// ```
+    pub fn divide_into_days(&self) -> Vec<Slot> {
         let mut result = vec![];
         let mut start_slider = self.start;
+
         while start_slider.lt(&self.end) {
             if start_slider.date().eq(&self.end.date()) {
                 result.push(Slot {
                     start: start_slider,
                     end: self.end,
                 });
+
                 start_slider = start_slider
                     .with_hour(0)
                     .unwrap()
@@ -154,6 +165,7 @@ impl Slot {
                         .checked_add_days(Days::new(1))
                         .unwrap(),
                 });
+
                 start_slider = start_slider
                     .with_hour(0)
                     .unwrap()
@@ -164,7 +176,7 @@ impl Slot {
         result
     }
 
-    pub fn is_intersect(&self, other: &Slot) -> bool {
+    pub fn is_intersect_with_slot(&self, other: &Slot) -> bool {
         let overlap = min(self.end, other.end) - max(self.start, other.start);
         overlap.num_hours() > 0
     }

@@ -1,43 +1,20 @@
-use crate::{
-    models::goal::{BudgetType, Goal, Tag},
-    models::repetition::Repetition,
-    models::slot::Slot,
-    models::slot_iterator::TimeSlotsIterator,
-    models::task::{Task, TaskStatus},
-};
-use chrono::NaiveDateTime;
-use serde::Deserialize;
 use std::collections::{BTreeMap, HashMap};
 
-#[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
-pub struct TaskBudgets {
-    calendar_start: NaiveDateTime,
-    calendar_end: NaiveDateTime,
-    goal_id_to_budget_ids: HashMap<String, Vec<String>>,
-    pub budget_id_to_budget: HashMap<String, TaskBudget>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct TaskBudget {
-    task_budget_type: BudgetType,
-    pub slot_budgets: Vec<SlotBudget>,
-    min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
-    max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
-}
-
-#[derive(Debug, Deserialize)]
-pub struct SlotBudget {
-    pub slot: Slot,
-    pub min: Option<usize>,
-    pub max: Option<usize>,
-    pub used: usize,
-}
+use super::{BudgetType, SlotBudget, TaskBudget, TaskBudgets};
+use crate::models::{
+    goal::{Goal, Tag},
+    repetition::Repetition,
+    slot::Slot,
+    slots_iterator::TimeSlotsIterator,
+    task::{NewTask, Task, TaskStatus},
+};
+use chrono::NaiveDateTime;
 
 impl TaskBudget {
     fn decrement(&mut self, slot: &Slot) {
         for slot_budget in self.slot_budgets.iter_mut() {
             if slot.start.ge(&slot_budget.slot.start) && slot.end.le(&slot_budget.slot.end) {
-                slot_budget.used += slot.num_hours();
+                slot_budget.used += slot.calc_duration_in_hours();
                 if slot_budget.max.is_some() && slot_budget.used > slot_budget.max.unwrap() {
                     panic!("allocated more than max SlotBudget!");
                 }
@@ -51,7 +28,7 @@ impl TaskBudget {
             if slot.start.ge(&slot_budget.slot.start)
                 && slot.end.le(&slot_budget.slot.end)
                 && slot_budget.max.is_some()
-                && slot_budget.used + slot.num_hours() > slot_budget.max.unwrap()
+                && slot_budget.used + slot.calc_duration_in_hours() > slot_budget.max.unwrap()
             {
                 result = false;
             }
@@ -60,15 +37,15 @@ impl TaskBudget {
     }
 
     fn initialize(&mut self, budget_start: NaiveDateTime, budget_end: NaiveDateTime) {
-        let mut repetition = Repetition::Weekly(1);
+        let mut repetition: Repetition = Repetition::Weekly(1);
         match self.task_budget_type {
             BudgetType::Weekly => (),
             BudgetType::Daily => repetition = Repetition::DAILY(1),
         }
         let time_slot_iterator =
             TimeSlotsIterator::new(budget_start, budget_end, Some(repetition), None);
-        for slots in time_slot_iterator {
-            for slot in slots {
+        for timeline in time_slot_iterator {
+            for slot in timeline.slots {
                 self.slot_budgets.push(SlotBudget {
                     slot,
                     min: self.min,
@@ -90,7 +67,7 @@ impl TaskBudgets {
         }
     }
 
-    pub fn create_task_budgets_config(&mut self, goals: &mut BTreeMap<String, Goal>) {
+    pub fn configure_budgets(&mut self, goals: &mut BTreeMap<String, Goal>) {
         // Todo: create a shadow tasks per budget period that have a tag so the won't be handled by initial call to schedule
         // Once all Tasks are scheduled, if a minimum budget per period is not reached,
         // give the task a duration to get to the minimum per period, remove don't schedule tag, mark ready to schedule and schedule
@@ -151,7 +128,7 @@ impl TaskBudgets {
         }
     }
 
-    pub(crate) fn decrement_budgets(&mut self, slot: &Slot, goal_id: &String) -> bool {
+    pub(crate) fn is_allowed_by_budget(&mut self, slot: &Slot, goal_id: &String) -> bool {
         let mut result: bool = false;
         let budget_ids = self.goal_id_to_budget_ids.get(goal_id);
         //decrement all budgets or none => check first - then do
@@ -193,31 +170,65 @@ impl TaskBudgets {
             let time_slots_iterator =
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
-            for time_slots in time_slots_iterator {
+            for timeline in time_slots_iterator {
                 let task_id = *counter;
                 *counter += 1;
-                if !time_slots.is_empty() {
-                    let task = Task {
-                        id: task_id,
-                        goal_id: goal.id.clone(),
+                if timeline.slots.len() > 0 {
+                    let duration = task_budget.1.min.unwrap();
+
+                    let new_task = NewTask {
+                        task_id,
                         title: goal.title.clone(),
-                        duration: task_budget.1.min.unwrap(),
-                        start: None,
-                        deadline: None,
-                        calender_start: goal.start.unwrap(),
-                        calender_end: goal.deadline.unwrap(),
-                        slots: time_slots,
+                        duration,
+                        goal: goal.clone(),
+                        timeline,
                         status: TaskStatus::BudgetMinWaitingForAdjustment,
-                        tags: goal.tags.clone(),
-                        after_goals: goal.after_goals.clone(),
-                        flexibility: 0,
+                        timeframe: None,
                     };
+
+                    let task = Task::new(new_task);
+
                     tasks_result.push(task);
                 } else {
                     panic!("time_slots expected")
                 }
             }
         }
+        dbg!(&tasks_result);
         tasks_result
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::Duration;
+
+    #[test]
+    fn test_initialize_weekly_for_a_month() {
+        // Test that the weekly budget is initialized correctly
+        //for a month with 5 weeks
+
+        let mut task_budget = TaskBudget {
+            task_budget_type: BudgetType::Weekly,
+            max: Some(10),
+            min: Some(1),
+            slot_budgets: vec![],
+        };
+        let timeframe = Slot::mock(Duration::days(31), 2023, 5, 1, 0, 0);
+        dbg!(&timeframe);
+        let start_date = timeframe.start;
+        let end_date = timeframe.end;
+
+        dbg!(&task_budget);
+        task_budget.initialize(start_date, end_date);
+        dbg!(&task_budget);
+
+        assert_eq!(task_budget.slot_budgets.len(), 5);
+        for slot_budget in task_budget.slot_budgets.iter() {
+            assert_eq!(slot_budget.used, 0);
+            assert_eq!(slot_budget.min, Some(1));
+            assert_eq!(slot_budget.max, Some(10));
+        }
     }
 }

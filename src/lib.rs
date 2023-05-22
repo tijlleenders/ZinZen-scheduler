@@ -70,10 +70,13 @@ use models::input::Input;
 use models::output::FinalOutput;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
-use services::{task_generator::task_generator, task_placer::task_placer};
+use services::task_generator::generate_tasks_to_place;
+use services::task_placer::task_placer;
 use wasm_bindgen::prelude::*;
 
 mod errors;
+/// Mocking module to generate objects for testing
+pub mod mocking;
 /// The data structures
 pub mod models;
 /// The services handling the data structures
@@ -96,7 +99,7 @@ interface Input {
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     // JsError implements From<Error>, so we can just use `?` on any Error
     let input: Input = from_value(input.clone()).unwrap();
-    let tasks = task_generator(input);
+    let tasks = generate_tasks_to_place(input);
     let placed_tasks = task_placer(tasks);
     let output = match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
@@ -114,7 +117,9 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 //Todo why is there a schedule function and a run_scheduler function?
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalOutput {
-    let tasks = task_generator(input);
+    let tasks = generate_tasks_to_place(input);
+    dbg!(&tasks);
+    // _print_tasks(&tasks.tasks);
     let placed_tasks = task_placer(tasks);
     match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {

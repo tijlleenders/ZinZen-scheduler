@@ -1,30 +1,36 @@
+use std::ops::Add;
+
 use super::{Slot, TimeSlotsIterator};
-use crate::models::{goal::Day, slot::utils::convert_into_1h_slots};
+use crate::models::{goal::Day, slot::utils::convert_into_1h_slots, timeline::Timeline};
 use chrono::{Datelike, Timelike};
-use log::info;
 
 impl TimeSlotsIterator {
-    pub(crate) fn apply_filters(&mut self) {
+    pub(crate) fn _apply_filters(&mut self) {
         match &self.filters {
             Some(time_filter) => {
-                let _timeline_str: String = format!("{:?}", self.timeline);
-                let _time_filter_str: String = time_filter.to_string();
+                dbg!(&self.timeline);
+                dbg!(&time_filter);
 
-                if let Some(slots) = apply_timing_filter(self) {
-                    self.timeline = slots
+                if let Some(slots) = _apply_timing_filter(self) {
+                    self.timeline = Timeline {
+                        slots: slots.into_iter().collect(),
+                    }
                 }
-                let _timeline_str: String = format!("{:?}", self.timeline);
+                dbg!(&self.timeline);
 
-                if let Some(slots) = apply_on_days_filter(self) {
-                    self.timeline = slots
+                if let Some(slots) = _apply_on_days_filter(self) {
+                    self.timeline = Timeline {
+                        slots: slots.into_iter().collect(),
+                    }
                 }
-                let _timeline_str: String = format!("{:?}", self.timeline);
+                dbg!(&self.timeline);
 
-                if let Some(slots) = apply_not_on_filter(self) {
-                    self.timeline = slots
+                if let Some(slots) = _apply_not_on_filter(self) {
+                    self.timeline = Timeline {
+                        slots: slots.into_iter().collect(),
+                    }
                 }
-                let _timeline_str: String = format!("{:?}", self.timeline);
-                info!("{}", _timeline_str);
+                dbg!(&self.timeline);
             }
             None => (),
         }
@@ -32,25 +38,26 @@ impl TimeSlotsIterator {
 }
 
 /// Applies postpone feature for the given slot iterator.
-fn apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
+fn _apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     if let Some(time_filter) = &slot_iterator.filters {
-        let _time_filter_str: String = time_filter.to_string();
+        dbg!(&time_filter);
         match &time_filter.not_on {
             Some(not_on_slots) => {
-                let _not_on_slots_str: String = format!("{:?}", not_on_slots);
+                dbg!(&not_on_slots);
 
                 // Filter out time slots that are on the "not_on" list
 
                 let not_on_slots_as_hours: Vec<Slot> = convert_into_1h_slots(not_on_slots.clone());
-                let _not_on_slots_as_hours_str: String = format!("{:?}", not_on_slots_as_hours);
+                dbg!(&not_on_slots_as_hours);
 
-                let mut timeline_as_hours: Vec<Slot> =
-                    convert_into_1h_slots(slot_iterator.timeline.clone());
-                let _timeline_as_hours_str: String = format!("{:?}", timeline_as_hours);
+                let mut timeline_as_hours: Vec<Slot> = convert_into_1h_slots(
+                    slot_iterator.timeline.slots.clone().into_iter().collect(),
+                );
+                dbg!(&timeline_as_hours);
 
                 timeline_as_hours.retain(|slot| !not_on_slots_as_hours.contains(slot));
-                let _timeline_as_hours_str: String = format!("{:?}", timeline_as_hours);
-
+                dbg!(&timeline_as_hours);
+                // let timeline_merged = _merge_consequent_slots(&timeline_as_hours)?;
                 Some(timeline_as_hours)
             }
             None => None,
@@ -60,14 +67,14 @@ fn apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     }
 }
 
-fn apply_on_days_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
+fn _apply_on_days_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     if let Some(time_filter) = &slot_iterator.filters {
-        let _time_filter_str: String = time_filter.to_string();
+        dbg!(&time_filter);
         match &time_filter.on_days {
             Some(on_days) => {
                 let mut result: Vec<Slot> = vec![];
-                for slot in slot_iterator.timeline.iter() {
-                    let daily_slots = slot.divide_in_days();
+                for slot in slot_iterator.timeline.slots.iter() {
+                    let daily_slots = slot.divide_into_days();
 
                     for daily_slot in daily_slots.iter() {
                         // Check if the weekday matches with the given on days filter value
@@ -88,18 +95,18 @@ fn apply_on_days_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> 
     }
 }
 
-fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
+fn _apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
     if let Some(time_filter) = &slot_iterator.filters {
-        let _time_filter_str: String = time_filter.to_string();
+        dbg!(time_filter);
         if time_filter.after_time.is_some() || time_filter.before_time.is_some() {
             let mut result: Vec<Slot> = vec![];
-            for slot in slot_iterator.timeline.iter() {
-                let _slot_str = slot.to_string();
-                let mut daily_slots = slot.divide_in_days();
+            for slot in slot_iterator.timeline.slots.clone().into_iter() {
+                dbg!(&slot);
+                let mut daily_slots = slot.divide_into_days();
                 if time_filter.after_time.is_some() && time_filter.before_time.is_some() {
                     //after and before time
                     for daily_slot in daily_slots.iter() {
-                        let _daily_slot_str = daily_slot.to_string();
+                        dbg!(&daily_slot);
 
                         let before_datetime = daily_slot
                             .start
@@ -110,8 +117,8 @@ fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
                             .with_hour(time_filter.after_time.unwrap() as u32)
                             .unwrap();
 
-                        let _after_datetime_str = after_datetime.to_string();
-                        let _before_datetime_str = before_datetime.to_string();
+                        dbg!(&after_datetime);
+                        dbg!(&before_datetime);
 
                         if after_datetime > before_datetime {
                             if daily_slot.start < before_datetime {
@@ -167,10 +174,51 @@ fn apply_timing_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> {
                     }
                 }
             }
+
+            // TODO 2023-04-21
+            //  As agreed in meeting on 2023-04-21 to avoid merge_consequent_slots
+            // and implementing new feature Timeline
+            // if let Some(merged) = merge_consequent_slots(&result) {
+            //     dbg!(&merged);
+            //     dbg!(&merged.len());
+            //     dbg!(&result.len());
+            //     return Some(merged);
+            // }
+
             return Some(result);
         }
         None
     } else {
         None
     }
+}
+
+// function merge_consequent_slots
+fn _merge_consequent_slots(slots: &Vec<Slot>) -> Option<Vec<Slot>> {
+    dbg!(&slots);
+    dbg!(&slots.len());
+
+    if slots.is_empty() {
+        return None;
+    }
+
+    let mut result: Vec<Slot> = vec![];
+
+    for (index, slot) in slots.iter().enumerate() {
+        // check if there is next slot?
+        if index < slots.len() - 1 {
+            let next_slot = slots[index + 1];
+            dbg!(&next_slot);
+
+            // add next_slot to slot
+            if let Some(merged_slot) = slot.add(next_slot) {
+                dbg!(merged_slot);
+                result.push(merged_slot);
+            }
+        }
+    }
+    if result.is_empty() {
+        return None;
+    }
+    Some(result)
 }
