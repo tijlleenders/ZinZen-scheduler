@@ -44,6 +44,7 @@ pub(crate) fn filter_timing(
     after_time: Option<usize>,
     before_time: Option<usize>,
 ) -> Timeline {
+    dbg!(&timeline, after_time, before_time);
     // Return the same timeline if there are no slots, or if both `after_time` and `before_time` are None
     if timeline.slots.is_empty() || (after_time.is_none() && before_time.is_none()) {
         return timeline;
@@ -67,10 +68,20 @@ pub(crate) fn filter_timing(
         }
         TimingScenario::AfterOnly => {
             // If the timing scenario is `AfterOnly`, adjust the start time of each slot
+            // Rule: make sure that 'after_time' within slot boundaries
             for mut walking_slots in timeline_iterator {
+                dbg!(&walking_slots, &slots);
                 walking_slots.iter_mut().for_each(|mut slot| {
-                    slot.start = slot.start.with_hour(after_time.unwrap() as u32).unwrap();
+                    dbg!(&slot);
+                    let after_time = after_time.unwrap() as u32;
+                    let slot_start_hour = slot.start.hour();
+                    if after_time < slot_start_hour {
+                        slot.start = slot.start.with_hour(slot_start_hour).unwrap();
+                    } else {
+                        slot.start = slot.start.with_hour(after_time).unwrap();
+                    }
                     slots.push(*slot);
+                    dbg!(&slots);
                 });
             }
         }
@@ -354,6 +365,34 @@ mod tests {
         dbg!(&expected_result);
 
         let result = filter_timing(timeline, Some(after as usize), Some(before as usize));
+        dbg!(&expected_result, &result);
+        assert_eq!(expected_result, result);
+    }
+
+    /// Test edge case to not exceed boundaries of provided timeline
+    /// This edge case issued by test 'non_midnight_start_deadline'
+    /// which after_time is before timeline boundaries
+    /// - timeline: partial day 2022-11-30 10 to 11
+    /// - after_time: 01 (1am)
+    /// - before_time: None
+    /// - Expected same timeline day
+    #[test]
+    fn test_after_time_within_timeline_boundaries() {
+        let timeline: Timeline = Timeline {
+            slots: vec![Slot::mock(Duration::hours(1), 2022, 04, 30, 10, 0)]
+                .into_iter()
+                .collect(),
+        };
+        dbg!(&timeline);
+
+        let expected_result: Timeline = Timeline {
+            slots: vec![Slot::mock(Duration::hours(1), 2022, 04, 30, 10, 0)]
+                .into_iter()
+                .collect(),
+        };
+        dbg!(&expected_result);
+
+        let result = filter_timing(timeline, Some(1), None);
         dbg!(&expected_result, &result);
         assert_eq!(expected_result, result);
     }
