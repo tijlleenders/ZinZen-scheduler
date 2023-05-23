@@ -1,6 +1,7 @@
 use scheduler::models::{input::Input, output::FinalOutput};
 use std::error::Error;
 use std::fs::File;
+use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
 
@@ -16,4 +17,10 @@ pub fn get_output_string_from_json<P: AsRef<Path>>(path: P) -> Result<String, se
     let reader = BufReader::new(file);
     let output: FinalOutput = serde_json::from_reader(reader)?;
     serde_json::to_string_pretty(&output)
+}
+
+pub fn write_to_file<P: AsRef<Path>>(path: P, actual_output: &str) -> Result<(), Box<dyn Error>> {
+    let mut file = File::create(path)?;
+    file.write_all(actual_output.as_bytes())?;
+    Ok(())
 }
