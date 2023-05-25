@@ -104,6 +104,7 @@ impl Task {
         }
     }
 
+    /// Calculate flexibility of a task slots
     pub fn calculate_flexibility(&mut self) {
         dbg!(&self);
         if self.status == TaskStatus::Scheduled {

@@ -1,7 +1,9 @@
+mod find_best_slots;
+
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 use crate::models::goal::{Goal, Tag};
 use crate::models::input::{PlacedTasks, TasksToPlace};
-use crate::models::slot::{Slot, SlotConflict};
+use crate::models::slot::Slot;
 use crate::models::task::{NewTask, Task, TaskStatus};
 use crate::models::timeline::Timeline;
 
@@ -110,11 +112,16 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
 fn schedule(tasks_to_place: &mut TasksToPlace) {
     loop {
         tasks_to_place.sort_on_flexibility();
+        dbg!(&tasks_to_place);
         if tasks_to_place.tasks[0].status != TaskStatus::ReadyToSchedule {
             break;
         }
-        match find_best_slots(&tasks_to_place.tasks) {
-            Some(chosen_slots) => do_the_scheduling(tasks_to_place, chosen_slots),
+        match find_best_slots::find_best_slots(&tasks_to_place.tasks) {
+            Some(chosen_slots) => {
+                dbg!(&chosen_slots);
+                do_the_scheduling(tasks_to_place, chosen_slots);
+                dbg!(&tasks_to_place);
+            }
             None => break,
         }
     }
@@ -157,47 +164,4 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
             task.remove_from_blocked_by(task_scheduled_goal_id.clone());
         }
     }
-}
-
-fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
-    let mut slot_conflicts: Vec<SlotConflict> = vec![];
-    let task = &tasks_to_place[0];
-
-    for slot in task.slots.iter() {
-        for hour_slot in slot.divide_into_1h_slots() {
-            let mut count: usize = 0;
-            'outer: for t in tasks_to_place {
-                if t.status != TaskStatus::ReadyToSchedule {
-                    continue;
-                }
-                if t.id == task.id {
-                    continue;
-                }
-
-                for s in t.slots.iter() {
-                    if s.is_intersect_with_slot(&hour_slot) {
-                        count += 1;
-                        continue 'outer;
-                    }
-                }
-            }
-            slot_conflicts.push(SlotConflict {
-                slot: hour_slot,
-                num_conflicts: count,
-            });
-        }
-    }
-    slot_conflicts.sort_by(|a, b| b.slot.start.partial_cmp(&a.slot.start).unwrap());
-
-    slot_conflicts.sort_by(|a, b| b.num_conflicts.partial_cmp(&a.num_conflicts).unwrap());
-
-    let mut result = vec![];
-    for _dur in 0..task.duration {
-        match slot_conflicts.pop() {
-            Some(s) => result.push(s.slot),
-            None => break,
-        }
-    }
-
-    Some(result)
 }
