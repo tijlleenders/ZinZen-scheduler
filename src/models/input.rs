@@ -34,7 +34,9 @@ impl TasksToPlace {
 
     fn calculate_flexibilities(&mut self) {
         for task in self.tasks.iter_mut() {
+            dbg!(&task);
             task.calculate_flexibility();
+            dbg!(&task);
         }
     }
 }

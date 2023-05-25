@@ -105,22 +105,30 @@ impl Task {
     }
 
     pub fn calculate_flexibility(&mut self) {
+        dbg!(&self);
         if self.status == TaskStatus::Scheduled {
             return;
         }
+
         let mut flexibility = 0;
+        let task_duration = self.duration;
+
         for slot in &self.slots {
-            if slot.calc_duration_in_hours() < self.duration {
-                flexibility += slot.calc_duration_in_hours();
+            let slot_duration = slot.calc_duration_in_hours();
+            dbg!(&slot);
+            if slot_duration < task_duration {
+                flexibility += slot_duration;
                 continue;
             }
             //todo check correctness
-            flexibility += slot.calc_duration_in_hours() - self.duration + 1;
+            flexibility += slot_duration - task_duration + 1;
         }
         self.flexibility = flexibility;
+
         if self.flexibility == 0 {
             self.status = TaskStatus::Impossible
         }
+        dbg!(&self);
     }
 
     pub fn flexibility(&mut self) -> usize {
