@@ -55,7 +55,7 @@ pub(crate) fn find_best_slots(tasks_to_place: &Vec<Task>) -> Option<Vec<Slot>> {
 
 #[cfg(test)]
 mod tests {
-    use chrono::{Duration, NaiveDate};
+    use chrono::Duration;
 
     use super::*;
 
@@ -65,65 +65,21 @@ mod tests {
         assert_eq!(find_best_slots(&tasks_to_place), None);
     }
 
-    #[test]
-    fn test_unschedulable_task() {
-        todo!("not implemented");
-
-        // let tasks_to_place = vec![Task {
-        //     id: 1,
-        //     status: TaskStatus::Scheduled,
-        //     duration: 2,
-        //     slots: vec![Slot {
-        //         start: NaiveDate::from_ymd(2023, 5, 25).and_hms(10, 0, 0),
-        //         end: NaiveDate::from_ymd(2023, 5, 25).and_hms(12, 0, 0),
-        //     }],
-        // }];
-        // assert_eq!(find_best_slots(&tasks_to_place), None);
-    }
-
     /// Test single task
     /// Expected:
-    /// TODO
+    /// ```
+    /// Some([Slot {
+    ///     start: 2023-05-01 00
+    ///     end: 2023-05-01 01 }])
+    /// ```
     #[test]
     fn test_single_task() {
-        /*
-        Task {
-            id: 4,
-            goal_id: "4",
-            title: "me time",
-            duration: 1,
-            status: ReadyToSchedule,
-            flexibility: 168,
-            start: None,
-            deadline: None,
-            slots: [
-                Slot {
-                    start: 2023-01-03T00:00:00,
-                    end: 2023-01-10T00:00:00,
-                },
-            ],
-            tags: [],
-            after_goals: None,
-        },
-        */
+        let task = Task::mock(
+            TaskStatus::ReadyToSchedule,
+            vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+        );
 
-        let slot = Slot::mock(Duration::days(6), 2023, 01, 03, 0, 0);
-
-        let task = Task {
-            id: 1,
-            goal_id: "1".to_owned(),
-            title: "me time".to_owned(),
-            duration: 1,
-            status: TaskStatus::ReadyToSchedule,
-            flexibility: 168,
-            start: None,
-            deadline: None,
-            slots: vec![slot],
-            tags: vec![],
-            after_goals: None,
-        };
-
-        let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 01, 03, 0, 0)]);
+        let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 05, 01, 0, 0)]);
         dbg!(&expected);
 
         let result = find_best_slots(&vec![task]);
