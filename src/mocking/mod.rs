@@ -2,6 +2,7 @@ use chrono::{Duration, NaiveDate, NaiveDateTime};
 
 use crate::models::{
     slot::{iterator::SlotIterator, Slot},
+    task::{Task, TaskStatus},
     timeline::Timeline,
 };
 
@@ -93,8 +94,74 @@ impl Timeline {
     }
 }
 
+impl Task {
+    /// Mock a custom Task
+    /// ```
+    /// Task {
+    ///     id: 1,
+    ///     goal_id: "1",
+    ///     title: "A sample task",
+    ///     duration: 1,
+    ///     status: status,
+    ///     flexibility: 168,
+    ///     start: None,
+    ///     deadline: None,
+    ///     slots: slots,
+    ///     tags: vec![],
+    ///     after_goals: None
+    ///}
+    /// ```
+    pub fn mock(status: TaskStatus, slots: Vec<Slot>) -> Task {
+        Task {
+            id: 1,
+            title: "A sample task".to_string(),
+            duration: 1,
+            status,
+            flexibility: 168,
+            start: None,
+            deadline: None,
+            slots,
+            tags: vec![],
+            after_goals: None,
+            goal_id: "1".to_string(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
+
+    mod task {
+        use chrono::Duration;
+
+        use crate::models::{
+            slot::Slot,
+            task::{Task, TaskStatus},
+        };
+
+        #[test]
+        fn test_mock() {
+            let slots = vec![Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0)];
+
+            let expected = Task {
+                id: 1,
+                title: "A sample task".to_string(),
+                duration: 1,
+                status: TaskStatus::ReadyToSchedule,
+                flexibility: 168,
+                start: None,
+                deadline: None,
+                slots: slots.clone(),
+                tags: vec![],
+                after_goals: None,
+                goal_id: "1".to_string(),
+            };
+
+            let result = Task::mock(TaskStatus::ReadyToSchedule, slots);
+
+            assert_eq!(expected, result);
+        }
+    }
     use chrono::{Datelike, Timelike};
 
     use super::*;
