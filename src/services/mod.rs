@@ -1,5 +1,7 @@
 /// New filter functions which using SlotIterator and TimelineItertor
 pub mod filter;
+/// Calculate flexibility for tasks
+pub mod flexibility;
 /// Merges all FinalSlots Timelines from all Tasks into a single Timeline, formatted for the frontend
 pub mod output;
 /// For each Task, reduce the MaybeSlots Timeline into a FinalSlots Timeline, where the next Task to pick is calculated anew after every handled Task
