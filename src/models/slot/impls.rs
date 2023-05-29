@@ -81,7 +81,7 @@ impl Slot {
         Slot { start, end }
     }
 
-    pub fn calc_duration_in_hours(&self) -> usize {
+    pub fn duration_as_hours(&self) -> usize {
         (self.end - self.start).num_hours() as usize
     }
 
@@ -112,7 +112,7 @@ impl Slot {
     /// ```
     pub fn divide_into_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
-        let duration = self.calc_duration_in_hours();
+        let duration = self.duration_as_hours();
 
         for hour in 0..duration {
             result.push(Slot {

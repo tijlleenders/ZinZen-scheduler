@@ -142,7 +142,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         if !slot_allowed {
             continue;
         }
-        remaining_hours -= slot.calc_duration_in_hours();
+        remaining_hours -= slot.duration_as_hours();
         template_task.id += 1;
         template_task.start = Some(slot.start);
         template_task.deadline = Some(slot.end);

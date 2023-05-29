@@ -94,7 +94,7 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
 
 fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
     let mut date = start.date();
-    let days_num = Slot { start, end }.calc_duration_in_hours() / 24;
+    let days_num = Slot { start, end }.duration_as_hours() / 24;
     let mut days = vec![];
     for _i in 0..days_num {
         days.push(date);
@@ -177,7 +177,7 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
                 start: task.start,
                 end: task.deadline,
             }
-            .calc_duration_in_hours();
+            .duration_as_hours();
             task2.duration -= task.duration;
             new_outputs.push(task.clone());
             if task2.duration > 0 {
@@ -240,7 +240,7 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
                 taskid: 0,
                 goalid: "free".to_string(),
                 title: "free".to_string(),
-                duration: s.calc_duration_in_hours(),
+                duration: s.duration_as_hours(),
                 start: s.start,
                 deadline: s.end,
                 tags: vec![],

@@ -14,7 +14,7 @@ impl TaskBudget {
     fn decrement(&mut self, slot: &Slot) {
         for slot_budget in self.slot_budgets.iter_mut() {
             if slot.start.ge(&slot_budget.slot.start) && slot.end.le(&slot_budget.slot.end) {
-                slot_budget.used += slot.calc_duration_in_hours();
+                slot_budget.used += slot.duration_as_hours();
                 if slot_budget.max.is_some() && slot_budget.used > slot_budget.max.unwrap() {
                     panic!("allocated more than max SlotBudget!");
                 }
@@ -28,7 +28,7 @@ impl TaskBudget {
             if slot.start.ge(&slot_budget.slot.start)
                 && slot.end.le(&slot_budget.slot.end)
                 && slot_budget.max.is_some()
-                && slot_budget.used + slot.calc_duration_in_hours() > slot_budget.max.unwrap()
+                && slot_budget.used + slot.duration_as_hours() > slot_budget.max.unwrap()
             {
                 result = false;
             }
