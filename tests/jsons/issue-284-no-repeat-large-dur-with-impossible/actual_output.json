@@ -20,24 +20,8 @@
           "taskid": 1,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2023-03-10T00:00:00",
-          "deadline": "2023-03-10T08:00:00"
-        },
-        {
-          "taskid": 2,
-          "goalid": "1",
-          "title": "learn rust",
-          "duration": 1,
-          "start": "2023-03-10T08:00:00",
-          "deadline": "2023-03-10T09:00:00"
-        },
-        {
-          "taskid": 3,
-          "goalid": "free",
-          "title": "free",
-          "duration": 15,
-          "start": "2023-03-10T09:00:00",
           "deadline": "2023-03-11T00:00:00"
         }
       ]
@@ -46,7 +30,7 @@
       "day": "2023-03-11",
       "outputs": [
         {
-          "taskid": 4,
+          "taskid": 2,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -59,7 +43,7 @@
       "day": "2023-03-12",
       "outputs": [
         {
-          "taskid": 5,
+          "taskid": 3,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -72,27 +56,11 @@
       "day": "2023-03-13",
       "outputs": [
         {
-          "taskid": 6,
+          "taskid": 4,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2023-03-13T00:00:00",
-          "deadline": "2023-03-13T08:00:00"
-        },
-        {
-          "taskid": 7,
-          "goalid": "1",
-          "title": "learn rust",
-          "duration": 1,
-          "start": "2023-03-13T08:00:00",
-          "deadline": "2023-03-13T09:00:00"
-        },
-        {
-          "taskid": 8,
-          "goalid": "free",
-          "title": "free",
-          "duration": 15,
-          "start": "2023-03-13T09:00:00",
           "deadline": "2023-03-14T00:00:00"
         }
       ]
@@ -101,7 +69,7 @@
       "day": "2023-03-14",
       "outputs": [
         {
-          "taskid": 9,
+          "taskid": 5,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -114,7 +82,7 @@
       "day": "2023-03-15",
       "outputs": [
         {
-          "taskid": 10,
+          "taskid": 6,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -127,7 +95,7 @@
       "day": "2023-03-16",
       "outputs": [
         {
-          "taskid": 11,
+          "taskid": 7,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -140,27 +108,11 @@
       "day": "2023-03-17",
       "outputs": [
         {
-          "taskid": 12,
+          "taskid": 8,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2023-03-17T00:00:00",
-          "deadline": "2023-03-17T08:00:00"
-        },
-        {
-          "taskid": 13,
-          "goalid": "1",
-          "title": "learn rust",
-          "duration": 1,
-          "start": "2023-03-17T08:00:00",
-          "deadline": "2023-03-17T09:00:00"
-        },
-        {
-          "taskid": 14,
-          "goalid": "free",
-          "title": "free",
-          "duration": 15,
-          "start": "2023-03-17T09:00:00",
           "deadline": "2023-03-18T00:00:00"
         }
       ]
@@ -169,7 +121,7 @@
       "day": "2023-03-18",
       "outputs": [
         {
-          "taskid": 15,
+          "taskid": 9,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -182,7 +134,7 @@
       "day": "2023-03-19",
       "outputs": [
         {
-          "taskid": 16,
+          "taskid": 10,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -197,10 +149,10 @@
       "day": "2023-03-09",
       "outputs": [
         {
-          "taskid": 17,
+          "taskid": 11,
           "goalid": "1",
           "title": "learn rust",
-          "duration": 7,
+          "duration": 10,
           "start": "2023-03-09T00:00:00",
           "deadline": "2023-03-20T00:00:00"
         }
