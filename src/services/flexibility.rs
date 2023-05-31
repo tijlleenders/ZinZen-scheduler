@@ -248,7 +248,6 @@ mod tests {
         use chrono::Duration;
 
         use crate::models::{
-            input::TasksToPlace,
             slot::Slot,
             task::{Task, TaskStatus},
         };

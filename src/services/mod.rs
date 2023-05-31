@@ -1,3 +1,5 @@
+/// Generate and Handle budgeting for tasks
+pub mod budgeting;
 /// New filter functions which using SlotIterator and TimelineItertor
 pub mod filter;
 /// Calculate flexibility for tasks
