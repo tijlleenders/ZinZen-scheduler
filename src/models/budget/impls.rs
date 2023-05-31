@@ -174,6 +174,8 @@ impl TaskBudgets {
                 let task_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
+                    // TODO 2023-05-31  | Create a function to split tasks
+                    //and return them
                     let duration = task_budget.1.min.unwrap();
 
                     let new_task = NewTask {

@@ -12,7 +12,27 @@ impl TasksToPlace {
     fn calculate_flexibilities(&mut self) {
         for task in self.tasks.iter_mut() {
             dbg!(&task);
-            task.calculate_flexibility();
+            match task.status {
+                TaskStatus::Scheduled => {
+                    dbg!(&task);
+                }
+                TaskStatus::Impossible => {
+                    dbg!(&task);
+                }
+                TaskStatus::Uninitialized => {
+                    dbg!(&task);
+                }
+                TaskStatus::Blocked => {
+                    dbg!(&task);
+                }
+                TaskStatus::ReadyToSchedule => task.calculate_flexibility(),
+                TaskStatus::BudgetMinWaitingForAdjustment => {
+                    dbg!(&task);
+                    // TODO 2023-05-31  | Handle this task status to split
+                    //them into many tasks then ask for flexibility
+                }
+            }
+            // task.calculate_flexibility();
             dbg!(&task);
         }
     }
