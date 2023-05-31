@@ -10,9 +10,7 @@ impl Task {
         let task_duration = self.duration;
         let flexibility = self.slots.iter().fold(0, |acc, slot| {
             let slot_duration = slot.duration_as_hours();
-            // TODO 2023-05-30  |   remove below condition "if slot_duration < task_duration"
-            // and just ask "if slot_duration >= task_duration"
-            // We can add partial condition when allow splitting min_duration tasks
+
             if slot_duration >= task_duration {
                 acc + slot_duration - task_duration + 1
             } else {
