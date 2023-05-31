@@ -3,8 +3,11 @@ use crate::models::task::{Task, TaskStatus};
 impl Task {
     /// Calculate flexibility of a task slots
     pub fn calculate_flexibility(&mut self) {
-        if self.status == TaskStatus::Scheduled || self.status == TaskStatus::Impossible {
-            return;
+        if self.status != TaskStatus::ReadyToSchedule {
+            panic!(
+                "TaskStatus must be ReadyToSchedule, but it is now TaskStatus::{:?}",
+                self.status
+            );
         }
 
         let task_duration = self.duration;
@@ -28,64 +31,84 @@ impl Task {
 
 #[cfg(test)]
 mod tests {
-    use chrono::Duration;
 
-    use crate::models::slot::Slot;
+    mod status {
+        use chrono::Duration;
 
-    use super::*;
+        use crate::models::{
+            slot::Slot,
+            task::{Task, TaskStatus},
+        };
 
-    /// Test when Task Status is Impossible
-    #[test]
-    fn test_status_impossible() {
-        let mut task = Task::mock(
-            1,
-            168,
-            TaskStatus::Impossible,
-            vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
-        );
-        let flex_before = task.flexibility;
-        task.calculate_flexibility();
-        assert_eq!(task.status, TaskStatus::Impossible);
-        assert_eq!(task.flexibility, flex_before);
-    }
+        /// Test when TaskStatus::Blocked
+        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        #[test]
+        #[should_panic]
+        fn test_blocked() {
+            let mut task = Task::mock(
+                1,
+                168,
+                TaskStatus::Blocked,
+                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            );
+            task.calculate_flexibility();
+        }
 
-    /// Test when Task Status is Scheduled
-    #[test]
-    fn test_status_scheduled() {
-        let mut task = Task::mock(
-            1,
-            186,
-            TaskStatus::Scheduled,
-            vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
-        );
-        let flex_before = task.flexibility;
-        task.calculate_flexibility();
-        assert_eq!(task.status, TaskStatus::Scheduled);
-        assert_eq!(task.flexibility, flex_before);
-    }
+        /// Test when TaskStatus::BudgetMinWaitingForAdjustment
+        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        #[test]
+        #[should_panic]
+        fn test_budget_min_for_adjstmnt() {
+            let mut task = Task::mock(
+                1,
+                168,
+                TaskStatus::BudgetMinWaitingForAdjustment,
+                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            );
+            task.calculate_flexibility();
+        }
 
-    /// Test when Task Status is Uninitialized
-    #[test]
-    #[ignore]
-    fn test_status_uninitialized() {
-        // TODO 2023-05-29  |  add rules for TaskStatus Uninitialized
-        todo!("test_status_Uninitialized");
-    }
+        /// Test when TaskStatus::Impossible
+        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        #[test]
+        #[should_panic]
+        fn test_impossible() {
+            let mut task = Task::mock(
+                1,
+                168,
+                TaskStatus::Impossible,
+                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            );
+            task.calculate_flexibility();
+        }
 
-    /// Test when Task Status is Blocked
-    #[test]
-    #[ignore]
-    fn test_status_blocked() {
-        // TODO 2023-05-29  |  add rules for TaskStatus Blocked
-        todo!("test_status_blocked");
-    }
+        /// Test when TaskStatus::Scheduled
+        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        #[test]
+        #[should_panic]
+        fn test_scheduled() {
+            let mut task = Task::mock(
+                1,
+                168,
+                TaskStatus::Scheduled,
+                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            );
+            task.calculate_flexibility();
+        }
 
-    /// Test when Task Status is BudgetMinWaitingForAdjustment
-    #[test]
-    #[ignore]
-    fn test_status_budget_min_wait_adj() {
-        // TODO 2023-05-29  |  add rules for TaskStatus BudgetMinWaitingForAdjustment
-        todo!("test_status_budget_min_wait_adj");
+        /// Test when TaskStatus::Uninitialized
+        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        #[test]
+        #[should_panic]
+        fn test_uninitialized() {
+            let mut task = Task::mock(
+                1,
+                168,
+                TaskStatus::Uninitialized,
+                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            );
+            task.calculate_flexibility();
+        }
     }
 
     mod single_tasks {
@@ -187,6 +210,7 @@ mod tests {
         use chrono::Duration;
 
         use crate::models::{
+            input::TasksToPlace,
             slot::Slot,
             task::{Task, TaskStatus},
         };
@@ -205,26 +229,45 @@ mod tests {
         /// ```
         #[test]
         fn test_avail_slots_less_than_dur() {
-            let mut task = Task::mock(
-                1,
+            // todo!("test_avail_slots_less_than_dur");
+
+            let sleep_task = Task::mock(
+                8,
                 0,
                 TaskStatus::ReadyToSchedule,
                 vec![
-                    Slot::mock(Duration::hours(3), 2023, 01, 03, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 04, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 05, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 06, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 07, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 08, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 09, 18, 0),
+                    Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 04, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 05, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 06, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 07, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 08, 22, 0),
+                    Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
+                    // Slot::mock(Duration::hours(10), 2023, 01, 09, 22, 0),
                 ],
             );
-            dbg!(&task);
 
-            task.calculate_flexibility();
-            dbg!(&task);
+            let thinking_task = Task::mock(
+                1,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
+            );
 
-            assert_eq!(21, task.flexibility);
+            let tasks = vec![sleep_task, thinking_task];
+
+            for mut task in tasks {
+                task.calculate_flexibility();
+                dbg!(&task);
+                if task.duration == 8 {
+                    assert_eq!(19, task.flexibility);
+                } else if task.duration == 1 {
+                    assert_eq!(168, task.flexibility);
+                } else {
+                    assert!(false);
+                }
+            }
         }
     }
 
