@@ -1,4 +1,22 @@
-use crate::models::task::{Task, TaskStatus};
+use crate::models::{
+    input::TasksToPlace,
+    task::{Task, TaskStatus},
+};
+
+impl TasksToPlace {
+    pub fn sort_on_flexibility(&mut self) {
+        self.calculate_flexibilities();
+        self.tasks.sort();
+    }
+
+    fn calculate_flexibilities(&mut self) {
+        for task in self.tasks.iter_mut() {
+            dbg!(&task);
+            task.calculate_flexibility();
+            dbg!(&task);
+        }
+    }
+}
 
 impl Task {
     /// Calculate flexibility of a task slots

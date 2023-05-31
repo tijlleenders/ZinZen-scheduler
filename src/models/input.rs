@@ -26,21 +26,6 @@ pub struct TasksToPlace {
     pub task_budgets: TaskBudgets,
 }
 
-impl TasksToPlace {
-    pub fn sort_on_flexibility(&mut self) {
-        self.calculate_flexibilities();
-        self.tasks.sort();
-    }
-
-    fn calculate_flexibilities(&mut self) {
-        for task in self.tasks.iter_mut() {
-            dbg!(&task);
-            task.calculate_flexibility();
-            dbg!(&task);
-        }
-    }
-}
-
 #[derive(Deserialize, Debug)]
 pub struct PlacedTasks {
     pub calendar_start: NaiveDateTime,
