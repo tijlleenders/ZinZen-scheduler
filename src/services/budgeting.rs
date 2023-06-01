@@ -3,11 +3,12 @@ use std::collections::BTreeMap;
 use chrono::NaiveDateTime;
 
 use crate::models::{
-    budget::TaskBudgets,
+    budget::{TaskBudget, TaskBudgets},
     goal::{Goal, Tag},
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
     task::{NewTask, Task, TaskStatus},
+    timeline::Timeline,
 };
 
 impl TaskBudgets {
@@ -106,23 +107,10 @@ impl TaskBudgets {
                 let task_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
-                    // TODO 2023-05-31  | Create a function to split tasks
-                    //and return them
-                    let duration = task_budget.1.min.unwrap();
-
-                    let new_task = NewTask {
-                        task_id,
-                        title: goal.title.clone(),
-                        duration,
-                        goal: goal.clone(),
-                        timeline,
-                        status: TaskStatus::BudgetMinWaitingForAdjustment,
-                        timeframe: None,
-                    };
-
-                    let task = Task::new(new_task);
-
-                    tasks_result.push(task);
+                    let new_tasks =
+                        generate_tasks_by_budget(task_id, &timeline, goal, task_budget.1);
+                    dbg!(&new_tasks);
+                    tasks_result.extend(new_tasks);
                 } else {
                     panic!("time_slots expected")
                 }
@@ -131,4 +119,55 @@ impl TaskBudgets {
         dbg!(&tasks_result);
         tasks_result
     }
+}
+
+/// Generate tasks based on TaskBudget
+/// ```markdown
+/// Alogrithm
+/// - Get number of days in the goal
+/// - Calculate average_daily_duration as below:
+///     - If found `Goal.min_duration`:
+///         - consider it as the average_daily_duration
+///     - Else
+///         - Get average of daily_duration per day
+///         - consider it as the average_daily_duration
+/// - Generate list of Tasks which duration will be average_daily_duration
+/// ```
+fn generate_tasks_by_budget(
+    id: usize,
+    timeline: &Timeline,
+    goal: &Goal,
+    budget: &TaskBudget,
+) -> Vec<Task> {
+    dbg!(id, &timeline, &goal, &budget);
+    let min_budget = budget.min.unwrap();
+    let mut task_id = id;
+    let goal_start = goal.start.unwrap();
+    let goal_deadline = goal.deadline.unwrap();
+    let goal_days = (goal_deadline - goal_start).num_days() as usize;
+    let mut tasks_result: Vec<Task> = Vec::new();
+    let average_daily_duration: usize = if goal.min_duration.is_some() {
+        goal.min_duration.unwrap()
+    } else {
+        let daily_average = min_budget / goal_days;
+        dbg!(daily_average);
+        daily_average
+    };
+
+    for _ in 0..goal_days {
+        let new_task = NewTask {
+            task_id,
+            title: goal.title.clone(),
+            duration: average_daily_duration,
+            goal: goal.clone(),
+            timeline: timeline.clone(),
+            status: TaskStatus::ReadyToSchedule,
+            timeframe: None,
+        };
+
+        tasks_result.push(Task::new(new_task));
+        task_id += 1;
+    }
+
+    tasks_result
 }
