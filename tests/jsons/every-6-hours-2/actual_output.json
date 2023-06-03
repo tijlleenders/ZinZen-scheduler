@@ -23,8 +23,16 @@
           "taskid": 2,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 2,
           "start": "2022-11-19T19:00:00",
+          "deadline": "2022-11-19T21:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "1",
+          "title": "backup data",
+          "duration": 3,
+          "start": "2022-11-19T21:00:00",
           "deadline": "2022-11-20T00:00:00"
         }
       ]
@@ -35,10 +43,10 @@
       "day": "2022-11-19",
       "outputs": [
         {
-          "taskid": 3,
+          "taskid": 4,
           "goalid": "1",
           "title": "backup data",
-          "duration": 4,
+          "duration": 1,
           "start": "2022-11-19T00:00:00",
           "deadline": "2022-11-20T00:00:00"
         }

@@ -21,8 +21,8 @@
         },
         {
           "taskid": 2,
-          "goalid": "free",
-          "title": "free",
+          "goalid": "3",
+          "title": "walk",
           "duration": 1,
           "start": "2022-09-01T13:00:00",
           "deadline": "2022-09-01T14:00:00"
@@ -37,8 +37,8 @@
         },
         {
           "taskid": 4,
-          "goalid": "free",
-          "title": "free",
+          "goalid": "3",
+          "title": "walk",
           "duration": 1,
           "start": "2022-09-01T15:00:00",
           "deadline": "2022-09-01T16:00:00"
@@ -65,16 +65,7 @@
   "impossible": [
     {
       "day": "2022-09-01",
-      "outputs": [
-        {
-          "taskid": 7,
-          "goalid": "3",
-          "title": "walk",
-          "duration": 2,
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-09-02T00:00:00"
-        }
-      ]
+      "outputs": []
     }
   ]
 }

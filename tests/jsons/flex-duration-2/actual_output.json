@@ -5,14 +5,30 @@
       "outputs": [
         {
           "taskid": 0,
-          "goalid": "free",
-          "title": "free",
-          "duration": 11,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
           "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-01T11:00:00"
+          "deadline": "2022-10-01T06:00:00"
         },
         {
           "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2022-10-01T06:00:00",
+          "deadline": "2022-10-01T08:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-01T08:00:00",
+          "deadline": "2022-10-01T11:00:00"
+        },
+        {
+          "taskid": 3,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -20,11 +36,27 @@
           "deadline": "2022-10-01T16:00:00"
         },
         {
-          "taskid": 2,
+          "taskid": 4,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-01T16:00:00",
+          "deadline": "2022-10-01T18:00:00"
+        },
+        {
+          "taskid": 5,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-01T16:00:00",
+          "duration": 4,
+          "start": "2022-10-01T18:00:00",
+          "deadline": "2022-10-01T22:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-01T22:00:00",
           "deadline": "2022-10-02T00:00:00"
         }
       ]
@@ -33,15 +65,31 @@
       "day": "2022-10-02",
       "outputs": [
         {
-          "taskid": 3,
+          "taskid": 7,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-02T00:00:00",
+          "deadline": "2022-10-02T06:00:00"
+        },
+        {
+          "taskid": 8,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-02T00:00:00",
+          "duration": 2,
+          "start": "2022-10-02T06:00:00",
+          "deadline": "2022-10-02T08:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-02T08:00:00",
           "deadline": "2022-10-02T11:00:00"
         },
         {
-          "taskid": 4,
+          "taskid": 10,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -49,11 +97,27 @@
           "deadline": "2022-10-02T16:00:00"
         },
         {
-          "taskid": 5,
+          "taskid": 11,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-02T16:00:00",
+          "deadline": "2022-10-02T18:00:00"
+        },
+        {
+          "taskid": 12,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-02T16:00:00",
+          "duration": 4,
+          "start": "2022-10-02T18:00:00",
+          "deadline": "2022-10-02T22:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-02T22:00:00",
           "deadline": "2022-10-03T00:00:00"
         }
       ]
@@ -62,15 +126,31 @@
       "day": "2022-10-03",
       "outputs": [
         {
-          "taskid": 6,
+          "taskid": 14,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-03T00:00:00",
+          "deadline": "2022-10-03T06:00:00"
+        },
+        {
+          "taskid": 15,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-03T00:00:00",
+          "duration": 2,
+          "start": "2022-10-03T06:00:00",
+          "deadline": "2022-10-03T08:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-03T08:00:00",
           "deadline": "2022-10-03T11:00:00"
         },
         {
-          "taskid": 7,
+          "taskid": 17,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -78,11 +158,27 @@
           "deadline": "2022-10-03T16:00:00"
         },
         {
-          "taskid": 8,
+          "taskid": 18,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-03T16:00:00",
+          "deadline": "2022-10-03T18:00:00"
+        },
+        {
+          "taskid": 19,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-03T16:00:00",
+          "duration": 4,
+          "start": "2022-10-03T18:00:00",
+          "deadline": "2022-10-03T22:00:00"
+        },
+        {
+          "taskid": 20,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-03T22:00:00",
           "deadline": "2022-10-04T00:00:00"
         }
       ]
@@ -91,15 +187,31 @@
       "day": "2022-10-04",
       "outputs": [
         {
-          "taskid": 9,
+          "taskid": 21,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-04T00:00:00",
+          "deadline": "2022-10-04T06:00:00"
+        },
+        {
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-04T00:00:00",
+          "duration": 2,
+          "start": "2022-10-04T06:00:00",
+          "deadline": "2022-10-04T08:00:00"
+        },
+        {
+          "taskid": 23,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-04T08:00:00",
           "deadline": "2022-10-04T11:00:00"
         },
         {
-          "taskid": 10,
+          "taskid": 24,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -107,11 +219,27 @@
           "deadline": "2022-10-04T16:00:00"
         },
         {
-          "taskid": 11,
+          "taskid": 25,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-04T16:00:00",
+          "deadline": "2022-10-04T18:00:00"
+        },
+        {
+          "taskid": 26,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-04T16:00:00",
+          "duration": 4,
+          "start": "2022-10-04T18:00:00",
+          "deadline": "2022-10-04T22:00:00"
+        },
+        {
+          "taskid": 27,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-04T22:00:00",
           "deadline": "2022-10-05T00:00:00"
         }
       ]
@@ -120,15 +248,31 @@
       "day": "2022-10-05",
       "outputs": [
         {
-          "taskid": 12,
+          "taskid": 28,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-05T00:00:00",
+          "deadline": "2022-10-05T06:00:00"
+        },
+        {
+          "taskid": 29,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-05T00:00:00",
+          "duration": 2,
+          "start": "2022-10-05T06:00:00",
+          "deadline": "2022-10-05T08:00:00"
+        },
+        {
+          "taskid": 30,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-05T08:00:00",
           "deadline": "2022-10-05T11:00:00"
         },
         {
-          "taskid": 13,
+          "taskid": 31,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -136,11 +280,27 @@
           "deadline": "2022-10-05T16:00:00"
         },
         {
-          "taskid": 14,
+          "taskid": 32,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-05T16:00:00",
+          "deadline": "2022-10-05T18:00:00"
+        },
+        {
+          "taskid": 33,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-05T16:00:00",
+          "duration": 4,
+          "start": "2022-10-05T18:00:00",
+          "deadline": "2022-10-05T22:00:00"
+        },
+        {
+          "taskid": 34,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-05T22:00:00",
           "deadline": "2022-10-06T00:00:00"
         }
       ]
@@ -149,15 +309,31 @@
       "day": "2022-10-06",
       "outputs": [
         {
-          "taskid": 15,
+          "taskid": 35,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-06T00:00:00",
+          "deadline": "2022-10-06T06:00:00"
+        },
+        {
+          "taskid": 36,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-06T00:00:00",
+          "duration": 2,
+          "start": "2022-10-06T06:00:00",
+          "deadline": "2022-10-06T08:00:00"
+        },
+        {
+          "taskid": 37,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-06T08:00:00",
           "deadline": "2022-10-06T11:00:00"
         },
         {
-          "taskid": 16,
+          "taskid": 38,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -165,11 +341,27 @@
           "deadline": "2022-10-06T16:00:00"
         },
         {
-          "taskid": 17,
+          "taskid": 39,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-06T16:00:00",
+          "deadline": "2022-10-06T18:00:00"
+        },
+        {
+          "taskid": 40,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-06T16:00:00",
+          "duration": 4,
+          "start": "2022-10-06T18:00:00",
+          "deadline": "2022-10-06T22:00:00"
+        },
+        {
+          "taskid": 41,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-06T22:00:00",
           "deadline": "2022-10-07T00:00:00"
         }
       ]
@@ -178,15 +370,31 @@
       "day": "2022-10-07",
       "outputs": [
         {
-          "taskid": 18,
+          "taskid": 42,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-07T00:00:00",
+          "deadline": "2022-10-07T06:00:00"
+        },
+        {
+          "taskid": 43,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-07T00:00:00",
+          "duration": 2,
+          "start": "2022-10-07T06:00:00",
+          "deadline": "2022-10-07T08:00:00"
+        },
+        {
+          "taskid": 44,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-07T08:00:00",
           "deadline": "2022-10-07T11:00:00"
         },
         {
-          "taskid": 19,
+          "taskid": 45,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -194,11 +402,27 @@
           "deadline": "2022-10-07T16:00:00"
         },
         {
-          "taskid": 20,
+          "taskid": 46,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-07T16:00:00",
+          "deadline": "2022-10-07T18:00:00"
+        },
+        {
+          "taskid": 47,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-07T16:00:00",
+          "duration": 4,
+          "start": "2022-10-07T18:00:00",
+          "deadline": "2022-10-07T22:00:00"
+        },
+        {
+          "taskid": 48,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-07T22:00:00",
           "deadline": "2022-10-08T00:00:00"
         }
       ]
@@ -207,15 +431,31 @@
       "day": "2022-10-08",
       "outputs": [
         {
-          "taskid": 21,
+          "taskid": 49,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-08T00:00:00",
+          "deadline": "2022-10-08T06:00:00"
+        },
+        {
+          "taskid": 50,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-08T00:00:00",
+          "duration": 2,
+          "start": "2022-10-08T06:00:00",
+          "deadline": "2022-10-08T08:00:00"
+        },
+        {
+          "taskid": 51,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-08T08:00:00",
           "deadline": "2022-10-08T11:00:00"
         },
         {
-          "taskid": 22,
+          "taskid": 52,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -223,11 +463,27 @@
           "deadline": "2022-10-08T16:00:00"
         },
         {
-          "taskid": 23,
+          "taskid": 53,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-08T16:00:00",
+          "deadline": "2022-10-08T18:00:00"
+        },
+        {
+          "taskid": 54,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-08T16:00:00",
+          "duration": 4,
+          "start": "2022-10-08T18:00:00",
+          "deadline": "2022-10-08T22:00:00"
+        },
+        {
+          "taskid": 55,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-08T22:00:00",
           "deadline": "2022-10-09T00:00:00"
         }
       ]
@@ -236,15 +492,31 @@
       "day": "2022-10-09",
       "outputs": [
         {
-          "taskid": 24,
+          "taskid": 56,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-09T00:00:00",
+          "deadline": "2022-10-09T06:00:00"
+        },
+        {
+          "taskid": 57,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-09T00:00:00",
+          "duration": 2,
+          "start": "2022-10-09T06:00:00",
+          "deadline": "2022-10-09T08:00:00"
+        },
+        {
+          "taskid": 58,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-09T08:00:00",
           "deadline": "2022-10-09T11:00:00"
         },
         {
-          "taskid": 25,
+          "taskid": 59,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -252,11 +524,27 @@
           "deadline": "2022-10-09T16:00:00"
         },
         {
-          "taskid": 26,
+          "taskid": 60,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-09T16:00:00",
+          "deadline": "2022-10-09T18:00:00"
+        },
+        {
+          "taskid": 61,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-09T16:00:00",
+          "duration": 4,
+          "start": "2022-10-09T18:00:00",
+          "deadline": "2022-10-09T22:00:00"
+        },
+        {
+          "taskid": 62,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-09T22:00:00",
           "deadline": "2022-10-10T00:00:00"
         }
       ]
@@ -265,15 +553,31 @@
       "day": "2022-10-10",
       "outputs": [
         {
-          "taskid": 27,
+          "taskid": 63,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-10T00:00:00",
+          "deadline": "2022-10-10T06:00:00"
+        },
+        {
+          "taskid": 64,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-10T00:00:00",
+          "duration": 2,
+          "start": "2022-10-10T06:00:00",
+          "deadline": "2022-10-10T08:00:00"
+        },
+        {
+          "taskid": 65,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-10T08:00:00",
           "deadline": "2022-10-10T11:00:00"
         },
         {
-          "taskid": 28,
+          "taskid": 66,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -281,11 +585,27 @@
           "deadline": "2022-10-10T16:00:00"
         },
         {
-          "taskid": 29,
+          "taskid": 67,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-10T16:00:00",
+          "deadline": "2022-10-10T18:00:00"
+        },
+        {
+          "taskid": 68,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-10T16:00:00",
+          "duration": 4,
+          "start": "2022-10-10T18:00:00",
+          "deadline": "2022-10-10T22:00:00"
+        },
+        {
+          "taskid": 69,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-10T22:00:00",
           "deadline": "2022-10-11T00:00:00"
         }
       ]
@@ -294,15 +614,31 @@
       "day": "2022-10-11",
       "outputs": [
         {
-          "taskid": 30,
+          "taskid": 70,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-11T00:00:00",
+          "deadline": "2022-10-11T06:00:00"
+        },
+        {
+          "taskid": 71,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-11T00:00:00",
+          "duration": 2,
+          "start": "2022-10-11T06:00:00",
+          "deadline": "2022-10-11T08:00:00"
+        },
+        {
+          "taskid": 72,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-11T08:00:00",
           "deadline": "2022-10-11T11:00:00"
         },
         {
-          "taskid": 31,
+          "taskid": 73,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -310,11 +646,27 @@
           "deadline": "2022-10-11T16:00:00"
         },
         {
-          "taskid": 32,
+          "taskid": 74,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-11T16:00:00",
+          "deadline": "2022-10-11T18:00:00"
+        },
+        {
+          "taskid": 75,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-11T16:00:00",
+          "duration": 4,
+          "start": "2022-10-11T18:00:00",
+          "deadline": "2022-10-11T22:00:00"
+        },
+        {
+          "taskid": 76,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-11T22:00:00",
           "deadline": "2022-10-12T00:00:00"
         }
       ]
@@ -323,15 +675,31 @@
       "day": "2022-10-12",
       "outputs": [
         {
-          "taskid": 33,
+          "taskid": 77,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-12T00:00:00",
+          "deadline": "2022-10-12T06:00:00"
+        },
+        {
+          "taskid": 78,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-12T00:00:00",
+          "duration": 2,
+          "start": "2022-10-12T06:00:00",
+          "deadline": "2022-10-12T08:00:00"
+        },
+        {
+          "taskid": 79,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-12T08:00:00",
           "deadline": "2022-10-12T11:00:00"
         },
         {
-          "taskid": 34,
+          "taskid": 80,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -339,11 +707,27 @@
           "deadline": "2022-10-12T16:00:00"
         },
         {
-          "taskid": 35,
+          "taskid": 81,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-12T16:00:00",
+          "deadline": "2022-10-12T18:00:00"
+        },
+        {
+          "taskid": 82,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-12T16:00:00",
+          "duration": 4,
+          "start": "2022-10-12T18:00:00",
+          "deadline": "2022-10-12T22:00:00"
+        },
+        {
+          "taskid": 83,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-12T22:00:00",
           "deadline": "2022-10-13T00:00:00"
         }
       ]
@@ -352,15 +736,31 @@
       "day": "2022-10-13",
       "outputs": [
         {
-          "taskid": 36,
+          "taskid": 84,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-13T00:00:00",
+          "deadline": "2022-10-13T06:00:00"
+        },
+        {
+          "taskid": 85,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-13T00:00:00",
+          "duration": 2,
+          "start": "2022-10-13T06:00:00",
+          "deadline": "2022-10-13T08:00:00"
+        },
+        {
+          "taskid": 86,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-13T08:00:00",
           "deadline": "2022-10-13T11:00:00"
         },
         {
-          "taskid": 37,
+          "taskid": 87,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -368,11 +768,27 @@
           "deadline": "2022-10-13T16:00:00"
         },
         {
-          "taskid": 38,
+          "taskid": 88,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-13T16:00:00",
+          "deadline": "2022-10-13T18:00:00"
+        },
+        {
+          "taskid": 89,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-13T16:00:00",
+          "duration": 4,
+          "start": "2022-10-13T18:00:00",
+          "deadline": "2022-10-13T22:00:00"
+        },
+        {
+          "taskid": 90,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-13T22:00:00",
           "deadline": "2022-10-14T00:00:00"
         }
       ]
@@ -381,15 +797,31 @@
       "day": "2022-10-14",
       "outputs": [
         {
-          "taskid": 39,
+          "taskid": 91,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2022-10-14T00:00:00",
+          "deadline": "2022-10-14T06:00:00"
+        },
+        {
+          "taskid": 92,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2022-10-14T00:00:00",
+          "duration": 2,
+          "start": "2022-10-14T06:00:00",
+          "deadline": "2022-10-14T08:00:00"
+        },
+        {
+          "taskid": 93,
+          "goalid": "1",
+          "title": "work",
+          "duration": 3,
+          "start": "2022-10-14T08:00:00",
           "deadline": "2022-10-14T11:00:00"
         },
         {
-          "taskid": 40,
+          "taskid": 94,
           "goalid": "2",
           "title": "exercise",
           "duration": 5,
@@ -397,11 +829,27 @@
           "deadline": "2022-10-14T16:00:00"
         },
         {
-          "taskid": 41,
+          "taskid": 95,
+          "goalid": "1",
+          "title": "work",
+          "duration": 2,
+          "start": "2022-10-14T16:00:00",
+          "deadline": "2022-10-14T18:00:00"
+        },
+        {
+          "taskid": 96,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-10-14T16:00:00",
+          "duration": 4,
+          "start": "2022-10-14T18:00:00",
+          "deadline": "2022-10-14T22:00:00"
+        },
+        {
+          "taskid": 97,
+          "goalid": "3",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-10-14T22:00:00",
           "deadline": "2022-10-15T00:00:00"
         }
       ]
@@ -412,130 +860,10 @@
       "day": "2022-10-01",
       "outputs": [
         {
-          "taskid": 42,
-          "goalid": "1",
-          "title": "work",
-          "duration": 35,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 43,
+          "taskid": 98,
           "goalid": "3",
           "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 44,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 45,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 46,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 47,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 48,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 49,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 50,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 51,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 52,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 53,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 54,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 55,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 56,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 57,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
+          "duration": 2,
           "start": "2022-10-01T00:00:00",
           "deadline": "2022-10-15T00:00:00"
         }

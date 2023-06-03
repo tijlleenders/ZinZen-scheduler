@@ -7,8 +7,24 @@
           "taskid": 0,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 8,
           "start": "2018-01-01T00:00:00",
+          "deadline": "2018-01-01T08:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "2",
+          "title": "Project X",
+          "duration": 8,
+          "start": "2018-01-01T08:00:00",
+          "deadline": "2018-01-01T16:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-01-01T16:00:00",
           "deadline": "2018-01-02T00:00:00"
         }
       ]
@@ -17,11 +33,35 @@
       "day": "2018-01-02",
       "outputs": [
         {
-          "taskid": 1,
+          "taskid": 3,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 8,
           "start": "2018-01-02T00:00:00",
+          "deadline": "2018-01-02T08:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "2",
+          "title": "Project X",
+          "duration": 2,
+          "start": "2018-01-02T08:00:00",
+          "deadline": "2018-01-02T10:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "1",
+          "title": "Day job filler",
+          "duration": 6,
+          "start": "2018-01-02T10:00:00",
+          "deadline": "2018-01-02T16:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-01-02T16:00:00",
           "deadline": "2018-01-03T00:00:00"
         }
       ]
@@ -30,11 +70,27 @@
       "day": "2018-01-03",
       "outputs": [
         {
-          "taskid": 2,
+          "taskid": 7,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 8,
           "start": "2018-01-03T00:00:00",
+          "deadline": "2018-01-03T08:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "1",
+          "title": "Day job filler",
+          "duration": 8,
+          "start": "2018-01-03T08:00:00",
+          "deadline": "2018-01-03T16:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-01-03T16:00:00",
           "deadline": "2018-01-04T00:00:00"
         }
       ]
@@ -43,11 +99,27 @@
       "day": "2018-01-04",
       "outputs": [
         {
-          "taskid": 3,
+          "taskid": 10,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 8,
           "start": "2018-01-04T00:00:00",
+          "deadline": "2018-01-04T08:00:00"
+        },
+        {
+          "taskid": 11,
+          "goalid": "1",
+          "title": "Day job filler",
+          "duration": 8,
+          "start": "2018-01-04T08:00:00",
+          "deadline": "2018-01-04T16:00:00"
+        },
+        {
+          "taskid": 12,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-01-04T16:00:00",
           "deadline": "2018-01-05T00:00:00"
         }
       ]
@@ -56,11 +128,27 @@
       "day": "2018-01-05",
       "outputs": [
         {
-          "taskid": 4,
+          "taskid": 13,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 8,
           "start": "2018-01-05T00:00:00",
+          "deadline": "2018-01-05T08:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "1",
+          "title": "Day job filler",
+          "duration": 8,
+          "start": "2018-01-05T08:00:00",
+          "deadline": "2018-01-05T16:00:00"
+        },
+        {
+          "taskid": 15,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-01-05T16:00:00",
           "deadline": "2018-01-06T00:00:00"
         }
       ]
@@ -69,24 +157,7 @@
   "impossible": [
     {
       "day": "2018-01-01",
-      "outputs": [
-        {
-          "taskid": 5,
-          "goalid": "2",
-          "title": "Project X",
-          "duration": 10,
-          "start": "2018-01-01T00:00:00",
-          "deadline": "2018-01-06T00:00:00"
-        },
-        {
-          "taskid": 6,
-          "goalid": "1",
-          "title": "Day job filler",
-          "duration": 30,
-          "start": "2018-01-01T00:00:00",
-          "deadline": "2018-01-06T00:00:00"
-        }
-      ]
+      "outputs": []
     },
     {
       "day": "2018-01-02",
