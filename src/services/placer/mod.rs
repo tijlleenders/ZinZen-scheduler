@@ -182,7 +182,7 @@ mod tests {
     fn test_simulate_bug_215() {
         let calendar_timing = Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0);
 
-        let tasks = vec![
+        let tasks: Vec<Task> = vec![
             Task::mock(
                 "water the plants indoors",
                 1,
@@ -304,6 +304,7 @@ mod tests {
             goal_id_to_budget_ids: HashMap::new(),
             budget_id_to_budget: HashMap::new(),
         };
+        dbg!(&task_budgets);
 
         let tasks_to_place = TasksToPlace {
             calendar_start: calendar_timing.start,
@@ -313,6 +314,69 @@ mod tests {
         };
         dbg!(&tasks_to_place);
 
-        assert!(false);
+        let expected_tasks: Vec<Task> = vec![
+            Task::mock(
+                "me time",
+                1,
+                168,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 09, 0)],
+            ),
+            Task::mock(
+                "walk",
+                1,
+                42,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 14, 0)],
+            ),
+            Task::mock(
+                "dinner",
+                1,
+                21,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 18, 0)],
+            ),
+            Task::mock(
+                "breakfast",
+                1,
+                21,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 08, 0)],
+            ),
+            Task::mock(
+                "sleep",
+                8,
+                19,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0)],
+            ),
+            Task::mock(
+                "water the plants indoors",
+                1,
+                14,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 4, 1, 0)],
+            ),
+            Task::mock(
+                "lunch",
+                1,
+                14,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 12, 0)],
+            ),
+            Task::mock(
+                "hurdle",
+                2,
+                7,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::hours(2), 2023, 1, 5, 1, 0)],
+            ),
+        ];
+
+        let placed_tasks = task_placer(tasks_to_place);
+        dbg!(&placed_tasks);
+        dbg!(&expected_tasks);
+
+        assert_eq!(expected_tasks, placed_tasks.tasks);
     }
 }
