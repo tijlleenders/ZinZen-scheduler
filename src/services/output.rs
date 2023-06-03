@@ -8,6 +8,8 @@ use crate::models::slot::Slot;
 use crate::models::task::{Task, TaskStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 
+/// Formatting, sorting, and merging (contiguous) incoming tasks into a FinalOutput data-structure
+/// to be returned back. This data-structure will be printed out in the `output.json`
 pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
@@ -52,6 +54,7 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
 
     //sort and combine the scheduled outputs
     scheduled_outputs.sort();
+
     combine(&mut scheduled_outputs);
     split_cross_day_task(&mut scheduled_outputs);
     generate_free_tasks(

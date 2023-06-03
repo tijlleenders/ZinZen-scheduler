@@ -107,10 +107,23 @@ impl TaskBudgets {
                 let task_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
-                    let new_tasks =
-                        generate_tasks_by_budget(task_id, &timeline, goal, task_budget.1);
-                    dbg!(&new_tasks);
-                    tasks_result.extend(new_tasks);
+                    // TODO 2023-05-31  | Create a function to split tasks
+                    //and return them
+                    let duration = task_budget.1.min.unwrap();
+
+                    let new_task = NewTask {
+                        task_id,
+                        title: goal.title.clone(),
+                        duration,
+                        goal: goal.clone(),
+                        timeline,
+                        status: TaskStatus::BudgetMinWaitingForAdjustment,
+                        timeframe: None,
+                    };
+
+                    let task = Task::new(new_task);
+
+                    tasks_result.push(task);
                 } else {
                     panic!("time_slots expected")
                 }
@@ -133,7 +146,7 @@ impl TaskBudgets {
 ///         - consider it as the average_daily_duration
 /// - Generate list of Tasks which duration will be average_daily_duration
 /// ```
-fn generate_tasks_by_budget(
+fn _generate_tasks_by_budget(
     id: usize,
     timeline: &Timeline,
     goal: &Goal,

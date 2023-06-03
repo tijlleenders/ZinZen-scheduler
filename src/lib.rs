@@ -119,7 +119,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 pub fn run_scheduler(input: Input) -> FinalOutput {
     let tasks = generate_tasks_to_place(input);
     dbg!(&tasks);
-    // _print_tasks(&tasks.tasks);
+
     let placed_tasks = task_placer(tasks);
     match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {

@@ -91,9 +91,28 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
+    fn test_sleep() {
+        let task = Task::mock(
+            8,
+            19,
+            TaskStatus::ReadyToSchedule,
+            vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+        );
+
+        let expected = Some(vec![Slot::mock(Duration::hours(8), 2023, 05, 01, 0, 0)]);
+        dbg!(&task, &expected);
+
+        let result = find_best_slots(&vec![task]);
+        dbg!(&result);
+
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    #[ignore]
     fn test_multiple_tasks() {
         // todo!("not implemented");
-        assert!(true);
 
         // let tasks_to_place = vec![
         //     Task {

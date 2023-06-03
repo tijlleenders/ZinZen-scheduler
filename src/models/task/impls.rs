@@ -51,6 +51,7 @@ impl Ord for Task {
     /// - If there is a Tasks/Increments with flexibility 1, pick that one
     /// - If there are no more Tasks/Increments with flexibility 1 - pick the Task/Increment with **highest** flexibility
     fn cmp(&self, other: &Self) -> Ordering {
+        // TODO 2023-06-01  | Refactor for readability
         if (self.status == TaskStatus::ReadyToSchedule)
             && !(other.status == TaskStatus::ReadyToSchedule)
         {
