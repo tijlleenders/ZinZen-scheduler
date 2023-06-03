@@ -75,6 +75,7 @@ mod tests {
     #[test]
     fn test_single_task() {
         let task = Task::mock(
+            "test",
             1,
             168,
             TaskStatus::ReadyToSchedule,
@@ -94,6 +95,7 @@ mod tests {
     #[ignore]
     fn test_sleep() {
         let task = Task::mock(
+            "test",
             8,
             19,
             TaskStatus::ReadyToSchedule,

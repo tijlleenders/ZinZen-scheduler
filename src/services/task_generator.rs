@@ -38,6 +38,8 @@ pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
         dbg!(&tasks);
     }
 
+    dbg!(&tasks);
+
     TasksToPlace {
         calendar_start,
         calendar_end,

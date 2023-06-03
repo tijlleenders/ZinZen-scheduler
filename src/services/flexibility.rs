@@ -64,6 +64,7 @@ mod tests {
         #[ignore]
         fn test_blocked() {
             let mut task = Task::mock(
+                "test",
                 1,
                 168,
                 TaskStatus::Blocked,
@@ -79,6 +80,7 @@ mod tests {
         #[ignore]
         fn test_budget_min_for_adjstmnt() {
             let mut task = Task::mock(
+                "test",
                 1,
                 168,
                 TaskStatus::BudgetMinWaitingForAdjustment,
@@ -94,6 +96,7 @@ mod tests {
         #[ignore]
         fn test_impossible() {
             let mut task = Task::mock(
+                "test",
                 1,
                 168,
                 TaskStatus::Impossible,
@@ -109,6 +112,7 @@ mod tests {
         #[ignore]
         fn test_scheduled() {
             let mut task = Task::mock(
+                "test",
                 1,
                 168,
                 TaskStatus::Scheduled,
@@ -124,6 +128,7 @@ mod tests {
         #[ignore]
         fn test_uninitialized() {
             let mut task = Task::mock(
+                "test",
                 1,
                 168,
                 TaskStatus::Uninitialized,
@@ -150,6 +155,7 @@ mod tests {
         #[test]
         fn test_sleep() {
             let mut task = Task::mock(
+                "test",
                 8,
                 0,
                 TaskStatus::ReadyToSchedule,
@@ -183,6 +189,7 @@ mod tests {
         #[test]
         fn test_anytime_1hr() {
             let mut task = Task::mock(
+                "test",
                 1,
                 0,
                 TaskStatus::ReadyToSchedule,
@@ -206,6 +213,7 @@ mod tests {
         #[test]
         fn test_dinner_time() {
             let mut task = Task::mock(
+                "test",
                 1,
                 0,
                 TaskStatus::ReadyToSchedule,
@@ -253,6 +261,7 @@ mod tests {
             // todo!("test_avail_slots_less_than_dur");
 
             let sleep_task = Task::mock(
+                "test",
                 8,
                 0,
                 TaskStatus::ReadyToSchedule,
@@ -270,6 +279,7 @@ mod tests {
             );
 
             let thinking_task = Task::mock(
+                "thinking",
                 1,
                 0,
                 TaskStatus::ReadyToSchedule,

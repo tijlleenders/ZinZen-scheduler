@@ -11,6 +11,7 @@ use crate::models::timeline::Timeline;
 /// task a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible tasks.
 pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
+    dbg!(&tasks_to_place);
     //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks_to_place);
     dbg!(&tasks_to_place);
@@ -116,6 +117,7 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
         if tasks_to_place.tasks[0].status != TaskStatus::ReadyToSchedule {
             break;
         }
+        dbg!(&tasks_to_place.tasks);
         match find_best_slots::find_best_slots(&tasks_to_place.tasks) {
             Some(chosen_slots) => {
                 dbg!(&chosen_slots);
@@ -163,5 +165,154 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         for task in tasks_to_place.tasks.iter_mut() {
             task.remove_from_blocked_by(task_scheduled_goal_id.clone());
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::HashMap;
+
+    use crate::models::budget::TaskBudgets;
+
+    use super::*;
+    use chrono::{Duration, NaiveDate, NaiveDateTime};
+
+    /// Simulating test case bug_215 when coming to the function `task_placer`
+    #[test]
+    fn test_simulate_bug_215() {
+        let calendar_timing = Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0);
+
+        let tasks = vec![
+            Task::mock(
+                "water the plants indoors",
+                1,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 3, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 4, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 5, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 6, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 7, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 8, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 9, 1, 0),
+                ],
+            ),
+            Task::mock(
+                "dinner",
+                1,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 3, 18, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 4, 18, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 5, 18, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 6, 18, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 7, 18, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 8, 18, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 9, 18, 0),
+                ],
+            ),
+            Task::mock(
+                "walk",
+                1,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![
+                    Slot::mock(chrono::Duration::hours(6), 2023, 1, 3, 14, 0),
+                    Slot::mock(chrono::Duration::hours(6), 2023, 1, 4, 14, 0),
+                    Slot::mock(chrono::Duration::hours(6), 2023, 1, 5, 14, 0),
+                    Slot::mock(chrono::Duration::hours(6), 2023, 1, 6, 14, 0),
+                    Slot::mock(chrono::Duration::hours(6), 2023, 1, 7, 14, 0),
+                    Slot::mock(chrono::Duration::hours(6), 2023, 1, 8, 14, 0),
+                    Slot::mock(chrono::Duration::hours(6), 2023, 1, 9, 14, 0),
+                ],
+            ),
+            Task::mock(
+                "breakfast",
+                1,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 3, 06, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 4, 06, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 5, 06, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 6, 06, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 7, 06, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 8, 06, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 9, 06, 0),
+                ],
+            ),
+            Task::mock(
+                "me time",
+                1,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(chrono::Duration::days(7), 2023, 1, 3, 0, 0)],
+            ),
+            Task::mock(
+                "lunch",
+                1,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 3, 12, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 4, 12, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 5, 12, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 6, 12, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 7, 12, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 8, 12, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 9, 12, 0),
+                ],
+            ),
+            Task::mock(
+                "hurdle",
+                2,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 3, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 4, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 5, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 6, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 7, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 8, 1, 0),
+                    Slot::mock(chrono::Duration::hours(2), 2023, 1, 9, 1, 0),
+                ],
+            ),
+            Task::mock(
+                "sleep",
+                8,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![
+                    Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 04, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 05, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 06, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 07, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 08, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 01, 09, 22, 0),
+                ],
+            ),
+        ];
+
+        let task_budgets = TaskBudgets {
+            calendar_start: calendar_timing.start,
+            calendar_end: calendar_timing.end,
+            goal_id_to_budget_ids: HashMap::new(),
+            budget_id_to_budget: HashMap::new(),
+        };
+
+        let tasks_to_place = TasksToPlace {
+            calendar_start: calendar_timing.start,
+            calendar_end: calendar_timing.end,
+            tasks,
+            task_budgets,
+        };
+        dbg!(&tasks_to_place);
+
+        assert!(false);
     }
 }

@@ -100,7 +100,7 @@ impl Task {
     /// Task {
     ///     id: 1,
     ///     goal_id: "1",
-    ///     title: "A sample task",
+    ///     title: title,
     ///     duration: duration,
     ///     status: status,
     ///     flexibility: flexibility,
@@ -111,10 +111,16 @@ impl Task {
     ///     after_goals: None
     ///}
     /// ```
-    pub fn mock(duration: usize, flexibility: usize, status: TaskStatus, slots: Vec<Slot>) -> Task {
+    pub fn mock(
+        title: &str,
+        duration: usize,
+        flexibility: usize,
+        status: TaskStatus,
+        slots: Vec<Slot>,
+    ) -> Task {
         Task {
             id: 1,
-            title: "A sample task".to_string(),
+            title: title.to_string(),
             duration,
             status,
             flexibility,
@@ -157,7 +163,7 @@ mod tests {
                 goal_id: "1".to_string(),
             };
 
-            let result = Task::mock(1, 168, TaskStatus::ReadyToSchedule, slots);
+            let result = Task::mock("test", 1, 168, TaskStatus::ReadyToSchedule, slots);
 
             assert_eq!(expected, result);
         }
