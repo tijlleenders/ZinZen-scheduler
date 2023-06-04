@@ -15,7 +15,7 @@ pub struct Slot {
     pub end: NaiveDateTime,
 }
 
-#[derive(PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub struct SlotConflict {
     pub slot: Slot,
     pub num_conflicts: usize,
