@@ -82,6 +82,45 @@ impl Slot {
             num_conflicts: count,
         }
     }
+
+    /// Generate list of schedulable slots which can be scheduled in give
+    /// slot based on given slot's duration and given slot
+    /// - Example:
+    ///     ```
+    ///     slot: 22-08 (10 hours)
+    ///     duration: 8 (hours)
+    ///
+    ///     So will return 3 slots:
+    ///         Slot: 22-06
+    ///         Slot: 23-07
+    ///         Slot: 22-08
+    ///
+    ///
+    ///     slot: 07-11 (4 hours)
+    ///     duration: 1 hour
+    ///     return: slots:
+    ///         - Slot: 07-08
+    ///         - Slot: 08-09
+    ///         - Slot: 09-10
+    ///         - Slot: 10-11
+    ///     ```
+    fn generate_schedulable_slots(&self, duration: usize) -> Vec<Slot> {
+        // ===
+        /*
+        Algorithm:
+        - if slot's duration less than duration, return panic
+        - if slot's duration equal to duration, return same slot
+        - if slot's duration greater than duration:
+            - calculate flexibility by slot's duration - duration + 1
+            - loop from 0 to flexibility
+                - Initialize a slot with slot's start time + duration
+                - add it to schedulable_slots
+
+            return schedulable_slots
+        */
+        // ===
+        vec![]
+    }
 }
 
 impl Task {
