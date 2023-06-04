@@ -12,10 +12,6 @@ pub(crate) fn find_best_slots(tasks: &Vec<Task>) -> Option<Vec<Slot>> {
         return None;
     }
 
-    let mut slot_conflicts: Vec<SlotConflict> = vec![];
-    let task = &tasks[0];
-    // TODO 2023-06-04   | Coninue Dev use function Task::get_conflicts_in_tasks(...)
-
     /*
     TODO 2023-06-04  \
     - Isolate checking conflicts in a seperate function
@@ -37,19 +33,8 @@ pub(crate) fn find_best_slots(tasks: &Vec<Task>) -> Option<Vec<Slot>> {
             ```
     */
 
-    for slot in task.slots.iter() {
-        for hour_slot in slot.divide_into_1h_slots() {
-            let conflicts = hour_slot.get_conflicts_in_tasks(tasks);
-
-            slot_conflicts.push(SlotConflict {
-                slot: hour_slot,
-                num_conflicts: conflicts.num_conflicts,
-            });
-        }
-    }
-    slot_conflicts.sort_by(|a, b| b.slot.start.partial_cmp(&a.slot.start).unwrap());
-
-    slot_conflicts.sort_by(|a, b| b.num_conflicts.partial_cmp(&a.num_conflicts).unwrap());
+    let task = &tasks[0];
+    let mut slot_conflicts = task.get_conflicts_in_tasks(tasks);
 
     let mut result = vec![];
     for _dur in 0..task.duration {
