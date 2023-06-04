@@ -101,7 +101,10 @@ impl Slot {
 
 impl Task {
     /// Get conflicts of a task slots in list of Tasks
-    /// - NOTE: function check conflicts for only tasks with status TaskStatus::ReadyToSchedule
+    /// - Notes about function:
+    ///     - It check conflicts for only tasks with status TaskStatus::ReadyToSchedule
+    ///     - It returns sorted list of SlotConflict based on slot.start then num_conflicts
+    ///     - It implements split slots into 1 hour slots, so all returned SlotConflict is 1 hour slots
     fn get_conflicts_in_tasks(&self, slots_list: &[Task]) -> Vec<SlotConflict> {
         let mut conflicts_list: Vec<SlotConflict> = vec![];
 
@@ -116,6 +119,9 @@ impl Task {
                 conflicts_list.push(slot_conflict);
             });
         });
+
+        conflicts_list.sort_by(|a, b| b.slot.start.partial_cmp(&a.slot.start).unwrap());
+        conflicts_list.sort_by(|a, b| b.num_conflicts.partial_cmp(&a.num_conflicts).unwrap());
 
         conflicts_list
     }
@@ -151,10 +157,8 @@ mod tests {
         );
 
         let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 05, 01, 0, 0)]);
-        dbg!(&expected);
 
         let result = find_best_slots(&vec![task]);
-        dbg!(&result);
 
         assert_eq!(result, expected);
     }
@@ -391,6 +395,8 @@ mod tests {
         }
 
         mod task {
+            use crate::models::slot::SlotConflict;
+
             use super::*;
 
             #[test]
@@ -433,33 +439,26 @@ mod tests {
 
                 // Will result into 4 slots with 1 hour block
 
-                // Slot 1 ( 2023-05-01 06 to 07 ) in task_to_search
-                assert_eq!(
-                    conflicts[0].slot,
-                    Slot::mock(Duration::hours(1), 2023, 5, 1, 6, 0)
-                );
-                assert_eq!(conflicts[0].num_conflicts, 0);
+                let expected: Vec<SlotConflict> = vec![
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 6, 6, 1, 0),
+                        num_conflicts: 0,
+                    },
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 6, 6, 0, 0),
+                        num_conflicts: 0,
+                    },
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 5, 1, 7, 0),
+                        num_conflicts: 0,
+                    },
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 5, 1, 6, 0),
+                        num_conflicts: 0,
+                    },
+                ];
 
-                // Slot 2 ( 2023-05-01 07 to 08 ) in task_to_search
-                assert_eq!(
-                    conflicts[1].slot,
-                    Slot::mock(Duration::hours(1), 2023, 5, 1, 7, 0)
-                );
-                assert_eq!(conflicts[1].num_conflicts, 0);
-
-                // Slot 3 ( 2023-06-06 00 to 01 ) in task_to_search
-                assert_eq!(
-                    conflicts[2].slot,
-                    Slot::mock(Duration::hours(1), 2023, 6, 6, 0, 0)
-                );
-                assert_eq!(conflicts[2].num_conflicts, 0);
-
-                // Slot 4 ( 2023-06-06 01 to 02 ) in task_to_search
-                assert_eq!(
-                    conflicts[3].slot,
-                    Slot::mock(Duration::hours(1), 2023, 6, 6, 1, 0)
-                );
-                assert_eq!(conflicts[3].num_conflicts, 0);
+                assert_eq!(conflicts, expected);
             }
 
             /// Testing many conflicts for a task slots within list of
@@ -488,13 +487,16 @@ mod tests {
             ///         2023-06-03 00 to 08
             ///     
             ///
-            /// Expected:
+            /// Expected 4 slots with conflicts:
+            ///     SlotConflict:
+            ///         - Slot: 2023-06-01 02 to 03 (task1.slot1)
+            ///         - Conflicts: 4
             ///     SlotConflict:
             ///         - Slot: 2023-06-01 01 to 02 (task1.slot1)
             ///         - Conflicts: 4
             ///     SlotConflict:
-            ///         - Slot: 2023-06-01 02 to 03 (task1.slot1)
-            ///         - Conflicts: 4
+            ///         - Slot: 2023-06-02 09 to 10 (task1.slot1)
+            ///         - Conflicts: 2
             ///     SlotConflict:
             ///         - Slot: 2023-06-02 08 to 09 (task1.slot2)
             ///         - Conflicts: 2
@@ -540,34 +542,26 @@ mod tests {
                 let conflicts = task_to_search.get_conflicts_in_tasks(&tasks_list);
 
                 // Will result into 4 slots with 1 hour block
+                let expected: Vec<SlotConflict> = vec![
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 6, 1, 2, 0),
+                        num_conflicts: 4,
+                    },
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 6, 1, 1, 0),
+                        num_conflicts: 4,
+                    },
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 6, 2, 9, 0),
+                        num_conflicts: 2,
+                    },
+                    SlotConflict {
+                        slot: Slot::mock(Duration::hours(1), 2023, 6, 2, 8, 0),
+                        num_conflicts: 2,
+                    },
+                ];
 
-                // Slot 1 ( 2023-06-01 01 to 02 ) in task_to_search
-                assert_eq!(
-                    conflicts[0].slot,
-                    Slot::mock(Duration::hours(1), 2023, 6, 1, 1, 0)
-                );
-                assert_eq!(conflicts[0].num_conflicts, 4);
-
-                // Slot 2 ( 2023-06-01 02 to 03 ) in task_to_search
-                assert_eq!(
-                    conflicts[1].slot,
-                    Slot::mock(Duration::hours(1), 2023, 6, 1, 2, 0)
-                );
-                assert_eq!(conflicts[1].num_conflicts, 4);
-
-                // Slot 3 ( 2023-06-02 08 to 09 ) in task_to_search
-                assert_eq!(
-                    conflicts[2].slot,
-                    Slot::mock(Duration::hours(1), 2023, 6, 2, 8, 0)
-                );
-                assert_eq!(conflicts[2].num_conflicts, 2);
-
-                // Slot 4 ( 2023-06-02 08 to 09 ) in task_to_search
-                assert_eq!(
-                    conflicts[3].slot,
-                    Slot::mock(Duration::hours(1), 2023, 6, 2, 9, 0)
-                );
-                assert_eq!(conflicts[3].num_conflicts, 2);
+                assert_eq!(conflicts, expected);
             }
 
             /// Testing conflicts for a task with Scheduled status
