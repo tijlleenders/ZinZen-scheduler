@@ -121,11 +121,12 @@ impl Slot {
             return schedulable_slots
         */
         // ===
+        dbg!(&self);
         let slot_duration = self.duration_as_hours();
         let mut schedulable_slots = vec![];
 
         if slot_duration < duration {
-            panic!("Slot duration less than duration");
+            return schedulable_slots;
         } else if slot_duration == duration {
             return vec![*self];
         } else {
@@ -161,6 +162,7 @@ impl Task {
     ///     - It returns sorted list of SlotConflict based on slot.start then num_conflicts
     ///     - It implements split slots into 1 hour slots, so all returned SlotConflict is 1 hour slots
     fn get_conflicts_in_tasks(&self, slots_list: &[Task]) -> Vec<SlotConflict> {
+        dbg!(&self, &slots_list);
         let mut conflicts_list: Vec<SlotConflict> = vec![];
 
         if self.status != TaskStatus::ReadyToSchedule {
@@ -507,7 +509,7 @@ mod tests {
 
                 let task_to_search = Task::mock(
                     "test task",
-                    2,
+                    1,
                     0,
                     TaskStatus::ReadyToSchedule,
                     vec![
@@ -611,7 +613,7 @@ mod tests {
 
                 let task_to_search = Task::mock(
                     "test task 1",
-                    2,
+                    1,
                     0,
                     TaskStatus::ReadyToSchedule,
                     vec![
@@ -641,7 +643,6 @@ mod tests {
                         num_conflicts: 2,
                     },
                 ];
-                dbg!(&conflicts, &expected);
 
                 assert_eq!(conflicts, expected);
             }
