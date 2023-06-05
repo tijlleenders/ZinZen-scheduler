@@ -171,6 +171,14 @@ fn combine(outputs: &mut Vec<Output>) {
 //If a task starts in one day and ends in the next day, it should be splitted into two tasks.
 //e.g. A Task 'Sleep' from 22:00-6:00 should be split into two output tasks in output formatter: 22:00-0:00 and 0:00-6:00
 fn split_cross_day_task(outputs: &mut Vec<Output>) {
+    dbg!(&outputs);
+    /*
+    TODO 2023-06-04  | Debug note | case bug_215
+    - For param "outputs", it contains wrong duration for tasks "hurdle" and "sleep".
+    - Attention to function "is_cross_day" which comparison need to be enhanced. Check output.title:"hurdle"
+    - Attention to code line "task2.duration -= task.duration;" which seems is not accurate and also affected by function "is_cross_day"
+    */
+
     let mut new_outputs = vec![];
     for task in outputs.iter_mut() {
         if is_cross_day(task) {
@@ -182,6 +190,9 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
                 end: task.deadline,
             }
             .duration_as_hours();
+
+            dbg!(&task, &task2);
+
             task2.duration -= task.duration;
             new_outputs.push(task.clone());
             if task2.duration > 0 {
@@ -189,8 +200,11 @@ fn split_cross_day_task(outputs: &mut Vec<Output>) {
             }
         } else {
             new_outputs.push(task.clone());
+            dbg!(&new_outputs);
         }
     }
+
+    dbg!(&new_outputs);
     outputs.clear();
     outputs.extend(new_outputs);
 }
@@ -264,6 +278,8 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
 }
 
 fn is_cross_day(task: &Output) -> bool {
+    dbg!(&task);
+    dbg!(&task.start.day(), &task.deadline.day());
     task.start.day() < task.deadline.day()
 }
 
