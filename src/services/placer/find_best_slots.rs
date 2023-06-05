@@ -1,3 +1,5 @@
+use chrono::Duration;
+
 use crate::models::{
     slot::{Slot, SlotConflict},
     task::{Task, TaskStatus},
@@ -119,7 +121,36 @@ impl Slot {
             return schedulable_slots
         */
         // ===
-        vec![]
+        let slot_duration = self.duration_as_hours();
+        let mut schedulable_slots = vec![];
+
+        if slot_duration < duration {
+            panic!("Slot duration less than duration");
+        } else if slot_duration == duration {
+            return vec![*self];
+        } else {
+            let flexibility = slot_duration - duration + 1;
+
+            let mut start_time = self.start;
+            // used to make sure that endtime for each new slot not exceed self.end
+            let mut end_time = start_time + Duration::hours(duration as i64);
+
+            for _ in 0..flexibility {
+                if end_time <= self.end {
+                    let new_slot = Slot {
+                        start: start_time,
+                        end: end_time,
+                    };
+
+                    schedulable_slots.push(new_slot);
+
+                    start_time = start_time + Duration::hours(1);
+                    end_time = start_time + Duration::hours(duration as i64);
+                }
+            }
+        }
+
+        schedulable_slots
     }
 }
 
@@ -258,6 +289,31 @@ mod tests {
         //     },
         // ]);
         // assert_eq!(find_best_slots(&tasks_to_place), expected);
+    }
+
+    /// - Example:
+    ///     ```
+    ///     slot: 22-08 (10 hours)
+    ///     duration: 8 (hours)
+    ///
+    ///     So will return 3 slots:
+    ///         Slot: 22-06
+    ///         Slot: 23-07
+    ///         Slot: 22-08
+    ///     ```
+    #[test]
+    fn test_generate_schedulable_slots() {
+        let slot = Slot::mock(Duration::hours(10), 2023, 6, 1, 22, 0);
+        let duration: usize = 8;
+
+        let result = slot.generate_schedulable_slots(duration);
+        let expected = vec![
+            Slot::mock(Duration::hours(8), 2023, 6, 1, 22, 0),
+            Slot::mock(Duration::hours(8), 2023, 6, 1, 23, 0),
+            Slot::mock(Duration::hours(8), 2023, 6, 2, 0, 0),
+        ];
+
+        assert_eq!(result, expected);
     }
 
     mod conflicts {
