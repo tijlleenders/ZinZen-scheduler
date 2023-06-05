@@ -131,6 +131,7 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
 }
 
 fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>) {
+    dbg!(&tasks_to_place, &chosen_slots);
     let mut remaining_hours = tasks_to_place.tasks[0].duration;
     let mut template_task = tasks_to_place.tasks[0].clone();
     template_task.status = TaskStatus::Scheduled;
@@ -139,6 +140,10 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     template_task.slots.clear();
 
     for slot in chosen_slots.iter() {
+        dbg!(&slot);
+        if remaining_hours <= 0 {
+            break;
+        }
         let slot_allowed = tasks_to_place
             .task_budgets
             .is_allowed_by_budget(slot, &template_task.goal_id);
@@ -150,7 +155,9 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         template_task.id += 1;
         template_task.start = Some(slot.start);
         template_task.deadline = Some(slot.end);
+        dbg!(&template_task);
         tasks_to_place.tasks.push(template_task.clone());
+        dbg!(&tasks_to_place);
     }
     for task in tasks_to_place.tasks.iter_mut() {
         for slot in chosen_slots.iter() {
@@ -177,12 +184,20 @@ mod tests {
     use crate::models::budget::TaskBudgets;
 
     use super::*;
-    use chrono::{Duration, NaiveDate, NaiveDateTime};
+    use chrono::Duration;
 
     /// Simulating test case bug_215 when coming to the function `task_placer`
     #[test]
     #[ignore]
     fn test_simulate_bug_215() {
+        /*
+        TODO 2023-06-05  | Debug notes
+        flexiblity calculation is not accurate as below:
+        - For task: "water the plants indoors", correct flexiblity is 14 but it is calculated as 34.
+        - For task: "sleep", correct flexibility is 19 but it is calculated as 22.
+        - Task::mock function should support customize fields "start" and "deadline".
+        */
+
         let calendar_timing = Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0);
 
         let tasks: Vec<Task> = vec![
