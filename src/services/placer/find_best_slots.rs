@@ -168,8 +168,9 @@ impl Task {
         }
 
         self.slots.iter().for_each(|slot| {
-            let hour_slot = slot.divide_into_1h_slots();
-            hour_slot.iter().for_each(|hour_slot| {
+            let schedulable_slot = slot.generate_schedulable_slots(self.duration);
+            dbg!(&schedulable_slot);
+            schedulable_slot.iter().for_each(|hour_slot| {
                 let slot_conflict = hour_slot.get_conflicts_in_tasks(slots_list);
                 conflicts_list.push(slot_conflict);
             });
@@ -640,6 +641,7 @@ mod tests {
                         num_conflicts: 2,
                     },
                 ];
+                dbg!(&conflicts, &expected);
 
                 assert_eq!(conflicts, expected);
             }
