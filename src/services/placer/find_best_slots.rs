@@ -110,7 +110,7 @@ impl Slot {
         // ===
         /*
         Algorithm:
-        - if slot's duration less than duration, return panic
+        - if slot's duration less than duration, return empty list
         - if slot's duration equal to duration, return same slot
         - if slot's duration greater than duration:
             - calculate flexibility by slot's duration - duration + 1
@@ -160,7 +160,7 @@ impl Task {
     /// - Notes about function:
     ///     - It check conflicts for only tasks with status TaskStatus::ReadyToSchedule
     ///     - It returns sorted list of SlotConflict based on slot.start then num_conflicts
-    ///     - It implements split slots into 1 hour slots, so all returned SlotConflict is 1 hour slots
+    ///     - Splitting slots into schedulable slots based on slot's timing and task's duration
     fn get_conflicts_in_tasks(&self, slots_list: &[Task]) -> Vec<SlotConflict> {
         dbg!(&self, &slots_list);
         let mut conflicts_list: Vec<SlotConflict> = vec![];
@@ -170,9 +170,9 @@ impl Task {
         }
 
         self.slots.iter().for_each(|slot| {
-            let schedulable_slot = slot.generate_schedulable_slots(self.duration);
-            dbg!(&schedulable_slot);
-            schedulable_slot.iter().for_each(|hour_slot| {
+            let schedulable_slots = slot.generate_schedulable_slots(self.duration);
+            dbg!(&schedulable_slots);
+            schedulable_slots.iter().for_each(|hour_slot| {
                 let slot_conflict = hour_slot.get_conflicts_in_tasks(slots_list);
                 conflicts_list.push(slot_conflict);
             });

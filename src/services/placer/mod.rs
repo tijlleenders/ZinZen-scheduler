@@ -132,26 +132,37 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
 
 fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>) {
     dbg!(&tasks_to_place, &chosen_slots);
+    /*
+    TODO 2023-06-06 | Debug notes
+    - for code `template_task.duration`, expected causing inaccurate duration for tasks
+    - think to initialize `template_task.duration` to remaining_hours
+    - create a function to initialize scheduled task to minimize effort and clean code
+    - for code `template_task.id`, make it realistic numbering
+    - 2023-06-04  | for code `template_task.id += 1;`, have issue which multiple tasks with the same id
+    - for code `for slot in chosen_slots.iter()`, just make it function and call it
+
+    */
+
     let mut remaining_hours = tasks_to_place.tasks[0].duration;
     let mut template_task = tasks_to_place.tasks[0].clone();
     template_task.status = TaskStatus::Scheduled;
     template_task.duration = 1;
     template_task.id = tasks_to_place.tasks.len();
     template_task.slots.clear();
-
+    dbg!(&template_task);
     for slot in chosen_slots.iter() {
         dbg!(&slot);
         if remaining_hours <= 0 {
             break;
         }
-        let slot_allowed = tasks_to_place
+
+        if !tasks_to_place
             .task_budgets
-            .is_allowed_by_budget(slot, &template_task.goal_id);
-        if !slot_allowed {
+            .is_allowed_by_budget(slot, &template_task.goal_id)
+        {
             continue;
         }
         remaining_hours -= slot.duration_as_hours();
-        // TODO 2023-06-04  | have issue which multiple tasks with the same id
         template_task.id += 1;
         template_task.start = Some(slot.start);
         template_task.deadline = Some(slot.end);
@@ -163,6 +174,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         for slot in chosen_slots.iter() {
             task.remove_slot(slot.to_owned());
         }
+        dbg!(&task);
     }
     //Todo remove chosen_slots from TaskBudgets
     if remaining_hours > 0 {
@@ -171,9 +183,8 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     } else {
         let task_scheduled_goal_id = tasks_to_place.tasks[0].goal_id.clone();
         tasks_to_place.tasks.remove(0);
-        for task in tasks_to_place.tasks.iter_mut() {
-            task.remove_from_blocked_by(task_scheduled_goal_id.clone());
-        }
+
+        // TODO 2023-06-06  | apply function Task::remove_from_blocked_by when it is developed
     }
 }
 
@@ -189,7 +200,7 @@ mod tests {
     /// Simulating test case bug_215 when coming to the function `task_placer`
     #[test]
     #[ignore]
-    fn test_simulate_bug_215() {
+    fn test_task_placer_to_simulate_bug_215() {
         /*
         TODO 2023-06-05  | Debug notes
         flexiblity calculation is not accurate as below:
