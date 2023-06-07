@@ -115,10 +115,11 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
     loop {
         tasks_to_place.sort_on_flexibility();
         dbg!(&tasks_to_place);
-        if tasks_to_place.tasks[0].status != TaskStatus::ReadyToSchedule {
+        let first_task = tasks_to_place.tasks[0].clone();
+        dbg!(&first_task);
+        if first_task.status != TaskStatus::ReadyToSchedule {
             break;
         }
-        dbg!(&tasks_to_place.tasks);
         match find_best_slots::find_best_slots(&tasks_to_place.tasks) {
             Some(chosen_slots) => {
                 dbg!(&chosen_slots);
@@ -137,7 +138,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     - for code `template_task.duration`, expected causing inaccurate duration for tasks
     - think to initialize `template_task.duration` to remaining_hours
     - create a function to initialize scheduled task to minimize effort and clean code
-    - for code `template_task.id`, make it realistic numbering
+    - for code `template_task.id`, make it realistic numbering. Idea to create function inside Task to generate a new number which not duplicated with current list of tasks
     - 2023-06-04  | for code `template_task.id += 1;`, have issue which multiple tasks with the same id
     - for code `for slot in chosen_slots.iter()`, just make it function and call it
 
@@ -146,10 +147,10 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     let mut remaining_hours = tasks_to_place.tasks[0].duration;
     let mut template_task = tasks_to_place.tasks[0].clone();
     template_task.status = TaskStatus::Scheduled;
-    template_task.duration = 1;
+    // template_task.duration = 1;
     template_task.id = tasks_to_place.tasks.len();
     template_task.slots.clear();
-    dbg!(&template_task);
+
     for slot in chosen_slots.iter() {
         dbg!(&slot);
         if remaining_hours <= 0 {
@@ -166,25 +167,22 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         template_task.id += 1;
         template_task.start = Some(slot.start);
         template_task.deadline = Some(slot.end);
-        dbg!(&template_task);
         tasks_to_place.tasks.push(template_task.clone());
-        dbg!(&tasks_to_place);
     }
     for task in tasks_to_place.tasks.iter_mut() {
         for slot in chosen_slots.iter() {
             task.remove_slot(slot.to_owned());
         }
-        dbg!(&task);
     }
     //Todo remove chosen_slots from TaskBudgets
     if remaining_hours > 0 {
         tasks_to_place.tasks[0].duration = remaining_hours;
         tasks_to_place.tasks[0].status = TaskStatus::Impossible;
     } else {
-        let task_scheduled_goal_id = tasks_to_place.tasks[0].goal_id.clone();
         tasks_to_place.tasks.remove(0);
 
         // TODO 2023-06-06  | apply function Task::remove_from_blocked_by when it is developed
+        let _task_scheduled_goal_id = tasks_to_place.tasks[0].goal_id.clone();
     }
 }
 
@@ -205,6 +203,7 @@ mod tests {
         TODO 2023-06-05  | Debug notes
         flexiblity calculation is not accurate as below:
         - For task: "water the plants indoors", correct flexiblity is 14 but it is calculated as 34.
+            - FIXME 2023-06-06 | For task: "water the plants indoors", it added slots out of budget. It is noticed inside funciton `schedule`, after function `tasks_to_place.sort_on_flexibility()` and before calling function `find_best_slots`
         - For task: "sleep", correct flexibility is 19 but it is calculated as 22.
         - Task::mock function should support customize fields "start" and "deadline".
         */
