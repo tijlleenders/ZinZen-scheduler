@@ -151,6 +151,9 @@ impl Task {
     }
 
     pub fn remove_slot(&mut self, s: Slot) {
+        // Todo 2023-06-08: develop a rule when chosen_slot > task.slot,
+        //which will not removed from task.slot
+
         //Todo: duplicate of remove_taken_slots?
         if self.status == TaskStatus::Scheduled {
             return;
