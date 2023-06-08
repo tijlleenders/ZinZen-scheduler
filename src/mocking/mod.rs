@@ -132,6 +132,45 @@ impl Task {
             goal_id: "1".to_string(),
         }
     }
+
+    /// Mock a Scheduled Task
+    /// ```
+    /// Task {
+    ///     id: id,
+    ///     goal_id: goal_id,
+    ///     title: title,
+    ///     duration: duration,
+    ///     status: TaskStatus::Scheduled,
+    ///     flexibility: flexibility,
+    ///     start: task_timing.start,
+    ///     deadline: task_timing.end,
+    ///     slots: vec![],
+    ///     tags: vec![],
+    ///     after_goals: None
+    ///}
+    /// ```
+    pub fn mock_scheduled(
+        id: usize,
+        goal_id: &str,
+        title: &str,
+        duration: usize,
+        flexibility: usize,
+        task_timing: Slot,
+    ) -> Task {
+        Task {
+            id: id,
+            goal_id: goal_id.to_string(),
+            title: title.to_string(),
+            duration,
+            status: TaskStatus::Scheduled,
+            flexibility,
+            start: Some(task_timing.start),
+            deadline: Some(task_timing.end),
+            slots: vec![],
+            tags: vec![],
+            after_goals: None,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -165,6 +204,38 @@ mod tests {
 
             let result = Task::mock("test", 1, 168, TaskStatus::ReadyToSchedule, slots);
 
+            assert_eq!(expected, result);
+        }
+
+        #[test]
+        fn test_mock_scheduled() {
+            let expected_task_timing = Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0);
+
+            let expected = Task {
+                id: 1,
+                goal_id: "1".to_string(),
+                title: "Sheduled Task".to_string(),
+                duration: 1,
+                status: TaskStatus::Scheduled,
+                flexibility: 168,
+                start: Some(expected_task_timing.start),
+                deadline: Some(expected_task_timing.end),
+                slots: vec![],
+                tags: vec![],
+                after_goals: None,
+            };
+
+            let result = Task::mock_scheduled(
+                1,
+                "1",
+                "Sheduled Task",
+                1,
+                168,
+                Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+            );
+
+            dbg!(&result, &expected);
+            assert_eq!(expected.status, result.status);
             assert_eq!(expected, result);
         }
     }
