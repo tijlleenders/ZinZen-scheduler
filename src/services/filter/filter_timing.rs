@@ -109,24 +109,40 @@ pub(crate) fn filter_timing(
         TimingScenario::Overflow => {
             // If the timing scenario is `Overflow`
             for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
-                walking_slots
-                    .iter_mut()
-                    .enumerate()
-                    .for_each(|(walking_index, mut slot)| {
-                        // Below condition to handle case as comment: https://github.com/tijlleenders/ZinZen-scheduler/pull/295#issuecomment-1550956264
-                        // If this is the first slot in the first day of the timeline,
-                        // add a new slot that starts at the beginning of the day
-                        // and ends at the specified `before_time`
-                        if iterator_index == 0 && walking_index == 0 {
-                            slots.push(Slot {
-                                start: slot.start,
-                                end: slot.start.with_hour(before_time.unwrap() as u32).unwrap(),
-                            });
-                        }
-                        slot.start = slot.start.with_hour(after_time.unwrap() as u32).unwrap();
-                        slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap();
-                        slots.push(*slot);
-                    });
+                let walking_slots_len = walking_slots.len();
+                for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
+                    // ===
+                    dbg!(&iterator_index, &walking_index, &slot);
+                    // Below condition to handle case as comment: https://github.com/tijlleenders/ZinZen-scheduler/pull/295#issuecomment-1550956264
+                    // If this is the first slot in the first day of the timeline,
+                    // add a new slot that starts at the beginning of the day
+                    // and ends at the specified `before_time`
+                    if iterator_index == 0 && walking_index == 0 {
+                        slots.push(Slot {
+                            start: slot.start,
+                            end: slot.start.with_hour(before_time.unwrap() as u32).unwrap(),
+                        });
+                    }
+                    // ===
+                    // Condition added as per issue in PR https://github.com/tijlleenders/ZinZen-scheduler/pull/317
+                    // if it is last slot in the timeline,
+                    // add a new slot that starts at the specified `after_time`
+                    // TODO 2023-06-08: confirm behavior if many slots provided in Timeline
+                    else if walking_index == walking_slots_len - 1 {
+                        slots.push(Slot {
+                            start: slot.start.with_hour(after_time.unwrap() as u32).unwrap(),
+                            end: slot.end,
+                        });
+                        dbg!(&slots);
+                        continue;
+                    }
+                    // ===
+                    slot.start = slot.start.with_hour(after_time.unwrap() as u32).unwrap();
+                    slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap();
+                    slots.push(*slot);
+                    dbg!(&slots);
+                    // ===
+                }
             }
         }
     }
@@ -341,6 +357,7 @@ mod tests {
     /// - after_time: 20 (8pm)
     /// - before_time: 05 (5am)
     /// - Expected list of 5 days starting time from 8pm and end at 5am next day
+    /// expept for last day will be till end of day not 5am next day
     #[test]
     fn test_overflow() {
         let timeline_duration = Duration::days(5);
@@ -357,7 +374,7 @@ mod tests {
                 Slot::mock(Duration::hours(9), 2023, 05, 2, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 3, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 4, after, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 5, after, 0),
+                Slot::mock(Duration::hours(4), 2023, 05, 5, after, 0),
             ]
             .into_iter()
             .collect(),

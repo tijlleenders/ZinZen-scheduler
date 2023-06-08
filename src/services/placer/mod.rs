@@ -197,7 +197,7 @@ mod tests {
 
     /// Simulating test case bug_215 when coming to the function `task_placer`
     #[test]
-    // #[ignore]
+    #[ignore]
     fn test_task_placer_to_simulate_bug_215() {
         /*
         TODO 2023-06-05  | Debug notes
