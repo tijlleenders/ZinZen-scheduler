@@ -29,18 +29,10 @@
         },
         {
           "taskid": 3,
-          "goalid": "2",
-          "title": "program a ZinZen app in rust",
-          "duration": 2,
-          "start": "2018-01-01T14:00:00",
-          "deadline": "2018-01-01T16:00:00"
-        },
-        {
-          "taskid": 4,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2018-01-01T16:00:00",
+          "duration": 10,
+          "start": "2018-01-01T14:00:00",
           "deadline": "2018-01-02T00:00:00"
         }
       ]
@@ -49,35 +41,11 @@
       "day": "2018-01-02",
       "outputs": [
         {
-          "taskid": 5,
+          "taskid": 4,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2018-01-02T00:00:00",
-          "deadline": "2018-01-02T08:00:00"
-        },
-        {
-          "taskid": 6,
-          "goalid": "2",
-          "title": "program a ZinZen app in rust",
-          "duration": 6,
-          "start": "2018-01-02T08:00:00",
-          "deadline": "2018-01-02T14:00:00"
-        },
-        {
-          "taskid": 7,
-          "goalid": "3",
-          "title": "learn rust programming",
-          "duration": 2,
-          "start": "2018-01-02T14:00:00",
-          "deadline": "2018-01-02T16:00:00"
-        },
-        {
-          "taskid": 8,
-          "goalid": "free",
-          "title": "free",
-          "duration": 8,
-          "start": "2018-01-02T16:00:00",
           "deadline": "2018-01-03T00:00:00"
         }
       ]
@@ -86,7 +54,7 @@
       "day": "2018-01-03",
       "outputs": [
         {
-          "taskid": 9,
+          "taskid": 5,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -94,19 +62,19 @@
           "deadline": "2018-01-03T08:00:00"
         },
         {
-          "taskid": 10,
-          "goalid": "3",
-          "title": "learn rust programming",
-          "duration": 6,
+          "taskid": 6,
+          "goalid": "2",
+          "title": "program a ZinZen app in rust",
+          "duration": 8,
           "start": "2018-01-03T08:00:00",
-          "deadline": "2018-01-03T14:00:00"
+          "deadline": "2018-01-03T16:00:00"
         },
         {
-          "taskid": 11,
+          "taskid": 7,
           "goalid": "free",
           "title": "free",
-          "duration": 10,
-          "start": "2018-01-03T14:00:00",
+          "duration": 8,
+          "start": "2018-01-03T16:00:00",
           "deadline": "2018-01-04T00:00:00"
         }
       ]
@@ -115,7 +83,7 @@
       "day": "2018-01-04",
       "outputs": [
         {
-          "taskid": 12,
+          "taskid": 8,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -128,7 +96,7 @@
       "day": "2018-01-05",
       "outputs": [
         {
-          "taskid": 13,
+          "taskid": 9,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -141,7 +109,16 @@
   "impossible": [
     {
       "day": "2018-01-01",
-      "outputs": []
+      "outputs": [
+        {
+          "taskid": 10,
+          "goalid": "3",
+          "title": "learn rust programming",
+          "duration": 8,
+          "start": "2018-01-01T00:00:00",
+          "deadline": "2018-01-06T00:00:00"
+        }
+      ]
     },
     {
       "day": "2018-01-02",
