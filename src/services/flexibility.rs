@@ -4,6 +4,7 @@ use crate::models::{
 };
 
 impl TasksToPlace {
+    /// Calculate flexibility for each task in tasks then sort them
     pub fn sort_on_flexibility(&mut self) {
         self.calculate_flexibilities();
         self.tasks.sort();
@@ -20,10 +21,11 @@ impl Task {
     /// Calculate flexibility of a task slots
     pub fn calculate_flexibility(&mut self) {
         if self.status == TaskStatus::Scheduled || self.status == TaskStatus::Impossible {
-            dbg!(
+            let message = format!(
                 "TaskStatus must be ReadyToSchedule, but it is now TaskStatus::{:?}",
                 self.status.clone()
             );
+            dbg!(message);
             return;
         }
 

@@ -85,7 +85,7 @@ impl Slot {
         }
     }
 
-    /// Generate list of schedulable slots which can be scheduled in give
+    /// Generate list of schedulable slots which can be scheduled in a given
     /// slot based on given slot's duration and given slot
     /// - Example:
     ///     ```

@@ -33,24 +33,8 @@
           "taskid": 2,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-03T00:00:00",
-          "deadline": "2023-03-03T05:00:00"
-        },
-        {
-          "taskid": 3,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-03T05:00:00",
-          "deadline": "2023-03-03T06:00:00"
-        },
-        {
-          "taskid": 4,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-03T06:00:00",
           "deadline": "2023-03-04T00:00:00"
         }
       ]
@@ -59,27 +43,11 @@
       "day": "2023-03-04",
       "outputs": [
         {
-          "taskid": 5,
+          "taskid": 3,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-04T00:00:00",
-          "deadline": "2023-03-04T05:00:00"
-        },
-        {
-          "taskid": 6,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-04T05:00:00",
-          "deadline": "2023-03-04T06:00:00"
-        },
-        {
-          "taskid": 7,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-04T06:00:00",
           "deadline": "2023-03-05T00:00:00"
         }
       ]
@@ -88,7 +56,7 @@
       "day": "2023-03-05",
       "outputs": [
         {
-          "taskid": 8,
+          "taskid": 4,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -101,7 +69,7 @@
       "day": "2023-03-06",
       "outputs": [
         {
-          "taskid": 9,
+          "taskid": 5,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -114,7 +82,7 @@
       "day": "2023-03-07",
       "outputs": [
         {
-          "taskid": 10,
+          "taskid": 6,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -127,7 +95,7 @@
       "day": "2023-03-08",
       "outputs": [
         {
-          "taskid": 11,
+          "taskid": 7,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -140,7 +108,7 @@
       "day": "2023-03-09",
       "outputs": [
         {
-          "taskid": 12,
+          "taskid": 8,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -153,27 +121,11 @@
       "day": "2023-03-10",
       "outputs": [
         {
-          "taskid": 13,
+          "taskid": 9,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-10T00:00:00",
-          "deadline": "2023-03-10T05:00:00"
-        },
-        {
-          "taskid": 14,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-10T05:00:00",
-          "deadline": "2023-03-10T06:00:00"
-        },
-        {
-          "taskid": 15,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-10T06:00:00",
           "deadline": "2023-03-11T00:00:00"
         }
       ]
@@ -182,27 +134,11 @@
       "day": "2023-03-11",
       "outputs": [
         {
-          "taskid": 16,
+          "taskid": 10,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-11T00:00:00",
-          "deadline": "2023-03-11T05:00:00"
-        },
-        {
-          "taskid": 17,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-11T05:00:00",
-          "deadline": "2023-03-11T06:00:00"
-        },
-        {
-          "taskid": 18,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-11T06:00:00",
           "deadline": "2023-03-12T00:00:00"
         }
       ]
@@ -211,7 +147,7 @@
       "day": "2023-03-12",
       "outputs": [
         {
-          "taskid": 19,
+          "taskid": 11,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -224,7 +160,7 @@
       "day": "2023-03-13",
       "outputs": [
         {
-          "taskid": 20,
+          "taskid": 12,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -237,7 +173,7 @@
       "day": "2023-03-14",
       "outputs": [
         {
-          "taskid": 21,
+          "taskid": 13,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -250,7 +186,7 @@
       "day": "2023-03-15",
       "outputs": [
         {
-          "taskid": 22,
+          "taskid": 14,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -263,7 +199,7 @@
       "day": "2023-03-16",
       "outputs": [
         {
-          "taskid": 23,
+          "taskid": 15,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -276,27 +212,11 @@
       "day": "2023-03-17",
       "outputs": [
         {
-          "taskid": 24,
+          "taskid": 16,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-17T00:00:00",
-          "deadline": "2023-03-17T05:00:00"
-        },
-        {
-          "taskid": 25,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-17T05:00:00",
-          "deadline": "2023-03-17T06:00:00"
-        },
-        {
-          "taskid": 26,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-17T06:00:00",
           "deadline": "2023-03-18T00:00:00"
         }
       ]
@@ -305,27 +225,11 @@
       "day": "2023-03-18",
       "outputs": [
         {
-          "taskid": 27,
+          "taskid": 17,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-18T00:00:00",
-          "deadline": "2023-03-18T05:00:00"
-        },
-        {
-          "taskid": 28,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-18T05:00:00",
-          "deadline": "2023-03-18T06:00:00"
-        },
-        {
-          "taskid": 29,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-18T06:00:00",
           "deadline": "2023-03-19T00:00:00"
         }
       ]
@@ -334,7 +238,7 @@
       "day": "2023-03-19",
       "outputs": [
         {
-          "taskid": 30,
+          "taskid": 18,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -347,7 +251,7 @@
       "day": "2023-03-20",
       "outputs": [
         {
-          "taskid": 31,
+          "taskid": 19,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -360,7 +264,7 @@
       "day": "2023-03-21",
       "outputs": [
         {
-          "taskid": 32,
+          "taskid": 20,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -373,7 +277,7 @@
       "day": "2023-03-22",
       "outputs": [
         {
-          "taskid": 33,
+          "taskid": 21,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -386,7 +290,7 @@
       "day": "2023-03-23",
       "outputs": [
         {
-          "taskid": 34,
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -399,27 +303,11 @@
       "day": "2023-03-24",
       "outputs": [
         {
-          "taskid": 35,
+          "taskid": 23,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-24T00:00:00",
-          "deadline": "2023-03-24T05:00:00"
-        },
-        {
-          "taskid": 36,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-24T05:00:00",
-          "deadline": "2023-03-24T06:00:00"
-        },
-        {
-          "taskid": 37,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-24T06:00:00",
           "deadline": "2023-03-25T00:00:00"
         }
       ]
@@ -428,27 +316,11 @@
       "day": "2023-03-25",
       "outputs": [
         {
-          "taskid": 38,
+          "taskid": 24,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-25T00:00:00",
-          "deadline": "2023-03-25T05:00:00"
-        },
-        {
-          "taskid": 39,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-25T05:00:00",
-          "deadline": "2023-03-25T06:00:00"
-        },
-        {
-          "taskid": 40,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-25T06:00:00",
           "deadline": "2023-03-26T00:00:00"
         }
       ]
@@ -457,7 +329,7 @@
       "day": "2023-03-26",
       "outputs": [
         {
-          "taskid": 41,
+          "taskid": 25,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -470,7 +342,7 @@
       "day": "2023-03-27",
       "outputs": [
         {
-          "taskid": 42,
+          "taskid": 26,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -483,7 +355,7 @@
       "day": "2023-03-28",
       "outputs": [
         {
-          "taskid": 43,
+          "taskid": 27,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -496,7 +368,7 @@
       "day": "2023-03-29",
       "outputs": [
         {
-          "taskid": 44,
+          "taskid": 28,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -509,7 +381,7 @@
       "day": "2023-03-30",
       "outputs": [
         {
-          "taskid": 45,
+          "taskid": 29,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -522,27 +394,11 @@
       "day": "2023-03-31",
       "outputs": [
         {
-          "taskid": 46,
+          "taskid": 30,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-03-31T00:00:00",
-          "deadline": "2023-03-31T05:00:00"
-        },
-        {
-          "taskid": 47,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-03-31T05:00:00",
-          "deadline": "2023-03-31T06:00:00"
-        },
-        {
-          "taskid": 48,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-03-31T06:00:00",
           "deadline": "2023-04-01T00:00:00"
         }
       ]
@@ -551,27 +407,11 @@
       "day": "2023-04-01",
       "outputs": [
         {
-          "taskid": 49,
+          "taskid": 31,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-01T00:00:00",
-          "deadline": "2023-04-01T05:00:00"
-        },
-        {
-          "taskid": 50,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-01T05:00:00",
-          "deadline": "2023-04-01T06:00:00"
-        },
-        {
-          "taskid": 51,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-01T06:00:00",
           "deadline": "2023-04-02T00:00:00"
         }
       ]
@@ -580,7 +420,7 @@
       "day": "2023-04-02",
       "outputs": [
         {
-          "taskid": 52,
+          "taskid": 32,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -593,7 +433,7 @@
       "day": "2023-04-03",
       "outputs": [
         {
-          "taskid": 53,
+          "taskid": 33,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -606,7 +446,7 @@
       "day": "2023-04-04",
       "outputs": [
         {
-          "taskid": 54,
+          "taskid": 34,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -619,7 +459,7 @@
       "day": "2023-04-05",
       "outputs": [
         {
-          "taskid": 55,
+          "taskid": 35,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -632,7 +472,7 @@
       "day": "2023-04-06",
       "outputs": [
         {
-          "taskid": 56,
+          "taskid": 36,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -645,27 +485,11 @@
       "day": "2023-04-07",
       "outputs": [
         {
-          "taskid": 57,
+          "taskid": 37,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-07T00:00:00",
-          "deadline": "2023-04-07T05:00:00"
-        },
-        {
-          "taskid": 58,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-07T05:00:00",
-          "deadline": "2023-04-07T06:00:00"
-        },
-        {
-          "taskid": 59,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-07T06:00:00",
           "deadline": "2023-04-08T00:00:00"
         }
       ]
@@ -674,27 +498,11 @@
       "day": "2023-04-08",
       "outputs": [
         {
-          "taskid": 60,
+          "taskid": 38,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-08T00:00:00",
-          "deadline": "2023-04-08T05:00:00"
-        },
-        {
-          "taskid": 61,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-08T05:00:00",
-          "deadline": "2023-04-08T06:00:00"
-        },
-        {
-          "taskid": 62,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-08T06:00:00",
           "deadline": "2023-04-09T00:00:00"
         }
       ]
@@ -703,7 +511,7 @@
       "day": "2023-04-09",
       "outputs": [
         {
-          "taskid": 63,
+          "taskid": 39,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -716,7 +524,7 @@
       "day": "2023-04-10",
       "outputs": [
         {
-          "taskid": 64,
+          "taskid": 40,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -729,7 +537,7 @@
       "day": "2023-04-11",
       "outputs": [
         {
-          "taskid": 65,
+          "taskid": 41,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -742,7 +550,7 @@
       "day": "2023-04-12",
       "outputs": [
         {
-          "taskid": 66,
+          "taskid": 42,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -755,7 +563,7 @@
       "day": "2023-04-13",
       "outputs": [
         {
-          "taskid": 67,
+          "taskid": 43,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -768,27 +576,11 @@
       "day": "2023-04-14",
       "outputs": [
         {
-          "taskid": 68,
+          "taskid": 44,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-14T00:00:00",
-          "deadline": "2023-04-14T05:00:00"
-        },
-        {
-          "taskid": 69,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-14T05:00:00",
-          "deadline": "2023-04-14T06:00:00"
-        },
-        {
-          "taskid": 70,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-14T06:00:00",
           "deadline": "2023-04-15T00:00:00"
         }
       ]
@@ -797,27 +589,11 @@
       "day": "2023-04-15",
       "outputs": [
         {
-          "taskid": 71,
+          "taskid": 45,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-15T00:00:00",
-          "deadline": "2023-04-15T05:00:00"
-        },
-        {
-          "taskid": 72,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-15T05:00:00",
-          "deadline": "2023-04-15T06:00:00"
-        },
-        {
-          "taskid": 73,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-15T06:00:00",
           "deadline": "2023-04-16T00:00:00"
         }
       ]
@@ -826,7 +602,7 @@
       "day": "2023-04-16",
       "outputs": [
         {
-          "taskid": 74,
+          "taskid": 46,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -839,7 +615,7 @@
       "day": "2023-04-17",
       "outputs": [
         {
-          "taskid": 75,
+          "taskid": 47,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -852,7 +628,7 @@
       "day": "2023-04-18",
       "outputs": [
         {
-          "taskid": 76,
+          "taskid": 48,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -865,7 +641,7 @@
       "day": "2023-04-19",
       "outputs": [
         {
-          "taskid": 77,
+          "taskid": 49,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -878,7 +654,7 @@
       "day": "2023-04-20",
       "outputs": [
         {
-          "taskid": 78,
+          "taskid": 50,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -891,27 +667,11 @@
       "day": "2023-04-21",
       "outputs": [
         {
-          "taskid": 79,
+          "taskid": 51,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-21T00:00:00",
-          "deadline": "2023-04-21T05:00:00"
-        },
-        {
-          "taskid": 80,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-21T05:00:00",
-          "deadline": "2023-04-21T06:00:00"
-        },
-        {
-          "taskid": 81,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-21T06:00:00",
           "deadline": "2023-04-22T00:00:00"
         }
       ]
@@ -920,27 +680,11 @@
       "day": "2023-04-22",
       "outputs": [
         {
-          "taskid": 82,
+          "taskid": 52,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-22T00:00:00",
-          "deadline": "2023-04-22T05:00:00"
-        },
-        {
-          "taskid": 83,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-22T05:00:00",
-          "deadline": "2023-04-22T06:00:00"
-        },
-        {
-          "taskid": 84,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-22T06:00:00",
           "deadline": "2023-04-23T00:00:00"
         }
       ]
@@ -949,7 +693,7 @@
       "day": "2023-04-23",
       "outputs": [
         {
-          "taskid": 85,
+          "taskid": 53,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -962,7 +706,7 @@
       "day": "2023-04-24",
       "outputs": [
         {
-          "taskid": 86,
+          "taskid": 54,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -975,7 +719,7 @@
       "day": "2023-04-25",
       "outputs": [
         {
-          "taskid": 87,
+          "taskid": 55,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -988,7 +732,7 @@
       "day": "2023-04-26",
       "outputs": [
         {
-          "taskid": 88,
+          "taskid": 56,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1001,7 +745,7 @@
       "day": "2023-04-27",
       "outputs": [
         {
-          "taskid": 89,
+          "taskid": 57,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1014,27 +758,11 @@
       "day": "2023-04-28",
       "outputs": [
         {
-          "taskid": 90,
+          "taskid": 58,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-28T00:00:00",
-          "deadline": "2023-04-28T05:00:00"
-        },
-        {
-          "taskid": 91,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-28T05:00:00",
-          "deadline": "2023-04-28T06:00:00"
-        },
-        {
-          "taskid": 92,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-28T06:00:00",
           "deadline": "2023-04-29T00:00:00"
         }
       ]
@@ -1043,27 +771,11 @@
       "day": "2023-04-29",
       "outputs": [
         {
-          "taskid": 93,
+          "taskid": 59,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-04-29T00:00:00",
-          "deadline": "2023-04-29T05:00:00"
-        },
-        {
-          "taskid": 94,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-04-29T05:00:00",
-          "deadline": "2023-04-29T06:00:00"
-        },
-        {
-          "taskid": 95,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-04-29T06:00:00",
           "deadline": "2023-04-30T00:00:00"
         }
       ]
@@ -1072,7 +784,7 @@
       "day": "2023-04-30",
       "outputs": [
         {
-          "taskid": 96,
+          "taskid": 60,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1085,7 +797,7 @@
       "day": "2023-05-01",
       "outputs": [
         {
-          "taskid": 97,
+          "taskid": 61,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1098,7 +810,7 @@
       "day": "2023-05-02",
       "outputs": [
         {
-          "taskid": 98,
+          "taskid": 62,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1111,7 +823,7 @@
       "day": "2023-05-03",
       "outputs": [
         {
-          "taskid": 99,
+          "taskid": 63,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1124,7 +836,7 @@
       "day": "2023-05-04",
       "outputs": [
         {
-          "taskid": 100,
+          "taskid": 64,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1137,27 +849,11 @@
       "day": "2023-05-05",
       "outputs": [
         {
-          "taskid": 101,
+          "taskid": 65,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-05T00:00:00",
-          "deadline": "2023-05-05T05:00:00"
-        },
-        {
-          "taskid": 102,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-05T05:00:00",
-          "deadline": "2023-05-05T06:00:00"
-        },
-        {
-          "taskid": 103,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-05T06:00:00",
           "deadline": "2023-05-06T00:00:00"
         }
       ]
@@ -1166,27 +862,11 @@
       "day": "2023-05-06",
       "outputs": [
         {
-          "taskid": 104,
+          "taskid": 66,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-06T00:00:00",
-          "deadline": "2023-05-06T05:00:00"
-        },
-        {
-          "taskid": 105,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-06T05:00:00",
-          "deadline": "2023-05-06T06:00:00"
-        },
-        {
-          "taskid": 106,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-06T06:00:00",
           "deadline": "2023-05-07T00:00:00"
         }
       ]
@@ -1195,7 +875,7 @@
       "day": "2023-05-07",
       "outputs": [
         {
-          "taskid": 107,
+          "taskid": 67,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1208,7 +888,7 @@
       "day": "2023-05-08",
       "outputs": [
         {
-          "taskid": 108,
+          "taskid": 68,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1221,7 +901,7 @@
       "day": "2023-05-09",
       "outputs": [
         {
-          "taskid": 109,
+          "taskid": 69,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1234,7 +914,7 @@
       "day": "2023-05-10",
       "outputs": [
         {
-          "taskid": 110,
+          "taskid": 70,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1247,7 +927,7 @@
       "day": "2023-05-11",
       "outputs": [
         {
-          "taskid": 111,
+          "taskid": 71,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1260,27 +940,11 @@
       "day": "2023-05-12",
       "outputs": [
         {
-          "taskid": 112,
+          "taskid": 72,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-12T00:00:00",
-          "deadline": "2023-05-12T05:00:00"
-        },
-        {
-          "taskid": 113,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-12T05:00:00",
-          "deadline": "2023-05-12T06:00:00"
-        },
-        {
-          "taskid": 114,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-12T06:00:00",
           "deadline": "2023-05-13T00:00:00"
         }
       ]
@@ -1289,27 +953,11 @@
       "day": "2023-05-13",
       "outputs": [
         {
-          "taskid": 115,
+          "taskid": 73,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-13T00:00:00",
-          "deadline": "2023-05-13T05:00:00"
-        },
-        {
-          "taskid": 116,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-13T05:00:00",
-          "deadline": "2023-05-13T06:00:00"
-        },
-        {
-          "taskid": 117,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-13T06:00:00",
           "deadline": "2023-05-14T00:00:00"
         }
       ]
@@ -1318,7 +966,7 @@
       "day": "2023-05-14",
       "outputs": [
         {
-          "taskid": 118,
+          "taskid": 74,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1331,7 +979,7 @@
       "day": "2023-05-15",
       "outputs": [
         {
-          "taskid": 119,
+          "taskid": 75,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1344,7 +992,7 @@
       "day": "2023-05-16",
       "outputs": [
         {
-          "taskid": 120,
+          "taskid": 76,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1357,7 +1005,7 @@
       "day": "2023-05-17",
       "outputs": [
         {
-          "taskid": 121,
+          "taskid": 77,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1370,7 +1018,7 @@
       "day": "2023-05-18",
       "outputs": [
         {
-          "taskid": 122,
+          "taskid": 78,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1383,27 +1031,11 @@
       "day": "2023-05-19",
       "outputs": [
         {
-          "taskid": 123,
+          "taskid": 79,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-19T00:00:00",
-          "deadline": "2023-05-19T05:00:00"
-        },
-        {
-          "taskid": 124,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-19T05:00:00",
-          "deadline": "2023-05-19T06:00:00"
-        },
-        {
-          "taskid": 125,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-19T06:00:00",
           "deadline": "2023-05-20T00:00:00"
         }
       ]
@@ -1412,27 +1044,11 @@
       "day": "2023-05-20",
       "outputs": [
         {
-          "taskid": 126,
+          "taskid": 80,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-20T00:00:00",
-          "deadline": "2023-05-20T05:00:00"
-        },
-        {
-          "taskid": 127,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-20T05:00:00",
-          "deadline": "2023-05-20T06:00:00"
-        },
-        {
-          "taskid": 128,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-20T06:00:00",
           "deadline": "2023-05-21T00:00:00"
         }
       ]
@@ -1441,7 +1057,7 @@
       "day": "2023-05-21",
       "outputs": [
         {
-          "taskid": 129,
+          "taskid": 81,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1454,7 +1070,7 @@
       "day": "2023-05-22",
       "outputs": [
         {
-          "taskid": 130,
+          "taskid": 82,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1467,7 +1083,7 @@
       "day": "2023-05-23",
       "outputs": [
         {
-          "taskid": 131,
+          "taskid": 83,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1480,7 +1096,7 @@
       "day": "2023-05-24",
       "outputs": [
         {
-          "taskid": 132,
+          "taskid": 84,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1493,7 +1109,7 @@
       "day": "2023-05-25",
       "outputs": [
         {
-          "taskid": 133,
+          "taskid": 85,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1506,27 +1122,11 @@
       "day": "2023-05-26",
       "outputs": [
         {
-          "taskid": 134,
+          "taskid": 86,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-26T00:00:00",
-          "deadline": "2023-05-26T05:00:00"
-        },
-        {
-          "taskid": 135,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-26T05:00:00",
-          "deadline": "2023-05-26T06:00:00"
-        },
-        {
-          "taskid": 136,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-26T06:00:00",
           "deadline": "2023-05-27T00:00:00"
         }
       ]
@@ -1535,27 +1135,11 @@
       "day": "2023-05-27",
       "outputs": [
         {
-          "taskid": 137,
+          "taskid": 87,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-05-27T00:00:00",
-          "deadline": "2023-05-27T05:00:00"
-        },
-        {
-          "taskid": 138,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-05-27T05:00:00",
-          "deadline": "2023-05-27T06:00:00"
-        },
-        {
-          "taskid": 139,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-05-27T06:00:00",
           "deadline": "2023-05-28T00:00:00"
         }
       ]
@@ -1564,7 +1148,7 @@
       "day": "2023-05-28",
       "outputs": [
         {
-          "taskid": 140,
+          "taskid": 88,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1577,7 +1161,7 @@
       "day": "2023-05-29",
       "outputs": [
         {
-          "taskid": 141,
+          "taskid": 89,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1590,7 +1174,7 @@
       "day": "2023-05-30",
       "outputs": [
         {
-          "taskid": 142,
+          "taskid": 90,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1603,7 +1187,7 @@
       "day": "2023-05-31",
       "outputs": [
         {
-          "taskid": 143,
+          "taskid": 91,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1616,7 +1200,7 @@
       "day": "2023-06-01",
       "outputs": [
         {
-          "taskid": 144,
+          "taskid": 92,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1629,27 +1213,11 @@
       "day": "2023-06-02",
       "outputs": [
         {
-          "taskid": 145,
+          "taskid": 93,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-02T00:00:00",
-          "deadline": "2023-06-02T05:00:00"
-        },
-        {
-          "taskid": 146,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-02T05:00:00",
-          "deadline": "2023-06-02T06:00:00"
-        },
-        {
-          "taskid": 147,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-02T06:00:00",
           "deadline": "2023-06-03T00:00:00"
         }
       ]
@@ -1658,27 +1226,11 @@
       "day": "2023-06-03",
       "outputs": [
         {
-          "taskid": 148,
+          "taskid": 94,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-03T00:00:00",
-          "deadline": "2023-06-03T05:00:00"
-        },
-        {
-          "taskid": 149,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-03T05:00:00",
-          "deadline": "2023-06-03T06:00:00"
-        },
-        {
-          "taskid": 150,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-03T06:00:00",
           "deadline": "2023-06-04T00:00:00"
         }
       ]
@@ -1687,7 +1239,7 @@
       "day": "2023-06-04",
       "outputs": [
         {
-          "taskid": 151,
+          "taskid": 95,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1700,7 +1252,7 @@
       "day": "2023-06-05",
       "outputs": [
         {
-          "taskid": 152,
+          "taskid": 96,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1713,7 +1265,7 @@
       "day": "2023-06-06",
       "outputs": [
         {
-          "taskid": 153,
+          "taskid": 97,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1726,7 +1278,7 @@
       "day": "2023-06-07",
       "outputs": [
         {
-          "taskid": 154,
+          "taskid": 98,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1739,7 +1291,7 @@
       "day": "2023-06-08",
       "outputs": [
         {
-          "taskid": 155,
+          "taskid": 99,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1752,27 +1304,11 @@
       "day": "2023-06-09",
       "outputs": [
         {
-          "taskid": 156,
+          "taskid": 100,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-09T00:00:00",
-          "deadline": "2023-06-09T05:00:00"
-        },
-        {
-          "taskid": 157,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-09T05:00:00",
-          "deadline": "2023-06-09T06:00:00"
-        },
-        {
-          "taskid": 158,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-09T06:00:00",
           "deadline": "2023-06-10T00:00:00"
         }
       ]
@@ -1781,27 +1317,11 @@
       "day": "2023-06-10",
       "outputs": [
         {
-          "taskid": 159,
+          "taskid": 101,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-10T00:00:00",
-          "deadline": "2023-06-10T05:00:00"
-        },
-        {
-          "taskid": 160,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-10T05:00:00",
-          "deadline": "2023-06-10T06:00:00"
-        },
-        {
-          "taskid": 161,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-10T06:00:00",
           "deadline": "2023-06-11T00:00:00"
         }
       ]
@@ -1810,7 +1330,7 @@
       "day": "2023-06-11",
       "outputs": [
         {
-          "taskid": 162,
+          "taskid": 102,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1823,7 +1343,7 @@
       "day": "2023-06-12",
       "outputs": [
         {
-          "taskid": 163,
+          "taskid": 103,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1836,7 +1356,7 @@
       "day": "2023-06-13",
       "outputs": [
         {
-          "taskid": 164,
+          "taskid": 104,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1849,7 +1369,7 @@
       "day": "2023-06-14",
       "outputs": [
         {
-          "taskid": 165,
+          "taskid": 105,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1862,7 +1382,7 @@
       "day": "2023-06-15",
       "outputs": [
         {
-          "taskid": 166,
+          "taskid": 106,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1875,27 +1395,11 @@
       "day": "2023-06-16",
       "outputs": [
         {
-          "taskid": 167,
+          "taskid": 107,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-16T00:00:00",
-          "deadline": "2023-06-16T05:00:00"
-        },
-        {
-          "taskid": 168,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-16T05:00:00",
-          "deadline": "2023-06-16T06:00:00"
-        },
-        {
-          "taskid": 169,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-16T06:00:00",
           "deadline": "2023-06-17T00:00:00"
         }
       ]
@@ -1904,27 +1408,11 @@
       "day": "2023-06-17",
       "outputs": [
         {
-          "taskid": 170,
+          "taskid": 108,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-17T00:00:00",
-          "deadline": "2023-06-17T05:00:00"
-        },
-        {
-          "taskid": 171,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-17T05:00:00",
-          "deadline": "2023-06-17T06:00:00"
-        },
-        {
-          "taskid": 172,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-17T06:00:00",
           "deadline": "2023-06-18T00:00:00"
         }
       ]
@@ -1933,7 +1421,7 @@
       "day": "2023-06-18",
       "outputs": [
         {
-          "taskid": 173,
+          "taskid": 109,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1946,7 +1434,7 @@
       "day": "2023-06-19",
       "outputs": [
         {
-          "taskid": 174,
+          "taskid": 110,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1959,7 +1447,7 @@
       "day": "2023-06-20",
       "outputs": [
         {
-          "taskid": 175,
+          "taskid": 111,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1972,7 +1460,7 @@
       "day": "2023-06-21",
       "outputs": [
         {
-          "taskid": 176,
+          "taskid": 112,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1985,7 +1473,7 @@
       "day": "2023-06-22",
       "outputs": [
         {
-          "taskid": 177,
+          "taskid": 113,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -1998,27 +1486,11 @@
       "day": "2023-06-23",
       "outputs": [
         {
-          "taskid": 178,
+          "taskid": 114,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-23T00:00:00",
-          "deadline": "2023-06-23T05:00:00"
-        },
-        {
-          "taskid": 179,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-23T05:00:00",
-          "deadline": "2023-06-23T06:00:00"
-        },
-        {
-          "taskid": 180,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-23T06:00:00",
           "deadline": "2023-06-24T00:00:00"
         }
       ]
@@ -2027,27 +1499,11 @@
       "day": "2023-06-24",
       "outputs": [
         {
-          "taskid": 181,
+          "taskid": 115,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-24T00:00:00",
-          "deadline": "2023-06-24T05:00:00"
-        },
-        {
-          "taskid": 182,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-24T05:00:00",
-          "deadline": "2023-06-24T06:00:00"
-        },
-        {
-          "taskid": 183,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-24T06:00:00",
           "deadline": "2023-06-25T00:00:00"
         }
       ]
@@ -2056,7 +1512,7 @@
       "day": "2023-06-25",
       "outputs": [
         {
-          "taskid": 184,
+          "taskid": 116,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2069,7 +1525,7 @@
       "day": "2023-06-26",
       "outputs": [
         {
-          "taskid": 185,
+          "taskid": 117,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2082,7 +1538,7 @@
       "day": "2023-06-27",
       "outputs": [
         {
-          "taskid": 186,
+          "taskid": 118,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2095,7 +1551,7 @@
       "day": "2023-06-28",
       "outputs": [
         {
-          "taskid": 187,
+          "taskid": 119,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2108,7 +1564,7 @@
       "day": "2023-06-29",
       "outputs": [
         {
-          "taskid": 188,
+          "taskid": 120,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2121,27 +1577,11 @@
       "day": "2023-06-30",
       "outputs": [
         {
-          "taskid": 189,
+          "taskid": 121,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-06-30T00:00:00",
-          "deadline": "2023-06-30T05:00:00"
-        },
-        {
-          "taskid": 190,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-06-30T05:00:00",
-          "deadline": "2023-06-30T06:00:00"
-        },
-        {
-          "taskid": 191,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-06-30T06:00:00",
           "deadline": "2023-07-01T00:00:00"
         }
       ]
@@ -2150,27 +1590,11 @@
       "day": "2023-07-01",
       "outputs": [
         {
-          "taskid": 192,
+          "taskid": 122,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-07-01T00:00:00",
-          "deadline": "2023-07-01T05:00:00"
-        },
-        {
-          "taskid": 193,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-07-01T05:00:00",
-          "deadline": "2023-07-01T06:00:00"
-        },
-        {
-          "taskid": 194,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-07-01T06:00:00",
           "deadline": "2023-07-02T00:00:00"
         }
       ]
@@ -2179,7 +1603,7 @@
       "day": "2023-07-02",
       "outputs": [
         {
-          "taskid": 195,
+          "taskid": 123,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2192,7 +1616,7 @@
       "day": "2023-07-03",
       "outputs": [
         {
-          "taskid": 196,
+          "taskid": 124,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2205,7 +1629,7 @@
       "day": "2023-07-04",
       "outputs": [
         {
-          "taskid": 197,
+          "taskid": 125,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2218,7 +1642,7 @@
       "day": "2023-07-05",
       "outputs": [
         {
-          "taskid": 198,
+          "taskid": 126,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2231,7 +1655,7 @@
       "day": "2023-07-06",
       "outputs": [
         {
-          "taskid": 199,
+          "taskid": 127,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2244,27 +1668,11 @@
       "day": "2023-07-07",
       "outputs": [
         {
-          "taskid": 200,
+          "taskid": 128,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-07-07T00:00:00",
-          "deadline": "2023-07-07T05:00:00"
-        },
-        {
-          "taskid": 201,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-07-07T05:00:00",
-          "deadline": "2023-07-07T06:00:00"
-        },
-        {
-          "taskid": 202,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-07-07T06:00:00",
           "deadline": "2023-07-08T00:00:00"
         }
       ]
@@ -2273,27 +1681,11 @@
       "day": "2023-07-08",
       "outputs": [
         {
-          "taskid": 203,
+          "taskid": 129,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-07-08T00:00:00",
-          "deadline": "2023-07-08T05:00:00"
-        },
-        {
-          "taskid": 204,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-07-08T05:00:00",
-          "deadline": "2023-07-08T06:00:00"
-        },
-        {
-          "taskid": 205,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-07-08T06:00:00",
           "deadline": "2023-07-09T00:00:00"
         }
       ]
@@ -2302,7 +1694,7 @@
       "day": "2023-07-09",
       "outputs": [
         {
-          "taskid": 206,
+          "taskid": 130,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2315,7 +1707,7 @@
       "day": "2023-07-10",
       "outputs": [
         {
-          "taskid": 207,
+          "taskid": 131,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2328,7 +1720,7 @@
       "day": "2023-07-11",
       "outputs": [
         {
-          "taskid": 208,
+          "taskid": 132,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2341,7 +1733,7 @@
       "day": "2023-07-12",
       "outputs": [
         {
-          "taskid": 209,
+          "taskid": 133,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2354,7 +1746,7 @@
       "day": "2023-07-13",
       "outputs": [
         {
-          "taskid": 210,
+          "taskid": 134,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2367,27 +1759,11 @@
       "day": "2023-07-14",
       "outputs": [
         {
-          "taskid": 211,
+          "taskid": 135,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-07-14T00:00:00",
-          "deadline": "2023-07-14T05:00:00"
-        },
-        {
-          "taskid": 212,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-07-14T05:00:00",
-          "deadline": "2023-07-14T06:00:00"
-        },
-        {
-          "taskid": 213,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-07-14T06:00:00",
           "deadline": "2023-07-15T00:00:00"
         }
       ]
@@ -2396,27 +1772,11 @@
       "day": "2023-07-15",
       "outputs": [
         {
-          "taskid": 214,
+          "taskid": 136,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 24,
           "start": "2023-07-15T00:00:00",
-          "deadline": "2023-07-15T05:00:00"
-        },
-        {
-          "taskid": 215,
-          "goalid": "1",
-          "title": "Rust project",
-          "duration": 1,
-          "start": "2023-07-15T05:00:00",
-          "deadline": "2023-07-15T06:00:00"
-        },
-        {
-          "taskid": 216,
-          "goalid": "free",
-          "title": "free",
-          "duration": 18,
-          "start": "2023-07-15T06:00:00",
           "deadline": "2023-07-16T00:00:00"
         }
       ]
@@ -2425,7 +1785,7 @@
       "day": "2023-07-16",
       "outputs": [
         {
-          "taskid": 217,
+          "taskid": 137,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2438,7 +1798,7 @@
       "day": "2023-07-17",
       "outputs": [
         {
-          "taskid": 218,
+          "taskid": 138,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2451,7 +1811,7 @@
       "day": "2023-07-18",
       "outputs": [
         {
-          "taskid": 219,
+          "taskid": 139,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2464,7 +1824,7 @@
       "day": "2023-07-19",
       "outputs": [
         {
-          "taskid": 220,
+          "taskid": 140,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -2477,7 +1837,16 @@
   "impossible": [
     {
       "day": "2023-03-01",
-      "outputs": []
+      "outputs": [
+        {
+          "taskid": 141,
+          "goalid": "1",
+          "title": "Rust project",
+          "duration": 40,
+          "start": "2023-03-01T00:00:00",
+          "deadline": "2023-07-20T00:00:00"
+        }
+      ]
     },
     {
       "day": "2023-03-02",
