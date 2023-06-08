@@ -142,4 +142,8 @@ IDEA: This is to uniform location for notes related to similar bugs/concepts/iss
     - Task::remove_taken_slots(&mut self, s: Slot)
     - Timeline::remove_slots(&mut self, slots_to_remove: Vec<Slot>)
 
+# 2023-06-07
+- For filter_timing, "sleep" task in bug_215, on the last slot it consider few hours
+more out of deadline than it should.
+
 */
