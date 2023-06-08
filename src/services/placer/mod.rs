@@ -197,7 +197,7 @@ mod tests {
 
     /// Simulating test case bug_215 when coming to the function `task_placer`
     #[test]
-    #[ignore]
+    // #[ignore]
     fn test_task_placer_to_simulate_bug_215() {
         /*
         TODO 2023-06-05  | Debug notes
@@ -205,7 +205,9 @@ mod tests {
         - For task: "water the plants indoors", correct flexiblity is 14 but it is calculated as 34.
             - FIXME 2023-06-06 | For task: "water the plants indoors", it added slots out of budget. It is noticed inside funciton `schedule`, after function `tasks_to_place.sort_on_flexibility()` and before calling function `find_best_slots`
         - For task: "sleep", correct flexibility is 19 but it is calculated as 22.
-        - Task::mock function should support customize fields "start" and "deadline".
+
+        # 2023-06-08
+        - Tasks after function `task_placer` have inaccurate fields "id" and "goal_id"
         */
 
         let calendar_timing = Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0);
@@ -321,7 +323,7 @@ mod tests {
                     Slot::mock(Duration::hours(10), 2023, 01, 06, 22, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 07, 22, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 08, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 09, 22, 0),
+                    Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
                 ],
             ),
         ];
@@ -343,61 +345,69 @@ mod tests {
         dbg!(&tasks_to_place);
 
         let expected_tasks: Vec<Task> = vec![
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "me time",
                 1,
                 168,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 09, 0)],
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 09, 0),
             ),
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "walk",
                 1,
                 42,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 14, 0)],
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 14, 0),
             ),
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "dinner",
                 1,
                 21,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 18, 0)],
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 18, 0),
             ),
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "breakfast",
                 1,
                 21,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 08, 0)],
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 08, 0),
             ),
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "sleep",
                 8,
                 19,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0)],
+                Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
             ),
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "water the plants indoors",
                 1,
                 14,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 4, 1, 0)],
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 4, 1, 0),
             ),
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "lunch",
                 1,
                 14,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 12, 0)],
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 12, 0),
             ),
-            Task::mock(
+            Task::mock_scheduled(
+                9,
+                "1",
                 "hurdle",
                 2,
                 7,
-                TaskStatus::ReadyToSchedule,
-                vec![Slot::mock(chrono::Duration::hours(2), 2023, 1, 5, 1, 0)],
+                Slot::mock(chrono::Duration::hours(2), 2023, 1, 5, 1, 0),
             ),
         ];
 
