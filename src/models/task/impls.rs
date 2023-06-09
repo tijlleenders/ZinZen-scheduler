@@ -1,4 +1,4 @@
-use super::{NewTask, Task, TaskStatus};
+ruse super::{NewTask, Task, TaskStatus};
 use crate::{
     errors::Error,
     models::{
@@ -150,45 +150,74 @@ impl Task {
         Ok(tasks)
     }
 
-    pub fn remove_slot(&mut self, s: Slot) {
-        // Todo 2023-06-08: develop a rule when chosen_slot > task.slot,
-        //which will not removed from task.slot
-
+    pub fn remove_slot(&mut self, slot_to_remove: Slot) {
+        /*
+        Todo 2023-06-08: develop a rule when chosen_slot > task.slot,
+        which will not removed from task.slot
+        
+        ===
+        DEBUG NOTES | 2023-06-09:
+        - Using Timeline::remove_slots cause the same results for current function implementation which both based on Slot Sub trait implementation.
+        - This function have differnet rule as below:
+            - If slot_to_remove > task_slot and task_slot contained in slot_to_remove, so remove task_slot  
+        ===
+        
+        */
         //Todo: duplicate of remove_taken_slots?
         if self.status == TaskStatus::Scheduled {
             return;
         }
 
-        let mut new_slots = Vec::new();
-        for slot in &mut self.slots {
-            new_slots.extend(*slot - s);
+        dbg!(&self.slots, &slot_to_remove);
+        
+        let mut slots_after_filter = Vec::new();
+        for task_slot in &mut self.slots {
+            dbg!(&slot_to_remove, &task_slot);
+
+            let subtracted_slot = *task_slot - slot_to_remove;
+            dbg!(&subtracted_slot);
+            slots_after_filter.extend(subtracted_slot);
+            dbg!(&slots_after_filter);
         }
-        self.slots = new_slots;
-        if self.status == TaskStatus::Blocked {
-            Self::remove_taken_slots(self, s);
-        }
+        dbg!(&self.slots);
+        self.slots = slots_after_filter;
+        dbg!(&self.slots);
+        // =====
+
+        /*
+        Todo 2023-06-08:
+        - create a test case and avoid using remove_taken_slots or btter approach.
+        Todo 2023-06-09:
+        - removed calling Task::remove_taken_slots in case TaskStatus is Blocked
+        becasue it is not functional properly and need to be fixed.
+        */
 
         self.calculate_flexibility();
     }
 
-    pub fn remove_taken_slots(&mut self, s: Slot) {
-        let mut new_slots = Vec::new();
-        for slot in &mut self.slots {
-            if slot.start >= s.end {
-                new_slots.push(*slot);
+    pub fn remove_taken_slots(&mut self, slot_to_remove: Slot) {
+        // TODO 2023-06-09  | This function is not accurate which need to be fixed and create test cases.
+        let mut slots_after_filter = Vec::new();
+        for task_slot in &mut self.slots {
+            dbg!(&task_slot, &slot_to_remove);
+            if task_slot.start >= slot_to_remove.end {
+                slots_after_filter.push(*task_slot);
             }
-            if slot.end > s.end && slot.start < s.start {
-                slot.start = s.start;
-                new_slots.push(*slot);
+            if task_slot.end > slot_to_remove.end && task_slot.start < slot_to_remove.start {
+                task_slot.start = slot_to_remove.start;
+                slots_after_filter.push(*task_slot);
             }
-            if slot.end > s.end && slot.start >= s.start {
-                new_slots.push(*slot);
+            if task_slot.end > slot_to_remove.end && task_slot.start >= slot_to_remove.start {
+                slots_after_filter.push(*task_slot);
             }
-            if !(slot.end <= s.end && slot.start <= s.start) {
-                new_slots.push(*slot);
+            if !(task_slot.end <= slot_to_remove.end && task_slot.start <= slot_to_remove.start) {
+                slots_after_filter.push(*task_slot);
             }
+
+            dbg!(&slots_after_filter);
         }
-        self.slots = new_slots;
+        dbg!(&slots_after_filter);
+        self.slots = slots_after_filter;
     }
 
     pub fn remove_from_blocked_by(&mut self, _id_string: String) {
