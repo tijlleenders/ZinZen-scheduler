@@ -171,7 +171,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     }
     for task in tasks_to_place.tasks.iter_mut() {
         for slot in chosen_slots.iter() {
-            task.remove_slot(slot.to_owned());
+            task.remove_conflicted_slots(slot.to_owned());
         }
     }
     //Todo remove chosen_slots from TaskBudgets

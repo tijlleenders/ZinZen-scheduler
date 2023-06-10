@@ -1,4 +1,4 @@
-ruse super::{NewTask, Task, TaskStatus};
+use super::{NewTask, Task, TaskStatus};
 use crate::{
     errors::Error,
     models::{
@@ -150,31 +150,34 @@ impl Task {
         Ok(tasks)
     }
 
-    pub fn remove_slot(&mut self, slot_to_remove: Slot) {
+    /// Remove conflicted task slots with a given slot [slot_to_remove]
+    /// - Function will do nothing with Scheduled tasks
+    pub fn remove_conflicted_slots(&mut self, slot_to_remove: Slot) {
         /*
-        Todo 2023-06-08: develop a rule when chosen_slot > task.slot,
-        which will not removed from task.slot
-        
-        ===
-        DEBUG NOTES | 2023-06-09:
-        - Using Timeline::remove_slots cause the same results for current function implementation which both based on Slot Sub trait implementation.
-        - This function have differnet rule as below:
-            - If slot_to_remove > task_slot and task_slot contained in slot_to_remove, so remove task_slot  
-        ===
-        
+        TODO 2023-06-10: Add test case to guerntee not adding extra hours for the Task.slot
+        Todo: duplicate of remove_taken_slots? (NOTE: This todo need to be reviewed)
         */
-        //Todo: duplicate of remove_taken_slots?
         if self.status == TaskStatus::Scheduled {
             return;
         }
 
         dbg!(&self.slots, &slot_to_remove);
-        
-        let mut slots_after_filter = Vec::new();
-        for task_slot in &mut self.slots {
-            dbg!(&slot_to_remove, &task_slot);
 
-            let subtracted_slot = *task_slot - slot_to_remove;
+        let mut slots_after_filter = Vec::new();
+        for slot in &mut self.slots {
+            let task_slot = *slot;
+            dbg!(&slot_to_remove, &task_slot);
+            // Business rule:
+            // If slot_to_remove > task_slot AND
+            //  task_slot contained in slot_to_remove,
+            // so remove task_slot
+            if slot_to_remove.duration_as_hours() > task_slot.duration_as_hours() {
+                if slot_to_remove.is_contains_slot(&task_slot) {
+                    continue;
+                }
+            }
+
+            let subtracted_slot = task_slot - slot_to_remove;
             dbg!(&subtracted_slot);
             slots_after_filter.extend(subtracted_slot);
             dbg!(&slots_after_filter);
@@ -236,5 +239,112 @@ impl Task {
         //         self.after_goals = Some(ids);
         //     }
         // }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    mod remove_conflicted_slots {
+        use crate::models::{
+            slot::Slot,
+            task::{Task, TaskStatus},
+        };
+        use chrono::Duration;
+
+        /// Testing edge case in bug_215 which slot_to_remove
+        /// is bigger than task_slot and task_slot is contained in slot_to_remove
+        ///
+        /// ```
+        /// # "chosen_slot" to be removed from all tasks:
+        /// slot_to_remove: 2023-01-03 00 to 08 (8 hours)
+        /// # "task_slot" which has less duration than chosen_slot but not removed
+        /// task_slot: 2023-01-03 01 to 03 (2 hour)
+        /// # Also slot_to_remove contains task_slot
+        ///
+        /// # Output should be:
+        /// task.slots.len(): 0
+        /// ```
+        #[test]
+        fn test_intersected_bigger_slot() {
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let mut task = Task::mock(
+                "test",
+                1,
+                12,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0)],
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+
+            assert_eq!(task.slots.len(), 0);
+        }
+
+        #[test]
+        fn test_task_is_scheduled() {
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let mut task = Task::mock_scheduled(
+                1,
+                "1",
+                "test",
+                1,
+                12,
+                Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0),
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+            let task_after_remove = task.clone();
+
+            assert_eq!(task_after_remove, task);
+        }
+
+        /// Test non intersected task's slots with a given slot (slot_to_remove)
+        /// which returns the same task_slot
+        #[test]
+        fn test_nonintersected_slot() {
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let task_slot = Slot::mock(Duration::hours(10), 2023, 01, 04, 1, 0);
+            let mut task = Task::mock(
+                "test",
+                1,
+                12,
+                TaskStatus::ReadyToSchedule,
+                vec![task_slot.clone()],
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+
+            assert_eq!(task.slots[0], task_slot);
+        }
+
+        /// Testing normal case which removing conflicted task's slots with
+        /// slot_to_remove
+        /// ```
+        /// slot_to_remove: 2023-01-03 00 to 03 (3 hours)
+        ///
+        /// task_slot: 2023-01-03 01 to 11 (10 hour)
+        ///
+        /// Expected:
+        /// task_slot: 2023-01-03 03 to 11 (8 hour)
+        /// ```
+        #[test]
+        fn test_normal() {
+            let slot_to_remove = Slot::mock(Duration::hours(3), 2023, 01, 03, 0, 0);
+            let task_slot = Slot::mock(Duration::hours(10), 2023, 01, 03, 1, 0);
+            let mut task = Task::mock(
+                "test",
+                1,
+                12,
+                TaskStatus::ReadyToSchedule,
+                vec![task_slot.clone()],
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+
+            let expected_task_slot = Slot::mock(Duration::hours(8), 2023, 01, 03, 3, 0);
+
+            assert_eq!(task.slots[0], expected_task_slot);
+        }
     }
 }
