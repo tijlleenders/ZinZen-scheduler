@@ -28,11 +28,8 @@ impl Sub for Slot {
             return result;
         }
         if rhs.start < self.start && rhs.end > self.end {
-            // If rhs completely encompasses self, then swap self and rhs,
-            //and subtract from each other
-            let swap_subtract = rhs - self;
-            result.extend(swap_subtract);
-            return result;
+            // If rhs completely encompasses self, then return empty list
+            return vec![];
         }
 
         if rhs.start > self.start {

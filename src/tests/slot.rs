@@ -5,19 +5,10 @@ use chrono::Duration;
 
 use crate::models::slot::Slot;
 
+/// Test if subtracting few hours from full day (or more duration)
+/// - Expexted to return empty list
 #[test]
 fn test_subtract_few_hours_from_fullday() {
-    /*
-    slot_few_hours = Slot {
-        start: 2022-01-02T05:00:00,
-        end: 2022-01-02T15:00:00,
-    }
-    slot_full_day = Slot {
-        start: 2022-01-02T00:00:00,
-        end: 2022-01-03T00:00:00,
-    }
-    */
-
     let year = 2022;
     let month = 1;
     let day = 1;
@@ -25,10 +16,7 @@ fn test_subtract_few_hours_from_fullday() {
     let slot_few_hours = Slot::mock(Duration::hours(10), year, month, day, 5, 0);
     let slot_full_day = Slot::mock(Duration::days(1), year, month, day, 0, 0);
 
-    let expected_result: Vec<Slot> = vec![
-        Slot::mock(Duration::hours(5), year, month, day, 0, 0),
-        Slot::mock(Duration::hours(9), year, month, day, 15, 0),
-    ];
+    let expected_result: Vec<Slot> = vec![];
     dbg!(&expected_result);
 
     let result = slot_few_hours - slot_full_day;
