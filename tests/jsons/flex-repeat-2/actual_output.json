@@ -1602,9 +1602,9 @@
         },
         {
           "taskid": 180,
-          "goalid": "2",
-          "title": "sleep",
-          "duration": 10,
+          "goalid": "3",
+          "title": "work",
+          "duration": 9,
           "start": "2022-10-01T00:00:00",
           "deadline": "2022-11-01T00:00:00"
         },
@@ -1634,14 +1634,6 @@
         },
         {
           "taskid": 184,
-          "goalid": "3",
-          "title": "work",
-          "duration": 9,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-11-01T00:00:00"
-        },
-        {
-          "taskid": 185,
           "goalid": "3",
           "title": "work",
           "duration": 9,
