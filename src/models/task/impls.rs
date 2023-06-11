@@ -167,18 +167,10 @@ impl Task {
         for slot in &mut self.slots {
             let task_slot = *slot;
             dbg!(&slot_to_remove, &task_slot);
-            // Business rule:
-            // If slot_to_remove > task_slot AND
-            //  task_slot contained in slot_to_remove,
-            // so remove task_slot
-            if slot_to_remove.duration_as_hours() > task_slot.duration_as_hours() {
-                if slot_to_remove.is_contains_slot(&task_slot) {
-                    continue;
-                }
-            }
 
             let subtracted_slot = task_slot - slot_to_remove;
             dbg!(&subtracted_slot);
+
             slots_after_filter.extend(subtracted_slot);
             dbg!(&slots_after_filter);
         }
