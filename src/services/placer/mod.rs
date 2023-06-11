@@ -169,6 +169,18 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         template_task.deadline = Some(slot.end);
         tasks_to_place.tasks.push(template_task.clone());
     }
+    /*
+    Todo 2023-06-11: Fix below functionality:
+    Currently:
+    - It loop over all tasks then remove conflicted slots in all chosen_slots; that is why it is removing unconflicted slots like case.
+
+    Correct is:
+    - loop over chosen_slots, then loop over tasks for each chosen_slot, if a chosen_slot not conflicted with all slots in a tasks, break the loop and don't continue check another chosen_slot.
+
+    Example: Case bug_215, when first_task is Sleep and chosen_slot is:
+        Slot: 2023-01-03 22 to 2023-01-04 06
+        task: water, Slot: 2023-01-04 01 to 03
+    */
     for task in tasks_to_place.tasks.iter_mut() {
         for slot in chosen_slots.iter() {
             task.remove_conflicted_slots(slot.to_owned());
