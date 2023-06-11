@@ -21,10 +21,18 @@
         },
         {
           "taskid": 2,
+          "goalid": "2",
+          "title": "shopping",
+          "duration": 1,
+          "start": "2022-09-01T16:00:00",
+          "deadline": "2022-09-01T17:00:00"
+        },
+        {
+          "taskid": 3,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2022-09-01T16:00:00",
+          "duration": 7,
+          "start": "2022-09-01T17:00:00",
           "deadline": "2022-09-02T00:00:00"
         }
       ]
@@ -34,14 +42,6 @@
     {
       "day": "2022-09-01",
       "outputs": [
-        {
-          "taskid": 3,
-          "goalid": "2",
-          "title": "shopping",
-          "duration": 1,
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-09-02T00:00:00"
-        },
         {
           "taskid": 4,
           "goalid": "3",

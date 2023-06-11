@@ -93,26 +93,18 @@
         },
         {
           "taskid": 11,
-          "goalid": "free",
-          "title": "free",
+          "goalid": "6",
+          "title": "read",
           "duration": 1,
           "start": "2022-01-01T20:00:00",
           "deadline": "2022-01-01T21:00:00"
         },
         {
           "taskid": 12,
-          "goalid": "6",
-          "title": "read",
-          "duration": 1,
-          "start": "2022-01-01T21:00:00",
-          "deadline": "2022-01-01T22:00:00"
-        },
-        {
-          "taskid": 13,
           "goalid": "free",
           "title": "free",
-          "duration": 2,
-          "start": "2022-01-01T22:00:00",
+          "duration": 3,
+          "start": "2022-01-01T21:00:00",
           "deadline": "2022-01-02T00:00:00"
         }
       ]
