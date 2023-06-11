@@ -110,8 +110,6 @@ impl Timeline {
         }
     }
 
-    pub fn remove_slots_by_timing() {}
-
     /// Remove list of slots from timeline
     pub fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) {
         dbg!(&self);

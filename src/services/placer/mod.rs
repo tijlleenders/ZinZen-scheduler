@@ -139,9 +139,10 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     - think to initialize `template_task.duration` to remaining_hours
     - create a function to initialize scheduled task to minimize effort and clean code
     - for code `template_task.id`, make it realistic numbering. Idea to create function inside Task to generate a new number which not duplicated with current list of tasks
-    - 2023-06-04  | for code `template_task.id += 1;`, have issue which multiple tasks with the same id
+    - Todo 2023-06-04  | for code `template_task.id += 1;`, have issue which multiple tasks with the same id
     - for code `for slot in chosen_slots.iter()`, just make it function and call it
 
+    Todo 2023-06-11: Need to refactor this function to be testable
     */
 
     let mut remaining_hours = tasks_to_place.tasks[0].duration;
@@ -169,11 +170,12 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         template_task.deadline = Some(slot.end);
         tasks_to_place.tasks.push(template_task.clone());
     }
+
+    let chosen_slot = chosen_slots[0];
     for task in tasks_to_place.tasks.iter_mut() {
-        for slot in chosen_slots.iter() {
-            task.remove_slot(slot.to_owned());
-        }
+        task.remove_conflicted_slots(chosen_slot.to_owned());
     }
+
     //Todo remove chosen_slots from TaskBudgets
     if remaining_hours > 0 {
         tasks_to_place.tasks[0].duration = remaining_hours;

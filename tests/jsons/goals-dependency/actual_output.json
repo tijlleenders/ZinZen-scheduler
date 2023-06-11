@@ -44,8 +44,24 @@
           "taskid": 4,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 8,
           "start": "2018-01-02T00:00:00",
+          "deadline": "2018-01-02T08:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "2",
+          "title": "program a ZinZen app in rust",
+          "duration": 8,
+          "start": "2018-01-02T08:00:00",
+          "deadline": "2018-01-02T16:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-01-02T16:00:00",
           "deadline": "2018-01-03T00:00:00"
         }
       ]
@@ -54,7 +70,7 @@
       "day": "2018-01-03",
       "outputs": [
         {
-          "taskid": 5,
+          "taskid": 7,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -62,15 +78,15 @@
           "deadline": "2018-01-03T08:00:00"
         },
         {
-          "taskid": 6,
-          "goalid": "2",
-          "title": "program a ZinZen app in rust",
+          "taskid": 8,
+          "goalid": "3",
+          "title": "learn rust programming",
           "duration": 8,
           "start": "2018-01-03T08:00:00",
           "deadline": "2018-01-03T16:00:00"
         },
         {
-          "taskid": 7,
+          "taskid": 9,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -83,7 +99,7 @@
       "day": "2018-01-04",
       "outputs": [
         {
-          "taskid": 8,
+          "taskid": 10,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -96,7 +112,7 @@
       "day": "2018-01-05",
       "outputs": [
         {
-          "taskid": 9,
+          "taskid": 11,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -109,16 +125,7 @@
   "impossible": [
     {
       "day": "2018-01-01",
-      "outputs": [
-        {
-          "taskid": 10,
-          "goalid": "3",
-          "title": "learn rust programming",
-          "duration": 8,
-          "start": "2018-01-01T00:00:00",
-          "deadline": "2018-01-06T00:00:00"
-        }
-      ]
+      "outputs": []
     },
     {
       "day": "2018-01-02",

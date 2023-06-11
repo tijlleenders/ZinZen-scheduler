@@ -150,45 +150,69 @@ impl Task {
         Ok(tasks)
     }
 
-    pub fn remove_slot(&mut self, s: Slot) {
-        // Todo 2023-06-08: develop a rule when chosen_slot > task.slot,
-        //which will not removed from task.slot
-
-        //Todo: duplicate of remove_taken_slots?
+    /// Remove conflicted task slots with a given slot [slot_to_remove]
+    /// - Function will do nothing with Scheduled tasks
+    pub fn remove_conflicted_slots(&mut self, slot_to_remove: Slot) {
+        /*
+        TODO 2023-06-10: Add test case to guerntee not adding extra hours for the Task.slot
+        Todo: duplicate of remove_taken_slots? (NOTE: This todo need to be reviewed)
+        */
         if self.status == TaskStatus::Scheduled {
             return;
         }
 
-        let mut new_slots = Vec::new();
+        dbg!(&self.slots, &slot_to_remove);
+
+        let mut slots_after_filter = Vec::new();
         for slot in &mut self.slots {
-            new_slots.extend(*slot - s);
+            let task_slot = *slot;
+            dbg!(&slot_to_remove, &task_slot);
+
+            let subtracted_slot = task_slot - slot_to_remove;
+            dbg!(&subtracted_slot);
+
+            slots_after_filter.extend(subtracted_slot);
+            dbg!(&slots_after_filter);
         }
-        self.slots = new_slots;
-        if self.status == TaskStatus::Blocked {
-            Self::remove_taken_slots(self, s);
-        }
+        dbg!(&self.slots);
+        self.slots = slots_after_filter;
+        dbg!(&self.slots);
+        // =====
+
+        /*
+        Todo 2023-06-08:
+        - create a test case and avoid using remove_taken_slots or btter approach.
+        Todo 2023-06-09:
+        - removed calling Task::remove_taken_slots in case TaskStatus is Blocked
+        becasue it is not functional properly and need to be fixed.
+        */
 
         self.calculate_flexibility();
     }
 
-    pub fn remove_taken_slots(&mut self, s: Slot) {
-        let mut new_slots = Vec::new();
-        for slot in &mut self.slots {
-            if slot.start >= s.end {
-                new_slots.push(*slot);
+    pub fn remove_taken_slots(&mut self, slot_to_remove: Slot) {
+        // TODO 2023-06-09  | This function is not accurate which need to be fixed and create test cases.
+        let mut slots_after_filter = Vec::new();
+        for task_slot in &mut self.slots {
+            dbg!(&task_slot, &slot_to_remove);
+            if task_slot.start >= slot_to_remove.end {
+                slots_after_filter.push(*task_slot);
             }
-            if slot.end > s.end && slot.start < s.start {
-                slot.start = s.start;
-                new_slots.push(*slot);
+            if task_slot.end > slot_to_remove.end && task_slot.start < slot_to_remove.start {
+                task_slot.start = slot_to_remove.start;
+                slots_after_filter.push(*task_slot);
             }
-            if slot.end > s.end && slot.start >= s.start {
-                new_slots.push(*slot);
+            if task_slot.end > slot_to_remove.end && task_slot.start >= slot_to_remove.start {
+                slots_after_filter.push(*task_slot);
             }
-            if !(slot.end <= s.end && slot.start <= s.start) {
-                new_slots.push(*slot);
+            if !(task_slot.end <= slot_to_remove.end && task_slot.start <= slot_to_remove.start) {
+                slots_after_filter.push(*task_slot);
             }
+
+            dbg!(&slots_after_filter);
         }
-        self.slots = new_slots;
+        dbg!(&slots_after_filter);
+        self.slots = slots_after_filter;
     }
 
     pub fn remove_from_blocked_by(&mut self, _id_string: String) {
@@ -207,5 +231,112 @@ impl Task {
         //         self.after_goals = Some(ids);
         //     }
         // }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    mod remove_conflicted_slots {
+        use crate::models::{
+            slot::Slot,
+            task::{Task, TaskStatus},
+        };
+        use chrono::Duration;
+
+        /// Testing edge case in bug_215 which slot_to_remove
+        /// is bigger than task_slot and task_slot is contained in slot_to_remove
+        ///
+        /// ```
+        /// # "chosen_slot" to be removed from all tasks:
+        /// slot_to_remove: 2023-01-03 00 to 08 (8 hours)
+        /// # "task_slot" which has less duration than chosen_slot but not removed
+        /// task_slot: 2023-01-03 01 to 03 (2 hour)
+        /// # Also slot_to_remove contains task_slot
+        ///
+        /// # Output should be:
+        /// task.slots.len(): 0
+        /// ```
+        #[test]
+        fn test_intersected_bigger_slot() {
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let mut task = Task::mock(
+                "test",
+                1,
+                12,
+                TaskStatus::ReadyToSchedule,
+                vec![Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0)],
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+
+            assert_eq!(task.slots.len(), 0);
+        }
+
+        #[test]
+        fn test_task_is_scheduled() {
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let mut task = Task::mock_scheduled(
+                1,
+                "1",
+                "test",
+                1,
+                12,
+                Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0),
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+            let task_after_remove = task.clone();
+
+            assert_eq!(task_after_remove, task);
+        }
+
+        /// Test non intersected task's slots with a given slot (slot_to_remove)
+        /// which returns the same task_slot
+        #[test]
+        fn test_nonintersected_slot() {
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let task_slot = Slot::mock(Duration::hours(10), 2023, 01, 04, 1, 0);
+            let mut task = Task::mock(
+                "test",
+                1,
+                12,
+                TaskStatus::ReadyToSchedule,
+                vec![task_slot.clone()],
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+
+            assert_eq!(task.slots[0], task_slot);
+        }
+
+        /// Testing normal case which removing conflicted task's slots with
+        /// slot_to_remove
+        /// ```
+        /// slot_to_remove: 2023-01-03 00 to 03 (3 hours)
+        ///
+        /// task_slot: 2023-01-03 01 to 11 (10 hour)
+        ///
+        /// Expected:
+        /// task_slot: 2023-01-03 03 to 11 (8 hour)
+        /// ```
+        #[test]
+        fn test_normal() {
+            let slot_to_remove = Slot::mock(Duration::hours(3), 2023, 01, 03, 0, 0);
+            let task_slot = Slot::mock(Duration::hours(10), 2023, 01, 03, 1, 0);
+            let mut task = Task::mock(
+                "test",
+                1,
+                12,
+                TaskStatus::ReadyToSchedule,
+                vec![task_slot.clone()],
+            );
+
+            task.remove_conflicted_slots(slot_to_remove);
+
+            let expected_task_slot = Slot::mock(Duration::hours(8), 2023, 01, 03, 3, 0);
+
+            assert_eq!(task.slots[0], expected_task_slot);
+        }
     }
 }

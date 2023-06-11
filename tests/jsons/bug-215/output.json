@@ -97,7 +97,7 @@
           "deadline": "2023-01-04T01:00:00"
         },
         {
-          "taskid": 15,
+          "taskid": 11,
           "goalid": "8",
           "title": "water the plants indoors",
           "duration": 1,
@@ -105,7 +105,7 @@
           "deadline": "2023-01-04T02:00:00"
         },
         {
-          "taskid": 16,
+          "taskid": 12,
           "goalid": "free",
           "title": "free",
           "duration": 22,
@@ -118,11 +118,27 @@
       "day": "2023-01-05",
       "outputs": [
         {
-          "taskid": 17,
+          "taskid": 13,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 1,
           "start": "2023-01-05T00:00:00",
+          "deadline": "2023-01-05T01:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "2",
+          "title": "hurdle",
+          "duration": 2,
+          "start": "2023-01-05T01:00:00",
+          "deadline": "2023-01-05T03:00:00"
+        },
+        {
+          "taskid": 15,
+          "goalid": "free",
+          "title": "free",
+          "duration": 21,
+          "start": "2023-01-05T03:00:00",
           "deadline": "2023-01-06T00:00:00"
         }
       ]
@@ -131,7 +147,7 @@
       "day": "2023-01-06",
       "outputs": [
         {
-          "taskid": 18,
+          "taskid": 16,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -144,7 +160,7 @@
       "day": "2023-01-07",
       "outputs": [
         {
-          "taskid": 19,
+          "taskid": 17,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -157,7 +173,7 @@
       "day": "2023-01-08",
       "outputs": [
         {
-          "taskid": 20,
+          "taskid": 18,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -170,7 +186,7 @@
       "day": "2023-01-09",
       "outputs": [
         {
-          "taskid": 21,
+          "taskid": 19,
           "goalid": "free",
           "title": "free",
           "duration": 24,

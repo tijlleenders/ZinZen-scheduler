@@ -538,14 +538,6 @@
           "duration": 8,
           "start": "2022-10-01T00:00:00",
           "deadline": "2022-10-15T00:00:00"
-        },
-        {
-          "taskid": 58,
-          "goalid": "3",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
         }
       ]
     },
