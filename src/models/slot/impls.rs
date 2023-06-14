@@ -2,15 +2,8 @@ use super::Slot;
 use chrono::{Days, NaiveDateTime, Timelike};
 use std::{
     cmp::{max, min},
-    fmt::Display,
     ops::{Add, Sub},
 };
-
-impl Display for Slot {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Slot - start: {} - end: {}", self.start, self.end)
-    }
-}
 
 impl Sub for Slot {
     type Output = Vec<Slot>;
