@@ -11,16 +11,20 @@ pub fn get_start_of_repeat_step(
     let mut result = *current_date_time;
     // dbg!(&result);
     match repeat {
-        Repetition::DAILY(_) => result
-            .checked_add_days(Days::new(1))
-            .unwrap()
-            .with_hour(0)
-            .unwrap()
-            .with_minute(0)
-            .unwrap()
-            .with_second(0)
-            .unwrap(),
-
+        Repetition::DAILY(_) => {
+            dbg!(result);
+            result = result
+                .checked_add_days(Days::new(1))
+                .unwrap()
+                .with_hour(0)
+                .unwrap()
+                .with_minute(0)
+                .unwrap()
+                .with_second(0)
+                .unwrap();
+            dbg!(result);
+            result
+        }
         Repetition::HOURLY => result.checked_add_signed(Duration::hours(1)).unwrap(),
         Repetition::Weekly(_) => next_week(&mut result),
         Repetition::WEEKDAYS => {
