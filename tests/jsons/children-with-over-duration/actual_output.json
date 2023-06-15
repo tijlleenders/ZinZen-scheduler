@@ -1,0 +1,412 @@
+{
+  "scheduled": [
+    {
+      "day": "2018-03-05",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-05T08:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "5",
+          "title": "Write report",
+          "duration": 1,
+          "start": "2018-03-05T08:00:00",
+          "deadline": "2018-03-05T09:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "4",
+          "title": "Research",
+          "duration": 3,
+          "start": "2018-03-05T09:00:00",
+          "deadline": "2018-03-05T12:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2018-03-05T12:00:00",
+          "deadline": "2018-03-06T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-06",
+      "outputs": [
+        {
+          "taskid": 4,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-06T00:00:00",
+          "deadline": "2018-03-07T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-07",
+      "outputs": [
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-07T00:00:00",
+          "deadline": "2018-03-08T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-08",
+      "outputs": [
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-08T00:00:00",
+          "deadline": "2018-03-09T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-09",
+      "outputs": [
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-10T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-10",
+      "outputs": [
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-10T00:00:00",
+          "deadline": "2018-03-11T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-11",
+      "outputs": [
+        {
+          "taskid": 9,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-11T00:00:00",
+          "deadline": "2018-03-12T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-12",
+      "outputs": [
+        {
+          "taskid": 10,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-12T00:00:00",
+          "deadline": "2018-03-13T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-13",
+      "outputs": [
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-13T00:00:00",
+          "deadline": "2018-03-14T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-14",
+      "outputs": [
+        {
+          "taskid": 12,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-14T00:00:00",
+          "deadline": "2018-03-15T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-15",
+      "outputs": [
+        {
+          "taskid": 13,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-15T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-16",
+      "outputs": [
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-16T00:00:00",
+          "deadline": "2018-03-17T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-17",
+      "outputs": [
+        {
+          "taskid": 15,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-17T00:00:00",
+          "deadline": "2018-03-18T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-18",
+      "outputs": [
+        {
+          "taskid": 16,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-18T00:00:00",
+          "deadline": "2018-03-19T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-19",
+      "outputs": [
+        {
+          "taskid": 17,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-19T00:00:00",
+          "deadline": "2018-03-20T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-20",
+      "outputs": [
+        {
+          "taskid": 18,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-20T00:00:00",
+          "deadline": "2018-03-21T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-21",
+      "outputs": [
+        {
+          "taskid": 19,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-21T00:00:00",
+          "deadline": "2018-03-22T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-22",
+      "outputs": [
+        {
+          "taskid": 20,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-22T00:00:00",
+          "deadline": "2018-03-23T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-23",
+      "outputs": [
+        {
+          "taskid": 21,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-23T00:00:00",
+          "deadline": "2018-03-24T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-24",
+      "outputs": [
+        {
+          "taskid": 22,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-24T00:00:00",
+          "deadline": "2018-03-25T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-25",
+      "outputs": [
+        {
+          "taskid": 23,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-25T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2018-03-05",
+      "outputs": [
+        {
+          "taskid": 24,
+          "goalid": "1",
+          "title": "work",
+          "duration": 38,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 25,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 35,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 26,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 11,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-06",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-07",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-08",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-09",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-10",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-11",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-12",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-13",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-14",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-15",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-16",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-17",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-18",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-19",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-20",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-21",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-22",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-23",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-24",
+      "outputs": []
+    },
+    {
+      "day": "2018-03-25",
+      "outputs": []
+    }
+  ]
+}
