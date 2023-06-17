@@ -87,20 +87,24 @@ fn generate_flex_weekly_goals(goals: &mut GoalsMap) {
             //Flex repeat goals are handled as follows:
             //If given a goal with 3-5x/week, create 3 goals and 2 extra optional goals
             goal.repeat = Some(Repetition::Weekly(1));
-            for number in 1..min {
+
+            // Create repeated goals and optional repeated goals
+            for number in 1..max {
                 // 1.. because we're leaving the initial goal
                 let mut template_goal = goal.clone();
                 template_goal.id.push_str("-repeat-");
-                template_goal.id.push_str(&number.to_string());
-                generated_goals.insert(template_goal.id.clone(), template_goal);
-            }
-            // TODO 2023-06-17: here will decrease optional goal by one which differnet from theory
-            for number in min..max - 1 {
-                let mut template_goal = goal.clone();
-                template_goal.id.push_str("-repeat-opt-");
-                template_goal.id.push_str(&number.to_string());
-                template_goal.tags.push(Tag::Optional);
-                generated_goals.insert(template_goal.id.clone(), template_goal);
+
+                if number < min {
+                    // Repeated goal
+                    template_goal.id.push_str(&number.to_string());
+                    generated_goals.insert(template_goal.id.clone(), template_goal);
+                } else {
+                    // Optional repeated goal
+                    template_goal.id.push_str("opt-");
+                    template_goal.id.push_str(&number.to_string());
+                    template_goal.tags.push(Tag::Optional);
+                    generated_goals.insert(template_goal.id.clone(), template_goal);
+                }
             }
             generated_goals.insert(goal_id.to_owned(), goal.to_owned());
         }
@@ -173,7 +177,7 @@ mod tests {
 
         use crate::{
             models::{
-                goal::{Goal, GoalsMap},
+                goal::{Goal, GoalsMap, Tag},
                 repetition::Repetition,
                 slot::Slot,
             },
@@ -220,14 +224,16 @@ mod tests {
 
             let mut expected_goal_2 = expected_goal_1.clone();
             expected_goal_2.id = "1-repeat-opt-1".to_string();
+            expected_goal_2.tags.push(Tag::Optional);
 
-            let expected_goal_3 = expected_goal_1.clone();
+            let expected_goal_3 = expected_goal_2.clone();
             expected_goal_2.id = "1-repeat-opt-2".to_string();
 
             let mut expected_goals = GoalsMap::new();
             expected_goals.insert(expected_goal_1.id.clone(), expected_goal_1);
             expected_goals.insert(expected_goal_2.id.clone(), expected_goal_2);
             expected_goals.insert(expected_goal_3.id.clone(), expected_goal_3);
+
             dbg!(&expected_goals, &input_goals);
             assert_eq!(expected_goals, input_goals);
         }

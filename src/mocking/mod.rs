@@ -213,7 +213,7 @@ impl Goal {
 #[cfg(test)]
 mod tests {
 
-    mod Goal {
+    mod goal {
         use chrono::Duration;
 
         use crate::models::{goal::Goal, slot::Slot};
