@@ -1,6 +1,7 @@
 use chrono::{Duration, NaiveDate, NaiveDateTime};
 
 use crate::models::{
+    goal::Goal,
     slot::{iterator::SlotIterator, Slot},
     task::{Task, TaskStatus},
     timeline::Timeline,
@@ -173,9 +174,73 @@ impl Task {
     }
 }
 
+impl Goal {
+    /// Mock a basic Goal
+    /// ```markdown
+    /// Goal {
+    ///    id: id,
+    ///    title: title,
+    ///    min_duration: None,
+    ///    max_duration: None,
+    ///    budgets: None,
+    ///    repeat: None,
+    ///    start: None,
+    ///    deadline: None,
+    ///    tags: vec![],
+    ///    filters: None,
+    ///    children: None,
+    ///    after_goals: None,
+    /// }
+    /// ``
+    pub fn mock(id: &str, title: &str, goal_dates: Slot) -> Goal {
+        Goal {
+            id: id.to_string(),
+            title: title.to_string(),
+            min_duration: None,
+            max_duration: None,
+            budgets: None,
+            repeat: None,
+            start: Some(goal_dates.start),
+            deadline: Some(goal_dates.end),
+            tags: vec![],
+            filters: None,
+            children: None,
+            after_goals: None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
+    mod Goal {
+        use chrono::Duration;
+
+        use crate::models::{goal::Goal, slot::Slot};
+
+        #[test]
+        fn test_mock() {
+            let goal_dates = Slot::mock(Duration::days(15), 2023, 5, 1, 0, 0);
+            let goal = Goal::mock("1", "goal sample", goal_dates);
+
+            let expected_goal = Goal {
+                id: "1".to_string(),
+                title: "goal sample".to_string(),
+                min_duration: None,
+                max_duration: None,
+                budgets: None,
+                repeat: None,
+                start: Some(goal_dates.start),
+                deadline: Some(goal_dates.end),
+                tags: vec![],
+                filters: None,
+                children: None,
+                after_goals: None,
+            };
+
+            assert_eq!(goal, expected_goal);
+        }
+    }
     mod task {
         use chrono::Duration;
 
