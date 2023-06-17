@@ -162,3 +162,74 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
     }
     goals
 }
+
+// test
+#[cfg(test)]
+mod tests {
+    mod generate_flex_weekly_goals {
+        use std::collections::BTreeMap;
+
+        use chrono::Duration;
+
+        use crate::{
+            models::{
+                goal::{Goal, GoalsMap},
+                repetition::Repetition,
+                slot::Slot,
+            },
+            services::task_generator::generate_flex_weekly_goals,
+        };
+
+        /// Test generating flex weekly goals based on one task with 1-3/week
+        /// ```markdown
+        /// Input:
+        ///     Goal:
+        ///         title: side project
+        ///         min_duration: 8
+        ///         repeat: 1-3/week
+        ///
+        /// Output:
+        ///     Goal:
+        ///         id: 1-repeat-opt-1
+        ///         title: side project
+        ///         min_duration: 8
+        ///         repeat: 1/week
+        ///     Goal:
+        ///         id: 1-repeat-opt-2
+        ///         title: side project
+        ///         min_duration: 8
+        ///         repeat: 1/week
+        ///
+        /// ```
+        #[test]
+        fn test_single_goal() {
+            let goal_dates = Slot::mock(Duration::days(31), 2022, 10, 1, 0, 0);
+
+            let mut input_goal = Goal::mock("1", "side project", goal_dates);
+            input_goal.min_duration = Some(8);
+            input_goal.repeat = Some(Repetition::FlexWeekly(1, 3));
+
+            let mut input_goals: GoalsMap = BTreeMap::new();
+            input_goals.insert(input_goal.id.clone(), input_goal);
+
+            generate_flex_weekly_goals(&mut input_goals);
+
+            let mut expected_goal_1 = Goal::mock("1", "side project", goal_dates);
+            expected_goal_1.min_duration = Some(8);
+            expected_goal_1.repeat = Some(Repetition::Weekly(1));
+
+            let mut expected_goal_2 = expected_goal_1.clone();
+            expected_goal_2.id = "1-repeat-opt-1".to_string();
+
+            let expected_goal_3 = expected_goal_1.clone();
+            expected_goal_2.id = "1-repeat-opt-2".to_string();
+
+            let mut expected_goals = GoalsMap::new();
+            expected_goals.insert(expected_goal_1.id.clone(), expected_goal_1);
+            expected_goals.insert(expected_goal_2.id.clone(), expected_goal_2);
+            expected_goals.insert(expected_goal_3.id.clone(), expected_goal_3);
+            dbg!(&expected_goals, &input_goals);
+            assert_eq!(expected_goals, input_goals);
+        }
+    }
+}
