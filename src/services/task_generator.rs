@@ -58,8 +58,10 @@ fn manipulate_input_goals(input: Input) -> GoalsMap {
     let mut goals: GoalsMap = populate_goal_dates(goals, calendar_start, calendar_end);
 
     add_filler_goals(&mut goals);
-    add_optional_flex_duration_regular_goals(&mut goals); //TODO
-    add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
+
+    // TODO 2023-06-17: removed empty function until need it and develop it add_optional_flex_duration_regular_goals(&mut goals);
+
+    generate_flex_weekly_goals(&mut goals);
 
     goals
 }
@@ -76,32 +78,31 @@ fn populate_goal_dates(
     goals
 }
 
-fn add_optional_flex_duration_regular_goals(_goals: &mut GoalsMap) {
-    // TODO todo!();
-}
-
-fn add_optional_flex_number_and_duration_habits_goals(goals: &mut GoalsMap) {
+/// Generate new goals based on given goals' FlexWeekly repetition
+/// - Note: this function generating goals for goals with FlexWeekly repetition only
+fn generate_flex_weekly_goals(goals: &mut GoalsMap) {
     let mut generated_goals: GoalsMap = BTreeMap::new();
-    for goal in goals.iter_mut() {
-        if let Some(Repetition::FlexWeekly(min, max)) = goal.1.repeat {
+    for (goal_id, goal) in goals.iter_mut() {
+        if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
             //If given a goal with 3-5x/week, create 3 goals and 2 extra optional goals
-            goal.1.repeat = Some(Repetition::Weekly(1));
+            goal.repeat = Some(Repetition::Weekly(1));
             for number in 1..min {
                 // 1.. because we're leaving the initial goal
-                let mut template_goal = goal.1.clone();
+                let mut template_goal = goal.clone();
                 template_goal.id.push_str("-repeat-");
                 template_goal.id.push_str(&number.to_string());
                 generated_goals.insert(template_goal.id.clone(), template_goal);
             }
+            // TODO 2023-06-17: here will decrease optional goal by one which differnet from theory
             for number in min..max - 1 {
-                let mut template_goal = goal.1.clone();
+                let mut template_goal = goal.clone();
                 template_goal.id.push_str("-repeat-opt-");
                 template_goal.id.push_str(&number.to_string());
                 template_goal.tags.push(Tag::Optional);
                 generated_goals.insert(template_goal.id.clone(), template_goal);
             }
-            generated_goals.insert(goal.0.to_owned(), goal.1.to_owned());
+            generated_goals.insert(goal_id.to_owned(), goal.to_owned());
         }
     }
 
