@@ -1,0 +1,789 @@
+{
+  "scheduled": [
+    {
+      "day": "2022-10-01",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-01T00:00:00",
+          "deadline": "2022-10-01T13:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-01T13:00:00",
+          "deadline": "2022-10-01T14:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-01T14:00:00",
+          "deadline": "2022-10-02T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-02",
+      "outputs": [
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-02T00:00:00",
+          "deadline": "2022-10-03T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-03",
+      "outputs": [
+        {
+          "taskid": 4,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-03T00:00:00",
+          "deadline": "2022-10-03T13:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-03T13:00:00",
+          "deadline": "2022-10-03T14:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-03T14:00:00",
+          "deadline": "2022-10-04T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-04",
+      "outputs": [
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-04T00:00:00",
+          "deadline": "2022-10-05T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-05",
+      "outputs": [
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-05T00:00:00",
+          "deadline": "2022-10-05T13:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-05T13:00:00",
+          "deadline": "2022-10-05T14:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-05T14:00:00",
+          "deadline": "2022-10-06T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-06",
+      "outputs": [
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-06T00:00:00",
+          "deadline": "2022-10-07T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-07",
+      "outputs": [
+        {
+          "taskid": 12,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-07T00:00:00",
+          "deadline": "2022-10-07T13:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-07T13:00:00",
+          "deadline": "2022-10-07T14:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-07T14:00:00",
+          "deadline": "2022-10-08T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-08",
+      "outputs": [
+        {
+          "taskid": 15,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-08T00:00:00",
+          "deadline": "2022-10-09T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-09",
+      "outputs": [
+        {
+          "taskid": 16,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-09T00:00:00",
+          "deadline": "2022-10-09T13:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-09T13:00:00",
+          "deadline": "2022-10-09T14:00:00"
+        },
+        {
+          "taskid": 18,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-09T14:00:00",
+          "deadline": "2022-10-10T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-10",
+      "outputs": [
+        {
+          "taskid": 19,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-10T00:00:00",
+          "deadline": "2022-10-11T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-11",
+      "outputs": [
+        {
+          "taskid": 20,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-11T00:00:00",
+          "deadline": "2022-10-11T13:00:00"
+        },
+        {
+          "taskid": 21,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-11T13:00:00",
+          "deadline": "2022-10-11T14:00:00"
+        },
+        {
+          "taskid": 22,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-11T14:00:00",
+          "deadline": "2022-10-12T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-12",
+      "outputs": [
+        {
+          "taskid": 23,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-12T00:00:00",
+          "deadline": "2022-10-13T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-13",
+      "outputs": [
+        {
+          "taskid": 24,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-13T00:00:00",
+          "deadline": "2022-10-13T13:00:00"
+        },
+        {
+          "taskid": 25,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-13T13:00:00",
+          "deadline": "2022-10-13T14:00:00"
+        },
+        {
+          "taskid": 26,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-13T14:00:00",
+          "deadline": "2022-10-14T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-14",
+      "outputs": [
+        {
+          "taskid": 27,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-14T00:00:00",
+          "deadline": "2022-10-15T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-15",
+      "outputs": [
+        {
+          "taskid": 28,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-15T00:00:00",
+          "deadline": "2022-10-15T13:00:00"
+        },
+        {
+          "taskid": 29,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-15T13:00:00",
+          "deadline": "2022-10-15T14:00:00"
+        },
+        {
+          "taskid": 30,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-15T14:00:00",
+          "deadline": "2022-10-16T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-16",
+      "outputs": [
+        {
+          "taskid": 31,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-16T00:00:00",
+          "deadline": "2022-10-17T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-17",
+      "outputs": [
+        {
+          "taskid": 32,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-17T00:00:00",
+          "deadline": "2022-10-17T13:00:00"
+        },
+        {
+          "taskid": 33,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-17T13:00:00",
+          "deadline": "2022-10-17T14:00:00"
+        },
+        {
+          "taskid": 34,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-17T14:00:00",
+          "deadline": "2022-10-18T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-18",
+      "outputs": [
+        {
+          "taskid": 35,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-18T00:00:00",
+          "deadline": "2022-10-19T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-19",
+      "outputs": [
+        {
+          "taskid": 36,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-19T00:00:00",
+          "deadline": "2022-10-19T13:00:00"
+        },
+        {
+          "taskid": 37,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-19T13:00:00",
+          "deadline": "2022-10-19T14:00:00"
+        },
+        {
+          "taskid": 38,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-19T14:00:00",
+          "deadline": "2022-10-20T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-20",
+      "outputs": [
+        {
+          "taskid": 39,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-20T00:00:00",
+          "deadline": "2022-10-21T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-21",
+      "outputs": [
+        {
+          "taskid": 40,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-21T00:00:00",
+          "deadline": "2022-10-21T13:00:00"
+        },
+        {
+          "taskid": 41,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-21T13:00:00",
+          "deadline": "2022-10-21T14:00:00"
+        },
+        {
+          "taskid": 42,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-21T14:00:00",
+          "deadline": "2022-10-22T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-22",
+      "outputs": [
+        {
+          "taskid": 43,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-22T00:00:00",
+          "deadline": "2022-10-23T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-23",
+      "outputs": [
+        {
+          "taskid": 44,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-23T00:00:00",
+          "deadline": "2022-10-23T13:00:00"
+        },
+        {
+          "taskid": 45,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-23T13:00:00",
+          "deadline": "2022-10-23T14:00:00"
+        },
+        {
+          "taskid": 46,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-23T14:00:00",
+          "deadline": "2022-10-24T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-24",
+      "outputs": [
+        {
+          "taskid": 47,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-24T00:00:00",
+          "deadline": "2022-10-25T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-25",
+      "outputs": [
+        {
+          "taskid": 48,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-25T00:00:00",
+          "deadline": "2022-10-25T13:00:00"
+        },
+        {
+          "taskid": 49,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-25T13:00:00",
+          "deadline": "2022-10-25T14:00:00"
+        },
+        {
+          "taskid": 50,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-25T14:00:00",
+          "deadline": "2022-10-26T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-26",
+      "outputs": [
+        {
+          "taskid": 51,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-26T00:00:00",
+          "deadline": "2022-10-27T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-27",
+      "outputs": [
+        {
+          "taskid": 52,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-27T00:00:00",
+          "deadline": "2022-10-27T13:00:00"
+        },
+        {
+          "taskid": 53,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-27T13:00:00",
+          "deadline": "2022-10-27T14:00:00"
+        },
+        {
+          "taskid": 54,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-27T14:00:00",
+          "deadline": "2022-10-28T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-28",
+      "outputs": [
+        {
+          "taskid": 55,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-28T00:00:00",
+          "deadline": "2022-10-29T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-29",
+      "outputs": [
+        {
+          "taskid": 56,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-29T00:00:00",
+          "deadline": "2022-10-29T13:00:00"
+        },
+        {
+          "taskid": 57,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-29T13:00:00",
+          "deadline": "2022-10-29T14:00:00"
+        },
+        {
+          "taskid": 58,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-29T14:00:00",
+          "deadline": "2022-10-30T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-30",
+      "outputs": [
+        {
+          "taskid": 59,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-10-30T00:00:00",
+          "deadline": "2022-10-31T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-31",
+      "outputs": [
+        {
+          "taskid": 60,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-10-31T00:00:00",
+          "deadline": "2022-10-31T13:00:00"
+        },
+        {
+          "taskid": 61,
+          "goalid": "1",
+          "title": "check on friend",
+          "duration": 1,
+          "start": "2022-10-31T13:00:00",
+          "deadline": "2022-10-31T14:00:00"
+        },
+        {
+          "taskid": 62,
+          "goalid": "free",
+          "title": "free",
+          "duration": 10,
+          "start": "2022-10-31T14:00:00",
+          "deadline": "2022-11-01T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2022-10-01",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-02",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-03",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-04",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-05",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-06",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-07",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-08",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-09",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-10",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-11",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-12",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-13",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-14",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-15",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-16",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-17",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-18",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-19",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-20",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-21",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-22",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-23",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-24",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-25",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-26",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-27",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-28",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-29",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-30",
+      "outputs": []
+    },
+    {
+      "day": "2022-10-31",
+      "outputs": []
+    }
+  ]
+}

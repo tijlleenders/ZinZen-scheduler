@@ -70,8 +70,8 @@ use models::input::Input;
 use models::output::FinalOutput;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
+use services::placer::task_placer;
 use services::task_generator::generate_tasks_to_place;
-use services::task_placer::task_placer;
 use wasm_bindgen::prelude::*;
 
 mod errors;
@@ -118,9 +118,9 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalOutput {
     let tasks = generate_tasks_to_place(input);
-    dbg!(&tasks);
-    // _print_tasks(&tasks.tasks);
+
     let placed_tasks = task_placer(tasks);
+    dbg!(&placed_tasks);
     match output_formatter(placed_tasks) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
@@ -131,3 +131,19 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
         Ok(output) => output,
     }
 }
+
+/* TODO DEBUG NOTES
+
+IDEA: This is to uniform location for notes related to similar bugs/concepts/issues/ideas in many files or modules.
+
+# 2023-06-06
+- Found many functions achieve the same concept "remove slots" as below samples:
+    - Task::remove_slot(&mut self, s: Slot)
+    - Task::remove_taken_slots(&mut self, s: Slot)
+    - Timeline::remove_slots(&mut self, slots_to_remove: Vec<Slot>)
+
+# 2023-06-07
+- For filter_timing, "sleep" task in bug_215, on the last slot it consider few hours
+more out of deadline than it should.
+
+*/

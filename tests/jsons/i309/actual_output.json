@@ -1,0 +1,670 @@
+{
+  "scheduled": [
+    {
+      "day": "2023-05-10",
+      "outputs": [
+        {
+          "taskid": 0,
+          "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2023-05-10T00:00:00",
+          "deadline": "2023-05-10T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2023-05-10T06:00:00",
+          "deadline": "2023-05-10T07:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-10T07:00:00",
+          "deadline": "2023-05-10T09:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "900dfa10-6fe0-486c-af98-f160360f81b9",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2023-05-10T09:00:00",
+          "deadline": "2023-05-10T10:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-10T10:00:00",
+          "deadline": "2023-05-10T12:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+          "title": "Lunch 🥪",
+          "duration": 2,
+          "start": "2023-05-10T12:00:00",
+          "deadline": "2023-05-10T14:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2023-05-10T14:00:00",
+          "deadline": "2023-05-10T15:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2023-05-10T15:00:00",
+          "deadline": "2023-05-10T18:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2023-05-10T18:00:00",
+          "deadline": "2023-05-10T19:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-10T19:00:00",
+          "deadline": "2023-05-10T21:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "ebc34193-e5ff-4fc4-9dab-de6f29c3bf34",
+          "title": "Presentation",
+          "duration": 2,
+          "start": "2023-05-10T21:00:00",
+          "deadline": "2023-05-10T23:00:00"
+        },
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2023-05-10T23:00:00",
+          "deadline": "2023-05-11T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2023-05-11",
+      "outputs": [
+        {
+          "taskid": 12,
+          "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2023-05-11T00:00:00",
+          "deadline": "2023-05-11T06:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2023-05-11T06:00:00",
+          "deadline": "2023-05-11T07:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-11T07:00:00",
+          "deadline": "2023-05-11T09:00:00"
+        },
+        {
+          "taskid": 15,
+          "goalid": "900dfa10-6fe0-486c-af98-f160360f81b9",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2023-05-11T09:00:00",
+          "deadline": "2023-05-11T10:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-11T10:00:00",
+          "deadline": "2023-05-11T12:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+          "title": "Lunch 🥪",
+          "duration": 2,
+          "start": "2023-05-11T12:00:00",
+          "deadline": "2023-05-11T14:00:00"
+        },
+        {
+          "taskid": 18,
+          "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2023-05-11T14:00:00",
+          "deadline": "2023-05-11T15:00:00"
+        },
+        {
+          "taskid": 19,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2023-05-11T15:00:00",
+          "deadline": "2023-05-11T18:00:00"
+        },
+        {
+          "taskid": 20,
+          "goalid": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2023-05-11T18:00:00",
+          "deadline": "2023-05-11T19:00:00"
+        },
+        {
+          "taskid": 21,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2023-05-11T19:00:00",
+          "deadline": "2023-05-12T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2023-05-12",
+      "outputs": [
+        {
+          "taskid": 22,
+          "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2023-05-12T00:00:00",
+          "deadline": "2023-05-12T06:00:00"
+        },
+        {
+          "taskid": 23,
+          "goalid": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2023-05-12T06:00:00",
+          "deadline": "2023-05-12T07:00:00"
+        },
+        {
+          "taskid": 24,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-12T07:00:00",
+          "deadline": "2023-05-12T09:00:00"
+        },
+        {
+          "taskid": 25,
+          "goalid": "900dfa10-6fe0-486c-af98-f160360f81b9",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2023-05-12T09:00:00",
+          "deadline": "2023-05-12T10:00:00"
+        },
+        {
+          "taskid": 26,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-12T10:00:00",
+          "deadline": "2023-05-12T12:00:00"
+        },
+        {
+          "taskid": 27,
+          "goalid": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+          "title": "Lunch 🥪",
+          "duration": 2,
+          "start": "2023-05-12T12:00:00",
+          "deadline": "2023-05-12T14:00:00"
+        },
+        {
+          "taskid": 28,
+          "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2023-05-12T14:00:00",
+          "deadline": "2023-05-12T15:00:00"
+        },
+        {
+          "taskid": 29,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2023-05-12T15:00:00",
+          "deadline": "2023-05-12T18:00:00"
+        },
+        {
+          "taskid": 30,
+          "goalid": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2023-05-12T18:00:00",
+          "deadline": "2023-05-12T19:00:00"
+        },
+        {
+          "taskid": 31,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2023-05-12T19:00:00",
+          "deadline": "2023-05-13T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2023-05-13",
+      "outputs": [
+        {
+          "taskid": 32,
+          "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2023-05-13T00:00:00",
+          "deadline": "2023-05-13T06:00:00"
+        },
+        {
+          "taskid": 33,
+          "goalid": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2023-05-13T06:00:00",
+          "deadline": "2023-05-13T07:00:00"
+        },
+        {
+          "taskid": 34,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-13T07:00:00",
+          "deadline": "2023-05-13T09:00:00"
+        },
+        {
+          "taskid": 35,
+          "goalid": "900dfa10-6fe0-486c-af98-f160360f81b9",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2023-05-13T09:00:00",
+          "deadline": "2023-05-13T10:00:00"
+        },
+        {
+          "taskid": 36,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-13T10:00:00",
+          "deadline": "2023-05-13T12:00:00"
+        },
+        {
+          "taskid": 37,
+          "goalid": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+          "title": "Lunch 🥪",
+          "duration": 2,
+          "start": "2023-05-13T12:00:00",
+          "deadline": "2023-05-13T14:00:00"
+        },
+        {
+          "taskid": 38,
+          "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2023-05-13T14:00:00",
+          "deadline": "2023-05-13T15:00:00"
+        },
+        {
+          "taskid": 39,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2023-05-13T15:00:00",
+          "deadline": "2023-05-13T18:00:00"
+        },
+        {
+          "taskid": 40,
+          "goalid": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2023-05-13T18:00:00",
+          "deadline": "2023-05-13T19:00:00"
+        },
+        {
+          "taskid": 41,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2023-05-13T19:00:00",
+          "deadline": "2023-05-14T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2023-05-14",
+      "outputs": [
+        {
+          "taskid": 42,
+          "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2023-05-14T00:00:00",
+          "deadline": "2023-05-14T06:00:00"
+        },
+        {
+          "taskid": 43,
+          "goalid": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2023-05-14T06:00:00",
+          "deadline": "2023-05-14T07:00:00"
+        },
+        {
+          "taskid": 44,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-14T07:00:00",
+          "deadline": "2023-05-14T09:00:00"
+        },
+        {
+          "taskid": 45,
+          "goalid": "900dfa10-6fe0-486c-af98-f160360f81b9",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2023-05-14T09:00:00",
+          "deadline": "2023-05-14T10:00:00"
+        },
+        {
+          "taskid": 46,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-14T10:00:00",
+          "deadline": "2023-05-14T12:00:00"
+        },
+        {
+          "taskid": 47,
+          "goalid": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+          "title": "Lunch 🥪",
+          "duration": 2,
+          "start": "2023-05-14T12:00:00",
+          "deadline": "2023-05-14T14:00:00"
+        },
+        {
+          "taskid": 48,
+          "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2023-05-14T14:00:00",
+          "deadline": "2023-05-14T15:00:00"
+        },
+        {
+          "taskid": 49,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2023-05-14T15:00:00",
+          "deadline": "2023-05-14T18:00:00"
+        },
+        {
+          "taskid": 50,
+          "goalid": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2023-05-14T18:00:00",
+          "deadline": "2023-05-14T19:00:00"
+        },
+        {
+          "taskid": 51,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2023-05-14T19:00:00",
+          "deadline": "2023-05-15T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2023-05-15",
+      "outputs": [
+        {
+          "taskid": 52,
+          "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2023-05-15T00:00:00",
+          "deadline": "2023-05-15T06:00:00"
+        },
+        {
+          "taskid": 53,
+          "goalid": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2023-05-15T06:00:00",
+          "deadline": "2023-05-15T07:00:00"
+        },
+        {
+          "taskid": 54,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-15T07:00:00",
+          "deadline": "2023-05-15T09:00:00"
+        },
+        {
+          "taskid": 55,
+          "goalid": "900dfa10-6fe0-486c-af98-f160360f81b9",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2023-05-15T09:00:00",
+          "deadline": "2023-05-15T10:00:00"
+        },
+        {
+          "taskid": 56,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-15T10:00:00",
+          "deadline": "2023-05-15T12:00:00"
+        },
+        {
+          "taskid": 57,
+          "goalid": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+          "title": "Lunch 🥪",
+          "duration": 2,
+          "start": "2023-05-15T12:00:00",
+          "deadline": "2023-05-15T14:00:00"
+        },
+        {
+          "taskid": 58,
+          "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2023-05-15T14:00:00",
+          "deadline": "2023-05-15T15:00:00"
+        },
+        {
+          "taskid": 59,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2023-05-15T15:00:00",
+          "deadline": "2023-05-15T18:00:00"
+        },
+        {
+          "taskid": 60,
+          "goalid": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2023-05-15T18:00:00",
+          "deadline": "2023-05-15T19:00:00"
+        },
+        {
+          "taskid": 61,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2023-05-15T19:00:00",
+          "deadline": "2023-05-16T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2023-05-16",
+      "outputs": [
+        {
+          "taskid": 62,
+          "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2023-05-16T00:00:00",
+          "deadline": "2023-05-16T06:00:00"
+        },
+        {
+          "taskid": 63,
+          "goalid": "f704cdd6-c02c-465a-bfbd-37b7f2d54823",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2023-05-16T06:00:00",
+          "deadline": "2023-05-16T07:00:00"
+        },
+        {
+          "taskid": 64,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-16T07:00:00",
+          "deadline": "2023-05-16T09:00:00"
+        },
+        {
+          "taskid": 65,
+          "goalid": "900dfa10-6fe0-486c-af98-f160360f81b9",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2023-05-16T09:00:00",
+          "deadline": "2023-05-16T10:00:00"
+        },
+        {
+          "taskid": 66,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2023-05-16T10:00:00",
+          "deadline": "2023-05-16T12:00:00"
+        },
+        {
+          "taskid": 67,
+          "goalid": "9e65959b-4645-4b19-b4d4-b5896afa00a1",
+          "title": "Lunch 🥪",
+          "duration": 2,
+          "start": "2023-05-16T12:00:00",
+          "deadline": "2023-05-16T14:00:00"
+        },
+        {
+          "taskid": 68,
+          "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2023-05-16T14:00:00",
+          "deadline": "2023-05-16T15:00:00"
+        },
+        {
+          "taskid": 69,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2023-05-16T15:00:00",
+          "deadline": "2023-05-16T18:00:00"
+        },
+        {
+          "taskid": 70,
+          "goalid": "713c5d0e-c91a-4324-83d7-9e53aaae572d",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2023-05-16T18:00:00",
+          "deadline": "2023-05-16T19:00:00"
+        },
+        {
+          "taskid": 71,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2023-05-16T19:00:00",
+          "deadline": "2023-05-17T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2023-05-10",
+      "outputs": [
+        {
+          "taskid": 72,
+          "goalid": "8abeb0b6-dc36-4c74-9f56-935de7b4eb19",
+          "title": "Project A",
+          "duration": 20,
+          "start": "2023-05-10T00:00:00",
+          "deadline": "2023-05-17T00:00:00"
+        },
+        {
+          "taskid": 73,
+          "goalid": "dc914376-3313-41b3-aed4-d3c1cda3e01c",
+          "title": "Work",
+          "duration": 45,
+          "start": "2023-05-10T00:00:00",
+          "deadline": "2023-05-17T00:00:00"
+        },
+        {
+          "taskid": 74,
+          "goalid": "a7992b3e-6f51-42ec-98ad-c0d5dc633b67",
+          "title": "Project B filler",
+          "duration": 8,
+          "start": "2023-05-10T00:00:00",
+          "deadline": "2023-05-17T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2023-05-11",
+      "outputs": []
+    },
+    {
+      "day": "2023-05-12",
+      "outputs": []
+    },
+    {
+      "day": "2023-05-13",
+      "outputs": []
+    },
+    {
+      "day": "2023-05-14",
+      "outputs": []
+    },
+    {
+      "day": "2023-05-15",
+      "outputs": []
+    },
+    {
+      "day": "2023-05-16",
+      "outputs": []
+    }
+  ]
+}

@@ -38,6 +38,8 @@ pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
         dbg!(&tasks);
     }
 
+    dbg!(&tasks);
+
     TasksToPlace {
         calendar_start,
         calendar_end,
@@ -56,8 +58,10 @@ fn manipulate_input_goals(input: Input) -> GoalsMap {
     let mut goals: GoalsMap = populate_goal_dates(goals, calendar_start, calendar_end);
 
     add_filler_goals(&mut goals);
-    add_optional_flex_duration_regular_goals(&mut goals); //TODO
-    add_optional_flex_number_and_duration_habits_goals(&mut goals); //TODO
+
+    // TODO 2023-06-17: removed empty function until need it and develop it add_optional_flex_duration_regular_goals(&mut goals);
+
+    generate_flex_weekly_goals(&mut goals);
 
     goals
 }
@@ -74,32 +78,35 @@ fn populate_goal_dates(
     goals
 }
 
-fn add_optional_flex_duration_regular_goals(_goals: &mut GoalsMap) {
-    // TODO todo!();
-}
-
-fn add_optional_flex_number_and_duration_habits_goals(goals: &mut GoalsMap) {
+/// Generate new goals based on given goals' FlexWeekly repetition
+/// - Note: this function generating goals for goals with FlexWeekly repetition only
+fn generate_flex_weekly_goals(goals: &mut GoalsMap) {
     let mut generated_goals: GoalsMap = BTreeMap::new();
-    for goal in goals.iter_mut() {
-        if let Some(Repetition::FlexWeekly(min, max)) = goal.1.repeat {
+    for (goal_id, goal) in goals.iter_mut() {
+        if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
             //If given a goal with 3-5x/week, create 3 goals and 2 extra optional goals
-            goal.1.repeat = Some(Repetition::Weekly(1));
-            for number in 1..min {
+            goal.repeat = Some(Repetition::Weekly(1));
+
+            // Create repeated goals and optional repeated goals
+            for number in 1..max {
                 // 1.. because we're leaving the initial goal
-                let mut template_goal = goal.1.clone();
+                let mut template_goal = goal.clone();
                 template_goal.id.push_str("-repeat-");
-                template_goal.id.push_str(&number.to_string());
-                generated_goals.insert(template_goal.id.clone(), template_goal);
+
+                if number < min {
+                    // Repeated goal
+                    template_goal.id.push_str(&number.to_string());
+                    generated_goals.insert(template_goal.id.clone(), template_goal);
+                } else {
+                    // Optional repeated goal
+                    template_goal.id.push_str("opt-");
+                    template_goal.id.push_str(&number.to_string());
+                    template_goal.tags.push(Tag::Optional);
+                    generated_goals.insert(template_goal.id.clone(), template_goal);
+                }
             }
-            for number in min..max - 1 {
-                let mut template_goal = goal.1.clone();
-                template_goal.id.push_str("-repeat-opt-");
-                template_goal.id.push_str(&number.to_string());
-                template_goal.tags.push(Tag::Optional);
-                generated_goals.insert(template_goal.id.clone(), template_goal);
-            }
-            generated_goals.insert(goal.0.to_owned(), goal.1.to_owned());
+            generated_goals.insert(goal_id.to_owned(), goal.to_owned());
         }
     }
 
@@ -158,4 +165,77 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
         goals.push(g);
     }
     goals
+}
+
+// test
+#[cfg(test)]
+mod tests {
+    mod generate_flex_weekly_goals {
+        use std::collections::BTreeMap;
+
+        use chrono::Duration;
+
+        use crate::{
+            models::{
+                goal::{Goal, GoalsMap, Tag},
+                repetition::Repetition,
+                slot::Slot,
+            },
+            services::task_generator::generate_flex_weekly_goals,
+        };
+
+        /// Test generating flex weekly goals based on one task with 1-3/week
+        /// ```markdown
+        /// Input:
+        ///     Goal:
+        ///         title: side project
+        ///         min_duration: 8
+        ///         repeat: 1-3/week
+        ///
+        /// Output:
+        ///     Goal:
+        ///         id: 1-repeat-opt-1
+        ///         title: side project
+        ///         min_duration: 8
+        ///         repeat: 1/week
+        ///     Goal:
+        ///         id: 1-repeat-opt-2
+        ///         title: side project
+        ///         min_duration: 8
+        ///         repeat: 1/week
+        ///
+        /// ```
+        #[test]
+        fn test_single_goal() {
+            let goal_dates = Slot::mock(Duration::days(31), 2022, 10, 1, 0, 0);
+
+            let mut input_goal = Goal::mock("1", "side project", goal_dates);
+            input_goal.min_duration = Some(8);
+            input_goal.repeat = Some(Repetition::FlexWeekly(1, 3));
+
+            let mut input_goals: GoalsMap = BTreeMap::new();
+            input_goals.insert(input_goal.id.clone(), input_goal);
+
+            generate_flex_weekly_goals(&mut input_goals);
+
+            let mut expected_goal_1 = Goal::mock("1", "side project", goal_dates);
+            expected_goal_1.min_duration = Some(8);
+            expected_goal_1.repeat = Some(Repetition::Weekly(1));
+
+            let mut expected_goal_2 = expected_goal_1.clone();
+            expected_goal_2.id = "1-repeat-opt-1".to_string();
+            expected_goal_2.tags.push(Tag::Optional);
+
+            let expected_goal_3 = expected_goal_2.clone();
+            expected_goal_2.id = "1-repeat-opt-2".to_string();
+
+            let mut expected_goals = GoalsMap::new();
+            expected_goals.insert(expected_goal_1.id.clone(), expected_goal_1);
+            expected_goals.insert(expected_goal_2.id.clone(), expected_goal_2);
+            expected_goals.insert(expected_goal_3.id.clone(), expected_goal_3);
+
+            dbg!(&expected_goals, &input_goals);
+            assert_eq!(expected_goals, input_goals);
+        }
+    }
 }

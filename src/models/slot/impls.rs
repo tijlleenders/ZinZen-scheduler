@@ -2,15 +2,8 @@ use super::Slot;
 use chrono::{Days, NaiveDateTime, Timelike};
 use std::{
     cmp::{max, min},
-    fmt::Display,
     ops::{Add, Sub},
 };
-
-impl Display for Slot {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Slot - start: {} - end: {}", self.start, self.end)
-    }
-}
 
 impl Sub for Slot {
     type Output = Vec<Slot>;
@@ -28,11 +21,8 @@ impl Sub for Slot {
             return result;
         }
         if rhs.start < self.start && rhs.end > self.end {
-            // If rhs completely encompasses self, then swap self and rhs,
-            //and subtract from each other
-            let swap_subtract = rhs - self;
-            result.extend(swap_subtract);
-            return result;
+            // If rhs completely encompasses self, then return empty list
+            return vec![];
         }
 
         if rhs.start > self.start {
@@ -81,7 +71,7 @@ impl Slot {
         Slot { start, end }
     }
 
-    pub fn calc_duration_in_hours(&self) -> usize {
+    pub fn duration_as_hours(&self) -> usize {
         (self.end - self.start).num_hours() as usize
     }
 
@@ -112,7 +102,7 @@ impl Slot {
     /// ```
     pub fn divide_into_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
-        let duration = self.calc_duration_in_hours();
+        let duration = self.duration_as_hours();
 
         for hour in 0..duration {
             result.push(Slot {

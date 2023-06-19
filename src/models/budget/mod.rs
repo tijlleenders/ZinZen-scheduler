@@ -24,9 +24,9 @@ pub enum BudgetType {
 
 #[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
 pub struct TaskBudgets {
-    calendar_start: NaiveDateTime,
-    calendar_end: NaiveDateTime,
-    goal_id_to_budget_ids: HashMap<String, Vec<String>>,
+    pub calendar_start: NaiveDateTime,
+    pub calendar_end: NaiveDateTime,
+    pub goal_id_to_budget_ids: HashMap<String, Vec<String>>,
     pub budget_id_to_budget: HashMap<String, TaskBudget>,
 }
 
@@ -34,7 +34,7 @@ pub struct TaskBudgets {
 pub struct TaskBudget {
     task_budget_type: BudgetType,
     pub slot_budgets: Vec<SlotBudget>,
-    min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
+    pub min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
     max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
 }
 
