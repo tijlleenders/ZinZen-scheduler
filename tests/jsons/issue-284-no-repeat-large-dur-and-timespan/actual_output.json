@@ -1842,7 +1842,39 @@
           "taskid": 141,
           "goalid": "1",
           "title": "Rust project",
-          "duration": 40,
+          "duration": 8,
+          "start": "2023-03-01T00:00:00",
+          "deadline": "2023-07-20T00:00:00"
+        },
+        {
+          "taskid": 142,
+          "goalid": "1",
+          "title": "Rust project",
+          "duration": 8,
+          "start": "2023-03-01T00:00:00",
+          "deadline": "2023-07-20T00:00:00"
+        },
+        {
+          "taskid": 143,
+          "goalid": "1",
+          "title": "Rust project",
+          "duration": 8,
+          "start": "2023-03-01T00:00:00",
+          "deadline": "2023-07-20T00:00:00"
+        },
+        {
+          "taskid": 144,
+          "goalid": "1",
+          "title": "Rust project",
+          "duration": 8,
+          "start": "2023-03-01T00:00:00",
+          "deadline": "2023-07-20T00:00:00"
+        },
+        {
+          "taskid": 145,
+          "goalid": "1",
+          "title": "Rust project",
+          "duration": 8,
           "start": "2023-03-01T00:00:00",
           "deadline": "2023-07-20T00:00:00"
         }
