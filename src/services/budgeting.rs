@@ -3,12 +3,11 @@ use std::collections::BTreeMap;
 use chrono::NaiveDateTime;
 
 use crate::models::{
-    budget::{TaskBudget, TaskBudgets},
+    budget::TaskBudgets,
     goal::{Goal, Tag},
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
     task::{NewTask, Task, TaskStatus},
-    timeline::Timeline,
 };
 
 impl TaskBudgets {

@@ -49,6 +49,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 // Loop through BudgetTaskMinWaitingForAdjustment Task Vec<Slot> and chop off anything that is outside of the slot_budget Slot
                 // Make Task with those slots and remaining hours
                 // If not enough hours - mark impossible? No will happen during scheduling.
+                // TODO 2023-06-20: idea to refactor below code into a separate function
                 let mut task_slots_to_adjust = tasks_to_place.tasks[index].slots.clone();
                 for slot in task_slots_to_adjust.iter_mut() {
                     if slot.start.lt(&slot_budget.slot.start) {
@@ -70,6 +71,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                         result_slots.push(task_slot);
                     }
                 }
+
                 // TODO 2023-06-04  | fix this by using retain instead of this way
                 tasks_to_place.tasks[index].tags.push(Tag::Remove);
 

@@ -85,26 +85,6 @@ impl Ord for Task {
 }
 
 impl Task {
-    /// Create new task
-    pub fn new(new_task: NewTask) -> Task {
-        let start = new_task.timeframe.map(|time| time.start);
-        let deadline = new_task.timeframe.map(|time| time.end);
-
-        Task {
-            id: new_task.task_id,
-            goal_id: new_task.goal.id,
-            title: new_task.title,
-            duration: new_task.duration,
-            status: new_task.status,
-            flexibility: 0,
-            start,
-            deadline,
-            slots: new_task.timeline.slots.into_iter().collect(),
-            tags: new_task.goal.tags,
-            after_goals: new_task.goal.after_goals,
-        }
-    }
-
     pub fn flexibility(&mut self) -> usize {
         self.flexibility
     }
