@@ -38,17 +38,6 @@ impl NewTask {
                 dbg!(&tasks);
             }
 
-            // =========== Another way to calculate new tasks
-            // // Used f32 to be able to get round up (ceil) for accurate calculation
-            // let tasks_count = (total_duration as f32 / 8.0).ceil() as usize;
-            // let mut tasks: Vec<Task> = Vec::new();
-
-            // for _ in 0..tasks_count {
-            //     let task = Task::new(self.clone());
-            //     dbg!(&task);
-            //     tasks.push(task);
-            // }
-
             tasks
         }
     }
@@ -117,7 +106,7 @@ impl Goal {
             dbg!(&timeline);
             let task_id = *counter;
             *counter += 1;
-            // TODO 2023-05-06  | apply Task::new(...)
+
             if !timeline.slots.is_empty() && self.min_duration.is_some() {
                 let title = self.title.clone();
                 let duration = self.min_duration.unwrap();
@@ -132,10 +121,14 @@ impl Goal {
                     timeframe: None,
                 };
 
-                let task = Task::new(new_task);
+                // let task = Task::new(new_task);
+                // dbg!(&task);
 
-                dbg!(&task);
-                tasks.push(task);
+                let new_tasks = new_task.generate_tasks();
+                dbg!(&new_tasks);
+
+                tasks.extend(new_tasks);
+                dbg!(&tasks);
             }
         }
         dbg!(&tasks);
@@ -198,16 +191,149 @@ mod tests {
             };
             dbg!(&new_task);
 
-            let mut expected_task = vec![
+            let mut expected_tasks = vec![
                 Task::mock("test", 8, 0, TaskStatus::ReadyToSchedule, vec![timeframe]),
                 Task::mock("test", 2, 0, TaskStatus::ReadyToSchedule, vec![timeframe]),
+            ];
+            expected_tasks[1].id = 2;
+            dbg!(&expected_tasks);
+
+            let tasks = new_task.generate_tasks();
+            dbg!(&tasks);
+
+            assert_eq!(tasks, expected_tasks);
+
+            assert_eq!(tasks[0].id, expected_tasks[0].id);
+            assert_eq!(tasks[1].id, expected_tasks[1].id);
+
+            assert_eq!(tasks[0].duration, expected_tasks[0].duration);
+            assert_eq!(tasks[1].duration, expected_tasks[1].duration);
+
+            assert_eq!(tasks[0].status, expected_tasks[0].status);
+            assert_eq!(tasks[1].status, expected_tasks[1].status);
+        }
+    }
+
+    mod goal_tasks {
+        use chrono::Duration;
+
+        use crate::models::{
+            goal::Goal,
+            slot::Slot,
+            task::{Task, TaskStatus},
+        };
+
+        /// Test Goal::generate_tasks when goal.min_duration>8 hours
+        /// ```markdown
+        /// =========================
+        /// Input:
+        /// Goal {
+        ///    id: "1",
+        ///    title: "test",
+        ///    min_duration: Some(
+        ///        10,
+        ///    ),
+        ///    max_duration: None,
+        ///    budgets: None,
+        ///    repeat: None,
+        ///    start: Some(
+        ///        2023-06-01T00:00:00,
+        ///    ),
+        ///    deadline: Some(
+        ///        2023-06-06T00:00:00,
+        ///    ),
+        ///    tags: [],
+        ///    filters: None,
+        ///    children: None,
+        ///    after_goals: None,
+        ///}
+        ///
+        /// ===========================
+        /// Output:
+        /// expected_task = [
+        ///    Task {
+        ///        id: 1,
+        ///        goal_id: "1",
+        ///        title: "test",
+        ///        duration: 8,
+        ///        status: ReadyToSchedule,
+        ///        flexibility: 0,
+        ///        start: None,
+        ///        deadline: None,
+        ///        slots: [
+        ///            Slot {
+        ///                start:   2023-06-01 00,
+        ///                 end:    2023-06-06 00,
+        ///            },
+        ///        ],
+        ///        tags: [],
+        ///        after_goals: None,
+        ///    },
+        ///    Task {
+        ///        id: 2,
+        ///        goal_id: "1",
+        ///        title: "test",
+        ///        duration: 2,
+        ///        status: ReadyToSchedule,
+        ///        flexibility: 0,
+        ///        start: None,
+        ///        deadline: None,
+        ///        slots: [
+        ///            Slot {
+        ///                start:   2023-06-01 00,
+        ///                 end:    2023-06-06 00,
+        ///            },
+        ///        ],
+        ///        tags: [],
+        ///        after_goals: None,
+        ///    },
+        ///]
+        ///
+        ///
+        /// ```
+        #[test]
+        fn test_duration_more_8_hrs() {
+            let duration: usize = 10;
+            let mut counter: usize = 1;
+
+            let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
+            let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
+            goal.min_duration = Some(duration);
+            dbg!(&goal);
+
+            let tasks = goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
+            dbg!(&tasks);
+
+            let mut expected_task = vec![
+                Task::mock(
+                    "test",
+                    8,
+                    0,
+                    TaskStatus::ReadyToSchedule,
+                    vec![goal_timeframe],
+                ),
+                Task::mock(
+                    "test",
+                    2,
+                    0,
+                    TaskStatus::ReadyToSchedule,
+                    vec![goal_timeframe],
+                ),
             ];
             expected_task[1].id = 2;
             dbg!(&expected_task);
 
-            let generated_task = new_task.generate_tasks();
-            dbg!(&generated_task);
-            // assert_eq!(generated_task, vec![expected_task]);
+            assert_eq!(tasks, expected_task);
+            assert_eq!(counter, 2);
+
+            assert_eq!(tasks[0].id, expected_task[0].id);
+            assert_eq!(tasks[1].id, expected_task[1].id);
+
+            assert_eq!(tasks[0].duration, expected_task[0].duration);
+            assert_eq!(tasks[1].duration, expected_task[1].duration);
+
+            assert_eq!(tasks[0].status, expected_task[0].status);
+            assert_eq!(tasks[1].status, expected_task[1].status);
         }
     }
 }
