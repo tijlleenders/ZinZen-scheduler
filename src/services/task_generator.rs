@@ -341,6 +341,38 @@ mod tests {
                 task::{Task, TaskStatus},
             };
 
+            #[test]
+            fn test_duration_less_8_hrs() {
+                let duration: usize = 6;
+                let mut counter: usize = 1;
+
+                let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
+                let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
+                goal.min_duration = Some(duration);
+                dbg!(&goal);
+
+                let tasks =
+                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                dbg!(&tasks);
+
+                let expected_task = vec![Task::mock(
+                    "test",
+                    duration,
+                    0,
+                    TaskStatus::ReadyToSchedule,
+                    vec![goal_timeframe],
+                    None,
+                )];
+                dbg!(&expected_task);
+
+                assert_eq!(tasks, expected_task);
+                assert_eq!(counter, 2);
+
+                assert_eq!(tasks[0].id, expected_task[0].id);
+                assert_eq!(tasks[0].duration, expected_task[0].duration);
+                assert_eq!(tasks[0].status, expected_task[0].status);
+            }
+
             /// Test Goal::generate_tasks when goal.min_duration>8 hours
             /// ```markdown
             /// =========================
