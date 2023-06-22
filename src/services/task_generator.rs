@@ -114,12 +114,17 @@ impl Goal {
 
                 let task = Task::new(new_task);
                 dbg!(&task);
+                // Apply split on threshold (8 hours) rule if goal is a leaf
+                if self.children.is_none() {
+                    let thresholded_tasks = task.apply_duration_threshold();
+                    dbg!(&thresholded_tasks);
 
-                let thresholded_tasks = task.apply_duration_threshold();
-                dbg!(&thresholded_tasks);
-
-                tasks.extend(thresholded_tasks);
-                dbg!(&tasks);
+                    tasks.extend(thresholded_tasks);
+                    dbg!(&tasks);
+                } else {
+                    tasks.push(task);
+                    dbg!(&tasks);
+                }
             }
         }
         dbg!(&tasks);
@@ -549,6 +554,88 @@ mod tests {
                 assert_eq!(tasks[0].status, expected_task[0].status);
                 assert_eq!(tasks[1].status, expected_task[1].status);
                 assert_eq!(tasks[2].status, expected_task[2].status);
+            }
+
+            /// Test when a given Goal is not a leaf and goal.min_duration > 8
+            /// So in this case, tasks will not be splitted
+            /// ```markdown
+            /// =========================
+            /// Input:
+            /// Goal {
+            ///    id: "1",
+            ///    title: "test",
+            ///    min_duration: Some(
+            ///        10,
+            ///    ),
+            ///    max_duration: None,
+            ///    budgets: None,
+            ///    repeat: None,
+            ///    start: Some(
+            ///        2023-06-01T00:00:00,
+            ///    ),
+            ///    deadline: Some(
+            ///        2023-06-06T00:00:00,
+            ///    ),
+            ///    tags: [],
+            ///    filters: None,
+            ///    children: ["2"],
+            ///    after_goals: None,
+            ///}
+            ///
+            /// ===========================
+            /// Output:
+            /// expected_task = [
+            ///    Task {
+            ///        id: 1,
+            ///        goal_id: "1",
+            ///        title: "test",
+            ///        duration: 10,
+            ///        status: ReadyToSchedule,
+            ///        flexibility: 0,
+            ///        start: None,
+            ///        deadline: None,
+            ///        slots: [
+            ///            Slot {
+            ///                start:   2023-06-01 00,
+            ///                 end:    2023-06-06 00,
+            ///            },
+            ///        ],
+            ///        tags: [],
+            ///        after_goals: None,
+            ///    },
+            ///]
+            /// ```
+            #[test]
+            fn test_goal_is_not_leaf_duration_more_8_hrs() {
+                let duration: usize = 10;
+                let mut counter: usize = 1;
+
+                let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
+                let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
+                goal.min_duration = Some(duration);
+                goal.children = Some(vec!["2".to_string()]);
+                dbg!(&goal);
+
+                let tasks =
+                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                dbg!(&tasks);
+
+                let expected_task = vec![Task::mock(
+                    "test",
+                    10,
+                    0,
+                    TaskStatus::ReadyToSchedule,
+                    vec![goal_timeframe],
+                    None,
+                )];
+                dbg!(&expected_task);
+
+                assert_eq!(tasks, expected_task);
+                assert_eq!(counter, 2);
+
+                assert_eq!(tasks[0].id, expected_task[0].id);
+                assert_eq!(tasks[0].duration, expected_task[0].duration);
+                assert_eq!(tasks[0].status, expected_task[0].status);
             }
         }
     }
