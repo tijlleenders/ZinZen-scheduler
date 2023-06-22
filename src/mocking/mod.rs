@@ -105,8 +105,8 @@ impl Task {
     ///     duration: duration,
     ///     status: status,
     ///     flexibility: flexibility,
-    ///     start: None,
-    ///     deadline: None,
+    ///     start: Some(timeframe.start),
+    ///     deadline: Some(timeframe.end),
     ///     slots: slots,
     ///     tags: vec![],
     ///     after_goals: None
@@ -118,15 +118,19 @@ impl Task {
         flexibility: usize,
         status: TaskStatus,
         slots: Vec<Slot>,
+        timeframe: Option<Slot>,
     ) -> Task {
+        let start = timeframe.map(|time| time.start);
+        let deadline = timeframe.map(|time| time.end);
+
         Task {
             id: 1,
             title: title.to_string(),
             duration,
             status,
             flexibility,
-            start: None,
-            deadline: None,
+            start,
+            deadline,
             slots,
             tags: vec![],
             after_goals: None,
@@ -267,7 +271,7 @@ mod tests {
                 goal_id: "1".to_string(),
             };
 
-            let result = Task::mock("test", 1, 168, TaskStatus::ReadyToSchedule, slots);
+            let result = Task::mock("test", 1, 168, TaskStatus::ReadyToSchedule, slots, None);
 
             assert_eq!(expected, result);
         }
