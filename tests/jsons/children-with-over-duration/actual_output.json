@@ -124,18 +124,10 @@
         },
         {
           "taskid": 13,
-          "goalid": "3",
-          "title": "Project B filler",
-          "duration": 1,
-          "start": "2018-03-08T15:00:00",
-          "deadline": "2018-03-08T16:00:00"
-        },
-        {
-          "taskid": 14,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2018-03-08T16:00:00",
+          "duration": 9,
+          "start": "2018-03-08T15:00:00",
           "deadline": "2018-03-09T00:00:00"
         }
       ]
@@ -144,7 +136,7 @@
       "day": "2018-03-09",
       "outputs": [
         {
-          "taskid": 15,
+          "taskid": 14,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -152,7 +144,7 @@
           "deadline": "2018-03-09T08:00:00"
         },
         {
-          "taskid": 16,
+          "taskid": 15,
           "goalid": "2",
           "title": "Project A",
           "duration": 8,
@@ -160,7 +152,7 @@
           "deadline": "2018-03-09T16:00:00"
         },
         {
-          "taskid": 17,
+          "taskid": 16,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -173,27 +165,11 @@
       "day": "2018-03-10",
       "outputs": [
         {
-          "taskid": 18,
+          "taskid": 17,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2018-03-10T00:00:00",
-          "deadline": "2018-03-10T08:00:00"
-        },
-        {
-          "taskid": 19,
-          "goalid": "3",
-          "title": "Project B filler",
-          "duration": 2,
-          "start": "2018-03-10T08:00:00",
-          "deadline": "2018-03-10T10:00:00"
-        },
-        {
-          "taskid": 20,
-          "goalid": "free",
-          "title": "free",
-          "duration": 14,
-          "start": "2018-03-10T10:00:00",
           "deadline": "2018-03-11T00:00:00"
         }
       ]
@@ -202,7 +178,7 @@
       "day": "2018-03-11",
       "outputs": [
         {
-          "taskid": 21,
+          "taskid": 18,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -215,27 +191,11 @@
       "day": "2018-03-12",
       "outputs": [
         {
-          "taskid": 22,
+          "taskid": 19,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2018-03-12T00:00:00",
-          "deadline": "2018-03-12T08:00:00"
-        },
-        {
-          "taskid": 23,
-          "goalid": "3",
-          "title": "Project B filler",
-          "duration": 8,
-          "start": "2018-03-12T08:00:00",
-          "deadline": "2018-03-12T16:00:00"
-        },
-        {
-          "taskid": 24,
-          "goalid": "free",
-          "title": "free",
-          "duration": 8,
-          "start": "2018-03-12T16:00:00",
           "deadline": "2018-03-13T00:00:00"
         }
       ]
@@ -244,7 +204,7 @@
       "day": "2018-03-13",
       "outputs": [
         {
-          "taskid": 25,
+          "taskid": 20,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -257,7 +217,7 @@
       "day": "2018-03-14",
       "outputs": [
         {
-          "taskid": 26,
+          "taskid": 21,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -270,7 +230,7 @@
       "day": "2018-03-15",
       "outputs": [
         {
-          "taskid": 27,
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -283,7 +243,7 @@
       "day": "2018-03-16",
       "outputs": [
         {
-          "taskid": 28,
+          "taskid": 23,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -296,7 +256,7 @@
       "day": "2018-03-17",
       "outputs": [
         {
-          "taskid": 29,
+          "taskid": 24,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -309,7 +269,7 @@
       "day": "2018-03-18",
       "outputs": [
         {
-          "taskid": 30,
+          "taskid": 25,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -322,7 +282,7 @@
       "day": "2018-03-19",
       "outputs": [
         {
-          "taskid": 31,
+          "taskid": 26,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -335,7 +295,7 @@
       "day": "2018-03-20",
       "outputs": [
         {
-          "taskid": 32,
+          "taskid": 27,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -348,7 +308,7 @@
       "day": "2018-03-21",
       "outputs": [
         {
-          "taskid": 33,
+          "taskid": 28,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -361,7 +321,7 @@
       "day": "2018-03-22",
       "outputs": [
         {
-          "taskid": 34,
+          "taskid": 29,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -374,7 +334,7 @@
       "day": "2018-03-23",
       "outputs": [
         {
-          "taskid": 35,
+          "taskid": 30,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -387,7 +347,7 @@
       "day": "2018-03-24",
       "outputs": [
         {
-          "taskid": 36,
+          "taskid": 31,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -400,7 +360,7 @@
       "day": "2018-03-25",
       "outputs": [
         {
-          "taskid": 37,
+          "taskid": 32,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -415,10 +375,18 @@
       "day": "2018-03-05",
       "outputs": [
         {
-          "taskid": 38,
+          "taskid": 33,
           "goalid": "1",
           "title": "work",
           "duration": 38,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 34,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 11,
           "start": "2018-03-05T00:00:00",
           "deadline": "2018-03-26T00:00:00"
         }
