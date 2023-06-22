@@ -36,16 +36,16 @@
           "taskid": 3,
           "goalid": "1429f3f4-0315-4e72-a7e4-19b05b38884c",
           "title": "Project A",
-          "duration": 4,
+          "duration": 8,
           "start": "2023-03-02T08:00:00",
-          "deadline": "2023-03-02T12:00:00"
+          "deadline": "2023-03-02T16:00:00"
         },
         {
           "taskid": 4,
           "goalid": "free",
           "title": "free",
-          "duration": 12,
-          "start": "2023-03-02T12:00:00",
+          "duration": 8,
+          "start": "2023-03-02T16:00:00",
           "deadline": "2023-03-03T00:00:00"
         }
       ]
@@ -65,16 +65,16 @@
           "taskid": 6,
           "goalid": "1429f3f4-0315-4e72-a7e4-19b05b38884c",
           "title": "Project A",
-          "duration": 8,
+          "duration": 4,
           "start": "2023-03-03T08:00:00",
-          "deadline": "2023-03-03T16:00:00"
+          "deadline": "2023-03-03T12:00:00"
         },
         {
           "taskid": 7,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2023-03-03T16:00:00",
+          "duration": 12,
+          "start": "2023-03-03T12:00:00",
           "deadline": "2023-03-04T00:00:00"
         }
       ]
