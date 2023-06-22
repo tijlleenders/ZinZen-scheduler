@@ -212,6 +212,7 @@ mod tests {
             168,
             TaskStatus::ReadyToSchedule,
             vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            None,
         );
 
         let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 05, 01, 0, 0)]);
@@ -230,6 +231,7 @@ mod tests {
             19,
             TaskStatus::ReadyToSchedule,
             vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            None,
         );
 
         let expected = Some(vec![Slot::mock(Duration::hours(8), 2023, 05, 01, 0, 0)]);
@@ -391,6 +393,7 @@ mod tests {
                             Slot::mock(Duration::hours(5), 2023, 6, 1, 0, 0),
                             Slot::mock(Duration::hours(10), 2023, 6, 1, 9, 0),
                         ],
+                        None,
                     ),
                     Task::mock(
                         "task 2",
@@ -401,6 +404,7 @@ mod tests {
                             Slot::mock(Duration::hours(5), 2023, 6, 5, 0, 0),
                             Slot::mock(Duration::hours(10), 2023, 6, 6, 9, 0),
                         ],
+                        None,
                     ),
                 ];
 
@@ -457,6 +461,7 @@ mod tests {
                         0,
                         TaskStatus::ReadyToSchedule,
                         slots_list.clone(),
+                        None,
                     ),
                     Task::mock(
                         "task 2",
@@ -464,8 +469,9 @@ mod tests {
                         0,
                         TaskStatus::ReadyToSchedule,
                         slots_list.clone(),
+                        None,
                     ),
-                    Task::mock("task 2", 2, 0, TaskStatus::Scheduled, slots_list),
+                    Task::mock("task 2", 2, 0, TaskStatus::Scheduled, slots_list, None),
                 ];
 
                 let slot_to_search = Slot::mock(Duration::hours(2), 2023, 6, 1, 1, 0);
@@ -494,6 +500,7 @@ mod tests {
                             Slot::mock(Duration::hours(5), 2023, 6, 1, 0, 0),
                             Slot::mock(Duration::hours(10), 2023, 6, 1, 9, 0),
                         ],
+                        None,
                     ),
                     Task::mock(
                         "task 2",
@@ -504,6 +511,7 @@ mod tests {
                             Slot::mock(Duration::hours(5), 2023, 6, 5, 0, 0),
                             Slot::mock(Duration::hours(10), 2023, 6, 6, 9, 0),
                         ],
+                        None,
                     ),
                 ];
 
@@ -516,6 +524,7 @@ mod tests {
                         Slot::mock(Duration::hours(2), 2023, 5, 1, 6, 0),
                         Slot::mock(Duration::hours(2), 2023, 6, 6, 0, 0),
                     ],
+                    None,
                 );
 
                 let conflicts = task_to_search.get_conflicts_in_tasks(&tasks_list);
@@ -600,6 +609,7 @@ mod tests {
                         0,
                         TaskStatus::ReadyToSchedule,
                         slots_list.clone(),
+                        None,
                     ),
                     Task::mock(
                         "task 2",
@@ -607,8 +617,9 @@ mod tests {
                         0,
                         TaskStatus::ReadyToSchedule,
                         slots_list.clone(),
+                        None,
                     ),
-                    Task::mock("task 2", 2, 0, TaskStatus::Scheduled, slots_list),
+                    Task::mock("task 2", 2, 0, TaskStatus::Scheduled, slots_list, None),
                 ];
 
                 let task_to_search = Task::mock(
@@ -620,6 +631,7 @@ mod tests {
                         Slot::mock(Duration::hours(2), 2023, 6, 1, 1, 0),
                         Slot::mock(Duration::hours(2), 2023, 6, 2, 8, 0),
                     ],
+                    None,
                 );
 
                 let conflicts = task_to_search.get_conflicts_in_tasks(&tasks_list);
@@ -692,6 +704,7 @@ mod tests {
                         0,
                         TaskStatus::ReadyToSchedule,
                         slots_list.clone(),
+                        None,
                     ),
                     Task::mock(
                         "task 2",
@@ -699,8 +712,9 @@ mod tests {
                         0,
                         TaskStatus::ReadyToSchedule,
                         slots_list.clone(),
+                        None,
                     ),
-                    Task::mock("task 2", 2, 0, TaskStatus::Scheduled, slots_list),
+                    Task::mock("task 2", 2, 0, TaskStatus::Scheduled, slots_list, None),
                 ];
 
                 let task_to_search = Task::mock(
@@ -712,6 +726,7 @@ mod tests {
                         Slot::mock(Duration::hours(2), 2023, 6, 1, 1, 0),
                         Slot::mock(Duration::hours(2), 2023, 6, 2, 8, 0),
                     ],
+                    None,
                 );
 
                 let conflicts = task_to_search.get_conflicts_in_tasks(&tasks_list);

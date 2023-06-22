@@ -71,7 +71,7 @@ use models::output::FinalOutput;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
 use services::placer::task_placer;
-use services::task_generator::generate_tasks_to_place;
+use services::preprocess::generate_tasks_to_place;
 use wasm_bindgen::prelude::*;
 
 mod errors;

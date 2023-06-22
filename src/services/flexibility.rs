@@ -77,6 +77,7 @@ mod tests {
                 168,
                 TaskStatus::Blocked,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                None,
             );
             task.calculate_flexibility();
         }
@@ -93,6 +94,7 @@ mod tests {
                 168,
                 TaskStatus::BudgetMinWaitingForAdjustment,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                None,
             );
             task.calculate_flexibility();
         }
@@ -109,6 +111,7 @@ mod tests {
                 168,
                 TaskStatus::Impossible,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                None,
             );
             task.calculate_flexibility();
         }
@@ -125,6 +128,7 @@ mod tests {
                 168,
                 TaskStatus::Scheduled,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                None,
             );
             task.calculate_flexibility();
         }
@@ -141,6 +145,7 @@ mod tests {
                 168,
                 TaskStatus::Uninitialized,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                None,
             );
             task.calculate_flexibility();
         }
@@ -178,6 +183,7 @@ mod tests {
                     // Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 09, 22, 0),
                 ],
+                None,
             );
             dbg!(&task);
 
@@ -202,6 +208,7 @@ mod tests {
                 0,
                 TaskStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
+                None,
             );
             dbg!(&task);
 
@@ -234,6 +241,7 @@ mod tests {
                     Slot::mock(Duration::hours(3), 2023, 01, 08, 18, 0),
                     Slot::mock(Duration::hours(3), 2023, 01, 09, 18, 0),
                 ],
+                None,
             );
             dbg!(&task);
 
@@ -284,6 +292,7 @@ mod tests {
                     // Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 09, 22, 0),
                 ],
+                None,
             );
 
             let thinking_task = Task::mock(
@@ -292,6 +301,7 @@ mod tests {
                 0,
                 TaskStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
+                None,
             );
 
             let tasks = vec![sleep_task, thinking_task];

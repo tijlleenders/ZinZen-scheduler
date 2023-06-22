@@ -85,26 +85,6 @@ impl Ord for Task {
 }
 
 impl Task {
-    /// Create new task
-    pub fn new(new_task: NewTask) -> Task {
-        let start = new_task.timeframe.map(|time| time.start);
-        let deadline = new_task.timeframe.map(|time| time.end);
-
-        Task {
-            id: new_task.task_id,
-            goal_id: new_task.goal.id,
-            title: new_task.title,
-            duration: new_task.duration,
-            status: new_task.status,
-            flexibility: 0,
-            start,
-            deadline,
-            slots: new_task.timeline.slots.into_iter().collect(),
-            tags: new_task.goal.tags,
-            after_goals: new_task.goal.after_goals,
-        }
-    }
-
     pub fn flexibility(&mut self) -> usize {
         self.flexibility
     }
@@ -114,6 +94,7 @@ impl Task {
     }
 
     pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Task>, Error> {
+        // TODO 2023-06-22: Debug notes: This function not clone task.start and task.deadline
         if self.duration == 1 {
             // && !self.tags.contains(&Tag::DoNotSort) {
             return Err(Error::CannotSplit);
@@ -141,8 +122,7 @@ impl Task {
 
         for _ in 0..self.duration {
             let mut task = Task::new(new_task.clone());
-
-            task.calculate_flexibility();
+            task.id = *counter;
             task.status = TaskStatus::ReadyToSchedule;
             *counter += 1;
             tasks.push(task);
@@ -266,6 +246,7 @@ mod tests {
                 12,
                 TaskStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0)],
+                None,
             );
 
             task.remove_conflicted_slots(slot_to_remove);
@@ -303,6 +284,7 @@ mod tests {
                 12,
                 TaskStatus::ReadyToSchedule,
                 vec![task_slot.clone()],
+                None,
             );
 
             task.remove_conflicted_slots(slot_to_remove);
@@ -330,6 +312,7 @@ mod tests {
                 12,
                 TaskStatus::ReadyToSchedule,
                 vec![task_slot.clone()],
+                None,
             );
 
             task.remove_conflicted_slots(slot_to_remove);
@@ -337,6 +320,78 @@ mod tests {
             let expected_task_slot = Slot::mock(Duration::hours(8), 2023, 01, 03, 3, 0);
 
             assert_eq!(task.slots[0], expected_task_slot);
+        }
+    }
+
+    mod split {
+        use chrono::Duration;
+
+        use crate::models::{
+            slot::Slot,
+            task::{Task, TaskStatus},
+        };
+
+        #[test]
+        fn test_split() {
+            let duration: usize = 3;
+            let mut counter: usize = 1;
+
+            let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
+            let mut task = Task::mock(
+                "test",
+                duration,
+                0,
+                TaskStatus::ReadyToSchedule,
+                vec![goal_timeframe],
+                None,
+            );
+            let tasks = task.split(&mut counter).unwrap();
+            dbg!(&task, &tasks);
+
+            let mut expected_task = vec![
+                Task::mock(
+                    "test",
+                    1,
+                    0,
+                    TaskStatus::ReadyToSchedule,
+                    vec![goal_timeframe],
+                    None,
+                ),
+                Task::mock(
+                    "test",
+                    1,
+                    0,
+                    TaskStatus::ReadyToSchedule,
+                    vec![goal_timeframe],
+                    None,
+                ),
+                Task::mock(
+                    "test",
+                    1,
+                    0,
+                    TaskStatus::ReadyToSchedule,
+                    vec![goal_timeframe],
+                    None,
+                ),
+            ];
+            expected_task[1].id = 2;
+            expected_task[2].id = 3;
+            dbg!(&expected_task);
+
+            assert_eq!(tasks, expected_task);
+            assert_eq!(counter, 4);
+
+            assert_eq!(tasks[0].id, expected_task[0].id);
+            assert_eq!(tasks[1].id, expected_task[1].id);
+            assert_eq!(tasks[2].id, expected_task[2].id);
+
+            assert_eq!(tasks[0].duration, expected_task[0].duration);
+            assert_eq!(tasks[1].duration, expected_task[1].duration);
+            assert_eq!(tasks[2].duration, expected_task[2].duration);
+
+            assert_eq!(tasks[0].status, expected_task[0].status);
+            assert_eq!(tasks[1].status, expected_task[1].status);
+            assert_eq!(tasks[2].status, expected_task[2].status);
         }
     }
 }

@@ -49,6 +49,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 // Loop through BudgetTaskMinWaitingForAdjustment Task Vec<Slot> and chop off anything that is outside of the slot_budget Slot
                 // Make Task with those slots and remaining hours
                 // If not enough hours - mark impossible? No will happen during scheduling.
+                // TODO 2023-06-20: idea to refactor below code into a separate function
                 let mut task_slots_to_adjust = tasks_to_place.tasks[index].slots.clone();
                 for slot in task_slots_to_adjust.iter_mut() {
                     if slot.start.lt(&slot_budget.slot.start) {
@@ -70,6 +71,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                         result_slots.push(task_slot);
                     }
                 }
+
                 // TODO 2023-06-04  | fix this by using retain instead of this way
                 tasks_to_place.tasks[index].tags.push(Tag::Remove);
 
@@ -229,6 +231,7 @@ mod tests {
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 8, 1, 0),
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 9, 1, 0),
                 ],
+                None,
             ),
             Task::mock(
                 "dinner",
@@ -244,6 +247,7 @@ mod tests {
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 8, 18, 0),
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 9, 18, 0),
                 ],
+                None,
             ),
             Task::mock(
                 "walk",
@@ -259,6 +263,7 @@ mod tests {
                     Slot::mock(chrono::Duration::hours(6), 2023, 1, 8, 14, 0),
                     Slot::mock(chrono::Duration::hours(6), 2023, 1, 9, 14, 0),
                 ],
+                None,
             ),
             Task::mock(
                 "breakfast",
@@ -274,6 +279,7 @@ mod tests {
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 8, 06, 0),
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 9, 06, 0),
                 ],
+                None,
             ),
             Task::mock(
                 "me time",
@@ -281,6 +287,7 @@ mod tests {
                 0,
                 TaskStatus::ReadyToSchedule,
                 vec![Slot::mock(chrono::Duration::days(7), 2023, 1, 3, 0, 0)],
+                None,
             ),
             Task::mock(
                 "lunch",
@@ -296,6 +303,7 @@ mod tests {
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 8, 12, 0),
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 9, 12, 0),
                 ],
+                None,
             ),
             Task::mock(
                 "hurdle",
@@ -311,6 +319,7 @@ mod tests {
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 8, 1, 0),
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 9, 1, 0),
                 ],
+                None,
             ),
             Task::mock(
                 "sleep",
@@ -327,6 +336,7 @@ mod tests {
                     Slot::mock(Duration::hours(10), 2023, 01, 08, 22, 0),
                     Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
                 ],
+                None,
             ),
         ];
 
