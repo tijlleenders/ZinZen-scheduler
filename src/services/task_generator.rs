@@ -30,7 +30,7 @@ impl Task {
         let threshold: usize = 8;
         let mut new_task = self.clone();
 
-        if new_task.duration > 1 && new_task.duration < threshold {
+        if new_task.duration > 0 && new_task.duration < threshold {
             dbg!(&new_task);
             vec![new_task]
         } else {
