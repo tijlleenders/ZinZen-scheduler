@@ -153,13 +153,13 @@ impl Goal {
                     timeframe: None,
                 };
 
-                // let task = Task::new(new_task);
-                // dbg!(&task);
+                let task = Task::new(new_task);
+                dbg!(&task);
 
-                let new_tasks = new_task.generate_tasks();
-                dbg!(&new_tasks);
+                let thresholded_tasks = task.apply_duration_threshold();
+                dbg!(&thresholded_tasks);
 
-                tasks.extend(new_tasks);
+                tasks.extend(thresholded_tasks);
                 dbg!(&tasks);
             }
         }
@@ -571,7 +571,25 @@ mod tests {
             ///        id: 2,
             ///        goal_id: "1",
             ///        title: "test",
-            ///        duration: 2,
+            ///        duration: 1,
+            ///        status: ReadyToSchedule,
+            ///        flexibility: 0,
+            ///        start: None,
+            ///        deadline: None,
+            ///        slots: [
+            ///            Slot {
+            ///                start:   2023-06-01 00,
+            ///                 end:    2023-06-06 00,
+            ///            },
+            ///        ],
+            ///        tags: [],
+            ///        after_goals: None,
+            ///    },
+            ///    Task {
+            ///        id: 3,
+            ///        goal_id: "1",
+            ///        title: "test",
+            ///        duration: 1,
             ///        status: ReadyToSchedule,
             ///        flexibility: 0,
             ///        start: None,
@@ -630,6 +648,7 @@ mod tests {
                     ),
                 ];
                 expected_task[1].id = 2;
+                expected_task[2].id = 3;
                 dbg!(&expected_task);
 
                 assert_eq!(tasks, expected_task);
@@ -637,12 +656,15 @@ mod tests {
 
                 assert_eq!(tasks[0].id, expected_task[0].id);
                 assert_eq!(tasks[1].id, expected_task[1].id);
+                assert_eq!(tasks[2].id, expected_task[2].id);
 
                 assert_eq!(tasks[0].duration, expected_task[0].duration);
                 assert_eq!(tasks[1].duration, expected_task[1].duration);
+                assert_eq!(tasks[2].duration, expected_task[2].duration);
 
                 assert_eq!(tasks[0].status, expected_task[0].status);
                 assert_eq!(tasks[1].status, expected_task[1].status);
+                assert_eq!(tasks[2].status, expected_task[2].status);
             }
         }
 
