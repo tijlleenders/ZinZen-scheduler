@@ -4,7 +4,7 @@ mod find_best_slots;
 use crate::models::goal::{Goal, Tag};
 use crate::models::input::{PlacedSteps, StepsToPlace};
 use crate::models::slot::Slot;
-use crate::models::task::{NewStep, Step, StepStatus};
+use crate::models::step::{NewStep, Step, StepStatus};
 use crate::models::timeline::Timeline;
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each

@@ -85,7 +85,7 @@ pub enum Tag {
     Optional,
     FlexDur,
     Remove,
-    IgnoreForTaskGeneration,
+    IgnoreStepGeneration,
     Filler,
     Budget,
 }

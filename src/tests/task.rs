@@ -1,7 +1,7 @@
 use crate::models::{
     goal::{Goal, Tag},
     slot::Slot,
-    task::{NewStep, Step, StepStatus},
+    step::{NewStep, Step, StepStatus},
     timeline::Timeline,
 };
 use chrono::Duration;

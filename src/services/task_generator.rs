@@ -1,6 +1,6 @@
 use crate::models::goal::{Goal, Tag};
 use crate::models::slots_iterator::TimeSlotsIterator;
-use crate::models::task::{NewStep, Step, StepStatus};
+use crate::models::step::{NewStep, Step, StepStatus};
 use chrono::NaiveDateTime;
 
 impl Step {
@@ -74,7 +74,7 @@ impl Goal {
         counter: &mut usize,
     ) -> Vec<Step> {
         let mut tasks: Vec<Step> = Vec::new();
-        if self.tags.contains(&Tag::IgnoreForTaskGeneration) {
+        if self.tags.contains(&Tag::IgnoreStepGeneration) {
             return tasks;
         }
 
@@ -142,7 +142,7 @@ mod tests {
             use crate::models::{
                 goal::Goal,
                 slot::Slot,
-                task::{NewStep, Step, StepStatus},
+                step::{NewStep, Step, StepStatus},
                 timeline::Timeline,
             };
 
@@ -343,7 +343,7 @@ mod tests {
             use crate::models::{
                 goal::Goal,
                 slot::Slot,
-                task::{Step, StepStatus},
+                step::{Step, StepStatus},
             };
 
             #[test]

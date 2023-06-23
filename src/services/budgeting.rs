@@ -7,7 +7,7 @@ use crate::models::{
     goal::{Goal, Tag},
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
-    task::{NewStep, Step, StepStatus},
+    step::{NewStep, Step, StepStatus},
 };
 
 impl StepBudgets {

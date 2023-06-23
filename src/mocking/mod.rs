@@ -3,7 +3,7 @@ use chrono::{Duration, NaiveDate, NaiveDateTime};
 use crate::models::{
     goal::Goal,
     slot::{iterator::SlotIterator, Slot},
-    task::{Step, StepStatus},
+    step::{Step, StepStatus},
     timeline::Timeline,
 };
 
@@ -250,7 +250,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Step, StepStatus},
+            step::{Step, StepStatus},
         };
 
         #[test]

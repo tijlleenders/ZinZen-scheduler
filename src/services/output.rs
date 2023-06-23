@@ -5,7 +5,7 @@ use crate::models::goal::Tag;
 use crate::models::input::PlacedSteps;
 use crate::models::output::{DayOutputFormat, FinalOutput, Output};
 use crate::models::slot::Slot;
-use crate::models::task::{Step, StepStatus};
+use crate::models::step::{Step, StepStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 
 /// Formatting, sorting, and merging (contiguous) incoming tasks into

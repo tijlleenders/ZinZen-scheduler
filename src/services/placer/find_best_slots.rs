@@ -2,7 +2,7 @@ use chrono::Duration;
 
 use crate::models::{
     slot::{Slot, SlotConflict},
-    task::{Step, StepStatus},
+    step::{Step, StepStatus},
 };
 
 /// Find best slots for tasks by splitting, finding conflicts and return list of slots which can be scheduled
@@ -326,7 +326,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Step, StepStatus},
+            step::{Step, StepStatus},
         };
 
         mod slot {

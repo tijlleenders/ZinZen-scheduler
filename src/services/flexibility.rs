@@ -1,6 +1,6 @@
 use crate::models::{
     input::StepsToPlace,
-    task::{Step, StepStatus},
+    step::{Step, StepStatus},
 };
 
 impl StepsToPlace {
@@ -62,7 +62,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Step, StepStatus},
+            step::{Step, StepStatus},
         };
 
         /// Test when TaskStatus::Blocked
@@ -156,7 +156,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Step, StepStatus},
+            step::{Step, StepStatus},
         };
 
         /// Simulate one Task in test case bug_215 which is Sleep
@@ -257,7 +257,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Step, StepStatus},
+            step::{Step, StepStatus},
         };
 
         /// An edge case test which simulating 2 tasks and avail slots

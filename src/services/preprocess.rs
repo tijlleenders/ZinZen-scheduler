@@ -3,7 +3,7 @@ use crate::models::{
     goal::{Goal, GoalsMap, Tag},
     input::{Input, StepsToPlace},
     repetition::Repetition,
-    task::Step,
+    step::Step,
 };
 use chrono::NaiveDateTime;
 use std::collections::BTreeMap;
@@ -142,7 +142,7 @@ fn add_filler_goals(goals: &mut GoalsMap) {
             .get_mut(&goal_id_to_ignore)
             .unwrap()
             .tags
-            .push(Tag::IgnoreForTaskGeneration);
+            .push(Tag::IgnoreStepGeneration);
     }
     for parent_child in children_to_add {
         goals

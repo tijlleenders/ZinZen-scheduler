@@ -220,7 +220,7 @@ mod tests {
     mod remove_conflicted_slots {
         use crate::models::{
             slot::Slot,
-            task::{Step, StepStatus},
+            step::{Step, StepStatus},
         };
         use chrono::Duration;
 
@@ -328,7 +328,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Step, StepStatus},
+            step::{Step, StepStatus},
         };
 
         #[test]
