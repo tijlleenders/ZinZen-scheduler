@@ -3,7 +3,7 @@ use crate::models::{
     goal::{Goal, GoalsMap, Tag},
     input::{Input, TasksToPlace},
     repetition::Repetition,
-    task::Task,
+    task::Step,
 };
 use chrono::NaiveDateTime;
 use std::collections::BTreeMap;
@@ -27,12 +27,12 @@ pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
     task_budgets.configure_budgets(&mut goals);
 
     let mut counter: usize = 0;
-    let mut tasks: Vec<Task> =
+    let mut tasks: Vec<Step> =
         task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter);
 
     for goal in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
-        let tasks_for_goal: Vec<Task> =
+        let tasks_for_goal: Vec<Step> =
             goal.1
                 .generate_tasks(calendar_start, calendar_end, &mut counter);
         tasks.extend(tasks_for_goal);

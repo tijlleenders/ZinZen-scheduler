@@ -4,7 +4,7 @@ mod find_best_slots;
 use crate::models::goal::{Goal, Tag};
 use crate::models::input::{PlacedTasks, TasksToPlace};
 use crate::models::slot::Slot;
-use crate::models::task::{NewTask, Task, TaskStatus};
+use crate::models::task::{NewStep, Step, StepStatus};
 use crate::models::timeline::Timeline;
 
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
@@ -33,11 +33,11 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
 }
 
 fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
-    let mut tasks_to_add: Vec<Task> = Vec::new();
+    let mut tasks_to_add: Vec<Step> = Vec::new();
     dbg!(&tasks_to_place);
 
     for index in 0..tasks_to_place.tasks.len() {
-        if tasks_to_place.tasks[index].status == TaskStatus::BudgetMinWaitingForAdjustment {
+        if tasks_to_place.tasks[index].status == StepStatus::BudgetMinWaitingForAdjustment {
             for slot_budget in &tasks_to_place
                 .task_budgets
                 .budget_id_to_budget
@@ -90,17 +90,17 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                         slots: result_slots.into_iter().collect(),
                     };
 
-                    let new_task = NewTask {
+                    let new_task = NewStep {
                         task_id,
                         title: new_title,
                         duration: new_duration,
                         goal,
                         timeline,
-                        status: TaskStatus::ReadyToSchedule,
+                        status: StepStatus::ReadyToSchedule,
                         timeframe: None,
                     };
 
-                    let task_to_add = Task::new(new_task);
+                    let task_to_add = Step::new(new_task);
 
                     tasks_to_add.push(task_to_add);
                 }
@@ -119,7 +119,7 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
         dbg!(&tasks_to_place);
         let first_task = tasks_to_place.tasks[0].clone();
         dbg!(&first_task);
-        if first_task.status != TaskStatus::ReadyToSchedule {
+        if first_task.status != StepStatus::ReadyToSchedule {
             break;
         }
         match find_best_slots::find_best_slots(&tasks_to_place.tasks) {
@@ -149,7 +149,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
 
     let mut remaining_hours = tasks_to_place.tasks[0].duration;
     let mut template_task = tasks_to_place.tasks[0].clone();
-    template_task.status = TaskStatus::Scheduled;
+    template_task.status = StepStatus::Scheduled;
     // template_task.duration = 1;
     template_task.id = tasks_to_place.tasks.len();
     template_task.slots.clear();
@@ -181,7 +181,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     //Todo remove chosen_slots from TaskBudgets
     if remaining_hours > 0 {
         tasks_to_place.tasks[0].duration = remaining_hours;
-        tasks_to_place.tasks[0].status = TaskStatus::Impossible;
+        tasks_to_place.tasks[0].status = StepStatus::Impossible;
     } else {
         tasks_to_place.tasks.remove(0);
 
@@ -216,12 +216,12 @@ mod tests {
 
         let calendar_timing = Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0);
 
-        let tasks: Vec<Task> = vec![
-            Task::mock(
+        let tasks: Vec<Step> = vec![
+            Step::mock(
                 "water the plants indoors",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 3, 1, 0),
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 4, 1, 0),
@@ -233,11 +233,11 @@ mod tests {
                 ],
                 None,
             ),
-            Task::mock(
+            Step::mock(
                 "dinner",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 3, 18, 0),
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 4, 18, 0),
@@ -249,11 +249,11 @@ mod tests {
                 ],
                 None,
             ),
-            Task::mock(
+            Step::mock(
                 "walk",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(chrono::Duration::hours(6), 2023, 1, 3, 14, 0),
                     Slot::mock(chrono::Duration::hours(6), 2023, 1, 4, 14, 0),
@@ -265,11 +265,11 @@ mod tests {
                 ],
                 None,
             ),
-            Task::mock(
+            Step::mock(
                 "breakfast",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 3, 06, 0),
                     Slot::mock(chrono::Duration::hours(3), 2023, 1, 4, 06, 0),
@@ -281,19 +281,19 @@ mod tests {
                 ],
                 None,
             ),
-            Task::mock(
+            Step::mock(
                 "me time",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![Slot::mock(chrono::Duration::days(7), 2023, 1, 3, 0, 0)],
                 None,
             ),
-            Task::mock(
+            Step::mock(
                 "lunch",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 3, 12, 0),
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 4, 12, 0),
@@ -305,11 +305,11 @@ mod tests {
                 ],
                 None,
             ),
-            Task::mock(
+            Step::mock(
                 "hurdle",
                 2,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 3, 1, 0),
                     Slot::mock(chrono::Duration::hours(2), 2023, 1, 4, 1, 0),
@@ -321,11 +321,11 @@ mod tests {
                 ],
                 None,
             ),
-            Task::mock(
+            Step::mock(
                 "sleep",
                 8,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
@@ -356,8 +356,8 @@ mod tests {
         };
         dbg!(&tasks_to_place);
 
-        let expected_tasks: Vec<Task> = vec![
-            Task::mock_scheduled(
+        let expected_tasks: Vec<Step> = vec![
+            Step::mock_scheduled(
                 9,
                 "1",
                 "me time",
@@ -365,7 +365,7 @@ mod tests {
                 168,
                 Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 09, 0),
             ),
-            Task::mock_scheduled(
+            Step::mock_scheduled(
                 9,
                 "1",
                 "walk",
@@ -373,7 +373,7 @@ mod tests {
                 42,
                 Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 14, 0),
             ),
-            Task::mock_scheduled(
+            Step::mock_scheduled(
                 9,
                 "1",
                 "dinner",
@@ -381,7 +381,7 @@ mod tests {
                 21,
                 Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 18, 0),
             ),
-            Task::mock_scheduled(
+            Step::mock_scheduled(
                 9,
                 "1",
                 "breakfast",
@@ -389,7 +389,7 @@ mod tests {
                 21,
                 Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 08, 0),
             ),
-            Task::mock_scheduled(
+            Step::mock_scheduled(
                 9,
                 "1",
                 "sleep",
@@ -397,7 +397,7 @@ mod tests {
                 19,
                 Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
             ),
-            Task::mock_scheduled(
+            Step::mock_scheduled(
                 9,
                 "1",
                 "water the plants indoors",
@@ -405,7 +405,7 @@ mod tests {
                 14,
                 Slot::mock(chrono::Duration::hours(1), 2023, 1, 4, 1, 0),
             ),
-            Task::mock_scheduled(
+            Step::mock_scheduled(
                 9,
                 "1",
                 "lunch",
@@ -413,7 +413,7 @@ mod tests {
                 14,
                 Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 12, 0),
             ),
-            Task::mock_scheduled(
+            Step::mock_scheduled(
                 9,
                 "1",
                 "hurdle",

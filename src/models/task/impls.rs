@@ -1,4 +1,4 @@
-use super::{NewTask, Task, TaskStatus};
+use super::{NewStep, Step, StepStatus};
 use crate::{
     errors::Error,
     models::{
@@ -9,19 +9,19 @@ use crate::{
 };
 use std::cmp::Ordering;
 
-impl PartialEq for Task {
+impl PartialEq for Step {
     fn eq(&self, other: &Self) -> bool {
         self.flexibility == other.flexibility
     }
 }
 
-impl PartialOrd for Task {
+impl PartialOrd for Step {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl Ord for Task {
+impl Ord for Step {
     /// ### Custom ordering for collections of Tasks:
     ///
     /// TODO!: Rething Tags/Statusses to simplify and make this easier to understand
@@ -52,12 +52,12 @@ impl Ord for Task {
     /// - If there are no more Tasks/Increments with flexibility 1 - pick the Task/Increment with **highest** flexibility
     fn cmp(&self, other: &Self) -> Ordering {
         // TODO 2023-06-01  | Refactor for readability
-        if (self.status == TaskStatus::ReadyToSchedule)
-            && !(other.status == TaskStatus::ReadyToSchedule)
+        if (self.status == StepStatus::ReadyToSchedule)
+            && !(other.status == StepStatus::ReadyToSchedule)
         {
             Ordering::Less
-        } else if (other.status == TaskStatus::ReadyToSchedule)
-            && !(self.status == TaskStatus::ReadyToSchedule)
+        } else if (other.status == StepStatus::ReadyToSchedule)
+            && !(self.status == StepStatus::ReadyToSchedule)
         {
             Ordering::Greater
         } else if !self.tags.contains(&Tag::Optional) && other.tags.contains(&Tag::Optional) {
@@ -84,7 +84,7 @@ impl Ord for Task {
     }
 }
 
-impl Task {
+impl Step {
     pub fn flexibility(&mut self) -> usize {
         self.flexibility
     }
@@ -93,7 +93,7 @@ impl Task {
         self.slots.clone()
     }
 
-    pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Task>, Error> {
+    pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Step>, Error> {
         // TODO 2023-06-22: Debug notes: This function not clone task.start and task.deadline
         if self.duration == 1 {
             // && !self.tags.contains(&Tag::DoNotSort) {
@@ -110,20 +110,20 @@ impl Task {
             after_goals: self.after_goals.clone(),
             ..Default::default()
         };
-        let new_task = NewTask {
+        let new_task = NewStep {
             task_id: *counter,
             title: self.title.clone(),
             duration: 1,
             goal,
             timeline,
-            status: TaskStatus::Uninitialized,
+            status: StepStatus::Uninitialized,
             timeframe: None,
         };
 
         for _ in 0..self.duration {
-            let mut task = Task::new(new_task.clone());
+            let mut task = Step::new(new_task.clone());
             task.id = *counter;
-            task.status = TaskStatus::ReadyToSchedule;
+            task.status = StepStatus::ReadyToSchedule;
             *counter += 1;
             tasks.push(task);
         }
@@ -137,7 +137,7 @@ impl Task {
         TODO 2023-06-10: Add test case to guerntee not adding extra hours for the Task.slot
         Todo: duplicate of remove_taken_slots? (NOTE: This todo need to be reviewed)
         */
-        if self.status == TaskStatus::Scheduled {
+        if self.status == StepStatus::Scheduled {
             return;
         }
 
@@ -220,7 +220,7 @@ mod tests {
     mod remove_conflicted_slots {
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            task::{Step, StepStatus},
         };
         use chrono::Duration;
 
@@ -240,11 +240,11 @@ mod tests {
         #[test]
         fn test_intersected_bigger_slot() {
             let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 12,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0)],
                 None,
             );
@@ -257,7 +257,7 @@ mod tests {
         #[test]
         fn test_task_is_scheduled() {
             let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
-            let mut task = Task::mock_scheduled(
+            let mut task = Step::mock_scheduled(
                 1,
                 "1",
                 "test",
@@ -278,11 +278,11 @@ mod tests {
         fn test_nonintersected_slot() {
             let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
             let task_slot = Slot::mock(Duration::hours(10), 2023, 01, 04, 1, 0);
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 12,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![task_slot.clone()],
                 None,
             );
@@ -306,11 +306,11 @@ mod tests {
         fn test_normal() {
             let slot_to_remove = Slot::mock(Duration::hours(3), 2023, 01, 03, 0, 0);
             let task_slot = Slot::mock(Duration::hours(10), 2023, 01, 03, 1, 0);
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 12,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![task_slot.clone()],
                 None,
             );
@@ -328,7 +328,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            task::{Step, StepStatus},
         };
 
         #[test]
@@ -337,11 +337,11 @@ mod tests {
             let mut counter: usize = 1;
 
             let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 duration,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![goal_timeframe],
                 None,
             );
@@ -349,27 +349,27 @@ mod tests {
             dbg!(&task, &tasks);
 
             let mut expected_task = vec![
-                Task::mock(
+                Step::mock(
                     "test",
                     1,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 ),
-                Task::mock(
+                Step::mock(
                     "test",
                     1,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 ),
-                Task::mock(
+                Step::mock(
                     "test",
                     1,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 ),

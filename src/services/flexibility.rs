@@ -1,6 +1,6 @@
 use crate::models::{
     input::TasksToPlace,
-    task::{Task, TaskStatus},
+    task::{Step, StepStatus},
 };
 
 impl TasksToPlace {
@@ -17,10 +17,10 @@ impl TasksToPlace {
     }
 }
 
-impl Task {
+impl Step {
     /// Calculate flexibility of a task slots
     pub fn calculate_flexibility(&mut self) {
-        if self.status == TaskStatus::Scheduled || self.status == TaskStatus::Impossible {
+        if self.status == StepStatus::Scheduled || self.status == StepStatus::Impossible {
             let message = format!(
                 "TaskStatus must be ReadyToSchedule, but it is now TaskStatus::{:?}",
                 self.status.clone()
@@ -47,7 +47,7 @@ impl Task {
         });
 
         if flexibility == 0 {
-            self.status = TaskStatus::Impossible;
+            self.status = StepStatus::Impossible;
         }
 
         self.flexibility = flexibility;
@@ -62,7 +62,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            task::{Step, StepStatus},
         };
 
         /// Test when TaskStatus::Blocked
@@ -71,11 +71,11 @@ mod tests {
         #[should_panic]
         #[ignore]
         fn test_blocked() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Blocked,
+                StepStatus::Blocked,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
@@ -88,11 +88,11 @@ mod tests {
         #[should_panic]
         #[ignore]
         fn test_budget_min_for_adjstmnt() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::BudgetMinWaitingForAdjustment,
+                StepStatus::BudgetMinWaitingForAdjustment,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
@@ -105,11 +105,11 @@ mod tests {
         #[should_panic]
         #[ignore]
         fn test_impossible() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Impossible,
+                StepStatus::Impossible,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
@@ -122,11 +122,11 @@ mod tests {
         #[should_panic]
         #[ignore]
         fn test_scheduled() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Scheduled,
+                StepStatus::Scheduled,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
@@ -139,11 +139,11 @@ mod tests {
         #[should_panic]
         #[ignore]
         fn test_uninitialized() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Uninitialized,
+                StepStatus::Uninitialized,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
@@ -156,7 +156,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            task::{Step, StepStatus},
         };
 
         /// Simulate one Task in test case bug_215 which is Sleep
@@ -167,11 +167,11 @@ mod tests {
         /// ```
         #[test]
         fn test_sleep() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 8,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
@@ -202,11 +202,11 @@ mod tests {
         /// ```
         #[test]
         fn test_anytime_1hr() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
                 None,
             );
@@ -227,11 +227,11 @@ mod tests {
         /// ```
         #[test]
         fn test_dinner_time() {
-            let mut task = Task::mock(
+            let mut task = Step::mock(
                 "test",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(Duration::hours(3), 2023, 01, 03, 18, 0),
                     Slot::mock(Duration::hours(3), 2023, 01, 04, 18, 0),
@@ -257,7 +257,7 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            task::{Step, StepStatus},
         };
 
         /// An edge case test which simulating 2 tasks and avail slots
@@ -276,11 +276,11 @@ mod tests {
         fn test_avail_slots_less_than_dur() {
             // todo!("test_avail_slots_less_than_dur");
 
-            let sleep_task = Task::mock(
+            let sleep_task = Step::mock(
                 "test",
                 8,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
@@ -295,11 +295,11 @@ mod tests {
                 None,
             );
 
-            let thinking_task = Task::mock(
+            let thinking_task = Step::mock(
                 "thinking",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
                 None,
             );

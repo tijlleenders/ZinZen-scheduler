@@ -7,7 +7,7 @@ use crate::models::{
     goal::{Goal, Tag},
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
-    task::{NewTask, Task, TaskStatus},
+    task::{NewStep, Step, StepStatus},
 };
 
 impl TaskBudgets {
@@ -89,8 +89,8 @@ impl TaskBudgets {
         &mut self,
         goals: &mut BTreeMap<String, Goal>,
         counter: &mut usize,
-    ) -> Vec<Task> {
-        let mut tasks_result: Vec<Task> = Vec::new();
+    ) -> Vec<Step> {
+        let mut tasks_result: Vec<Step> = Vec::new();
         //for each budget create a min task (and optional max task) per corresponding time period
 
         for task_budget in &self.budget_id_to_budget {
@@ -110,17 +110,17 @@ impl TaskBudgets {
                     //and return them
                     let duration = task_budget.1.min.unwrap();
 
-                    let new_task = NewTask {
+                    let new_task = NewStep {
                         task_id,
                         title: goal.title.clone(),
                         duration,
                         goal: goal.clone(),
                         timeline,
-                        status: TaskStatus::BudgetMinWaitingForAdjustment,
+                        status: StepStatus::BudgetMinWaitingForAdjustment,
                         timeframe: None,
                     };
 
-                    let task = Task::new(new_task);
+                    let task = Step::new(new_task);
 
                     tasks_result.push(task);
                 } else {

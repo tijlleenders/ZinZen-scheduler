@@ -12,7 +12,7 @@ pub mod impls;
 /// Tasks/Increments are generated to achieve a Goal in one or more Increments.
 /// A Goal can generate one or more Tasks.
 #[derive(Deserialize, Debug, Eq, Clone)]
-pub struct Task {
+pub struct Step {
     /// Only used by the scheduler.
     /// Unstable between scheduler runs if input changes.
     pub id: usize,
@@ -25,7 +25,7 @@ pub struct Task {
     /// This duration is equal or part of the Goal duration.
     pub duration: usize,
     /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Tags.
-    pub status: TaskStatus,
+    pub status: StepStatus,
     /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment Status and Tags.
     pub flexibility: usize,
     /// Final start time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
@@ -44,7 +44,7 @@ pub struct Task {
 
 /// Used to decide in which order to schedule tasks, together with their flexibility
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
-pub enum TaskStatus {
+pub enum StepStatus {
     /// Task is scheduled and can't be modified any more.
     Scheduled,
     /// Task is impossible - its MaybeSlots Timeline is removed.
@@ -60,12 +60,12 @@ pub enum TaskStatus {
 }
 
 #[derive(Debug, Clone)]
-pub struct NewTask {
+pub struct NewStep {
     pub task_id: usize,
     pub title: String,
     pub duration: usize,
     pub goal: Goal,
     pub timeline: Timeline,
-    pub status: TaskStatus,
+    pub status: StepStatus,
     pub timeframe: Option<Slot>,
 }

@@ -1,7 +1,7 @@
 use crate::models::{
     goal::{Goal, Tag},
     slot::Slot,
-    task::{NewTask, Task, TaskStatus},
+    task::{NewStep, Step, StepStatus},
     timeline::Timeline,
 };
 use chrono::Duration;
@@ -19,10 +19,10 @@ fn new_task() {
         ..Default::default()
     };
     let timeline = Timeline::new();
-    let status = TaskStatus::ReadyToSchedule;
+    let status = StepStatus::ReadyToSchedule;
     let timeframe = Some(Slot::mock(Duration::days(2), 2023, 05, 01, 0, 0));
 
-    let new_task = NewTask {
+    let new_task = NewStep {
         task_id,
         title: title.clone(),
         duration,
@@ -32,7 +32,7 @@ fn new_task() {
         timeframe,
     };
 
-    let task = Task::new(new_task);
+    let task = Step::new(new_task);
 
     // let task = Task::new(
     //     task_id, title, duration, &goal, &timeline, &status, timeframe,

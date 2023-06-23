@@ -5,7 +5,7 @@ use crate::models::goal::Tag;
 use crate::models::input::PlacedTasks;
 use crate::models::output::{DayOutputFormat, FinalOutput, Output};
 use crate::models::slot::Slot;
-use crate::models::task::{Task, TaskStatus};
+use crate::models::task::{Step, StepStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 
 /// Formatting, sorting, and merging (contiguous) incoming tasks into
@@ -17,7 +17,7 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
 
     for task in placed_tasks.tasks.iter_mut() {
         match task.status {
-            TaskStatus::Scheduled => {
+            StepStatus::Scheduled => {
                 //convert scheduled tasks to output objects and add to scheduled_outputs vec
                 if task.start.is_none() || task.deadline.is_none() {
                     return Err(Error::NoConfirmedDate(task.title.clone(), task.id));
@@ -28,7 +28,7 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
                     placed_tasks.calendar_end,
                 ));
             }
-            TaskStatus::Impossible => {
+            StepStatus::Impossible => {
                 //convert impossible tasks to output objects and add to impossible_outputs vec
                 //don't report optional tasks
                 if task.tags.contains(&Tag::Optional) {
@@ -40,14 +40,14 @@ pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Er
                     placed_tasks.calendar_end,
                 ));
             }
-            TaskStatus::Uninitialized => {
+            StepStatus::Uninitialized => {
                 panic!("no uninitialized tasks should be present in placed_tasks")
             }
-            TaskStatus::Blocked => panic!("no Blocked tasks should be present in placed_tasks"),
-            TaskStatus::ReadyToSchedule => {
+            StepStatus::Blocked => panic!("no Blocked tasks should be present in placed_tasks"),
+            StepStatus::ReadyToSchedule => {
                 panic!("no ReadyToSchedule tasks should be present in placed_tasks")
             }
-            TaskStatus::BudgetMinWaitingForAdjustment => {
+            StepStatus::BudgetMinWaitingForAdjustment => {
                 panic!("no BudgetMinWaitingForAdjustment tasks should be present in placed_tasks")
             }
         }
@@ -108,12 +108,12 @@ fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
 }
 
 fn get_output_from_task(
-    task: &mut Task,
+    task: &mut Step,
     calendar_start: NaiveDateTime,
     calendar_end: NaiveDateTime,
 ) -> Output {
     match task.status {
-        TaskStatus::Scheduled => Output {
+        StepStatus::Scheduled => Output {
             taskid: task.id,
             goalid: task.goal_id.clone(),
             title: task.title.clone(),
@@ -123,7 +123,7 @@ fn get_output_from_task(
             tags: task.tags.clone(),
             impossible: false,
         },
-        TaskStatus::Impossible => Output {
+        StepStatus::Impossible => Output {
             taskid: task.id,
             goalid: task.goal_id.clone(),
             title: task.title.clone(),
@@ -133,10 +133,10 @@ fn get_output_from_task(
             tags: task.tags.clone(),
             impossible: true,
         },
-        TaskStatus::Uninitialized => todo!(),
-        TaskStatus::Blocked => todo!(),
-        TaskStatus::ReadyToSchedule => todo!(),
-        TaskStatus::BudgetMinWaitingForAdjustment => todo!(),
+        StepStatus::Uninitialized => todo!(),
+        StepStatus::Blocked => todo!(),
+        StepStatus::ReadyToSchedule => todo!(),
+        StepStatus::BudgetMinWaitingForAdjustment => todo!(),
     }
 }
 

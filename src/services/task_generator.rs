@@ -1,15 +1,15 @@
 use crate::models::goal::{Goal, Tag};
 use crate::models::slots_iterator::TimeSlotsIterator;
-use crate::models::task::{NewTask, Task, TaskStatus};
+use crate::models::task::{NewStep, Step, StepStatus};
 use chrono::NaiveDateTime;
 
-impl Task {
+impl Step {
     /// Create new task based on NewTask object
-    pub fn new(new_task: NewTask) -> Task {
+    pub fn new(new_task: NewStep) -> Step {
         let start = new_task.timeframe.map(|time| time.start);
         let deadline = new_task.timeframe.map(|time| time.end);
 
-        Task {
+        Step {
             id: new_task.task_id,
             goal_id: new_task.goal.id,
             title: new_task.title,
@@ -26,7 +26,7 @@ impl Task {
 
     /// When a task duration exceeded threshold, it will be splitted
     /// into 1 hour tasks
-    pub fn apply_duration_threshold(&self) -> Vec<Task> {
+    pub fn apply_duration_threshold(&self) -> Vec<Step> {
         let threshold: usize = 8;
         let mut new_task = self.clone();
 
@@ -38,7 +38,7 @@ impl Task {
             // then split tasks into 1 hours tasks till finish
             // remaining_duration
 
-            let mut tasks: Vec<Task> = Vec::new();
+            let mut tasks: Vec<Step> = Vec::new();
             let mut first_task = new_task.clone();
             first_task.duration = threshold;
             dbg!(&first_task);
@@ -72,8 +72,8 @@ impl Goal {
         calendar_start: NaiveDateTime,
         calendar_end: NaiveDateTime,
         counter: &mut usize,
-    ) -> Vec<Task> {
-        let mut tasks: Vec<Task> = Vec::new();
+    ) -> Vec<Step> {
+        let mut tasks: Vec<Step> = Vec::new();
         if self.tags.contains(&Tag::IgnoreForTaskGeneration) {
             return tasks;
         }
@@ -102,17 +102,17 @@ impl Goal {
                 let title = self.title.clone();
                 let duration = self.min_duration.unwrap();
 
-                let new_task = NewTask {
+                let new_task = NewStep {
                     task_id,
                     title,
                     duration,
                     goal: self.clone(),
                     timeline,
-                    status: TaskStatus::ReadyToSchedule,
+                    status: StepStatus::ReadyToSchedule,
                     timeframe: None,
                 };
 
-                let task = Task::new(new_task);
+                let task = Step::new(new_task);
                 dbg!(&task);
                 // Apply split on threshold (8 hours) rule if goal is a leaf
                 if self.children.is_none() {
@@ -142,7 +142,7 @@ mod tests {
             use crate::models::{
                 goal::Goal,
                 slot::Slot,
-                task::{NewTask, Task, TaskStatus},
+                task::{NewStep, Step, StepStatus},
                 timeline::Timeline,
             };
 
@@ -151,26 +151,26 @@ mod tests {
                 let duration: usize = 7;
                 let timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
 
-                let new_task = NewTask {
+                let new_task = NewStep {
                     task_id: 1,
                     title: "test".to_string(),
                     duration,
                     goal: Goal::mock("1", "test", timeframe.clone()),
                     timeline: Timeline::new(),
-                    status: TaskStatus::ReadyToSchedule,
+                    status: StepStatus::ReadyToSchedule,
                     timeframe: Some(timeframe),
                 };
-                let new_task = Task::new(new_task);
+                let new_task = Step::new(new_task);
                 dbg!(&new_task);
 
                 let generated_tasks = new_task.apply_duration_threshold();
                 dbg!(&generated_tasks);
 
-                let expected_task = Task::mock(
+                let expected_task = Step::mock(
                     "test",
                     7,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![timeframe],
                     None,
                 );
@@ -276,42 +276,42 @@ mod tests {
                     slots: vec![timeframe.clone()].into_iter().collect(),
                 };
 
-                let new_task = NewTask {
+                let new_task = NewStep {
                     task_id: 1,
                     title: "test".to_string(),
                     duration,
                     goal: Goal::mock("1", "test", timeframe.clone()),
                     timeline,
-                    status: TaskStatus::ReadyToSchedule,
+                    status: StepStatus::ReadyToSchedule,
                     timeframe: None,
                 };
-                let new_task = Task::new(new_task);
+                let new_task = Step::new(new_task);
                 dbg!(&new_task);
                 let generated_tasks = new_task.apply_duration_threshold();
                 dbg!(&generated_tasks);
 
                 let mut expected_task = vec![
-                    Task::mock(
+                    Step::mock(
                         "test",
                         8,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![timeframe],
                         None,
                     ),
@@ -343,7 +343,7 @@ mod tests {
             use crate::models::{
                 goal::Goal,
                 slot::Slot,
-                task::{Task, TaskStatus},
+                task::{Step, StepStatus},
             };
 
             #[test]
@@ -360,11 +360,11 @@ mod tests {
                     goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
                 dbg!(&tasks);
 
-                let expected_task = vec![Task::mock(
+                let expected_task = vec![Step::mock(
                     "test",
                     duration,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 )];
@@ -392,11 +392,11 @@ mod tests {
                     goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
                 dbg!(&tasks);
 
-                let expected_task = vec![Task::mock(
+                let expected_task = vec![Step::mock(
                     "test",
                     duration,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 )];
@@ -511,27 +511,27 @@ mod tests {
                 dbg!(&tasks);
 
                 let mut expected_task = vec![
-                    Task::mock(
+                    Step::mock(
                         "test",
                         8,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![goal_timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![goal_timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![goal_timeframe],
                         None,
                     ),
@@ -620,11 +620,11 @@ mod tests {
                     goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
                 dbg!(&tasks);
 
-                let expected_task = vec![Task::mock(
+                let expected_task = vec![Step::mock(
                     "test",
                     10,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 )];
