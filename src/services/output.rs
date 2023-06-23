@@ -2,7 +2,7 @@
 //whichever format required by front-end
 use crate::errors::Error;
 use crate::models::goal::Tag;
-use crate::models::input::PlacedTasks;
+use crate::models::input::PlacedSteps;
 use crate::models::output::{DayOutputFormat, FinalOutput, Output};
 use crate::models::slot::Slot;
 use crate::models::task::{Step, StepStatus};
@@ -11,11 +11,11 @@ use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 /// Formatting, sorting, and merging (contiguous) incoming tasks into
 /// a FinalOutput data-structure to be returned back.
 /// This data-structure will be printed out in the `output.json`
-pub fn output_formatter(mut placed_tasks: PlacedTasks) -> Result<FinalOutput, Error> {
+pub fn output_formatter(mut placed_tasks: PlacedSteps) -> Result<FinalOutput, Error> {
     let mut scheduled_outputs: Vec<Output> = Vec::new();
     let mut impossible_outputs: Vec<Output> = Vec::new();
 
-    for task in placed_tasks.tasks.iter_mut() {
+    for task in placed_tasks.steps.iter_mut() {
         match task.status {
             StepStatus::Scheduled => {
                 //convert scheduled tasks to output objects and add to scheduled_outputs vec

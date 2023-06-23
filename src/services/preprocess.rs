@@ -1,7 +1,7 @@
 use crate::models::{
-    budget::TaskBudgets,
+    budget::StepBudgets,
     goal::{Goal, GoalsMap, Tag},
-    input::{Input, TasksToPlace},
+    input::{Input, StepsToPlace},
     repetition::Repetition,
     task::Step,
 };
@@ -17,13 +17,13 @@ use std::collections::BTreeMap;
 /// - add_optional_flex_number_and_duration_habits_goals
 /// - create min and max budgets (task_budgets.create_task_budgets_config)
 /// - task_budgets.generate_budget_min_and_max_tasks
-pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
+pub fn generate_tasks_to_place(input: Input) -> StepsToPlace {
     let calendar_start = input.calendar_start;
     let calendar_end = input.calendar_end;
 
     let mut goals = manipulate_input_goals(input);
 
-    let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
+    let mut task_budgets = StepBudgets::new(&calendar_start, &calendar_end);
     task_budgets.configure_budgets(&mut goals);
 
     let mut counter: usize = 0;
@@ -41,10 +41,10 @@ pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
 
     dbg!(&tasks);
 
-    TasksToPlace {
+    StepsToPlace {
         calendar_start,
         calendar_end,
-        tasks,
+        steps: tasks,
         task_budgets,
     }
 }

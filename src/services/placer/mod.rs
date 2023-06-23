@@ -2,7 +2,7 @@ mod find_best_slots;
 
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 use crate::models::goal::{Goal, Tag};
-use crate::models::input::{PlacedTasks, TasksToPlace};
+use crate::models::input::{PlacedSteps, StepsToPlace};
 use crate::models::slot::Slot;
 use crate::models::task::{NewStep, Step, StepStatus};
 use crate::models::timeline::Timeline;
@@ -10,7 +10,7 @@ use crate::models::timeline::Timeline;
 /// The Task Placer receives a list of tasks from the Task Generator and attempts to assign each
 /// task a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible tasks.
-pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
+pub fn task_placer(mut tasks_to_place: StepsToPlace) -> PlacedSteps {
     dbg!(&tasks_to_place);
     //first pass of scheduler while tasks are unsplit
     schedule(&mut tasks_to_place);
@@ -25,23 +25,23 @@ pub fn task_placer(mut tasks_to_place: TasksToPlace) -> PlacedTasks {
     schedule(&mut tasks_to_place); //TODO
     dbg!(&tasks_to_place);
 
-    PlacedTasks {
+    PlacedSteps {
         calendar_start: tasks_to_place.calendar_start,
         calendar_end: tasks_to_place.calendar_end,
-        tasks: tasks_to_place.tasks,
+        steps: tasks_to_place.steps,
     }
 }
 
-fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
+fn adjust_min_budget_tasks(tasks_to_place: &mut StepsToPlace) {
     let mut tasks_to_add: Vec<Step> = Vec::new();
     dbg!(&tasks_to_place);
 
-    for index in 0..tasks_to_place.tasks.len() {
-        if tasks_to_place.tasks[index].status == StepStatus::BudgetMinWaitingForAdjustment {
+    for index in 0..tasks_to_place.steps.len() {
+        if tasks_to_place.steps[index].status == StepStatus::BudgetMinWaitingForAdjustment {
             for slot_budget in &tasks_to_place
                 .task_budgets
                 .budget_id_to_budget
-                .get(&tasks_to_place.tasks[index].goal_id)
+                .get(&tasks_to_place.steps[index].goal_id)
                 .unwrap()
                 .slot_budgets
             {
@@ -50,7 +50,7 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 // Make Task with those slots and remaining hours
                 // If not enough hours - mark impossible? No will happen during scheduling.
                 // TODO 2023-06-20: idea to refactor below code into a separate function
-                let mut task_slots_to_adjust = tasks_to_place.tasks[index].slots.clone();
+                let mut task_slots_to_adjust = tasks_to_place.steps[index].slots.clone();
                 for slot in task_slots_to_adjust.iter_mut() {
                     if slot.start.lt(&slot_budget.slot.start) {
                         slot.start = slot_budget.slot.start;
@@ -73,17 +73,17 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
                 }
 
                 // TODO 2023-06-04  | fix this by using retain instead of this way
-                tasks_to_place.tasks[index].tags.push(Tag::Remove);
+                tasks_to_place.steps[index].tags.push(Tag::Remove);
 
-                let new_title = tasks_to_place.tasks[index].title.clone();
-                if tasks_to_place.tasks[index].duration >= slot_budget.used {
-                    let new_duration = tasks_to_place.tasks[index].duration - slot_budget.used;
-                    let task_id = tasks_to_place.tasks[index].id;
+                let new_title = tasks_to_place.steps[index].title.clone();
+                if tasks_to_place.steps[index].duration >= slot_budget.used {
+                    let new_duration = tasks_to_place.steps[index].duration - slot_budget.used;
+                    let task_id = tasks_to_place.steps[index].id;
                     let goal = Goal {
-                        id: tasks_to_place.tasks[index].goal_id.clone(),
+                        id: tasks_to_place.steps[index].goal_id.clone(),
                         title: new_title.clone(),
-                        tags: tasks_to_place.tasks[index].tags.clone(),
-                        after_goals: tasks_to_place.tasks[index].after_goals.clone(),
+                        tags: tasks_to_place.steps[index].tags.clone(),
+                        after_goals: tasks_to_place.steps[index].after_goals.clone(),
                         ..Default::default()
                     };
                     let timeline = Timeline {
@@ -108,21 +108,21 @@ fn adjust_min_budget_tasks(tasks_to_place: &mut TasksToPlace) {
         }
     }
     tasks_to_place
-        .tasks
+        .steps
         .retain(|x| !x.tags.contains(&Tag::Remove));
-    tasks_to_place.tasks.extend(tasks_to_add);
+    tasks_to_place.steps.extend(tasks_to_add);
 }
 
-fn schedule(tasks_to_place: &mut TasksToPlace) {
+fn schedule(tasks_to_place: &mut StepsToPlace) {
     loop {
         tasks_to_place.sort_on_flexibility();
         dbg!(&tasks_to_place);
-        let first_task = tasks_to_place.tasks[0].clone();
+        let first_task = tasks_to_place.steps[0].clone();
         dbg!(&first_task);
         if first_task.status != StepStatus::ReadyToSchedule {
             break;
         }
-        match find_best_slots::find_best_slots(&tasks_to_place.tasks) {
+        match find_best_slots::find_best_slots(&tasks_to_place.steps) {
             Some(chosen_slots) => {
                 dbg!(&chosen_slots);
                 do_the_scheduling(tasks_to_place, chosen_slots);
@@ -133,7 +133,7 @@ fn schedule(tasks_to_place: &mut TasksToPlace) {
     }
 }
 
-fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>) {
+fn do_the_scheduling(tasks_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>) {
     dbg!(&tasks_to_place, &chosen_slots);
     /*
     TODO 2023-06-06 | Debug notes
@@ -147,11 +147,11 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
     Todo 2023-06-11: Need to refactor this function to be testable
     */
 
-    let mut remaining_hours = tasks_to_place.tasks[0].duration;
-    let mut template_task = tasks_to_place.tasks[0].clone();
+    let mut remaining_hours = tasks_to_place.steps[0].duration;
+    let mut template_task = tasks_to_place.steps[0].clone();
     template_task.status = StepStatus::Scheduled;
     // template_task.duration = 1;
-    template_task.id = tasks_to_place.tasks.len();
+    template_task.id = tasks_to_place.steps.len();
     template_task.slots.clear();
 
     for slot in chosen_slots.iter() {
@@ -170,23 +170,23 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
         template_task.id += 1;
         template_task.start = Some(slot.start);
         template_task.deadline = Some(slot.end);
-        tasks_to_place.tasks.push(template_task.clone());
+        tasks_to_place.steps.push(template_task.clone());
     }
 
     let chosen_slot = chosen_slots[0];
-    for task in tasks_to_place.tasks.iter_mut() {
+    for task in tasks_to_place.steps.iter_mut() {
         task.remove_conflicted_slots(chosen_slot.to_owned());
     }
 
     //Todo remove chosen_slots from TaskBudgets
     if remaining_hours > 0 {
-        tasks_to_place.tasks[0].duration = remaining_hours;
-        tasks_to_place.tasks[0].status = StepStatus::Impossible;
+        tasks_to_place.steps[0].duration = remaining_hours;
+        tasks_to_place.steps[0].status = StepStatus::Impossible;
     } else {
-        tasks_to_place.tasks.remove(0);
+        tasks_to_place.steps.remove(0);
 
         // TODO 2023-06-06  | apply function Task::remove_from_blocked_by when it is developed
-        let _task_scheduled_goal_id = tasks_to_place.tasks[0].goal_id.clone();
+        let _task_scheduled_goal_id = tasks_to_place.steps[0].goal_id.clone();
     }
 }
 
@@ -194,7 +194,7 @@ fn do_the_scheduling(tasks_to_place: &mut TasksToPlace, chosen_slots: Vec<Slot>)
 mod tests {
     use std::collections::HashMap;
 
-    use crate::models::budget::TaskBudgets;
+    use crate::models::budget::StepBudgets;
 
     use super::*;
     use chrono::Duration;
@@ -340,7 +340,7 @@ mod tests {
             ),
         ];
 
-        let task_budgets = TaskBudgets {
+        let task_budgets = StepBudgets {
             calendar_start: calendar_timing.start,
             calendar_end: calendar_timing.end,
             goal_id_to_budget_ids: HashMap::new(),
@@ -348,10 +348,10 @@ mod tests {
         };
         dbg!(&task_budgets);
 
-        let tasks_to_place = TasksToPlace {
+        let tasks_to_place = StepsToPlace {
             calendar_start: calendar_timing.start,
             calendar_end: calendar_timing.end,
-            tasks,
+            steps: tasks,
             task_budgets,
         };
         dbg!(&tasks_to_place);
@@ -427,6 +427,6 @@ mod tests {
         dbg!(&placed_tasks);
         dbg!(&expected_tasks);
 
-        assert_eq!(expected_tasks, placed_tasks.tasks);
+        assert_eq!(expected_tasks, placed_tasks.steps);
     }
 }

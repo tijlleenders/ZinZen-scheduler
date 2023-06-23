@@ -1,17 +1,17 @@
 use crate::models::{
-    input::TasksToPlace,
+    input::StepsToPlace,
     task::{Step, StepStatus},
 };
 
-impl TasksToPlace {
+impl StepsToPlace {
     /// Calculate flexibility for each task in tasks then sort them
     pub fn sort_on_flexibility(&mut self) {
         self.calculate_flexibilities();
-        self.tasks.sort();
+        self.steps.sort();
     }
 
     fn calculate_flexibilities(&mut self) {
-        for task in self.tasks.iter_mut() {
+        for task in self.steps.iter_mut() {
             task.calculate_flexibility();
         }
     }

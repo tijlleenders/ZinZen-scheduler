@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-use super::{BudgetType, SlotBudget, TaskBudget, TaskBudgets};
+use super::{BudgetType, SlotBudget, StepBudget, StepBudgets};
 use crate::models::{
     goal::Goal, repetition::Repetition, slot::Slot, slots_iterator::TimeSlotsIterator,
 };
 use chrono::NaiveDateTime;
 
-impl TaskBudget {
+impl StepBudget {
     pub fn decrement(&mut self, slot: &Slot) {
         for slot_budget in self.slot_budgets.iter_mut() {
             if slot.start.ge(&slot_budget.slot.start) && slot.end.le(&slot_budget.slot.end) {
@@ -53,7 +53,7 @@ impl TaskBudget {
     }
 }
 
-impl TaskBudgets {
+impl StepBudgets {
     pub fn new(calendar_start: &NaiveDateTime, calendar_end: &NaiveDateTime) -> Self {
         Self {
             calendar_start: *calendar_start,
@@ -65,7 +65,7 @@ impl TaskBudgets {
 
     pub fn add(&mut self, goal: &Goal) {
         for budget in goal.budgets.clone().unwrap() {
-            let budget = TaskBudget {
+            let budget = StepBudget {
                 task_budget_type: budget.budget_type.clone(),
                 slot_budgets: Vec::new(),
                 min: budget.min,
@@ -86,7 +86,7 @@ mod tests {
         // Test that the weekly budget is initialized correctly
         //for a month with 5 weeks
 
-        let mut task_budget = TaskBudget {
+        let mut task_budget = StepBudget {
             task_budget_type: BudgetType::Weekly,
             max: Some(10),
             min: Some(1),

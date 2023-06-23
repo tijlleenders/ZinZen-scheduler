@@ -1,4 +1,4 @@
-use crate::models::budget::TaskBudgets;
+use crate::models::budget::StepBudgets;
 use crate::models::goal::Goal;
 use crate::models::task::Step;
 use chrono::prelude::*;
@@ -19,16 +19,16 @@ pub struct Input {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct TasksToPlace {
+pub struct StepsToPlace {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
-    pub tasks: Vec<Step>,
-    pub task_budgets: TaskBudgets,
+    pub steps: Vec<Step>,
+    pub task_budgets: StepBudgets,
 }
 
 #[derive(Deserialize, Debug)]
-pub struct PlacedTasks {
+pub struct PlacedSteps {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
-    pub tasks: Vec<Step>,
+    pub steps: Vec<Step>,
 }

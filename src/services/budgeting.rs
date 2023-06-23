@@ -3,14 +3,14 @@ use std::collections::BTreeMap;
 use chrono::NaiveDateTime;
 
 use crate::models::{
-    budget::TaskBudgets,
+    budget::StepBudgets,
     goal::{Goal, Tag},
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
     task::{NewStep, Step, StepStatus},
 };
 
-impl TaskBudgets {
+impl StepBudgets {
     pub fn configure_budgets(&mut self, goals: &mut BTreeMap<String, Goal>) {
         // Todo: create a shadow tasks per budget period that have a tag so the won't be handled by initial call to schedule
         // Once all Tasks are scheduled, if a minimum budget per period is not reached,
