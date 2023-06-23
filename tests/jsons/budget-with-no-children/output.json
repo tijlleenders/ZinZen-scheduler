@@ -5,7 +5,7 @@
       "outputs": [
         {
           "taskid": 0,
-          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-01T00:00:00",
@@ -13,7 +13,7 @@
         },
         {
           "taskid": 1,
-          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "goalid": "2-breakfast",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
           "start": "2018-01-01T06:00:00",
@@ -21,7 +21,7 @@
         },
         {
           "taskid": 2,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 2,
           "start": "2018-01-01T07:00:00",
@@ -29,7 +29,7 @@
         },
         {
           "taskid": 3,
-          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "goalid": "7-me_time",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
           "start": "2018-01-01T09:00:00",
@@ -37,7 +37,7 @@
         },
         {
           "taskid": 4,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 2,
           "start": "2018-01-01T10:00:00",
@@ -45,7 +45,7 @@
         },
         {
           "taskid": 5,
-          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "goalid": "5-lunch",
           "title": "Lunch 🥪",
           "duration": 1,
           "start": "2018-01-01T12:00:00",
@@ -53,7 +53,7 @@
         },
         {
           "taskid": 6,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 1,
           "start": "2018-01-01T13:00:00",
@@ -61,7 +61,7 @@
         },
         {
           "taskid": 7,
-          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "goalid": "6-walk",
           "title": "Walk 🚶🏽",
           "duration": 1,
           "start": "2018-01-01T14:00:00",
@@ -69,7 +69,7 @@
         },
         {
           "taskid": 8,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 3,
           "start": "2018-01-01T15:00:00",
@@ -77,7 +77,7 @@
         },
         {
           "taskid": 9,
-          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "goalid": "1-dinner",
           "title": "Dinner 🍽️",
           "duration": 1,
           "start": "2018-01-01T18:00:00",
@@ -85,7 +85,7 @@
         },
         {
           "taskid": 10,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 5,
           "start": "2018-01-01T19:00:00",
@@ -98,7 +98,7 @@
       "outputs": [
         {
           "taskid": 11,
-          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-02T00:00:00",
@@ -106,7 +106,7 @@
         },
         {
           "taskid": 12,
-          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "goalid": "2-breakfast",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
           "start": "2018-01-02T06:00:00",
@@ -114,7 +114,7 @@
         },
         {
           "taskid": 13,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 2,
           "start": "2018-01-02T07:00:00",
@@ -122,7 +122,7 @@
         },
         {
           "taskid": 14,
-          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "goalid": "7-me_time",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
           "start": "2018-01-02T09:00:00",
@@ -130,7 +130,7 @@
         },
         {
           "taskid": 15,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 2,
           "start": "2018-01-02T10:00:00",
@@ -138,7 +138,7 @@
         },
         {
           "taskid": 16,
-          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "goalid": "5-lunch",
           "title": "Lunch 🥪",
           "duration": 1,
           "start": "2018-01-02T12:00:00",
@@ -146,7 +146,7 @@
         },
         {
           "taskid": 17,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 1,
           "start": "2018-01-02T13:00:00",
@@ -154,7 +154,7 @@
         },
         {
           "taskid": 18,
-          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "goalid": "6-walk",
           "title": "Walk 🚶🏽",
           "duration": 1,
           "start": "2018-01-02T14:00:00",
@@ -162,7 +162,7 @@
         },
         {
           "taskid": 19,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 3,
           "start": "2018-01-02T15:00:00",
@@ -170,7 +170,7 @@
         },
         {
           "taskid": 20,
-          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "goalid": "1-dinner",
           "title": "Dinner 🍽️",
           "duration": 1,
           "start": "2018-01-02T18:00:00",
@@ -178,7 +178,7 @@
         },
         {
           "taskid": 21,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 5,
           "start": "2018-01-02T19:00:00",
@@ -191,7 +191,7 @@
       "outputs": [
         {
           "taskid": 22,
-          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-03T00:00:00",
@@ -199,7 +199,7 @@
         },
         {
           "taskid": 23,
-          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "goalid": "2-breakfast",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
           "start": "2018-01-03T06:00:00",
@@ -207,7 +207,7 @@
         },
         {
           "taskid": 24,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 2,
           "start": "2018-01-03T07:00:00",
@@ -215,7 +215,7 @@
         },
         {
           "taskid": 25,
-          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "goalid": "7-me_time",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
           "start": "2018-01-03T09:00:00",
@@ -223,7 +223,7 @@
         },
         {
           "taskid": 26,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 2,
           "start": "2018-01-03T10:00:00",
@@ -231,7 +231,7 @@
         },
         {
           "taskid": 27,
-          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "goalid": "5-lunch",
           "title": "Lunch 🥪",
           "duration": 1,
           "start": "2018-01-03T12:00:00",
@@ -239,7 +239,7 @@
         },
         {
           "taskid": 28,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 1,
           "start": "2018-01-03T13:00:00",
@@ -247,7 +247,7 @@
         },
         {
           "taskid": 29,
-          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "goalid": "6-walk",
           "title": "Walk 🚶🏽",
           "duration": 1,
           "start": "2018-01-03T14:00:00",
@@ -255,7 +255,7 @@
         },
         {
           "taskid": 30,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 3,
           "start": "2018-01-03T15:00:00",
@@ -263,7 +263,7 @@
         },
         {
           "taskid": 31,
-          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "goalid": "1-dinner",
           "title": "Dinner 🍽️",
           "duration": 1,
           "start": "2018-01-03T18:00:00",
@@ -271,7 +271,7 @@
         },
         {
           "taskid": 32,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 5,
           "start": "2018-01-03T19:00:00",
@@ -284,7 +284,7 @@
       "outputs": [
         {
           "taskid": 33,
-          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-04T00:00:00",
@@ -292,7 +292,7 @@
         },
         {
           "taskid": 34,
-          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "goalid": "2-breakfast",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
           "start": "2018-01-04T06:00:00",
@@ -300,7 +300,7 @@
         },
         {
           "taskid": 35,
-          "goalid": "6d71c60f-b9f2-4ad8-b80e-87c38dfb7ec3",
+          "goalid": "4-work",
           "title": "Work",
           "duration": 1,
           "start": "2018-01-04T07:00:00",
@@ -316,7 +316,7 @@
         },
         {
           "taskid": 37,
-          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "goalid": "7-me_time",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
           "start": "2018-01-04T09:00:00",
@@ -332,7 +332,7 @@
         },
         {
           "taskid": 39,
-          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "goalid": "5-lunch",
           "title": "Lunch 🥪",
           "duration": 1,
           "start": "2018-01-04T12:00:00",
@@ -348,7 +348,7 @@
         },
         {
           "taskid": 41,
-          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "goalid": "6-walk",
           "title": "Walk 🚶🏽",
           "duration": 1,
           "start": "2018-01-04T14:00:00",
@@ -364,7 +364,7 @@
         },
         {
           "taskid": 43,
-          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "goalid": "1-dinner",
           "title": "Dinner 🍽️",
           "duration": 1,
           "start": "2018-01-04T18:00:00",
@@ -385,7 +385,7 @@
       "outputs": [
         {
           "taskid": 45,
-          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-05T00:00:00",
@@ -393,7 +393,7 @@
         },
         {
           "taskid": 46,
-          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "goalid": "2-breakfast",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
           "start": "2018-01-05T06:00:00",
@@ -409,7 +409,7 @@
         },
         {
           "taskid": 48,
-          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "goalid": "7-me_time",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
           "start": "2018-01-05T09:00:00",
@@ -425,7 +425,7 @@
         },
         {
           "taskid": 50,
-          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "goalid": "5-lunch",
           "title": "Lunch 🥪",
           "duration": 1,
           "start": "2018-01-05T12:00:00",
@@ -441,7 +441,7 @@
         },
         {
           "taskid": 52,
-          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "goalid": "6-walk",
           "title": "Walk 🚶🏽",
           "duration": 1,
           "start": "2018-01-05T14:00:00",
@@ -457,7 +457,7 @@
         },
         {
           "taskid": 54,
-          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "goalid": "1-dinner",
           "title": "Dinner 🍽️",
           "duration": 1,
           "start": "2018-01-05T18:00:00",
@@ -478,7 +478,7 @@
       "outputs": [
         {
           "taskid": 56,
-          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-06T00:00:00",
@@ -486,7 +486,7 @@
         },
         {
           "taskid": 57,
-          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "goalid": "2-breakfast",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
           "start": "2018-01-06T06:00:00",
@@ -502,7 +502,7 @@
         },
         {
           "taskid": 59,
-          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "goalid": "7-me_time",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
           "start": "2018-01-06T09:00:00",
@@ -518,7 +518,7 @@
         },
         {
           "taskid": 61,
-          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "goalid": "5-lunch",
           "title": "Lunch 🥪",
           "duration": 1,
           "start": "2018-01-06T12:00:00",
@@ -534,7 +534,7 @@
         },
         {
           "taskid": 63,
-          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "goalid": "6-walk",
           "title": "Walk 🚶🏽",
           "duration": 1,
           "start": "2018-01-06T14:00:00",
@@ -550,7 +550,7 @@
         },
         {
           "taskid": 65,
-          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "goalid": "1-dinner",
           "title": "Dinner 🍽️",
           "duration": 1,
           "start": "2018-01-06T18:00:00",
@@ -571,7 +571,7 @@
       "outputs": [
         {
           "taskid": 67,
-          "goalid": "749b306c-a025-4b1b-b945-71939189868d",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-07T00:00:00",
@@ -579,7 +579,7 @@
         },
         {
           "taskid": 68,
-          "goalid": "84bd2e15-9771-42b2-81f7-c83e6f25801b",
+          "goalid": "2-breakfast",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
           "start": "2018-01-07T06:00:00",
@@ -595,7 +595,7 @@
         },
         {
           "taskid": 70,
-          "goalid": "05a6b43c-3c50-48e1-9c6a-3a01cdcd102f",
+          "goalid": "7-me_time",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
           "start": "2018-01-07T09:00:00",
@@ -611,7 +611,7 @@
         },
         {
           "taskid": 72,
-          "goalid": "6ce569f4-b8e1-4df9-8d2a-b55ea7ffcff8",
+          "goalid": "5-lunch",
           "title": "Lunch 🥪",
           "duration": 1,
           "start": "2018-01-07T12:00:00",
@@ -627,7 +627,7 @@
         },
         {
           "taskid": 74,
-          "goalid": "0c37df98-dbd4-4226-bc74-47d7dc317bbf",
+          "goalid": "6-walk",
           "title": "Walk 🚶🏽",
           "duration": 1,
           "start": "2018-01-07T14:00:00",
@@ -643,7 +643,7 @@
         },
         {
           "taskid": 76,
-          "goalid": "d7b56844-87eb-43b3-b0db-807128133e5d",
+          "goalid": "1-dinner",
           "title": "Dinner 🍽️",
           "duration": 1,
           "start": "2018-01-07T18:00:00",
