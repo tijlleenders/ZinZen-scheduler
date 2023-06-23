@@ -4,6 +4,10 @@ use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
+
+/// To generate a flamegraph of the scheduler on your machine, follow the platform-specific instructions [here](https://github.com/flamegraph-rs/flamegraph).
+/// If you're running inside WSL2 you'll probably need to follow https://gist.github.com/abel0b/b1881e41b9e1c4b16d84e5e083c38a13
+/// Then `cargo flamegraph --bin flamegraph-bin`
 fn main() {
     let path = Path::new("./tests/jsons/after-12/input.json");
     let path2 = Path::new("./tests/jsons/before-7/input.json");
