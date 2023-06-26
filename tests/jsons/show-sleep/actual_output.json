@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2023-03-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
@@ -23,7 +23,7 @@
     },
     {
       "day": "2023-03-02",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 2,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
@@ -52,7 +52,7 @@
     },
     {
       "day": "2023-03-03",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 5,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
@@ -81,7 +81,7 @@
     },
     {
       "day": "2023-03-04",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 8,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
@@ -110,7 +110,7 @@
     },
     {
       "day": "2023-03-05",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 11,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
@@ -131,7 +131,7 @@
     },
     {
       "day": "2023-03-06",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 13,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
@@ -152,7 +152,7 @@
     },
     {
       "day": "2023-03-07",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 15,
           "goalid": "09e198d9-613f-4f17-a23c-4e38d3c5d529",
@@ -175,7 +175,7 @@
   "impossible": [
     {
       "day": "2023-03-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 17,
           "goalid": "d7fddb3d-2c3b-4a50-aadd-739d60a96378",
@@ -188,27 +188,27 @@
     },
     {
       "day": "2023-03-02",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-03",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-04",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-05",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-06",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-07",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

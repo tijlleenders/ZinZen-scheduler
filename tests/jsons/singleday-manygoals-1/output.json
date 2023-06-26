@@ -1,119 +1,114 @@
 {
-  "scheduled": [
-    {
-      "day": "2022-01-01",
-      "outputs": [
-        {
-          "taskid": 0,
-          "goalid": "8",
-          "title": "code",
-          "duration": 1,
-          "start": "2022-01-01T00:00:00",
-          "deadline": "2022-01-01T01:00:00"
-        },
-        {
-          "taskid": 1,
-          "goalid": "free",
-          "title": "free",
-          "duration": 4,
-          "start": "2022-01-01T01:00:00",
-          "deadline": "2022-01-01T05:00:00"
-        },
-        {
-          "taskid": 2,
-          "goalid": "4",
-          "title": "meditate",
-          "duration": 1,
-          "start": "2022-01-01T05:00:00",
-          "deadline": "2022-01-01T06:00:00"
-        },
-        {
-          "taskid": 3,
-          "goalid": "free",
-          "title": "free",
-          "duration": 4,
-          "start": "2022-01-01T06:00:00",
-          "deadline": "2022-01-01T10:00:00"
-        },
-        {
-          "taskid": 4,
-          "goalid": "2",
-          "title": "dentist",
-          "duration": 1,
-          "start": "2022-01-01T10:00:00",
-          "deadline": "2022-01-01T11:00:00"
-        },
-        {
-          "taskid": 5,
-          "goalid": "1",
-          "title": "shopping",
-          "duration": 1,
-          "start": "2022-01-01T11:00:00",
-          "deadline": "2022-01-01T12:00:00"
-        },
-        {
-          "taskid": 6,
-          "goalid": "free",
-          "title": "free",
-          "duration": 1,
-          "start": "2022-01-01T12:00:00",
-          "deadline": "2022-01-01T13:00:00"
-        },
-        {
-          "taskid": 7,
-          "goalid": "7",
-          "title": "meeting",
-          "duration": 2,
-          "start": "2022-01-01T13:00:00",
-          "deadline": "2022-01-01T15:00:00"
-        },
-        {
-          "taskid": 8,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2022-01-01T15:00:00",
-          "deadline": "2022-01-01T17:00:00"
-        },
-        {
-          "taskid": 9,
-          "goalid": "3",
-          "title": "exercise",
-          "duration": 1,
-          "start": "2022-01-01T17:00:00",
-          "deadline": "2022-01-01T18:00:00"
-        },
-        {
-          "taskid": 10,
-          "goalid": "5",
-          "title": "cook",
-          "duration": 2,
-          "start": "2022-01-01T18:00:00",
-          "deadline": "2022-01-01T20:00:00"
-        },
-        {
-          "taskid": 11,
-          "goalid": "6",
-          "title": "read",
-          "duration": 1,
-          "start": "2022-01-01T20:00:00",
-          "deadline": "2022-01-01T21:00:00"
-        },
-        {
-          "taskid": 12,
-          "goalid": "free",
-          "title": "free",
-          "duration": 3,
-          "start": "2022-01-01T21:00:00",
-          "deadline": "2022-01-02T00:00:00"
-        }
-      ]
-    }
-  ],
-  "impossible": [
-    {
-      "day": "2022-01-01",
-      "outputs": []
-    }
-  ]
+    "scheduled": [{
+        "day": "2022-01-01",
+        "tasks": [{
+                "taskid": 0,
+                "goalid": "8",
+                "title": "code",
+                "duration": 1,
+                "start": "2022-01-01T00:00:00",
+                "deadline": "2022-01-01T01:00:00"
+            },
+            {
+                "taskid": 1,
+                "goalid": "free",
+                "title": "free",
+                "duration": 4,
+                "start": "2022-01-01T01:00:00",
+                "deadline": "2022-01-01T05:00:00"
+            },
+            {
+                "taskid": 2,
+                "goalid": "4",
+                "title": "meditate",
+                "duration": 1,
+                "start": "2022-01-01T05:00:00",
+                "deadline": "2022-01-01T06:00:00"
+            },
+            {
+                "taskid": 3,
+                "goalid": "free",
+                "title": "free",
+                "duration": 4,
+                "start": "2022-01-01T06:00:00",
+                "deadline": "2022-01-01T10:00:00"
+            },
+            {
+                "taskid": 4,
+                "goalid": "2",
+                "title": "dentist",
+                "duration": 1,
+                "start": "2022-01-01T10:00:00",
+                "deadline": "2022-01-01T11:00:00"
+            },
+            {
+                "taskid": 5,
+                "goalid": "1",
+                "title": "shopping",
+                "duration": 1,
+                "start": "2022-01-01T11:00:00",
+                "deadline": "2022-01-01T12:00:00"
+            },
+            {
+                "taskid": 6,
+                "goalid": "free",
+                "title": "free",
+                "duration": 1,
+                "start": "2022-01-01T12:00:00",
+                "deadline": "2022-01-01T13:00:00"
+            },
+            {
+                "taskid": 7,
+                "goalid": "7",
+                "title": "meeting",
+                "duration": 2,
+                "start": "2022-01-01T13:00:00",
+                "deadline": "2022-01-01T15:00:00"
+            },
+            {
+                "taskid": 8,
+                "goalid": "free",
+                "title": "free",
+                "duration": 2,
+                "start": "2022-01-01T15:00:00",
+                "deadline": "2022-01-01T17:00:00"
+            },
+            {
+                "taskid": 9,
+                "goalid": "3",
+                "title": "exercise",
+                "duration": 1,
+                "start": "2022-01-01T17:00:00",
+                "deadline": "2022-01-01T18:00:00"
+            },
+            {
+                "taskid": 10,
+                "goalid": "5",
+                "title": "cook",
+                "duration": 2,
+                "start": "2022-01-01T18:00:00",
+                "deadline": "2022-01-01T20:00:00"
+            },
+            {
+                "taskid": 11,
+                "goalid": "6",
+                "title": "read",
+                "duration": 1,
+                "start": "2022-01-01T20:00:00",
+                "deadline": "2022-01-01T21:00:00"
+            },
+            {
+                "taskid": 12,
+                "goalid": "free",
+                "title": "free",
+                "duration": 3,
+                "start": "2022-01-01T21:00:00",
+                "deadline": "2022-01-02T00:00:00"
+            }
+        ]
+    }],
+    "impossible": [{
+        "day": "2022-01-01",
+        "tasks": []
+    }]
 }

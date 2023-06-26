@@ -8,7 +8,7 @@ use std::fmt;
 /// (e.g. "4/week" or "mondays") are converted into this enum
 /// via a custom serde deserializer.
 /// This enum is used by the Goal struct for it's "repeat" field, to
-/// determine how many tasks to generate from a goal.
+/// determine how many steps to generate from a goal.
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Repetition {
     DAILY(usize),

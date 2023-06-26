@@ -1,9 +1,7 @@
 {
-    "scheduled": [
-        {
+    "scheduled": [{
             "day": "2023-05-10",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 0,
                     "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
                     "title": "Sleep 😴🌙",
@@ -103,8 +101,7 @@
         },
         {
             "day": "2023-05-11",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 12,
                     "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
                     "title": "Sleep 😴🌙",
@@ -196,8 +193,7 @@
         },
         {
             "day": "2023-05-12",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 23,
                     "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
                     "title": "Sleep 😴🌙",
@@ -297,8 +293,7 @@
         },
         {
             "day": "2023-05-13",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 35,
                     "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
                     "title": "Sleep 😴🌙",
@@ -390,8 +385,7 @@
         },
         {
             "day": "2023-05-14",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 46,
                     "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
                     "title": "Sleep 😴🌙",
@@ -483,8 +477,7 @@
         },
         {
             "day": "2023-05-15",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 57,
                     "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
                     "title": "Sleep 😴🌙",
@@ -576,8 +569,7 @@
         },
         {
             "day": "2023-05-16",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 68,
                     "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
                     "title": "Sleep 😴🌙",
@@ -676,34 +668,33 @@
             ]
         }
     ],
-    "impossible": [
-        {
+    "impossible": [{
             "day": "2023-05-10",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-05-11",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-05-12",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-05-13",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-05-14",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-05-15",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-05-16",
-            "outputs": []
+            "tasks": []
         }
     ]
 }

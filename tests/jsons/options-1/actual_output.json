@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2022-01-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "free",
@@ -57,7 +57,7 @@
   "impossible": [
     {
       "day": "2022-01-01",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

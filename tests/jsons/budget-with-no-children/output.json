@@ -201,7 +201,7 @@
           "deadline": "2018-01-02T13:00:00"
         },
         {
-          "taskid": 24, 
+          "taskid": 24,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -217,7 +217,7 @@
           "deadline": "2018-01-02T15:00:00"
         },
         {
-          "taskid": 25, 
+          "taskid": 25,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -233,7 +233,7 @@
           "deadline": "2018-01-02T19:00:00"
         },
         {
-          "taskid": 27, 
+          "taskid": 27,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -334,7 +334,7 @@
           "deadline": "2018-01-03T13:00:00"
         },
         {
-          "taskid": 39, 
+          "taskid": 39,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -350,7 +350,7 @@
           "deadline": "2018-01-03T15:00:00"
         },
         {
-          "taskid": 41, 
+          "taskid": 41,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -366,7 +366,7 @@
           "deadline": "2018-01-03T19:00:00"
         },
         {
-          "taskid": 43, 
+          "taskid": 43,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -467,7 +467,7 @@
           "deadline": "2018-01-04T13:00:00"
         },
         {
-          "taskid": 55, 
+          "taskid": 55,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -483,7 +483,7 @@
           "deadline": "2018-01-04T15:00:00"
         },
         {
-          "taskid": 57, 
+          "taskid": 57,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -499,7 +499,7 @@
           "deadline": "2018-01-04T19:00:00"
         },
         {
-          "taskid": 59, 
+          "taskid": 59,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -600,7 +600,7 @@
           "deadline": "2018-01-05T13:00:00"
         },
         {
-          "taskid": 71, 
+          "taskid": 71,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -616,7 +616,7 @@
           "deadline": "2018-01-05T15:00:00"
         },
         {
-          "taskid": 73, 
+          "taskid": 73,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -632,7 +632,7 @@
           "deadline": "2018-01-05T19:00:00"
         },
         {
-          "taskid": 75, 
+          "taskid": 75,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -733,7 +733,7 @@
           "deadline": "2018-01-06T15:00:00"
         },
         {
-          "taskid": 87, 
+          "taskid": 87,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -749,7 +749,7 @@
           "deadline": "2018-01-06T19:00:00"
         },
         {
-          "taskid": 89, 
+          "taskid": 89,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -850,7 +850,7 @@
           "deadline": "2018-01-06T15:00:00"
         },
         {
-          "taskid": 101, 
+          "taskid": 101,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -866,7 +866,7 @@
           "deadline": "2018-01-06T19:00:00"
         },
         {
-          "taskid": 103, 
+          "taskid": 103,
           "goalid": "free",
           "title": "free",
           "duration": 2,

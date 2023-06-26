@@ -1,51 +1,51 @@
 use crate::models::{
-    budget::TaskBudgets,
+    budget::StepBudgets,
     goal::{Goal, GoalsMap, Tag},
-    input::{Input, TasksToPlace},
+    input::{Input, StepsToPlace},
     repetition::Repetition,
-    task::Task,
+    step::Step,
 };
 use chrono::NaiveDateTime;
 use std::collections::BTreeMap;
 
-// Todo 2023-05-05  | Move preprocessing Goals into separate module(s) - generating Tasks then becomes simple
-/// Preprocesses the hierarchy of goals, then for each Goal call Goal.generate_tasks
+// Todo 2023-05-05  | Move preprocessing Goals into separate module(s) - generating Steps then becomes simple
+/// Preprocesses the hierarchy of goals, then for each Goal call Goal.generate_steps
 /// Preprocessing involves a number of steps:
 /// - add_start_and_end_where_none
 /// - add_filler_goals
 /// - add_optional_flex_duration_regular_goals
 /// - add_optional_flex_number_and_duration_habits_goals
-/// - create min and max budgets (task_budgets.create_task_budgets_config)
-/// - task_budgets.generate_budget_min_and_max_tasks
-pub fn generate_tasks_to_place(input: Input) -> TasksToPlace {
+/// - create min and max budgets (step_budgets.create_step_budgets_config)
+/// - step_budgets.generate_budget_min_and_max_steps
+pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
     let calendar_start = input.calendar_start;
     let calendar_end = input.calendar_end;
 
     let mut goals = manipulate_input_goals(input);
 
-    let mut task_budgets = TaskBudgets::new(&calendar_start, &calendar_end);
-    task_budgets.configure_budgets(&mut goals);
+    let mut step_budgets = StepBudgets::new(&calendar_start, &calendar_end);
+    step_budgets.configure_budgets(&mut goals);
 
     let mut counter: usize = 0;
-    let mut tasks: Vec<Task> =
-        task_budgets.generate_budget_min_and_max_tasks(&mut goals, &mut counter);
+    let mut steps: Vec<Step> =
+        step_budgets.generate_budget_min_and_max_steps(&mut goals, &mut counter);
 
     for goal in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
-        let tasks_for_goal: Vec<Task> =
+        let steps_for_goal: Vec<Step> =
             goal.1
-                .generate_tasks(calendar_start, calendar_end, &mut counter);
-        tasks.extend(tasks_for_goal);
-        dbg!(&tasks);
+                .generate_steps(calendar_start, calendar_end, &mut counter);
+        steps.extend(steps_for_goal);
+        dbg!(&steps);
     }
 
-    dbg!(&tasks);
+    dbg!(&steps);
 
-    TasksToPlace {
+    StepsToPlace {
         calendar_start,
         calendar_end,
-        tasks,
-        task_budgets,
+        steps,
+        step_budgets,
     }
 }
 
@@ -142,7 +142,7 @@ fn add_filler_goals(goals: &mut GoalsMap) {
             .get_mut(&goal_id_to_ignore)
             .unwrap()
             .tags
-            .push(Tag::IgnoreForTaskGeneration);
+            .push(Tag::IgnoreStepGeneration);
     }
     for parent_child in children_to_add {
         goals
@@ -184,7 +184,7 @@ mod tests {
             services::preprocess::generate_flex_weekly_goals,
         };
 
-        /// Test generating flex weekly goals based on one task with 1-3/week
+        /// Test generating flex weekly goals based on one step with 1-3/week
         /// ```markdown
         /// Input:
         ///     Goal:

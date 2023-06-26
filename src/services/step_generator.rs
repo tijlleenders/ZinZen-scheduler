@@ -1,85 +1,85 @@
 use crate::models::goal::{Goal, Tag};
 use crate::models::slots_iterator::TimeSlotsIterator;
-use crate::models::task::{NewTask, Task, TaskStatus};
+use crate::models::step::{NewStep, Step, StepStatus};
 use chrono::NaiveDateTime;
 
-impl Task {
-    /// Create new task based on NewTask object
-    pub fn new(new_task: NewTask) -> Task {
-        let start = new_task.timeframe.map(|time| time.start);
-        let deadline = new_task.timeframe.map(|time| time.end);
+impl Step {
+    /// Create new step based on NewStep object
+    pub fn new(new_step: NewStep) -> Step {
+        let start = new_step.timeframe.map(|time| time.start);
+        let deadline = new_step.timeframe.map(|time| time.end);
 
-        Task {
-            id: new_task.task_id,
-            goal_id: new_task.goal.id,
-            title: new_task.title,
-            duration: new_task.duration,
-            status: new_task.status,
+        Step {
+            id: new_step.step_id,
+            goal_id: new_step.goal.id,
+            title: new_step.title,
+            duration: new_step.duration,
+            status: new_step.status,
             flexibility: 0,
             start,
             deadline,
-            slots: new_task.timeline.slots.into_iter().collect(),
-            tags: new_task.goal.tags,
-            after_goals: new_task.goal.after_goals,
+            slots: new_step.timeline.slots.into_iter().collect(),
+            tags: new_step.goal.tags,
+            after_goals: new_step.goal.after_goals,
         }
     }
 
-    /// When a task duration exceeded threshold, it will be splitted
-    /// into 1 hour tasks
-    pub fn apply_duration_threshold(&self) -> Vec<Task> {
+    /// When a step duration exceeded threshold, it will be splitted
+    /// into 1 hour steps
+    pub fn apply_duration_threshold(&self) -> Vec<Step> {
         let threshold: usize = 8;
-        let mut new_task = self.clone();
+        let mut new_step = self.clone();
 
-        if new_task.duration > 0 && new_task.duration < threshold {
-            dbg!(&new_task);
-            vec![new_task]
+        if new_step.duration > 0 && new_step.duration < threshold {
+            dbg!(&new_step);
+            vec![new_step]
         } else {
-            // Make first Task with duration as threshold,
-            // then split tasks into 1 hours tasks till finish
+            // Make first Step with duration as threshold,
+            // then split steps into 1 hours steps till finish
             // remaining_duration
 
-            let mut tasks: Vec<Task> = Vec::new();
-            let mut first_task = new_task.clone();
-            first_task.duration = threshold;
-            dbg!(&first_task);
-            tasks.push(first_task);
-            dbg!(&tasks);
+            let mut steps: Vec<Step> = Vec::new();
+            let mut first_step = new_step.clone();
+            first_step.duration = threshold;
+            dbg!(&first_step);
+            steps.push(first_step);
+            dbg!(&steps);
 
-            let mut remaining_duration = new_task.duration - threshold;
-            new_task.duration = remaining_duration;
-            let new_tasks_splitted = new_task.split(&mut remaining_duration).unwrap();
-            dbg!(&new_tasks_splitted);
-            tasks.extend(new_tasks_splitted);
-            dbg!(&tasks);
+            let mut remaining_duration = new_step.duration - threshold;
+            new_step.duration = remaining_duration;
+            let new_steps_splitted = new_step.split(&mut remaining_duration).unwrap();
+            dbg!(&new_steps_splitted);
+            steps.extend(new_steps_splitted);
+            dbg!(&steps);
 
-            tasks
+            steps
         }
     }
 }
 
 impl Goal {
-    /// Generates a Task/Increment from a Processed Goal
+    /// Generates a Steps from a Processed Goal
     /// **Caution!:*** This can only be done after the Goals have been pre-processed!
-    /// Creates and splits the Goal Timeline into one or more segments, making a Task/Increment for each.
-    /// Depending on the Goal Tag, Task/Increments will also get Tags to help with scheduling order:
+    /// Creates and splits the Goal Timeline into one or more segments, making a Step for each.
+    /// Depending on the Goal Tag, Steps will also get Tags to help with scheduling order:
     /// - Optional Tag // Todo! add Regular Tag to simplify?
     /// - Filler Tag
     /// - FlexDur Tag
     /// - FlexNum Tag
     /// - Budget Tag
-    pub fn generate_tasks(
+    pub fn generate_steps(
         self,
         calendar_start: NaiveDateTime,
         calendar_end: NaiveDateTime,
         counter: &mut usize,
-    ) -> Vec<Task> {
-        let mut tasks: Vec<Task> = Vec::new();
-        if self.tags.contains(&Tag::IgnoreForTaskGeneration) {
-            return tasks;
+    ) -> Vec<Step> {
+        let mut steps: Vec<Step> = Vec::new();
+        if self.tags.contains(&Tag::IgnoreStepGeneration) {
+            return steps;
         }
 
         if self.tags.contains(&Tag::Budget) {
-            return tasks;
+            return steps;
         }
         let start = self.start.unwrap_or(calendar_start);
         let deadline = self.deadline.unwrap_or(calendar_end);
@@ -95,40 +95,40 @@ impl Goal {
 
         for timeline in time_slots_iterator {
             dbg!(&timeline);
-            let task_id = *counter;
+            let step_id = *counter;
             *counter += 1;
 
             if !timeline.slots.is_empty() && self.min_duration.is_some() {
                 let title = self.title.clone();
                 let duration = self.min_duration.unwrap();
 
-                let new_task = NewTask {
-                    task_id,
+                let new_step = NewStep {
+                    step_id,
                     title,
                     duration,
                     goal: self.clone(),
                     timeline,
-                    status: TaskStatus::ReadyToSchedule,
+                    status: StepStatus::ReadyToSchedule,
                     timeframe: None,
                 };
 
-                let task = Task::new(new_task);
-                dbg!(&task);
+                let step = Step::new(new_step);
+                dbg!(&step);
                 // Apply split on threshold (8 hours) rule if goal is a leaf
                 if self.children.is_none() {
-                    let thresholded_tasks = task.apply_duration_threshold();
-                    dbg!(&thresholded_tasks);
+                    let thresholded_steps = step.apply_duration_threshold();
+                    dbg!(&thresholded_steps);
 
-                    tasks.extend(thresholded_tasks);
-                    dbg!(&tasks);
+                    steps.extend(thresholded_steps);
+                    dbg!(&steps);
                 } else {
-                    tasks.push(task);
-                    dbg!(&tasks);
+                    steps.push(step);
+                    dbg!(&steps);
                 }
             }
         }
-        dbg!(&tasks);
-        tasks
+        dbg!(&steps);
+        steps
     }
 }
 
@@ -142,7 +142,7 @@ mod tests {
             use crate::models::{
                 goal::Goal,
                 slot::Slot,
-                task::{NewTask, Task, TaskStatus},
+                step::{NewStep, Step, StepStatus},
                 timeline::Timeline,
             };
 
@@ -151,37 +151,37 @@ mod tests {
                 let duration: usize = 7;
                 let timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
 
-                let new_task = NewTask {
-                    task_id: 1,
+                let new_step = NewStep {
+                    step_id: 1,
                     title: "test".to_string(),
                     duration,
                     goal: Goal::mock("1", "test", timeframe.clone()),
                     timeline: Timeline::new(),
-                    status: TaskStatus::ReadyToSchedule,
+                    status: StepStatus::ReadyToSchedule,
                     timeframe: Some(timeframe),
                 };
-                let new_task = Task::new(new_task);
-                dbg!(&new_task);
+                let new_step = Step::new(new_step);
+                dbg!(&new_step);
 
-                let generated_tasks = new_task.apply_duration_threshold();
-                dbg!(&generated_tasks);
+                let generated_steps = new_step.apply_duration_threshold();
+                dbg!(&generated_steps);
 
-                let expected_task = Task::mock(
+                let expected_step = Step::mock(
                     "test",
                     7,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![timeframe],
                     None,
                 );
 
-                assert_eq!(generated_tasks, vec![expected_task.clone()]);
-                assert_eq!(generated_tasks[0].id, expected_task.id);
-                assert_eq!(generated_tasks[0].duration, expected_task.duration);
-                assert_eq!(generated_tasks[0].status, expected_task.status);
+                assert_eq!(generated_steps, vec![expected_step.clone()]);
+                assert_eq!(generated_steps[0].id, expected_step.id);
+                assert_eq!(generated_steps[0].duration, expected_step.duration);
+                assert_eq!(generated_steps[0].status, expected_step.status);
             }
 
-            /// Test Task::apply_duration_threshold when goal.min_duration > 8 hours
+            /// Test Step::apply_duration_threshold when goal.min_duration > 8 hours
             /// ```markdown
             /// =========================
             /// Input:
@@ -208,8 +208,8 @@ mod tests {
             ///
             /// ===========================
             /// Output:
-            /// expected_task = [
-            ///    Task {
+            /// expected_step = [
+            ///    Step {
             ///        id: 1,
             ///        goal_id: "1",
             ///        title: "test",
@@ -227,7 +227,7 @@ mod tests {
             ///        tags: [],
             ///        after_goals: None,
             ///    },
-            ///    Task {
+            ///    Step {
             ///        id: 2,
             ///        goal_id: "1",
             ///        title: "test",
@@ -245,7 +245,7 @@ mod tests {
             ///        tags: [],
             ///        after_goals: None,
             ///    },
-            ///    Task {
+            ///    Step {
             ///        id: 3,
             ///        goal_id: "1",
             ///        title: "test",
@@ -276,74 +276,74 @@ mod tests {
                     slots: vec![timeframe.clone()].into_iter().collect(),
                 };
 
-                let new_task = NewTask {
-                    task_id: 1,
+                let new_step = NewStep {
+                    step_id: 1,
                     title: "test".to_string(),
                     duration,
                     goal: Goal::mock("1", "test", timeframe.clone()),
                     timeline,
-                    status: TaskStatus::ReadyToSchedule,
+                    status: StepStatus::ReadyToSchedule,
                     timeframe: None,
                 };
-                let new_task = Task::new(new_task);
-                dbg!(&new_task);
-                let generated_tasks = new_task.apply_duration_threshold();
-                dbg!(&generated_tasks);
+                let new_step = Step::new(new_step);
+                dbg!(&new_step);
+                let generated_steps = new_step.apply_duration_threshold();
+                dbg!(&generated_steps);
 
-                let mut expected_task = vec![
-                    Task::mock(
+                let mut expected_steps = vec![
+                    Step::mock(
                         "test",
                         8,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![timeframe],
                         None,
                     ),
                 ];
-                expected_task[1].id = 2;
-                expected_task[2].id = 3;
-                dbg!(&expected_task);
+                expected_steps[1].id = 2;
+                expected_steps[2].id = 3;
+                dbg!(&expected_steps);
 
-                assert_eq!(generated_tasks, expected_task);
-                assert_eq!(generated_tasks.len(), 3);
+                assert_eq!(generated_steps, expected_steps);
+                assert_eq!(generated_steps.len(), 3);
 
-                assert_eq!(generated_tasks[0].id, expected_task[0].id);
-                assert_eq!(generated_tasks[1].id, expected_task[1].id);
-                assert_eq!(generated_tasks[2].id, expected_task[2].id);
+                assert_eq!(generated_steps[0].id, expected_steps[0].id);
+                assert_eq!(generated_steps[1].id, expected_steps[1].id);
+                assert_eq!(generated_steps[2].id, expected_steps[2].id);
 
-                assert_eq!(generated_tasks[0].duration, expected_task[0].duration);
-                assert_eq!(generated_tasks[1].duration, expected_task[1].duration);
-                assert_eq!(generated_tasks[2].duration, expected_task[2].duration);
+                assert_eq!(generated_steps[0].duration, expected_steps[0].duration);
+                assert_eq!(generated_steps[1].duration, expected_steps[1].duration);
+                assert_eq!(generated_steps[2].duration, expected_steps[2].duration);
 
-                assert_eq!(generated_tasks[0].status, expected_task[0].status);
-                assert_eq!(generated_tasks[1].status, expected_task[1].status);
-                assert_eq!(generated_tasks[2].status, expected_task[2].status);
+                assert_eq!(generated_steps[0].status, expected_steps[0].status);
+                assert_eq!(generated_steps[1].status, expected_steps[1].status);
+                assert_eq!(generated_steps[2].status, expected_steps[2].status);
             }
         }
 
-        mod generate_tasks {
+        mod generate_steps {
             use chrono::Duration;
 
             use crate::models::{
                 goal::Goal,
                 slot::Slot,
-                task::{Task, TaskStatus},
+                step::{Step, StepStatus},
             };
 
             #[test]
@@ -356,26 +356,26 @@ mod tests {
                 goal.min_duration = Some(duration);
                 dbg!(&goal);
 
-                let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&tasks);
+                let steps =
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                dbg!(&steps);
 
-                let expected_task = vec![Task::mock(
+                let expected_steps = vec![Step::mock(
                     "test",
                     duration,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_task);
+                dbg!(&expected_steps);
 
-                assert_eq!(tasks, expected_task);
+                assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
 
-                assert_eq!(tasks[0].id, expected_task[0].id);
-                assert_eq!(tasks[0].duration, expected_task[0].duration);
-                assert_eq!(tasks[0].status, expected_task[0].status);
+                assert_eq!(steps[0].id, expected_steps[0].id);
+                assert_eq!(steps[0].duration, expected_steps[0].duration);
+                assert_eq!(steps[0].status, expected_steps[0].status);
             }
 
             #[test]
@@ -388,29 +388,29 @@ mod tests {
                 goal.min_duration = Some(duration);
                 dbg!(&goal);
 
-                let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&tasks);
+                let steps =
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                dbg!(&steps);
 
-                let expected_task = vec![Task::mock(
+                let expected_steps = vec![Step::mock(
                     "test",
                     duration,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_task);
+                dbg!(&expected_steps);
 
-                assert_eq!(tasks, expected_task);
+                assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
 
-                assert_eq!(tasks[0].id, expected_task[0].id);
-                assert_eq!(tasks[0].duration, expected_task[0].duration);
-                assert_eq!(tasks[0].status, expected_task[0].status);
+                assert_eq!(steps[0].id, expected_steps[0].id);
+                assert_eq!(steps[0].duration, expected_steps[0].duration);
+                assert_eq!(steps[0].status, expected_steps[0].status);
             }
 
-            /// Test Goal::generate_tasks when goal.min_duration>8 hours
+            /// Test Goal::generate_steps when goal.min_duration>8 hours
             /// ```markdown
             /// =========================
             /// Input:
@@ -437,8 +437,8 @@ mod tests {
             ///
             /// ===========================
             /// Output:
-            /// expected_task = [
-            ///    Task {
+            /// expected_step = [
+            ///    Step {
             ///        id: 1,
             ///        goal_id: "1",
             ///        title: "test",
@@ -456,7 +456,7 @@ mod tests {
             ///        tags: [],
             ///        after_goals: None,
             ///    },
-            ///    Task {
+            ///    Step {
             ///        id: 2,
             ///        goal_id: "1",
             ///        title: "test",
@@ -474,7 +474,7 @@ mod tests {
             ///        tags: [],
             ///        after_goals: None,
             ///    },
-            ///    Task {
+            ///    Step {
             ///        id: 3,
             ///        goal_id: "1",
             ///        title: "test",
@@ -506,58 +506,58 @@ mod tests {
                 goal.min_duration = Some(duration);
                 dbg!(&goal);
 
-                let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&tasks);
+                let steps =
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                dbg!(&steps);
 
-                let mut expected_task = vec![
-                    Task::mock(
+                let mut expected_steps = vec![
+                    Step::mock(
                         "test",
                         8,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![goal_timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![goal_timeframe],
                         None,
                     ),
-                    Task::mock(
+                    Step::mock(
                         "test",
                         1,
                         0,
-                        TaskStatus::ReadyToSchedule,
+                        StepStatus::ReadyToSchedule,
                         vec![goal_timeframe],
                         None,
                     ),
                 ];
-                expected_task[1].id = 2;
-                expected_task[2].id = 3;
-                dbg!(&expected_task);
+                expected_steps[1].id = 2;
+                expected_steps[2].id = 3;
+                dbg!(&expected_steps);
 
-                assert_eq!(tasks, expected_task);
+                assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
 
-                assert_eq!(tasks[0].id, expected_task[0].id);
-                assert_eq!(tasks[1].id, expected_task[1].id);
-                assert_eq!(tasks[2].id, expected_task[2].id);
+                assert_eq!(steps[0].id, expected_steps[0].id);
+                assert_eq!(steps[1].id, expected_steps[1].id);
+                assert_eq!(steps[2].id, expected_steps[2].id);
 
-                assert_eq!(tasks[0].duration, expected_task[0].duration);
-                assert_eq!(tasks[1].duration, expected_task[1].duration);
-                assert_eq!(tasks[2].duration, expected_task[2].duration);
+                assert_eq!(steps[0].duration, expected_steps[0].duration);
+                assert_eq!(steps[1].duration, expected_steps[1].duration);
+                assert_eq!(steps[2].duration, expected_steps[2].duration);
 
-                assert_eq!(tasks[0].status, expected_task[0].status);
-                assert_eq!(tasks[1].status, expected_task[1].status);
-                assert_eq!(tasks[2].status, expected_task[2].status);
+                assert_eq!(steps[0].status, expected_steps[0].status);
+                assert_eq!(steps[1].status, expected_steps[1].status);
+                assert_eq!(steps[2].status, expected_steps[2].status);
             }
 
             /// Test when a given Goal is not a leaf and goal.min_duration > 8
-            /// So in this case, tasks will not be splitted
+            /// So in this case, steps will not be splitted
             /// ```markdown
             /// =========================
             /// Input:
@@ -584,8 +584,8 @@ mod tests {
             ///
             /// ===========================
             /// Output:
-            /// expected_task = [
-            ///    Task {
+            /// expected_step = [
+            ///    Step {
             ///        id: 1,
             ///        goal_id: "1",
             ///        title: "test",
@@ -616,26 +616,26 @@ mod tests {
                 goal.children = Some(vec!["2".to_string()]);
                 dbg!(&goal);
 
-                let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&tasks);
+                let steps =
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                dbg!(&steps);
 
-                let expected_task = vec![Task::mock(
+                let expected_steps = vec![Step::mock(
                     "test",
                     10,
                     0,
-                    TaskStatus::ReadyToSchedule,
+                    StepStatus::ReadyToSchedule,
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_task);
+                dbg!(&expected_steps);
 
-                assert_eq!(tasks, expected_task);
+                assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
 
-                assert_eq!(tasks[0].id, expected_task[0].id);
-                assert_eq!(tasks[0].duration, expected_task[0].duration);
-                assert_eq!(tasks[0].status, expected_task[0].status);
+                assert_eq!(steps[0].id, expected_steps[0].id);
+                assert_eq!(steps[0].duration, expected_steps[0].duration);
+                assert_eq!(steps[0].status, expected_steps[0].status);
             }
         }
     }

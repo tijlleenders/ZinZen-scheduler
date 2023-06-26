@@ -1,107 +1,96 @@
 {
-  "scheduled": [
-    {
-      "day": "2022-01-01",
-      "outputs": [
-        {
-          "taskid": 0,
-          "goalid": "free",
-          "title": "free",
-          "duration": 15,
-          "start": "2022-01-01T00:00:00",
-          "deadline": "2022-01-01T15:00:00"
+    "scheduled": [{
+            "day": "2022-01-01",
+            "tasks": [{
+                    "taskid": 0,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 15,
+                    "start": "2022-01-01T00:00:00",
+                    "deadline": "2022-01-01T15:00:00"
+                },
+                {
+                    "taskid": 1,
+                    "goalid": "1",
+                    "title": "home repair",
+                    "duration": 1,
+                    "start": "2022-01-01T15:00:00",
+                    "deadline": "2022-01-01T16:00:00"
+                },
+                {
+                    "taskid": 2,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 8,
+                    "start": "2022-01-01T16:00:00",
+                    "deadline": "2022-01-02T00:00:00"
+                }
+            ]
         },
         {
-          "taskid": 1,
-          "goalid": "1",
-          "title": "home repair",
-          "duration": 1,
-          "start": "2022-01-01T15:00:00",
-          "deadline": "2022-01-01T16:00:00"
+            "day": "2022-01-02",
+            "tasks": [{
+                "taskid": 3,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-01-02T00:00:00",
+                "deadline": "2022-01-03T00:00:00"
+            }]
         },
         {
-          "taskid": 2,
-          "goalid": "free",
-          "title": "free",
-          "duration": 8,
-          "start": "2022-01-01T16:00:00",
-          "deadline": "2022-01-02T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-01-02",
-      "outputs": [
+            "day": "2022-01-03",
+            "tasks": [{
+                "taskid": 4,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-01-03T00:00:00",
+                "deadline": "2022-01-04T00:00:00"
+            }]
+        },
         {
-          "taskid": 3,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-01-02T00:00:00",
-          "deadline": "2022-01-03T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-01-03",
-      "outputs": [
+            "day": "2022-01-04",
+            "tasks": [{
+                "taskid": 5,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-01-04T00:00:00",
+                "deadline": "2022-01-05T00:00:00"
+            }]
+        },
         {
-          "taskid": 4,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-01-03T00:00:00",
-          "deadline": "2022-01-04T00:00:00"
+            "day": "2022-01-05",
+            "tasks": [{
+                "taskid": 6,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-01-05T00:00:00",
+                "deadline": "2022-01-06T00:00:00"
+            }]
         }
-      ]
-    },
-    {
-      "day": "2022-01-04",
-      "outputs": [
+    ],
+    "impossible": [{
+            "day": "2022-01-01",
+            "tasks": []
+        },
         {
-          "taskid": 5,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-01-04T00:00:00",
-          "deadline": "2022-01-05T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-01-05",
-      "outputs": [
+            "day": "2022-01-02",
+            "tasks": []
+        },
         {
-          "taskid": 6,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-01-05T00:00:00",
-          "deadline": "2022-01-06T00:00:00"
+            "day": "2022-01-03",
+            "tasks": []
+        },
+        {
+            "day": "2022-01-04",
+            "tasks": []
+        },
+        {
+            "day": "2022-01-05",
+            "tasks": []
         }
-      ]
-    }
-  ],
-  "impossible": [
-    {
-      "day": "2022-01-01",
-      "outputs": []
-    },
-    {
-      "day": "2022-01-02",
-      "outputs": []
-    },
-    {
-      "day": "2022-01-03",
-      "outputs": []
-    },
-    {
-      "day": "2022-01-04",
-      "outputs": []
-    },
-    {
-      "day": "2022-01-05",
-      "outputs": []
-    }
-  ]
+    ]
 }

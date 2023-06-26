@@ -1,4 +1,4 @@
-/// Keeps track of the min and max time allowed and scheduled per time period for a collection of Increments/Tasks.
+/// Keeps track of the min and max time allowed and scheduled per time period for a collection of Steps.
 pub mod budget;
 /// An aim or desired result someone wants to reach.  
 pub mod goal;
@@ -12,7 +12,7 @@ pub mod repetition;
 pub mod slot;
 /// The logic of partitioning a Goal Timeline into [MECE parts](https://en.wikipedia.org/wiki/MECE_principle).
 pub mod slots_iterator;
-/// An Increment for the realization of a Goal.
-pub mod task;
+/// An Step for the realization of a Goal.
+pub mod step;
 
 pub mod timeline;

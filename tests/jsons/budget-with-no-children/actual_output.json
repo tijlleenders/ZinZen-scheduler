@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2018-01-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "3-sleep",
@@ -95,7 +95,7 @@
     },
     {
       "day": "2018-01-02",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 11,
           "goalid": "3-sleep",
@@ -188,7 +188,7 @@
     },
     {
       "day": "2018-01-03",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 22,
           "goalid": "3-sleep",
@@ -281,7 +281,7 @@
     },
     {
       "day": "2018-01-04",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 33,
           "goalid": "3-sleep",
@@ -374,7 +374,7 @@
     },
     {
       "day": "2018-01-05",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 44,
           "goalid": "3-sleep",
@@ -467,7 +467,7 @@
     },
     {
       "day": "2018-01-06",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 55,
           "goalid": "3-sleep",
@@ -560,7 +560,7 @@
     },
     {
       "day": "2018-01-07",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 66,
           "goalid": "3-sleep",
@@ -655,7 +655,7 @@
   "impossible": [
     {
       "day": "2018-01-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 77,
           "goalid": "4-work",
@@ -668,27 +668,27 @@
     },
     {
       "day": "2018-01-02",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-01-03",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-01-04",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-01-05",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-01-06",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-01-07",
-      "outputs": []
+      "tasks": []
     }
   ]
 }
