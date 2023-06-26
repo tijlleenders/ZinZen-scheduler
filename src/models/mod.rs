@@ -12,7 +12,7 @@ pub mod repetition;
 pub mod slot;
 /// The logic of partitioning a Goal Timeline into [MECE parts](https://en.wikipedia.org/wiki/MECE_principle).
 pub mod slots_iterator;
-/// An Increment for the realization of a Goal.
+/// An Step for the realization of a Goal.
 pub mod step;
 
 pub mod timeline;

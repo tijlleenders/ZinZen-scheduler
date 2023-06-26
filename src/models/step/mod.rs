@@ -9,35 +9,35 @@ use super::{
 
 pub mod impls;
 
-/// Tasks/Increments are generated to achieve a Goal in one or more Increments.
+/// Steps are generated to achieve a Goal in one or more Steps.
 /// A Goal can generate one or more Tasks.
 #[derive(Deserialize, Debug, Eq, Clone)]
 pub struct Step {
     /// Only used by the scheduler.
     /// Unstable between scheduler runs if input changes.
     pub id: usize,
-    /// Reference to the Goal a Taks/Increment was generated from.
+    /// Reference to the Goal a Step was generated from.
     pub goal_id: String,
-    /// Title of the Goal the Task/Increment was generated from.
+    /// Title of the Goal the Step was generated from.
     /// Duplicated for ease of debugging and simplicity of code.
     pub title: String,
-    /// Duration the Task/Increment wants to claim on the Calendar.
+    /// Duration the Step wants to claim on the Calendar.
     /// This duration is equal or part of the Goal duration.
     pub duration: usize,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Tags.
+    /// Used for finding next Step to be scheduled in combination with Step flexibility and Tags.
     pub status: StepStatus,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment Status and Tags.
+    /// Used for finding next Step to be scheduled in combination with Step Status and Tags.
     pub flexibility: usize,
-    /// Final start time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
+    /// Final start time for Step on Calendar - should be removed in favor of Timeline + SlotStatus combination.
     pub start: Option<NaiveDateTime>,
-    /// Final end time for Task/Increment on Calendar - should be removed in favor of Timeline + SlotStatus combination.
+    /// Final end time for Step on Calendar - should be removed in favor of Timeline + SlotStatus combination.
     pub deadline: Option<NaiveDateTime>,
-    /// The places on Calendar that could potentially be used given the Goal constraints - and what other scheduled Tasks/Increments already have consumed.
+    /// The places on Calendar that could potentially be used given the Goal constraints - and what other scheduled Steps already have consumed.
     pub slots: Vec<Slot>,
-    /// Used for finding next Task/Increment to be scheduled in combination with Task/Increment flexibility and Status.
+    /// Used for finding next Step to be scheduled in combination with Step flexibility and Status.
     #[serde(default)]
     pub tags: Vec<Tag>,
-    /// Used for adding Blocked Task/Increment Tag, used in finding next Task/Increment to be scheduled.
+    /// Used for adding Blocked Step Tag, used in finding next Step to be scheduled.
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
 }

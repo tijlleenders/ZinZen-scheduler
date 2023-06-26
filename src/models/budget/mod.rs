@@ -7,7 +7,7 @@ use super::slot::Slot;
 
 pub mod impls;
 
-/// Keeps track of the min and max time allowed and scheduled per time period for a collection of Increments/Tasks.
+/// Keeps track of the min and max time allowed and scheduled per time period for a collection of Steps/Tasks.
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct Budget {
     pub budget_type: BudgetType,
