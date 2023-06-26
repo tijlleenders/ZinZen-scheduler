@@ -32,7 +32,7 @@ pub struct StepBudgets {
 
 #[derive(Debug, Deserialize)]
 pub struct StepBudget {
-    task_budget_type: BudgetType,
+    step_budget_type: BudgetType,
     pub slot_budgets: Vec<SlotBudget>,
     pub min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
     max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?

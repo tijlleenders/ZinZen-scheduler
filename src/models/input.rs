@@ -23,7 +23,7 @@ pub struct StepsToPlace {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
     pub steps: Vec<Step>,
-    pub task_budgets: StepBudgets,
+    pub step_budgets: StepBudgets,
 }
 
 #[derive(Deserialize, Debug)]

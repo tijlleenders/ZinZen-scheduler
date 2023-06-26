@@ -1,4 +1,4 @@
-//new module for outputting the result of task_placer in
+//new module for outputting the result of step_placer in
 //whichever format required by front-end
 use crate::models::goal::Tag;
 use chrono::{NaiveDate, NaiveDateTime};
@@ -8,8 +8,8 @@ use std::cmp::Ordering;
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Output {
-    pub taskid: usize,
-    pub goalid: String,
+    pub step_id: usize,
+    pub goal_id: String,
     pub title: String,
     pub duration: usize,
     pub start: NaiveDateTime,

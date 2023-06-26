@@ -10,7 +10,7 @@ impl Step {
         let deadline = new_task.timeframe.map(|time| time.end);
 
         Step {
-            id: new_task.task_id,
+            id: new_task.step_id,
             goal_id: new_task.goal.id,
             title: new_task.title,
             duration: new_task.duration,
@@ -67,7 +67,7 @@ impl Goal {
     /// - FlexDur Tag
     /// - FlexNum Tag
     /// - Budget Tag
-    pub fn generate_tasks(
+    pub fn generate_steps(
         self,
         calendar_start: NaiveDateTime,
         calendar_end: NaiveDateTime,
@@ -103,7 +103,7 @@ impl Goal {
                 let duration = self.min_duration.unwrap();
 
                 let new_task = NewStep {
-                    task_id,
+                    step_id: task_id,
                     title,
                     duration,
                     goal: self.clone(),
@@ -152,7 +152,7 @@ mod tests {
                 let timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
 
                 let new_task = NewStep {
-                    task_id: 1,
+                    step_id: 1,
                     title: "test".to_string(),
                     duration,
                     goal: Goal::mock("1", "test", timeframe.clone()),
@@ -277,7 +277,7 @@ mod tests {
                 };
 
                 let new_task = NewStep {
-                    task_id: 1,
+                    step_id: 1,
                     title: "test".to_string(),
                     duration,
                     goal: Goal::mock("1", "test", timeframe.clone()),
@@ -357,7 +357,7 @@ mod tests {
                 dbg!(&goal);
 
                 let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
                 dbg!(&tasks);
 
                 let expected_task = vec![Step::mock(
@@ -389,7 +389,7 @@ mod tests {
                 dbg!(&goal);
 
                 let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
                 dbg!(&tasks);
 
                 let expected_task = vec![Step::mock(
@@ -507,7 +507,7 @@ mod tests {
                 dbg!(&goal);
 
                 let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
                 dbg!(&tasks);
 
                 let mut expected_task = vec![
@@ -617,7 +617,7 @@ mod tests {
                 dbg!(&goal);
 
                 let tasks =
-                    goal.generate_tasks(goal_timeframe.start, goal_timeframe.end, &mut counter);
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
                 dbg!(&tasks);
 
                 let expected_task = vec![Step::mock(

@@ -70,8 +70,8 @@ use models::input::Input;
 use models::output::FinalOutput;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
-use services::placer::task_placer;
-use services::preprocess::generate_tasks_to_place;
+use services::placer::step_placer;
+use services::preprocess::generate_steps_to_place;
 use wasm_bindgen::prelude::*;
 
 mod errors;
@@ -99,11 +99,11 @@ interface Input {
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     // JsError implements From<Error>, so we can just use `?` on any Error
     let input: Input = from_value(input.clone()).unwrap();
-    let tasks = generate_tasks_to_place(input);
-    let placed_tasks = task_placer(tasks);
-    let output = match output_formatter(placed_tasks) {
+    let steps = generate_steps_to_place(input);
+    let placed_steps = step_placer(steps);
+    let output = match output_formatter(placed_steps) {
         Err(Error::NoConfirmedDate(title, id)) => {
-            panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.")
+            panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.")
         }
         Err(e) => {
             panic!("Unexpected error: {:?}", e);
@@ -117,13 +117,13 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 //Todo why is there a schedule function and a run_scheduler function?
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalOutput {
-    let tasks = generate_tasks_to_place(input);
+    let steps = generate_steps_to_place(input);
 
-    let placed_tasks = task_placer(tasks);
-    dbg!(&placed_tasks);
-    match output_formatter(placed_tasks) {
+    let placed_steps = step_placer(steps);
+    dbg!(&placed_steps);
+    match output_formatter(placed_steps) {
         Err(Error::NoConfirmedDate(title, id)) => {
-            panic!("Error with task {title}:{id}. Tasks passed to output formatter should always have a confirmed_start/deadline.");
+            panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.");
         }
         Err(e) => {
             panic!("Unexpected error: {:?}", e);
@@ -138,12 +138,12 @@ IDEA: This is to uniform location for notes related to similar bugs/concepts/iss
 
 # 2023-06-06
 - Found many functions achieve the same concept "remove slots" as below samples:
-    - Task::remove_slot(&mut self, s: Slot)
-    - Task::remove_taken_slots(&mut self, s: Slot)
+    - Step::remove_slot(&mut self, s: Slot)
+    - Step::remove_taken_slots(&mut self, s: Slot)
     - Timeline::remove_slots(&mut self, slots_to_remove: Vec<Slot>)
 
 # 2023-06-07
-- For filter_timing, "sleep" task in bug_215, on the last slot it consider few hours
+- For filter_timing, "sleep" step in bug_215, on the last slot it consider few hours
 more out of deadline than it should.
 
 */

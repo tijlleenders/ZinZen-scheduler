@@ -42,7 +42,7 @@ pub struct Step {
     pub after_goals: Option<Vec<String>>,
 }
 
-/// Used to decide in which order to schedule tasks, together with their flexibility
+/// Used to decide in which order to schedule steps, together with their flexibility
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 pub enum StepStatus {
     /// Task is scheduled and can't be modified any more.
@@ -61,7 +61,7 @@ pub enum StepStatus {
 
 #[derive(Debug, Clone)]
 pub struct NewStep {
-    pub task_id: usize,
+    pub step_id: usize,
     pub title: String,
     pub duration: usize,
     pub goal: Goal,

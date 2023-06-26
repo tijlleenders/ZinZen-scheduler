@@ -34,7 +34,7 @@ impl StepBudget {
 
     pub fn initialize(&mut self, budget_start: NaiveDateTime, budget_end: NaiveDateTime) {
         let mut repetition: Repetition = Repetition::Weekly(1);
-        match self.task_budget_type {
+        match self.step_budget_type {
             BudgetType::Weekly => (),
             BudgetType::Daily => repetition = Repetition::DAILY(1),
         }
@@ -66,7 +66,7 @@ impl StepBudgets {
     pub fn add(&mut self, goal: &Goal) {
         for budget in goal.budgets.clone().unwrap() {
             let budget = StepBudget {
-                task_budget_type: budget.budget_type.clone(),
+                step_budget_type: budget.budget_type.clone(),
                 slot_budgets: Vec::new(),
                 min: budget.min,
                 max: budget.max,
@@ -86,8 +86,8 @@ mod tests {
         // Test that the weekly budget is initialized correctly
         //for a month with 5 weeks
 
-        let mut task_budget = StepBudget {
-            task_budget_type: BudgetType::Weekly,
+        let mut step_budget = StepBudget {
+            step_budget_type: BudgetType::Weekly,
             max: Some(10),
             min: Some(1),
             slot_budgets: vec![],
@@ -97,12 +97,12 @@ mod tests {
         let start_date = timeframe.start;
         let end_date = timeframe.end;
 
-        dbg!(&task_budget);
-        task_budget.initialize(start_date, end_date);
-        dbg!(&task_budget);
+        dbg!(&step_budget);
+        step_budget.initialize(start_date, end_date);
+        dbg!(&step_budget);
 
-        assert_eq!(task_budget.slot_budgets.len(), 5);
-        for slot_budget in task_budget.slot_budgets.iter() {
+        assert_eq!(step_budget.slot_budgets.len(), 5);
+        for slot_budget in step_budget.slot_budgets.iter() {
             assert_eq!(slot_budget.used, 0);
             assert_eq!(slot_budget.min, Some(1));
             assert_eq!(slot_budget.max, Some(10));

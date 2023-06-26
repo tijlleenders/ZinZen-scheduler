@@ -96,9 +96,9 @@ impl Timeline {
 }
 
 impl Step {
-    /// Mock a custom Task
+    /// Mock a custom Step
     /// ```
-    /// Task {
+    /// Step {
     ///     id: 1,
     ///     goal_id: "1",
     ///     title: title,
@@ -138,17 +138,17 @@ impl Step {
         }
     }
 
-    /// Mock a Scheduled Task
+    /// Mock a Scheduled Step
     /// ```
-    /// Task {
+    /// Step {
     ///     id: id,
     ///     goal_id: goal_id,
     ///     title: title,
     ///     duration: duration,
-    ///     status: TaskStatus::Scheduled,
+    ///     status: StepStatus::Scheduled,
     ///     flexibility: flexibility,
-    ///     start: task_timing.start,
-    ///     deadline: task_timing.end,
+    ///     start: step_timing.start,
+    ///     deadline: step_timing.end,
     ///     slots: vec![],
     ///     tags: vec![],
     ///     after_goals: None
@@ -160,7 +160,7 @@ impl Step {
         title: &str,
         duration: usize,
         flexibility: usize,
-        task_timing: Slot,
+        step_timing: Slot,
     ) -> Step {
         Step {
             id: id,
@@ -169,8 +169,8 @@ impl Step {
             duration,
             status: StepStatus::Scheduled,
             flexibility,
-            start: Some(task_timing.start),
-            deadline: Some(task_timing.end),
+            start: Some(step_timing.start),
+            deadline: Some(step_timing.end),
             slots: vec![],
             tags: vec![],
             after_goals: None,
@@ -245,7 +245,7 @@ mod tests {
             assert_eq!(goal, expected_goal);
         }
     }
-    mod task {
+    mod step {
         use chrono::Duration;
 
         use crate::models::{
@@ -259,7 +259,7 @@ mod tests {
 
             let expected = Step {
                 id: 1,
-                title: "A sample task".to_string(),
+                title: "A sample step".to_string(),
                 duration: 1,
                 status: StepStatus::ReadyToSchedule,
                 flexibility: 168,
@@ -278,17 +278,17 @@ mod tests {
 
         #[test]
         fn test_mock_scheduled() {
-            let expected_task_timing = Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0);
+            let expected_step_timing = Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0);
 
             let expected = Step {
                 id: 1,
                 goal_id: "1".to_string(),
-                title: "Sheduled Task".to_string(),
+                title: "Sheduled Step".to_string(),
                 duration: 1,
                 status: StepStatus::Scheduled,
                 flexibility: 168,
-                start: Some(expected_task_timing.start),
-                deadline: Some(expected_task_timing.end),
+                start: Some(expected_step_timing.start),
+                deadline: Some(expected_step_timing.end),
                 slots: vec![],
                 tags: vec![],
                 after_goals: None,
@@ -297,7 +297,7 @@ mod tests {
             let result = Step::mock_scheduled(
                 1,
                 "1",
-                "Sheduled Task",
+                "Sheduled Step",
                 1,
                 168,
                 Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
