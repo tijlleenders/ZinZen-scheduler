@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2023-03-09",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "free",
@@ -15,7 +15,7 @@
     },
     {
       "day": "2023-03-10",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 1,
           "goalid": "free",
@@ -44,7 +44,7 @@
     },
     {
       "day": "2023-03-11",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 4,
           "goalid": "free",
@@ -57,7 +57,7 @@
     },
     {
       "day": "2023-03-12",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 5,
           "goalid": "free",
@@ -70,7 +70,7 @@
     },
     {
       "day": "2023-03-13",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 6,
           "goalid": "free",
@@ -99,7 +99,7 @@
     },
     {
       "day": "2023-03-14",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 9,
           "goalid": "free",
@@ -112,7 +112,7 @@
     },
     {
       "day": "2023-03-15",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 10,
           "goalid": "free",
@@ -125,7 +125,7 @@
     },
     {
       "day": "2023-03-16",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 11,
           "goalid": "free",
@@ -138,7 +138,7 @@
     },
     {
       "day": "2023-03-17",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 12,
           "goalid": "free",
@@ -151,7 +151,7 @@
     },
     {
       "day": "2023-03-18",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 13,
           "goalid": "free",
@@ -164,7 +164,7 @@
     },
     {
       "day": "2023-03-19",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 14,
           "goalid": "free",
@@ -179,7 +179,7 @@
   "impossible": [
     {
       "day": "2023-03-09",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 15,
           "goalid": "1",
@@ -192,43 +192,43 @@
     },
     {
       "day": "2023-03-10",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-11",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-12",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-13",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-14",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-15",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-16",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-17",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-18",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-19",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

@@ -1,45 +1,45 @@
 use crate::models::{
-    input::TasksToPlace,
-    task::{Task, TaskStatus},
+    input::StepsToPlace,
+    step::{Step, StepStatus},
 };
 
-impl TasksToPlace {
-    /// Calculate flexibility for each task in tasks then sort them
+impl StepsToPlace {
+    /// Calculate flexibility for each step in steps then sort them
     pub fn sort_on_flexibility(&mut self) {
         self.calculate_flexibilities();
-        self.tasks.sort();
+        self.steps.sort();
     }
 
     fn calculate_flexibilities(&mut self) {
-        for task in self.tasks.iter_mut() {
-            task.calculate_flexibility();
+        for step in self.steps.iter_mut() {
+            step.calculate_flexibility();
         }
     }
 }
 
-impl Task {
-    /// Calculate flexibility of a task slots
+impl Step {
+    /// Calculate flexibility of a step slots
     pub fn calculate_flexibility(&mut self) {
-        if self.status == TaskStatus::Scheduled || self.status == TaskStatus::Impossible {
+        if self.status == StepStatus::Scheduled || self.status == StepStatus::Impossible {
             let message = format!(
-                "TaskStatus must be ReadyToSchedule, but it is now TaskStatus::{:?}",
+                "StepStatus must be ReadyToSchedule, but it is now StepStatus::{:?}",
                 self.status.clone()
             );
             dbg!(message);
             return;
         }
 
-        let task_duration = self.duration;
+        let step_duration = self.duration;
         let flexibility = self.slots.iter().fold(0, |acc, slot| {
             let slot_duration = slot.duration_as_hours();
 
-            if slot_duration >= task_duration {
-                acc + slot_duration - task_duration + 1
+            if slot_duration >= step_duration {
+                acc + slot_duration - step_duration + 1
             } else {
                 /*
                 TODO 2023-06-15: below fixed flexibility calculation for goal
                 "sleep" for test bug_215, but will affect other tests and not
-                accurate for other cases like budgeting tasks
+                accurate for other cases like budgeting steps
                 */
 
                 acc
@@ -47,7 +47,7 @@ impl Task {
         });
 
         if flexibility == 0 {
-            self.status = TaskStatus::Impossible;
+            self.status = StepStatus::Impossible;
         }
 
         self.flexibility = flexibility;
@@ -62,116 +62,116 @@ mod tests {
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            step::{Step, StepStatus},
         };
 
-        /// Test when TaskStatus::Blocked
-        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        /// Test when StepStatus::Blocked
+        /// - Expected Should panic when StepStatus is not ReadyToSchedule
         #[test]
         #[should_panic]
         #[ignore]
         fn test_blocked() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Blocked,
+                StepStatus::Blocked,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
-            task.calculate_flexibility();
+            step.calculate_flexibility();
         }
 
-        /// Test when TaskStatus::BudgetMinWaitingForAdjustment
-        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        /// Test when StepStatus::BudgetMinWaitingForAdjustment
+        /// - Expected Should panic when StepStatus is not ReadyToSchedule
         #[test]
         #[should_panic]
         #[ignore]
         fn test_budget_min_for_adjstmnt() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::BudgetMinWaitingForAdjustment,
+                StepStatus::BudgetMinWaitingForAdjustment,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
-            task.calculate_flexibility();
+            step.calculate_flexibility();
         }
 
-        /// Test when TaskStatus::Impossible
-        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        /// Test when StepStatus::Impossible
+        /// - Expected Should panic when StepStatus is not ReadyToSchedule
         #[test]
         #[should_panic]
         #[ignore]
         fn test_impossible() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Impossible,
+                StepStatus::Impossible,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
-            task.calculate_flexibility();
+            step.calculate_flexibility();
         }
 
-        /// Test when TaskStatus::Scheduled
-        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        /// Test when StepStatus::Scheduled
+        /// - Expected Should panic when StepStatus is not ReadyToSchedule
         #[test]
         #[should_panic]
         #[ignore]
         fn test_scheduled() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Scheduled,
+                StepStatus::Scheduled,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
-            task.calculate_flexibility();
+            step.calculate_flexibility();
         }
 
-        /// Test when TaskStatus::Uninitialized
-        /// - Expected Should panic when TaskStatus is not ReadyToSchedule
+        /// Test when StepStatus::Uninitialized
+        /// - Expected Should panic when StepStatus is not ReadyToSchedule
         #[test]
         #[should_panic]
         #[ignore]
         fn test_uninitialized() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 1,
                 168,
-                TaskStatus::Uninitialized,
+                StepStatus::Uninitialized,
                 vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
                 None,
             );
-            task.calculate_flexibility();
+            step.calculate_flexibility();
         }
     }
 
-    mod single_tasks {
+    mod single_steps {
         use chrono::Duration;
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            step::{Step, StepStatus},
         };
 
-        /// Simulate one Task in test case bug_215 which is Sleep
+        /// Simulate one Step in test case bug_215 which is Sleep
         /// ```
-        ///     Task: Sleep,
+        ///     Step: Sleep,
         ///     Duration: 8 hours
         ///     Timing: 22-08
         /// ```
         #[test]
         fn test_sleep() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 8,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
@@ -185,53 +185,53 @@ mod tests {
                 ],
                 None,
             );
-            dbg!(&task);
+            dbg!(&step);
 
-            task.calculate_flexibility();
-            dbg!(&task);
+            step.calculate_flexibility();
+            dbg!(&step);
 
-            assert_eq!(22, task.flexibility);
+            assert_eq!(22, step.flexibility);
         }
 
-        /// Simulate a Task in test case bug_215 which is
+        /// Simulate a Step in test case bug_215 which is
         /// have highest flexibility because it can be assigned anytime
         /// ```
-        ///     Task: Refreshing,
+        ///     Step: Refreshing,
         ///     Duration: 1 hour
         ///     Timing: anytime
         /// ```
         #[test]
         fn test_anytime_1hr() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
                 None,
             );
-            dbg!(&task);
+            dbg!(&step);
 
-            task.calculate_flexibility();
-            dbg!(&task);
+            step.calculate_flexibility();
+            dbg!(&step);
 
-            assert_eq!(168, task.flexibility);
+            assert_eq!(168, step.flexibility);
         }
 
-        /// Simulate a Task in test case bug_215 which is
+        /// Simulate a Step in test case bug_215 which is
         /// for taking dineer daily basis
         /// ```
-        ///     Task: Dinner,
+        ///     Step: Dinner,
         ///     Duration: 1 hour
         ///     Timing: daily between (6pm - 9pm)
         /// ```
         #[test]
         fn test_dinner_time() {
-            let mut task = Task::mock(
+            let mut step = Step::mock(
                 "test",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(Duration::hours(3), 2023, 01, 03, 18, 0),
                     Slot::mock(Duration::hours(3), 2023, 01, 04, 18, 0),
@@ -243,32 +243,32 @@ mod tests {
                 ],
                 None,
             );
-            dbg!(&task);
+            dbg!(&step);
 
-            task.calculate_flexibility();
-            dbg!(&task);
+            step.calculate_flexibility();
+            dbg!(&step);
 
-            assert_eq!(21, task.flexibility);
+            assert_eq!(21, step.flexibility);
         }
     }
 
-    mod multiple_tasks {
+    mod multiple_steps {
         use chrono::Duration;
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            step::{Step, StepStatus},
         };
 
-        /// An edge case test which simulating 2 tasks and avail slots
-        ///  in the first day is less than min_duration for first task,
-        ///  so other task will be assigned in first instead.
+        /// An edge case test which simulating 2 steps and avail slots
+        ///  in the first day is less than min_duration for first step,
+        ///  so other step will be assigned in first instead.
         /// ```
-        ///     Task 1: Sleep,
+        ///     Step 1: Sleep,
         ///     Duration: 8 hours
         ///     Timing: 22-08
         ///
-        ///     Task 2: Thinking,
+        ///     Step 2: Thinking,
         ///     Duration: 1 hour
         ///     Timing: anytime
         /// ```
@@ -276,11 +276,11 @@ mod tests {
         fn test_avail_slots_less_than_dur() {
             // todo!("test_avail_slots_less_than_dur");
 
-            let sleep_task = Task::mock(
+            let sleep_step = Step::mock(
                 "test",
                 8,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![
                     Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
                     Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
@@ -295,24 +295,24 @@ mod tests {
                 None,
             );
 
-            let thinking_task = Task::mock(
+            let thinking_step = Step::mock(
                 "thinking",
                 1,
                 0,
-                TaskStatus::ReadyToSchedule,
+                StepStatus::ReadyToSchedule,
                 vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
                 None,
             );
 
-            let tasks = vec![sleep_task, thinking_task];
+            let steps = vec![sleep_step, thinking_step];
 
-            for mut task in tasks {
-                task.calculate_flexibility();
-                dbg!(&task);
-                if task.duration == 8 {
-                    assert_eq!(22, task.flexibility);
-                } else if task.duration == 1 {
-                    assert_eq!(168, task.flexibility);
+            for mut step in steps {
+                step.calculate_flexibility();
+                dbg!(&step);
+                if step.duration == 8 {
+                    assert_eq!(22, step.flexibility);
+                } else if step.duration == 1 {
+                    assert_eq!(168, step.flexibility);
                 } else {
                     assert!(false);
                 }
@@ -323,7 +323,7 @@ mod tests {
     ///
     #[test]
     #[ignore]
-    fn test_overlapped_tasks() {
-        todo!("test_overlapped_tasks");
+    fn test_overlapped_steps() {
+        todo!("test_overlapped_steps");
     }
 }

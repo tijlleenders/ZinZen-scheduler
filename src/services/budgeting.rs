@@ -3,23 +3,23 @@ use std::collections::BTreeMap;
 use chrono::NaiveDateTime;
 
 use crate::models::{
-    budget::TaskBudgets,
+    budget::StepBudgets,
     goal::{Goal, Tag},
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
-    task::{NewTask, Task, TaskStatus},
+    step::{NewStep, Step, StepStatus},
 };
 
-impl TaskBudgets {
+impl StepBudgets {
     pub fn configure_budgets(&mut self, goals: &mut BTreeMap<String, Goal>) {
-        // Todo: create a shadow tasks per budget period that have a tag so the won't be handled by initial call to schedule
-        // Once all Tasks are scheduled, if a minimum budget per period is not reached,
-        // give the task a duration to get to the minimum per period, remove don't schedule tag, mark ready to schedule and schedule
+        // Todo: create a shadow steps per budget period that have a tag so the won't be handled by initial call to schedule
+        // Once all Steps are scheduled, if a minimum budget per period is not reached,
+        // give the step a duration to get to the minimum per period, remove don't schedule tag, mark ready to schedule and schedule
         // ! How to avoid overlapping budgets? Go from inner to outer budgets (/day first => then /week)
         // This way of shadowing is required so that the min budget scheduling at the end also takes into account the relevant filters and what slots have been taken already
-        // It is also necessary to make the tasks being scheduled earlier (Regular and Filler) aware of the slots the budget_min is 'vying for' so they can try to 'keep away'
+        // It is also necessary to make the steps being scheduled earlier (Regular and Filler) aware of the slots the budget_min is 'vying for' so they can try to 'keep away'
         if goals.is_empty() {
-            panic!("expected goals for making TaskBudgets");
+            panic!("expected goals for making StepBudgets");
         }
 
         let mut goals_to_mark_as_budget: Vec<String> = Vec::new();
@@ -85,16 +85,16 @@ impl TaskBudgets {
         result
     }
 
-    pub fn generate_budget_min_and_max_tasks(
+    pub fn generate_budget_min_and_max_steps(
         &mut self,
         goals: &mut BTreeMap<String, Goal>,
         counter: &mut usize,
-    ) -> Vec<Task> {
-        let mut tasks_result: Vec<Task> = Vec::new();
-        //for each budget create a min task (and optional max task) per corresponding time period
+    ) -> Vec<Step> {
+        let mut steps_result: Vec<Step> = Vec::new();
+        //for each budget create a min step (and optional max step) per corresponding time period
 
-        for task_budget in &self.budget_id_to_budget {
-            let goal = goals.get(task_budget.0).unwrap();
+        for step_budget in &self.budget_id_to_budget {
+            let goal = goals.get(step_budget.0).unwrap();
 
             let start: NaiveDateTime = goal.start.unwrap();
             let deadline: NaiveDateTime = goal.deadline.unwrap();
@@ -103,32 +103,32 @@ impl TaskBudgets {
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
-                let task_id = *counter;
+                let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
-                    // TODO 2023-05-31  | Create a function to split tasks
+                    // TODO 2023-05-31  | Create a function to split steps
                     //and return them
-                    let duration = task_budget.1.min.unwrap();
+                    let duration = step_budget.1.min.unwrap();
 
-                    let new_task = NewTask {
-                        task_id,
+                    let new_step = NewStep {
+                        step_id,
                         title: goal.title.clone(),
                         duration,
                         goal: goal.clone(),
                         timeline,
-                        status: TaskStatus::BudgetMinWaitingForAdjustment,
+                        status: StepStatus::BudgetMinWaitingForAdjustment,
                         timeframe: None,
                     };
 
-                    let task = Task::new(new_task);
+                    let step = Step::new(new_step);
 
-                    tasks_result.push(task);
+                    steps_result.push(step);
                 } else {
                     panic!("time_slots expected")
                 }
             }
         }
-        dbg!(&tasks_result);
-        tasks_result
+        dbg!(&steps_result);
+        steps_result
     }
 }

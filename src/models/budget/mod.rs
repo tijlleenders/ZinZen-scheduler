@@ -7,7 +7,7 @@ use super::slot::Slot;
 
 pub mod impls;
 
-/// Keeps track of the min and max time allowed and scheduled per time period for a collection of Increments/Tasks.
+/// Keeps track of the min and max time allowed and scheduled per time period for a collection of Steps/Tasks.
 #[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct Budget {
     pub budget_type: BudgetType,
@@ -23,16 +23,16 @@ pub enum BudgetType {
 }
 
 #[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
-pub struct TaskBudgets {
+pub struct StepBudgets {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
     pub goal_id_to_budget_ids: HashMap<String, Vec<String>>,
-    pub budget_id_to_budget: HashMap<String, TaskBudget>,
+    pub budget_id_to_budget: HashMap<String, StepBudget>,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct TaskBudget {
-    task_budget_type: BudgetType,
+pub struct StepBudget {
+    step_budget_type: BudgetType,
     pub slot_budgets: Vec<SlotBudget>,
     pub min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
     max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?

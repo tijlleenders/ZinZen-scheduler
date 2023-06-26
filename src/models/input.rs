@@ -1,6 +1,6 @@
-use crate::models::budget::TaskBudgets;
+use crate::models::budget::StepBudgets;
 use crate::models::goal::Goal;
-use crate::models::task::Task;
+use crate::models::step::Step;
 use chrono::prelude::*;
 use serde::Deserialize;
 use std::collections::BTreeMap;
@@ -19,16 +19,16 @@ pub struct Input {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct TasksToPlace {
+pub struct StepsToPlace {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
-    pub tasks: Vec<Task>,
-    pub task_budgets: TaskBudgets,
+    pub steps: Vec<Step>,
+    pub step_budgets: StepBudgets,
 }
 
 #[derive(Deserialize, Debug)]
-pub struct PlacedTasks {
+pub struct PlacedSteps {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
-    pub tasks: Vec<Task>,
+    pub steps: Vec<Step>,
 }

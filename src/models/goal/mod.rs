@@ -16,7 +16,7 @@ pub struct Goal {
     pub id: String,
     /// The title given to the Goal, ie "Run", "Read a book" or "Become a nuclear scientist".
     pub title: String,
-    /// The minimum duration per increment towards the Goal.
+    /// The minimum duration per Step towards the Goal.
     #[serde(default)]
     pub min_duration: Option<usize>,
     /// The maximum duration, if the other Goals allow for it.
@@ -36,7 +36,7 @@ pub struct Goal {
     /// Internal - should be private
     #[serde(default)]
     pub tags: Vec<Tag>,
-    /// Filters that reduce where on the Timeline Increments for this Goal can be scheduled.
+    /// Filters that reduce the potential Timeline of the Steps for this Goal.
     /// Examples: After 8, Weekends, not this afternoon
     #[serde(default)]
     pub filters: Option<TimeFilter>,
@@ -85,7 +85,7 @@ pub enum Tag {
     Optional,
     FlexDur,
     Remove,
-    IgnoreForTaskGeneration,
+    IgnoreStepGeneration,
     Filler,
     Budget,
 }

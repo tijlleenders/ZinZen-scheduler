@@ -1,7 +1,7 @@
 {
     "scheduled": [{
             "day": "2022-10-01",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 0,
                     "goalid": "2",
                     "title": "learn rust",
@@ -29,7 +29,7 @@
         },
         {
             "day": "2022-10-02",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 3,
                     "goalid": "2",
                     "title": "learn rust",
@@ -57,7 +57,7 @@
         },
         {
             "day": "2022-10-03",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 6,
                     "goalid": "2",
                     "title": "learn rust",
@@ -85,7 +85,7 @@
         },
         {
             "day": "2022-10-04",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 9,
                     "goalid": "2",
                     "title": "learn rust",
@@ -113,7 +113,7 @@
         },
         {
             "day": "2022-10-05",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 12,
                     "goalid": "2",
                     "title": "learn rust",
@@ -141,7 +141,7 @@
         },
         {
             "day": "2022-10-06",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 15,
                     "goalid": "2",
                     "title": "learn rust",
@@ -169,7 +169,7 @@
         },
         {
             "day": "2022-10-07",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 18,
                     "goalid": "2",
                     "title": "learn rust",
@@ -197,7 +197,7 @@
         },
         {
             "day": "2022-10-08",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 21,
                     "goalid": "2",
                     "title": "learn rust",
@@ -225,7 +225,7 @@
         },
         {
             "day": "2022-10-09",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 24,
                     "goalid": "2",
                     "title": "learn rust",
@@ -253,7 +253,7 @@
         },
         {
             "day": "2022-10-10",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 27,
                     "goalid": "2",
                     "title": "learn rust",
@@ -281,7 +281,7 @@
         },
         {
             "day": "2022-10-11",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 30,
                     "goalid": "2",
                     "title": "learn rust",
@@ -309,7 +309,7 @@
         },
         {
             "day": "2022-10-12",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 33,
                     "goalid": "2",
                     "title": "learn rust",
@@ -337,7 +337,7 @@
         },
         {
             "day": "2022-10-13",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 36,
                     "goalid": "2",
                     "title": "learn rust",
@@ -365,7 +365,7 @@
         },
         {
             "day": "2022-10-14",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 39,
                     "goalid": "2",
                     "title": "learn rust",
@@ -393,7 +393,7 @@
         },
         {
             "day": "2022-10-15",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 42,
                     "goalid": "2",
                     "title": "learn rust",
@@ -421,7 +421,7 @@
         },
         {
             "day": "2022-10-16",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 45,
                     "goalid": "2",
                     "title": "learn rust",
@@ -449,7 +449,7 @@
         },
         {
             "day": "2022-10-17",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 48,
                     "goalid": "2",
                     "title": "learn rust",
@@ -477,7 +477,7 @@
         },
         {
             "day": "2022-10-18",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 51,
                     "goalid": "2",
                     "title": "learn rust",
@@ -505,7 +505,7 @@
         },
         {
             "day": "2022-10-19",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 54,
                     "goalid": "2",
                     "title": "learn rust",
@@ -533,7 +533,7 @@
         },
         {
             "day": "2022-10-20",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 57,
                     "goalid": "2",
                     "title": "learn rust",
@@ -561,7 +561,7 @@
         },
         {
             "day": "2022-10-21",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 60,
                     "goalid": "2",
                     "title": "learn rust",
@@ -589,7 +589,7 @@
         },
         {
             "day": "2022-10-22",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 63,
                     "goalid": "2",
                     "title": "learn rust",
@@ -617,7 +617,7 @@
         },
         {
             "day": "2022-10-23",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 66,
                     "goalid": "2",
                     "title": "learn rust",
@@ -645,7 +645,7 @@
         },
         {
             "day": "2022-10-24",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 69,
                     "goalid": "2",
                     "title": "learn rust",
@@ -673,7 +673,7 @@
         },
         {
             "day": "2022-10-25",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 72,
                     "goalid": "2",
                     "title": "learn rust",
@@ -701,7 +701,7 @@
         },
         {
             "day": "2022-10-26",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 75,
                     "goalid": "2",
                     "title": "learn rust",
@@ -729,7 +729,7 @@
         },
         {
             "day": "2022-10-27",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 78,
                     "goalid": "2",
                     "title": "learn rust",
@@ -757,7 +757,7 @@
         },
         {
             "day": "2022-10-28",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 81,
                     "goalid": "2",
                     "title": "learn rust",
@@ -785,7 +785,7 @@
         },
         {
             "day": "2022-10-29",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 84,
                     "goalid": "2",
                     "title": "learn rust",
@@ -813,7 +813,7 @@
         },
         {
             "day": "2022-10-30",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 87,
                     "goalid": "2",
                     "title": "learn rust",
@@ -841,7 +841,7 @@
         },
         {
             "day": "2022-10-31",
-            "outputs": [{
+            "tasks": [{
                     "taskid": 90,
                     "goalid": "2",
                     "title": "learn rust",
@@ -870,127 +870,127 @@
     ],
     "impossible": [{
             "day": "2022-10-01",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-02",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-03",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-04",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-05",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-06",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-07",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-08",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-09",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-10",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-11",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-12",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-13",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-14",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-15",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-16",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-17",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-18",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-19",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-20",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-21",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-22",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-23",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-24",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-25",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-26",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-27",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-28",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-29",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-30",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2022-10-31",
-            "outputs": []
+            "tasks": []
         }
     ]
 }

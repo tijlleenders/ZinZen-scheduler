@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2023-05-10",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
@@ -95,7 +95,7 @@
     },
     {
       "day": "2023-05-11",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 11,
           "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
@@ -188,7 +188,7 @@
     },
     {
       "day": "2023-05-12",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 22,
           "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
@@ -281,7 +281,7 @@
     },
     {
       "day": "2023-05-13",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 33,
           "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
@@ -374,7 +374,7 @@
     },
     {
       "day": "2023-05-14",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 44,
           "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
@@ -475,7 +475,7 @@
     },
     {
       "day": "2023-05-15",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 56,
           "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
@@ -544,7 +544,7 @@
     },
     {
       "day": "2023-05-16",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 64,
           "goalid": "95438911-95ee-47bc-ba4f-090a560f46e2",
@@ -631,7 +631,7 @@
   "impossible": [
     {
       "day": "2023-05-10",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 74,
           "goalid": "ab599a7e-8a1c-4eb0-88ec-f2d1fbd5d46b",
@@ -668,27 +668,27 @@
     },
     {
       "day": "2023-05-11",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-12",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-13",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-14",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-15",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-16",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

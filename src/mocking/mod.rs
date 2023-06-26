@@ -3,7 +3,7 @@ use chrono::{Duration, NaiveDate, NaiveDateTime};
 use crate::models::{
     goal::Goal,
     slot::{iterator::SlotIterator, Slot},
-    task::{Task, TaskStatus},
+    step::{Step, StepStatus},
     timeline::Timeline,
 };
 
@@ -95,10 +95,10 @@ impl Timeline {
     }
 }
 
-impl Task {
-    /// Mock a custom Task
+impl Step {
+    /// Mock a custom Step
     /// ```
-    /// Task {
+    /// Step {
     ///     id: 1,
     ///     goal_id: "1",
     ///     title: title,
@@ -116,14 +116,14 @@ impl Task {
         title: &str,
         duration: usize,
         flexibility: usize,
-        status: TaskStatus,
+        status: StepStatus,
         slots: Vec<Slot>,
         timeframe: Option<Slot>,
-    ) -> Task {
+    ) -> Step {
         let start = timeframe.map(|time| time.start);
         let deadline = timeframe.map(|time| time.end);
 
-        Task {
+        Step {
             id: 1,
             title: title.to_string(),
             duration,
@@ -138,17 +138,17 @@ impl Task {
         }
     }
 
-    /// Mock a Scheduled Task
+    /// Mock a Scheduled Step
     /// ```
-    /// Task {
+    /// Step {
     ///     id: id,
     ///     goal_id: goal_id,
     ///     title: title,
     ///     duration: duration,
-    ///     status: TaskStatus::Scheduled,
+    ///     status: StepStatus::Scheduled,
     ///     flexibility: flexibility,
-    ///     start: task_timing.start,
-    ///     deadline: task_timing.end,
+    ///     start: step_timing.start,
+    ///     deadline: step_timing.end,
     ///     slots: vec![],
     ///     tags: vec![],
     ///     after_goals: None
@@ -160,17 +160,17 @@ impl Task {
         title: &str,
         duration: usize,
         flexibility: usize,
-        task_timing: Slot,
-    ) -> Task {
-        Task {
+        step_timing: Slot,
+    ) -> Step {
+        Step {
             id: id,
             goal_id: goal_id.to_string(),
             title: title.to_string(),
             duration,
-            status: TaskStatus::Scheduled,
+            status: StepStatus::Scheduled,
             flexibility,
-            start: Some(task_timing.start),
-            deadline: Some(task_timing.end),
+            start: Some(step_timing.start),
+            deadline: Some(step_timing.end),
             slots: vec![],
             tags: vec![],
             after_goals: None,
@@ -245,23 +245,23 @@ mod tests {
             assert_eq!(goal, expected_goal);
         }
     }
-    mod task {
+    mod step {
         use chrono::Duration;
 
         use crate::models::{
             slot::Slot,
-            task::{Task, TaskStatus},
+            step::{Step, StepStatus},
         };
 
         #[test]
         fn test_mock() {
             let slots = vec![Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0)];
 
-            let expected = Task {
+            let expected = Step {
                 id: 1,
-                title: "A sample task".to_string(),
+                title: "A sample step".to_string(),
                 duration: 1,
-                status: TaskStatus::ReadyToSchedule,
+                status: StepStatus::ReadyToSchedule,
                 flexibility: 168,
                 start: None,
                 deadline: None,
@@ -271,33 +271,33 @@ mod tests {
                 goal_id: "1".to_string(),
             };
 
-            let result = Task::mock("test", 1, 168, TaskStatus::ReadyToSchedule, slots, None);
+            let result = Step::mock("test", 1, 168, StepStatus::ReadyToSchedule, slots, None);
 
             assert_eq!(expected, result);
         }
 
         #[test]
         fn test_mock_scheduled() {
-            let expected_task_timing = Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0);
+            let expected_step_timing = Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0);
 
-            let expected = Task {
+            let expected = Step {
                 id: 1,
                 goal_id: "1".to_string(),
-                title: "Sheduled Task".to_string(),
+                title: "Sheduled Step".to_string(),
                 duration: 1,
-                status: TaskStatus::Scheduled,
+                status: StepStatus::Scheduled,
                 flexibility: 168,
-                start: Some(expected_task_timing.start),
-                deadline: Some(expected_task_timing.end),
+                start: Some(expected_step_timing.start),
+                deadline: Some(expected_step_timing.end),
                 slots: vec![],
                 tags: vec![],
                 after_goals: None,
             };
 
-            let result = Task::mock_scheduled(
+            let result = Step::mock_scheduled(
                 1,
                 "1",
-                "Sheduled Task",
+                "Sheduled Step",
                 1,
                 168,
                 Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
