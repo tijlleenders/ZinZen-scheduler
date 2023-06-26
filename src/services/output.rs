@@ -1,19 +1,19 @@
-//new module for outputting the result of step_placer in
-//whichever format required by front-end
+// new module for outputting the result of step_placer in
+// whichever format required by front-end
 use crate::errors::Error;
 use crate::models::goal::Tag;
 use crate::models::input::PlacedSteps;
-use crate::models::output::{DayOutputFormat, FinalOutput, Output};
+use crate::models::output::{DayTasks, FinalTasks, Task};
 use crate::models::slot::Slot;
 use crate::models::step::{Step, StepStatus};
 use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
 
 /// Formatting, sorting, and merging (contiguous) incoming steps into
-/// a FinalOutput data-structure to be returned back.
+/// a FinalTasks data-structure to be returned back.
 /// This data-structure will be printed out in the `output.json`
-pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalOutput, Error> {
-    let mut scheduled_outputs: Vec<Output> = Vec::new();
-    let mut impossible_outputs: Vec<Output> = Vec::new();
+pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Error> {
+    let mut scheduled_tasks: Vec<Task> = Vec::new();
+    let mut impossible_tasks: Vec<Task> = Vec::new();
 
     for step in placed_steps.steps.iter_mut() {
         match step.status {
@@ -22,7 +22,7 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalOutput, Er
                 if step.start.is_none() || step.deadline.is_none() {
                     return Err(Error::NoConfirmedDate(step.title.clone(), step.id));
                 }
-                scheduled_outputs.push(get_output_from_step(
+                scheduled_tasks.push(get_task_from_step(
                     step,
                     placed_steps.calendar_start,
                     placed_steps.calendar_end,
@@ -34,7 +34,7 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalOutput, Er
                 if step.tags.contains(&Tag::Optional) {
                     continue;
                 }
-                impossible_outputs.push(get_output_from_step(
+                impossible_tasks.push(get_task_from_step(
                     step,
                     placed_steps.calendar_start,
                     placed_steps.calendar_end,
@@ -54,48 +54,49 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalOutput, Er
     }
 
     //sort and combine the scheduled outputs
-    scheduled_outputs.sort();
+    scheduled_tasks.sort();
 
-    combine(&mut scheduled_outputs);
-    split_cross_day_step(&mut scheduled_outputs);
+    combine(&mut scheduled_tasks);
+    split_cross_day_step(&mut scheduled_tasks);
     generate_free_tasks(
-        &mut scheduled_outputs,
+        &mut scheduled_tasks,
         placed_steps.calendar_start,
         placed_steps.calendar_end,
     );
     //assign task ids
     let mut i = 0;
-    for task in &mut scheduled_outputs {
+    for task in &mut scheduled_tasks {
         task.taskid = i;
         i += 1;
     }
     //sort and combine the impossible outputs
-    impossible_outputs.sort();
+    impossible_tasks.sort();
     //assign step ids (start from last scheduled id)
-    combine(&mut impossible_outputs);
-    for task in &mut impossible_outputs {
+    combine(&mut impossible_tasks);
+    for task in &mut impossible_tasks {
         task.taskid = i;
         i += 1;
     }
-    //create final output object
-    let final_ouput = FinalOutput {
-        scheduled: get_output_with_date(
-            scheduled_outputs,
+    //create FinalTasks object
+    let final_tasks = FinalTasks {
+        scheduled: get_tasks_with_date(
+            scheduled_tasks,
             placed_steps.calendar_start,
             placed_steps.calendar_end,
         ),
-        impossible: get_output_with_date(
-            impossible_outputs,
+        impossible: get_tasks_with_date(
+            impossible_tasks,
             placed_steps.calendar_start,
             placed_steps.calendar_end,
         ),
     };
 
-    print!("{}", serde_json::to_string_pretty(&final_ouput).unwrap());
+    print!("{}", serde_json::to_string_pretty(&final_tasks).unwrap());
 
-    Ok(final_ouput)
+    Ok(final_tasks)
 }
 
+/// Get list of days between given start and end dates
 fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate> {
     let mut date = start.date();
     let days_num = Slot { start, end }.duration_as_hours() / 24;
@@ -107,13 +108,14 @@ fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
     days
 }
 
-fn get_output_from_step(
+/// Get a task from a given Step
+fn get_task_from_step(
     step: &mut Step,
     calendar_start: NaiveDateTime,
     calendar_end: NaiveDateTime,
-) -> Output {
+) -> Task {
     match step.status {
-        StepStatus::Scheduled => Output {
+        StepStatus::Scheduled => Task {
             taskid: step.id,
             goalid: step.goal_id.clone(),
             title: step.title.clone(),
@@ -123,7 +125,7 @@ fn get_output_from_step(
             tags: step.tags.clone(),
             impossible: false,
         },
-        StepStatus::Impossible => Output {
+        StepStatus::Impossible => Task {
             taskid: step.id,
             goalid: step.goal_id.clone(),
             title: step.title.clone(),
@@ -142,18 +144,18 @@ fn get_output_from_step(
 
 //If tasks had been split, they need to be combined into contiguous tasks
 //e.g. work(1-2), work(2-3), work(3-4) should be combined into work(1-4).
-fn combine(outputs: &mut Vec<Output>) {
+fn combine(tasks: &mut Vec<Task>) {
     let mut indexes_to_remove = Vec::new();
     let mut i = 0;
-    'outer: while i < outputs.len() {
-        for j in (i + 1)..outputs.len() {
-            if (outputs[j].goalid == outputs[i].goalid && outputs[j].start == outputs[i].deadline)
-                || (outputs[j].goalid == outputs[i].goalid
-                    && outputs[i].tags.contains(&Tag::FlexDur)
-                    && outputs[i].impossible)
+    'outer: while i < tasks.len() {
+        for j in (i + 1)..tasks.len() {
+            if (tasks[j].goalid == tasks[i].goalid && tasks[j].start == tasks[i].deadline)
+                || (tasks[j].goalid == tasks[i].goalid
+                    && tasks[i].tags.contains(&Tag::FlexDur)
+                    && tasks[i].impossible)
             {
-                outputs[i].deadline = outputs[j].deadline;
-                outputs[i].duration += outputs[j].duration;
+                tasks[i].deadline = tasks[j].deadline;
+                tasks[i].duration += tasks[j].duration;
                 indexes_to_remove.push(j);
             } else {
                 i = j;
@@ -164,83 +166,85 @@ fn combine(outputs: &mut Vec<Output>) {
     }
 
     while !indexes_to_remove.is_empty() {
-        outputs.remove(indexes_to_remove.pop().unwrap());
+        tasks.remove(indexes_to_remove.pop().unwrap());
     }
 }
 
 //If a step starts in one day and ends in the next day, it should be splitted into two steps.
 //e.g. A Step 'Sleep' from 22:00-6:00 should be split into two output steps in output formatter: 22:00-0:00 and 0:00-6:00
-fn split_cross_day_step(outputs: &mut Vec<Output>) {
-    dbg!(&outputs);
+fn split_cross_day_step(tasks: &mut Vec<Task>) {
+    dbg!(&tasks);
     /*
     TODO 2023-06-04  | Debug note | case bug_215
-    - For param "outputs", it contains wrong duration for steps "hurdle" and "sleep".
-    - Attention to function "is_cross_day" which comparison need to be enhanced. Check output.title:"hurdle"
+    - For param "tasks", it contains wrong duration for steps "hurdle" and "sleep".
+    - Attention to function "is_cross_day" which comparison need to be enhanced. Check task.title:"hurdle"
     - Attention to code line "step2.duration -= step.duration;" which seems is not accurate and also affected by function "is_cross_day"
     */
 
-    let mut new_outputs = vec![];
-    for step in outputs.iter_mut() {
-        if is_cross_day(step) {
-            let mut step2 = step.clone();
-            step.deadline = step.deadline.with_hour(0).unwrap();
-            step2.start = step.deadline.with_hour(0).unwrap();
-            step.duration = Slot {
-                start: step.start,
-                end: step.deadline,
+    let mut new_tasks = vec![];
+    for task in tasks.iter_mut() {
+        if is_cross_day(task) {
+            let mut task2 = task.clone();
+            task.deadline = task.deadline.with_hour(0).unwrap();
+            task2.start = task.deadline.with_hour(0).unwrap();
+            task.duration = Slot {
+                start: task.start,
+                end: task.deadline,
             }
             .duration_as_hours();
 
-            dbg!(&step, &step2);
+            dbg!(&task, &task2);
 
-            step2.duration -= step.duration;
-            new_outputs.push(step.clone());
-            if step2.duration > 0 {
-                new_outputs.push(step2);
+            task2.duration -= task.duration;
+            new_tasks.push(task.clone());
+            if task2.duration > 0 {
+                new_tasks.push(task2);
             }
         } else {
-            new_outputs.push(step.clone());
-            dbg!(&new_outputs);
+            new_tasks.push(task.clone());
+            dbg!(&new_tasks);
         }
     }
 
-    dbg!(&new_outputs);
-    outputs.clear();
-    outputs.extend(new_outputs);
+    dbg!(&new_tasks);
+    tasks.clear();
+    tasks.extend(new_tasks);
 }
 
-fn get_output_with_date(
-    output: Vec<Output>,
+/// Filter tasks with date and return sorted tasks
+fn get_tasks_with_date(
+    tasks: Vec<Task>,
     start: NaiveDateTime,
     end: NaiveDateTime,
-) -> Vec<DayOutputFormat> {
+) -> Vec<DayTasks> {
     let mut result = vec![];
     for day in get_calendar_days(start, end).iter() {
-        let mut outputs = output
+        let mut filtered_tasks = tasks
             .iter()
             .filter(|&e| day.eq(&e.start.date()))
             .cloned()
-            .collect::<Vec<Output>>();
-        outputs.sort_by(|a, b| a.start.cmp(&b.start));
+            .collect::<Vec<Task>>();
+        filtered_tasks.sort_by(|a, b| a.start.cmp(&b.start));
 
-        combine(&mut outputs);
-        result.push(DayOutputFormat {
+        combine(&mut filtered_tasks);
+        result.push(DayTasks {
             day: day.to_owned(),
-            outputs,
+            tasks: filtered_tasks,
         })
     }
 
     result
 }
 
-fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: NaiveDateTime) {
+/// Generate tasks for free slots without any tasks
+fn generate_free_tasks(outputs: &mut Vec<Task>, start: NaiveDateTime, end: NaiveDateTime) {
     let mut new_outputs = vec![];
     for day in get_calendar_days(start, end).iter() {
         let mut day_outputs = outputs
             .iter()
             .filter(|&e| day.eq(&e.start.date()))
             .cloned()
-            .collect::<Vec<Output>>();
+            .collect::<Vec<Task>>();
         let filled_slots = day_outputs
             .iter()
             .map(|e| Slot {
@@ -254,7 +258,7 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
         }
         let free_outputs = day_slot
             .iter()
-            .map(|s| Output {
+            .map(|s| Task {
                 taskid: 0,
                 goalid: "free".to_string(),
                 title: "free".to_string(),
@@ -277,12 +281,14 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
     outputs.extend(new_outputs);
 }
 
-fn is_cross_day(task: &Output) -> bool {
+/// Is a task crossing a day so day of start date is different from day of end date
+fn is_cross_day(task: &Task) -> bool {
     dbg!(&task);
     dbg!(&task.start.day(), &task.deadline.day());
     task.start.day() < task.deadline.day()
 }
 
+/// Return list of hourly slots for a day starting given datetime
 fn day_hour_slots(day: &NaiveDate) -> Vec<Slot> {
     let mut result = vec![];
     let start = day.and_hms_opt(0, 0, 0).unwrap();

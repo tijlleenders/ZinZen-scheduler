@@ -67,7 +67,7 @@
 
 use errors::Error;
 use models::input::Input;
-use models::output::FinalOutput;
+use models::output::FinalTasks;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
 use services::placer::step_placer;
@@ -101,22 +101,22 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     let input: Input = from_value(input.clone()).unwrap();
     let steps = generate_steps_to_place(input);
     let placed_steps = step_placer(steps);
-    let output = match output_formatter(placed_steps) {
+    let final_tasks = match output_formatter(placed_steps) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.")
         }
         Err(e) => {
             panic!("Unexpected error: {:?}", e);
         }
-        Ok(output) => output,
+        Ok(final_tasks) => final_tasks,
     };
 
-    Ok(to_value(&output)?)
+    Ok(to_value(&final_tasks)?)
 }
 
 //Todo why is there a schedule function and a run_scheduler function?
 /// The main binary function to call
-pub fn run_scheduler(input: Input) -> FinalOutput {
+pub fn run_scheduler(input: Input) -> FinalTasks {
     let steps = generate_steps_to_place(input);
 
     let placed_steps = step_placer(steps);
@@ -128,7 +128,7 @@ pub fn run_scheduler(input: Input) -> FinalOutput {
         Err(e) => {
             panic!("Unexpected error: {:?}", e);
         }
-        Ok(output) => output,
+        Ok(final_tasks) => final_tasks,
     }
 }
 

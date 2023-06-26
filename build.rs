@@ -56,7 +56,7 @@ fn get_imports() -> String {
     result.push("\nmod common;".to_string());
     result.push("\n#[cfg(test)]".to_string());
     result.push("\nuse pretty_assertions::assert_eq;".to_string());
-    result.push("\nuse scheduler::models::{input::Input, output::FinalOutput};".to_string());
+    result.push("\nuse scheduler::models::{input::Input, output::FinalTasks};".to_string());
     result.push("\nuse std::path::Path;".to_string());
 
     result.join("")
@@ -108,7 +108,7 @@ fn run_test(directory: &str) -> (String, String) {
     let input: Input = common::get_input_from_json(input_path).unwrap();
     let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
 
-    let output: FinalOutput = scheduler::run_scheduler(input);
+    let output: FinalTasks = scheduler::run_scheduler(input);
     let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
     common::write_to_file(&actual_output_path, &actual_output).unwrap();
