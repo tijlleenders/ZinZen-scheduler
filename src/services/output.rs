@@ -66,7 +66,7 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalOutput, Er
     //assign task ids
     let mut i = 0;
     for task in &mut scheduled_outputs {
-        task.step_id = i;
+        task.taskid = i;
         i += 1;
     }
     //sort and combine the impossible outputs
@@ -74,7 +74,7 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalOutput, Er
     //assign step ids (start from last scheduled id)
     combine(&mut impossible_outputs);
     for task in &mut impossible_outputs {
-        task.step_id = i;
+        task.taskid = i;
         i += 1;
     }
     //create final output object
@@ -114,8 +114,8 @@ fn get_output_from_step(
 ) -> Output {
     match step.status {
         StepStatus::Scheduled => Output {
-            step_id: step.id,
-            goal_id: step.goal_id.clone(),
+            taskid: step.id,
+            goalid: step.goal_id.clone(),
             title: step.title.clone(),
             duration: step.duration,
             start: step.start.unwrap(),
@@ -124,8 +124,8 @@ fn get_output_from_step(
             impossible: false,
         },
         StepStatus::Impossible => Output {
-            step_id: step.id,
-            goal_id: step.goal_id.clone(),
+            taskid: step.id,
+            goalid: step.goal_id.clone(),
             title: step.title.clone(),
             duration: step.duration,
             start: calendar_start,
@@ -147,8 +147,8 @@ fn combine(outputs: &mut Vec<Output>) {
     let mut i = 0;
     'outer: while i < outputs.len() {
         for j in (i + 1)..outputs.len() {
-            if (outputs[j].goal_id == outputs[i].goal_id && outputs[j].start == outputs[i].deadline)
-                || (outputs[j].goal_id == outputs[i].goal_id
+            if (outputs[j].goalid == outputs[i].goalid && outputs[j].start == outputs[i].deadline)
+                || (outputs[j].goalid == outputs[i].goalid
                     && outputs[i].tags.contains(&Tag::FlexDur)
                     && outputs[i].impossible)
             {
@@ -255,8 +255,8 @@ fn generate_free_tasks(outputs: &mut Vec<Output>, start: NaiveDateTime, end: Nai
         let free_outputs = day_slot
             .iter()
             .map(|s| Output {
-                step_id: 0,
-                goal_id: "free".to_string(),
+                taskid: 0,
+                goalid: "free".to_string(),
                 title: "free".to_string(),
                 duration: s.duration_as_hours(),
                 start: s.start,

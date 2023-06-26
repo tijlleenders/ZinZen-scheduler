@@ -8,8 +8,8 @@ use std::cmp::Ordering;
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Output {
-    pub step_id: usize,
-    pub goal_id: String,
+    pub taskid: usize,
+    pub goalid: String,
     pub title: String,
     pub duration: usize,
     pub start: NaiveDateTime,
