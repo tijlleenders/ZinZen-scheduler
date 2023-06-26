@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2022-01-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "1",
@@ -23,7 +23,7 @@
     },
     {
       "day": "2022-01-02",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 2,
           "goalid": "1",
@@ -44,7 +44,7 @@
     },
     {
       "day": "2022-01-03",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 4,
           "goalid": "1",
@@ -67,15 +67,15 @@
   "impossible": [
     {
       "day": "2022-01-01",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-01-02",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-01-03",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

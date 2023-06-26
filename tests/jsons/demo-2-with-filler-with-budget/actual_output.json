@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2018-03-09",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "free",
@@ -31,7 +31,7 @@
     },
     {
       "day": "2018-03-10",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 3,
           "goalid": "free",
@@ -76,7 +76,7 @@
     },
     {
       "day": "2018-03-11",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 8,
           "goalid": "free",
@@ -105,7 +105,7 @@
     },
     {
       "day": "2018-03-12",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 11,
           "goalid": "free",
@@ -118,7 +118,7 @@
     },
     {
       "day": "2018-03-13",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 12,
           "goalid": "free",
@@ -131,7 +131,7 @@
     },
     {
       "day": "2018-03-14",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 13,
           "goalid": "free",
@@ -144,7 +144,7 @@
     },
     {
       "day": "2018-03-15",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 14,
           "goalid": "free",
@@ -159,7 +159,7 @@
   "impossible": [
     {
       "day": "2018-03-09",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 15,
           "goalid": "1",
@@ -180,27 +180,27 @@
     },
     {
       "day": "2018-03-10",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-03-11",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-03-12",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-03-13",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-03-14",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2018-03-15",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

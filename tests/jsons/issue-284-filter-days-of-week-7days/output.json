@@ -1,9 +1,7 @@
 {
-    "scheduled": [
-        {
+    "scheduled": [{
             "day": "2023-03-09",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 0,
                     "goalid": "free",
                     "title": "free",
@@ -31,8 +29,7 @@
         },
         {
             "day": "2023-03-10",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 3,
                     "goalid": "free",
                     "title": "free",
@@ -60,8 +57,7 @@
         },
         {
             "day": "2023-03-11",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 6,
                     "goalid": "free",
                     "title": "free",
@@ -89,8 +85,7 @@
         },
         {
             "day": "2023-03-12",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 9,
                     "goalid": "free",
                     "title": "free",
@@ -118,8 +113,7 @@
         },
         {
             "day": "2023-03-13",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 12,
                     "goalid": "free",
                     "title": "free",
@@ -147,8 +141,7 @@
         },
         {
             "day": "2023-03-14",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 15,
                     "goalid": "free",
                     "title": "free",
@@ -176,8 +169,7 @@
         },
         {
             "day": "2023-03-15",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 18,
                     "goalid": "free",
                     "title": "free",
@@ -205,8 +197,7 @@
         },
         {
             "day": "2023-03-16",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 21,
                     "goalid": "free",
                     "title": "free",
@@ -234,8 +225,7 @@
         },
         {
             "day": "2023-03-17",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 24,
                     "goalid": "free",
                     "title": "free",
@@ -263,8 +253,7 @@
         },
         {
             "day": "2023-03-18",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 27,
                     "goalid": "free",
                     "title": "free",
@@ -292,8 +281,7 @@
         },
         {
             "day": "2023-03-19",
-            "outputs": [
-                {
+            "tasks": [{
                     "taskid": 30,
                     "goalid": "free",
                     "title": "free",
@@ -320,50 +308,49 @@
             ]
         }
     ],
-    "impossible": [
-        {
+    "impossible": [{
             "day": "2023-03-09",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-10",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-11",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-12",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-13",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-14",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-15",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-16",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-17",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-18",
-            "outputs": []
+            "tasks": []
         },
         {
             "day": "2023-03-19",
-            "outputs": []
+            "tasks": []
         }
     ]
 }

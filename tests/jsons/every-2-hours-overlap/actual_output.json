@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2022-11-21",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "1",
@@ -87,7 +87,7 @@
     },
     {
       "day": "2022-11-22",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 10,
           "goalid": "1",
@@ -174,11 +174,11 @@
   "impossible": [
     {
       "day": "2022-11-21",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-11-22",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

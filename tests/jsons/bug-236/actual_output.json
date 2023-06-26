@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2022-01-31",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "free",
@@ -31,7 +31,7 @@
     },
     {
       "day": "2022-02-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 3,
           "goalid": "free",
@@ -44,7 +44,7 @@
     },
     {
       "day": "2022-02-02",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 4,
           "goalid": "free",
@@ -57,7 +57,7 @@
     },
     {
       "day": "2022-02-03",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 5,
           "goalid": "free",
@@ -70,7 +70,7 @@
     },
     {
       "day": "2022-02-04",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 6,
           "goalid": "free",
@@ -83,7 +83,7 @@
     },
     {
       "day": "2022-02-05",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 7,
           "goalid": "free",
@@ -96,7 +96,7 @@
     },
     {
       "day": "2022-02-06",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 8,
           "goalid": "free",
@@ -111,7 +111,7 @@
   "impossible": [
     {
       "day": "2022-01-31",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 9,
           "goalid": "1",
@@ -124,27 +124,27 @@
     },
     {
       "day": "2022-02-01",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-02-02",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-02-03",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-02-04",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-02-05",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2022-02-06",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

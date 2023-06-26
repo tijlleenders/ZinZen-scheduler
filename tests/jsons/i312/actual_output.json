@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2023-05-11",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
@@ -103,7 +103,7 @@
     },
     {
       "day": "2023-05-12",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 12,
           "goalid": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
@@ -196,7 +196,7 @@
     },
     {
       "day": "2023-05-13",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 23,
           "goalid": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
@@ -289,7 +289,7 @@
     },
     {
       "day": "2023-05-14",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 34,
           "goalid": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
@@ -382,7 +382,7 @@
     },
     {
       "day": "2023-05-15",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 45,
           "goalid": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
@@ -475,7 +475,7 @@
     },
     {
       "day": "2023-05-16",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 56,
           "goalid": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
@@ -568,7 +568,7 @@
     },
     {
       "day": "2023-05-17",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 67,
           "goalid": "4f030fa4-1897-4478-9f5f-f282f0d8f958",
@@ -663,31 +663,31 @@
   "impossible": [
     {
       "day": "2023-05-11",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-12",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-13",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-14",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-15",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-16",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-17",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

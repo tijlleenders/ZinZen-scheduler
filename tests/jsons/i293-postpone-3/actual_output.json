@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2023-05-01",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "1",
@@ -39,7 +39,7 @@
     },
     {
       "day": "2023-05-02",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 4,
           "goalid": "1",
@@ -60,7 +60,7 @@
     },
     {
       "day": "2023-05-03",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 6,
           "goalid": "1",
@@ -81,7 +81,7 @@
     },
     {
       "day": "2023-05-04",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 8,
           "goalid": "1",
@@ -102,7 +102,7 @@
     },
     {
       "day": "2023-05-05",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 10,
           "goalid": "free",
@@ -123,7 +123,7 @@
     },
     {
       "day": "2023-05-06",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 12,
           "goalid": "1",
@@ -144,7 +144,7 @@
     },
     {
       "day": "2023-05-07",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 14,
           "goalid": "1",
@@ -165,7 +165,7 @@
     },
     {
       "day": "2023-05-08",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 16,
           "goalid": "1",
@@ -202,7 +202,7 @@
     },
     {
       "day": "2023-05-09",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 20,
           "goalid": "1",
@@ -223,7 +223,7 @@
     },
     {
       "day": "2023-05-10",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 22,
           "goalid": "1",
@@ -244,7 +244,7 @@
     },
     {
       "day": "2023-05-11",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 24,
           "goalid": "1",
@@ -265,7 +265,7 @@
     },
     {
       "day": "2023-05-12",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 26,
           "goalid": "1",
@@ -286,7 +286,7 @@
     },
     {
       "day": "2023-05-13",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 28,
           "goalid": "1",
@@ -307,7 +307,7 @@
     },
     {
       "day": "2023-05-14",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 30,
           "goalid": "1",
@@ -328,7 +328,7 @@
     },
     {
       "day": "2023-05-15",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 32,
           "goalid": "1",
@@ -365,7 +365,7 @@
     },
     {
       "day": "2023-05-16",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 36,
           "goalid": "1",
@@ -386,7 +386,7 @@
     },
     {
       "day": "2023-05-17",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 38,
           "goalid": "1",
@@ -407,7 +407,7 @@
     },
     {
       "day": "2023-05-18",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 40,
           "goalid": "1",
@@ -428,7 +428,7 @@
     },
     {
       "day": "2023-05-19",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 42,
           "goalid": "1",
@@ -449,7 +449,7 @@
     },
     {
       "day": "2023-05-20",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 44,
           "goalid": "free",
@@ -478,7 +478,7 @@
     },
     {
       "day": "2023-05-21",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 47,
           "goalid": "1",
@@ -499,7 +499,7 @@
     },
     {
       "day": "2023-05-22",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 49,
           "goalid": "1",
@@ -536,7 +536,7 @@
     },
     {
       "day": "2023-05-23",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 53,
           "goalid": "1",
@@ -557,7 +557,7 @@
     },
     {
       "day": "2023-05-24",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 55,
           "goalid": "1",
@@ -578,7 +578,7 @@
     },
     {
       "day": "2023-05-25",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 57,
           "goalid": "free",
@@ -607,7 +607,7 @@
     },
     {
       "day": "2023-05-26",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 60,
           "goalid": "1",
@@ -628,7 +628,7 @@
     },
     {
       "day": "2023-05-27",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 62,
           "goalid": "1",
@@ -649,7 +649,7 @@
     },
     {
       "day": "2023-05-28",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 64,
           "goalid": "1",
@@ -670,7 +670,7 @@
     },
     {
       "day": "2023-05-29",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 66,
           "goalid": "1",
@@ -707,7 +707,7 @@
     },
     {
       "day": "2023-05-30",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 70,
           "goalid": "1",
@@ -730,123 +730,123 @@
   "impossible": [
     {
       "day": "2023-05-01",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-02",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-03",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-04",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-05",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-06",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-07",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-08",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-09",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-10",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-11",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-12",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-13",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-14",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-15",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-16",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-17",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-18",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-19",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-20",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-21",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-22",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-23",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-24",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-25",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-26",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-27",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-28",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-29",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-05-30",
-      "outputs": []
+      "tasks": []
     }
   ]
 }

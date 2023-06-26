@@ -2,7 +2,7 @@
   "scheduled": [
     {
       "day": "2023-03-09",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 0,
           "goalid": "free",
@@ -15,7 +15,7 @@
     },
     {
       "day": "2023-03-10",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 1,
           "goalid": "free",
@@ -44,7 +44,7 @@
     },
     {
       "day": "2023-03-11",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 4,
           "goalid": "free",
@@ -73,7 +73,7 @@
     },
     {
       "day": "2023-03-12",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 7,
           "goalid": "free",
@@ -102,7 +102,7 @@
     },
     {
       "day": "2023-03-13",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 10,
           "goalid": "free",
@@ -131,7 +131,7 @@
     },
     {
       "day": "2023-03-14",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 13,
           "goalid": "free",
@@ -160,7 +160,7 @@
     },
     {
       "day": "2023-03-15",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 16,
           "goalid": "free",
@@ -173,7 +173,7 @@
     },
     {
       "day": "2023-03-16",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 17,
           "goalid": "free",
@@ -186,7 +186,7 @@
     },
     {
       "day": "2023-03-17",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 18,
           "goalid": "free",
@@ -215,7 +215,7 @@
     },
     {
       "day": "2023-03-18",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 21,
           "goalid": "free",
@@ -244,7 +244,7 @@
     },
     {
       "day": "2023-03-19",
-      "outputs": [
+      "tasks": [
         {
           "taskid": 24,
           "goalid": "free",
@@ -275,47 +275,47 @@
   "impossible": [
     {
       "day": "2023-03-09",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-10",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-11",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-12",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-13",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-14",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-15",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-16",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-17",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-18",
-      "outputs": []
+      "tasks": []
     },
     {
       "day": "2023-03-19",
-      "outputs": []
+      "tasks": []
     }
   ]
 }
