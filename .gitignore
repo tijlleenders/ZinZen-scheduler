@@ -4,3 +4,4 @@ Cargo.lock
 outputformat.txt
 target/
 tests/rust_tests.rs
+_logs/
