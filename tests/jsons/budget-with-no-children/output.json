@@ -138,7 +138,7 @@
       "outputs": [
         {
           "taskid": 16,
-          "goalid": "4-work",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-02T00:00:00",
@@ -271,7 +271,7 @@
       "outputs": [
         {
           "taskid": 31,
-          "goalid": "4-work",
+          "goalid": "3-sleep",
           "title": "Sleep 😴🌙",
           "duration": 6,
           "start": "2018-01-03T00:00:00",
