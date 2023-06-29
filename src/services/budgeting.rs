@@ -137,3 +137,172 @@ impl StepBudgets {
         steps_result
     }
 }
+
+// test
+#[cfg(test)]
+mod tests {
+
+    mod generate_steps {
+        use crate::models::{
+            budget::{Budget, BudgetType, SlotBudget, StepBudget, StepBudgets},
+            goal::{Goal, GoalsMap, Tag},
+            repetition::Repetition,
+            slot::Slot,
+            step::{Step, StepStatus},
+        };
+        use chrono::Duration;
+        use std::collections::HashMap;
+
+        /// Test budgeted goal "4-work" simulating case "budget_with_no_children" but with little horus for simplicity
+        #[test]
+        fn test_work_in_case_budget_with_no_children() {
+            let calendar = Slot::mock(Duration::days(7), 2018, 1, 1, 0, 0);
+            let budget_min: usize = 5;
+
+            let mut goal_id_to_budget_ids: HashMap<String, Vec<String>> = HashMap::new();
+            goal_id_to_budget_ids.insert("4-work".to_string(), vec!["4-work".to_string()]);
+
+            let mut budget_id_to_budget: HashMap<String, StepBudget> = HashMap::new();
+            budget_id_to_budget.insert(
+                "4-work".to_string(),
+                StepBudget {
+                    step_budget_type: BudgetType::Weekly,
+                    slot_budgets: vec![SlotBudget {
+                        slot: calendar,
+                        min: Some(budget_min),
+                        max: None,
+                        used: 0,
+                    }],
+                    min: Some(budget_min),
+                    max: None,
+                },
+            );
+
+            let mut step_budgets = StepBudgets {
+                calendar_start: calendar.start,
+                calendar_end: calendar.end,
+                budget_ids_map: goal_id_to_budget_ids,
+                budget_map: budget_id_to_budget,
+            };
+
+            let work_goal = Goal {
+                id: "4-work".to_string(),
+                title: "Work".to_string(),
+                min_duration: None,
+                max_duration: None,
+                budgets: Some(vec![Budget {
+                    budget_type: BudgetType::Weekly,
+                    min: Some(40),
+                    max: None,
+                }]),
+                repeat: Some(Repetition::Weekly(1)),
+                start: Some(calendar.start),
+                deadline: Some(calendar.end),
+                tags: vec![Tag::Budget],
+                filters: None,
+                children: None,
+                after_goals: None,
+            };
+
+            let mut goals: GoalsMap = GoalsMap::new();
+            goals.insert(work_goal.id.clone(), work_goal);
+            let mut counter = 0;
+            let result_steps = step_budgets.generate_steps(&mut goals, &mut counter);
+
+            // Expected steps data
+            let goal_id: String = "4-work".to_string();
+            let title = "Work".to_string();
+            let status = StepStatus::ReadyToSchedule;
+            let expected_steps: Vec<Step> = vec![
+                Step {
+                    id: 1,
+                    goal_id: goal_id.clone(),
+                    title: title.clone(),
+                    duration: 1,
+                    status: status.clone(),
+                    flexibility: 0,
+                    start: None,
+                    deadline: None,
+                    slots: vec![calendar],
+                    tags: vec![],
+                    after_goals: None,
+                },
+                Step {
+                    id: 2,
+                    goal_id: goal_id.clone(),
+                    title: title.clone(),
+                    duration: 1,
+                    status: status.clone(),
+                    flexibility: 0,
+                    start: None,
+                    deadline: None,
+                    slots: vec![calendar],
+                    tags: vec![],
+                    after_goals: None,
+                },
+                Step {
+                    id: 3,
+                    goal_id: goal_id.clone(),
+                    title: title.clone(),
+                    duration: 1,
+                    status: status.clone(),
+                    flexibility: 0,
+                    start: None,
+                    deadline: None,
+                    slots: vec![calendar],
+                    tags: vec![],
+                    after_goals: None,
+                },
+                Step {
+                    id: 4,
+                    goal_id: goal_id.clone(),
+                    title: title.clone(),
+                    duration: 1,
+                    status: status.clone(),
+                    flexibility: 0,
+                    start: None,
+                    deadline: None,
+                    slots: vec![calendar],
+                    tags: vec![],
+                    after_goals: None,
+                },
+                Step {
+                    id: 5,
+                    goal_id: goal_id.clone(),
+                    title: title.clone(),
+                    duration: 1,
+                    status: status.clone(),
+                    flexibility: 0,
+                    start: None,
+                    deadline: None,
+                    slots: vec![calendar],
+                    tags: vec![],
+                    after_goals: None,
+                },
+            ];
+
+            dbg!(&result_steps, &expected_steps);
+
+            assert_eq!(result_steps, expected_steps);
+            assert_eq!(result_steps[0].duration, expected_steps[0].duration);
+            assert_eq!(result_steps[0].status, expected_steps[0].status);
+            assert_eq!(result_steps[0].tags, expected_steps[0].tags);
+
+            assert_eq!(result_steps[1].duration, expected_steps[1].duration);
+            assert_eq!(result_steps[1].status, expected_steps[1].status);
+            assert_eq!(result_steps[1].tags, expected_steps[1].tags);
+
+            assert_eq!(result_steps[2].duration, expected_steps[2].duration);
+            assert_eq!(result_steps[2].status, expected_steps[2].status);
+            assert_eq!(result_steps[2].tags, expected_steps[2].tags);
+
+            assert_eq!(result_steps[3].duration, expected_steps[3].duration);
+            assert_eq!(result_steps[3].status, expected_steps[3].status);
+            assert_eq!(result_steps[3].tags, expected_steps[3].tags);
+
+            assert_eq!(result_steps[4].duration, expected_steps[4].duration);
+            assert_eq!(result_steps[4].status, expected_steps[4].status);
+            assert_eq!(result_steps[4].tags, expected_steps[4].tags);
+        }
+    }
+}
