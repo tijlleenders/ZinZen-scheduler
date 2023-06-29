@@ -22,14 +22,14 @@ pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
     let calendar_end = input.calendar_end;
 
     let mut goals = manipulate_input_goals(input);
-
+    
     let mut step_budgets = StepBudgets::new(&calendar_start, &calendar_end);
     step_budgets.configure_budgets(&mut goals);
+    dbg!(&step_budgets);
 
     let mut counter: usize = 0;
-    let mut steps: Vec<Step> =
-        step_budgets.generate_budget_min_and_max_steps(&mut goals, &mut counter);
-
+    let mut steps: Vec<Step> = step_budgets.generate_steps(&mut goals, &mut counter);
+    dbg!(&steps);
     for goal in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
         let steps_for_goal: Vec<Step> =
