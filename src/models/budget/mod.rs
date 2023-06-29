@@ -26,16 +26,18 @@ pub enum BudgetType {
 pub struct StepBudgets {
     pub calendar_start: NaiveDateTime,
     pub calendar_end: NaiveDateTime,
-    pub goal_id_to_budget_ids: HashMap<String, Vec<String>>,
-    pub budget_id_to_budget: HashMap<String, StepBudget>,
+    /// A map from goal IDs to a vector of budget IDs associated with that goal
+    pub budget_ids_map: HashMap<String, Vec<String>>,
+    /// A map from goal IDs to the `StepBudget` objects associated with that goal.
+    pub budget_map: HashMap<String, StepBudget>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct StepBudget {
-    step_budget_type: BudgetType,
+    pub(crate) step_budget_type: BudgetType,
     pub slot_budgets: Vec<SlotBudget>,
     pub min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
-    max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
+    pub(crate) max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
 }
 
 #[derive(Debug, Deserialize)]

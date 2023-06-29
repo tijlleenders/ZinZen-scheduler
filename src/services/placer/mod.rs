@@ -40,7 +40,7 @@ fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
         if steps_to_place.steps[index].status == StepStatus::BudgetMinWaitingForAdjustment {
             for slot_budget in &steps_to_place
                 .step_budgets
-                .budget_id_to_budget
+                .budget_map
                 .get(&steps_to_place.steps[index].goal_id)
                 .unwrap()
                 .slot_budgets
@@ -343,8 +343,8 @@ mod tests {
         let step_budgets = StepBudgets {
             calendar_start: calendar_timing.start,
             calendar_end: calendar_timing.end,
-            goal_id_to_budget_ids: HashMap::new(),
-            budget_id_to_budget: HashMap::new(),
+            budget_ids_map: HashMap::new(),
+            budget_map: HashMap::new(),
         };
         dbg!(&step_budgets);
 
