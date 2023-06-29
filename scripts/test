@@ -5,8 +5,18 @@ set -au
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 LOG_BASE="${SCRIPT_DIR}/../_logs"
 ZIN_BASE="${SCRIPT_DIR}/../Cargo.toml"
+PARAM=${1:-""}
+CARGO_MANIFEST_DIR=$ZIN_BASE
 
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+CURRENTDATE=$(date +"%Y-%m-%d--%H-%M")
+FILE_NAME="test_${PARAM}_${CURRENTDATE}.log"
+LOG_FILE="${LOG_BASE}/${FILE_NAME}"
+
+if [[ ! -d "$LOG_BASE" ]]; then
+    mkdir -p "$LOG_BASE"
+fi
+
+if [[ "${PARAM}" == "--help" || "${PARAM}" == "-h" ]]; then
     echo "Usage: $0 [PARAM]"
     echo ""
     echo "  PARAM: [Optional] add test case name to be passed to cargo test"
@@ -16,14 +26,12 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo "  and saves the output to a log file in the _logs directory."
     echo ""
     exit 0
+elif [[ "${PARAM}" == "" ]]; then
+    echo ""
 fi
 
-PARAM=${1:-""}
-CARGO_MANIFEST_DIR=$ZIN_BASE
 
-CURRENTDATE=$(date +"%Y-%m-%d--%H-%M")
-FILE_NAME="test_${PARAM}_${CURRENTDATE}.log"
-LOG_FILE="${LOG_BASE}/${FILE_NAME}"
+
 touch "$LOG_FILE"
 
 cargo test --manifest-path "$ZIN_BASE" "$PARAM" > "$LOG_FILE"

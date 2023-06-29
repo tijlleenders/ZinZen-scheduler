@@ -58,8 +58,8 @@ impl StepBudgets {
         Self {
             calendar_start: *calendar_start,
             calendar_end: *calendar_end,
-            goal_id_to_budget_ids: HashMap::new(),
-            budget_id_to_budget: HashMap::new(),
+            budget_ids_map: HashMap::new(),
+            budget_map: HashMap::new(),
         }
     }
 
@@ -71,7 +71,7 @@ impl StepBudgets {
                 min: budget.min,
                 max: budget.max,
             };
-            self.budget_id_to_budget.insert(goal.id.clone(), budget);
+            self.budget_map.insert(goal.id.clone(), budget);
         }
     }
 }
