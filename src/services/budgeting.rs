@@ -34,20 +34,20 @@ impl StepBudgets {
             goals.get_mut(&goal_id).unwrap().tags.push(Tag::Budget);
         }
         //For each budget add all descendants
-        for budget in &self.budget_id_to_budget {
-            let mut parents_to_go: Vec<String> = vec![budget.0.clone()]; //start with the goal that initiates the budget
-            self.goal_id_to_budget_ids
-                .insert(budget.0.clone(), vec![budget.0.clone()]); //add itself for when budget filler min-max need to be checked with budget
+        for (goal_id, _) in &self.budget_map {
+            let mut parents_to_go: Vec<String> = vec![goal_id.clone()]; //start with the goal that initiates the budget
+            self.budget_ids_map
+                .insert(goal_id.clone(), vec![goal_id.clone()]); //add itself for when budget filler min-max need to be checked with budget
             while !parents_to_go.is_empty() {
                 let children = &goals.get(&parents_to_go[0]).unwrap().children;
                 if children.is_some() {
                     for child_id in children.as_ref().unwrap() {
-                        let temp_to_update = self.goal_id_to_budget_ids.get_mut(child_id);
+                        let temp_to_update = self.budget_ids_map.get_mut(child_id);
                         if let Some(temp) = temp_to_update {
-                            temp.push(budget.0.clone());
+                            temp.push(goal_id.clone());
                         } else {
-                            self.goal_id_to_budget_ids
-                                .insert(child_id.clone(), vec![budget.0.clone()]);
+                            self.budget_ids_map
+                                .insert(child_id.clone(), vec![goal_id.clone()]);
                         }
                         parents_to_go.push(child_id.clone());
                     }
@@ -55,21 +55,21 @@ impl StepBudgets {
                 parents_to_go.remove(0);
             }
         }
-        for budget in self.budget_id_to_budget.values_mut() {
+        for budget in self.budget_map.values_mut() {
             budget.initialize(self.calendar_start, self.calendar_end);
         }
     }
 
     pub(crate) fn is_allowed_by_budget(&mut self, slot: &Slot, goal_id: &String) -> bool {
         let mut result: bool = false;
-        let budget_ids = self.goal_id_to_budget_ids.get(goal_id);
+        let budget_ids = self.budget_ids_map.get(goal_id);
         //decrement all budgets or none => check first - then do
         if budget_ids.is_none() {
             return true;
         }
         let mut decrement_all = true;
         for budget_id in budget_ids.unwrap().iter() {
-            let budget = self.budget_id_to_budget.get_mut(budget_id).unwrap();
+            let budget = self.budget_map.get_mut(budget_id).unwrap();
             if !budget.test_decrement(slot) {
                 decrement_all = false;
                 break;
@@ -77,7 +77,7 @@ impl StepBudgets {
         }
         if decrement_all {
             for budget_id in budget_ids.unwrap().iter() {
-                let budget = self.budget_id_to_budget.get_mut(budget_id).unwrap();
+                let budget = self.budget_map.get_mut(budget_id).unwrap();
                 budget.decrement(slot);
             }
             result = true;
@@ -85,16 +85,19 @@ impl StepBudgets {
         result
     }
 
-    pub fn generate_budget_min_and_max_steps(
+    /// Generate Steps only for goals which have budgets
+    pub fn generate_steps(
         &mut self,
         goals: &mut BTreeMap<String, Goal>,
         counter: &mut usize,
     ) -> Vec<Step> {
-        let mut steps_result: Vec<Step> = Vec::new();
-        //for each budget create a min step (and optional max step) per corresponding time period
+        dbg!(&self, &goals, &counter);
 
-        for step_budget in &self.budget_id_to_budget {
-            let goal = goals.get(step_budget.0).unwrap();
+        let mut steps_result: Vec<Step> = Vec::new();
+
+        //for each budget create a min step (and optional max step) per corresponding time period
+        for (goal_id, step_budget) in &self.budget_map {
+            let goal = goals.get(goal_id).unwrap();
 
             let start: NaiveDateTime = goal.start.unwrap();
             let deadline: NaiveDateTime = goal.deadline.unwrap();
@@ -108,7 +111,7 @@ impl StepBudgets {
                 if !timeline.slots.is_empty() {
                     // TODO 2023-05-31  | Create a function to split steps
                     //and return them
-                    let duration = step_budget.1.min.unwrap();
+                    let duration = step_budget.min.unwrap();
 
                     let new_step = NewStep {
                         step_id,
@@ -120,11 +123,13 @@ impl StepBudgets {
                         timeframe: None,
                     };
 
-                    let step = Step::new(new_step);
+                    let mut step = Step::new(new_step);
 
-                    steps_result.push(step);
+                    let splitted_steps = step.split(counter).unwrap();
+
+                    steps_result.extend(splitted_steps);
                 } else {
-                    panic!("time_slots expected")
+                    panic!("No timeline slots found")
                 }
             }
         }
