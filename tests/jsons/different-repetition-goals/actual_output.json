@@ -154,8 +154,8 @@
         },
         {
           "taskid": 18,
-          "goalid": "04069248-0a5e-46e2-99bb-5886eb905cf0",
-          "title": "work",
+          "goalid": "free",
+          "title": "free",
           "duration": 3,
           "start": "2023-03-02T15:00:00",
           "deadline": "2023-03-02T18:00:00"
@@ -172,8 +172,16 @@
           "taskid": 20,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 2,
           "start": "2023-03-02T19:00:00",
+          "deadline": "2023-03-02T21:00:00"
+        },
+        {
+          "taskid": 21,
+          "goalid": "04069248-0a5e-46e2-99bb-5886eb905cf0",
+          "title": "work",
+          "duration": 3,
+          "start": "2023-03-02T21:00:00",
           "deadline": "2023-03-03T00:00:00"
         }
       ]
@@ -182,7 +190,7 @@
       "day": "2023-03-03",
       "tasks": [
         {
-          "taskid": 21,
+          "taskid": 22,
           "goalid": "fc22a0d0-90f9-4c53-9d24-e99ce646b7b0",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 8,
@@ -190,7 +198,7 @@
           "deadline": "2023-03-03T08:00:00"
         },
         {
-          "taskid": 22,
+          "taskid": 23,
           "goalid": "09965429-6210-417d-8eff-27fa2eadd69b",
           "title": "Breakfast croissantbowl_with_spoon",
           "duration": 1,
@@ -198,7 +206,7 @@
           "deadline": "2023-03-03T09:00:00"
         },
         {
-          "taskid": 23,
+          "taskid": 24,
           "goalid": "9601497c-9cb4-4414-abb6-be104eca3d20",
           "title": "Me time 🧘🏽relieved",
           "duration": 1,
@@ -206,7 +214,7 @@
           "deadline": "2023-03-03T10:00:00"
         },
         {
-          "taskid": 24,
+          "taskid": 25,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -214,7 +222,7 @@
           "deadline": "2023-03-03T12:00:00"
         },
         {
-          "taskid": 25,
+          "taskid": 26,
           "goalid": "a59bead6-4585-488c-abab-76aad3f0c686",
           "title": "Lunch sandwich",
           "duration": 1,
@@ -222,7 +230,7 @@
           "deadline": "2023-03-03T13:00:00"
         },
         {
-          "taskid": 26,
+          "taskid": 27,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -230,7 +238,7 @@
           "deadline": "2023-03-03T14:00:00"
         },
         {
-          "taskid": 27,
+          "taskid": 28,
           "goalid": "434ed33c-8ffe-499f-b699-d536d2f45000",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -238,7 +246,7 @@
           "deadline": "2023-03-03T15:00:00"
         },
         {
-          "taskid": 28,
+          "taskid": 29,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -246,7 +254,7 @@
           "deadline": "2023-03-03T18:00:00"
         },
         {
-          "taskid": 29,
+          "taskid": 30,
           "goalid": "3752ab5d-5b29-43c0-b914-a5fa12d22e6b",
           "title": "Dinner plate_with_cutlery",
           "duration": 1,
@@ -254,7 +262,7 @@
           "deadline": "2023-03-03T19:00:00"
         },
         {
-          "taskid": 30,
+          "taskid": 31,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -267,7 +275,7 @@
       "day": "2023-03-04",
       "tasks": [
         {
-          "taskid": 31,
+          "taskid": 32,
           "goalid": "fc22a0d0-90f9-4c53-9d24-e99ce646b7b0",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 8,
@@ -275,7 +283,7 @@
           "deadline": "2023-03-04T08:00:00"
         },
         {
-          "taskid": 32,
+          "taskid": 33,
           "goalid": "09965429-6210-417d-8eff-27fa2eadd69b",
           "title": "Breakfast croissantbowl_with_spoon",
           "duration": 1,
@@ -283,7 +291,7 @@
           "deadline": "2023-03-04T09:00:00"
         },
         {
-          "taskid": 33,
+          "taskid": 34,
           "goalid": "807b851a-76f8-4504-89bb-ba42eca796a1",
           "title": "Water the plants potted_plant indoors",
           "duration": 1,
@@ -291,7 +299,7 @@
           "deadline": "2023-03-04T10:00:00"
         },
         {
-          "taskid": 34,
+          "taskid": 35,
           "goalid": "9601497c-9cb4-4414-abb6-be104eca3d20",
           "title": "Me time 🧘🏽relieved",
           "duration": 1,
@@ -299,7 +307,7 @@
           "deadline": "2023-03-04T11:00:00"
         },
         {
-          "taskid": 35,
+          "taskid": 36,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -307,7 +315,7 @@
           "deadline": "2023-03-04T12:00:00"
         },
         {
-          "taskid": 36,
+          "taskid": 37,
           "goalid": "a59bead6-4585-488c-abab-76aad3f0c686",
           "title": "Lunch sandwich",
           "duration": 1,
@@ -315,7 +323,7 @@
           "deadline": "2023-03-04T13:00:00"
         },
         {
-          "taskid": 37,
+          "taskid": 38,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -323,7 +331,7 @@
           "deadline": "2023-03-04T14:00:00"
         },
         {
-          "taskid": 38,
+          "taskid": 39,
           "goalid": "434ed33c-8ffe-499f-b699-d536d2f45000",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -331,7 +339,7 @@
           "deadline": "2023-03-04T15:00:00"
         },
         {
-          "taskid": 39,
+          "taskid": 40,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -339,7 +347,7 @@
           "deadline": "2023-03-04T18:00:00"
         },
         {
-          "taskid": 40,
+          "taskid": 41,
           "goalid": "3752ab5d-5b29-43c0-b914-a5fa12d22e6b",
           "title": "Dinner plate_with_cutlery",
           "duration": 1,
@@ -347,7 +355,7 @@
           "deadline": "2023-03-04T19:00:00"
         },
         {
-          "taskid": 41,
+          "taskid": 42,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -360,7 +368,7 @@
       "day": "2023-03-05",
       "tasks": [
         {
-          "taskid": 42,
+          "taskid": 43,
           "goalid": "fc22a0d0-90f9-4c53-9d24-e99ce646b7b0",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 8,
@@ -368,7 +376,7 @@
           "deadline": "2023-03-05T08:00:00"
         },
         {
-          "taskid": 43,
+          "taskid": 44,
           "goalid": "09965429-6210-417d-8eff-27fa2eadd69b",
           "title": "Breakfast croissantbowl_with_spoon",
           "duration": 1,
@@ -376,7 +384,7 @@
           "deadline": "2023-03-05T09:00:00"
         },
         {
-          "taskid": 44,
+          "taskid": 45,
           "goalid": "9601497c-9cb4-4414-abb6-be104eca3d20",
           "title": "Me time 🧘🏽relieved",
           "duration": 1,
@@ -384,7 +392,7 @@
           "deadline": "2023-03-05T10:00:00"
         },
         {
-          "taskid": 45,
+          "taskid": 46,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -392,7 +400,7 @@
           "deadline": "2023-03-05T12:00:00"
         },
         {
-          "taskid": 46,
+          "taskid": 47,
           "goalid": "a59bead6-4585-488c-abab-76aad3f0c686",
           "title": "Lunch sandwich",
           "duration": 1,
@@ -400,7 +408,7 @@
           "deadline": "2023-03-05T13:00:00"
         },
         {
-          "taskid": 47,
+          "taskid": 48,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -408,7 +416,7 @@
           "deadline": "2023-03-05T14:00:00"
         },
         {
-          "taskid": 48,
+          "taskid": 49,
           "goalid": "434ed33c-8ffe-499f-b699-d536d2f45000",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -416,7 +424,7 @@
           "deadline": "2023-03-05T15:00:00"
         },
         {
-          "taskid": 49,
+          "taskid": 50,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -424,7 +432,7 @@
           "deadline": "2023-03-05T18:00:00"
         },
         {
-          "taskid": 50,
+          "taskid": 51,
           "goalid": "3752ab5d-5b29-43c0-b914-a5fa12d22e6b",
           "title": "Dinner plate_with_cutlery",
           "duration": 1,
@@ -432,7 +440,7 @@
           "deadline": "2023-03-05T19:00:00"
         },
         {
-          "taskid": 51,
+          "taskid": 52,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -445,7 +453,7 @@
       "day": "2023-03-06",
       "tasks": [
         {
-          "taskid": 52,
+          "taskid": 53,
           "goalid": "fc22a0d0-90f9-4c53-9d24-e99ce646b7b0",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 8,
@@ -453,7 +461,7 @@
           "deadline": "2023-03-06T08:00:00"
         },
         {
-          "taskid": 53,
+          "taskid": 54,
           "goalid": "09965429-6210-417d-8eff-27fa2eadd69b",
           "title": "Breakfast croissantbowl_with_spoon",
           "duration": 1,
@@ -461,7 +469,7 @@
           "deadline": "2023-03-06T09:00:00"
         },
         {
-          "taskid": 54,
+          "taskid": 55,
           "goalid": "9601497c-9cb4-4414-abb6-be104eca3d20",
           "title": "Me time 🧘🏽relieved",
           "duration": 1,
@@ -469,7 +477,7 @@
           "deadline": "2023-03-06T10:00:00"
         },
         {
-          "taskid": 55,
+          "taskid": 56,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -477,7 +485,7 @@
           "deadline": "2023-03-06T12:00:00"
         },
         {
-          "taskid": 56,
+          "taskid": 57,
           "goalid": "a59bead6-4585-488c-abab-76aad3f0c686",
           "title": "Lunch sandwich",
           "duration": 1,
@@ -485,7 +493,7 @@
           "deadline": "2023-03-06T13:00:00"
         },
         {
-          "taskid": 57,
+          "taskid": 58,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -493,7 +501,7 @@
           "deadline": "2023-03-06T14:00:00"
         },
         {
-          "taskid": 58,
+          "taskid": 59,
           "goalid": "434ed33c-8ffe-499f-b699-d536d2f45000",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -501,7 +509,7 @@
           "deadline": "2023-03-06T15:00:00"
         },
         {
-          "taskid": 59,
+          "taskid": 60,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -509,7 +517,7 @@
           "deadline": "2023-03-06T18:00:00"
         },
         {
-          "taskid": 60,
+          "taskid": 61,
           "goalid": "3752ab5d-5b29-43c0-b914-a5fa12d22e6b",
           "title": "Dinner plate_with_cutlery",
           "duration": 1,
@@ -517,7 +525,7 @@
           "deadline": "2023-03-06T19:00:00"
         },
         {
-          "taskid": 61,
+          "taskid": 62,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -530,7 +538,7 @@
       "day": "2023-03-07",
       "tasks": [
         {
-          "taskid": 62,
+          "taskid": 63,
           "goalid": "fc22a0d0-90f9-4c53-9d24-e99ce646b7b0",
           "title": "Sleep sleepingcrescent_moon",
           "duration": 8,
@@ -538,7 +546,7 @@
           "deadline": "2023-03-07T08:00:00"
         },
         {
-          "taskid": 63,
+          "taskid": 64,
           "goalid": "09965429-6210-417d-8eff-27fa2eadd69b",
           "title": "Breakfast croissantbowl_with_spoon",
           "duration": 1,
@@ -546,7 +554,7 @@
           "deadline": "2023-03-07T09:00:00"
         },
         {
-          "taskid": 64,
+          "taskid": 65,
           "goalid": "807b851a-76f8-4504-89bb-ba42eca796a1",
           "title": "Water the plants potted_plant indoors",
           "duration": 1,
@@ -554,7 +562,7 @@
           "deadline": "2023-03-07T10:00:00"
         },
         {
-          "taskid": 65,
+          "taskid": 66,
           "goalid": "9601497c-9cb4-4414-abb6-be104eca3d20",
           "title": "Me time 🧘🏽relieved",
           "duration": 1,
@@ -562,7 +570,7 @@
           "deadline": "2023-03-07T11:00:00"
         },
         {
-          "taskid": 66,
+          "taskid": 67,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -570,7 +578,7 @@
           "deadline": "2023-03-07T12:00:00"
         },
         {
-          "taskid": 67,
+          "taskid": 68,
           "goalid": "a59bead6-4585-488c-abab-76aad3f0c686",
           "title": "Lunch sandwich",
           "duration": 1,
@@ -578,7 +586,7 @@
           "deadline": "2023-03-07T13:00:00"
         },
         {
-          "taskid": 68,
+          "taskid": 69,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -586,7 +594,7 @@
           "deadline": "2023-03-07T14:00:00"
         },
         {
-          "taskid": 69,
+          "taskid": 70,
           "goalid": "434ed33c-8ffe-499f-b699-d536d2f45000",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -594,7 +602,7 @@
           "deadline": "2023-03-07T15:00:00"
         },
         {
-          "taskid": 70,
+          "taskid": 71,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -602,7 +610,7 @@
           "deadline": "2023-03-07T18:00:00"
         },
         {
-          "taskid": 71,
+          "taskid": 72,
           "goalid": "3752ab5d-5b29-43c0-b914-a5fa12d22e6b",
           "title": "Dinner plate_with_cutlery",
           "duration": 1,
@@ -610,7 +618,7 @@
           "deadline": "2023-03-07T19:00:00"
         },
         {
-          "taskid": 72,
+          "taskid": 73,
           "goalid": "free",
           "title": "free",
           "duration": 5,
