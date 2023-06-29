@@ -28,7 +28,7 @@ pub struct StepBudgets {
     pub calendar_end: NaiveDateTime,
     /// A map from goal IDs to a vector of budget IDs associated with that goal
     pub budget_ids_map: HashMap<String, Vec<String>>,
-    /// A map from budget IDs to the `StepBudget` objects associated with that goal.
+    /// A map from goal IDs to the `StepBudget` objects associated with that goal.
     pub budget_map: HashMap<String, StepBudget>,
 }
 
