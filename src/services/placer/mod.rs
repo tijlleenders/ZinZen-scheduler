@@ -154,7 +154,6 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     template_step.id = steps_to_place.steps.len();
     template_step.slots.clear();
 
-    // TODO 2023-06-29: In this loop, it is not test all chosen_slots, it just select first slot which convenient. But that is not gonna work well as per test case split-1
     for slot in chosen_slots.iter() {
         dbg!(&slot);
         if remaining_hours <= 0 {

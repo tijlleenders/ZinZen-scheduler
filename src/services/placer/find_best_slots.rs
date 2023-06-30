@@ -162,8 +162,6 @@ impl Step {
     ///     - It returns sorted list of SlotConflict based on slot.start then num_conflicts
     ///     - Splitting slots into schedulable slots based on slot's timing and step's duration
     fn get_conflicts_in_steps(&self, slots_list: &[Step]) -> Vec<SlotConflict> {
-        // TODO 2023-06-29: Test this function. system now select first slot which convenient. But that is not gonna work well as per test case "split-1".
-
         dbg!(&self, &slots_list);
         let mut conflicts_list: Vec<SlotConflict> = vec![];
 
