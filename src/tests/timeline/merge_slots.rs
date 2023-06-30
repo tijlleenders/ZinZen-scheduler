@@ -22,23 +22,23 @@ fn test_merge_all_consequent_slots() {
 
     let mut input_slots: Vec<Slot> = vec![];
     input_slots.append(
-        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).divide_into_1h_slots(),
+        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 1, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 2, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 3, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 4, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
 
     let input_timeline: Timeline = Timeline {
@@ -76,26 +76,26 @@ fn test_merge_some_consequent_slots() {
 
     let mut input_slots: Vec<Slot> = vec![];
     input_slots.append(
-        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).divide_into_1h_slots(),
+        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 1, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 2, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 3, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 4, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots
-        .append(&mut Slot::mock(Duration::hours(1), year, month, day, 9, 0).divide_into_1h_slots());
+        .append(&mut Slot::mock(Duration::hours(1), year, month, day, 9, 0).split_into_1h_slots());
 
     let input_timeline: Timeline = Timeline {
         slots: input_slots.into_iter().collect(),

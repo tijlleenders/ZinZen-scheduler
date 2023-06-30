@@ -100,7 +100,7 @@ impl Slot {
     ///     Slot [ 2022-01-01 04:00:00 - 2022-01-01 05:00:00 ]
     ///
     /// ```
-    pub fn divide_into_1h_slots(&self) -> Vec<Slot> {
+    pub fn split_into_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
         let duration = self.duration_as_hours();
 
@@ -129,7 +129,7 @@ impl Slot {
     ///     Slot [ 2022-01-06 00:00:00 - 2022-01-07 00:00:00 ]
     ///     Slot [ 2022-01-07 00:00:00 - 2022-01-08 00:00:00 ]
     /// ```
-    pub fn divide_into_days(&self) -> Vec<Slot> {
+    pub fn split_into_days(&self) -> Vec<Slot> {
         let mut result = vec![];
         let mut start_slider = self.start;
 

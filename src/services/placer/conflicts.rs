@@ -59,6 +59,7 @@ impl Slot {
                 count += 1;
             }
         });
+        dbg!(&self, &slots_list, &count);
 
         SlotConflict {
             slot: *self,
@@ -433,6 +434,31 @@ mod tests {
 
                 assert_eq!(conflicts.slot, slot_to_search);
                 assert_eq!(conflicts.num_conflicts, 4);
+            }
+
+            /// Testing finding conflicted slots on hour-based.
+            /// This related to case `split-1`
+            /// Issue: https://github.com/tijlleenders/ZinZen-scheduler/issues/343
+            ///
+            /// ```
+            /// slot to search:
+            ///     name: work
+            ///     timing: 2022-09-01 08 to 16
+            ///     durtion: 8
+            ///
+            /// Step to search in:
+            ///     name: dentist
+            ///     min_duration: 1
+            ///     timing: 2022-09-01 12 to 14
+            ///
+            /// * NOTE: function will split slots into min_duration based,
+            /// then finding conflicts based on each
+            ///
+
+            /// ```
+            #[test]
+            fn test_conflicts_hour_based() {
+                todo!("not implemented");
             }
         }
 

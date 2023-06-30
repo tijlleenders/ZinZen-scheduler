@@ -24,7 +24,7 @@ fn divide_a_day_in_days() {
             .and_hms_opt(0, 0, 0)
             .unwrap(),
     }];
-    let result = slot_of_exactly_a_day.divide_into_days();
+    let result = slot_of_exactly_a_day.split_into_days();
     assert_eq!(exact_day_split_in_days, result);
 }
 #[test]
@@ -61,7 +61,7 @@ fn divide_two_days_in_days() {
                 .unwrap(),
         },
     ];
-    let result = slot_of_exactly_two_day.divide_into_days();
+    let result = slot_of_exactly_two_day.split_into_days();
     assert_eq!(exactly_two_days_split_in_days, result);
 }
 
@@ -87,7 +87,7 @@ fn divide_half_a_day_in_days() {
             .and_hms_opt(6, 0, 0)
             .unwrap(),
     }];
-    let result = slot_of_half_a_day.divide_into_days();
+    let result = slot_of_half_a_day.split_into_days();
     assert_eq!(half_a_day_split_in_days, result);
 }
 

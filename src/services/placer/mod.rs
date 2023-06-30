@@ -1,4 +1,4 @@
-mod find_best_slots;
+mod conflicts;
 
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 use crate::models::goal::{Goal, Tag};
@@ -122,7 +122,7 @@ fn schedule(steps_to_place: &mut StepsToPlace) {
         if first_step.status != StepStatus::ReadyToSchedule {
             break;
         }
-        match find_best_slots::find_best_slots(&steps_to_place.steps) {
+        match conflicts::find_best_slots(&steps_to_place.steps) {
             Some(chosen_slots) => {
                 dbg!(&chosen_slots);
                 do_the_scheduling(steps_to_place, chosen_slots);
