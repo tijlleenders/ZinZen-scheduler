@@ -35,8 +35,8 @@ fn get_run_test() -> String {
     include_str!("build_templates/run_test.rs").to_string()
 }
 
-fn get_test_fn_template(test_dir: &str, is_warn: bool) -> String {
-    let test_name = test_dir.replace('-', "_");
+fn get_test_fn_template(dir_name: &str, is_warn: bool) -> String {
+    let test_name = dir_name.replace('-', "_");
     let mut test_fn_template: String;
 
     if is_warn {
@@ -46,6 +46,7 @@ fn get_test_fn_template(test_dir: &str, is_warn: bool) -> String {
     }
 
     test_fn_template = test_fn_template.replace("TEST_NAME", &test_name);
+    test_fn_template = test_fn_template.replace("DIR_NAME", dir_name);
 
     test_fn_template
 }
