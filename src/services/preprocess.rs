@@ -22,7 +22,7 @@ pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
     let calendar_end = input.calendar_end;
 
     let mut goals = manipulate_input_goals(input);
-    
+
     let mut step_budgets = StepBudgets::new(&calendar_start, &calendar_end);
     step_budgets.configure_budgets(&mut goals);
     dbg!(&step_budgets);

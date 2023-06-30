@@ -1,7 +1,12 @@
+// TODO 2023-07-01: Remove this module
+
 use std::ops::Add;
 
 use super::{Slot, TimeSlotsIterator};
-use crate::models::{goal::Day, slot::utils::convert_into_1h_slots, timeline::Timeline};
+use crate::{
+    models::{goal::Day, timeline::Timeline},
+    services::splitters::convert_into_1h_slots,
+};
 use chrono::{Datelike, Timelike};
 
 impl TimeSlotsIterator {

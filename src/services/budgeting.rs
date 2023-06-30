@@ -109,8 +109,6 @@ impl StepBudgets {
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
-                    // TODO 2023-05-31  | Create a function to split steps
-                    //and return them
                     let duration = step_budget.min.unwrap();
 
                     let new_step = NewStep {

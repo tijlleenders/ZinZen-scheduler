@@ -39,28 +39,6 @@ impl Timeline {
         }
     }
 
-    /// Get splitted timeline into slots with 1 day interval
-    pub fn get_split_into_days(&self) -> Timeline {
-        // TODO 2023-04-25 | test scenario:
-        //  - when slots in timeline are not full days!!!! Is the split
-        // will return full day or will respect the tha slot not full day!!
-        let mut new_slots: TimelineSlotsType = BTreeSet::new();
-        for slot in self.slots.iter() {
-            new_slots.extend(slot.split_into_days());
-        }
-        Timeline { slots: new_slots }
-    }
-
-    /// Get splitted timeline into slots with 1 hour interval
-    pub fn get_split_into_hours(&self) -> Timeline {
-        //TODO 2023-04-30 | Create a generic function to split slots into custom interval (1 hour, 10 mins, 1 day, etc)
-        let mut new_slots: TimelineSlotsType = BTreeSet::new();
-        for slot in self.slots.iter() {
-            new_slots.extend(slot.split_into_1h_slots());
-        }
-        Timeline { slots: new_slots }
-    }
-
     /// Get merged consequent Timeline slots
     pub fn get_merged_slots(&self) -> Timeline {
         /*
