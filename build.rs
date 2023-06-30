@@ -16,75 +16,12 @@ fn get_test_dirs() -> Result<Vec<PathBuf>, std::io::Error> {
     Ok(dirs)
 }
 
-fn test_template(test_dir: &str, is_warn: bool) -> String {
-    let test_name = test_dir.replace('-', "_");
-    let mut result = vec!["\n#[test]\n".to_string()];
-    result.push(format!("fn {}() {{", test_name));
-    if is_warn {
-        result.push(format!("\n{}SimpleLogger::new().init().unwrap();", space()));
-        result.push(format!(
-            "\n{}log::warn!(\n{0}{0}\"Empty directory Or one of input.json & output.json not exist: {{}}\",\n{0}{0}\"{:}\"\n{0});",
-            space(),
-            test_dir
-        ));
-    }
-    result.push(format!(
-        "\n{}let (actual_output, desired_output) = run_test(\"{}\");",
-        space(),
-        test_dir
-    ));
-    if is_warn {
-        result.push(format!(
-            "\n{}soft::assert_eq!(actual_output, desired_output).unwrap();\n}}",
-            space()
-        ));
-    } else {
-        result.push(format!(
-            "\n{}assert_eq!(actual_output, desired_output);\n}}",
-            space()
-        ));
-    }
-    result.join("")
-}
-fn space() -> String {
-    "    ".to_string()
-}
-fn get_imports() -> String {
-    let mut result = vec!["extern crate scheduler;".to_string()];
-
-    result.push("\nextern crate soft;".to_string());
-    result.push("\nmod common;".to_string());
-    result.push("\n#[cfg(test)]".to_string());
-    result.push("\nuse pretty_assertions::assert_eq;".to_string());
-    result.push("\nuse scheduler::models::{input::Input, output::FinalTasks};".to_string());
-    result.push("\nuse std::path::Path;".to_string());
-
-    result.join("")
-}
-
 fn main() -> Result<(), std::io::Error> {
     let out_dir = String::from("./tests/");
-    let mut dirs = get_test_dirs().expect("Unable to read tests directory");
     let mut result = vec!["".to_string()];
-    result.push(get_imports());
-    result.push(get_run_test());
-    dirs.retain(|d| !d.file_name().unwrap().eq("benchmark-tests") && (d.is_dir()));
 
-    for d in dirs.iter() {
-        if let Ok(mut dir) = d.read_dir() {
-            if dir.next().is_none() {
-                result.push(test_template(
-                    d.file_name().unwrap().to_str().unwrap(),
-                    true,
-                ))
-            } else {
-                result.push(test_template(
-                    d.file_name().unwrap().to_str().unwrap(),
-                    false,
-                ));
-            }
-        }
-    }
+    result.push(get_run_test());
+    result.push(create_tests_module());
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
     write_test(
@@ -95,25 +32,61 @@ fn main() -> Result<(), std::io::Error> {
 }
 
 fn get_run_test() -> String {
-    "
-fn run_test(directory: &str) -> (String, String) {
-    let input_path_str = format!(\"./tests/jsons/{}/input.json\", directory);
-    let output_path_str = format!(\"./tests/jsons/{}/output.json\", directory);
-    let actual_output_path_str = format!(\"./tests/jsons/{}/actual_output.json\", directory);
+    include_str!("build_templates/run_test.rs").to_string()
+}
 
-    let input_path = Path::new(&input_path_str[..]);
-    let output_path = Path::new(&output_path_str[..]);
-    let actual_output_path = Path::new(&actual_output_path_str[..]);
+fn get_test_fn_template(dir_name: &str, is_warn: bool) -> String {
+    let test_name = dir_name.replace('-', "_");
+    let mut test_fn_template: String;
 
-    let input: Input = common::get_input_from_json(input_path).unwrap();
-    let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
+    if is_warn {
+        test_fn_template = include_str!("build_templates/test_fn _soft_assertion.rs").to_string();
+    } else {
+        test_fn_template = include_str!("build_templates/test_fn.rs").to_string();
+    }
 
-    let output: FinalTasks = scheduler::run_scheduler(input);
-    let actual_output = serde_json::to_string_pretty(&output).unwrap();
+    test_fn_template = test_fn_template.replace("TEST_NAME", &test_name);
+    test_fn_template = test_fn_template.replace("DIR_NAME", dir_name);
 
-    common::write_to_file(&actual_output_path, &actual_output).unwrap();
+    test_fn_template
+}
 
-    (actual_output, desired_output)
-}"
-    .to_string()
+fn create_tests_module() -> String {
+    // let mut result = vec!["".to_string()];
+    let module_name = "e2e";
+    let mut tests_mod = include_str!("build_templates/tests_mod.rs").to_string();
+
+    tests_mod = tests_mod.replace("TEST_MODULE_NAME", module_name);
+    tests_mod = tests_mod.replace("//TEST_FUNCTIONS", &create_test_functions());
+
+    tests_mod
+}
+
+fn create_test_functions() -> String {
+    let mut dirs = get_test_dirs().expect("Unable to read tests directory");
+    let mut result = vec!["".to_string()];
+
+    dirs.retain(|d| !d.file_name().unwrap().eq("benchmark-tests") && (d.is_dir()));
+
+    for d in dirs.iter() {
+        if let Ok(mut dir) = d.read_dir() {
+            if dir.next().is_none() {
+                result.push(get_test_fn_template(
+                    d.file_name().unwrap().to_str().unwrap(),
+                    true,
+                ));
+            } else {
+                result.push(get_test_fn_template(
+                    d.file_name().unwrap().to_str().unwrap(),
+                    false,
+                ));
+            }
+        }
+    }
+
+    result
+        .into_iter()
+        .collect::<String>()
+        .trim_end()
+        .to_string()
 }

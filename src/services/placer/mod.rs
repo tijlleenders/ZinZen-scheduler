@@ -175,8 +175,11 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
 
     let chosen_slot = chosen_slots[0];
     for step in steps_to_place.steps.iter_mut() {
+        dbg!(&step);
         step.remove_conflicted_slots(chosen_slot.to_owned());
+        dbg!(&step);
     }
+    dbg!(&steps_to_place);
 
     //Todo remove chosen_slots from StepBudgets
     if remaining_hours > 0 {
@@ -188,6 +191,9 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         // TODO 2023-06-06  | apply function Step::remove_from_blocked_by when it is developed
         let _step_scheduled_goal_id = steps_to_place.steps[0].goal_id.clone();
     }
+
+    dbg!(&steps_to_place);
+    let _i = 0;
 }
 
 #[cfg(test)]
