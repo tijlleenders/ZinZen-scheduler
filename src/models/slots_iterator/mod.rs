@@ -1,4 +1,3 @@
-pub mod filter;
 pub mod iterator;
 pub mod utils;
 
