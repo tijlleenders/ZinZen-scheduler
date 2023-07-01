@@ -15,16 +15,16 @@
           "taskid": 1,
           "goalid": "2",
           "title": "Project X",
-          "duration": 2,
+          "duration": 8,
           "start": "2018-01-01T08:00:00",
-          "deadline": "2018-01-01T10:00:00"
+          "deadline": "2018-01-01T16:00:00"
         },
         {
           "taskid": 2,
           "goalid": "free",
           "title": "free",
-          "duration": 14,
-          "start": "2018-01-01T10:00:00",
+          "duration": 8,
+          "start": "2018-01-01T16:00:00",
           "deadline": "2018-01-02T00:00:00"
         }
       ]
@@ -44,16 +44,16 @@
           "taskid": 4,
           "goalid": "2",
           "title": "Project X",
-          "duration": 8,
+          "duration": 2,
           "start": "2018-01-02T08:00:00",
-          "deadline": "2018-01-02T16:00:00"
+          "deadline": "2018-01-02T10:00:00"
         },
         {
           "taskid": 5,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2018-01-02T16:00:00",
+          "duration": 14,
+          "start": "2018-01-02T10:00:00",
           "deadline": "2018-01-03T00:00:00"
         }
       ]

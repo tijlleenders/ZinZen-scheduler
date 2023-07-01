@@ -202,9 +202,9 @@
       "tasks": [
         {
           "taskid": 20,
-          "goalid": "4",
-          "title": "Research",
-          "duration": 3,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 1,
           "start": "2018-03-09T00:00:00",
           "deadline": "2018-03-16T00:00:00"
         },
@@ -226,8 +226,8 @@
         },
         {
           "taskid": 23,
-          "goalid": "5",
-          "title": "Write report",
+          "goalid": "2",
+          "title": "Project A",
           "duration": 1,
           "start": "2018-03-09T00:00:00",
           "deadline": "2018-03-16T00:00:00"
@@ -236,12 +236,68 @@
           "taskid": 24,
           "goalid": "2",
           "title": "Project A",
-          "duration": 8,
+          "duration": 1,
           "start": "2018-03-09T00:00:00",
           "deadline": "2018-03-16T00:00:00"
         },
         {
           "taskid": 25,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 1,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 26,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 1,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 27,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 1,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 28,
+          "goalid": "4",
+          "title": "Research",
+          "duration": 3,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 29,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 1,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 30,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 1,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 31,
+          "goalid": "5",
+          "title": "Write report",
+          "duration": 1,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 32,
           "goalid": "3",
           "title": "Project B filler",
           "duration": 11,
