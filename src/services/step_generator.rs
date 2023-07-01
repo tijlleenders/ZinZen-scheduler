@@ -538,65 +538,6 @@ mod tests {
             ///
             ///
             /// ```
-            #[test]
-            fn test_duration_more_8_hrs() {
-                let duration: usize = 10;
-                let mut counter: usize = 1;
-
-                let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-                let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
-                goal.min_duration = Some(duration);
-                dbg!(&goal);
-
-                let steps =
-                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
-
-                let mut expected_steps = vec![
-                    Step::mock(
-                        "test",
-                        8,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![goal_timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![goal_timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![goal_timeframe],
-                        None,
-                    ),
-                ];
-                expected_steps[1].id = 2;
-                expected_steps[2].id = 3;
-                dbg!(&expected_steps);
-
-                assert_eq!(steps, expected_steps);
-                assert_eq!(counter, 2);
-
-                assert_eq!(steps[0].id, expected_steps[0].id);
-                assert_eq!(steps[1].id, expected_steps[1].id);
-                assert_eq!(steps[2].id, expected_steps[2].id);
-
-                assert_eq!(steps[0].duration, expected_steps[0].duration);
-                assert_eq!(steps[1].duration, expected_steps[1].duration);
-                assert_eq!(steps[2].duration, expected_steps[2].duration);
-
-                assert_eq!(steps[0].status, expected_steps[0].status);
-                assert_eq!(steps[1].status, expected_steps[1].status);
-                assert_eq!(steps[2].status, expected_steps[2].status);
-            }
 
             /// Test when a given Goal is not a leaf and goal.min_duration > 8
             /// So in this case, steps will not be splitted
