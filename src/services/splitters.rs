@@ -145,7 +145,7 @@ impl Slot {
         result
     }
 
-    /// Split a Slot into list of slots based on given interval duration.
+    /// Split a Slot into list of slots based on given threshold.
     pub fn split_into_custom_hours(&self, threshold: usize) -> Vec<Slot> {
         let given_slot = self.clone();
         let duration = given_slot.duration_as_hours();
