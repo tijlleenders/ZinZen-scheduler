@@ -5,7 +5,7 @@ use std::ops::Add;
 use super::{Slot, TimeSlotsIterator};
 use crate::{
     models::{goal::Day, timeline::Timeline},
-    services::splitters::split_into_1h_slots,
+    services::splitters::split_slots_into_1h_slots,
 };
 use chrono::{Datelike, Timelike};
 
@@ -52,10 +52,10 @@ fn _apply_not_on_filter(slot_iterator: &TimeSlotsIterator) -> Option<Vec<Slot>> 
 
                 // Filter out time slots that are on the "not_on" list
 
-                let not_on_slots_as_hours: Vec<Slot> = split_into_1h_slots(not_on_slots.clone());
+                let not_on_slots_as_hours: Vec<Slot> = split_slots_into_1h_slots(not_on_slots.clone());
                 dbg!(&not_on_slots_as_hours);
 
-                let mut timeline_as_hours: Vec<Slot> = split_into_1h_slots(
+                let mut timeline_as_hours: Vec<Slot> = split_slots_into_1h_slots(
                     slot_iterator.timeline.slots.clone().into_iter().collect(),
                 );
                 dbg!(&timeline_as_hours);

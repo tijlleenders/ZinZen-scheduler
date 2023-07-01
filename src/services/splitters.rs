@@ -100,19 +100,6 @@ impl Step {
         Ok(steps)
     }
 
-    // TODO 2023-07-01: Propose new function split_into_slots to split
-    // /// Split a Step into list of Slots based on interval duration.
-    // pub fn split_into_slots(&self, duration: usize) -> Vec<Slot> {
-    //     // TODO 2023-07-01: Finish this function
-    //     let given_slots = self.slots.clone();
-
-    //     let mut result_slots: Vec<Slot> = Vec::new();
-    //     // given_slots.iter().for_each(|slot| {
-    //     //     result_slots.extend(slot.split_into_slots(duration));
-    //     // });
-
-    //     result_slots
-    // }
     /// Split a Step slots into list of slots based on given threshold.
     pub fn split_into_custom_hours(&self, threshold: usize) -> Vec<Slot> {
         let given_step = self.clone();
@@ -238,7 +225,7 @@ impl Slot {
 }
 
 /// Split list of slots into a list of slots with 1 hour interval
-pub fn split_into_1h_slots(slots: Vec<Slot>) -> Vec<Slot> {
+pub fn split_slots_into_1h_slots(slots: Vec<Slot>) -> Vec<Slot> {
     let mut all_slots: Vec<Slot> = vec![];
     for slot in slots.iter() {
         let mut slots_1h = slot.split_into_1h_slots();
@@ -259,8 +246,7 @@ pub fn split_into_1h_slots(slots: Vec<Slot>) -> Vec<Slot> {
 ///         Task `Sleep` 22 - 00 (current day)
 ///         Task `Sleep` 00 - 06 (next day)
 /// ```
-pub fn split_cross_day_tasks(tasks: &mut Vec<Task>) {
-    dbg!(&tasks);
+pub fn split_crossed_tasks(tasks: &mut Vec<Task>) {
     /*
     TODO 2023-06-04  | Debug note | case bug_215
     - For param "tasks", it contains wrong duration for steps "hurdle" and "sleep".
@@ -280,8 +266,6 @@ pub fn split_cross_day_tasks(tasks: &mut Vec<Task>) {
             }
             .duration_as_hours();
 
-            dbg!(&task, &task2);
-
             task2.duration -= task.duration;
             new_tasks.push(task.clone());
             if task2.duration > 0 {
@@ -289,19 +273,15 @@ pub fn split_cross_day_tasks(tasks: &mut Vec<Task>) {
             }
         } else {
             new_tasks.push(task.clone());
-            dbg!(&new_tasks);
         }
     }
 
-    dbg!(&new_tasks);
     tasks.clear();
     tasks.extend(new_tasks);
 }
 
 /// Is a task crossing a day so day of start date is different from day of end date
 fn is_cross_day(task: &Task) -> bool {
-    dbg!(&task);
-    dbg!(&task.start.day(), &task.deadline.day());
     task.start.day() < task.deadline.day()
 }
 

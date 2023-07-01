@@ -6,7 +6,7 @@ use crate::models::input::PlacedSteps;
 use crate::models::output::{DayTasks, FinalTasks, Task};
 use crate::models::slot::Slot;
 use crate::models::step::{Step, StepStatus};
-use crate::services::splitters::split_cross_day_tasks;
+use crate::services::splitters::split_crossed_tasks;
 use chrono::{Days, NaiveDate, NaiveDateTime, Timelike};
 
 /// Formatting, sorting, and merging (contiguous) incoming steps into
@@ -58,7 +58,7 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
     scheduled_tasks.sort();
 
     combine(&mut scheduled_tasks);
-    split_cross_day_tasks(&mut scheduled_tasks);
+    split_crossed_tasks(&mut scheduled_tasks);
     generate_free_tasks(
         &mut scheduled_tasks,
         placed_steps.calendar_start,
