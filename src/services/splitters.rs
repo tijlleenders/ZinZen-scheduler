@@ -1,7 +1,3 @@
-use std::{collections::BTreeSet, ops::Add};
-
-use chrono::{Datelike, Days, Duration, Timelike};
-
 use crate::{
     errors::Error,
     models::{
@@ -12,26 +8,18 @@ use crate::{
         timeline::{Timeline, TimelineSlotsType},
     },
 };
+use chrono::{Datelike, Days, Duration, Timelike};
+use std::{collections::BTreeSet, ops::Add};
 
 impl Timeline {
     /// Get splitted timeline into slots with 1 day interval
-    pub fn get_split_into_days(&self) -> Timeline {
+    pub fn split_into_days(&self) -> Timeline {
         // TODO 2023-04-25 | test scenario:
         //  - when slots in timeline are not full days!!!! Is the split
         // will return full day or will respect the tha slot not full day!!
         let mut new_slots: TimelineSlotsType = BTreeSet::new();
         for slot in self.slots.iter() {
             new_slots.extend(slot.split_into_days());
-        }
-        Timeline { slots: new_slots }
-    }
-
-    /// Get splitted timeline into slots with 1 hour interval
-    pub fn get_split_into_hours(&self) -> Timeline {
-        //TODO 2023-04-30 | Create a generic function to split slots into custom interval (1 hour, 10 mins, 1 day, etc)
-        let mut new_slots: TimelineSlotsType = BTreeSet::new();
-        for slot in self.slots.iter() {
-            new_slots.extend(slot.split_into_1h_slots());
         }
         Timeline { slots: new_slots }
     }
@@ -113,7 +101,18 @@ impl Step {
     }
 
     // TODO 2023-07-01: Propose new function split_into_slots to split
-    //Steps into list of Slots
+    // /// Split a Step into list of Slots based on interval duration.
+    // pub fn split_into_slots(&self, duration: usize) -> Vec<Slot> {
+    //     // TODO 2023-07-01: Finish this function
+    //     let given_slots = self.slots.clone();
+
+    //     let mut result_slots: Vec<Slot> = Vec::new();
+    //     // given_slots.iter().for_each(|slot| {
+    //     //     result_slots.extend(slot.split_into_slots(duration));
+    //     // });
+
+    //     result_slots
+    // }
 }
 
 impl Slot {
@@ -143,6 +142,33 @@ impl Slot {
                 end: self.start.add(Duration::hours((hour + 1) as i64)),
             });
         }
+        result
+    }
+
+    /// Split a Slot into list of slots based on given interval duration.
+    pub fn split_into_custom_hours(&self, threshold: usize) -> Vec<Slot> {
+        let given_slot = self.clone();
+        let duration = given_slot.duration_as_hours();
+        if threshold == 0 || threshold > duration {
+            return vec![given_slot];
+        }
+
+        let mut result = vec![];
+
+        for hour in (0..duration).step_by(threshold) {
+            if hour == duration - 1 {
+                result.push(Slot {
+                    start: self.start.add(Duration::hours(hour as i64)),
+                    end: self.end,
+                });
+                break;
+            }
+            result.push(Slot {
+                start: self.start.add(Duration::hours(hour as i64)),
+                end: self.start.add(Duration::hours((hour + threshold) as i64)),
+            });
+        }
+
         result
     }
 
@@ -201,7 +227,7 @@ impl Slot {
 }
 
 /// Split list of slots into a list of slots with 1 hour interval
-pub fn convert_into_1h_slots(slots: Vec<Slot>) -> Vec<Slot> {
+pub fn split_into_1h_slots(slots: Vec<Slot>) -> Vec<Slot> {
     let mut all_slots: Vec<Slot> = vec![];
     for slot in slots.iter() {
         let mut slots_1h = slot.split_into_1h_slots();
@@ -270,39 +296,36 @@ fn is_cross_day(task: &Task) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use crate::models::{slot::Slot, timeline::Timeline};
-    use chrono::Duration;
+    mod slot {
+        use crate::models::slot::Slot;
+        use chrono::Duration;
 
-    #[test]
-    fn test_split_into_days() {
-        let init_year = 2022;
-        let init_month = 1;
-        let init_day = 1;
-        let hour: u32 = 0;
-        let minute: u32 = 0;
-        let days_count: i64 = 5;
-        let duration = Duration::days(days_count);
+        #[test]
+        fn test_split_into_custom_hours() {
+            let slot = Slot::mock(Duration::hours(5), 2023, 6, 1, 0, 0);
 
-        let timeline = Timeline::mock(duration, init_year, init_month, init_day);
+            // Test when threshold > slot.duration which return same slot
+            let result = slot.split_into_custom_hours(10);
+            let expected = slot.clone();
+            assert_eq!(result.len(), 1);
+            assert_eq!(result[0], expected);
 
-        let expected_result = Timeline {
-            slots: vec![
-                Slot::mock(Duration::days(1), init_year, init_month, 1, hour, minute),
-                Slot::mock(Duration::days(1), init_year, init_month, 2, hour, minute),
-                Slot::mock(Duration::days(1), init_year, init_month, 3, hour, minute),
-                Slot::mock(Duration::days(1), init_year, init_month, 4, hour, minute),
-                Slot::mock(Duration::days(1), init_year, init_month, 5, hour, minute),
-            ]
-            .into_iter()
-            .collect(),
-        };
+            // Test when threshold=0 which return same slot
+            let result = slot.split_into_custom_hours(0);
+            assert_eq!(result.len(), 1);
+            assert_eq!(result[0], expected);
 
-        let splitted_timeline = timeline.get_split_into_days();
-
-        dbg!(&splitted_timeline);
-        assert_eq!(expected_result, splitted_timeline);
+            // Test when threshold < slot.duration whcih return same slot
+            let result = slot.split_into_custom_hours(2);
+            let expected = vec![
+                Slot::mock(Duration::hours(2), 2023, 06, 01, 0, 0),
+                Slot::mock(Duration::hours(2), 2023, 06, 01, 2, 0),
+                Slot::mock(Duration::hours(1), 2023, 06, 01, 4, 0),
+            ];
+            assert_eq!(result.len(), 3);
+            assert_eq!(result, expected);
+        }
     }
-
     mod step {
         use chrono::Duration;
 
@@ -573,6 +596,40 @@ mod tests {
                 assert_eq!(generated_steps[1].status, expected_steps[1].status);
                 assert_eq!(generated_steps[2].status, expected_steps[2].status);
             }
+        }
+    }
+    mod timeline {
+        use crate::models::{slot::Slot, timeline::Timeline};
+        use chrono::Duration;
+
+        #[test]
+        fn test_split_into_days() {
+            let init_year = 2022;
+            let init_month = 1;
+            let init_day = 1;
+            let hour: u32 = 0;
+            let minute: u32 = 0;
+            let days_count: i64 = 5;
+            let duration = Duration::days(days_count);
+
+            let timeline = Timeline::mock(duration, init_year, init_month, init_day);
+
+            let expected_result = Timeline {
+                slots: vec![
+                    Slot::mock(Duration::days(1), init_year, init_month, 1, hour, minute),
+                    Slot::mock(Duration::days(1), init_year, init_month, 2, hour, minute),
+                    Slot::mock(Duration::days(1), init_year, init_month, 3, hour, minute),
+                    Slot::mock(Duration::days(1), init_year, init_month, 4, hour, minute),
+                    Slot::mock(Duration::days(1), init_year, init_month, 5, hour, minute),
+                ]
+                .into_iter()
+                .collect(),
+            };
+
+            let splitted_timeline = timeline.split_into_days();
+
+            dbg!(&splitted_timeline);
+            assert_eq!(expected_result, splitted_timeline);
         }
     }
 }
