@@ -145,20 +145,12 @@
                     "taskid": 15,
                     "goalid": "free",
                     "title": "free",
-                    "duration": 9,
+                    "duration": 10,
                     "start": "2022-12-03T00:00:00",
-                    "deadline": "2022-12-03T09:00:00"
-                },
-                {
-                    "taskid": 16,
-                    "goalid": "1",
-                    "title": "work",
-                    "duration": 1,
-                    "start": "2022-12-03T09:00:00",
                     "deadline": "2022-12-03T10:00:00"
                 },
                 {
-                    "taskid": 17,
+                    "taskid": 16,
                     "goalid": "2",
                     "title": "gym",
                     "duration": 1,
@@ -166,27 +158,11 @@
                     "deadline": "2022-12-03T11:00:00"
                 },
                 {
-                    "taskid": 18,
+                    "taskid": 17,
                     "goalid": "free",
                     "title": "free",
-                    "duration": 1,
+                    "duration": 13,
                     "start": "2022-12-03T11:00:00",
-                    "deadline": "2022-12-03T12:00:00"
-                },
-                {
-                    "taskid": 19,
-                    "goalid": "1",
-                    "title": "work",
-                    "duration": 6,
-                    "start": "2022-12-03T12:00:00",
-                    "deadline": "2022-12-03T18:00:00"
-                },
-                {
-                    "taskid": 20,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 6,
-                    "start": "2022-12-03T18:00:00",
                     "deadline": "2022-12-04T00:00:00"
                 }
             ]
@@ -194,23 +170,15 @@
         {
             "day": "2022-12-04",
             "tasks": [{
-                    "taskid": 21,
+                    "taskid": 18,
                     "goalid": "free",
                     "title": "free",
-                    "duration": 9,
+                    "duration": 10,
                     "start": "2022-12-04T00:00:00",
-                    "deadline": "2022-12-04T09:00:00"
-                },
-                {
-                    "taskid": 22,
-                    "goalid": "1",
-                    "title": "work",
-                    "duration": 1,
-                    "start": "2022-12-04T09:00:00",
                     "deadline": "2022-12-04T10:00:00"
                 },
                 {
-                    "taskid": 23,
+                    "taskid": 19,
                     "goalid": "2",
                     "title": "gym",
                     "duration": 1,
@@ -218,27 +186,11 @@
                     "deadline": "2022-12-04T11:00:00"
                 },
                 {
-                    "taskid": 24,
+                    "taskid": 20,
                     "goalid": "free",
                     "title": "free",
-                    "duration": 1,
+                    "duration": 13,
                     "start": "2022-12-04T11:00:00",
-                    "deadline": "2022-12-04T12:00:00"
-                },
-                {
-                    "taskid": 25,
-                    "goalid": "1",
-                    "title": "work",
-                    "duration": 1,
-                    "start": "2022-12-04T12:00:00",
-                    "deadline": "2022-12-04T13:00:00"
-                },
-                {
-                    "taskid": 26,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 11,
-                    "start": "2022-12-04T13:00:00",
                     "deadline": "2022-12-05T00:00:00"
                 }
             ]
@@ -247,7 +199,7 @@
     "impossible": [{
             "day": "2022-11-28",
             "tasks": [{
-                    "taskid": 27,
+                    "taskid": 21,
                     "goalid": "2",
                     "title": "gym",
                     "duration": 1,
@@ -255,7 +207,7 @@
                     "deadline": "2022-12-05T00:00:00"
                 },
                 {
-                    "taskid": 28,
+                    "taskid": 22,
                     "goalid": "2",
                     "title": "gym",
                     "duration": 1,
@@ -263,7 +215,7 @@
                     "deadline": "2022-12-05T00:00:00"
                 },
                 {
-                    "taskid": 29,
+                    "taskid": 23,
                     "goalid": "2",
                     "title": "gym",
                     "duration": 1,
@@ -271,7 +223,7 @@
                     "deadline": "2022-12-05T00:00:00"
                 },
                 {
-                    "taskid": 30,
+                    "taskid": 24,
                     "goalid": "2",
                     "title": "gym",
                     "duration": 1,
@@ -279,7 +231,7 @@
                     "deadline": "2022-12-05T00:00:00"
                 },
                 {
-                    "taskid": 31,
+                    "taskid": 25,
                     "goalid": "2",
                     "title": "gym",
                     "duration": 1,
