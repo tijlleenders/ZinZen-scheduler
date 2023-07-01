@@ -35,7 +35,7 @@ impl Step {
             vec![new_step]
         } else {
             let mut steps: Vec<Step> = Vec::new();
-            steps.extend(new_step.split(&mut new_step.duration.clone()).unwrap());
+            steps.extend(new_step.split(&mut 1).unwrap());
             dbg!(&steps);
 
             steps
@@ -279,7 +279,63 @@ mod tests {
                 let mut expected_steps = vec![
                     Step::mock(
                         "test",
-                        8,
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
                         0,
                         StepStatus::ReadyToSchedule,
                         vec![timeframe],
@@ -307,7 +363,7 @@ mod tests {
                 dbg!(&expected_steps);
 
                 assert_eq!(generated_steps, expected_steps);
-                assert_eq!(generated_steps.len(), 3);
+                assert_eq!(generated_steps.len(), 10);
 
                 assert_eq!(generated_steps[0].id, expected_steps[0].id);
                 assert_eq!(generated_steps[1].id, expected_steps[1].id);
