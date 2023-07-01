@@ -30,26 +30,12 @@ impl Step {
         let threshold: usize = 8;
         let mut new_step = self.clone();
 
-        if new_step.duration > 0 && new_step.duration < threshold {
+        if new_step.duration > 0 && new_step.duration <= threshold {
             dbg!(&new_step);
             vec![new_step]
         } else {
-            // Make first Step with duration as threshold,
-            // then split steps into 1 hours steps till finish
-            // remaining_duration
-
             let mut steps: Vec<Step> = Vec::new();
-            let mut first_step = new_step.clone();
-            first_step.duration = threshold;
-            dbg!(&first_step);
-            steps.push(first_step);
-            dbg!(&steps);
-
-            let mut remaining_duration = new_step.duration - threshold;
-            new_step.duration = remaining_duration;
-            let new_steps_splitted = new_step.split(&mut remaining_duration).unwrap();
-            dbg!(&new_steps_splitted);
-            steps.extend(new_steps_splitted);
+            steps.extend(new_step.split(&mut new_step.duration.clone()).unwrap());
             dbg!(&steps);
 
             steps
