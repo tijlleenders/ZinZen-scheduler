@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -aux
+set -au
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 LOG_BASE="${SCRIPT_DIR}/../_logs"
