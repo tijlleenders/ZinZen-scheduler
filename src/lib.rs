@@ -83,6 +83,18 @@ pub mod services;
 #[cfg(test)]
 mod tests;
 
+use std::sync::Once;
+
+// Static flag to ensure logger init happens only once
+static LOGGER_INITIALIZED: Once = Once::new();
+
+fn initialize_logger() {
+    // Use the Once flag to ensure initialization happens only once
+    LOGGER_INITIALIZED.call_once(|| {
+        env_logger::init();
+    });
+}
+
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 interface Input {
@@ -116,11 +128,11 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 //Todo why is there a schedule function and a run_scheduler function?
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
-    env_logger::init();
+    initialize_logger();
     dbg!("run_scheduler");
     log::debug!("debug: run_scheduler");
     log::info!("info: run_scheduler");
-    
+
     let steps = generate_steps_to_place(input);
 
     let placed_steps = step_placer(steps);
