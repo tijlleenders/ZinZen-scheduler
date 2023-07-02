@@ -129,12 +129,8 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
     initialize_logger();
-    dbg!("run_scheduler");
-    log::debug!("debug: run_scheduler");
-    log::info!("info: run_scheduler");
 
     let steps = generate_steps_to_place(input);
-
     let placed_steps = step_placer(steps);
     log::debug!("{:?}", &placed_steps);
     match output_formatter(placed_steps) {

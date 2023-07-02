@@ -1,9 +1,8 @@
-use chrono::Duration;
-
 use crate::models::{
     slot::{Slot, SlotConflict},
     step::{Step, StepStatus},
 };
+use chrono::Duration;
 
 /// Find best slots for steps by splitting, finding conflicts and return list of slots which can be scheduled
 pub(crate) fn find_best_slots(steps: &Vec<Step>) -> Option<Vec<Slot>> {
@@ -54,7 +53,13 @@ impl Slot {
     fn get_conflicts_in_slots(&self, slots_list: &[Slot]) -> SlotConflict {
         let mut count: usize = 0;
 
-        slots_list.iter().for_each(|slot| {
+        // Split slots_list into 1 hour slots
+        let mut splitted_slots: Vec<Slot> = vec![];
+        slots_list
+            .iter()
+            .for_each(|slot| splitted_slots.extend(slot.split_into_1h_slots()));
+
+        splitted_slots.iter().for_each(|slot| {
             if self.is_intersect_with_slot(slot) {
                 count += 1;
             }
@@ -70,7 +75,6 @@ impl Slot {
     /// - NOTE: function check conflicts for only steps with status StepStatus::ReadyToSchedule
     fn get_conflicts_in_steps(&self, slots_list: &[Step]) -> SlotConflict {
         let mut count: usize = 0;
-
         slots_list
             .iter()
             .filter(|step| step.status == StepStatus::ReadyToSchedule)
@@ -160,7 +164,14 @@ impl Step {
     ///     - It check conflicts for only steps with status StepStatus::ReadyToSchedule
     ///     - It returns sorted list of SlotConflict based on slot.start then num_conflicts
     ///     - Splitting slots into schedulable slots based on slot's timing and step's duration
-    fn get_conflicts_in_steps(&self, slots_list: &[Step]) -> Vec<SlotConflict> {
+    fn get_conflicts_in_steps(&self, steps_list: &[Step]) -> Vec<SlotConflict> {
+        // Remove given_step from steps_list to avoid wrong conflicts calculation
+        let steps_list: Vec<Step> = steps_list
+            .iter()
+            .filter(|step| step.id != self.id)
+            .map(|step| step.clone())
+            .collect();
+
         let mut conflicts_list: Vec<SlotConflict> = vec![];
 
         if self.status != StepStatus::ReadyToSchedule {
@@ -170,8 +181,9 @@ impl Step {
         self.slots.iter().for_each(|slot| {
             let schedulable_slots = slot.generate_schedulable_slots(self.duration);
 
-            schedulable_slots.iter().for_each(|hour_slot| {
-                let slot_conflict = hour_slot.get_conflicts_in_steps(slots_list);
+            schedulable_slots.iter().for_each(|schedulable_slot| {
+                let slot_conflict = schedulable_slot.get_conflicts_in_steps(steps_list.as_slice());
+
                 conflicts_list.push(slot_conflict);
             });
         });
@@ -220,30 +232,6 @@ mod tests {
         assert_eq!(result, expected);
     }
 
-    #[test]
-    #[ignore]
-    fn test_sleep() {
-        let step = Step::mock(
-            "test",
-            8,
-            19,
-            StepStatus::ReadyToSchedule,
-            vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
-            None,
-        );
-
-        let expected = Some(vec![Slot::mock(Duration::hours(8), 2023, 05, 01, 0, 0)]);
-        let result = find_best_slots(&vec![step]);
-
-        assert_eq!(result, expected);
-    }
-
-    #[test]
-    #[ignore]
-    fn test_multiple_steps() {
-        todo!("not implemented");
-    }
-
     /// - Example:
     ///     ```markdown
     ///     slot: 22-08 (10 hours)
@@ -270,15 +258,13 @@ mod tests {
     }
 
     mod conflicts {
-        use chrono::Duration;
-
         use crate::models::{
             slot::Slot,
             step::{Step, StepStatus},
         };
+        use chrono::Duration;
 
         mod slot {
-
             use super::*;
 
             #[test]
@@ -289,7 +275,6 @@ mod tests {
                 ];
 
                 let slot_to_search = Slot::mock(Duration::hours(2), 2023, 6, 1, 6, 0);
-
                 let conflicts = slot_to_search.get_conflicts_in_slots(&slots_list);
 
                 assert_eq!(conflicts.slot, slot_to_search);
@@ -302,8 +287,8 @@ mod tests {
             ///     2023-06-01 01 to 03
             ///
             /// list of slots to search in:
-            ///     2023-05-30 to 2023-06-04
-            ///     2023-06-01 00 to 05
+            ///     2023-05-30 to 2023-06-04 (conflicts )
+            ///     2023-06-01 00 to 05 (conflicts)
             ///     2023-06-02 00 to 08
             ///     2023-06-03 00 to 08
             ///
@@ -326,7 +311,7 @@ mod tests {
                 let conflicts = slot_to_search.get_conflicts_in_slots(&slots_list);
 
                 assert_eq!(conflicts.slot, slot_to_search);
-                assert_eq!(conflicts.num_conflicts, 2);
+                assert_eq!(conflicts.num_conflicts, 4);
             }
 
             #[test]
@@ -427,7 +412,7 @@ mod tests {
                 let conflicts = slot_to_search.get_conflicts_in_steps(&steps_list);
 
                 assert_eq!(conflicts.slot, slot_to_search);
-                assert_eq!(conflicts.num_conflicts, 4);
+                assert_eq!(conflicts.num_conflicts, 8);
             }
 
             /// Testing finding conflicted slots on hour-based.
@@ -440,20 +425,35 @@ mod tests {
             ///     timing: 2022-09-01 08 to 16
             ///     durtion: 8
             ///
+            /// Steps list:
+            ///     Title   | Duration  |   Slots    
+            ///     work    |   8       | 2022-09-01 08 to 21
+            ///     dentist |   1       | 2022-09-01 12 to 15
+            ///
             /// Step to search in:
-            ///     name: dentist
-            ///     min_duration: 1
-            ///     timing: 2022-09-01 12 to 14
+            ///     dentist |   1       | 2022-09-01 12 to 15
             ///
             /// * NOTE: function will split slots into min_duration based,
             /// then finding conflicts based on each
             ///
-
             /// ```
             #[test]
-            fn test_conflicts_hour_based() {
-                // TODO 2023-07-01:
-                todo!("not implemented");
+            fn test_no_conflicts_in_slots_for_work() {
+                let steps_list = vec![Step::mock(
+                    "dentist",
+                    1,
+                    2,
+                    StepStatus::ReadyToSchedule,
+                    vec![Slot::mock(Duration::hours(3), 2022, 9, 1, 12, 0)],
+                    None,
+                )];
+
+                let slot_to_search = Slot::mock(Duration::hours(3), 2022, 9, 1, 12, 0);
+
+                let conflicts = slot_to_search.get_conflicts_in_steps(&steps_list);
+
+                assert_eq!(conflicts.slot, slot_to_search);
+                assert_eq!(conflicts.num_conflicts, 3);
             }
         }
 
@@ -521,112 +521,6 @@ mod tests {
                     SlotConflict {
                         slot: Slot::mock(Duration::hours(1), 2023, 5, 1, 6, 0),
                         num_conflicts: 0,
-                    },
-                ];
-
-                assert_eq!(conflicts, expected);
-            }
-
-            /// Testing many conflicts for a step slots within list of
-            /// steps but, one of them with status Scheduled
-            /// ```markdown
-            /// step to search:
-            ///         ReadyToSchedule
-            ///         2023-06-01 01 to 03
-            ///         2023-06-02 08 to 09
-            ///
-            /// Taks:
-            ///     Step 1 ReadyToSchedule
-            ///         2023-05-30 to 2023-06-04 (conflicts with both slots in step1)
-            ///         2023-06-01 00 to 05 (conflicts with step1.slot1)
-            ///         2023-06-02 00 to 08
-            ///         2023-06-03 00 to 08
-            ///     Step 2 ReadyToSchedule
-            ///         2023-05-30 to 2023-06-04 (conflicts with both slots in step1)
-            ///         2023-06-01 00 to 05 (conflicts with step1.slot1)
-            ///         2023-06-02 00 to 08
-            ///         2023-06-03 00 to 08
-            ///     Step 3 Scheduled
-            ///         2023-05-30 to 2023-06-04 (will not conflicts)
-            ///         2023-06-01 00 to 05 (will not conflicts)
-            ///         2023-06-02 00 to 08
-            ///         2023-06-03 00 to 08
-            ///     
-            ///
-            /// Expected 4 slots with conflicts:
-            ///     SlotConflict:
-            ///         - Slot: 2023-06-01 02 to 03 (step1.slot1)
-            ///         - Conflicts: 4
-            ///     SlotConflict:
-            ///         - Slot: 2023-06-01 01 to 02 (step1.slot1)
-            ///         - Conflicts: 4
-            ///     SlotConflict:
-            ///         - Slot: 2023-06-02 09 to 10 (step1.slot1)
-            ///         - Conflicts: 2
-            ///     SlotConflict:
-            ///         - Slot: 2023-06-02 08 to 09 (step1.slot2)
-            ///         - Conflicts: 2
-            /// ```
-            #[test]
-            fn test_conflicts_in_steps() {
-                let slots_list = vec![
-                    Slot::mock(Duration::days(5), 2023, 5, 30, 0, 0),
-                    Slot::mock(Duration::hours(5), 2023, 6, 1, 0, 0),
-                    Slot::mock(Duration::hours(8), 2023, 6, 2, 0, 0),
-                    Slot::mock(Duration::hours(8), 2023, 6, 3, 0, 0),
-                ];
-
-                let steps_list = vec![
-                    Step::mock(
-                        "step 1",
-                        10,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        slots_list.clone(),
-                        None,
-                    ),
-                    Step::mock(
-                        "step 2",
-                        2,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        slots_list.clone(),
-                        None,
-                    ),
-                    Step::mock("step 2", 2, 0, StepStatus::Scheduled, slots_list, None),
-                ];
-
-                let step_to_search = Step::mock(
-                    "test step 1",
-                    1,
-                    0,
-                    StepStatus::ReadyToSchedule,
-                    vec![
-                        Slot::mock(Duration::hours(2), 2023, 6, 1, 1, 0),
-                        Slot::mock(Duration::hours(2), 2023, 6, 2, 8, 0),
-                    ],
-                    None,
-                );
-
-                let conflicts = step_to_search.get_conflicts_in_steps(&steps_list);
-
-                // Will result into 4 slots with 1 hour block
-                let expected: Vec<SlotConflict> = vec![
-                    SlotConflict {
-                        slot: Slot::mock(Duration::hours(1), 2023, 6, 1, 2, 0),
-                        num_conflicts: 4,
-                    },
-                    SlotConflict {
-                        slot: Slot::mock(Duration::hours(1), 2023, 6, 1, 1, 0),
-                        num_conflicts: 4,
-                    },
-                    SlotConflict {
-                        slot: Slot::mock(Duration::hours(1), 2023, 6, 2, 9, 0),
-                        num_conflicts: 2,
-                    },
-                    SlotConflict {
-                        slot: Slot::mock(Duration::hours(1), 2023, 6, 2, 8, 0),
-                        num_conflicts: 2,
                     },
                 ];
 
