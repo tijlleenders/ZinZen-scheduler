@@ -195,64 +195,19 @@ mod tests {
             /// ===========================
             /// Output:
             /// expected_step = [
-            ///    Step {
-            ///        id: 1,
-            ///        goal_id: "1",
-            ///        title: "test",
-            ///        duration: 8,
-            ///        status: ReadyToSchedule,
-            ///        flexibility: 0,
-            ///        start: None,
-            ///        deadline: None,
-            ///        slots: [
-            ///            Slot {
-            ///                start:   2023-06-01 00,
-            ///                 end:    2023-06-06 00,
-            ///            },
-            ///        ],
-            ///        tags: [],
-            ///        after_goals: None,
-            ///    },
-            ///    Step {
-            ///        id: 2,
-            ///        goal_id: "1",
-            ///        title: "test",
-            ///        duration: 1,
-            ///        status: ReadyToSchedule,
-            ///        flexibility: 0,
-            ///        start: None,
-            ///        deadline: None,
-            ///        slots: [
-            ///            Slot {
-            ///                start:   2023-06-01 00,
-            ///                 end:    2023-06-06 00,
-            ///            },
-            ///        ],
-            ///        tags: [],
-            ///        after_goals: None,
-            ///    },
-            ///    Step {
-            ///        id: 3,
-            ///        goal_id: "1",
-            ///        title: "test",
-            ///        duration: 1,
-            ///        status: ReadyToSchedule,
-            ///        flexibility: 0,
-            ///        start: None,
-            ///        deadline: None,
-            ///        slots: [
-            ///            Slot {
-            ///                start:   2023-06-01 00,
-            ///                 end:    2023-06-06 00,
-            ///            },
-            ///        ],
-            ///        tags: [],
-            ///        after_goals: None,
-            ///    },
-            ///
-            ///]
-            ///
-            ///
+            ///    Step { 
+            ///     id  |   goal_id |   duration    |       slots
+            ///     1   |   "1"     |       1       |   2023-06-01 00-06
+            ///     2   |   "1"     |       1       |   2023-06-01 00-06
+            ///     3   |   "1"     |       1       |   2023-06-01 00-06
+            ///     4   |   "1"     |       1       |   2023-06-01 00-06
+            ///     5   |   "1"     |       1       |   2023-06-01 00-06
+            ///     6   |   "1"     |       1       |   2023-06-01 00-06
+            ///     7   |   "1"     |       1       |   2023-06-01 00-06
+            ///     8   |   "1"     |       1       |   2023-06-01 00-06
+            ///     9   |   "1"     |       1       |   2023-06-01 00-06
+            ///     10  |   "1"     |       1       |   2023-06-01 00-06
+            /// ]
             /// ```
             #[test]
             fn test_duration_more_8_hrs() {
@@ -360,6 +315,13 @@ mod tests {
                 ];
                 expected_steps[1].id = 2;
                 expected_steps[2].id = 3;
+                expected_steps[3].id = 4;
+                expected_steps[4].id = 5;
+                expected_steps[5].id = 6;
+                expected_steps[6].id = 7;
+                expected_steps[7].id = 8;
+                expected_steps[8].id = 9;
+                expected_steps[9].id = 10;
                 dbg!(&expected_steps);
 
                 assert_eq!(generated_steps, expected_steps);
@@ -368,14 +330,35 @@ mod tests {
                 assert_eq!(generated_steps[0].id, expected_steps[0].id);
                 assert_eq!(generated_steps[1].id, expected_steps[1].id);
                 assert_eq!(generated_steps[2].id, expected_steps[2].id);
+                assert_eq!(generated_steps[3].id, expected_steps[3].id);
+                assert_eq!(generated_steps[4].id, expected_steps[4].id);
+                assert_eq!(generated_steps[5].id, expected_steps[5].id);
+                assert_eq!(generated_steps[6].id, expected_steps[6].id);
+                assert_eq!(generated_steps[7].id, expected_steps[7].id);
+                assert_eq!(generated_steps[8].id, expected_steps[8].id);
+                assert_eq!(generated_steps[9].id, expected_steps[9].id);
 
                 assert_eq!(generated_steps[0].duration, expected_steps[0].duration);
                 assert_eq!(generated_steps[1].duration, expected_steps[1].duration);
                 assert_eq!(generated_steps[2].duration, expected_steps[2].duration);
+                assert_eq!(generated_steps[3].duration, expected_steps[3].duration);
+                assert_eq!(generated_steps[4].duration, expected_steps[4].duration);
+                assert_eq!(generated_steps[5].duration, expected_steps[5].duration);
+                assert_eq!(generated_steps[6].duration, expected_steps[6].duration);
+                assert_eq!(generated_steps[7].duration, expected_steps[7].duration);
+                assert_eq!(generated_steps[8].duration, expected_steps[8].duration);
+                assert_eq!(generated_steps[9].duration, expected_steps[9].duration);
 
                 assert_eq!(generated_steps[0].status, expected_steps[0].status);
                 assert_eq!(generated_steps[1].status, expected_steps[1].status);
                 assert_eq!(generated_steps[2].status, expected_steps[2].status);
+                assert_eq!(generated_steps[3].status, expected_steps[3].status);
+                assert_eq!(generated_steps[4].status, expected_steps[4].status);
+                assert_eq!(generated_steps[5].status, expected_steps[5].status);
+                assert_eq!(generated_steps[6].status, expected_steps[6].status);
+                assert_eq!(generated_steps[7].status, expected_steps[7].status);
+                assert_eq!(generated_steps[8].status, expected_steps[8].status);
+                assert_eq!(generated_steps[9].status, expected_steps[9].status);
             }
         }
 
