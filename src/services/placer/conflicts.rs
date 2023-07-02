@@ -20,7 +20,7 @@ pub(crate) fn find_best_slots(steps: &Vec<Step>) -> Option<Vec<Slot>> {
     - Check step duration and split based on that list of
     potential slots as below example:
         - Consider below step:
-            ```
+            ```markdown
             Step{
                 title: sleep
                 duration: 8
@@ -59,7 +59,6 @@ impl Slot {
                 count += 1;
             }
         });
-        dbg!(&self, &slots_list, &count);
 
         SlotConflict {
             slot: *self,
@@ -89,7 +88,7 @@ impl Slot {
     /// Generate list of schedulable slots which can be scheduled in a given
     /// slot based on given slot's duration and given slot
     /// - Example:
-    ///     ```
+    ///     ```markdown
     ///     slot: 22-08 (10 hours)
     ///     duration: 8 (hours)
     ///
@@ -122,7 +121,6 @@ impl Slot {
             return schedulable_slots
         */
         // ===
-        dbg!(&self);
         let slot_duration = self.duration_as_hours();
         let mut schedulable_slots = vec![];
 
@@ -163,7 +161,6 @@ impl Step {
     ///     - It returns sorted list of SlotConflict based on slot.start then num_conflicts
     ///     - Splitting slots into schedulable slots based on slot's timing and step's duration
     fn get_conflicts_in_steps(&self, slots_list: &[Step]) -> Vec<SlotConflict> {
-        dbg!(&self, &slots_list);
         let mut conflicts_list: Vec<SlotConflict> = vec![];
 
         if self.status != StepStatus::ReadyToSchedule {
@@ -172,7 +169,7 @@ impl Step {
 
         self.slots.iter().for_each(|slot| {
             let schedulable_slots = slot.generate_schedulable_slots(self.duration);
-            dbg!(&schedulable_slots);
+
             schedulable_slots.iter().for_each(|hour_slot| {
                 let slot_conflict = hour_slot.get_conflicts_in_steps(slots_list);
                 conflicts_list.push(slot_conflict);
@@ -200,7 +197,7 @@ mod tests {
 
     /// Test single step
     /// Expected:
-    /// ```
+    /// ```markdown
     /// Some([Slot {
     ///     start: 2023-05-01 00
     ///     end: 2023-05-01 01 }])
@@ -236,10 +233,7 @@ mod tests {
         );
 
         let expected = Some(vec![Slot::mock(Duration::hours(8), 2023, 05, 01, 0, 0)]);
-        dbg!(&step, &expected);
-
         let result = find_best_slots(&vec![step]);
-        dbg!(&result);
 
         assert_eq!(result, expected);
     }
@@ -251,7 +245,7 @@ mod tests {
     }
 
     /// - Example:
-    ///     ```
+    ///     ```markdown
     ///     slot: 22-08 (10 hours)
     ///     duration: 8 (hours)
     ///
@@ -303,7 +297,7 @@ mod tests {
             }
 
             /// Testing many conflicts for a slot within list of slots
-            /// ```
+            /// ```markdown
             /// slot to search:
             ///     2023-06-01 01 to 03
             ///
@@ -372,7 +366,7 @@ mod tests {
 
             /// Testing many conflicts for a slot within list of
             /// steps but, one of them with status Scheduled
-            /// ```
+            /// ```markdown
             /// slot to search:
             ///     2023-06-01 01 to 03
             ///
@@ -440,7 +434,7 @@ mod tests {
             /// This related to case `split-1`
             /// Issue: https://github.com/tijlleenders/ZinZen-scheduler/issues/343
             ///
-            /// ```
+            /// ```markdown
             /// slot to search:
             ///     name: work
             ///     timing: 2022-09-01 08 to 16
@@ -458,7 +452,7 @@ mod tests {
             /// ```
             #[test]
             fn test_conflicts_hour_based() {
-                // TODO 2023-07-01: 
+                // TODO 2023-07-01:
                 todo!("not implemented");
             }
         }
@@ -535,7 +529,7 @@ mod tests {
 
             /// Testing many conflicts for a step slots within list of
             /// steps but, one of them with status Scheduled
-            /// ```
+            /// ```markdown
             /// step to search:
             ///         ReadyToSchedule
             ///         2023-06-01 01 to 03
@@ -641,7 +635,7 @@ mod tests {
 
             /// Testing conflicts for a step with Scheduled status
             /// within list of steps
-            /// ```
+            /// ```markdown
             /// step to search:
             ///         Scheduled
             ///         2023-06-01 01 to 03

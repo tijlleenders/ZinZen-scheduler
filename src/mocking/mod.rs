@@ -97,7 +97,7 @@ impl Timeline {
 
 impl Step {
     /// Mock a custom Step
-    /// ```
+    /// ```markdown
     /// Step {
     ///     id: 1,
     ///     goal_id: "1",
@@ -139,7 +139,7 @@ impl Step {
     }
 
     /// Mock a Scheduled Step
-    /// ```
+    /// ```markdown
     /// Step {
     ///     id: id,
     ///     goal_id: goal_id,
@@ -195,7 +195,7 @@ impl Goal {
     ///    children: None,
     ///    after_goals: None,
     /// }
-    /// ``
+    /// ```
     pub fn mock(id: &str, title: &str, goal_dates: Slot) -> Goal {
         Goal {
             id: id.to_string(),
@@ -303,7 +303,7 @@ mod tests {
                 Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
             );
 
-            dbg!(&result, &expected);
+            log::debug!("{:?}\n{:?}", &result, &expected);
             assert_eq!(expected.status, result.status);
             assert_eq!(expected, result);
         }

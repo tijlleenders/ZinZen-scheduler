@@ -7,13 +7,10 @@ fn test_remove_from() {
 
     if let Some(mut timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
         let slot_to_remove = Slot::mock(Duration::hours(5), 2022, 10, 1, 05, 0);
-        dbg!(&slot_to_remove);
 
         timeline.remove_slots(vec![slot_to_remove]);
         let result: Vec<Slot> = timeline.slots.clone().into_iter().collect();
         let expected_result = vec![Slot::mock(Duration::hours(10), 2022, 10, 1, 10, 0)];
-        dbg!(&expected_result);
-        dbg!(&result);
 
         assert_eq!(expected_result, result);
     } else {
@@ -24,22 +21,16 @@ fn test_remove_from() {
 #[test]
 fn test_remove_halfday_from_fullday() {
     let slot_fullday = Slot::mock(Duration::hours(24), 2022, 10, 1, 00, 0);
-    dbg!(&slot_fullday);
     let mut timeline = Timeline {
         slots: vec![slot_fullday].into_iter().collect(),
     };
-    dbg!(&timeline);
 
     let slot_halfday_night = Slot::mock(Duration::hours(12), 2022, 10, 1, 12, 0);
     let slot_halfday_morning = Slot::mock(Duration::hours(12), 2022, 10, 1, 0, 0);
     let expected_result = vec![slot_halfday_morning];
 
-    dbg!(&slot_halfday_night);
-    dbg!(&expected_result);
-
     timeline.remove_slots(vec![slot_halfday_night]);
     let result: Vec<Slot> = timeline.slots.clone().into_iter().collect();
-    dbg!(&result);
 
     assert_eq!(expected_result, result);
 }
@@ -58,13 +49,8 @@ fn test_remove_afternoon_hours_from_fullday() {
         Slot::mock(Duration::hours(9), 2022, 10, 1, 15, 0),
     ];
 
-    dbg!(&timeline_fullday);
-    dbg!(&slot_afternoon);
-    dbg!(&expected_result);
-
     timeline_fullday.remove_slots(vec![slot_afternoon]);
     let result: Vec<Slot> = timeline_fullday.slots.clone().into_iter().collect();
-    dbg!(&result);
 
     assert_eq!(expected_result, result);
 }
@@ -97,13 +83,11 @@ fn test_based_on_i284_7days() {
     let mut timeline = Timeline {
         slots: slots.clone().into_iter().collect(),
     };
-    dbg!(&timeline);
 
     let expected_result: Vec<Slot> = slots;
 
     timeline.remove_slots(vec![]);
     let result: Vec<Slot> = timeline.slots.clone().into_iter().collect();
-    dbg!(&result);
 
     assert_eq!(expected_result, result);
 }
@@ -122,7 +106,6 @@ fn test_based_on_edge_case_in_filter_not_on() {
     ];
 
     let mut timeline = Timeline::mock_as_days(5, 2023, 05, 1);
-    dbg!(&timeline);
 
     let expected_result: Timeline = Timeline {
         slots: vec![
@@ -136,11 +119,9 @@ fn test_based_on_edge_case_in_filter_not_on() {
         .into_iter()
         .collect(),
     };
-    dbg!(&expected_result);
 
     timeline.remove_slots(slots_to_filter);
 
-    dbg!(&expected_result, &timeline);
     assert_eq!(expected_result, timeline);
 }
 
@@ -167,7 +148,6 @@ fn test_many_filters_same_day() {
     ];
 
     let mut timeline = Timeline::mock_as_days(5, 2023, 05, 1);
-    dbg!(&timeline);
 
     let expected_result: Timeline = Timeline {
         slots: vec![
@@ -182,10 +162,8 @@ fn test_many_filters_same_day() {
         .into_iter()
         .collect(),
     };
-    dbg!(&expected_result);
 
     timeline.remove_slots(slots_to_filter);
 
-    dbg!(&expected_result, &timeline);
     assert_eq!(expected_result, timeline);
 }

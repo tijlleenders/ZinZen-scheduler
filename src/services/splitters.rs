@@ -33,7 +33,6 @@ impl Step {
         let mut new_step = self.clone();
 
         if new_step.duration > 0 && new_step.duration < threshold {
-            dbg!(&new_step);
             vec![new_step]
         } else {
             // Make first Step with duration as threshold,
@@ -43,16 +42,14 @@ impl Step {
             let mut steps: Vec<Step> = Vec::new();
             let mut first_step = new_step.clone();
             first_step.duration = threshold;
-            dbg!(&first_step);
+
             steps.push(first_step);
-            dbg!(&steps);
 
             let mut remaining_duration = new_step.duration - threshold;
             new_step.duration = remaining_duration;
             let new_steps_splitted = new_step.split(&mut remaining_duration).unwrap();
-            dbg!(&new_steps_splitted);
+
             steps.extend(new_steps_splitted);
-            dbg!(&steps);
 
             steps
         }
@@ -350,10 +347,8 @@ mod tests {
                     timeframe: Some(timeframe),
                 };
                 let new_step = Step::new(new_step);
-                dbg!(&new_step);
 
                 let generated_steps = new_step.apply_duration_threshold();
-                dbg!(&generated_steps);
 
                 let expected_step = Step::mock(
                     "test",
@@ -475,9 +470,8 @@ mod tests {
                     timeframe: None,
                 };
                 let new_step = Step::new(new_step);
-                dbg!(&new_step);
+
                 let generated_steps = new_step.apply_duration_threshold();
-                dbg!(&generated_steps);
 
                 let mut expected_steps = vec![
                     Step::mock(
@@ -507,7 +501,6 @@ mod tests {
                 ];
                 expected_steps[1].id = 2;
                 expected_steps[2].id = 3;
-                dbg!(&expected_steps);
 
                 assert_eq!(generated_steps, expected_steps);
                 assert_eq!(generated_steps.len(), 3);
@@ -541,7 +534,6 @@ mod tests {
                 None,
             );
             let steps = step.split(&mut counter).unwrap();
-            dbg!(&step, &steps);
 
             let mut expected_steps = vec![
                 Step::mock(
@@ -571,7 +563,6 @@ mod tests {
             ];
             expected_steps[1].id = 2;
             expected_steps[2].id = 3;
-            dbg!(&expected_steps);
 
             assert_eq!(steps, expected_steps);
             assert_eq!(counter, 4);
@@ -656,7 +647,6 @@ mod tests {
 
             let splitted_timeline = timeline.split_into_days();
 
-            dbg!(&splitted_timeline);
             assert_eq!(expected_result, splitted_timeline);
         }
     }

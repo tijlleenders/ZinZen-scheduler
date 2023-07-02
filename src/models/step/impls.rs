@@ -92,30 +92,7 @@ impl Step {
         /*
         TODO 2023-06-10: Add test case to guerntee not adding extra hours for the Step.slot
         Todo: duplicate of remove_taken_slots? (NOTE: This todo need to be reviewed)
-        */
-        if self.status == StepStatus::Scheduled {
-            return;
-        }
-
-        dbg!(&self.slots, &slot_to_remove);
-
-        let mut slots_after_filter = Vec::new();
-        for slot in &mut self.slots {
-            let step_slot = *slot;
-            dbg!(&slot_to_remove, &step_slot);
-
-            let subtracted_slot = step_slot - slot_to_remove;
-            dbg!(&subtracted_slot);
-
-            slots_after_filter.extend(subtracted_slot);
-            dbg!(&slots_after_filter);
-        }
-        dbg!(&self.slots);
-        self.slots = slots_after_filter;
-        dbg!(&self.slots);
-        // =====
-
-        /*
+        ====
         Todo 2023-06-08:
         - create a test case and avoid using remove_taken_slots or btter approach.
         Todo 2023-06-09:
@@ -123,6 +100,18 @@ impl Step {
         becasue it is not functional properly and need to be fixed.
         */
 
+        if self.status == StepStatus::Scheduled {
+            return;
+        }
+
+        let mut slots_after_filter = Vec::new();
+        for slot in &mut self.slots {
+            let step_slot = *slot;
+            let subtracted_slot = step_slot - slot_to_remove;
+            slots_after_filter.extend(subtracted_slot);
+        }
+
+        self.slots = slots_after_filter;
         self.calculate_flexibility();
     }
 
@@ -130,7 +119,6 @@ impl Step {
         // TODO 2023-06-09  | This function is not accurate which need to be fixed and create test cases.
         let mut slots_after_filter = Vec::new();
         for step_slot in &mut self.slots {
-            dbg!(&step_slot, &slot_to_remove);
             if step_slot.start >= slot_to_remove.end {
                 slots_after_filter.push(*step_slot);
             }
@@ -144,10 +132,8 @@ impl Step {
             if !(step_slot.end <= slot_to_remove.end && step_slot.start <= slot_to_remove.start) {
                 slots_after_filter.push(*step_slot);
             }
-
-            dbg!(&slots_after_filter);
         }
-        dbg!(&slots_after_filter);
+
         self.slots = slots_after_filter;
     }
 
@@ -183,7 +169,7 @@ mod tests {
         /// Testing edge case in bug_215 which slot_to_remove
         /// is bigger than step_slot and step_slot is contained in slot_to_remove
         ///
-        /// ```
+        /// ```markdown
         /// # "chosen_slot" to be removed from all steps:
         /// slot_to_remove: 2023-01-03 00 to 08 (8 hours)
         /// # "step_slot" which has less duration than chosen_slot but not removed
@@ -250,7 +236,7 @@ mod tests {
 
         /// Testing normal case which removing conflicted step's slots with
         /// slot_to_remove
-        /// ```
+        /// ```markdown
         /// slot_to_remove: 2023-01-03 00 to 03 (3 hours)
         ///
         /// step_slot: 2023-01-03 01 to 11 (10 hour)

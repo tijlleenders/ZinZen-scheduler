@@ -16,10 +16,7 @@ impl Timeline {
         }
 
         if let Some(filter) = filter {
-            dbg!(&filter);
-
             let mut filtered_timeline = self.clone();
-            dbg!(&filtered_timeline);
 
             if filter.after_time.is_some() || filter.before_time.is_some() {
                 filtered_timeline = filter_timing::filter_timing(
@@ -28,18 +25,14 @@ impl Timeline {
                     filter.before_time,
                 );
             }
-            dbg!(&filtered_timeline);
 
             if let Some(days) = &filter.on_days {
                 filtered_timeline = filter_on_days::filter_on_days(filtered_timeline, days);
             }
-            dbg!(&filtered_timeline);
 
             if let Some(not_on) = &filter.not_on {
-                dbg!(&not_on);
                 filtered_timeline = filter_not_on::filter_not_on(filtered_timeline, not_on);
             }
-            dbg!(&filtered_timeline);
 
             *self = filtered_timeline;
         } else {
@@ -118,7 +111,6 @@ mod tests {
 
         // intiate a sample timeline
         let timeline = Timeline::mock(timeline_duration, year, month, day);
-        dbg!(&timeline);
 
         let expected_slots: Vec<Slot> = vec![
             Slot::mock(Duration::hours(10), year, month, 1, after, 0),
@@ -131,12 +123,10 @@ mod tests {
             Slot::mock(Duration::hours(10), year, month, 14, after, 0),
             Slot::mock(Duration::hours(10), year, month, 15, after, 0),
         ];
-        dbg!(&expected_slots);
 
         let expected_result = Timeline {
             slots: expected_slots.into_iter().collect(),
         };
-        dbg!(&expected_result);
 
         let filters: Option<TimeFilter> = Some(TimeFilter {
             before_time,
@@ -147,7 +137,6 @@ mod tests {
 
         let mut result_timeline = timeline.clone();
         result_timeline.apply_filter(&filters);
-        dbg!(&result_timeline);
 
         assert_eq!(result_timeline, expected_result);
     }

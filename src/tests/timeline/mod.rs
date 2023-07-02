@@ -34,14 +34,12 @@ fn test_get_next() {
         Slot::mock(Duration::hours(4), 2022, 10, 1, 07, 0),
         Slot::mock(Duration::hours(10), 2022, 10, 1, 12, 0),
     );
-    dbg!(&(slot1, slot2, slot3, slot4));
+
     let timeline = Timeline {
         slots: vec![slot1, slot2, slot3, slot4].into_iter().collect(),
     };
-    dbg!(&timeline);
 
     if let Some(next_slot) = timeline.get_slot(1) {
-        dbg!(&next_slot);
         assert_eq!(slot2, next_slot);
     } else {
         assert!(false);

@@ -59,10 +59,8 @@ impl Goal {
             self.filters.clone(),
             // Todo! add self.before_time filter
         );
-        dbg!(&time_slots_iterator);
 
         for timeline in time_slots_iterator {
-            dbg!(&timeline);
             let step_id = *counter;
             *counter += 1;
 
@@ -81,21 +79,18 @@ impl Goal {
                 };
 
                 let step = Step::new(new_step);
-                dbg!(&step);
+
                 // Apply split on threshold (8 hours) rule if goal is a leaf
                 if self.children.is_none() {
                     let thresholded_steps = step.apply_duration_threshold();
-                    dbg!(&thresholded_steps);
 
                     steps.extend(thresholded_steps);
-                    dbg!(&steps);
                 } else {
                     steps.push(step);
-                    dbg!(&steps);
                 }
             }
         }
-        dbg!(&steps);
+
         steps
     }
 }
@@ -120,11 +115,9 @@ mod tests {
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
                 let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
                 goal.min_duration = Some(duration);
-                dbg!(&goal);
 
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
 
                 let expected_steps = vec![Step::mock(
                     "test",
@@ -134,7 +127,6 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_steps);
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
@@ -152,11 +144,9 @@ mod tests {
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
                 let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
                 goal.min_duration = Some(duration);
-                dbg!(&goal);
 
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
 
                 let expected_steps = vec![Step::mock(
                     "test",
@@ -166,7 +156,6 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_steps);
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
@@ -270,11 +259,9 @@ mod tests {
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
                 let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
                 goal.min_duration = Some(duration);
-                dbg!(&goal);
 
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
 
                 let mut expected_steps = vec![
                     Step::mock(
@@ -304,7 +291,6 @@ mod tests {
                 ];
                 expected_steps[1].id = 2;
                 expected_steps[2].id = 3;
-                dbg!(&expected_steps);
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
@@ -380,11 +366,9 @@ mod tests {
                 let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
                 goal.min_duration = Some(duration);
                 goal.children = Some(vec!["2".to_string()]);
-                dbg!(&goal);
 
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
 
                 let expected_steps = vec![Step::mock(
                     "test",
@@ -394,7 +378,6 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_steps);
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);

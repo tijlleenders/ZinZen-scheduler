@@ -58,7 +58,7 @@ impl Iterator for TimeSlotsIterator {
             None => {
                 let result = self.timeline.clone();
                 self.timeline.slots.clear();
-                dbg!(&result);
+                log::debug!("{:?}", &result);
                 Some(result)
             }
         }

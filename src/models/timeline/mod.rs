@@ -54,10 +54,6 @@ impl Timeline {
             - if addition not done:
                 - add incoming_slot to the merged_slots list
         */
-        let slots_len = self.slots.len();
-
-        dbg!(&self);
-        dbg!(&slots_len);
 
         if self.slots.is_empty() {
             return Timeline::new();
@@ -90,13 +86,11 @@ impl Timeline {
 
     /// Remove list of slots from timeline
     pub fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) {
-        dbg!(&self);
         let mut to_remove: TimelineSlotsType = BTreeSet::new();
         to_remove.extend(slots_to_remove);
-        dbg!(&to_remove);
+
         // Remove similar slots from Timeline
         self.slots.retain(|slot| !to_remove.contains(slot));
-        dbg!(&self);
 
         /*
         =========
@@ -109,27 +103,20 @@ impl Timeline {
             - push slots_after_subtraction to the timeline_slots
         */
         for slot_to_filter in to_remove {
-            dbg!(&slot_to_filter);
             let timeline_slots = self.slots.clone();
             match timeline_slots
                 .iter()
                 .find(|slot| slot.is_contains_slot(&slot_to_filter))
             {
                 Some(overlapped_timeline_slot) => {
-                    dbg!(&overlapped_timeline_slot);
-
                     let slots_after_subtraction = *overlapped_timeline_slot - slot_to_filter;
-                    dbg!(&slots_after_subtraction);
 
                     self.slots.retain(|slot| slot != overlapped_timeline_slot);
                     self.slots.extend(slots_after_subtraction);
-                    dbg!(&self);
                 }
                 None => continue,
             };
         }
-
-        dbg!(&self);
     }
 
     /// Get a slot of timeline based on index

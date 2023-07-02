@@ -63,7 +63,6 @@ mod tests {
         let interval_duration = Duration::days(1);
 
         let slot = Slot::mock(slot_duration, 2023, 05, 1, 0, 0);
-        dbg!(&slot);
 
         let expected_result: Vec<Slot> = vec![
             Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
@@ -72,17 +71,14 @@ mod tests {
             Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
             Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
         ];
-        dbg!(&expected_result);
 
         let slot_iterator = SlotIterator::new(slot, interval_duration);
-        dbg!(&slot, &slot_iterator);
 
         let mut result: Vec<Slot> = vec![];
 
         for slot in slot_iterator {
             result.push(slot);
         }
-        dbg!(&expected_result, &result);
 
         assert_eq!(expected_result, result);
     }
@@ -94,7 +90,6 @@ mod tests {
         let interval_duration = Duration::hours(1);
 
         let slot = Slot::mock(slot_duration, 2023, 05, 1, 0, 0);
-        dbg!(&slot);
 
         let expected_result: Vec<Slot> = vec![
             Slot::mock(Duration::hours(1), 2023, 05, 1, 0, 0),
@@ -103,17 +98,14 @@ mod tests {
             Slot::mock(Duration::hours(1), 2023, 05, 1, 3, 0),
             Slot::mock(Duration::hours(1), 2023, 05, 1, 4, 0),
         ];
-        dbg!(&expected_result);
 
         let slot_iterator = SlotIterator::new(slot, interval_duration);
-        dbg!(&slot, &slot_iterator);
 
         let mut result: Vec<Slot> = vec![];
 
         for slot in slot_iterator {
             result.push(slot);
         }
-        dbg!(&expected_result, &result);
 
         assert_eq!(expected_result, result);
     }
@@ -129,7 +121,6 @@ mod tests {
         let interval_duration = Duration::days(1);
 
         let slot = Slot::mock(slot_duration, 2023, 05, 1, 0, 0);
-        dbg!(&slot);
 
         let expected_result: Vec<Slot> = vec![
             Slot::mock(Duration::hours(10), 2023, 05, 1, 0, 0),
@@ -138,20 +129,16 @@ mod tests {
             Slot::mock(Duration::hours(10), 2023, 05, 4, 0, 0),
             Slot::mock(Duration::hours(10), 2023, 05, 5, 0, 0),
         ];
-        dbg!(&expected_result);
 
         let slot_iterator = SlotIterator::new(slot, interval_duration);
-        dbg!(&slot, &slot_iterator);
 
         let mut result: Vec<Slot> = vec![];
 
         for mut slot in slot_iterator {
-            dbg!(&slot);
             slot.end = slot.end - Duration::hours(14);
-            dbg!(&slot);
             result.push(slot);
         }
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 }
