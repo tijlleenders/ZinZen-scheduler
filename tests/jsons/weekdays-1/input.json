@@ -1,16 +1,17 @@
 {
-   "startDate": "2022-10-01T00:00:00",
-   "endDate": "2022-11-01T00:00:00",
-   "goals": {
-      "1": {
-         "id": "1",
-         "title": "work",
-         "min_duration": 8,
-         "repeat": "weekdays",
-         "filters": {
-            "after_time": 8,
-            "before_time": 20
-         }
-      }
-   }
+    "startDate": "2022-10-01T00:00:00",
+    "endDate": "2022-11-01T00:00:00",
+    "goals": {
+        "1": {
+            "id": "1",
+            "title": "work",
+            "min_duration": 8,
+            "repeat": "weekly",
+            "filters": {
+                "after_time": 8,
+                "before_time": 20,
+                "on_days": ["Mon", "Tue", "Wed", "Thu", "Fri"]
+            }
+        }
+    }
 }
