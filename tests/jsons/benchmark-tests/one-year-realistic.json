@@ -21,7 +21,7 @@
             "id": "3",
             "title": "piano practice",
             "duration": 2,
-            "repeat": "daily",
+            "repeat": "weekly",
             "after_time": 12,
             "before_time": 14,
             "filters": {
