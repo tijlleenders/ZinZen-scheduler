@@ -2,35 +2,18 @@
     "scheduled": [{
             "day": "2022-09-01",
             "tasks": [{
-                    "taskid": 0,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 10,
-                    "start": "2022-09-01T00:00:00",
-                    "deadline": "2022-09-01T10:00:00"
-                },
-                {
-                    "taskid": 1,
-                    "goalid": "1",
-                    "title": "community_cleanup",
-                    "duration": 3,
-                    "start": "2022-09-01T10:00:00",
-                    "deadline": "2022-09-01T13:00:00"
-                },
-                {
-                    "taskid": 2,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 11,
-                    "start": "2022-09-01T13:00:00",
-                    "deadline": "2022-09-02T00:00:00"
-                }
-            ]
+                "taskid": 0,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-09-01T00:00:00",
+                "deadline": "2022-09-02T00:00:00"
+            }]
         },
         {
             "day": "2022-09-02",
             "tasks": [{
-                "taskid": 3,
+                "taskid": 1,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -41,7 +24,7 @@
         {
             "day": "2022-09-03",
             "tasks": [{
-                    "taskid": 4,
+                    "taskid": 2,
                     "goalid": "free",
                     "title": "free",
                     "duration": 10,
@@ -49,7 +32,7 @@
                     "deadline": "2022-09-03T10:00:00"
                 },
                 {
-                    "taskid": 5,
+                    "taskid": 3,
                     "goalid": "1",
                     "title": "community_cleanup",
                     "duration": 3,
@@ -57,7 +40,7 @@
                     "deadline": "2022-09-03T13:00:00"
                 },
                 {
-                    "taskid": 6,
+                    "taskid": 4,
                     "goalid": "free",
                     "title": "free",
                     "duration": 11,
@@ -69,13 +52,30 @@
         {
             "day": "2022-09-04",
             "tasks": [{
-                "taskid": 7,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2022-09-04T00:00:00",
-                "deadline": "2022-09-05T00:00:00"
-            }]
+                    "taskid": 5,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 10,
+                    "start": "2022-09-04T00:00:00",
+                    "deadline": "2022-09-04T10:00:00"
+                },
+                {
+                    "taskid": 6,
+                    "goalid": "1",
+                    "title": "community_cleanup",
+                    "duration": 3,
+                    "start": "2022-09-04T10:00:00",
+                    "deadline": "2022-09-04T13:00:00"
+                },
+                {
+                    "taskid": 7,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 11,
+                    "start": "2022-09-04T13:00:00",
+                    "deadline": "2022-09-05T00:00:00"
+                }
+            ]
         },
         {
             "day": "2022-09-05",
@@ -163,18 +163,35 @@
         {
             "day": "2022-09-11",
             "tasks": [{
-                "taskid": 16,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2022-09-11T00:00:00",
-                "deadline": "2022-09-12T00:00:00"
-            }]
+                    "taskid": 16,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 10,
+                    "start": "2022-09-11T00:00:00",
+                    "deadline": "2022-09-11T10:00:00"
+                },
+                {
+                    "taskid": 17,
+                    "goalid": "1",
+                    "title": "community_cleanup",
+                    "duration": 3,
+                    "start": "2022-09-11T10:00:00",
+                    "deadline": "2022-09-11T13:00:00"
+                },
+                {
+                    "taskid": 18,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 11,
+                    "start": "2022-09-11T13:00:00",
+                    "deadline": "2022-09-12T00:00:00"
+                }
+            ]
         },
         {
             "day": "2022-09-12",
             "tasks": [{
-                "taskid": 17,
+                "taskid": 19,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -185,7 +202,7 @@
         {
             "day": "2022-09-13",
             "tasks": [{
-                "taskid": 18,
+                "taskid": 20,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -196,7 +213,7 @@
         {
             "day": "2022-09-14",
             "tasks": [{
-                "taskid": 19,
+                "taskid": 21,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -207,7 +224,7 @@
         {
             "day": "2022-09-15",
             "tasks": [{
-                "taskid": 20,
+                "taskid": 22,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -218,7 +235,7 @@
         {
             "day": "2022-09-16",
             "tasks": [{
-                "taskid": 21,
+                "taskid": 23,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -229,7 +246,7 @@
         {
             "day": "2022-09-17",
             "tasks": [{
-                    "taskid": 22,
+                    "taskid": 24,
                     "goalid": "free",
                     "title": "free",
                     "duration": 10,
@@ -237,7 +254,7 @@
                     "deadline": "2022-09-17T10:00:00"
                 },
                 {
-                    "taskid": 23,
+                    "taskid": 25,
                     "goalid": "1",
                     "title": "community_cleanup",
                     "duration": 3,
@@ -245,7 +262,7 @@
                     "deadline": "2022-09-17T13:00:00"
                 },
                 {
-                    "taskid": 24,
+                    "taskid": 26,
                     "goalid": "free",
                     "title": "free",
                     "duration": 11,
@@ -257,18 +274,35 @@
         {
             "day": "2022-09-18",
             "tasks": [{
-                "taskid": 25,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2022-09-18T00:00:00",
-                "deadline": "2022-09-19T00:00:00"
-            }]
+                    "taskid": 27,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 10,
+                    "start": "2022-09-18T00:00:00",
+                    "deadline": "2022-09-18T10:00:00"
+                },
+                {
+                    "taskid": 28,
+                    "goalid": "1",
+                    "title": "community_cleanup",
+                    "duration": 3,
+                    "start": "2022-09-18T10:00:00",
+                    "deadline": "2022-09-18T13:00:00"
+                },
+                {
+                    "taskid": 29,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 11,
+                    "start": "2022-09-18T13:00:00",
+                    "deadline": "2022-09-19T00:00:00"
+                }
+            ]
         },
         {
             "day": "2022-09-19",
             "tasks": [{
-                "taskid": 26,
+                "taskid": 30,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -279,7 +313,7 @@
         {
             "day": "2022-09-20",
             "tasks": [{
-                "taskid": 27,
+                "taskid": 31,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -290,7 +324,7 @@
         {
             "day": "2022-09-21",
             "tasks": [{
-                "taskid": 28,
+                "taskid": 32,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -301,7 +335,7 @@
         {
             "day": "2022-09-22",
             "tasks": [{
-                "taskid": 29,
+                "taskid": 33,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -312,7 +346,7 @@
         {
             "day": "2022-09-23",
             "tasks": [{
-                "taskid": 30,
+                "taskid": 34,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -323,7 +357,7 @@
         {
             "day": "2022-09-24",
             "tasks": [{
-                    "taskid": 31,
+                    "taskid": 35,
                     "goalid": "free",
                     "title": "free",
                     "duration": 10,
@@ -331,7 +365,7 @@
                     "deadline": "2022-09-24T10:00:00"
                 },
                 {
-                    "taskid": 32,
+                    "taskid": 36,
                     "goalid": "1",
                     "title": "community_cleanup",
                     "duration": 3,
@@ -339,7 +373,7 @@
                     "deadline": "2022-09-24T13:00:00"
                 },
                 {
-                    "taskid": 33,
+                    "taskid": 37,
                     "goalid": "free",
                     "title": "free",
                     "duration": 11,
@@ -351,18 +385,35 @@
         {
             "day": "2022-09-25",
             "tasks": [{
-                "taskid": 34,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2022-09-25T00:00:00",
-                "deadline": "2022-09-26T00:00:00"
-            }]
+                    "taskid": 38,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 10,
+                    "start": "2022-09-25T00:00:00",
+                    "deadline": "2022-09-25T10:00:00"
+                },
+                {
+                    "taskid": 39,
+                    "goalid": "1",
+                    "title": "community_cleanup",
+                    "duration": 3,
+                    "start": "2022-09-25T10:00:00",
+                    "deadline": "2022-09-25T13:00:00"
+                },
+                {
+                    "taskid": 40,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 11,
+                    "start": "2022-09-25T13:00:00",
+                    "deadline": "2022-09-26T00:00:00"
+                }
+            ]
         },
         {
             "day": "2022-09-26",
             "tasks": [{
-                "taskid": 35,
+                "taskid": 41,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -373,7 +424,7 @@
         {
             "day": "2022-09-27",
             "tasks": [{
-                "taskid": 36,
+                "taskid": 42,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -384,7 +435,7 @@
         {
             "day": "2022-09-28",
             "tasks": [{
-                "taskid": 37,
+                "taskid": 43,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -395,7 +446,7 @@
         {
             "day": "2022-09-29",
             "tasks": [{
-                "taskid": 38,
+                "taskid": 44,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -406,7 +457,7 @@
         {
             "day": "2022-09-30",
             "tasks": [{
-                "taskid": 39,
+                "taskid": 45,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
