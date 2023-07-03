@@ -18,36 +18,33 @@ fn test_merge_all_consequent_slots() {
     let duration = Duration::hours((end_hour - start_hour) as i64);
 
     let expected_timeline: Timeline = Timeline::mock(duration, year, month, day);
-    dbg!(&expected_timeline);
 
     let mut input_slots: Vec<Slot> = vec![];
     input_slots.append(
-        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).divide_into_1h_slots(),
+        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 1, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 2, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 3, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 4, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
 
     let input_timeline: Timeline = Timeline {
         slots: input_slots.into_iter().collect(),
     };
-    dbg!(&input_timeline);
 
     let result_timeline = input_timeline.get_merged_slots();
-    dbg!(&result_timeline);
 
     assert_eq!(expected_timeline, result_timeline);
 }
@@ -72,38 +69,35 @@ fn test_merge_some_consequent_slots() {
     expected_timeline
         .slots
         .insert(Slot::mock(Duration::hours(1), year, month, day, 9, 0));
-    dbg!(&expected_timeline);
 
     let mut input_slots: Vec<Slot> = vec![];
     input_slots.append(
-        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).divide_into_1h_slots(),
+        &mut Slot::mock(Duration::hours(1), year, month, day, start_hour, 0).split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 1, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 2, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 3, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots.append(
         &mut Slot::mock(Duration::hours(1), year, month, day, start_hour + 4, 0)
-            .divide_into_1h_slots(),
+            .split_into_1h_slots(),
     );
     input_slots
-        .append(&mut Slot::mock(Duration::hours(1), year, month, day, 9, 0).divide_into_1h_slots());
+        .append(&mut Slot::mock(Duration::hours(1), year, month, day, 9, 0).split_into_1h_slots());
 
     let input_timeline: Timeline = Timeline {
         slots: input_slots.into_iter().collect(),
     };
-    dbg!(&input_timeline);
 
     let result_timeline = input_timeline.get_merged_slots();
-    dbg!(&result_timeline);
 
     assert_eq!(expected_timeline, result_timeline);
 }

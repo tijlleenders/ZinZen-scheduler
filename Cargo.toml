@@ -40,7 +40,8 @@ serde-wasm-bindgen = "0.5.0"
 console_error_panic_hook = "0.1.7"
 
 # display logs
-log = "0.4.17"
+log = "0.4.19"
+env_logger="0.10.0"
 
 # soft assertions without panic
 soft = "0.1.1"

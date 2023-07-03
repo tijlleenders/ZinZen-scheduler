@@ -39,28 +39,6 @@ impl Timeline {
         }
     }
 
-    /// Get splitted timeline into slots with 1 day interval
-    pub fn get_split_into_days(&self) -> Timeline {
-        // TODO 2023-04-25 | test scenario:
-        //  - when slots in timeline are not full days!!!! Is the split
-        // will return full day or will respect the tha slot not full day!!
-        let mut new_slots: TimelineSlotsType = BTreeSet::new();
-        for slot in self.slots.iter() {
-            new_slots.extend(slot.divide_into_days());
-        }
-        Timeline { slots: new_slots }
-    }
-
-    /// Get splitted timeline into slots with 1 hour interval
-    pub fn get_split_into_hours(&self) -> Timeline {
-        //TODO 2023-04-30 | Create a generic function to split slots into custom interval (1 hour, 10 mins, 1 day, etc)
-        let mut new_slots: TimelineSlotsType = BTreeSet::new();
-        for slot in self.slots.iter() {
-            new_slots.extend(slot.divide_into_1h_slots());
-        }
-        Timeline { slots: new_slots }
-    }
-
     /// Get merged consequent Timeline slots
     pub fn get_merged_slots(&self) -> Timeline {
         /*
@@ -76,10 +54,6 @@ impl Timeline {
             - if addition not done:
                 - add incoming_slot to the merged_slots list
         */
-        let slots_len = self.slots.len();
-
-        dbg!(&self);
-        dbg!(&slots_len);
 
         if self.slots.is_empty() {
             return Timeline::new();
@@ -112,13 +86,11 @@ impl Timeline {
 
     /// Remove list of slots from timeline
     pub fn remove_slots(&mut self, slots_to_remove: Vec<Slot>) {
-        dbg!(&self);
         let mut to_remove: TimelineSlotsType = BTreeSet::new();
         to_remove.extend(slots_to_remove);
-        dbg!(&to_remove);
+
         // Remove similar slots from Timeline
         self.slots.retain(|slot| !to_remove.contains(slot));
-        dbg!(&self);
 
         /*
         =========
@@ -131,27 +103,20 @@ impl Timeline {
             - push slots_after_subtraction to the timeline_slots
         */
         for slot_to_filter in to_remove {
-            dbg!(&slot_to_filter);
             let timeline_slots = self.slots.clone();
             match timeline_slots
                 .iter()
                 .find(|slot| slot.is_contains_slot(&slot_to_filter))
             {
                 Some(overlapped_timeline_slot) => {
-                    dbg!(&overlapped_timeline_slot);
-
                     let slots_after_subtraction = *overlapped_timeline_slot - slot_to_filter;
-                    dbg!(&slots_after_subtraction);
 
                     self.slots.retain(|slot| slot != overlapped_timeline_slot);
                     self.slots.extend(slots_after_subtraction);
-                    dbg!(&self);
                 }
                 None => continue,
             };
         }
-
-        dbg!(&self);
     }
 
     /// Get a slot of timeline based on index

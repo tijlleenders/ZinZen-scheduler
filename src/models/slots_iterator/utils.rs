@@ -9,22 +9,16 @@ pub fn get_start_of_repeat_step(
     //TODO 2023-04-19 This function doesn't consider merged slots. It should be fixed to consider merged slots.
 
     let mut result = *current_date_time;
-    // dbg!(&result);
     match repeat {
-        Repetition::DAILY(_) => {
-            dbg!(result);
-            result = result
-                .checked_add_days(Days::new(1))
-                .unwrap()
-                .with_hour(0)
-                .unwrap()
-                .with_minute(0)
-                .unwrap()
-                .with_second(0)
-                .unwrap();
-            dbg!(result);
-            result
-        }
+        Repetition::DAILY(_) => result
+            .checked_add_days(Days::new(1))
+            .unwrap()
+            .with_hour(0)
+            .unwrap()
+            .with_minute(0)
+            .unwrap()
+            .with_second(0)
+            .unwrap(),
         Repetition::HOURLY => result.checked_add_signed(Duration::hours(1)).unwrap(),
         Repetition::Weekly(_) => next_week(&mut result),
         Repetition::WEEKDAYS => match result.weekday() {
@@ -290,7 +284,6 @@ pub fn get_start_of_repeat_step(
         Repetition::FlexDaily(_, _) => todo!(),
         Repetition::FlexWeekly(_, _) => todo!(),
     }
-    // dbg!(&result);
 }
 
 /// Get next week for a current datetime

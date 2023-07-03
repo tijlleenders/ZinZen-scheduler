@@ -9,11 +9,8 @@ pub(crate) fn filter_not_on(mut timeline: Timeline, slots_to_filter: &[Slot]) ->
         return timeline;
     }
 
-    dbg!(&timeline, &slots_to_filter);
-
     timeline.remove_slots(slots_to_filter.to_vec());
 
-    dbg!(&timeline);
     timeline
 }
 
@@ -53,7 +50,6 @@ mod tests {
         let slots_to_filter: Vec<Slot> = vec![Slot::mock(Duration::hours(5), 2023, 05, 2, 0, 0)];
 
         let timeline = Timeline::mock_as_days(5, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -66,7 +62,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_not_on(timeline, &slots_to_filter);
 
@@ -87,7 +82,6 @@ mod tests {
         ];
 
         let timeline = Timeline::mock_as_days(5, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -101,10 +95,9 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_not_on(timeline, &slots_to_filter);
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 
@@ -119,10 +112,8 @@ mod tests {
             Slot::mock(Duration::hours(3), 2023, 04, 1, 0, 0),
             Slot::mock(Duration::hours(1), 2023, 04, 1, 5, 0),
         ];
-        dbg!(&slots_to_filter);
 
         let timeline = Timeline::mock_as_days(6, 2023, 4, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -137,10 +128,9 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_not_on(timeline, &slots_to_filter);
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 }

@@ -1,5 +1,5 @@
 use super::Slot;
-use chrono::{Days, NaiveDateTime, Timelike};
+use chrono::NaiveDateTime;
 use std::{
     cmp::{max, min},
     ops::{Add, Sub},
@@ -82,88 +82,6 @@ impl Slot {
 
     pub fn is_contains_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
-    }
-
-    /// Divide a Slot into list of slots with 1 hour interval
-    /// If you pass a Slot for 5 hours, then it will splitted
-    ///  into 5 slots with 1 hour interval:
-    /// ```markdown
-    /// Param:
-    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-01 05:00:00 ]
-    ///     Duration: 5 hours
-    ///
-    /// Returns:
-    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-01 01:00:00 ]
-    ///     Slot [ 2022-01-01 01:00:00 - 2022-01-01 02:00:00 ]
-    ///     Slot [ 2022-01-01 02:00:00 - 2022-01-01 03:00:00 ]
-    ///     Slot [ 2022-01-01 03:00:00 - 2022-01-01 04:00:00 ]
-    ///     Slot [ 2022-01-01 04:00:00 - 2022-01-01 05:00:00 ]
-    ///
-    /// ```
-    pub fn divide_into_1h_slots(&self) -> Vec<Slot> {
-        let mut result = vec![];
-        let duration = self.duration_as_hours();
-
-        for hour in 0..duration {
-            result.push(Slot {
-                start: self.start.add(chrono::Duration::hours(hour as i64)),
-                end: self.start.add(chrono::Duration::hours((hour + 1) as i64)),
-            });
-        }
-        result
-    }
-
-    /// Divide a Slot into list of slots with 1 day interval
-    /// If you pass a Slot for a week, then it will splitted
-    ///  into 7 slots for each day of the week:
-    /// ```markdown
-    /// Param:
-    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-08 00:00:00 ]
-    ///
-    /// Returns:
-    ///     Slot [ 2022-01-01 00:00:00 - 2022-01-02 00:00:00 ]
-    ///     Slot [ 2022-01-02 00:00:00 - 2022-01-03 00:00:00 ]
-    ///     Slot [ 2022-01-03 00:00:00 - 2022-01-04 00:00:00 ]
-    ///     Slot [ 2022-01-04 00:00:00 - 2022-01-05 00:00:00 ]
-    ///     Slot [ 2022-01-05 00:00:00 - 2022-01-06 00:00:00 ]
-    ///     Slot [ 2022-01-06 00:00:00 - 2022-01-07 00:00:00 ]
-    ///     Slot [ 2022-01-07 00:00:00 - 2022-01-08 00:00:00 ]
-    /// ```
-    pub fn divide_into_days(&self) -> Vec<Slot> {
-        let mut result = vec![];
-        let mut start_slider = self.start;
-
-        while start_slider.lt(&self.end) {
-            if start_slider.date().eq(&self.end.date()) {
-                result.push(Slot {
-                    start: start_slider,
-                    end: self.end,
-                });
-
-                start_slider = start_slider
-                    .with_hour(0)
-                    .unwrap()
-                    .checked_add_days(Days::new(1))
-                    .unwrap();
-                continue;
-            } else {
-                result.push(Slot {
-                    start: start_slider,
-                    end: start_slider
-                        .with_hour(0)
-                        .unwrap()
-                        .checked_add_days(Days::new(1))
-                        .unwrap(),
-                });
-
-                start_slider = start_slider
-                    .with_hour(0)
-                    .unwrap()
-                    .checked_add_days(Days::new(1))
-                    .unwrap();
-            }
-        }
-        result
     }
 
     pub fn is_intersect_with_slot(&self, other: &Slot) -> bool {

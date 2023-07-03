@@ -44,7 +44,6 @@ pub(crate) fn filter_timing(
     after_time: Option<usize>,
     before_time: Option<usize>,
 ) -> Timeline {
-    dbg!(&timeline, after_time, before_time);
     // Return the same timeline if there are no slots, or if both `after_time` and `before_time` are None
     if timeline.slots.is_empty() || (after_time.is_none() && before_time.is_none()) {
         return timeline;
@@ -70,9 +69,7 @@ pub(crate) fn filter_timing(
             // If the timing scenario is `AfterOnly`, adjust the start time of each slot
             // Rule: make sure that 'after_time' within slot boundaries
             for mut walking_slots in timeline_iterator {
-                dbg!(&walking_slots, &slots);
                 walking_slots.iter_mut().for_each(|mut slot| {
-                    dbg!(&slot);
                     let after_time = after_time.unwrap() as u32;
                     let slot_start_hour = slot.start.hour();
                     if after_time < slot_start_hour {
@@ -81,7 +78,6 @@ pub(crate) fn filter_timing(
                         slot.start = slot.start.with_hour(after_time).unwrap();
                     }
                     slots.push(*slot);
-                    dbg!(&slots);
                 });
             }
         }
@@ -112,7 +108,6 @@ pub(crate) fn filter_timing(
                 let walking_slots_len = walking_slots.len();
                 for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
                     // ===
-                    dbg!(&iterator_index, &walking_index, &slot);
                     // Below condition to handle case as comment: https://github.com/tijlleenders/ZinZen-scheduler/pull/295#issuecomment-1550956264
                     // If this is the first slot in the first day of the timeline,
                     // add a new slot that starts at the beginning of the day
@@ -133,14 +128,14 @@ pub(crate) fn filter_timing(
                             start: slot.start.with_hour(after_time.unwrap() as u32).unwrap(),
                             end: slot.end,
                         });
-                        dbg!(&slots);
+
                         continue;
                     }
                     // ===
                     slot.start = slot.start.with_hour(after_time.unwrap() as u32).unwrap();
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap();
                     slots.push(*slot);
-                    dbg!(&slots);
+
                     // ===
                 }
             }
@@ -268,7 +263,6 @@ mod tests {
         let after: u32 = 5;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -281,7 +275,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_timing(timeline, Some(after as usize), None);
 
@@ -299,7 +292,6 @@ mod tests {
         let before: u32 = 20;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -312,7 +304,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_timing(timeline, None, Some(before as usize));
 
@@ -331,7 +322,6 @@ mod tests {
         let before: u32 = 20;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -344,10 +334,9 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_timing(timeline, Some(after as usize), Some(before as usize));
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 
@@ -365,7 +354,6 @@ mod tests {
         let before: u32 = 5;
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -379,10 +367,9 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_timing(timeline, Some(after as usize), Some(before as usize));
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 
@@ -400,17 +387,15 @@ mod tests {
                 .into_iter()
                 .collect(),
         };
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![Slot::mock(Duration::hours(1), 2022, 04, 30, 10, 0)]
                 .into_iter()
                 .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_timing(timeline, Some(1), None);
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 

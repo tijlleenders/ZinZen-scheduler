@@ -23,14 +23,12 @@ pub(crate) fn filter_on_days(timeline: Timeline, days_to_filter: &[Day]) -> Time
     let days_to_filter: BTreeSet<Day> = days_to_filter.iter().cloned().collect();
     let mut days_to_remove: Vec<Slot> = vec![];
     let timeline_iterator = TimelineIterator::new(timeline.clone(), Duration::days(1));
-    dbg!(&timeline, &timeline_iterator, &days_to_filter);
+
     let mut slots_from_iter: Vec<Slot> = vec![];
 
     for walking_slots in timeline_iterator {
-        dbg!(&walking_slots);
         slots_from_iter.extend(walking_slots);
     }
-    dbg!(&slots_from_iter);
 
     let mut expected_timeline = Timeline {
         slots: slots_from_iter.clone().into_iter().collect(),
@@ -38,17 +36,14 @@ pub(crate) fn filter_on_days(timeline: Timeline, days_to_filter: &[Day]) -> Time
 
     for slot in slots_from_iter {
         let day = slot.start.weekday().to_string();
-        dbg!(&day);
 
         if !days_to_filter.contains(&Day::from(day)) {
             days_to_remove.push(slot);
-            dbg!(&days_to_remove);
         }
     }
-    dbg!(&days_to_remove);
 
     expected_timeline.remove_slots(days_to_remove);
-    dbg!(&expected_timeline);
+
     expected_timeline
 }
 
@@ -88,7 +83,6 @@ mod tests {
         let days_to_filter: Vec<Day> = vec![Day::Mon, Day::Fri];
 
         let timeline = Timeline::mock_as_days(15, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -101,7 +95,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_on_days(timeline, &days_to_filter);
 
@@ -117,7 +110,6 @@ mod tests {
         let days_to_filter: Vec<Day> = vec![Day::Sun, Day::Thu];
 
         let timeline = Timeline::mock(Duration::days(15), 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -129,7 +121,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_on_days(timeline, &days_to_filter);
 
@@ -172,7 +163,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&timeline);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
@@ -191,10 +181,9 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&expected_result);
 
         let result = filter_on_days(timeline, &days_to_filter);
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 }

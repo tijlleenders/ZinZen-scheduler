@@ -1,12 +1,5 @@
-use super::{NewStep, Step, StepStatus};
-use crate::{
-    errors::Error,
-    models::{
-        goal::{Goal, Tag},
-        slot::Slot,
-        timeline::Timeline,
-    },
-};
+use super::{Step, StepStatus};
+use crate::models::{goal::Tag, slot::Slot};
 use std::cmp::Ordering;
 
 impl PartialEq for Step {
@@ -93,78 +86,13 @@ impl Step {
         self.slots.clone()
     }
 
-    /// Split a Step into list of Steps based on given Step duration.
-    /// - Note: This function will change below in the resulted steps:
-    ///     - Step.status = StepStatus::ReadyToSchedule
-    ///     - Step.tags = empty list
-    pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Step>, Error> {
-        // TODO 2023-06-22: Debug notes: This function not clone step.start and step.deadline
-        if self.duration == 1 {
-            // && !self.tags.contains(&Tag::DoNotSort) {
-            return Err(Error::CannotSplit);
-        }
-        let mut steps = Vec::new();
-        let timeline = Timeline {
-            slots: self.get_slots().into_iter().collect(),
-        };
-        let goal = Goal {
-            id: self.goal_id.clone(),
-            title: self.title.clone(),
-            tags: self.tags.clone(),
-            after_goals: self.after_goals.clone(),
-            ..Default::default()
-        };
-        let new_step = NewStep {
-            step_id: *counter,
-            title: self.title.clone(),
-            duration: 1,
-            goal,
-            timeline,
-            status: StepStatus::Uninitialized,
-            timeframe: None,
-        };
-
-        for _ in 0..self.duration {
-            let mut step = Step::new(new_step.clone());
-            step.id = *counter;
-            step.status = StepStatus::ReadyToSchedule;
-            step.tags = vec![];
-            *counter += 1;
-            steps.push(step);
-        }
-        Ok(steps)
-    }
-
     /// Remove conflicted step slots with a given slot [slot_to_remove]
     /// - Function will do nothing with Scheduled steps
     pub fn remove_conflicted_slots(&mut self, slot_to_remove: Slot) {
         /*
         TODO 2023-06-10: Add test case to guerntee not adding extra hours for the Step.slot
         Todo: duplicate of remove_taken_slots? (NOTE: This todo need to be reviewed)
-        */
-        if self.status == StepStatus::Scheduled {
-            return;
-        }
-
-        dbg!(&self.slots, &slot_to_remove);
-
-        let mut slots_after_filter = Vec::new();
-        for slot in &mut self.slots {
-            let step_slot = *slot;
-            dbg!(&slot_to_remove, &step_slot);
-
-            let subtracted_slot = step_slot - slot_to_remove;
-            dbg!(&subtracted_slot);
-
-            slots_after_filter.extend(subtracted_slot);
-            dbg!(&slots_after_filter);
-        }
-        dbg!(&self.slots);
-        self.slots = slots_after_filter;
-        dbg!(&self.slots);
-        // =====
-
-        /*
+        ====
         Todo 2023-06-08:
         - create a test case and avoid using remove_taken_slots or btter approach.
         Todo 2023-06-09:
@@ -172,6 +100,18 @@ impl Step {
         becasue it is not functional properly and need to be fixed.
         */
 
+        if self.status == StepStatus::Scheduled {
+            return;
+        }
+
+        let mut slots_after_filter = Vec::new();
+        for slot in &mut self.slots {
+            let step_slot = *slot;
+            let subtracted_slot = step_slot - slot_to_remove;
+            slots_after_filter.extend(subtracted_slot);
+        }
+
+        self.slots = slots_after_filter;
         self.calculate_flexibility();
     }
 
@@ -179,7 +119,6 @@ impl Step {
         // TODO 2023-06-09  | This function is not accurate which need to be fixed and create test cases.
         let mut slots_after_filter = Vec::new();
         for step_slot in &mut self.slots {
-            dbg!(&step_slot, &slot_to_remove);
             if step_slot.start >= slot_to_remove.end {
                 slots_after_filter.push(*step_slot);
             }
@@ -193,10 +132,8 @@ impl Step {
             if !(step_slot.end <= slot_to_remove.end && step_slot.start <= slot_to_remove.start) {
                 slots_after_filter.push(*step_slot);
             }
-
-            dbg!(&slots_after_filter);
         }
-        dbg!(&slots_after_filter);
+
         self.slots = slots_after_filter;
     }
 
@@ -232,7 +169,7 @@ mod tests {
         /// Testing edge case in bug_215 which slot_to_remove
         /// is bigger than step_slot and step_slot is contained in slot_to_remove
         ///
-        /// ```
+        /// ```markdown
         /// # "chosen_slot" to be removed from all steps:
         /// slot_to_remove: 2023-01-03 00 to 08 (8 hours)
         /// # "step_slot" which has less duration than chosen_slot but not removed
@@ -299,7 +236,7 @@ mod tests {
 
         /// Testing normal case which removing conflicted step's slots with
         /// slot_to_remove
-        /// ```
+        /// ```markdown
         /// slot_to_remove: 2023-01-03 00 to 03 (3 hours)
         ///
         /// step_slot: 2023-01-03 01 to 11 (10 hour)
@@ -325,78 +262,6 @@ mod tests {
             let expected_step_slot = Slot::mock(Duration::hours(8), 2023, 01, 03, 3, 0);
 
             assert_eq!(step.slots[0], expected_step_slot);
-        }
-    }
-
-    mod split {
-        use chrono::Duration;
-
-        use crate::models::{
-            slot::Slot,
-            step::{Step, StepStatus},
-        };
-
-        #[test]
-        fn test_split() {
-            let duration: usize = 3;
-            let mut counter: usize = 1;
-
-            let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-            let mut step = Step::mock(
-                "test",
-                duration,
-                0,
-                StepStatus::ReadyToSchedule,
-                vec![goal_timeframe],
-                None,
-            );
-            let steps = step.split(&mut counter).unwrap();
-            dbg!(&step, &steps);
-
-            let mut expected_steps = vec![
-                Step::mock(
-                    "test",
-                    1,
-                    0,
-                    StepStatus::ReadyToSchedule,
-                    vec![goal_timeframe],
-                    None,
-                ),
-                Step::mock(
-                    "test",
-                    1,
-                    0,
-                    StepStatus::ReadyToSchedule,
-                    vec![goal_timeframe],
-                    None,
-                ),
-                Step::mock(
-                    "test",
-                    1,
-                    0,
-                    StepStatus::ReadyToSchedule,
-                    vec![goal_timeframe],
-                    None,
-                ),
-            ];
-            expected_steps[1].id = 2;
-            expected_steps[2].id = 3;
-            dbg!(&expected_steps);
-
-            assert_eq!(steps, expected_steps);
-            assert_eq!(counter, 4);
-
-            assert_eq!(steps[0].id, expected_steps[0].id);
-            assert_eq!(steps[1].id, expected_steps[1].id);
-            assert_eq!(steps[2].id, expected_steps[2].id);
-
-            assert_eq!(steps[0].duration, expected_steps[0].duration);
-            assert_eq!(steps[1].duration, expected_steps[1].duration);
-            assert_eq!(steps[2].duration, expected_steps[2].duration);
-
-            assert_eq!(steps[0].status, expected_steps[0].status);
-            assert_eq!(steps[1].status, expected_steps[1].status);
-            assert_eq!(steps[2].status, expected_steps[2].status);
         }
     }
 }

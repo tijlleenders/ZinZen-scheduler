@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -au   
+set -au
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 LOG_BASE="${SCRIPT_DIR}/../_logs"
@@ -9,8 +9,6 @@ PARAM=${1:-""}
 CARGO_MANIFEST_DIR=$ZIN_BASE
 
 CURRENTDATE=$(date +"%Y-%m-%d--%H-%M")
-FILE_NAME="test_${PARAM}_${CURRENTDATE}.log"
-LOG_FILE="${LOG_BASE}/${FILE_NAME}"
 
 if [[ ! -d "$LOG_BASE" ]]; then
     mkdir -p "$LOG_BASE"
@@ -27,11 +25,25 @@ if [[ "${PARAM}" == "--help" || "${PARAM}" == "-h" ]]; then
     echo ""
     exit 0
 elif [[ "${PARAM}" == "" ]]; then
-    echo ""
+    # Update FILE_NAME and LOG_FILE to avoid PARAM inside it
+    FILE_NAME="test_${CURRENTDATE}.log"
+    LOG_FILE="${LOG_BASE}/${FILE_NAME}"
+
+    touch "$LOG_FILE"
+    echo "COMMAND: cargo test --no-fail-fast --manifest-path ${ZIN_BASE} >> ${LOG_FILE}" >> "$LOG_FILE"
+    cargo test --no-fail-fast --manifest-path "$ZIN_BASE" >> "$LOG_FILE"
+    exit
+else
+    # Update FILE_NAME and LOG_FILE to include PARAM inside it
+    FILE_NAME="test_${PARAM}_${CURRENTDATE}.log"
+    LOG_FILE="${LOG_BASE}/${FILE_NAME}"
+    RUST_LOG=debug
+
+    touch "$LOG_FILE"
+    echo "COMMAND: RUST_LOG=debug cargo test --no-fail-fast --manifest-path ${ZIN_BASE} ${PARAM} >> ${LOG_FILE}" > "$LOG_FILE"
+    # cargo test --manifest-path "$ZIN_BASE" "$PARAM" -- --nocapture >> "$LOG_FILE"
+    RUST_LOG=debug cargo test --manifest-path "$ZIN_BASE" "$PARAM" 2>&1 | tee -a "$LOG_FILE"
+    exit
 fi
 
 
-
-touch "$LOG_FILE"
-
-cargo test --manifest-path "$ZIN_BASE" "$PARAM" > "$LOG_FILE"

@@ -6,7 +6,8 @@ use crate::models::input::PlacedSteps;
 use crate::models::output::{DayTasks, FinalTasks, Task};
 use crate::models::slot::Slot;
 use crate::models::step::{Step, StepStatus};
-use chrono::{Datelike, Days, NaiveDate, NaiveDateTime, Timelike};
+use crate::services::splitters::split_crossed_tasks;
+use chrono::{Days, NaiveDate, NaiveDateTime, Timelike};
 
 /// Formatting, sorting, and merging (contiguous) incoming steps into
 /// a FinalTasks data-structure to be returned back.
@@ -57,7 +58,7 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
     scheduled_tasks.sort();
 
     combine(&mut scheduled_tasks);
-    split_cross_day_step(&mut scheduled_tasks);
+    split_crossed_tasks(&mut scheduled_tasks);
     generate_free_tasks(
         &mut scheduled_tasks,
         placed_steps.calendar_start,
@@ -170,47 +171,6 @@ fn combine(tasks: &mut Vec<Task>) {
     }
 }
 
-//If a step starts in one day and ends in the next day, it should be splitted into two steps.
-//e.g. A Step 'Sleep' from 22:00-6:00 should be split into two output steps in output formatter: 22:00-0:00 and 0:00-6:00
-fn split_cross_day_step(tasks: &mut Vec<Task>) {
-    dbg!(&tasks);
-    /*
-    TODO 2023-06-04  | Debug note | case bug_215
-    - For param "tasks", it contains wrong duration for steps "hurdle" and "sleep".
-    - Attention to function "is_cross_day" which comparison need to be enhanced. Check task.title:"hurdle"
-    - Attention to code line "step2.duration -= step.duration;" which seems is not accurate and also affected by function "is_cross_day"
-    */
-
-    let mut new_tasks = vec![];
-    for task in tasks.iter_mut() {
-        if is_cross_day(task) {
-            let mut task2 = task.clone();
-            task.deadline = task.deadline.with_hour(0).unwrap();
-            task2.start = task.deadline.with_hour(0).unwrap();
-            task.duration = Slot {
-                start: task.start,
-                end: task.deadline,
-            }
-            .duration_as_hours();
-
-            dbg!(&task, &task2);
-
-            task2.duration -= task.duration;
-            new_tasks.push(task.clone());
-            if task2.duration > 0 {
-                new_tasks.push(task2);
-            }
-        } else {
-            new_tasks.push(task.clone());
-            dbg!(&new_tasks);
-        }
-    }
-
-    dbg!(&new_tasks);
-    tasks.clear();
-    tasks.extend(new_tasks);
-}
-
 /// Filter tasks with date and return sorted tasks
 fn get_tasks_with_date(
     tasks: Vec<Task>,
@@ -279,13 +239,6 @@ fn generate_free_tasks(outputs: &mut Vec<Task>, start: NaiveDateTime, end: Naive
     new_outputs.sort_by(|a, b| a.start.cmp(&b.start));
     outputs.clear();
     outputs.extend(new_outputs);
-}
-
-/// Is a task crossing a day so day of start date is different from day of end date
-fn is_cross_day(task: &Task) -> bool {
-    dbg!(&task);
-    dbg!(&task.start.day(), &task.deadline.day());
-    task.start.day() < task.deadline.day()
 }
 
 /// Return list of hourly slots for a day starting given datetime

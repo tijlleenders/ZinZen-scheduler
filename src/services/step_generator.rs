@@ -23,24 +23,6 @@ impl Step {
             after_goals: new_step.goal.after_goals,
         }
     }
-
-    /// When a step duration exceeded threshold, it will be splitted
-    /// into 1 hour steps
-    pub fn apply_duration_threshold(&self) -> Vec<Step> {
-        let threshold: usize = 8;
-        let mut new_step = self.clone();
-
-        if new_step.duration > 0 && new_step.duration <= threshold {
-            dbg!(&new_step);
-            vec![new_step]
-        } else {
-            let mut steps: Vec<Step> = Vec::new();
-            steps.extend(new_step.split(&mut 1).unwrap());
-            dbg!(&steps);
-
-            steps
-        }
-    }
 }
 
 impl Goal {
@@ -77,10 +59,8 @@ impl Goal {
             self.filters.clone(),
             // Todo! add self.before_time filter
         );
-        dbg!(&time_slots_iterator);
 
         for timeline in time_slots_iterator {
-            dbg!(&timeline);
             let step_id = *counter;
             *counter += 1;
 
@@ -99,269 +79,25 @@ impl Goal {
                 };
 
                 let step = Step::new(new_step);
-                dbg!(&step);
+
                 // Apply split on threshold (8 hours) rule if goal is a leaf
                 if self.children.is_none() {
                     let thresholded_steps = step.apply_duration_threshold();
-                    dbg!(&thresholded_steps);
 
                     steps.extend(thresholded_steps);
-                    dbg!(&steps);
                 } else {
                     steps.push(step);
-                    dbg!(&steps);
                 }
             }
         }
-        dbg!(&steps);
+
         steps
     }
 }
 
 #[cfg(test)]
 mod tests {
-
     mod goal {
-        mod apply_duration_threshold {
-            use chrono::Duration;
-
-            use crate::models::{
-                goal::Goal,
-                slot::Slot,
-                step::{NewStep, Step, StepStatus},
-                timeline::Timeline,
-            };
-
-            #[test]
-            fn test_duration_less_8_hrs() {
-                let duration: usize = 7;
-                let timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-
-                let new_step = NewStep {
-                    step_id: 1,
-                    title: "test".to_string(),
-                    duration,
-                    goal: Goal::mock("1", "test", timeframe.clone()),
-                    timeline: Timeline::new(),
-                    status: StepStatus::ReadyToSchedule,
-                    timeframe: Some(timeframe),
-                };
-                let new_step = Step::new(new_step);
-                dbg!(&new_step);
-
-                let generated_steps = new_step.apply_duration_threshold();
-                dbg!(&generated_steps);
-
-                let expected_step = Step::mock(
-                    "test",
-                    7,
-                    0,
-                    StepStatus::ReadyToSchedule,
-                    vec![timeframe],
-                    None,
-                );
-
-                assert_eq!(generated_steps, vec![expected_step.clone()]);
-                assert_eq!(generated_steps[0].id, expected_step.id);
-                assert_eq!(generated_steps[0].duration, expected_step.duration);
-                assert_eq!(generated_steps[0].status, expected_step.status);
-            }
-
-            /// Test Step::apply_duration_threshold when goal.min_duration > 8 hours
-            /// ```markdown
-            /// =========================
-            /// Input:
-            /// Goal {
-            ///    id: "1",
-            ///    title: "test",
-            ///    min_duration: Some(
-            ///        10,
-            ///    ),
-            ///    max_duration: None,
-            ///    budgets: None,
-            ///    repeat: None,
-            ///    start: Some(
-            ///        2023-06-01T00:00:00,
-            ///    ),
-            ///    deadline: Some(
-            ///        2023-06-06T00:00:00,
-            ///    ),
-            ///    tags: [],
-            ///    filters: None,
-            ///    children: None,
-            ///    after_goals: None,
-            ///}
-            ///
-            /// ===========================
-            /// Output:
-            /// expected_step = [
-            ///    Step { 
-            ///     id  |   goal_id |   duration    |       slots
-            ///     1   |   "1"     |       1       |   2023-06-01 00-06
-            ///     2   |   "1"     |       1       |   2023-06-01 00-06
-            ///     3   |   "1"     |       1       |   2023-06-01 00-06
-            ///     4   |   "1"     |       1       |   2023-06-01 00-06
-            ///     5   |   "1"     |       1       |   2023-06-01 00-06
-            ///     6   |   "1"     |       1       |   2023-06-01 00-06
-            ///     7   |   "1"     |       1       |   2023-06-01 00-06
-            ///     8   |   "1"     |       1       |   2023-06-01 00-06
-            ///     9   |   "1"     |       1       |   2023-06-01 00-06
-            ///     10  |   "1"     |       1       |   2023-06-01 00-06
-            /// ]
-            /// ```
-            #[test]
-            fn test_duration_more_8_hrs() {
-                let duration: usize = 10;
-                let timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-                let timeline = Timeline {
-                    slots: vec![timeframe.clone()].into_iter().collect(),
-                };
-
-                let new_step = NewStep {
-                    step_id: 1,
-                    title: "test".to_string(),
-                    duration,
-                    goal: Goal::mock("1", "test", timeframe.clone()),
-                    timeline,
-                    status: StepStatus::ReadyToSchedule,
-                    timeframe: None,
-                };
-                let new_step = Step::new(new_step);
-                dbg!(&new_step);
-                let generated_steps = new_step.apply_duration_threshold();
-                dbg!(&generated_steps);
-
-                let mut expected_steps = vec![
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                    Step::mock(
-                        "test",
-                        1,
-                        0,
-                        StepStatus::ReadyToSchedule,
-                        vec![timeframe],
-                        None,
-                    ),
-                ];
-                expected_steps[1].id = 2;
-                expected_steps[2].id = 3;
-                expected_steps[3].id = 4;
-                expected_steps[4].id = 5;
-                expected_steps[5].id = 6;
-                expected_steps[6].id = 7;
-                expected_steps[7].id = 8;
-                expected_steps[8].id = 9;
-                expected_steps[9].id = 10;
-                dbg!(&expected_steps);
-
-                assert_eq!(generated_steps, expected_steps);
-                assert_eq!(generated_steps.len(), 10);
-
-                assert_eq!(generated_steps[0].id, expected_steps[0].id);
-                assert_eq!(generated_steps[1].id, expected_steps[1].id);
-                assert_eq!(generated_steps[2].id, expected_steps[2].id);
-                assert_eq!(generated_steps[3].id, expected_steps[3].id);
-                assert_eq!(generated_steps[4].id, expected_steps[4].id);
-                assert_eq!(generated_steps[5].id, expected_steps[5].id);
-                assert_eq!(generated_steps[6].id, expected_steps[6].id);
-                assert_eq!(generated_steps[7].id, expected_steps[7].id);
-                assert_eq!(generated_steps[8].id, expected_steps[8].id);
-                assert_eq!(generated_steps[9].id, expected_steps[9].id);
-
-                assert_eq!(generated_steps[0].duration, expected_steps[0].duration);
-                assert_eq!(generated_steps[1].duration, expected_steps[1].duration);
-                assert_eq!(generated_steps[2].duration, expected_steps[2].duration);
-                assert_eq!(generated_steps[3].duration, expected_steps[3].duration);
-                assert_eq!(generated_steps[4].duration, expected_steps[4].duration);
-                assert_eq!(generated_steps[5].duration, expected_steps[5].duration);
-                assert_eq!(generated_steps[6].duration, expected_steps[6].duration);
-                assert_eq!(generated_steps[7].duration, expected_steps[7].duration);
-                assert_eq!(generated_steps[8].duration, expected_steps[8].duration);
-                assert_eq!(generated_steps[9].duration, expected_steps[9].duration);
-
-                assert_eq!(generated_steps[0].status, expected_steps[0].status);
-                assert_eq!(generated_steps[1].status, expected_steps[1].status);
-                assert_eq!(generated_steps[2].status, expected_steps[2].status);
-                assert_eq!(generated_steps[3].status, expected_steps[3].status);
-                assert_eq!(generated_steps[4].status, expected_steps[4].status);
-                assert_eq!(generated_steps[5].status, expected_steps[5].status);
-                assert_eq!(generated_steps[6].status, expected_steps[6].status);
-                assert_eq!(generated_steps[7].status, expected_steps[7].status);
-                assert_eq!(generated_steps[8].status, expected_steps[8].status);
-                assert_eq!(generated_steps[9].status, expected_steps[9].status);
-            }
-        }
-
         mod generate_steps {
             use chrono::Duration;
 
@@ -379,11 +115,9 @@ mod tests {
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
                 let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
                 goal.min_duration = Some(duration);
-                dbg!(&goal);
 
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
 
                 let expected_steps = vec![Step::mock(
                     "test",
@@ -393,7 +127,6 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_steps);
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
@@ -411,11 +144,9 @@ mod tests {
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
                 let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
                 goal.min_duration = Some(duration);
-                dbg!(&goal);
 
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
 
                 let expected_steps = vec![Step::mock(
                     "test",
@@ -425,7 +156,6 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_steps);
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
@@ -521,6 +251,62 @@ mod tests {
             ///
             ///
             /// ```
+            #[test]
+            fn test_duration_more_8_hrs() {
+                let duration: usize = 10;
+                let mut counter: usize = 1;
+
+                let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
+                let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
+                goal.min_duration = Some(duration);
+
+                let steps =
+                    goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
+
+                let mut expected_steps = vec![
+                    Step::mock(
+                        "test",
+                        8,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![goal_timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![goal_timeframe],
+                        None,
+                    ),
+                    Step::mock(
+                        "test",
+                        1,
+                        0,
+                        StepStatus::ReadyToSchedule,
+                        vec![goal_timeframe],
+                        None,
+                    ),
+                ];
+                expected_steps[1].id = 2;
+                expected_steps[2].id = 3;
+
+                assert_eq!(steps, expected_steps);
+                assert_eq!(counter, 2);
+
+                assert_eq!(steps[0].id, expected_steps[0].id);
+                assert_eq!(steps[1].id, expected_steps[1].id);
+                assert_eq!(steps[2].id, expected_steps[2].id);
+
+                assert_eq!(steps[0].duration, expected_steps[0].duration);
+                assert_eq!(steps[1].duration, expected_steps[1].duration);
+                assert_eq!(steps[2].duration, expected_steps[2].duration);
+
+                assert_eq!(steps[0].status, expected_steps[0].status);
+                assert_eq!(steps[1].status, expected_steps[1].status);
+                assert_eq!(steps[2].status, expected_steps[2].status);
+            }
 
             /// Test when a given Goal is not a leaf and goal.min_duration > 8
             /// So in this case, steps will not be splitted
@@ -580,11 +366,9 @@ mod tests {
                 let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
                 goal.min_duration = Some(duration);
                 goal.children = Some(vec!["2".to_string()]);
-                dbg!(&goal);
 
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
-                dbg!(&steps);
 
                 let expected_steps = vec![Step::mock(
                     "test",
@@ -594,7 +378,6 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
-                dbg!(&expected_steps);
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);

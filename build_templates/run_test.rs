@@ -8,8 +8,8 @@ use std::path::Path;
 /// Function to run tests
 fn run_test(directory: &str) -> (String, String) {
     let input_path_str = format!("./tests/jsons/{}/input.json", directory);
-    let output_path_str = format!("./tests/jsons/{}/output.json", directory);
-    let actual_output_path_str = format!("./tests/jsons/{}/actual_output.json", directory);
+    let output_path_str = format!("./tests/jsons/{}/expected.json", directory);
+    let actual_output_path_str = format!("./tests/jsons/{}/observed.json", directory);
 
     let input_path = Path::new(&input_path_str[..]);
     let output_path = Path::new(&output_path_str[..]);

@@ -93,13 +93,11 @@ mod tests {
             slot_budgets: vec![],
         };
         let timeframe = Slot::mock(Duration::days(31), 2023, 5, 1, 0, 0);
-        dbg!(&timeframe);
+
         let start_date = timeframe.start;
         let end_date = timeframe.end;
 
-        dbg!(&step_budget);
         step_budget.initialize(start_date, end_date);
-        dbg!(&step_budget);
 
         assert_eq!(step_budget.slot_budgets.len(), 5);
         for slot_budget in step_budget.slot_budgets.iter() {

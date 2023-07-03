@@ -25,7 +25,7 @@ impl Step {
                 "StepStatus must be ReadyToSchedule, but it is now StepStatus::{:?}",
                 self.status.clone()
             );
-            dbg!(message);
+            log::debug!("{message}");
             return;
         }
 
@@ -160,7 +160,7 @@ mod tests {
         };
 
         /// Simulate one Step in test case bug_215 which is Sleep
-        /// ```
+        /// ```markdown
         ///     Step: Sleep,
         ///     Duration: 8 hours
         ///     Timing: 22-08
@@ -185,17 +185,15 @@ mod tests {
                 ],
                 None,
             );
-            dbg!(&step);
 
             step.calculate_flexibility();
-            dbg!(&step);
 
             assert_eq!(22, step.flexibility);
         }
 
         /// Simulate a Step in test case bug_215 which is
         /// have highest flexibility because it can be assigned anytime
-        /// ```
+        /// ```markdown
         ///     Step: Refreshing,
         ///     Duration: 1 hour
         ///     Timing: anytime
@@ -210,17 +208,15 @@ mod tests {
                 vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
                 None,
             );
-            dbg!(&step);
 
             step.calculate_flexibility();
-            dbg!(&step);
 
             assert_eq!(168, step.flexibility);
         }
 
         /// Simulate a Step in test case bug_215 which is
         /// for taking dineer daily basis
-        /// ```
+        /// ```markdown
         ///     Step: Dinner,
         ///     Duration: 1 hour
         ///     Timing: daily between (6pm - 9pm)
@@ -243,10 +239,8 @@ mod tests {
                 ],
                 None,
             );
-            dbg!(&step);
 
             step.calculate_flexibility();
-            dbg!(&step);
 
             assert_eq!(21, step.flexibility);
         }
@@ -263,7 +257,7 @@ mod tests {
         /// An edge case test which simulating 2 steps and avail slots
         ///  in the first day is less than min_duration for first step,
         ///  so other step will be assigned in first instead.
-        /// ```
+        /// ```markdown
         ///     Step 1: Sleep,
         ///     Duration: 8 hours
         ///     Timing: 22-08
@@ -308,7 +302,7 @@ mod tests {
 
             for mut step in steps {
                 step.calculate_flexibility();
-                dbg!(&step);
+
                 if step.duration == 8 {
                     assert_eq!(22, step.flexibility);
                 } else if step.duration == 1 {

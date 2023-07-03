@@ -25,7 +25,6 @@
 //!     });
 //!     let input: Input = serde_json::from_value(json_input).unwrap();
 //!     let output = scheduler::run_scheduler(input);
-//!     dbg!(output);
 //! ```
 //!
 //! ## Getting Started
@@ -84,6 +83,18 @@ pub mod services;
 #[cfg(test)]
 mod tests;
 
+use std::sync::Once;
+
+// Static flag to ensure logger init happens only once
+static LOGGER_INITIALIZED: Once = Once::new();
+
+fn initialize_logger() {
+    // Use the Once flag to ensure initialization happens only once
+    LOGGER_INITIALIZED.call_once(|| {
+        env_logger::init();
+    });
+}
+
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 interface Input {
@@ -117,10 +128,11 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 //Todo why is there a schedule function and a run_scheduler function?
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
-    let steps = generate_steps_to_place(input);
+    initialize_logger();
 
+    let steps = generate_steps_to_place(input);
     let placed_steps = step_placer(steps);
-    dbg!(&placed_steps);
+    log::debug!("{:?}", &placed_steps);
     match output_formatter(placed_steps) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.");

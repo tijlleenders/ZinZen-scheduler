@@ -91,8 +91,6 @@ impl StepBudgets {
         goals: &mut BTreeMap<String, Goal>,
         counter: &mut usize,
     ) -> Vec<Step> {
-        dbg!(&self, &goals, &counter);
-
         let mut steps_result: Vec<Step> = Vec::new();
 
         //for each budget create a min step (and optional max step) per corresponding time period
@@ -109,8 +107,6 @@ impl StepBudgets {
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
-                    // TODO 2023-05-31  | Create a function to split steps
-                    //and return them
                     let duration = step_budget.min.unwrap();
 
                     let new_step = NewStep {
@@ -133,7 +129,6 @@ impl StepBudgets {
                 }
             }
         }
-        dbg!(&steps_result);
         steps_result
     }
 }
@@ -280,8 +275,6 @@ mod tests {
                     after_goals: None,
                 },
             ];
-
-            dbg!(&result_steps, &expected_steps);
 
             assert_eq!(result_steps, expected_steps);
             assert_eq!(result_steps[0].duration, expected_steps[0].duration);

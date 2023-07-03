@@ -1,4 +1,4 @@
-mod find_best_slots;
+mod conflicts;
 
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
 use crate::models::goal::{Goal, Tag};
@@ -11,19 +11,17 @@ use crate::models::timeline::Timeline;
 /// step a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible steps.
 pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
-    dbg!(&steps_to_place);
+    log::debug!("{:?}", &steps_to_place);
     //first pass of scheduler while steps are unsplit
     schedule(&mut steps_to_place);
-    dbg!(&steps_to_place);
 
     // TODO 2023-04-29: Fix function adjust_min_budget_steps based on debug feedback check:
     // https://github.com/tijlleenders/ZinZen-scheduler/issues/300#issuecomment-1528727445
 
     adjust_min_budget_step(&mut steps_to_place); //TODO
-    dbg!(&steps_to_place);
 
     schedule(&mut steps_to_place); //TODO
-    dbg!(&steps_to_place);
+    log::debug!("{:?}", &steps_to_place);
 
     PlacedSteps {
         calendar_start: steps_to_place.calendar_start,
@@ -34,7 +32,6 @@ pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
 
 fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
     let mut steps_to_add: Vec<Step> = Vec::new();
-    dbg!(&steps_to_place);
 
     for index in 0..steps_to_place.steps.len() {
         if steps_to_place.steps[index].status == StepStatus::BudgetMinWaitingForAdjustment {
@@ -116,17 +113,15 @@ fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
 fn schedule(steps_to_place: &mut StepsToPlace) {
     loop {
         steps_to_place.sort_on_flexibility();
-        dbg!(&steps_to_place);
+
         let first_step = steps_to_place.steps[0].clone();
-        dbg!(&first_step);
+
         if first_step.status != StepStatus::ReadyToSchedule {
             break;
         }
-        match find_best_slots::find_best_slots(&steps_to_place.steps) {
+        match conflicts::find_best_slots(&steps_to_place.steps) {
             Some(chosen_slots) => {
-                dbg!(&chosen_slots);
                 do_the_scheduling(steps_to_place, chosen_slots);
-                dbg!(&steps_to_place);
             }
             None => break,
         }
@@ -134,7 +129,6 @@ fn schedule(steps_to_place: &mut StepsToPlace) {
 }
 
 fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>) {
-    dbg!(&steps_to_place, &chosen_slots);
     /*
     TODO 2023-06-06 | Debug notes
     - for code `template_step.duration`, expected causing inaccurate duration for steps
@@ -155,7 +149,6 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     template_step.slots.clear();
 
     for slot in chosen_slots.iter() {
-        dbg!(&slot);
         if remaining_hours <= 0 {
             break;
         }
@@ -175,11 +168,8 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
 
     let chosen_slot = chosen_slots[0];
     for step in steps_to_place.steps.iter_mut() {
-        dbg!(&step);
         step.remove_conflicted_slots(chosen_slot.to_owned());
-        dbg!(&step);
     }
-    dbg!(&steps_to_place);
 
     //Todo remove chosen_slots from StepBudgets
     if remaining_hours > 0 {
@@ -192,7 +182,6 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         let _step_scheduled_goal_id = steps_to_place.steps[0].goal_id.clone();
     }
 
-    dbg!(&steps_to_place);
     let _i = 0;
 }
 
@@ -352,7 +341,6 @@ mod tests {
             budget_ids_map: HashMap::new(),
             budget_map: HashMap::new(),
         };
-        dbg!(&step_budgets);
 
         let steps_to_place = StepsToPlace {
             calendar_start: calendar_timing.start,
@@ -360,7 +348,6 @@ mod tests {
             steps,
             step_budgets,
         };
-        dbg!(&steps_to_place);
 
         let expected_steps: Vec<Step> = vec![
             Step::mock_scheduled(
@@ -430,8 +417,6 @@ mod tests {
         ];
 
         let placed_steps = step_placer(steps_to_place);
-        dbg!(&placed_steps);
-        dbg!(&expected_steps);
 
         assert_eq!(expected_steps, placed_steps.steps);
     }

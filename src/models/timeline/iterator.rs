@@ -58,8 +58,6 @@ impl Iterator for TimelineIterator {
     type Item = Vec<Slot>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        dbg!(&self);
-
         if self.timeline.slots.is_empty() {
             return None;
         }
@@ -67,28 +65,21 @@ impl Iterator for TimelineIterator {
         if let Some(first_slot) = self.timeline.slots.first() {
             match self.timeline.slots.take(&first_slot.clone()) {
                 Some(slot) => {
-                    dbg!(&slot);
-
                     let slot_duration = slot.end.signed_duration_since(slot.start);
                     let slot_iterator: SlotIterator;
 
                     // A condition to avoid iteration over slots when inerval > slot duration
-                    dbg!(&self.interval, &slot_duration.num_seconds());
+
                     if self.interval > slot_duration {
                         slot_iterator = SlotIterator::new(slot, slot_duration);
-                        dbg!(&slot_iterator);
                     } else {
                         slot_iterator = SlotIterator::new(slot, self.interval);
-                        dbg!(&slot_iterator);
                     }
 
                     let mut walking_slots: Vec<Slot> = vec![];
                     for slot in slot_iterator {
                         walking_slots.push(slot);
                     }
-                    dbg!(&walking_slots);
-
-                    dbg!(&self);
 
                     Some(walking_slots)
                 }
@@ -115,7 +106,6 @@ mod tests {
         let interval_duration = Duration::days(1);
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Vec<Slot> = vec![
             Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
@@ -124,18 +114,14 @@ mod tests {
             Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
             Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
         ];
-        dbg!(&expected_result);
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
-        dbg!(&timeline, &timeline_iterator);
 
         let mut result: Vec<Slot> = vec![];
 
         for walking_slots in timeline_iterator {
-            dbg!(&walking_slots);
             result.extend(walking_slots);
         }
-        dbg!(&expected_result, &result);
 
         assert_eq!(expected_result, result);
     }
@@ -156,7 +142,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&timeline);
 
         let expected_result: Vec<Slot> = vec![
             Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
@@ -168,18 +153,13 @@ mod tests {
             Slot::mock(Duration::days(1), 2023, 06, 2, 0, 0),
             Slot::mock(Duration::days(1), 2023, 06, 3, 0, 0),
         ];
-        dbg!(&expected_result);
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
-        dbg!(&timeline, &timeline_iterator);
-
         let mut result: Vec<Slot> = vec![];
 
         for walking_slots in timeline_iterator {
-            dbg!(&walking_slots);
             result.extend(walking_slots);
         }
-        dbg!(&expected_result, &result);
 
         assert_eq!(expected_result, result);
     }
@@ -195,7 +175,6 @@ mod tests {
         let interval_duration = Duration::days(1);
 
         let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
-        dbg!(&timeline);
 
         let expected_result: Vec<Slot> = vec![
             Slot::mock(Duration::hours(10), 2023, 05, 1, 0, 0),
@@ -204,23 +183,17 @@ mod tests {
             Slot::mock(Duration::hours(10), 2023, 05, 4, 0, 0),
             Slot::mock(Duration::hours(10), 2023, 05, 5, 0, 0),
         ];
-        dbg!(&expected_result);
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
-        dbg!(&timeline, &timeline_iterator);
 
         let mut result: Vec<Slot> = vec![];
 
         for mut walking_slots in timeline_iterator {
-            dbg!(&walking_slots);
             walking_slots.iter_mut().for_each(|mut slot| {
                 slot.end = slot.end - Duration::hours(14);
             });
-            dbg!(&walking_slots);
-
             result.extend(walking_slots);
         }
-        dbg!(&expected_result, &result);
 
         assert_eq!(expected_result, result);
     }
@@ -246,7 +219,6 @@ mod tests {
             .into_iter()
             .collect(),
         };
-        dbg!(&timeline);
 
         let expected_result: Vec<Slot> = vec![
             Slot::mock(Duration::hours(10), 2023, 05, 1, start_time, 0),
@@ -255,18 +227,14 @@ mod tests {
             Slot::mock(Duration::hours(10), 2023, 05, 4, start_time, 0),
             Slot::mock(Duration::hours(10), 2023, 05, 5, start_time, 0),
         ];
-        dbg!(&expected_result);
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
-        dbg!(&timeline, &timeline_iterator);
 
         let mut result: Vec<Slot> = vec![];
 
         for walking_slots in timeline_iterator {
-            dbg!(&walking_slots);
             result.extend(walking_slots);
         }
-        dbg!(&expected_result, &result);
 
         assert_eq!(expected_result, result);
     }

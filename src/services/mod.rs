@@ -10,5 +10,7 @@ pub mod output;
 pub mod placer;
 /// Preprocessing new Input Goals data to be Steps ready to be placed StepsToPlace
 pub mod preprocess;
+/// Contains functions which splitting Slots, Timelines and Steps
+pub mod splitters;
 /// Generates Steps from Goals, giving each Step their [MECE part](https://en.wikipedia.org/wiki/MECE_principle) of the Goal MaybeSlots Timeline
 pub mod step_generator;
