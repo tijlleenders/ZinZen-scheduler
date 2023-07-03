@@ -6,7 +6,7 @@
             "id": "1",
             "title": "run",
             "min_duration": 1,
-            "repeat": "daily",
+            "repeat": "weekly",
             "filters": {
                 "before_time": 6,
                 "on_days": ["Sat", "Sun"]

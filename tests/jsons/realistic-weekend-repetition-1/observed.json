@@ -94,28 +94,12 @@
           "taskid": 9,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 11,
           "start": "2022-09-04T00:00:00",
-          "deadline": "2022-09-04T05:00:00"
-        },
-        {
-          "taskid": 10,
-          "goalid": "2",
-          "title": "gym",
-          "duration": 2,
-          "start": "2022-09-04T05:00:00",
-          "deadline": "2022-09-04T07:00:00"
-        },
-        {
-          "taskid": 11,
-          "goalid": "free",
-          "title": "free",
-          "duration": 4,
-          "start": "2022-09-04T07:00:00",
           "deadline": "2022-09-04T11:00:00"
         },
         {
-          "taskid": 12,
+          "taskid": 10,
           "goalid": "5",
           "title": "dentist",
           "duration": 1,
@@ -123,27 +107,19 @@
           "deadline": "2022-09-04T12:00:00"
         },
         {
-          "taskid": 13,
-          "goalid": "1",
-          "title": "work",
-          "duration": 6,
+          "taskid": 11,
+          "goalid": "4",
+          "title": "church",
+          "duration": 2,
           "start": "2022-09-04T12:00:00",
-          "deadline": "2022-09-04T18:00:00"
+          "deadline": "2022-09-04T14:00:00"
         },
         {
-          "taskid": 14,
-          "goalid": "3",
-          "title": "walk",
-          "duration": 1,
-          "start": "2022-09-04T18:00:00",
-          "deadline": "2022-09-04T19:00:00"
-        },
-        {
-          "taskid": 15,
+          "taskid": 12,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
-          "start": "2022-09-04T19:00:00",
+          "duration": 10,
+          "start": "2022-09-04T14:00:00",
           "deadline": "2022-09-05T00:00:00"
         }
       ]
@@ -152,7 +128,7 @@
       "day": "2022-09-05",
       "tasks": [
         {
-          "taskid": 16,
+          "taskid": 13,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -165,7 +141,7 @@
       "day": "2022-09-06",
       "tasks": [
         {
-          "taskid": 17,
+          "taskid": 14,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -178,7 +154,7 @@
       "day": "2022-09-07",
       "tasks": [
         {
-          "taskid": 18,
+          "taskid": 15,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -191,7 +167,7 @@
       "day": "2022-09-08",
       "tasks": [
         {
-          "taskid": 19,
+          "taskid": 16,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -204,7 +180,7 @@
       "day": "2022-09-09",
       "tasks": [
         {
-          "taskid": 20,
+          "taskid": 17,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -217,7 +193,7 @@
       "day": "2022-09-10",
       "tasks": [
         {
-          "taskid": 21,
+          "taskid": 18,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -225,7 +201,7 @@
           "deadline": "2022-09-10T05:00:00"
         },
         {
-          "taskid": 22,
+          "taskid": 19,
           "goalid": "2",
           "title": "gym",
           "duration": 2,
@@ -233,7 +209,7 @@
           "deadline": "2022-09-10T07:00:00"
         },
         {
-          "taskid": 23,
+          "taskid": 20,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -241,7 +217,7 @@
           "deadline": "2022-09-10T08:00:00"
         },
         {
-          "taskid": 24,
+          "taskid": 21,
           "goalid": "1",
           "title": "work",
           "duration": 6,
@@ -249,7 +225,7 @@
           "deadline": "2022-09-10T14:00:00"
         },
         {
-          "taskid": 25,
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -257,7 +233,7 @@
           "deadline": "2022-09-10T17:00:00"
         },
         {
-          "taskid": 26,
+          "taskid": 23,
           "goalid": "3",
           "title": "walk",
           "duration": 1,
@@ -265,7 +241,7 @@
           "deadline": "2022-09-10T18:00:00"
         },
         {
-          "taskid": 27,
+          "taskid": 24,
           "goalid": "free",
           "title": "free",
           "duration": 6,
@@ -278,51 +254,27 @@
       "day": "2022-09-11",
       "tasks": [
         {
-          "taskid": 28,
+          "taskid": 25,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 10,
           "start": "2022-09-11T00:00:00",
-          "deadline": "2022-09-11T05:00:00"
+          "deadline": "2022-09-11T10:00:00"
         },
         {
-          "taskid": 29,
-          "goalid": "2",
-          "title": "gym",
+          "taskid": 26,
+          "goalid": "4",
+          "title": "church",
           "duration": 2,
-          "start": "2022-09-11T05:00:00",
-          "deadline": "2022-09-11T07:00:00"
+          "start": "2022-09-11T10:00:00",
+          "deadline": "2022-09-11T12:00:00"
         },
         {
-          "taskid": 30,
+          "taskid": 27,
           "goalid": "free",
           "title": "free",
-          "duration": 4,
-          "start": "2022-09-11T07:00:00",
-          "deadline": "2022-09-11T11:00:00"
-        },
-        {
-          "taskid": 31,
-          "goalid": "1",
-          "title": "work",
-          "duration": 6,
-          "start": "2022-09-11T11:00:00",
-          "deadline": "2022-09-11T17:00:00"
-        },
-        {
-          "taskid": 32,
-          "goalid": "3",
-          "title": "walk",
-          "duration": 1,
-          "start": "2022-09-11T17:00:00",
-          "deadline": "2022-09-11T18:00:00"
-        },
-        {
-          "taskid": 33,
-          "goalid": "free",
-          "title": "free",
-          "duration": 6,
-          "start": "2022-09-11T18:00:00",
+          "duration": 12,
+          "start": "2022-09-11T12:00:00",
           "deadline": "2022-09-12T00:00:00"
         }
       ]
@@ -331,7 +283,7 @@
       "day": "2022-09-12",
       "tasks": [
         {
-          "taskid": 34,
+          "taskid": 28,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -344,7 +296,7 @@
       "day": "2022-09-13",
       "tasks": [
         {
-          "taskid": 35,
+          "taskid": 29,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -357,7 +309,7 @@
       "day": "2022-09-14",
       "tasks": [
         {
-          "taskid": 36,
+          "taskid": 30,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -370,7 +322,7 @@
       "day": "2022-09-15",
       "tasks": [
         {
-          "taskid": 37,
+          "taskid": 31,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -383,7 +335,7 @@
       "day": "2022-09-16",
       "tasks": [
         {
-          "taskid": 38,
+          "taskid": 32,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -396,7 +348,7 @@
       "day": "2022-09-17",
       "tasks": [
         {
-          "taskid": 39,
+          "taskid": 33,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -404,7 +356,7 @@
           "deadline": "2022-09-17T05:00:00"
         },
         {
-          "taskid": 40,
+          "taskid": 34,
           "goalid": "2",
           "title": "gym",
           "duration": 2,
@@ -412,7 +364,7 @@
           "deadline": "2022-09-17T07:00:00"
         },
         {
-          "taskid": 41,
+          "taskid": 35,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -420,7 +372,7 @@
           "deadline": "2022-09-17T08:00:00"
         },
         {
-          "taskid": 42,
+          "taskid": 36,
           "goalid": "1",
           "title": "work",
           "duration": 6,
@@ -428,7 +380,7 @@
           "deadline": "2022-09-17T14:00:00"
         },
         {
-          "taskid": 43,
+          "taskid": 37,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -436,7 +388,7 @@
           "deadline": "2022-09-17T17:00:00"
         },
         {
-          "taskid": 44,
+          "taskid": 38,
           "goalid": "3",
           "title": "walk",
           "duration": 1,
@@ -444,7 +396,7 @@
           "deadline": "2022-09-17T18:00:00"
         },
         {
-          "taskid": 45,
+          "taskid": 39,
           "goalid": "free",
           "title": "free",
           "duration": 6,
@@ -457,51 +409,27 @@
       "day": "2022-09-18",
       "tasks": [
         {
-          "taskid": 46,
+          "taskid": 40,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 10,
           "start": "2022-09-18T00:00:00",
-          "deadline": "2022-09-18T05:00:00"
+          "deadline": "2022-09-18T10:00:00"
         },
         {
-          "taskid": 47,
-          "goalid": "2",
-          "title": "gym",
+          "taskid": 41,
+          "goalid": "4",
+          "title": "church",
           "duration": 2,
-          "start": "2022-09-18T05:00:00",
-          "deadline": "2022-09-18T07:00:00"
+          "start": "2022-09-18T10:00:00",
+          "deadline": "2022-09-18T12:00:00"
         },
         {
-          "taskid": 48,
+          "taskid": 42,
           "goalid": "free",
           "title": "free",
-          "duration": 4,
-          "start": "2022-09-18T07:00:00",
-          "deadline": "2022-09-18T11:00:00"
-        },
-        {
-          "taskid": 49,
-          "goalid": "1",
-          "title": "work",
-          "duration": 6,
-          "start": "2022-09-18T11:00:00",
-          "deadline": "2022-09-18T17:00:00"
-        },
-        {
-          "taskid": 50,
-          "goalid": "3",
-          "title": "walk",
-          "duration": 1,
-          "start": "2022-09-18T17:00:00",
-          "deadline": "2022-09-18T18:00:00"
-        },
-        {
-          "taskid": 51,
-          "goalid": "free",
-          "title": "free",
-          "duration": 6,
-          "start": "2022-09-18T18:00:00",
+          "duration": 12,
+          "start": "2022-09-18T12:00:00",
           "deadline": "2022-09-19T00:00:00"
         }
       ]
@@ -510,7 +438,7 @@
       "day": "2022-09-19",
       "tasks": [
         {
-          "taskid": 52,
+          "taskid": 43,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -523,7 +451,7 @@
       "day": "2022-09-20",
       "tasks": [
         {
-          "taskid": 53,
+          "taskid": 44,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -536,7 +464,7 @@
       "day": "2022-09-21",
       "tasks": [
         {
-          "taskid": 54,
+          "taskid": 45,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -549,7 +477,7 @@
       "day": "2022-09-22",
       "tasks": [
         {
-          "taskid": 55,
+          "taskid": 46,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -562,7 +490,7 @@
       "day": "2022-09-23",
       "tasks": [
         {
-          "taskid": 56,
+          "taskid": 47,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -575,7 +503,7 @@
       "day": "2022-09-24",
       "tasks": [
         {
-          "taskid": 57,
+          "taskid": 48,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -583,7 +511,7 @@
           "deadline": "2022-09-24T05:00:00"
         },
         {
-          "taskid": 58,
+          "taskid": 49,
           "goalid": "2",
           "title": "gym",
           "duration": 2,
@@ -591,7 +519,7 @@
           "deadline": "2022-09-24T07:00:00"
         },
         {
-          "taskid": 59,
+          "taskid": 50,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -599,7 +527,7 @@
           "deadline": "2022-09-24T08:00:00"
         },
         {
-          "taskid": 60,
+          "taskid": 51,
           "goalid": "1",
           "title": "work",
           "duration": 6,
@@ -607,7 +535,7 @@
           "deadline": "2022-09-24T14:00:00"
         },
         {
-          "taskid": 61,
+          "taskid": 52,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -615,7 +543,7 @@
           "deadline": "2022-09-24T17:00:00"
         },
         {
-          "taskid": 62,
+          "taskid": 53,
           "goalid": "3",
           "title": "walk",
           "duration": 1,
@@ -623,7 +551,7 @@
           "deadline": "2022-09-24T18:00:00"
         },
         {
-          "taskid": 63,
+          "taskid": 54,
           "goalid": "free",
           "title": "free",
           "duration": 6,
@@ -636,51 +564,27 @@
       "day": "2022-09-25",
       "tasks": [
         {
-          "taskid": 64,
+          "taskid": 55,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 10,
           "start": "2022-09-25T00:00:00",
-          "deadline": "2022-09-25T05:00:00"
+          "deadline": "2022-09-25T10:00:00"
         },
         {
-          "taskid": 65,
-          "goalid": "2",
-          "title": "gym",
+          "taskid": 56,
+          "goalid": "4",
+          "title": "church",
           "duration": 2,
-          "start": "2022-09-25T05:00:00",
-          "deadline": "2022-09-25T07:00:00"
+          "start": "2022-09-25T10:00:00",
+          "deadline": "2022-09-25T12:00:00"
         },
         {
-          "taskid": 66,
+          "taskid": 57,
           "goalid": "free",
           "title": "free",
-          "duration": 4,
-          "start": "2022-09-25T07:00:00",
-          "deadline": "2022-09-25T11:00:00"
-        },
-        {
-          "taskid": 67,
-          "goalid": "1",
-          "title": "work",
-          "duration": 6,
-          "start": "2022-09-25T11:00:00",
-          "deadline": "2022-09-25T17:00:00"
-        },
-        {
-          "taskid": 68,
-          "goalid": "3",
-          "title": "walk",
-          "duration": 1,
-          "start": "2022-09-25T17:00:00",
-          "deadline": "2022-09-25T18:00:00"
-        },
-        {
-          "taskid": 69,
-          "goalid": "free",
-          "title": "free",
-          "duration": 6,
-          "start": "2022-09-25T18:00:00",
+          "duration": 12,
+          "start": "2022-09-25T12:00:00",
           "deadline": "2022-09-26T00:00:00"
         }
       ]
@@ -689,7 +593,7 @@
       "day": "2022-09-26",
       "tasks": [
         {
-          "taskid": 70,
+          "taskid": 58,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -702,7 +606,7 @@
       "day": "2022-09-27",
       "tasks": [
         {
-          "taskid": 71,
+          "taskid": 59,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -715,7 +619,7 @@
       "day": "2022-09-28",
       "tasks": [
         {
-          "taskid": 72,
+          "taskid": 60,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -728,7 +632,7 @@
       "day": "2022-09-29",
       "tasks": [
         {
-          "taskid": 73,
+          "taskid": 61,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -741,7 +645,7 @@
       "day": "2022-09-30",
       "tasks": [
         {
-          "taskid": 74,
+          "taskid": 62,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -754,40 +658,7 @@
   "impossible": [
     {
       "day": "2022-09-01",
-      "tasks": [
-        {
-          "taskid": 75,
-          "goalid": "4",
-          "title": "church",
-          "duration": 2,
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-10-01T00:00:00"
-        },
-        {
-          "taskid": 76,
-          "goalid": "4",
-          "title": "church",
-          "duration": 2,
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-10-01T00:00:00"
-        },
-        {
-          "taskid": 77,
-          "goalid": "4",
-          "title": "church",
-          "duration": 2,
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-10-01T00:00:00"
-        },
-        {
-          "taskid": 78,
-          "goalid": "4",
-          "title": "church",
-          "duration": 2,
-          "start": "2022-09-01T00:00:00",
-          "deadline": "2022-10-01T00:00:00"
-        }
-      ]
+      "tasks": []
     },
     {
       "day": "2022-09-02",
