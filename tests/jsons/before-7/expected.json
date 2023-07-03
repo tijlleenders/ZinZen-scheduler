@@ -22,27 +22,18 @@
         {
             "day": "2022-10-02",
             "tasks": [{
-                    "taskid": 2,
-                    "goalid": "1",
-                    "title": "run",
-                    "duration": 1,
-                    "start": "2022-10-02T00:00:00",
-                    "deadline": "2022-10-02T01:00:00"
-                },
-                {
-                    "taskid": 3,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 23,
-                    "start": "2022-10-02T01:00:00",
-                    "deadline": "2022-10-03T00:00:00"
-                }
-            ]
+                "taskid": 2,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-10-02T00:00:00",
+                "deadline": "2022-10-03T00:00:00"
+            }]
         },
         {
             "day": "2022-10-03",
             "tasks": [{
-                "taskid": 4,
+                "taskid": 3,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -53,7 +44,7 @@
         {
             "day": "2022-10-04",
             "tasks": [{
-                "taskid": 5,
+                "taskid": 4,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -64,7 +55,7 @@
         {
             "day": "2022-10-05",
             "tasks": [{
-                "taskid": 6,
+                "taskid": 5,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -75,7 +66,7 @@
         {
             "day": "2022-10-06",
             "tasks": [{
-                "taskid": 7,
+                "taskid": 6,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -86,7 +77,7 @@
         {
             "day": "2022-10-07",
             "tasks": [{
-                "taskid": 8,
+                "taskid": 7,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -97,7 +88,7 @@
         {
             "day": "2022-10-08",
             "tasks": [{
-                    "taskid": 9,
+                    "taskid": 8,
                     "goalid": "1",
                     "title": "run",
                     "duration": 1,
@@ -105,7 +96,7 @@
                     "deadline": "2022-10-08T01:00:00"
                 },
                 {
-                    "taskid": 10,
+                    "taskid": 9,
                     "goalid": "free",
                     "title": "free",
                     "duration": 23,
@@ -117,27 +108,18 @@
         {
             "day": "2022-10-09",
             "tasks": [{
-                    "taskid": 11,
-                    "goalid": "1",
-                    "title": "run",
-                    "duration": 1,
-                    "start": "2022-10-09T00:00:00",
-                    "deadline": "2022-10-09T01:00:00"
-                },
-                {
-                    "taskid": 12,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 23,
-                    "start": "2022-10-09T01:00:00",
-                    "deadline": "2022-10-10T00:00:00"
-                }
-            ]
+                "taskid": 10,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-10-09T00:00:00",
+                "deadline": "2022-10-10T00:00:00"
+            }]
         },
         {
             "day": "2022-10-10",
             "tasks": [{
-                "taskid": 13,
+                "taskid": 11,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -148,7 +130,7 @@
         {
             "day": "2022-10-11",
             "tasks": [{
-                "taskid": 14,
+                "taskid": 12,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -159,7 +141,7 @@
         {
             "day": "2022-10-12",
             "tasks": [{
-                "taskid": 15,
+                "taskid": 13,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -170,7 +152,7 @@
         {
             "day": "2022-10-13",
             "tasks": [{
-                "taskid": 16,
+                "taskid": 14,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -181,7 +163,7 @@
         {
             "day": "2022-10-14",
             "tasks": [{
-                "taskid": 17,
+                "taskid": 15,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -192,7 +174,7 @@
         {
             "day": "2022-10-15",
             "tasks": [{
-                    "taskid": 18,
+                    "taskid": 16,
                     "goalid": "1",
                     "title": "run",
                     "duration": 1,
@@ -200,7 +182,7 @@
                     "deadline": "2022-10-15T01:00:00"
                 },
                 {
-                    "taskid": 19,
+                    "taskid": 17,
                     "goalid": "free",
                     "title": "free",
                     "duration": 23,
@@ -212,27 +194,18 @@
         {
             "day": "2022-10-16",
             "tasks": [{
-                    "taskid": 20,
-                    "goalid": "1",
-                    "title": "run",
-                    "duration": 1,
-                    "start": "2022-10-16T00:00:00",
-                    "deadline": "2022-10-16T01:00:00"
-                },
-                {
-                    "taskid": 21,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 23,
-                    "start": "2022-10-16T01:00:00",
-                    "deadline": "2022-10-17T00:00:00"
-                }
-            ]
+                "taskid": 18,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-10-16T00:00:00",
+                "deadline": "2022-10-17T00:00:00"
+            }]
         },
         {
             "day": "2022-10-17",
             "tasks": [{
-                "taskid": 22,
+                "taskid": 19,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -243,7 +216,7 @@
         {
             "day": "2022-10-18",
             "tasks": [{
-                "taskid": 23,
+                "taskid": 20,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -254,7 +227,7 @@
         {
             "day": "2022-10-19",
             "tasks": [{
-                "taskid": 24,
+                "taskid": 21,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -265,7 +238,7 @@
         {
             "day": "2022-10-20",
             "tasks": [{
-                "taskid": 25,
+                "taskid": 22,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -276,7 +249,7 @@
         {
             "day": "2022-10-21",
             "tasks": [{
-                "taskid": 26,
+                "taskid": 23,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -287,7 +260,7 @@
         {
             "day": "2022-10-22",
             "tasks": [{
-                    "taskid": 27,
+                    "taskid": 24,
                     "goalid": "1",
                     "title": "run",
                     "duration": 1,
@@ -295,7 +268,7 @@
                     "deadline": "2022-10-22T01:00:00"
                 },
                 {
-                    "taskid": 28,
+                    "taskid": 25,
                     "goalid": "free",
                     "title": "free",
                     "duration": 23,
@@ -307,27 +280,18 @@
         {
             "day": "2022-10-23",
             "tasks": [{
-                    "taskid": 29,
-                    "goalid": "1",
-                    "title": "run",
-                    "duration": 1,
-                    "start": "2022-10-23T00:00:00",
-                    "deadline": "2022-10-23T01:00:00"
-                },
-                {
-                    "taskid": 30,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 23,
-                    "start": "2022-10-23T01:00:00",
-                    "deadline": "2022-10-24T00:00:00"
-                }
-            ]
+                "taskid": 26,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-10-23T00:00:00",
+                "deadline": "2022-10-24T00:00:00"
+            }]
         },
         {
             "day": "2022-10-24",
             "tasks": [{
-                "taskid": 31,
+                "taskid": 27,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -338,7 +302,7 @@
         {
             "day": "2022-10-25",
             "tasks": [{
-                "taskid": 32,
+                "taskid": 28,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -349,7 +313,7 @@
         {
             "day": "2022-10-26",
             "tasks": [{
-                "taskid": 33,
+                "taskid": 29,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -360,7 +324,7 @@
         {
             "day": "2022-10-27",
             "tasks": [{
-                "taskid": 34,
+                "taskid": 30,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -371,7 +335,7 @@
         {
             "day": "2022-10-28",
             "tasks": [{
-                "taskid": 35,
+                "taskid": 31,
                 "goalid": "free",
                 "title": "free",
                 "duration": 24,
@@ -382,7 +346,7 @@
         {
             "day": "2022-10-29",
             "tasks": [{
-                    "taskid": 36,
+                    "taskid": 32,
                     "goalid": "1",
                     "title": "run",
                     "duration": 1,
@@ -390,7 +354,7 @@
                     "deadline": "2022-10-29T01:00:00"
                 },
                 {
-                    "taskid": 37,
+                    "taskid": 33,
                     "goalid": "free",
                     "title": "free",
                     "duration": 23,
@@ -402,22 +366,13 @@
         {
             "day": "2022-10-30",
             "tasks": [{
-                    "taskid": 38,
-                    "goalid": "1",
-                    "title": "run",
-                    "duration": 1,
-                    "start": "2022-10-30T00:00:00",
-                    "deadline": "2022-10-30T01:00:00"
-                },
-                {
-                    "taskid": 39,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 23,
-                    "start": "2022-10-30T01:00:00",
-                    "deadline": "2022-10-31T00:00:00"
-                }
-            ]
+                "taskid": 34,
+                "goalid": "free",
+                "title": "free",
+                "duration": 24,
+                "start": "2022-10-30T00:00:00",
+                "deadline": "2022-10-31T00:00:00"
+            }]
         }
     ],
     "impossible": [{
