@@ -418,6 +418,58 @@
           "deadline": "2022-11-01T00:00:00"
         }
       ]
+    },
+    {
+      "day": "2022-11-01",
+      "tasks": [
+        {
+          "taskid": 33,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-11-01T00:00:00",
+          "deadline": "2022-11-02T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-02",
+      "tasks": [
+        {
+          "taskid": 34,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-11-02T00:00:00",
+          "deadline": "2022-11-03T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-03",
+      "tasks": [
+        {
+          "taskid": 35,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-11-03T00:00:00",
+          "deadline": "2022-11-04T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-04",
+      "tasks": [
+        {
+          "taskid": 36,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2022-11-04T00:00:00",
+          "deadline": "2022-11-05T00:00:00"
+        }
+      ]
     }
   ],
   "impossible": [
@@ -543,6 +595,22 @@
     },
     {
       "day": "2022-10-31",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-01",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-02",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-03",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-04",
       "tasks": []
     }
   ]

@@ -898,6 +898,122 @@
           "deadline": "2022-11-01T00:00:00"
         }
       ]
+    },
+    {
+      "day": "2022-11-01",
+      "tasks": [
+        {
+          "taskid": 93,
+          "goalid": "1",
+          "title": "work",
+          "duration": 5,
+          "start": "2022-11-01T00:00:00",
+          "deadline": "2022-11-01T05:00:00"
+        },
+        {
+          "taskid": 94,
+          "goalid": "2",
+          "title": "learn rust",
+          "duration": 2,
+          "start": "2022-11-01T05:00:00",
+          "deadline": "2022-11-01T07:00:00"
+        },
+        {
+          "taskid": 95,
+          "goalid": "free",
+          "title": "free",
+          "duration": 17,
+          "start": "2022-11-01T07:00:00",
+          "deadline": "2022-11-02T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-02",
+      "tasks": [
+        {
+          "taskid": 96,
+          "goalid": "1",
+          "title": "work",
+          "duration": 5,
+          "start": "2022-11-02T00:00:00",
+          "deadline": "2022-11-02T05:00:00"
+        },
+        {
+          "taskid": 97,
+          "goalid": "2",
+          "title": "learn rust",
+          "duration": 2,
+          "start": "2022-11-02T05:00:00",
+          "deadline": "2022-11-02T07:00:00"
+        },
+        {
+          "taskid": 98,
+          "goalid": "free",
+          "title": "free",
+          "duration": 17,
+          "start": "2022-11-02T07:00:00",
+          "deadline": "2022-11-03T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-03",
+      "tasks": [
+        {
+          "taskid": 99,
+          "goalid": "1",
+          "title": "work",
+          "duration": 5,
+          "start": "2022-11-03T00:00:00",
+          "deadline": "2022-11-03T05:00:00"
+        },
+        {
+          "taskid": 100,
+          "goalid": "2",
+          "title": "learn rust",
+          "duration": 2,
+          "start": "2022-11-03T05:00:00",
+          "deadline": "2022-11-03T07:00:00"
+        },
+        {
+          "taskid": 101,
+          "goalid": "free",
+          "title": "free",
+          "duration": 17,
+          "start": "2022-11-03T07:00:00",
+          "deadline": "2022-11-04T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-11-04",
+      "tasks": [
+        {
+          "taskid": 102,
+          "goalid": "1",
+          "title": "work",
+          "duration": 5,
+          "start": "2022-11-04T00:00:00",
+          "deadline": "2022-11-04T05:00:00"
+        },
+        {
+          "taskid": 103,
+          "goalid": "2",
+          "title": "learn rust",
+          "duration": 2,
+          "start": "2022-11-04T05:00:00",
+          "deadline": "2022-11-04T07:00:00"
+        },
+        {
+          "taskid": 104,
+          "goalid": "free",
+          "title": "free",
+          "duration": 17,
+          "start": "2022-11-04T07:00:00",
+          "deadline": "2022-11-05T00:00:00"
+        }
+      ]
     }
   ],
   "impossible": [
@@ -1023,6 +1139,22 @@
     },
     {
       "day": "2022-10-31",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-01",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-02",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-03",
+      "tasks": []
+    },
+    {
+      "day": "2022-11-04",
       "tasks": []
     }
   ]
