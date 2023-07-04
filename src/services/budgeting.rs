@@ -19,18 +19,8 @@ impl StepBudgets {
             panic!("expected goals for making StepBudgets");
         }
 
-        let mut goals_to_mark_as_budget: Vec<String> = Vec::new();
-        for (goal_id, goal) in goals.iter() {
-            //Collect budgets per goal
-            if goal.budgets.is_some() {
-                self.insert_goal(goal);
-                goals_to_mark_as_budget.push(goal_id.clone());
-            }
-        }
-        for goal_id in goals_to_mark_as_budget {
-            goals.get_mut(&goal_id).unwrap().tags.push(Tag::Budget);
-        }
-        //For each budget add all descendants
+        tag_budgeted_goals(goals);
+        self.insert_budgeted_goals(goals);
         self.add_descendants(goals);
 
         dbg!(&self);
@@ -41,6 +31,15 @@ impl StepBudgets {
             dbg!(&budget.slot_budgets.len());
         }
         dbg!(&self);
+    }
+
+    /// Insert budgeted goals into given StepBudgets
+    fn insert_budgeted_goals(&mut self, goals: &GoalsMap) {
+        // TODO 2023-07-04: create unit tests
+        goals
+            .iter()
+            .filter(|(_, goal)| goal.budgets.is_some())
+            .for_each(|(_, goal)| self.insert_goal(goal));
     }
 
     /// For each budget add all descendants
@@ -150,7 +149,17 @@ impl StepBudgets {
     }
 }
 
-// test
+/// Tag budgeted goals with Tag::Budget
+fn tag_budgeted_goals(goals: &mut GoalsMap) {
+    goals
+        .iter_mut()
+        .filter(|(_, goal)| goal.budgets.is_some())
+        .fold((), |_, (_, goal)| {
+            goal.tags.push(Tag::Budget);
+            ()
+        });
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -313,6 +322,43 @@ mod tests {
             assert_eq!(result_steps[4].duration, expected_steps[4].duration);
             assert_eq!(result_steps[4].status, expected_steps[4].status);
             assert_eq!(result_steps[4].tags, expected_steps[4].tags);
+        }
+    }
+
+    mod goals_map {
+        use crate::{
+            models::{
+                budget::{Budget, BudgetType},
+                goal::{Goal, GoalsMap, Tag},
+                slot::Slot,
+            },
+            services::budgeting::tag_budgeted_goals,
+        };
+
+        #[test]
+        fn test_tag_budgeted_goals() {
+            let mut goals: GoalsMap = GoalsMap::new();
+
+            // Create budgeted goal and insert to goals
+            let mut budgeted_goal = Goal::mock("1", "test goal", Slot::mock_sample());
+            let budget = Budget {
+                budget_type: BudgetType::Daily,
+                min: Some(5),
+                max: Some(10),
+            };
+            budgeted_goal.budgets = Some(vec![budget]);
+            goals.insert(budgeted_goal.id.clone(), budgeted_goal.clone());
+
+            // Create goal with no budgets and insert to goals
+            let goal = Goal::mock("2", "test goal 2", Slot::mock_sample());
+            goals.insert(goal.id.clone(), goal.clone());
+
+            tag_budgeted_goals(&mut goals);
+            let result_budgeted_goal = goals.get(&budgeted_goal.id).unwrap();
+            assert!(result_budgeted_goal.tags.contains(&Tag::Budget));
+
+            let result_normal_goal = goals.get(&goal.id).unwrap();
+            assert!(!result_normal_goal.tags.contains(&Tag::Budget));
         }
     }
 }
