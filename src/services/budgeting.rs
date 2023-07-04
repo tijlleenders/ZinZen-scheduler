@@ -1,17 +1,14 @@
-use std::collections::BTreeMap;
-
-use chrono::NaiveDateTime;
-
 use crate::models::{
     budget::StepBudgets,
-    goal::{Goal, Tag},
+    goal::{Goal, GoalsMap, Tag},
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
     step::{NewStep, Step, StepStatus},
 };
+use chrono::NaiveDateTime;
 
 impl StepBudgets {
-    pub fn configure_budgets(&mut self, goals: &mut BTreeMap<String, Goal>) {
+    pub fn configure_budgets(&mut self, goals: &mut GoalsMap) {
         // Todo: create a shadow steps per budget period that have a tag so the won't be handled by initial call to schedule
         // Once all Steps are scheduled, if a minimum budget per period is not reached,
         // give the step a duration to get to the minimum per period, remove don't schedule tag, mark ready to schedule and schedule
@@ -23,17 +20,32 @@ impl StepBudgets {
         }
 
         let mut goals_to_mark_as_budget: Vec<String> = Vec::new();
-        for goal in goals.iter() {
+        for (goal_id, goal) in goals.iter() {
             //Collect budgets per goal
-            if goal.1.budgets.is_some() {
-                self.add(goal.1);
-                goals_to_mark_as_budget.push(goal.0.clone());
+            if goal.budgets.is_some() {
+                self.add(goal);
+                goals_to_mark_as_budget.push(goal_id.clone());
             }
         }
         for goal_id in goals_to_mark_as_budget {
             goals.get_mut(&goal_id).unwrap().tags.push(Tag::Budget);
         }
         //For each budget add all descendants
+        self.add_descendants(goals);
+
+        dbg!(&self);
+        for budget in self.budget_map.values_mut() {
+            dbg!(&budget);
+            budget.initialize(self.calendar_start, self.calendar_end);
+            dbg!(&budget);
+            dbg!(&budget.slot_budgets.len());
+        }
+        dbg!(&self);
+    }
+
+    /// For each budget add all descendants
+    fn add_descendants(&mut self, goals: &GoalsMap) {
+        // TODO 2023-07-04: create unit tests
         for (goal_id, _) in &self.budget_map {
             let mut parents_to_go: Vec<String> = vec![goal_id.clone()]; //start with the goal that initiates the budget
             self.budget_ids_map
@@ -54,9 +66,6 @@ impl StepBudgets {
                 }
                 parents_to_go.remove(0);
             }
-        }
-        for budget in self.budget_map.values_mut() {
-            budget.initialize(self.calendar_start, self.calendar_end);
         }
     }
 
@@ -86,24 +95,31 @@ impl StepBudgets {
     }
 
     /// Generate Steps only for goals which have budgets
-    pub fn generate_steps(
-        &mut self,
-        goals: &mut BTreeMap<String, Goal>,
-        counter: &mut usize,
-    ) -> Vec<Step> {
+    pub fn generate_steps(&mut self, goals: &mut GoalsMap, counter: &mut usize) -> Vec<Step> {
+        dbg!("=====================");
+        dbg!("pub fn generate_steps");
+        dbg!(&self);
+
         let mut steps_result: Vec<Step> = Vec::new();
 
         //for each budget create a min step (and optional max step) per corresponding time period
         for (goal_id, step_budget) in &self.budget_map {
+            dbg!(&goal_id, &step_budget);
             let goal = goals.get(goal_id).unwrap();
+            dbg!(&goal);
 
             let start: NaiveDateTime = goal.start.unwrap();
             let deadline: NaiveDateTime = goal.deadline.unwrap();
 
+            /*
+            TODO 2023-07-4: Found issue that goal.repeat doesn't consider budget_type, which means will not repeat based on budget_type
+            - Related to PR https://github.com/tijlleenders/ZinZen-scheduler/pull/358
+            */
             let time_slots_iterator =
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
+                dbg!(&timeline);
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
@@ -128,6 +144,7 @@ impl StepBudgets {
                     panic!("No timeline slots found")
                 }
             }
+            dbg!(&steps_result);
         }
         steps_result
     }

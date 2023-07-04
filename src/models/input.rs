@@ -1,9 +1,8 @@
+use super::goal::GoalsMap;
 use crate::models::budget::StepBudgets;
-use crate::models::goal::Goal;
 use crate::models::step::Step;
 use chrono::prelude::*;
 use serde::Deserialize;
-use std::collections::BTreeMap;
 
 /// The front end gets a Calendar by passing a JSON data into the scheduler, via an Input object.
 /// It has the requested calendar start and end, and a collection of goals that the scheduler needs to schedule.
@@ -15,7 +14,7 @@ pub struct Input {
     pub calendar_start: NaiveDateTime,
     #[serde(rename = "endDate")]
     pub calendar_end: NaiveDateTime,
-    pub goals: BTreeMap<String, Goal>,
+    pub goals: GoalsMap,
 }
 
 #[derive(Debug, Deserialize)]
