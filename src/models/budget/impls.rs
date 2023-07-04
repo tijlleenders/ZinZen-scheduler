@@ -63,7 +63,8 @@ impl StepBudgets {
         }
     }
 
-    pub fn add(&mut self, goal: &Goal) {
+    /// Insert new Goal to the StepBudgets
+    pub fn insert_goal(&mut self, goal: &Goal) {
         for budget in goal.budgets.clone().unwrap() {
             let budget = StepBudget {
                 step_budget_type: budget.budget_type.clone(),
@@ -98,7 +99,7 @@ mod tests {
         let end_date = timeframe.end;
 
         step_budget.initialize(start_date, end_date);
-
+        dbg!(&step_budget);
         assert_eq!(step_budget.slot_budgets.len(), 5);
         for slot_budget in step_budget.slot_budgets.iter() {
             assert_eq!(slot_budget.used, 0);

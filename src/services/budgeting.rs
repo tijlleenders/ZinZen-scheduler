@@ -23,7 +23,7 @@ impl StepBudgets {
         for (goal_id, goal) in goals.iter() {
             //Collect budgets per goal
             if goal.budgets.is_some() {
-                self.add(goal);
+                self.insert_goal(goal);
                 goals_to_mark_as_budget.push(goal_id.clone());
             }
         }
