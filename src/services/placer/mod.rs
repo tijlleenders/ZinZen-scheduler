@@ -149,7 +149,7 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     template_step.slots.clear();
 
     for slot in chosen_slots.iter() {
-        if remaining_hours <= 0 {
+        if remaining_hours == 0 {
             break;
         }
 
@@ -181,8 +181,6 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         // TODO 2023-06-06  | apply function Step::remove_from_blocked_by when it is developed
         let _step_scheduled_goal_id = steps_to_place.steps[0].goal_id.clone();
     }
-
-    let _i = 0;
 }
 
 #[cfg(test)]

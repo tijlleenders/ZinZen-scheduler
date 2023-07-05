@@ -24,20 +24,11 @@ impl StepBudgets {
         self.insert_budgeted_goals(goals);
         self.add_descendants(goals);
 
-        dbg!(&self);
         for budget in self.budget_map.values_mut() {
-            dbg!(&budget);
             budget.initialize(self.calendar_start, self.calendar_end);
-            dbg!(&budget);
-            dbg!(&budget.slot_budgets.len());
         }
-        dbg!(&self);
 
-        dbg!(&goals);
-        configure_goals_repeatance(goals, Some(&self));
-        dbg!(&goals);
-
-        let _i: bool;
+        configure_goals_repeatance(goals, Some(self));
     }
 
     /// Insert budgeted goals into given StepBudgets
@@ -52,7 +43,7 @@ impl StepBudgets {
     /// For each budget add all descendants
     fn add_descendants(&mut self, goals: &GoalsMap) {
         // TODO 2023-07-04: create unit tests
-        for (goal_id, _) in &self.budget_map {
+        for goal_id in self.budget_map.keys() {
             let mut parents_to_go: Vec<String> = vec![goal_id.clone()]; //start with the goal that initiates the budget
             self.budget_ids_map
                 .insert(goal_id.clone(), vec![goal_id.clone()]); //add itself for when budget filler min-max need to be checked with budget
@@ -102,17 +93,11 @@ impl StepBudgets {
 
     /// Generate Steps only for goals which have budgets
     pub fn generate_steps(&mut self, goals: &mut GoalsMap, counter: &mut usize) -> Vec<Step> {
-        dbg!("=====================");
-        dbg!("pub fn generate_steps");
-        dbg!(&self);
-
         let mut steps_result: Vec<Step> = Vec::new();
 
         //for each budget create a min step (and optional max step) per corresponding time period
         for (goal_id, step_budget) in &self.budget_map {
-            dbg!(&goal_id, &step_budget);
             let goal = goals.get(goal_id).unwrap();
-            dbg!(&goal);
 
             let start: NaiveDateTime = goal.start.unwrap();
             let deadline: NaiveDateTime = goal.deadline.unwrap();
@@ -125,7 +110,6 @@ impl StepBudgets {
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
-                dbg!(&timeline);
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
@@ -150,7 +134,6 @@ impl StepBudgets {
                     panic!("No timeline slots found")
                 }
             }
-            dbg!(&steps_result);
         }
         steps_result
     }
@@ -164,7 +147,7 @@ fn configure_goals_repeatance(goals: &mut GoalsMap, step_budgets: Option<&StepBu
             goal.configure_repeatance(Some(step_budget));
         })
     } else {
-        goals.iter_mut().for_each(|(goal_id, goal)| {
+        goals.iter_mut().for_each(|(_, goal)| {
             goal.configure_repeatance(None);
         })
     }
@@ -177,7 +160,6 @@ fn tag_budgeted_goals(goals: &mut GoalsMap) {
         .filter(|(_, goal)| goal.budgets.is_some())
         .fold((), |_, (_, goal)| {
             goal.tags.push(Tag::Budget);
-            ()
         });
 }
 
@@ -227,9 +209,6 @@ impl Goal {
                 } else {
                     goal.repeat = Some(Repetition::Weekly(repeatance));
                 }
-            } else {
-                // if no goal.budgets, just do nothing
-                return;
             }
         }
     }

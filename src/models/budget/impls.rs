@@ -99,7 +99,7 @@ mod tests {
         let end_date = timeframe.end;
 
         step_budget.initialize(start_date, end_date);
-        dbg!(&step_budget);
+
         assert_eq!(step_budget.slot_budgets.len(), 5);
         for slot_budget in step_budget.slot_budgets.iter() {
             assert_eq!(slot_budget.used, 0);

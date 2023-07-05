@@ -33,13 +33,10 @@ impl Step {
         let mut new_step = self.clone();
 
         if new_step.duration > 0 && new_step.duration <= threshold {
-            dbg!(&new_step);
             vec![new_step]
         } else {
             let mut steps: Vec<Step> = Vec::new();
             steps.extend(new_step.split(&mut 1).unwrap());
-            dbg!(&steps);
-
             steps
         }
     }
@@ -131,7 +128,7 @@ impl Slot {
 
     /// Split a Slot into list of slots based on given threshold.
     pub fn split_into_custom_hours(&self, threshold: usize) -> Vec<Slot> {
-        let given_slot = self.clone();
+        let given_slot = *self;
         let duration = given_slot.duration_as_hours();
         if threshold == 0 || threshold > duration {
             return vec![given_slot];
@@ -414,10 +411,7 @@ mod tests {
                     timeframe: None,
                 };
                 let new_step = Step::new(new_step);
-                dbg!(&new_step);
                 let generated_steps = new_step.apply_duration_threshold();
-                dbg!(&generated_steps);
-
                 let mut expected_steps = vec![
                     Step::mock(
                         "test",
@@ -509,7 +503,6 @@ mod tests {
                 expected_steps[7].id = 8;
                 expected_steps[8].id = 9;
                 expected_steps[9].id = 10;
-                dbg!(&expected_steps);
 
                 assert_eq!(generated_steps, expected_steps);
                 assert_eq!(generated_steps.len(), 10);

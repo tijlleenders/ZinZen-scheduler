@@ -22,7 +22,7 @@ pub(crate) fn filter_on_days(timeline: Timeline, days_to_filter: &[Day]) -> Time
 
     let days_to_filter: BTreeSet<Day> = days_to_filter.iter().cloned().collect();
     let mut days_to_remove: Vec<Slot> = vec![];
-    let timeline_iterator = TimelineIterator::new(timeline.clone(), Duration::days(1));
+    let timeline_iterator = TimelineIterator::new(timeline, Duration::days(1));
 
     let mut slots_from_iter: Vec<Slot> = vec![];
 

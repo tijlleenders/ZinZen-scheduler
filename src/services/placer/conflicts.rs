@@ -128,28 +128,31 @@ impl Slot {
         let slot_duration = self.duration_as_hours();
         let mut schedulable_slots = vec![];
 
-        if slot_duration < duration {
-            return schedulable_slots;
-        } else if slot_duration == duration {
-            return vec![*self];
-        } else {
-            let flexibility = slot_duration - duration + 1;
+        match slot_duration.cmp(&duration) {
+            std::cmp::Ordering::Less => {
+                return schedulable_slots;
+            }
+            std::cmp::Ordering::Equal => {
+                return vec![*self];
+            }
+            std::cmp::Ordering::Greater => {
+                let flexibility = slot_duration - duration + 1;
 
-            let mut start_time = self.start;
-            // used to make sure that endtime for each new slot not exceed self.end
-            let mut end_time = start_time + Duration::hours(duration as i64);
+                let mut start_time = self.start;
+                let mut end_time = start_time + Duration::hours(duration as i64);
 
-            for _ in 0..flexibility {
-                if end_time <= self.end {
-                    let new_slot = Slot {
-                        start: start_time,
-                        end: end_time,
-                    };
+                for _ in 0..flexibility {
+                    if end_time <= self.end {
+                        let new_slot = Slot {
+                            start: start_time,
+                            end: end_time,
+                        };
 
-                    schedulable_slots.push(new_slot);
+                        schedulable_slots.push(new_slot);
 
-                    start_time = start_time + Duration::hours(1);
-                    end_time = start_time + Duration::hours(duration as i64);
+                        start_time += Duration::hours(1);
+                        end_time = start_time + Duration::hours(duration as i64);
+                    }
                 }
             }
         }
@@ -169,7 +172,7 @@ impl Step {
         let steps_list: Vec<Step> = steps_list
             .iter()
             .filter(|step| step.id != self.id)
-            .map(|step| step.clone())
+            .cloned()
             .collect();
 
         let mut conflicts_list: Vec<SlotConflict> = vec![];
