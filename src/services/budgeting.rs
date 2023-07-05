@@ -1,6 +1,7 @@
 use crate::models::{
-    budget::StepBudgets,
+    budget::{BudgetType, StepBudget, StepBudgets},
     goal::{Goal, GoalsMap, Tag},
+    repetition::Repetition,
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
     step::{NewStep, Step, StepStatus},
@@ -31,6 +32,12 @@ impl StepBudgets {
             dbg!(&budget.slot_budgets.len());
         }
         dbg!(&self);
+
+        dbg!(&goals);
+        configure_goals_repeatance(goals, Some(&self));
+        dbg!(&goals);
+
+        let _i: bool;
     }
 
     /// Insert budgeted goals into given StepBudgets
@@ -149,6 +156,20 @@ impl StepBudgets {
     }
 }
 
+/// Configure each goal.repeat in case goal.repeat is none and step_budgets.
+fn configure_goals_repeatance(goals: &mut GoalsMap, step_budgets: Option<&StepBudgets>) {
+    if let Some(step_budgets) = step_budgets {
+        goals.iter_mut().for_each(|(goal_id, goal)| {
+            let step_budget = step_budgets.budget_map.get(goal_id).unwrap();
+            goal.configure_repeatance(Some(step_budget));
+        })
+    } else {
+        goals.iter_mut().for_each(|(goal_id, goal)| {
+            goal.configure_repeatance(None);
+        })
+    }
+}
+
 /// Tag budgeted goals with Tag::Budget
 fn tag_budgeted_goals(goals: &mut GoalsMap) {
     goals
@@ -160,9 +181,62 @@ fn tag_budgeted_goals(goals: &mut GoalsMap) {
         });
 }
 
+impl Goal {
+    /// Configure goal.repeat in case goal.repeat is none but goal have budgets
+    /// - If step_budget is None, so Weekly or Daily value will 1
+    fn configure_repeatance(self: &mut Goal, step_budget: Option<&StepBudget>) {
+        // TODO 2023-07-05: create unit tests specially when step_budget is given
+        /*
+        Notes:
+        - Use StepBudget to calculate count of repeatation whether
+        daily or weekly.
+
+        - if step_budget is None, consider repeatance is 1 for daily or weekly
+        - if step_budget have value:
+            - get count of slot_budgets "step_budget.slot_budgets.len()"
+            - if step_budget.step_budget_type is Daily:
+                - set goal.repeat to daily(count)
+            - else:
+                - set goal.repeat to weekly(count)
+        */
+        let goal = self;
+        // if not budgets OR there is a goal.repeat value, do nothing
+        if goal.budgets.is_none() || goal.repeat.is_some() {
+            return;
+        }
+        let mut repeatance: usize = 1;
+
+        if let Some(budget) = step_budget {
+            repeatance = budget.slot_budgets.len();
+            if budget.step_budget_type == BudgetType::Daily {
+                goal.repeat = Some(Repetition::DAILY(repeatance));
+            } else {
+                goal.repeat = Some(Repetition::Weekly(repeatance));
+            }
+        } else {
+            // get goal.budgets:
+            //  - If found a daily: set goal.repeat to daily(1)
+            //  - else: set goal.repeat to weekly(1)
+            if let Some(budgets) = &goal.budgets {
+                let found_daily_budget = budgets
+                    .iter()
+                    .any(|budget| budget.budget_type == BudgetType::Daily);
+
+                if found_daily_budget {
+                    goal.repeat = Some(Repetition::DAILY(repeatance));
+                } else {
+                    goal.repeat = Some(Repetition::Weekly(repeatance));
+                }
+            } else {
+                // if no goal.budgets, just do nothing
+                return;
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
-
     mod generate_steps {
         use crate::models::{
             budget::{Budget, BudgetType, SlotBudget, StepBudget, StepBudgets},
@@ -359,6 +433,114 @@ mod tests {
 
             let result_normal_goal = goals.get(&goal.id).unwrap();
             assert!(!result_normal_goal.tags.contains(&Tag::Budget));
+        }
+    }
+
+    mod goal {
+        mod configure_repeatance {
+            use crate::models::{
+                budget::{Budget, BudgetType},
+                goal::Goal,
+                repetition::Repetition,
+                slot::Slot,
+            };
+
+            #[test]
+            fn test_no_goal_repeat_no_budget() {
+                let mut goal = Goal::mock("1", "sample goal", Slot::mock_sample());
+
+                goal.configure_repeatance(None);
+                assert_eq!(goal.repeat, None);
+            }
+
+            #[test]
+            fn test_have_budget_and_repeat() {
+                let mut goal = Goal::mock("1", "sample goal", Slot::mock_sample());
+
+                let budget = Budget {
+                    budget_type: BudgetType::Daily,
+                    min: Some(5),
+                    max: Some(10),
+                };
+                let budgets = Some(vec![budget]);
+                goal.budgets = budgets.clone();
+
+                let repeat = Some(Repetition::Weekly(1));
+                goal.repeat = repeat;
+
+                goal.configure_repeatance(None);
+
+                assert_eq!(goal.repeat, repeat);
+                assert_eq!(goal.budgets, budgets);
+            }
+
+            #[test]
+            fn test_have_weekly_budget_but_no_repeat() {
+                let mut goal = Goal::mock("1", "sample goal", Slot::mock_sample());
+
+                let budget = Budget {
+                    budget_type: BudgetType::Weekly,
+                    min: Some(30),
+                    max: Some(40),
+                };
+                let budgets = Some(vec![budget]);
+                goal.budgets = budgets.clone();
+                goal.repeat = None;
+
+                goal.configure_repeatance(None);
+
+                let expected_repeat = Some(Repetition::Weekly(1));
+
+                assert_eq!(goal.repeat, expected_repeat);
+                assert_eq!(goal.budgets, budgets);
+            }
+
+            #[test]
+            fn test_have_daily_budget_but_no_repeat() {
+                let mut goal = Goal::mock("1", "sample goal", Slot::mock_sample());
+
+                let budget = Budget {
+                    budget_type: BudgetType::Daily,
+                    min: Some(5),
+                    max: Some(10),
+                };
+                let budgets = Some(vec![budget]);
+                goal.budgets = budgets.clone();
+                goal.repeat = None;
+
+                goal.configure_repeatance(None);
+
+                let expected_repeat = Some(Repetition::DAILY(1));
+
+                assert_eq!(goal.repeat, expected_repeat);
+                assert_eq!(goal.budgets, budgets);
+            }
+
+            #[test]
+            fn test_have_daily_and_weekly_budget_but_no_repeat() {
+                let mut goal = Goal::mock("1", "sample goal", Slot::mock_sample());
+
+                let daily_budget = Budget {
+                    budget_type: BudgetType::Daily,
+                    min: Some(5),
+                    max: Some(10),
+                };
+                let weekly_budget = Budget {
+                    budget_type: BudgetType::Weekly,
+                    min: Some(30),
+                    max: Some(40),
+                };
+                let budgets = Some(vec![daily_budget, weekly_budget]);
+                goal.budgets = budgets.clone();
+                goal.repeat = None;
+
+                goal.configure_repeatance(None);
+
+                let expected_repeat = Some(Repetition::DAILY(1));
+
+                assert_eq!(goal.repeat, expected_repeat);
+                assert_eq!(goal.budgets, budgets);
+            }
         }
     }
 }
