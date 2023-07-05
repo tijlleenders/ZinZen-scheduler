@@ -63,7 +63,8 @@ impl StepBudgets {
         }
     }
 
-    pub fn add(&mut self, goal: &Goal) {
+    /// Insert new Goal to the StepBudgets
+    pub fn insert_goal(&mut self, goal: &Goal) {
         for budget in goal.budgets.clone().unwrap() {
             let budget = StepBudget {
                 step_budget_type: budget.budget_type.clone(),

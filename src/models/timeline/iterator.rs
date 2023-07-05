@@ -66,15 +66,13 @@ impl Iterator for TimelineIterator {
             match self.timeline.slots.take(&first_slot.clone()) {
                 Some(slot) => {
                     let slot_duration = slot.end.signed_duration_since(slot.start);
-                    let slot_iterator: SlotIterator;
 
                     // A condition to avoid iteration over slots when inerval > slot duration
-
-                    if self.interval > slot_duration {
-                        slot_iterator = SlotIterator::new(slot, slot_duration);
+                    let slot_iterator: SlotIterator = if self.interval > slot_duration {
+                        SlotIterator::new(slot, slot_duration)
                     } else {
-                        slot_iterator = SlotIterator::new(slot, self.interval);
-                    }
+                        SlotIterator::new(slot, self.interval)
+                    };
 
                     let mut walking_slots: Vec<Slot> = vec![];
                     for slot in slot_iterator {

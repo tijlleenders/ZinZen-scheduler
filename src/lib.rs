@@ -131,8 +131,9 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
     initialize_logger();
 
     let steps = generate_steps_to_place(input);
+    log::debug!("{:#?}", &steps);
     let placed_steps = step_placer(steps);
-    log::debug!("{:?}", &placed_steps);
+    log::debug!("{:#?}", &placed_steps);
     match output_formatter(placed_steps) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.");

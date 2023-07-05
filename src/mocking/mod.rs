@@ -52,6 +52,17 @@ impl Slot {
 
         Slot { start, end }
     }
+
+    /// Get a sample of a slot for 1 day "2023-01-01"
+    pub fn mock_sample() -> Slot {
+        let start = NaiveDate::from_ymd_opt(2023, 1, 1)
+            .unwrap()
+            .and_hms_opt(0, 0, 0)
+            .unwrap();
+        let end = start + Duration::days(1);
+
+        Slot { start, end }
+    }
 }
 
 impl Timeline {
@@ -163,7 +174,7 @@ impl Step {
         step_timing: Slot,
     ) -> Step {
         Step {
-            id: id,
+            id,
             goal_id: goal_id.to_string(),
             title: title.to_string(),
             duration,
