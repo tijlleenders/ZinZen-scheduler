@@ -141,10 +141,12 @@ impl StepBudgets {
 
 /// Configure each goal.repeat in case goal.repeat is none and step_budgets.
 fn configure_goals_repeatance(goals: &mut GoalsMap, step_budgets: Option<&StepBudgets>) {
+    // TODO 2023-07-05: create unit tests
     if let Some(step_budgets) = step_budgets {
         goals.iter_mut().for_each(|(goal_id, goal)| {
-            let step_budget = step_budgets.budget_map.get(goal_id).unwrap();
-            goal.configure_repeatance(Some(step_budget));
+            if let Some(step_budget) = step_budgets.budget_map.get(goal_id) {
+                goal.configure_repeatance(Some(step_budget));
+            }
         })
     } else {
         goals.iter_mut().for_each(|(_, goal)| {
