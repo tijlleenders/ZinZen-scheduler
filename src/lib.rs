@@ -141,7 +141,10 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
         Err(e) => {
             panic!("Unexpected error: {:?}", e);
         }
-        Ok(final_tasks) => final_tasks,
+        Ok(final_tasks) => {
+            log::debug!("{:#?}", &final_tasks);
+            final_tasks
+        }
     }
 }
 

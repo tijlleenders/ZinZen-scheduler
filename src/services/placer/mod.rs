@@ -11,7 +11,6 @@ use crate::models::timeline::Timeline;
 /// step a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible steps.
 pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
-    log::debug!("{:?}", &steps_to_place);
     //first pass of scheduler while steps are unsplit
     schedule(&mut steps_to_place);
 
@@ -19,9 +18,7 @@ pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
     // https://github.com/tijlleenders/ZinZen-scheduler/issues/300#issuecomment-1528727445
 
     adjust_min_budget_step(&mut steps_to_place); //TODO
-
     schedule(&mut steps_to_place); //TODO
-    log::debug!("{:?}", &steps_to_place);
 
     PlacedSteps {
         calendar_start: steps_to_place.calendar_start,
