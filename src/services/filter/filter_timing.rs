@@ -2,41 +2,8 @@ use chrono::{Duration, Timelike};
 
 use crate::models::{
     slot::Slot,
-    timeline::{iterator::TimelineIterator, Timeline},
+    timeline::{iterator::TimelineIterator, Timeline}, slots_iterator::{TimingScenario, utils::determine_timing_scenario},
 };
-
-/// Enum representing Timing Scenario for the provided
-/// timing range (after_time and before_time)
-#[derive(PartialEq, Debug)]
-enum TimingScenario {
-    /// Unbounded timing scenario where neither `after_time` nor `before_time` is defined
-    Unbounded,
-    /// Bounded timing scenario where both `after_time` and `before_time` are defined,
-    /// and `after_time` is less than or equal to `before_time`
-    Bounded,
-    /// Timing scenario where only `after_time` is defined and `before_time` is `None`
-    AfterOnly,
-    /// Timing scenario where only `before_time` is defined and `after_time` is `None`
-    BeforeOnly,
-    /// Timing scenario where `after_time` is greater than `before_time`, indicating a time range that wraps around midnight
-    Overflow,
-}
-
-/// Determines the timing scenario based on the `after_time` and `before_time` inputs.
-/// Returns a `TimingScenario` variant that represents the corresponding timing scenario.
-fn determine_timing_scenario(
-    after_time: Option<usize>,
-    before_time: Option<usize>,
-) -> TimingScenario {
-    match (after_time, before_time) {
-        (None, None) => TimingScenario::Unbounded,
-        (Some(_), None) => TimingScenario::AfterOnly,
-        (None, Some(_)) => TimingScenario::BeforeOnly,
-        (Some(after), Some(before)) if after <= before => TimingScenario::Bounded,
-        (Some(after), Some(before)) if after > before => TimingScenario::Overflow,
-        _ => TimingScenario::Unbounded,
-    }
-}
 
 /// Filtering timeline based on before_time and after_time fields in TimeFilter
 pub(crate) fn filter_timing(
