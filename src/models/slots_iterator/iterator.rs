@@ -1,10 +1,14 @@
 use super::{utils::get_start_of_repeat_step, Slot, TimeSlotsIterator};
-use crate::models::timeline::Timeline;
+use crate::models::{
+    slots_iterator::{utils::determine_timing_scenario, TimingScenario},
+    timeline::Timeline,
+};
 use core::panic;
 
 impl Iterator for TimeSlotsIterator {
     type Item = Timeline;
     fn next(&mut self) -> Option<Self::Item> {
+        dbg!(&self);
         if self.timeline.slots.is_empty() {
             return None;
         }
@@ -16,12 +20,29 @@ impl Iterator for TimeSlotsIterator {
                     get_start_of_repeat_step(&self.current_start_position, repetition);
                 let mut indexes_to_delete_count: usize = 0;
                 for mut slot in self.timeline.slots.clone().into_iter() {
+                    dbg!(&next_start_position, &slot);
                     if next_start_position.le(&slot.end) && next_start_position.gt(&slot.start) {
-                        //next_start_position is 'on' the current slot
-                        result.slots.insert(Slot {
-                            start: slot.start,
-                            end: next_start_position,
-                        });
+                        // TODO 2023-07-07: Use TimingScenario to avoid wrongly slots for overflow slots
+                        if let Some(filters) = &self.filters {
+                            // Determine the timing scenario based on the `after_time` and `before_time` inputs
+                            let timing_scenario =
+                                determine_timing_scenario(filters.after_time, filters.before_time);
+                            match timing_scenario {
+                                TimingScenario::Overflow => {
+                                    //next_start_position is 'on' the current slot
+                                    result.slots.insert(slot);
+                                    dbg!(&result);
+                                }
+                                _ => {
+                                    //next_start_position is 'on' the current slot
+                                    result.slots.insert(Slot {
+                                        start: slot.start,
+                                        end: next_start_position,
+                                    });
+                                    dbg!(&result);
+                                }
+                            }
+                        }
 
                         if next_start_position.eq(&slot.end) {
                             indexes_to_delete_count += 1;
@@ -42,6 +63,7 @@ impl Iterator for TimeSlotsIterator {
                         //next_start_position is 'past' the current slot
                         indexes_to_delete_count += 1;
                         result.slots.insert(slot);
+                        dbg!(&result);
                     } else {
                         //next_start_position is 'before' the current slot
                         self.current_start_position = next_start_position;
@@ -52,7 +74,7 @@ impl Iterator for TimeSlotsIterator {
                 for _i in 1..=indexes_to_delete_count {
                     self.timeline.slots.pop_first();
                 }
-
+                dbg!(&result);
                 Some(result)
             }
             None => {
