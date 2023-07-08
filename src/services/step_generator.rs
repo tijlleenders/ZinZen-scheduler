@@ -41,6 +41,7 @@ impl Goal {
         calendar_end: NaiveDateTime,
         counter: &mut usize,
     ) -> Vec<Step> {
+        dbg!(&self);
         let mut steps: Vec<Step> = Vec::new();
         if self.tags.contains(&Tag::IgnoreStepGeneration) {
             return steps;
@@ -51,6 +52,15 @@ impl Goal {
         }
         let start = self.start.unwrap_or(calendar_start);
         let deadline = self.deadline.unwrap_or(calendar_end);
+        
+        /*
+        TODO 2023-07-08: algorithm to support extending start and deadline when it is Overflow timing scenario
+        - When self.filters is not None 
+            - get timing_scenario: determine_timing_scenario
+            - if timing_scenario == TimingScenario::OverFlow:
+                - set `start`: subtract a few hours (difference between after and 0:00) from start
+                - set `deadline`: add a few hours (different between 0:00 and before) to deadline
+        */
 
         let time_slots_iterator = TimeSlotsIterator::new(
             start,
@@ -61,6 +71,7 @@ impl Goal {
         );
 
         for timeline in time_slots_iterator {
+            dbg!(&timeline);
             let step_id = *counter;
             *counter += 1;
 
@@ -79,18 +90,21 @@ impl Goal {
                 };
 
                 let step = Step::new(new_step);
-
+                dbg!(&step);
                 // Apply split on threshold (8 hours) rule if goal is a leaf
                 if self.children.is_none() {
                     let thresholded_steps = step.apply_duration_threshold();
-
+                    dbg!(&thresholded_steps);
                     steps.extend(thresholded_steps);
+                    dbg!(&steps);
+                    let _i = 0;
                 } else {
                     steps.push(step);
+                    dbg!(&steps);
                 }
             }
         }
-
+        dbg!(&steps);
         steps
     }
 }

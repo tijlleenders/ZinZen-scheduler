@@ -22,27 +22,11 @@ impl Iterator for TimeSlotsIterator {
                 for mut slot in self.timeline.slots.clone().into_iter() {
                     dbg!(&next_start_position, &slot);
                     if next_start_position.le(&slot.end) && next_start_position.gt(&slot.start) {
-                        // TODO 2023-07-07: Use TimingScenario to avoid wrongly slots for overflow slots
-                        if let Some(filters) = &self.filters {
-                            // Determine the timing scenario based on the `after_time` and `before_time` inputs
-                            let timing_scenario =
-                                determine_timing_scenario(filters.after_time, filters.before_time);
-                            match timing_scenario {
-                                TimingScenario::Overflow => {
-                                    //next_start_position is 'on' the current slot
-                                    result.slots.insert(slot);
-                                    dbg!(&result);
-                                }
-                                _ => {
-                                    //next_start_position is 'on' the current slot
-                                    result.slots.insert(Slot {
-                                        start: slot.start,
-                                        end: next_start_position,
-                                    });
-                                    dbg!(&result);
-                                }
-                            }
-                        }
+                         //next_start_position is 'on' the current slot
+                         result.slots.insert(Slot {
+                            start: slot.start,
+                            end: next_start_position,
+                        });
 
                         if next_start_position.eq(&slot.end) {
                             indexes_to_delete_count += 1;
