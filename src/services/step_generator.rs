@@ -1,7 +1,8 @@
 use crate::models::goal::{Goal, Tag};
-use crate::models::slots_iterator::TimeSlotsIterator;
+use crate::models::slots_iterator::utils::determine_timing_scenario;
+use crate::models::slots_iterator::{TimeSlotsIterator, TimingScenario};
 use crate::models::step::{NewStep, Step, StepStatus};
-use chrono::NaiveDateTime;
+use chrono::{Duration, NaiveDateTime};
 
 impl Step {
     /// Create new step based on NewStep object
@@ -50,17 +51,38 @@ impl Goal {
         if self.tags.contains(&Tag::Budget) {
             return steps;
         }
-        let start = self.start.unwrap_or(calendar_start);
-        let deadline = self.deadline.unwrap_or(calendar_end);
-        
+        let mut start = self.start.unwrap_or(calendar_start);
+        let mut deadline = self.deadline.unwrap_or(calendar_end);
+
         /*
         TODO 2023-07-08: algorithm to support extending start and deadline when it is Overflow timing scenario
-        - When self.filters is not None 
+        - When self.filters is not None
             - get timing_scenario: determine_timing_scenario
             - if timing_scenario == TimingScenario::OverFlow:
                 - set `start`: subtract a few hours (difference between after and 0:00) from start
                 - set `deadline`: add a few hours (different between 0:00 and before) to deadline
         */
+        if let Some(filters) = self.filters.clone() {
+            let timing_scenario =
+                determine_timing_scenario(filters.after_time, filters.before_time);
+
+            match timing_scenario {
+                TimingScenario::Overflow => {
+                    dbg!(&start, &deadline);
+                    //- set `start`: subtract a few hours (difference between after and 0:00) from start
+                    let after_time = filters.after_time.unwrap();
+                    let diff = 24 - after_time;
+                    start = start - Duration::hours(diff as i64);
+                    dbg!(&start);
+
+                    //- set `deadline`: add a few hours (before_time) to deadline
+                    let before_time = filters.before_time.unwrap();
+                    deadline = deadline + Duration::hours(before_time as i64);
+                    dbg!(&deadline);
+                }
+                _ => (),
+            }
+        }
 
         let time_slots_iterator = TimeSlotsIterator::new(
             start,
