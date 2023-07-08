@@ -54,14 +54,6 @@ impl Goal {
         let mut start = self.start.unwrap_or(calendar_start);
         let mut deadline = self.deadline.unwrap_or(calendar_end);
 
-        /*
-        TODO 2023-07-08: algorithm to support extending start and deadline when it is Overflow timing scenario
-        - When self.filters is not None
-            - get timing_scenario: determine_timing_scenario
-            - if timing_scenario == TimingScenario::OverFlow:
-                - set `start`: subtract a few hours (difference between after and 0:00) from start
-                - set `deadline`: add a few hours (different between 0:00 and before) to deadline
-        */
         if let Some(filters) = self.filters.clone() {
             let timing_scenario =
                 determine_timing_scenario(filters.after_time, filters.before_time);
