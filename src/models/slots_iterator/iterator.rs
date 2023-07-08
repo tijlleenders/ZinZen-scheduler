@@ -1,8 +1,5 @@
 use super::{utils::get_start_of_repeat_step, Slot, TimeSlotsIterator};
-use crate::models::{
-    slots_iterator::{utils::determine_timing_scenario, TimingScenario},
-    timeline::Timeline,
-};
+use crate::models::timeline::Timeline;
 use core::panic;
 
 impl Iterator for TimeSlotsIterator {
@@ -22,8 +19,8 @@ impl Iterator for TimeSlotsIterator {
                 for mut slot in self.timeline.slots.clone().into_iter() {
                     dbg!(&next_start_position, &slot);
                     if next_start_position.le(&slot.end) && next_start_position.gt(&slot.start) {
-                         //next_start_position is 'on' the current slot
-                         result.slots.insert(Slot {
+                        //next_start_position is 'on' the current slot
+                        result.slots.insert(Slot {
                             start: slot.start,
                             end: next_start_position,
                         });

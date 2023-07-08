@@ -2,7 +2,8 @@ use chrono::{Duration, Timelike};
 
 use crate::models::{
     slot::Slot,
-    timeline::{iterator::TimelineIterator, Timeline}, slots_iterator::{TimingScenario, utils::determine_timing_scenario},
+    slots_iterator::{utils::determine_timing_scenario, TimingScenario},
+    timeline::{iterator::TimelineIterator, Timeline},
 };
 
 /// Filtering timeline based on before_time and after_time fields in TimeFilter
@@ -72,8 +73,10 @@ pub(crate) fn filter_timing(
         TimingScenario::Overflow => {
             // If the timing scenario is `Overflow`
             for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
+                dbg!(&iterator_index, &walking_slots);
                 let walking_slots_len = walking_slots.len();
                 for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
+                    dbg!(&walking_index, &slot);
                     // ===
                     // Below condition to handle case as comment: https://github.com/tijlleenders/ZinZen-scheduler/pull/295#issuecomment-1550956264
                     // If this is the first slot in the first day of the timeline,
@@ -82,8 +85,9 @@ pub(crate) fn filter_timing(
                     if iterator_index == 0 && walking_index == 0 {
                         slots.push(Slot {
                             start: slot.start,
-                            end: slot.start.with_hour(before_time.unwrap() as u32).unwrap(),
+                            end: slot.end.with_hour(before_time.unwrap() as u32).unwrap(),
                         });
+                        dbg!(&slots);
                     }
                     // ===
                     // Condition added as per issue in PR https://github.com/tijlleenders/ZinZen-scheduler/pull/317
@@ -95,6 +99,7 @@ pub(crate) fn filter_timing(
                             start: slot.start.with_hour(after_time.unwrap() as u32).unwrap(),
                             end: slot.end,
                         });
+                        dbg!(&slots);
 
                         continue;
                     }
@@ -102,6 +107,7 @@ pub(crate) fn filter_timing(
                     slot.start = slot.start.with_hour(after_time.unwrap() as u32).unwrap();
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap();
                     slots.push(*slot);
+                    dbg!(&slots);
 
                     // ===
                 }
@@ -316,27 +322,32 @@ mod tests {
     /// expept for last day will be till end of day not 5am next day
     #[test]
     fn test_overflow() {
-        let timeline_duration = Duration::days(5);
+        let timeline_duration = Duration::days(6);
         let after: u32 = 20;
         let before: u32 = 5;
 
-        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        let mut timeline_slot = Slot::mock(timeline_duration, 2023, 4, 30, after, 0);
+        timeline_slot.end -= Duration::hours((after - before) as i64);
+        dbg!(&timeline_slot);
+        let timeline = Timeline {
+            slots: vec![timeline_slot].into_iter().collect(),
+        };
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(5), 2023, 05, 1, 0, 0),
+                Slot::mock(Duration::hours(9), 2023, 04, 30, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 1, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 2, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 3, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 4, after, 0),
-                Slot::mock(Duration::hours(4), 2023, 05, 5, after, 0),
+                Slot::mock(Duration::hours(24), 2023, 05, 5, after, 0),
             ]
             .into_iter()
             .collect(),
         };
 
         let result = filter_timing(timeline, Some(after as usize), Some(before as usize));
-
+        dbg!(&expected_result, &result);
         assert_eq!(expected_result, result);
     }
 
