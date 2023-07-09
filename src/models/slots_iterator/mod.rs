@@ -40,20 +40,3 @@ impl TimeSlotsIterator {
         result
     }
 }
-
-/// Enum representing Timing Scenario for the provided
-/// timing range (after_time and before_time)
-#[derive(PartialEq, Debug)]
-pub enum TimingScenario {
-    /// Unbounded timing scenario where neither `after_time` nor `before_time` is defined
-    Unbounded,
-    /// Bounded timing scenario where both `after_time` and `before_time` are defined,
-    /// and `after_time` is less than or equal to `before_time`
-    Bounded,
-    /// Timing scenario where only `after_time` is defined and `before_time` is `None`
-    AfterOnly,
-    /// Timing scenario where only `before_time` is defined and `after_time` is `None`
-    BeforeOnly,
-    /// Timing scenario where `after_time` is greater than `before_time`, indicating a time range that wraps around midnight
-    Overflow,
-}

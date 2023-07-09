@@ -1,6 +1,5 @@
 pub mod impls;
 pub mod iterator;
-pub mod utils;
 
 use chrono::{Datelike, NaiveDateTime, Timelike};
 use serde::Deserialize;

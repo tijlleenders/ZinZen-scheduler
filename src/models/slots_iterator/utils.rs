@@ -1,4 +1,3 @@
-use super::TimingScenario;
 use crate::models::repetition::Repetition;
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Timelike, Weekday};
 
@@ -289,20 +288,4 @@ pub(crate) fn next_week(result: &mut NaiveDateTime) -> NaiveDateTime {
         .unwrap()
         .with_second(0)
         .unwrap()
-}
-
-/// Determines the timing scenario based on the `after_time` and `before_time` inputs.
-/// Returns a `TimingScenario` variant that represents the corresponding timing scenario.
-pub fn determine_timing_scenario(
-    after_time: Option<usize>,
-    before_time: Option<usize>,
-) -> TimingScenario {
-    match (after_time, before_time) {
-        (None, None) => TimingScenario::Unbounded,
-        (Some(_), None) => TimingScenario::AfterOnly,
-        (None, Some(_)) => TimingScenario::BeforeOnly,
-        (Some(after), Some(before)) if after <= before => TimingScenario::Bounded,
-        (Some(after), Some(before)) if after > before => TimingScenario::Overflow,
-        _ => TimingScenario::Unbounded,
-    }
 }

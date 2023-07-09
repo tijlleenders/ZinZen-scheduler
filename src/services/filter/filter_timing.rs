@@ -1,9 +1,10 @@
 use chrono::{Duration, Timelike};
 
 use crate::models::{
+    goal::TimeFilter,
     slot::Slot,
-    slots_iterator::{utils::determine_timing_scenario, TimingScenario},
     timeline::{iterator::TimelineIterator, Timeline},
+    utils::TimingScenario,
 };
 
 /// Filtering timeline based on before_time and after_time fields in TimeFilter
@@ -21,7 +22,13 @@ pub(crate) fn filter_timing(
     validate_time(before_time, "before_time");
 
     // Determine the timing scenario based on the `after_time` and `before_time` inputs
-    let timing_scenario = determine_timing_scenario(after_time, before_time);
+    let timing_scenario = TimeFilter {
+        after_time,
+        before_time,
+        on_days: None,
+        not_on: None,
+    }
+    .determine_timing_scenario();
     let mut expected_timeline = Timeline::new();
     let timeline_iterator = TimelineIterator::new(timeline, Duration::days(1));
     let mut slots: Vec<Slot> = vec![];
@@ -137,61 +144,6 @@ mod tests {
         models::{slot::Slot, timeline::Timeline},
         services::filter::filter_timing::filter_timing,
     };
-
-    mod timing_scenario {
-        use crate::services::filter::filter_timing::{determine_timing_scenario, TimingScenario};
-
-        /// Test the scenario where both `after_time` and `before_time` are `None`,
-        /// which should result in the `Unbounded` variant
-        #[test]
-        pub(crate) fn test_unbounded() {
-            let scenario = determine_timing_scenario(None, None);
-            assert_eq!(scenario, TimingScenario::Unbounded);
-        }
-
-        /// Test the scenario where only `after_time` is defined,
-        /// which should result in the `AfterOnly` variant
-        #[test]
-        pub(crate) fn test_after_only() {
-            let scenario = determine_timing_scenario(Some(10), None);
-            assert_eq!(scenario, TimingScenario::AfterOnly);
-        }
-
-        /// Test the scenario where only `before_time` is defined,
-        /// which should result in the `BeforeOnly` variant
-        #[test]
-        pub(crate) fn test_before_only() {
-            let scenario = determine_timing_scenario(None, Some(20));
-            assert_eq!(scenario, TimingScenario::BeforeOnly);
-        }
-
-        /// Test the scenario where both `after_time` and `before_time` are defined and
-        /// `after_time` is less than `before_time`, which should result in
-        /// the `Bounded` variant
-        #[test]
-        pub(crate) fn test_bounded() {
-            let scenario = determine_timing_scenario(Some(10), Some(20));
-            assert_eq!(scenario, TimingScenario::Bounded);
-        }
-
-        /// Test the scenario where both `after_time` and `before_time` are defined and
-        /// `after_time` is equal to `before_time`, which should result in
-        /// the `Bounded` variant
-        #[test]
-        pub(crate) fn test_bounded_and_both_are_equal() {
-            let scenario = determine_timing_scenario(Some(10), Some(10));
-            assert_eq!(scenario, TimingScenario::Bounded);
-        }
-
-        /// Test the scenario where both `after_time` and `before_time` are defined and
-        /// `after_time` is greater than `before_time`, which should result in the
-        /// `Overflow` variant
-        #[test]
-        pub(crate) fn test_overflow() {
-            let scenario = determine_timing_scenario(Some(20), Some(10));
-            assert_eq!(scenario, TimingScenario::Overflow);
-        }
-    }
 
     /// Test filter_timing when Timeline.slots is empty
     /// and before_time and after_time are None

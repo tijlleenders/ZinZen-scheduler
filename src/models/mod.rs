@@ -16,3 +16,5 @@ pub mod slots_iterator;
 pub mod step;
 
 pub mod timeline;
+/// Contains models used as a utility
+pub mod utils;

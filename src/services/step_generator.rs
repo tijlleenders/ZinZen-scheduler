@@ -1,7 +1,7 @@
 use crate::models::goal::{Goal, Tag};
-use crate::models::slots_iterator::utils::determine_timing_scenario;
-use crate::models::slots_iterator::{TimeSlotsIterator, TimingScenario};
+use crate::models::slots_iterator::TimeSlotsIterator;
 use crate::models::step::{NewStep, Step, StepStatus};
+use crate::models::utils::TimingScenario;
 use chrono::{Duration, NaiveDateTime};
 
 impl Step {
@@ -54,21 +54,20 @@ impl Goal {
         let mut start = self.start.unwrap_or(calendar_start);
         let mut deadline = self.deadline.unwrap_or(calendar_end);
 
-        if let Some(filters) = self.filters.clone() {
-            let timing_scenario =
-                determine_timing_scenario(filters.after_time, filters.before_time);
+        if let Some(filter) = self.filters.clone() {
+            let timing_scenario = filter.determine_timing_scenario();
 
             match timing_scenario {
                 TimingScenario::Overflow => {
                     dbg!(&start, &deadline);
                     //- set `start`: subtract a few hours (difference between after and 0:00) from start
-                    let after_time = filters.after_time.unwrap();
+                    let after_time = filter.after_time.unwrap();
                     let diff = 24 - after_time;
                     start = start - Duration::hours(diff as i64);
                     dbg!(&start);
 
                     //- set `deadline`: add a few hours (before_time) to deadline
-                    let before_time = filters.before_time.unwrap();
+                    let before_time = filter.before_time.unwrap();
                     deadline = deadline + Duration::hours(before_time as i64);
                     dbg!(&deadline);
                 }
