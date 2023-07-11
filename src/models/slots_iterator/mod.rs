@@ -36,7 +36,7 @@ impl TimeSlotsIterator {
         dbg!(&result.timeline);
         result.timeline.apply_filter(&result.filters);
         dbg!(&result.timeline);
-        result.current_start_position = result.timeline.slots.first().unwrap().start;
+        result.current_start_position = start;
         result
     }
 }
