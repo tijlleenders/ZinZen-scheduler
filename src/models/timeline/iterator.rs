@@ -30,7 +30,7 @@ pub struct TimelineIterator {
 impl TimelineIterator {
     /// Initialize new TimelineIterator with default interval duration to 1 day
     pub fn initialize(timeline: Timeline) -> TimelineIterator {
-        if let Some(_pionter_start) = timeline.slots.first() {
+        if let Some(_) = timeline.slots.first() {
             TimelineIterator {
                 timeline: timeline.clone(),
                 interval: Duration::days(1),
@@ -42,7 +42,7 @@ impl TimelineIterator {
 
     /// Create new TimelineIterator with custom interval duration
     pub fn new(timeline: Timeline, interval_duration: Duration) -> TimelineIterator {
-        if let Some(_pionter_start) = timeline.slots.first() {
+        if let Some(_) = timeline.slots.first() {
             TimelineIterator {
                 timeline: timeline.clone(),
                 interval: interval_duration,
@@ -50,6 +50,14 @@ impl TimelineIterator {
         } else {
             panic!("Timeline slots are empty")
         }
+    }
+
+    /// Create new TimelineIterator which iterate for a daily calendar day
+    pub fn new_calendar_day(timeline: Timeline) -> TimelineIterator {
+        // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
+        // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from
+        // midnight to midnight.
+        todo!("implement new_calendar_day")
     }
 }
 

@@ -13,6 +13,7 @@ pub(crate) fn filter_timing(
     after_time: Option<usize>,
     before_time: Option<usize>,
 ) -> Timeline {
+    dbg!(&timeline, &after_time, &before_time);
     // Return the same timeline if there are no slots, or if both `after_time` and `before_time` are None
     if timeline.slots.is_empty() || (after_time.is_none() && before_time.is_none()) {
         return timeline;
@@ -41,6 +42,11 @@ pub(crate) fn filter_timing(
             }
         }
         TimingScenario::AfterOnly => {
+            // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
+            // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from 
+            // midnight to midnight.
+            
+
             // If the timing scenario is `AfterOnly`, adjust the start time of each slot
             // Rule: make sure that 'after_time' within slot boundaries
             for mut walking_slots in timeline_iterator {
