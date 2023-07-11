@@ -31,7 +31,7 @@ pub(crate) fn filter_timing(
     }
     .determine_timing_scenario();
     let mut expected_timeline = Timeline::new();
-    let timeline_iterator = TimelineIterator::new(timeline, Duration::days(1));
+    let timeline_iterator = TimelineIterator::new(timeline.clone(), Duration::days(1));
     let mut slots: Vec<Slot> = vec![];
 
     match timing_scenario {
@@ -42,11 +42,6 @@ pub(crate) fn filter_timing(
             }
         }
         TimingScenario::AfterOnly => {
-            // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
-            // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from 
-            // midnight to midnight.
-            
-
             // If the timing scenario is `AfterOnly`, adjust the start time of each slot
             // Rule: make sure that 'after_time' within slot boundaries
             for mut walking_slots in timeline_iterator {
@@ -63,14 +58,25 @@ pub(crate) fn filter_timing(
             }
         }
         TimingScenario::BeforeOnly => {
+            // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
+            // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from
+            // midnight to midnight.
+            let timeline_iterator = TimelineIterator::new_calendar_day(timeline);
+            dbg!(&timeline_iterator);
             // If the timing scenario is `BeforeOnly`, adjust the end time of each slot
             for mut walking_slots in timeline_iterator {
+                dbg!(&walking_slots);
                 walking_slots.iter_mut().for_each(|mut slot| {
+                    dbg!(&slot);
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap()
                         - Duration::days(1);
                     slots.push(*slot);
+                    dbg!(&slots);
+                    let _i = 0;
                 });
             }
+            dbg!(&slots);
+            let _i = 0;
         }
         TimingScenario::Bounded => {
             // If the timing scenario is `Bounded`, adjust both the start and end times of each slot

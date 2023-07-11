@@ -5,26 +5,26 @@
       "tasks": [
         {
           "taskid": 0,
-          "goalid": "free",
-          "title": "free",
-          "duration": 1,
+          "goalid": "db01411c-6b57-4191-8c8b-733ac3751da3",
+          "title": "hurdle",
+          "duration": 2,
           "start": "2023-01-03T00:00:00",
-          "deadline": "2023-01-03T01:00:00"
+          "deadline": "2023-01-03T02:00:00"
         },
         {
           "taskid": 1,
           "goalid": "2f8d406e-0df2-43ac-a7aa-6e65ff1c5c95",
           "title": "water the plants indoors",
           "duration": 1,
-          "start": "2023-01-03T01:00:00",
-          "deadline": "2023-01-03T02:00:00"
+          "start": "2023-01-03T02:00:00",
+          "deadline": "2023-01-03T03:00:00"
         },
         {
           "taskid": 2,
           "goalid": "free",
           "title": "free",
-          "duration": 6,
-          "start": "2023-01-03T02:00:00",
+          "duration": 5,
+          "start": "2023-01-03T03:00:00",
           "deadline": "2023-01-03T08:00:00"
         },
         {
@@ -95,8 +95,16 @@
           "taskid": 11,
           "goalid": "free",
           "title": "free",
-          "duration": 5,
+          "duration": 3,
           "start": "2023-01-03T19:00:00",
+          "deadline": "2023-01-03T22:00:00"
+        },
+        {
+          "taskid": 12,
+          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2023-01-03T22:00:00",
           "deadline": "2023-01-04T00:00:00"
         }
       ]
@@ -105,27 +113,19 @@
       "day": "2023-01-04",
       "tasks": [
         {
-          "taskid": 12,
-          "goalid": "free",
-          "title": "free",
-          "duration": 1,
-          "start": "2023-01-04T00:00:00",
-          "deadline": "2023-01-04T01:00:00"
-        },
-        {
           "taskid": 13,
-          "goalid": "db01411c-6b57-4191-8c8b-733ac3751da3",
-          "title": "hurdle",
-          "duration": 2,
-          "start": "2023-01-04T01:00:00",
-          "deadline": "2023-01-04T03:00:00"
+          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b1",
+          "title": "sleep",
+          "duration": 6,
+          "start": "2023-01-04T00:00:00",
+          "deadline": "2023-01-04T06:00:00"
         },
         {
           "taskid": 14,
           "goalid": "free",
           "title": "free",
-          "duration": 19,
-          "start": "2023-01-04T03:00:00",
+          "duration": 16,
+          "start": "2023-01-04T06:00:00",
           "deadline": "2023-01-04T22:00:00"
         },
         {
@@ -290,14 +290,6 @@
       "tasks": [
         {
           "taskid": 31,
-          "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b1",
-          "title": "sleep",
-          "duration": 8,
-          "start": "2023-01-03T00:00:00",
-          "deadline": "2023-01-10T00:00:00"
-        },
-        {
-          "taskid": 32,
           "goalid": "e100fe8e-0c19-4a6f-b638-ef82107ea13b1",
           "title": "sleep",
           "duration": 8,
