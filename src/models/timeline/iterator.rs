@@ -52,7 +52,7 @@ impl TimelineIterator {
         }
     }
 
-    /// Create new TimelineIterator which iterate for a daily calendar 
+    /// Create new TimelineIterator which iterate for a daily calendar
     /// day regardless time of slots in the timeline
     pub fn new_calendar_day(timeline: Timeline) -> TimelineIterator {
         // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
@@ -67,24 +67,19 @@ impl TimelineIterator {
                 .unwrap()
                 .with_second(0)
                 .unwrap();
-            dbg!(&first_slot, &start_date);
             let end_date: NaiveDateTime;
             if timeline.slots.len() == 1 {
                 end_date = first_slot.end;
-                dbg!(&end_date);
             } else {
                 if let Some(last_slot) = timeline.slots.last() {
                     end_date = last_slot.end;
-                    dbg!(&end_date);
                 } else {
                     panic!("Can't get last timeline slot")
                 }
             }
 
             let custom_timeline = Timeline::initialize(start_date, end_date).unwrap();
-            dbg!(&custom_timeline);
             let iterator = TimelineIterator::initialize(custom_timeline);
-            dbg!(&iterator);
 
             iterator
         } else {
@@ -283,7 +278,6 @@ mod tests {
             timeline::{iterator::TimelineIterator, Timeline},
         };
         use chrono::Duration;
-
 
         /// Test goal hurdl in test case bug_215 but for 3 days
         #[test]

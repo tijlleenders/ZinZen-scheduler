@@ -42,7 +42,6 @@ impl Goal {
         calendar_end: NaiveDateTime,
         counter: &mut usize,
     ) -> Vec<Step> {
-        dbg!(&self);
         let mut steps: Vec<Step> = Vec::new();
         if self.tags.contains(&Tag::IgnoreStepGeneration) {
             return steps;
@@ -59,17 +58,14 @@ impl Goal {
 
             match timing_scenario {
                 TimingScenario::Overflow => {
-                    dbg!(&start, &deadline);
                     //- set `start`: subtract a few hours (difference between after and 0:00) from start
                     let after_time = filter.after_time.unwrap();
                     let diff = 24 - after_time;
                     start = start - Duration::hours(diff as i64);
-                    dbg!(&start);
 
                     //- set `deadline`: add a few hours (before_time) to deadline
                     let before_time = filter.before_time.unwrap();
                     deadline = deadline + Duration::hours(before_time as i64);
-                    dbg!(&deadline);
                 }
                 _ => (),
             }
@@ -84,7 +80,6 @@ impl Goal {
         );
 
         for timeline in time_slots_iterator {
-            dbg!(&timeline);
             let step_id = *counter;
             *counter += 1;
 
@@ -103,21 +98,20 @@ impl Goal {
                 };
 
                 let step = Step::new(new_step);
-                dbg!(&step);
+
                 // Apply split on threshold (8 hours) rule if goal is a leaf
                 if self.children.is_none() {
                     let thresholded_steps = step.apply_duration_threshold();
-                    dbg!(&thresholded_steps);
+
                     steps.extend(thresholded_steps);
-                    dbg!(&steps);
+
                     let _i = 0;
                 } else {
                     steps.push(step);
-                    dbg!(&steps);
                 }
             }
         }
-        dbg!(&steps);
+
         steps
     }
 }

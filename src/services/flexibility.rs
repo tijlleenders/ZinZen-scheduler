@@ -20,7 +20,6 @@ impl StepsToPlace {
 impl Step {
     /// Calculate flexibility of a step slots
     pub fn calculate_flexibility(&mut self) {
-        dbg!(&self);
         if self.status == StepStatus::Scheduled || self.status == StepStatus::Impossible {
             let message = format!(
                 "StepStatus must be ReadyToSchedule, but it is now StepStatus::{:?}",
@@ -32,12 +31,11 @@ impl Step {
 
         let step_duration = self.duration;
         let flexibility = self.slots.iter().fold(0, |acc, slot| {
-            dbg!(&acc, &slot);
             let slot_duration = slot.duration_as_hours();
 
             if slot_duration >= step_duration {
                 let acc_res = acc + slot_duration - step_duration + 1;
-                dbg!(&acc_res);
+
                 acc_res
             } else {
                 /*
@@ -45,7 +43,7 @@ impl Step {
                 "sleep" for test bug_215, but will affect other tests and not
                 accurate for other cases like budgeting steps
                 */
-                dbg!(&acc);
+
                 acc
             }
         });

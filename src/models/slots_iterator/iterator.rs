@@ -5,7 +5,6 @@ use core::panic;
 impl Iterator for TimeSlotsIterator {
     type Item = Timeline;
     fn next(&mut self) -> Option<Self::Item> {
-        dbg!(&self);
         if self.timeline.slots.is_empty() {
             return None;
         }
@@ -17,7 +16,6 @@ impl Iterator for TimeSlotsIterator {
                     get_start_of_repeat_step(&self.current_start_position, repetition);
                 let mut indexes_to_delete_count: usize = 0;
                 for mut slot in self.timeline.slots.clone().into_iter() {
-                    dbg!(&next_start_position, &slot);
                     if next_start_position.le(&slot.end) && next_start_position.gt(&slot.start) {
                         //next_start_position is 'on' the current slot
                         result.slots.insert(Slot {
@@ -44,7 +42,6 @@ impl Iterator for TimeSlotsIterator {
                         //next_start_position is 'past' the current slot
                         indexes_to_delete_count += 1;
                         result.slots.insert(slot);
-                        dbg!(&result);
                     } else {
                         //next_start_position is 'before' the current slot
                         self.current_start_position = next_start_position;
@@ -55,7 +52,6 @@ impl Iterator for TimeSlotsIterator {
                 for _i in 1..=indexes_to_delete_count {
                     self.timeline.slots.pop_first();
                 }
-                dbg!(&result);
                 Some(result)
             }
             None => {

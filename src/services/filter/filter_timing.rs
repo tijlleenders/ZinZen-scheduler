@@ -13,7 +13,6 @@ pub(crate) fn filter_timing(
     after_time: Option<usize>,
     before_time: Option<usize>,
 ) -> Timeline {
-    dbg!(&timeline, &after_time, &before_time);
     // Return the same timeline if there are no slots, or if both `after_time` and `before_time` are None
     if timeline.slots.is_empty() || (after_time.is_none() && before_time.is_none()) {
         return timeline;
@@ -61,28 +60,24 @@ pub(crate) fn filter_timing(
             // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
             // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from
             // midnight to midnight.
-            dbg!(&timeline_iterator);
+
             let timeline_iterator = TimelineIterator::new_calendar_day(timeline.clone());
-            dbg!(&timeline_iterator);
+
             // If the timing scenario is `BeforeOnly`, adjust the end time of each slot
             for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
-                dbg!(&iterator_index, &walking_slots);
                 for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
-                    dbg!(&walking_index, &slot);
                     if iterator_index == 0 && walking_index == 0 {
-                        dbg!(&slot);
                         let origin_start_hour = timeline.slots.first().unwrap().start.hour();
                         slot.start = slot.start.with_hour(origin_start_hour).unwrap();
-                        dbg!(&slot);
                     }
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap()
                         - Duration::days(1);
                     slots.push(*slot);
-                    dbg!(&slots);
+
                     let _i = 0;
                 }
             }
-            dbg!(&slots);
+
             let _i = 0;
         }
         TimingScenario::Bounded => {
@@ -99,10 +94,8 @@ pub(crate) fn filter_timing(
         TimingScenario::Overflow => {
             // If the timing scenario is `Overflow`
             for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
-                dbg!(&iterator_index, &walking_slots);
                 let walking_slots_len = walking_slots.len();
                 for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
-                    dbg!(&walking_index, &slot);
                     // ===
                     // Below condition to handle case as comment: https://github.com/tijlleenders/ZinZen-scheduler/pull/295#issuecomment-1550956264
                     // If this is the first slot in the first day of the timeline,
@@ -113,7 +106,6 @@ pub(crate) fn filter_timing(
                             start: slot.start,
                             end: slot.end.with_hour(before_time.unwrap() as u32).unwrap(),
                         });
-                        dbg!(&slots);
                     }
                     // ===
                     // Condition added as per issue in PR https://github.com/tijlleenders/ZinZen-scheduler/pull/317
@@ -125,7 +117,6 @@ pub(crate) fn filter_timing(
                             start: slot.start.with_hour(after_time.unwrap() as u32).unwrap(),
                             end: slot.end,
                         });
-                        dbg!(&slots);
 
                         continue;
                     }
@@ -133,7 +124,6 @@ pub(crate) fn filter_timing(
                     slot.start = slot.start.with_hour(after_time.unwrap() as u32).unwrap();
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap();
                     slots.push(*slot);
-                    dbg!(&slots);
 
                     // ===
                 }
@@ -299,7 +289,7 @@ mod tests {
 
         let mut timeline_slot = Slot::mock(timeline_duration, 2023, 4, 30, after, 0);
         timeline_slot.end -= Duration::hours((after - before) as i64);
-        dbg!(&timeline_slot);
+
         let timeline = Timeline {
             slots: vec![timeline_slot].into_iter().collect(),
         };
@@ -318,7 +308,7 @@ mod tests {
         };
 
         let result = filter_timing(timeline, Some(after as usize), Some(before as usize));
-        dbg!(&expected_result, &result);
+
         assert_eq!(expected_result, result);
     }
 
@@ -393,7 +383,6 @@ mod tests {
         };
 
         let filtered_timeline = filter_timing(input_timeline, None, Some(3));
-        dbg!(&expected_timeline, &filtered_timeline);
 
         assert_eq!(filtered_timeline, expected_timeline);
     }

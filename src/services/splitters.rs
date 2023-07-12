@@ -230,7 +230,6 @@ pub fn split_slots_into_1h_slots(slots: Vec<Slot>) -> Vec<Slot> {
 ///         Task `Sleep` 00 - 06 (next day)
 /// ```
 pub fn split_crossed_tasks(tasks: &mut Vec<Task>) {
-    dbg!(&tasks);
     /*
     TODO 2023-06-04  | Debug note | case bug_215
     - For param "tasks", it contains wrong duration for steps "hurdle" and "sleep".
@@ -240,30 +239,24 @@ pub fn split_crossed_tasks(tasks: &mut Vec<Task>) {
 
     let mut new_tasks = vec![];
     for task in tasks.iter_mut() {
-        dbg!(&task);
         if is_cross_day(task) {
             let mut task2 = task.clone();
             task.deadline = task.deadline.with_hour(0).unwrap();
             task2.start = task.deadline.with_hour(0).unwrap();
-            dbg!(&task, &task2);
             task.duration = Slot {
                 start: task.start,
                 end: task.deadline,
             }
             .duration_as_hours();
             task2.duration -= task.duration;
-            dbg!(&task, &task2);
 
             new_tasks.push(task.clone());
             if task2.duration > 0 {
                 new_tasks.push(task2);
             }
-            dbg!(&new_tasks);
         } else {
             new_tasks.push(task.clone());
-            dbg!(&new_tasks);
         }
-        dbg!(&new_tasks);
     }
 
     tasks.clear();
@@ -274,7 +267,7 @@ pub fn split_crossed_tasks(tasks: &mut Vec<Task>) {
 fn is_cross_day(task: &Task) -> bool {
     let start = task.start.date();
     let end = task.deadline.date();
-    dbg!(&start, &end);
+
     // start < end
     start < end || (start == end && task.start.time() > task.deadline.time())
 }
