@@ -61,19 +61,26 @@ pub(crate) fn filter_timing(
             // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
             // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from
             // midnight to midnight.
-            let timeline_iterator = TimelineIterator::new_calendar_day(timeline);
+            dbg!(&timeline_iterator);
+            let timeline_iterator = TimelineIterator::new_calendar_day(timeline.clone());
             dbg!(&timeline_iterator);
             // If the timing scenario is `BeforeOnly`, adjust the end time of each slot
-            for mut walking_slots in timeline_iterator {
-                dbg!(&walking_slots);
-                walking_slots.iter_mut().for_each(|mut slot| {
-                    dbg!(&slot);
+            for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
+                dbg!(&iterator_index, &walking_slots);
+                for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
+                    dbg!(&walking_index, &slot);
+                    if iterator_index == 0 && walking_index == 0 {
+                        dbg!(&slot);
+                        let origin_start_hour = timeline.slots.first().unwrap().start.hour();
+                        slot.start = slot.start.with_hour(origin_start_hour).unwrap();
+                        dbg!(&slot);
+                    }
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap()
                         - Duration::days(1);
                     slots.push(*slot);
                     dbg!(&slots);
                     let _i = 0;
-                });
+                }
             }
             dbg!(&slots);
             let _i = 0;
@@ -339,6 +346,56 @@ mod tests {
         let result = filter_timing(timeline, Some(1), None);
 
         assert_eq!(expected_result, result);
+    }
+
+    /// Simulate edge case which is goal `hurdle` in test case bug_215
+    /// ```markdown
+    /// Input:
+    ///     Timeline:
+    ///         Slot { 2023-01-03 01 - 2023-01-10 00 }
+    ///     After: None
+    ///     Before: 03
+    ///
+    /// Expected Output:
+    ///     Timeline:
+    ///         Slot { 2023-01-03 01 - 2023-01-03 03 }
+    ///         Slot { 2023-01-04 00 - 2023-01-04 03 }
+    ///         Slot { 2023-01-05 00 - 2023-01-05 03 }
+    ///         Slot { 2023-01-06 00 - 2023-01-06 03 }
+    ///         Slot { 2023-01-07 00 - 2023-01-07 03 }
+    ///         Slot { 2023-01-08 00 - 2023-01-08 03 }
+    ///         Slot { 2023-01-09 00 - 2023-01-09 03 }
+    ///
+    /// ```
+    #[test]
+    fn test_hurdle_in_case_bug_215() {
+        //---
+
+        // Timeline: Slot { 2023-01-03 01 - 2023-01-10 00 }
+        let input_timeline = Timeline {
+            slots: vec![Slot::mock(Duration::hours(167), 2023, 1, 3, 1, 0)]
+                .into_iter()
+                .collect(),
+        };
+
+        let expected_timeline = Timeline {
+            slots: vec![
+                Slot::mock(Duration::hours(2), 2023, 1, 3, 1, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 4, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 5, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 6, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 7, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 8, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 9, 0, 0),
+            ]
+            .into_iter()
+            .collect(),
+        };
+
+        let filtered_timeline = filter_timing(input_timeline, None, Some(3));
+        dbg!(&expected_timeline, &filtered_timeline);
+
+        assert_eq!(filtered_timeline, expected_timeline);
     }
 
     // TODO 2023-05-15  | create a test scenario like test_beforetime_is_before_aftertime but slots passed in timeline not fullday
