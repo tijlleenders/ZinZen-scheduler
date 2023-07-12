@@ -34,9 +34,7 @@ impl Step {
             let slot_duration = slot.duration_as_hours();
 
             if slot_duration >= step_duration {
-                let acc_res = acc + slot_duration - step_duration + 1;
-
-                acc_res
+                acc + slot_duration - step_duration + 1
             } else {
                 /*
                 TODO 2023-06-15: below fixed flexibility calculation for goal

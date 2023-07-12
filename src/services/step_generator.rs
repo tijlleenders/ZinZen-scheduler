@@ -56,18 +56,15 @@ impl Goal {
         if let Some(filter) = self.filters.clone() {
             let timing_scenario = filter.determine_timing_scenario();
 
-            match timing_scenario {
-                TimingScenario::Overflow => {
-                    //- set `start`: subtract a few hours (difference between after and 0:00) from start
-                    let after_time = filter.after_time.unwrap();
-                    let diff = 24 - after_time;
-                    start = start - Duration::hours(diff as i64);
+            if timing_scenario == TimingScenario::Overflow {
+                //- set `start`: subtract a few hours (difference between after and 0:00) from start
+                let after_time = filter.after_time.unwrap();
+                let diff = 24 - after_time;
+                start -= Duration::hours(diff as i64);
 
-                    //- set `deadline`: add a few hours (before_time) to deadline
-                    let before_time = filter.before_time.unwrap();
-                    deadline = deadline + Duration::hours(before_time as i64);
-                }
-                _ => (),
+                //- set `deadline`: add a few hours (before_time) to deadline
+                let before_time = filter.before_time.unwrap();
+                deadline += Duration::hours(before_time as i64);
             }
         }
 

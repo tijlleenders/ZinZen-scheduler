@@ -30,9 +30,10 @@ pub struct TimelineIterator {
 impl TimelineIterator {
     /// Initialize new TimelineIterator with default interval duration to 1 day
     pub fn initialize(timeline: Timeline) -> TimelineIterator {
-        if let Some(_) = timeline.slots.first() {
+        // if let Some(_) = timeline.slots.first() {
+        if timeline.slots.first().is_some() {
             TimelineIterator {
-                timeline: timeline.clone(),
+                timeline,
                 interval: Duration::days(1),
             }
         } else {
@@ -42,9 +43,9 @@ impl TimelineIterator {
 
     /// Create new TimelineIterator with custom interval duration
     pub fn new(timeline: Timeline, interval_duration: Duration) -> TimelineIterator {
-        if let Some(_) = timeline.slots.first() {
+        if timeline.slots.first().is_some() {
             TimelineIterator {
-                timeline: timeline.clone(),
+                timeline,
                 interval: interval_duration,
             }
         } else {
@@ -70,18 +71,14 @@ impl TimelineIterator {
             let end_date: NaiveDateTime;
             if timeline.slots.len() == 1 {
                 end_date = first_slot.end;
+            } else if let Some(last_slot) = timeline.slots.last() {
+                end_date = last_slot.end;
             } else {
-                if let Some(last_slot) = timeline.slots.last() {
-                    end_date = last_slot.end;
-                } else {
-                    panic!("Can't get last timeline slot")
-                }
+                panic!("Can't get last timeline slot")
             }
 
             let custom_timeline = Timeline::initialize(start_date, end_date).unwrap();
-            let iterator = TimelineIterator::initialize(custom_timeline);
-
-            iterator
+            TimelineIterator::initialize(custom_timeline)
         } else {
             panic!("Timeline slots are empty")
         }
