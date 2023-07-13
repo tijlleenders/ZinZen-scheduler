@@ -20,6 +20,11 @@ path = "src/lib.rs"
 name = "scheduler-bin"
 path = "src/bin/flamegraph-bin.rs"
 
+[[bin]]
+name = "test-summary"
+path = "scripts/test_summary.rs"
+
+
 [profile.release]
 lto = true
 # Tell `rustc` to optimize for small code size.
@@ -41,7 +46,7 @@ console_error_panic_hook = "0.1.7"
 
 # display logs
 log = "0.4.19"
-env_logger="0.10.0"
+env_logger = "0.10.0"
 
 # soft assertions without panic
 soft = "0.1.1"
