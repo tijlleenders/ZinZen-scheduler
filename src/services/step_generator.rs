@@ -1,7 +1,8 @@
 use crate::models::goal::{Goal, Tag};
 use crate::models::slots_iterator::TimeSlotsIterator;
 use crate::models::step::{NewStep, Step, StepStatus};
-use chrono::NaiveDateTime;
+use crate::models::utils::TimingScenario;
+use chrono::{Duration, NaiveDateTime};
 
 impl Step {
     /// Create new step based on NewStep object
@@ -49,8 +50,23 @@ impl Goal {
         if self.tags.contains(&Tag::Budget) {
             return steps;
         }
-        let start = self.start.unwrap_or(calendar_start);
-        let deadline = self.deadline.unwrap_or(calendar_end);
+        let mut start = self.start.unwrap_or(calendar_start);
+        let mut deadline = self.deadline.unwrap_or(calendar_end);
+
+        if let Some(filter) = self.filters.clone() {
+            let timing_scenario = filter.determine_timing_scenario();
+
+            if timing_scenario == TimingScenario::Overflow {
+                //- set `start`: subtract a few hours (difference between after and 0:00) from start
+                let after_time = filter.after_time.unwrap();
+                let diff = 24 - after_time;
+                start -= Duration::hours(diff as i64);
+
+                //- set `deadline`: add a few hours (before_time) to deadline
+                let before_time = filter.before_time.unwrap();
+                deadline += Duration::hours(before_time as i64);
+            }
+        }
 
         let time_slots_iterator = TimeSlotsIterator::new(
             start,
@@ -85,6 +101,8 @@ impl Goal {
                     let thresholded_steps = step.apply_duration_threshold();
 
                     steps.extend(thresholded_steps);
+
+                    let _i = 0;
                 } else {
                     steps.push(step);
                 }

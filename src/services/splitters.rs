@@ -8,7 +8,7 @@ use crate::{
         timeline::{Timeline, TimelineSlotsType},
     },
 };
-use chrono::{Datelike, Days, Duration, Timelike};
+use chrono::{Days, Duration, Timelike};
 use std::{collections::BTreeSet, ops::Add};
 
 impl Timeline {
@@ -248,8 +248,8 @@ pub fn split_crossed_tasks(tasks: &mut Vec<Task>) {
                 end: task.deadline,
             }
             .duration_as_hours();
-
             task2.duration -= task.duration;
+
             new_tasks.push(task.clone());
             if task2.duration > 0 {
                 new_tasks.push(task2);
@@ -265,7 +265,11 @@ pub fn split_crossed_tasks(tasks: &mut Vec<Task>) {
 
 /// Is a task crossing a day so day of start date is different from day of end date
 fn is_cross_day(task: &Task) -> bool {
-    task.start.day() < task.deadline.day()
+    let start = task.start.date();
+    let end = task.deadline.date();
+
+    // start < end
+    start < end || (start == end && task.start.time() > task.deadline.time())
 }
 
 #[cfg(test)]
@@ -671,6 +675,69 @@ mod tests {
             let splitted_timeline = timeline.split_into_days();
 
             assert_eq!(expected_result, splitted_timeline);
+        }
+    }
+
+    mod is_cross_day {
+        use chrono::Duration;
+
+        use crate::{
+            models::{output::Task, slot::Slot},
+            services::splitters::is_cross_day,
+        };
+
+        #[test]
+        fn test_first_day_of_month_with_hours_from_prev_day() {
+            let task_time = Slot::mock(Duration::hours(8), 2021, 12, 31, 22, 0);
+
+            let task = Task {
+                taskid: 10,
+                goalid: "1".to_string(),
+                title: "sleep".to_string(),
+                duration: 8,
+                start: task_time.start,
+                deadline: task_time.end,
+                tags: vec![],
+                impossible: false,
+            };
+
+            assert!(is_cross_day(&task));
+        }
+
+        #[test]
+        fn test_cross_day() {
+            let task_time = Slot::mock(Duration::hours(8), 2022, 1, 1, 22, 0);
+
+            let task = Task {
+                taskid: 10,
+                goalid: "1".to_string(),
+                title: "sleep".to_string(),
+                duration: 8,
+                start: task_time.start,
+                deadline: task_time.end,
+                tags: vec![],
+                impossible: false,
+            };
+
+            assert!(is_cross_day(&task));
+        }
+
+        #[test]
+        fn test_non_cross_day() {
+            let task_time = Slot::mock(Duration::hours(8), 2022, 1, 1, 0, 0);
+
+            let task = Task {
+                taskid: 10,
+                goalid: "1".to_string(),
+                title: "sleep".to_string(),
+                duration: 8,
+                start: task_time.start,
+                deadline: task_time.end,
+                tags: vec![],
+                impossible: false,
+            };
+
+            assert_eq!(false, is_cross_day(&task));
         }
     }
 }

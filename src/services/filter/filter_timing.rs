@@ -1,42 +1,11 @@
 use chrono::{Duration, Timelike};
 
 use crate::models::{
+    goal::TimeFilter,
     slot::Slot,
     timeline::{iterator::TimelineIterator, Timeline},
+    utils::TimingScenario,
 };
-
-/// Enum representing Timing Scenario for the provided
-/// timing range (after_time and before_time)
-#[derive(PartialEq, Debug)]
-enum TimingScenario {
-    /// Unbounded timing scenario where neither `after_time` nor `before_time` is defined
-    Unbounded,
-    /// Bounded timing scenario where both `after_time` and `before_time` are defined,
-    /// and `after_time` is less than or equal to `before_time`
-    Bounded,
-    /// Timing scenario where only `after_time` is defined and `before_time` is `None`
-    AfterOnly,
-    /// Timing scenario where only `before_time` is defined and `after_time` is `None`
-    BeforeOnly,
-    /// Timing scenario where `after_time` is greater than `before_time`, indicating a time range that wraps around midnight
-    Overflow,
-}
-
-/// Determines the timing scenario based on the `after_time` and `before_time` inputs.
-/// Returns a `TimingScenario` variant that represents the corresponding timing scenario.
-fn determine_timing_scenario(
-    after_time: Option<usize>,
-    before_time: Option<usize>,
-) -> TimingScenario {
-    match (after_time, before_time) {
-        (None, None) => TimingScenario::Unbounded,
-        (Some(_), None) => TimingScenario::AfterOnly,
-        (None, Some(_)) => TimingScenario::BeforeOnly,
-        (Some(after), Some(before)) if after <= before => TimingScenario::Bounded,
-        (Some(after), Some(before)) if after > before => TimingScenario::Overflow,
-        _ => TimingScenario::Unbounded,
-    }
-}
 
 /// Filtering timeline based on before_time and after_time fields in TimeFilter
 pub(crate) fn filter_timing(
@@ -53,9 +22,15 @@ pub(crate) fn filter_timing(
     validate_time(before_time, "before_time");
 
     // Determine the timing scenario based on the `after_time` and `before_time` inputs
-    let timing_scenario = determine_timing_scenario(after_time, before_time);
+    let timing_scenario = TimeFilter {
+        after_time,
+        before_time,
+        on_days: None,
+        not_on: None,
+    }
+    .determine_timing_scenario();
     let mut expected_timeline = Timeline::new();
-    let timeline_iterator = TimelineIterator::new(timeline, Duration::days(1));
+    let timeline_iterator = TimelineIterator::new(timeline.clone(), Duration::days(1));
     let mut slots: Vec<Slot> = vec![];
 
     match timing_scenario {
@@ -82,14 +57,28 @@ pub(crate) fn filter_timing(
             }
         }
         TimingScenario::BeforeOnly => {
+            // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
+            // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from
+            // midnight to midnight.
+
+            let timeline_iterator = TimelineIterator::new_calendar_day(timeline.clone());
+
             // If the timing scenario is `BeforeOnly`, adjust the end time of each slot
-            for mut walking_slots in timeline_iterator {
-                walking_slots.iter_mut().for_each(|mut slot| {
+            for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
+                for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
+                    if iterator_index == 0 && walking_index == 0 {
+                        let origin_start_hour = timeline.slots.first().unwrap().start.hour();
+                        slot.start = slot.start.with_hour(origin_start_hour).unwrap();
+                    }
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap()
                         - Duration::days(1);
                     slots.push(*slot);
-                });
+
+                    let _i = 0;
+                }
             }
+
+            let _i = 0;
         }
         TimingScenario::Bounded => {
             // If the timing scenario is `Bounded`, adjust both the start and end times of each slot
@@ -115,7 +104,7 @@ pub(crate) fn filter_timing(
                     if iterator_index == 0 && walking_index == 0 {
                         slots.push(Slot {
                             start: slot.start,
-                            end: slot.start.with_hour(before_time.unwrap() as u32).unwrap(),
+                            end: slot.end.with_hour(before_time.unwrap() as u32).unwrap(),
                         });
                     }
                     // ===
@@ -164,61 +153,6 @@ mod tests {
         models::{slot::Slot, timeline::Timeline},
         services::filter::filter_timing::filter_timing,
     };
-
-    mod timing_scenario {
-        use crate::services::filter::filter_timing::{determine_timing_scenario, TimingScenario};
-
-        /// Test the scenario where both `after_time` and `before_time` are `None`,
-        /// which should result in the `Unbounded` variant
-        #[test]
-        pub(crate) fn test_unbounded() {
-            let scenario = determine_timing_scenario(None, None);
-            assert_eq!(scenario, TimingScenario::Unbounded);
-        }
-
-        /// Test the scenario where only `after_time` is defined,
-        /// which should result in the `AfterOnly` variant
-        #[test]
-        pub(crate) fn test_after_only() {
-            let scenario = determine_timing_scenario(Some(10), None);
-            assert_eq!(scenario, TimingScenario::AfterOnly);
-        }
-
-        /// Test the scenario where only `before_time` is defined,
-        /// which should result in the `BeforeOnly` variant
-        #[test]
-        pub(crate) fn test_before_only() {
-            let scenario = determine_timing_scenario(None, Some(20));
-            assert_eq!(scenario, TimingScenario::BeforeOnly);
-        }
-
-        /// Test the scenario where both `after_time` and `before_time` are defined and
-        /// `after_time` is less than `before_time`, which should result in
-        /// the `Bounded` variant
-        #[test]
-        pub(crate) fn test_bounded() {
-            let scenario = determine_timing_scenario(Some(10), Some(20));
-            assert_eq!(scenario, TimingScenario::Bounded);
-        }
-
-        /// Test the scenario where both `after_time` and `before_time` are defined and
-        /// `after_time` is equal to `before_time`, which should result in
-        /// the `Bounded` variant
-        #[test]
-        pub(crate) fn test_bounded_and_both_are_equal() {
-            let scenario = determine_timing_scenario(Some(10), Some(10));
-            assert_eq!(scenario, TimingScenario::Bounded);
-        }
-
-        /// Test the scenario where both `after_time` and `before_time` are defined and
-        /// `after_time` is greater than `before_time`, which should result in the
-        /// `Overflow` variant
-        #[test]
-        pub(crate) fn test_overflow() {
-            let scenario = determine_timing_scenario(Some(20), Some(10));
-            assert_eq!(scenario, TimingScenario::Overflow);
-        }
-    }
 
     /// Test filter_timing when Timeline.slots is empty
     /// and before_time and after_time are None
@@ -349,20 +283,25 @@ mod tests {
     /// expept for last day will be till end of day not 5am next day
     #[test]
     fn test_overflow() {
-        let timeline_duration = Duration::days(5);
+        let timeline_duration = Duration::days(6);
         let after: u32 = 20;
         let before: u32 = 5;
 
-        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        let mut timeline_slot = Slot::mock(timeline_duration, 2023, 4, 30, after, 0);
+        timeline_slot.end -= Duration::hours((after - before) as i64);
+
+        let timeline = Timeline {
+            slots: vec![timeline_slot].into_iter().collect(),
+        };
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(5), 2023, 05, 1, 0, 0),
+                Slot::mock(Duration::hours(9), 2023, 04, 30, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 1, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 2, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 3, after, 0),
                 Slot::mock(Duration::hours(9), 2023, 05, 4, after, 0),
-                Slot::mock(Duration::hours(4), 2023, 05, 5, after, 0),
+                Slot::mock(Duration::hours(24), 2023, 05, 5, after, 0),
             ]
             .into_iter()
             .collect(),
@@ -397,6 +336,55 @@ mod tests {
         let result = filter_timing(timeline, Some(1), None);
 
         assert_eq!(expected_result, result);
+    }
+
+    /// Simulate edge case which is goal `hurdle` in test case bug_215
+    /// ```markdown
+    /// Input:
+    ///     Timeline:
+    ///         Slot { 2023-01-03 01 - 2023-01-10 00 }
+    ///     After: None
+    ///     Before: 03
+    ///
+    /// Expected Output:
+    ///     Timeline:
+    ///         Slot { 2023-01-03 01 - 2023-01-03 03 }
+    ///         Slot { 2023-01-04 00 - 2023-01-04 03 }
+    ///         Slot { 2023-01-05 00 - 2023-01-05 03 }
+    ///         Slot { 2023-01-06 00 - 2023-01-06 03 }
+    ///         Slot { 2023-01-07 00 - 2023-01-07 03 }
+    ///         Slot { 2023-01-08 00 - 2023-01-08 03 }
+    ///         Slot { 2023-01-09 00 - 2023-01-09 03 }
+    ///
+    /// ```
+    #[test]
+    fn test_hurdle_in_case_bug_215() {
+        //---
+
+        // Timeline: Slot { 2023-01-03 01 - 2023-01-10 00 }
+        let input_timeline = Timeline {
+            slots: vec![Slot::mock(Duration::hours(167), 2023, 1, 3, 1, 0)]
+                .into_iter()
+                .collect(),
+        };
+
+        let expected_timeline = Timeline {
+            slots: vec![
+                Slot::mock(Duration::hours(2), 2023, 1, 3, 1, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 4, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 5, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 6, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 7, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 8, 0, 0),
+                Slot::mock(Duration::hours(3), 2023, 1, 9, 0, 0),
+            ]
+            .into_iter()
+            .collect(),
+        };
+
+        let filtered_timeline = filter_timing(input_timeline, None, Some(3));
+
+        assert_eq!(filtered_timeline, expected_timeline);
     }
 
     // TODO 2023-05-15  | create a test scenario like test_beforetime_is_before_aftertime but slots passed in timeline not fullday

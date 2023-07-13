@@ -1,6 +1,6 @@
 use super::Timeline;
 use crate::models::slot::{iterator::SlotIterator, Slot};
-use chrono::Duration;
+use chrono::{Duration, NaiveDateTime, Timelike};
 
 // TODO 2023-05-20  | create edge cases to test behavior when first slot start time in the timeline is not 00 (midnight)
 // - Test idea to froce make the start of the timeline from 00 (midnight) of the first whatever even if it is other time in the same day
@@ -30,9 +30,10 @@ pub struct TimelineIterator {
 impl TimelineIterator {
     /// Initialize new TimelineIterator with default interval duration to 1 day
     pub fn initialize(timeline: Timeline) -> TimelineIterator {
-        if let Some(_pionter_start) = timeline.slots.first() {
+        // if let Some(_) = timeline.slots.first() {
+        if timeline.slots.first().is_some() {
             TimelineIterator {
-                timeline: timeline.clone(),
+                timeline,
                 interval: Duration::days(1),
             }
         } else {
@@ -42,11 +43,42 @@ impl TimelineIterator {
 
     /// Create new TimelineIterator with custom interval duration
     pub fn new(timeline: Timeline, interval_duration: Duration) -> TimelineIterator {
-        if let Some(_pionter_start) = timeline.slots.first() {
+        if timeline.slots.first().is_some() {
             TimelineIterator {
-                timeline: timeline.clone(),
+                timeline,
                 interval: interval_duration,
             }
+        } else {
+            panic!("Timeline slots are empty")
+        }
+    }
+
+    /// Create new TimelineIterator which iterate for a daily calendar
+    /// day regardless time of slots in the timeline
+    pub fn new_calendar_day(timeline: Timeline) -> TimelineIterator {
+        // TODO 2023-07-11: based on debugging in https://github.com/tijlleenders/ZinZen-scheduler/pull/363
+        // for case bug_215, agreed to create a custom TimelineIterator to iterate on daily basis from
+        // midnight to midnight.
+        if let Some(first_slot) = timeline.slots.first() {
+            let start_date = first_slot
+                .start
+                .with_hour(0)
+                .unwrap()
+                .with_minute(0)
+                .unwrap()
+                .with_second(0)
+                .unwrap();
+            let end_date: NaiveDateTime;
+            if timeline.slots.len() == 1 {
+                end_date = first_slot.end;
+            } else if let Some(last_slot) = timeline.slots.last() {
+                end_date = last_slot.end;
+            } else {
+                panic!("Can't get last timeline slot")
+            }
+
+            let custom_timeline = Timeline::initialize(start_date, end_date).unwrap();
+            TimelineIterator::initialize(custom_timeline)
         } else {
             panic!("Timeline slots are empty")
         }
@@ -235,5 +267,41 @@ mod tests {
         }
 
         assert_eq!(expected_result, result);
+    }
+
+    mod new_calendar_day {
+        use crate::models::{
+            slot::Slot,
+            timeline::{iterator::TimelineIterator, Timeline},
+        };
+        use chrono::Duration;
+
+        /// Test goal hurdl in test case bug_215 but for 3 days
+        #[test]
+        fn test_hurdle_in_case_bug_215() {
+            let timeline_duration = Duration::days(3);
+
+            let timeline_slot = Slot::mock(timeline_duration, 2023, 1, 3, 1, 0);
+            let timeline = Timeline {
+                slots: vec![timeline_slot].into_iter().collect(),
+            };
+
+            let expected_result: Vec<Slot> = vec![
+                Slot::mock(Duration::days(1), 2023, 1, 3, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 1, 4, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 1, 5, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 1, 6, 0, 0),
+            ];
+
+            let timeline_iterator = TimelineIterator::new_calendar_day(timeline.clone());
+
+            let mut result: Vec<Slot> = vec![];
+
+            for walking_slots in timeline_iterator {
+                result.extend(walking_slots);
+            }
+
+            assert_eq!(expected_result, result);
+        }
     }
 }

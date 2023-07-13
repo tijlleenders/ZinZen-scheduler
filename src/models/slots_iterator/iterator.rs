@@ -52,13 +52,11 @@ impl Iterator for TimeSlotsIterator {
                 for _i in 1..=indexes_to_delete_count {
                     self.timeline.slots.pop_first();
                 }
-
                 Some(result)
             }
             None => {
                 let result = self.timeline.clone();
                 self.timeline.slots.clear();
-                log::debug!("{:?}", &result);
                 Some(result)
             }
         }

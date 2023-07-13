@@ -25,7 +25,7 @@ impl Step {
                 "StepStatus must be ReadyToSchedule, but it is now StepStatus::{:?}",
                 self.status.clone()
             );
-            log::debug!("{message}");
+            log::debug!("{:#?}", message);
             return;
         }
 

@@ -33,8 +33,9 @@ impl TimeSlotsIterator {
             filters,
             current_start_position: start, //override after applying filters
         };
+
         result.timeline.apply_filter(&result.filters);
-        result.current_start_position = result.timeline.slots.first().unwrap().start;
+        result.current_start_position = start;
         result
     }
 }

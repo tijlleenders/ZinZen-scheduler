@@ -314,7 +314,6 @@ mod tests {
                 Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
             );
 
-            log::debug!("{:?}\n{:?}", &result, &expected);
             assert_eq!(expected.status, result.status);
             assert_eq!(expected, result);
         }
