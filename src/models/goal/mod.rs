@@ -7,6 +7,9 @@ use std::{collections::BTreeMap, option::Option};
 
 use super::{budget::Budget, slot::Slot};
 
+// TODO 2023-07-14: Apply new concept to all the system becuase still parts 
+//of the system using GoalMap.0 as goal_id
+/// Goal's Map of id to Goal. That Id is not goal_id.
 pub type GoalsMap = BTreeMap<String, Goal>;
 
 /// An aim or desired result someone wants to reach.  

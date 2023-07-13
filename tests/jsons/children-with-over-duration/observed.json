@@ -137,30 +137,14 @@
         },
         {
           "taskid": 14,
-          "goalid": "5",
-          "title": "Write report",
-          "duration": 1,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 5,
           "start": "2018-03-09T11:00:00",
-          "deadline": "2018-03-09T12:00:00"
-        },
-        {
-          "taskid": 15,
-          "goalid": "4",
-          "title": "Research",
-          "duration": 3,
-          "start": "2018-03-09T12:00:00",
-          "deadline": "2018-03-09T15:00:00"
-        },
-        {
-          "taskid": 16,
-          "goalid": "1",
-          "title": "work",
-          "duration": 1,
-          "start": "2018-03-09T15:00:00",
           "deadline": "2018-03-09T16:00:00"
         },
         {
-          "taskid": 17,
+          "taskid": 15,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -173,7 +157,7 @@
       "day": "2018-03-10",
       "tasks": [
         {
-          "taskid": 18,
+          "taskid": 16,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -181,19 +165,35 @@
           "deadline": "2018-03-10T08:00:00"
         },
         {
-          "taskid": 19,
-          "goalid": "1",
-          "title": "work",
+          "taskid": 17,
+          "goalid": "3",
+          "title": "Project B filler",
           "duration": 5,
           "start": "2018-03-10T08:00:00",
           "deadline": "2018-03-10T13:00:00"
         },
         {
+          "taskid": 18,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-03-10T13:00:00",
+          "deadline": "2018-03-10T14:00:00"
+        },
+        {
+          "taskid": 19,
+          "goalid": "5",
+          "title": "Write report",
+          "duration": 1,
+          "start": "2018-03-10T14:00:00",
+          "deadline": "2018-03-10T15:00:00"
+        },
+        {
           "taskid": 20,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2018-03-10T13:00:00",
+          "duration": 9,
+          "start": "2018-03-10T15:00:00",
           "deadline": "2018-03-11T00:00:00"
         }
       ]
@@ -205,8 +205,24 @@
           "taskid": 21,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
+          "duration": 8,
           "start": "2018-03-11T00:00:00",
+          "deadline": "2018-03-11T08:00:00"
+        },
+        {
+          "taskid": 22,
+          "goalid": "4",
+          "title": "Research",
+          "duration": 3,
+          "start": "2018-03-11T08:00:00",
+          "deadline": "2018-03-11T11:00:00"
+        },
+        {
+          "taskid": 23,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2018-03-11T11:00:00",
           "deadline": "2018-03-12T00:00:00"
         }
       ]
@@ -215,7 +231,7 @@
       "day": "2018-03-12",
       "tasks": [
         {
-          "taskid": 22,
+          "taskid": 24,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -223,7 +239,7 @@
           "deadline": "2018-03-12T08:00:00"
         },
         {
-          "taskid": 23,
+          "taskid": 25,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -231,7 +247,7 @@
           "deadline": "2018-03-12T16:00:00"
         },
         {
-          "taskid": 24,
+          "taskid": 26,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -244,7 +260,7 @@
       "day": "2018-03-13",
       "tasks": [
         {
-          "taskid": 25,
+          "taskid": 27,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -252,7 +268,7 @@
           "deadline": "2018-03-13T08:00:00"
         },
         {
-          "taskid": 26,
+          "taskid": 28,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -260,7 +276,7 @@
           "deadline": "2018-03-13T16:00:00"
         },
         {
-          "taskid": 27,
+          "taskid": 29,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -273,7 +289,7 @@
       "day": "2018-03-14",
       "tasks": [
         {
-          "taskid": 28,
+          "taskid": 30,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -281,7 +297,7 @@
           "deadline": "2018-03-14T08:00:00"
         },
         {
-          "taskid": 29,
+          "taskid": 31,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -289,7 +305,7 @@
           "deadline": "2018-03-14T16:00:00"
         },
         {
-          "taskid": 30,
+          "taskid": 32,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -302,7 +318,7 @@
       "day": "2018-03-15",
       "tasks": [
         {
-          "taskid": 31,
+          "taskid": 33,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -310,7 +326,7 @@
           "deadline": "2018-03-15T08:00:00"
         },
         {
-          "taskid": 32,
+          "taskid": 34,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -318,7 +334,7 @@
           "deadline": "2018-03-15T16:00:00"
         },
         {
-          "taskid": 33,
+          "taskid": 35,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -331,7 +347,7 @@
       "day": "2018-03-16",
       "tasks": [
         {
-          "taskid": 34,
+          "taskid": 36,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -339,7 +355,7 @@
           "deadline": "2018-03-16T08:00:00"
         },
         {
-          "taskid": 35,
+          "taskid": 37,
           "goalid": "1",
           "title": "work",
           "duration": 6,
@@ -347,7 +363,7 @@
           "deadline": "2018-03-16T14:00:00"
         },
         {
-          "taskid": 36,
+          "taskid": 38,
           "goalid": "free",
           "title": "free",
           "duration": 10,
@@ -360,7 +376,7 @@
       "day": "2018-03-17",
       "tasks": [
         {
-          "taskid": 37,
+          "taskid": 39,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -373,7 +389,7 @@
       "day": "2018-03-18",
       "tasks": [
         {
-          "taskid": 38,
+          "taskid": 40,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -386,7 +402,7 @@
       "day": "2018-03-19",
       "tasks": [
         {
-          "taskid": 39,
+          "taskid": 41,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -394,7 +410,7 @@
           "deadline": "2018-03-19T08:00:00"
         },
         {
-          "taskid": 40,
+          "taskid": 42,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -402,7 +418,7 @@
           "deadline": "2018-03-19T16:00:00"
         },
         {
-          "taskid": 41,
+          "taskid": 43,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -415,7 +431,7 @@
       "day": "2018-03-20",
       "tasks": [
         {
-          "taskid": 42,
+          "taskid": 44,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -423,7 +439,7 @@
           "deadline": "2018-03-20T08:00:00"
         },
         {
-          "taskid": 43,
+          "taskid": 45,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -431,7 +447,7 @@
           "deadline": "2018-03-20T16:00:00"
         },
         {
-          "taskid": 44,
+          "taskid": 46,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -444,7 +460,7 @@
       "day": "2018-03-21",
       "tasks": [
         {
-          "taskid": 45,
+          "taskid": 47,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -452,7 +468,7 @@
           "deadline": "2018-03-21T08:00:00"
         },
         {
-          "taskid": 46,
+          "taskid": 48,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -460,7 +476,7 @@
           "deadline": "2018-03-21T16:00:00"
         },
         {
-          "taskid": 47,
+          "taskid": 49,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -473,7 +489,7 @@
       "day": "2018-03-22",
       "tasks": [
         {
-          "taskid": 48,
+          "taskid": 50,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -481,7 +497,7 @@
           "deadline": "2018-03-22T08:00:00"
         },
         {
-          "taskid": 49,
+          "taskid": 51,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -489,7 +505,7 @@
           "deadline": "2018-03-22T16:00:00"
         },
         {
-          "taskid": 50,
+          "taskid": 52,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -502,7 +518,7 @@
       "day": "2018-03-23",
       "tasks": [
         {
-          "taskid": 51,
+          "taskid": 53,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -510,7 +526,7 @@
           "deadline": "2018-03-23T08:00:00"
         },
         {
-          "taskid": 52,
+          "taskid": 54,
           "goalid": "1",
           "title": "work",
           "duration": 6,
@@ -518,7 +534,7 @@
           "deadline": "2018-03-23T14:00:00"
         },
         {
-          "taskid": 53,
+          "taskid": 55,
           "goalid": "free",
           "title": "free",
           "duration": 10,
@@ -531,7 +547,7 @@
       "day": "2018-03-24",
       "tasks": [
         {
-          "taskid": 54,
+          "taskid": 56,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -544,7 +560,7 @@
       "day": "2018-03-25",
       "tasks": [
         {
-          "taskid": 55,
+          "taskid": 57,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -559,22 +575,6 @@
       "day": "2018-03-05",
       "tasks": [
         {
-          "taskid": 56,
-          "goalid": "1",
-          "title": "work",
-          "duration": 1,
-          "start": "2018-03-05T00:00:00",
-          "deadline": "2018-03-26T00:00:00"
-        },
-        {
-          "taskid": 57,
-          "goalid": "1",
-          "title": "work",
-          "duration": 1,
-          "start": "2018-03-05T00:00:00",
-          "deadline": "2018-03-26T00:00:00"
-        },
-        {
           "taskid": 58,
           "goalid": "1",
           "title": "work",
@@ -584,8 +584,8 @@
         },
         {
           "taskid": 59,
-          "goalid": "1",
-          "title": "work",
+          "goalid": "3",
+          "title": "Project B filler",
           "duration": 1,
           "start": "2018-03-05T00:00:00",
           "deadline": "2018-03-26T00:00:00"
@@ -816,9 +816,73 @@
         },
         {
           "taskid": 88,
-          "goalid": "3",
-          "title": "Project B filler",
-          "duration": 11,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 89,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 90,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 91,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 92,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 93,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 94,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 95,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 96,
+          "goalid": "1",
+          "title": "work",
+          "duration": 1,
           "start": "2018-03-05T00:00:00",
           "deadline": "2018-03-26T00:00:00"
         }

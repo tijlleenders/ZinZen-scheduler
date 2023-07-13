@@ -29,6 +29,7 @@ pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
     let mut steps: Vec<Step> = step_budgets.generate_steps(&mut goals, &mut counter);
 
     for (_, goal) in goals {
+        dbg!(&goal);
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
         let steps_for_goal: Vec<Step> =
             goal.generate_steps(calendar_start, calendar_end, &mut counter);
@@ -66,9 +67,9 @@ fn populate_goal_dates(
     calendar_start: NaiveDateTime,
     calendar_end: NaiveDateTime,
 ) -> GoalsMap {
-    for goal in goals.iter_mut() {
-        goal.1.start.get_or_insert(calendar_start);
-        goal.1.deadline.get_or_insert(calendar_end);
+    for (_, goal) in goals.iter_mut() {
+        goal.start.get_or_insert(calendar_start);
+        goal.deadline.get_or_insert(calendar_end);
     }
     goals
 }
@@ -112,22 +113,28 @@ fn add_filler_goals(goals: &mut GoalsMap) {
     let mut results: GoalsMap = BTreeMap::new();
     let mut ignore: Vec<String> = Vec::new();
     let mut children_to_add: Vec<(String, String)> = Vec::new();
-    for goal in goals.iter() {
-        if goal.1.children.is_some() && goal.1.budgets.is_none() {
+    for (_, goal) in goals.iter() {
+        dbg!(&goal);
+        if goal.children.is_some() && goal.budgets.is_none() {
             let mut duration_of_children: usize = 0;
-            for child in goal.1.children.clone().unwrap().iter() {
+            for child in goal.children.clone().unwrap().iter() {
                 let child_goal = goals.get(child).unwrap();
                 duration_of_children += child_goal.min_duration.unwrap();
             }
-            let difference = goal.1.min_duration.unwrap() - duration_of_children;
+            let difference = goal.min_duration.unwrap() - duration_of_children;
             if difference > 0 {
-                let mut filler_goal = goal.1.clone();
-                children_to_add.push((goal.1.id.clone(), filler_goal.id.clone()));
+                let mut filler_goal = goal.clone();
+                children_to_add.push((goal.id.clone(), filler_goal.id.clone()));
                 filler_goal.title.push_str(" filler");
                 filler_goal.min_duration = Some(difference);
                 filler_goal.tags.push(Tag::Filler);
+                // After removing duration from childs, remove childs to allow 
+                // dealing with it as normal steps and got scheduled.
+                filler_goal.children = None;
+                // TODO 2023-07-14: As agreed GoalsMap doesn't link goal_id with a goal. So need to resolve this in the whole system.
                 results.insert(filler_goal.id.clone(), filler_goal);
-                ignore.push(goal.1.id.clone());
+                dbg!(&results);
+                ignore.push(goal.id.clone());
             }
         }
     }
@@ -138,7 +145,10 @@ fn add_filler_goals(goals: &mut GoalsMap) {
             .tags
             .push(Tag::IgnoreStepGeneration);
     }
+    // TODO 2023-07-14: Need more info why this code needed to add itself id to its childs?
+    // Catch this in case children_with_over_duration for goal `Project B`
     for parent_child in children_to_add {
+        dbg!(&goals, &parent_child);
         goals
             .get_mut(&parent_child.0)
             .unwrap()
@@ -146,8 +156,13 @@ fn add_filler_goals(goals: &mut GoalsMap) {
             .as_mut()
             .unwrap()
             .push(parent_child.1.clone());
+        dbg!(&goals);
+        let _i = 0;
     }
+    dbg!(&goals);
     goals.extend(results);
+    dbg!(&goals);
+    let _i = 0;
 }
 
 #[allow(dead_code)]

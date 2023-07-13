@@ -27,6 +27,14 @@ pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
     }
 }
 
+/*
+TODO 2023-07-13:
+- apply todo notes inside function adjust_min_budget_step as possible
+- refactor function adjust_min_budget_step
+- create unit tests for adjust_min_budget_step and internal refactored functions
+- add feature to adjust_max_budget_step with test cases
+*/
+
 fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
     let mut steps_to_add: Vec<Step> = Vec::new();
 
