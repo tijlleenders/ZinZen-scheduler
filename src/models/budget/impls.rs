@@ -83,6 +83,8 @@ impl StepBudgets {
 
 #[cfg(test)]
 mod tests {
+    use crate::models::step;
+
     use super::*;
     use chrono::Duration;
 
@@ -110,5 +112,38 @@ mod tests {
             assert_eq!(slot_budget.min, Some(1));
             assert_eq!(slot_budget.max, Some(10));
         }
+    }
+
+    #[test]
+    fn test_decrease_slot() {
+        // Test decrease a slot from StepBudget
+
+        let mut step_budget = StepBudget {
+            step_budget_type: BudgetType::Weekly,
+            min: Some(8),
+            max: Some(15),
+            slot_budgets: vec![],
+        };
+        let timeframe = Slot::mock(Duration::days(14), 2018, 3, 5, 0, 0);
+
+        let start_date = timeframe.start;
+        let end_date = timeframe.end;
+
+        step_budget.generate_slot_budgets(start_date, end_date);
+        assert_eq!(step_budget.slot_budgets.len(), 2);
+        for slot_budget in step_budget.slot_budgets.iter() {
+            assert_eq!(slot_budget.used, 0);
+            assert_eq!(slot_budget.min, Some(8));
+            assert_eq!(slot_budget.max, Some(15));
+        }
+
+        let slot_to_decrease = Slot::mock(Duration::hours(3), 2018, 3, 5, 0, 0);
+        assert_eq!(slot_to_decrease.duration_as_hours(), 3);
+
+        step_budget.decrement(&slot_to_decrease);
+
+        assert_eq!(step_budget.slot_budgets.len(), 2);
+        assert_eq!(step_budget.slot_budgets[0].used, 3);
+        assert_eq!(step_budget.slot_budgets[1].used, 0);
     }
 }
