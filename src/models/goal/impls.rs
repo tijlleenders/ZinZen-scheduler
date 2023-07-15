@@ -1,6 +1,4 @@
 use super::{Day, Goal, TimeFilter};
-use crate::models::repetition::Repetition;
-use chrono::NaiveDateTime;
 use log::info;
 
 impl From<String> for Day {
@@ -43,31 +41,6 @@ impl Goal {
             title: String::from("Test"),
             ..Default::default()
         }
-    }
-
-    pub fn title(mut self, title: &str) -> Self {
-        self.title = title.to_string();
-        self
-    }
-
-    pub fn duration(mut self, min_duration: usize) -> Self {
-        self.min_duration = Some(min_duration);
-        self
-    }
-
-    pub fn repeat(mut self, repetition: Repetition) -> Self {
-        self.repeat = Some(repetition);
-        self
-    }
-
-    pub fn start(mut self, start: NaiveDateTime) -> Self {
-        self.start = Some(start);
-        self
-    }
-
-    pub fn deadline(mut self, deadline: NaiveDateTime) -> Self {
-        self.deadline = Some(deadline);
-        self
     }
 }
 
