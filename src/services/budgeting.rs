@@ -25,7 +25,7 @@ impl StepBudgets {
         self.add_descendants(goals);
 
         for budget in self.budget_map.values_mut() {
-            budget.initialize(self.calendar_start, self.calendar_end);
+            budget.generate_slot_budgets(self.calendar_start, self.calendar_end);
         }
 
         configure_goals_repeatance(goals, Some(self));

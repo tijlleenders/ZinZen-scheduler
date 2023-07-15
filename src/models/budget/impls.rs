@@ -32,7 +32,11 @@ impl StepBudget {
         result
     }
 
-    pub fn initialize(&mut self, budget_start: NaiveDateTime, budget_end: NaiveDateTime) {
+    pub fn generate_slot_budgets(
+        &mut self,
+        budget_start: NaiveDateTime,
+        budget_end: NaiveDateTime,
+    ) {
         let mut repetition: Repetition = Repetition::Weekly(1);
         match self.step_budget_type {
             BudgetType::Weekly => (),
@@ -98,7 +102,7 @@ mod tests {
         let start_date = timeframe.start;
         let end_date = timeframe.end;
 
-        step_budget.initialize(start_date, end_date);
+        step_budget.generate_slot_budgets(start_date, end_date);
 
         assert_eq!(step_budget.slot_budgets.len(), 5);
         for slot_budget in step_budget.slot_budgets.iter() {
