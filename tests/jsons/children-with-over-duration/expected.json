@@ -597,16 +597,7 @@
   "impossible": [
     {
       "day": "2018-03-05",
-      "tasks": [
-        {
-          "taskid": 62,
-          "goalid": "4",
-          "title": "Research",
-          "duration": 3,
-          "start": "2018-03-10T00:00:00",
-          "deadline": "2018-03-10T00:00:00"
-        }
-      ]
+      "tasks": []
     },
     {
       "day": "2018-03-06",
