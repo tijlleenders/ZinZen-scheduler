@@ -8,8 +8,8 @@ pub mod flexibility;
 pub mod output;
 /// For each Step, reduce the MaybeSlots Timeline into a FinalSlots Timeline, where the next Step to pick is calculated anew after every handled Step
 pub mod placer;
-/// Preprocessing new Input Goals data to be Steps ready to be placed StepsToPlace
-pub mod preprocess;
+/// Transforming Input Goals into Steps ready to be placed StepsToPlace
+pub mod transform;
 /// Contains functions which splitting Slots, Timelines and Steps
 pub mod splitters;
 /// Generates Steps from Goals, giving each Step their [MECE part](https://en.wikipedia.org/wiki/MECE_principle) of the Goal MaybeSlots Timeline

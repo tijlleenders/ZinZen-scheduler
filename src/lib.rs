@@ -70,7 +70,7 @@ use models::output::FinalTasks;
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
 use services::placer::step_placer;
-use services::preprocess::generate_steps_to_place;
+use services::transform::generate_steps_to_place;
 use wasm_bindgen::prelude::*;
 
 mod errors;
@@ -129,7 +129,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
     initialize_logger();
-
+    log::debug!("Input: {:#?}", &input);
     let steps = generate_steps_to_place(input);
     log::debug!("{:#?}", &steps);
     let placed_steps = step_placer(steps);
