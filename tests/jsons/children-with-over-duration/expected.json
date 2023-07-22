@@ -350,16 +350,16 @@
           "taskid": 37,
           "goalid": "1",
           "title": "work",
-          "duration": 8,
+          "duration": 6,
           "start": "2018-03-16T08:00:00",
-          "deadline": "2018-03-16T16:00:00"
+          "deadline": "2018-03-16T14:00:00"
         },
         {
           "taskid": 38,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2018-03-16T16:00:00",
+          "duration": 10,
+          "start": "2018-03-16T14:00:00",
           "deadline": "2018-03-17T00:00:00"
         }
       ]
@@ -371,24 +371,8 @@
           "taskid": 39,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2018-03-17T00:00:00",
-          "deadline": "2018-03-17T08:00:00"
-        },
-        {
-          "taskid": 40,
-          "goalid": "1",
-          "title": "work",
-          "duration": 5,
-          "start": "2018-03-17T08:00:00",
-          "deadline": "2018-03-17T13:00:00"
-        },
-        {
-          "taskid": 41,
-          "goalid": "free",
-          "title": "free",
-          "duration": 11,
-          "start": "2018-03-16T13:00:00",
           "deadline": "2018-03-18T00:00:00"
         }
       ]
@@ -397,7 +381,7 @@
       "day": "2018-03-18",
       "tasks": [
         {
-          "taskid": 42,
+          "taskid": 40,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -410,7 +394,7 @@
       "day": "2018-03-19",
       "tasks": [
         {
-          "taskid": 43,
+          "taskid": 41,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -418,7 +402,7 @@
           "deadline": "2018-03-19T08:00:00"
         },
         {
-          "taskid": 44,
+          "taskid": 42,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -426,7 +410,7 @@
           "deadline": "2018-03-19T16:00:00"
         },
         {
-          "taskid": 45,
+          "taskid": 43,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -439,7 +423,7 @@
       "day": "2018-03-20",
       "tasks": [
         {
-          "taskid": 46,
+          "taskid": 44,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -447,7 +431,7 @@
           "deadline": "2018-03-20T08:00:00"
         },
         {
-          "taskid": 47,
+          "taskid": 45,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -455,7 +439,7 @@
           "deadline": "2018-03-20T16:00:00"
         },
         {
-          "taskid": 48,
+          "taskid": 46,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -468,7 +452,7 @@
       "day": "2018-03-21",
       "tasks": [
         {
-          "taskid": 49,
+          "taskid": 47,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -476,7 +460,7 @@
           "deadline": "2018-03-21T08:00:00"
         },
         {
-          "taskid": 50,
+          "taskid": 48,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -484,7 +468,7 @@
           "deadline": "2018-03-21T16:00:00"
         },
         {
-          "taskid": 51,
+          "taskid": 49,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -497,7 +481,7 @@
       "day": "2018-03-22",
       "tasks": [
         {
-          "taskid": 52,
+          "taskid": 50,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -505,7 +489,7 @@
           "deadline": "2018-03-22T08:00:00"
         },
         {
-          "taskid": 53,
+          "taskid": 51,
           "goalid": "1",
           "title": "work",
           "duration": 8,
@@ -513,7 +497,7 @@
           "deadline": "2018-03-22T16:00:00"
         },
         {
-          "taskid": 54,
+          "taskid": 52,
           "goalid": "free",
           "title": "free",
           "duration": 8,
@@ -537,16 +521,16 @@
           "taskid": 56,
           "goalid": "1",
           "title": "work",
-          "duration": 8,
+          "duration": 6,
           "start": "2018-03-23T08:00:00",
-          "deadline": "2018-03-23T16:00:00"
+          "deadline": "2018-03-23T14:00:00"
         },
         {
           "taskid": 57,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
-          "start": "2018-03-23T16:00:00",
+          "duration": 10,
+          "start": "2018-03-23T14:00:00",
           "deadline": "2018-03-24T00:00:00"
         }
       ]
@@ -558,24 +542,8 @@
           "taskid": 58,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2018-03-24T00:00:00",
-          "deadline": "2018-03-24T08:00:00"
-        },
-        {
-          "taskid": 59,
-          "goalid": "1",
-          "title": "work",
-          "duration": 5,
-          "start": "2018-03-24T08:00:00",
-          "deadline": "2018-03-24T13:00:00"
-        },
-        {
-          "taskid": 60,
-          "goalid": "free",
-          "title": "free",
-          "duration": 11,
-          "start": "2018-03-24T13:00:00",
           "deadline": "2018-03-25T00:00:00"
         }
       ]
@@ -584,7 +552,7 @@
       "day": "2018-03-25",
       "tasks": [
         {
-          "taskid": 61,
+          "taskid": 59,
           "goalid": "free",
           "title": "free",
           "duration": 24,
