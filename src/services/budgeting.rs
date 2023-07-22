@@ -125,55 +125,23 @@ impl StepBudgets {
                         timeframe: None,
                     };
 
-                    let mut step = Step::new(new_step);
+                    let step = Step::new(new_step);
 
-                    let splitted_steps = step.split(counter).unwrap();
+                    // let splitted_steps = step.split(counter).unwrap();
 
-                    steps_result.extend(splitted_steps);
+                    // steps_result.extend(splitted_steps);
+                    dbg!(&step);
+                    steps_result.push(step);
+                    dbg!(&steps_result);
+                    let _i = 0;
                 } else {
                     panic!("No timeline slots found")
                 }
             }
         }
+        dbg!(&steps_result);
+        let _i = 0;
         steps_result
-    }
-}
-impl StepBudget {
-    /*
-    TODO 2023-07-15: Filter out from StepBudget total duration by child goals to avoid generating useless steps.
-    Ex: if budget { weekly (3) - min:30 }, and child goal{ duration: 15 },
-        so output will be: budget {week 1 - min: 15, week 2 - min: 30, week 3 - min: 30}
-
-    Function Param: StepBudget, goal_id, goals
-
-    Algorithm:
-    - get goal of goal_id
-    - get all child goals
-    - calculate total duration by child goals (create a function to calculate duration for a goal with respect to repeat value)
-    - deduct total duartion for childs from StepBudget.min and .max
-    */
-
-    fn filter_out_childs_duration(&mut self, goal_id: String, goals: Vec<Goal>) {
-        let goal = goals
-            .iter()
-            .filter(|goal| goal.id == goal_id)
-            .next()
-            .unwrap();
-
-        let childs_ids = goal.children.clone().unwrap();
-        let childs_goals: Vec<Goal> = childs_ids
-            .iter()
-            .map(|child_id| {
-                let child_goal = goals
-                    .iter()
-                    .filter(|goal| &goal.id == child_id)
-                    .next()
-                    .unwrap();
-                child_goal.clone()
-            })
-            .collect();
-
-        // CONT DEV 2023-07-15: continue algorithm in desc.
     }
 }
 

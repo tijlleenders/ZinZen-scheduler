@@ -11,14 +11,20 @@ use crate::models::timeline::Timeline;
 /// step a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible steps.
 pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
+    dbg!(&steps_to_place);
+
     //first pass of scheduler while steps are unsplit
     schedule(&mut steps_to_place);
+    dbg!(&steps_to_place);
 
     // TODO 2023-04-29: Fix function adjust_min_budget_steps based on debug feedback check:
     // https://github.com/tijlleenders/ZinZen-scheduler/issues/300#issuecomment-1528727445
 
     adjust_min_budget_step(&mut steps_to_place); //TODO
+    dbg!(&steps_to_place);
+
     schedule(&mut steps_to_place); //TODO
+    dbg!(&steps_to_place);
 
     PlacedSteps {
         calendar_start: steps_to_place.calendar_start,
@@ -36,10 +42,12 @@ TODO 2023-07-13:
 */
 
 fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
+    dbg!(&steps_to_place);
     let mut steps_to_add: Vec<Step> = Vec::new();
-
+    // TODO 2023-07-20: Avoid loop all over steps_to_place, and can just filter StepStatus::BudgetMinWaitingForAdjustment
     for index in 0..steps_to_place.steps.len() {
         if steps_to_place.steps[index].status == StepStatus::BudgetMinWaitingForAdjustment {
+            dbg!(&steps_to_place.steps[index]);
             for slot_budget in &steps_to_place
                 .step_budgets
                 .budget_map
@@ -54,6 +62,8 @@ fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
                 // TODO 2023-06-20: idea to refactor below code into a separate function
                 let mut step_slots_to_adjust = steps_to_place.steps[index].slots.clone();
                 for slot in step_slots_to_adjust.iter_mut() {
+                    dbg!(&slot_budget, &slot);
+
                     if slot.start.lt(&slot_budget.slot.start) {
                         slot.start = slot_budget.slot.start;
                     }
@@ -66,12 +76,20 @@ fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
                     if slot.start.gt(&slot_budget.slot.end) {
                         slot.start = slot_budget.slot.end;
                     }
+
+                    dbg!(&slot);
+                    let _i = 0;
                 }
                 let mut result_slots: Vec<Slot> = Vec::new();
+                dbg!(&step_slots_to_adjust);
                 for step_slot in step_slots_to_adjust {
                     if step_slot.start.ne(&step_slot.end) {
                         result_slots.push(step_slot);
                     }
+                }
+                dbg!(&result_slots);
+                if result_slots.is_empty(){
+                    continue;
                 }
 
                 // TODO 2023-06-04  | fix this by using retain instead of this way
@@ -101,26 +119,35 @@ fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
                         status: StepStatus::ReadyToSchedule,
                         timeframe: None,
                     };
+                    dbg!(&new_step);
 
-                    let step_to_add = Step::new(new_step);
+                    let mut step_to_add = Step::new(new_step);
+                    dbg!(&step_to_add);
+                    let mut id = step_id;
+                    let splitted_steps = step_to_add.split(&mut id).unwrap();
+                    steps_to_add.extend(splitted_steps);
 
-                    steps_to_add.push(step_to_add);
+                    // steps_to_add.push(step_to_add);
+                    dbg!(&steps_to_add);
+                    let _i = 0;
                 }
             }
         }
     }
+    dbg!(&steps_to_add);
     steps_to_place
         .steps
         .retain(|x| !x.tags.contains(&Tag::Remove));
     steps_to_place.steps.extend(steps_to_add);
+    dbg!(&steps_to_place);
 }
 
 fn schedule(steps_to_place: &mut StepsToPlace) {
     loop {
         steps_to_place.sort_on_flexibility();
-
+        dbg!(&steps_to_place);
         let first_step = steps_to_place.steps[0].clone();
-
+        dbg!(&first_step);
         if first_step.status != StepStatus::ReadyToSchedule {
             break;
         }
