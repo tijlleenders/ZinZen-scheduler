@@ -128,9 +128,9 @@ fn add_filler_goals(goals: &mut GoalsMap) {
                 filler_goal.title.push_str(" filler");
                 filler_goal.min_duration = Some(difference);
                 filler_goal.tags.push(Tag::Filler);
-                // After removing duration from childs, remove childs to allow
-                // dealing with it as normal steps and got scheduled.
-                filler_goal.children = None;
+                // // After removing duration from childs, remove childs to allow
+                // // dealing with it as normal steps and got scheduled.
+                // filler_goal.children = None;
                 // TODO 2023-07-14: As agreed GoalsMap doesn't link goal_id with a goal. So need to resolve this in the whole system.
                 results.insert(filler_goal.id.clone(), filler_goal);
                 dbg!(&results);

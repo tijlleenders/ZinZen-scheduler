@@ -19,10 +19,10 @@ impl StepBudgets {
         if goals.is_empty() {
             panic!("expected goals for making StepBudgets");
         }
-
         tag_budgeted_goals(goals);
         self.insert_budgeted_goals(goals);
         self.add_descendants(goals);
+        remove_childs_from_filler_goals(goals);
 
         for budget in self.budget_map.values_mut() {
             budget.generate_slot_budgets(self.calendar_start, self.calendar_end);
@@ -69,6 +69,8 @@ impl StepBudgets {
     ///  Determine whether a given slot is allowed by the budget constraints associated with a particular goal or not.
     pub(crate) fn is_allowed_by_budget(&mut self, slot: &Slot, goal_id: &String) -> bool {
         let mut result: bool = false;
+        // TODO 2023-07-23: BUG here if step is a sub child, will not consider it from budget, althoguth it is
+        // Example: Case children_with_over_duration for step `Write Report`
         let budget_ids = self.budget_ids_map.get(goal_id);
         //decrement all budgets or none => check first - then do
         if budget_ids.is_none() {
@@ -85,7 +87,10 @@ impl StepBudgets {
         if decrement_all {
             for budget_id in budget_ids.unwrap().iter() {
                 let budget = self.budget_map.get_mut(budget_id).unwrap();
+                dbg!(&budget);
+                // TODO 2023-07-23: Cont Dev why step `Write report` not affecting slot_budget.used
                 budget.decrement(slot);
+                dbg!(&budget);
             }
             result = true;
         }
@@ -144,6 +149,22 @@ impl StepBudgets {
         let _i = 0;
         steps_result
     }
+}
+
+fn remove_childs_from_filler_goals(goals_map: &mut GoalsMap) {
+    // TODO 2023-07-23: remove childs from Filler goals which causing issue
+    // Previuously, it was removed from function transform::add_filler_goals,
+    // but found it causing wrong calculation for SlotBudget.used when steps
+    // are not sub child and StepBudgets doesn't link it with grand parent goal if avail.
+    // TODO 2023-07-23: create unit tests
+    dbg!(&goals_map);
+    goals_map
+        .iter_mut()
+        .filter(|(_, goal)| goal.tags.contains(&Tag::Filler))
+        .for_each(|(_, goal)| goal.children = None);
+
+    dbg!(&goals_map);
+    let _i = 0;
 }
 
 /// Configure each goal.repeat in case goal.repeat is none and step_budgets.
