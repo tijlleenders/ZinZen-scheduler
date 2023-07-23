@@ -88,7 +88,7 @@ fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
                     }
                 }
                 dbg!(&result_slots);
-                if result_slots.is_empty(){
+                if result_slots.is_empty() {
                     continue;
                 }
 
@@ -153,7 +153,9 @@ fn schedule(steps_to_place: &mut StepsToPlace) {
         }
         match conflicts::find_best_slots(&steps_to_place.steps) {
             Some(chosen_slots) => {
+                dbg!(&chosen_slots);
                 do_the_scheduling(steps_to_place, chosen_slots);
+                dbg!(&steps_to_place);
             }
             None => break,
         }
@@ -177,24 +179,42 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     let mut template_step = steps_to_place.steps[0].clone();
     template_step.status = StepStatus::Scheduled;
     // template_step.duration = 1;
+    // TODO 2023-07-23: develop consistent way to assign step.id for steps
     template_step.id = steps_to_place.steps.len();
     template_step.slots.clear();
-
+    dbg!(&template_step);
     for slot in chosen_slots.iter() {
+        dbg!(&slot);
         if remaining_hours == 0 {
             break;
         }
 
+        /* 
+        DEBUG 2023-07-23: below logic is not accurate which causing to make Impossible steps.
+        - Found while debugging case children_with_over_duration 
+        - Found a Step `Project B filler` assigned on first week, then because first week is not allowed, status changed to Impossible.
+            - Correct solution: to ask for different week if possible
+            - Why chosen_slots is just only one, although there are another slots.
+
+        TODO: Debug Research step here beacuse it is assigned in first week
+
+ 
+        */
+        dbg!(&steps_to_place.step_budgets);
         if !steps_to_place
             .step_budgets
             .is_allowed_by_budget(slot, &template_step.goal_id)
         {
+            dbg!(&steps_to_place.step_budgets);
             continue;
         }
+        dbg!(&steps_to_place.step_budgets);
+        dbg!(&slot.duration_as_hours());
         remaining_hours -= slot.duration_as_hours();
         template_step.id += 1;
         template_step.start = Some(slot.start);
         template_step.deadline = Some(slot.end);
+        dbg!(&template_step);
         steps_to_place.steps.push(template_step.clone());
     }
 
@@ -207,12 +227,14 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     if remaining_hours > 0 {
         steps_to_place.steps[0].duration = remaining_hours;
         steps_to_place.steps[0].status = StepStatus::Impossible;
+        dbg!(&steps_to_place.steps[0]);
     } else {
         steps_to_place.steps.remove(0);
 
         // TODO 2023-06-06  | apply function Step::remove_from_blocked_by when it is developed
         let _step_scheduled_goal_id = steps_to_place.steps[0].goal_id.clone();
     }
+    dbg!(&steps_to_place);
 }
 
 #[cfg(test)]

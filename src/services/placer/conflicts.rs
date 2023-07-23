@@ -6,6 +6,7 @@ use chrono::Duration;
 
 /// Find best slots for steps by splitting, finding conflicts and return list of slots which can be scheduled
 pub(crate) fn find_best_slots(steps: &Vec<Step>) -> Option<Vec<Slot>> {
+    dbg!(&steps);
     // TODO 2023-05-25  \ Avoid spliting slots which causing wrong scheduling
     // Issued while debugging test case bug_215
 
@@ -36,14 +37,19 @@ pub(crate) fn find_best_slots(steps: &Vec<Step>) -> Option<Vec<Slot>> {
 
     let step = &steps[0];
     let mut slot_conflicts = step.get_conflicts_in_steps(steps);
+    dbg!(&step, &slot_conflicts);
 
-    let mut result = vec![];
-    for _dur in 0..step.duration {
-        match slot_conflicts.pop() {
-            Some(s) => result.push(s.slot),
-            None => break,
-        }
-    }
+    // let mut result = vec![];
+    // for _dur in 0..step.duration {
+    //     match slot_conflicts.pop() {
+    //         Some(s) => result.push(s.slot),
+    //         None => break,
+    //     }
+    // }
+
+    let mut result: Vec<Slot> = slot_conflicts.iter().map(|c| c.slot).collect();
+    result.sort();
+    dbg!(&result);
 
     Some(result)
 }

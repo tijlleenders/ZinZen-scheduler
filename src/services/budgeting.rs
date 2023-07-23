@@ -66,6 +66,7 @@ impl StepBudgets {
         }
     }
 
+    ///  Determine whether a given slot is allowed by the budget constraints associated with a particular goal or not.
     pub(crate) fn is_allowed_by_budget(&mut self, slot: &Slot, goal_id: &String) -> bool {
         let mut result: bool = false;
         let budget_ids = self.budget_ids_map.get(goal_id);
