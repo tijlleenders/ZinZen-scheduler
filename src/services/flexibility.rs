@@ -20,12 +20,10 @@ impl StepsToPlace {
 impl Step {
     /// Calculate flexibility of a step slots
     pub fn calculate_flexibility(&mut self) {
-        if self.status == StepStatus::Scheduled || self.status == StepStatus::Impossible {
-            let message = format!(
-                "StepStatus must be ReadyToSchedule, but it is now StepStatus::{:?}",
-                self.status.clone()
-            );
-            log::debug!("{:#?}", message);
+        if self.status == StepStatus::Scheduled
+            || self.status == StepStatus::Impossible
+            || self.status == StepStatus::BudgetMinWaitingForAdjustment
+        {
             return;
         }
 
