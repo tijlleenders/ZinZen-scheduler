@@ -2,7 +2,7 @@ use std::process::Command;
 
 fn main() {
     let mut command = Command::new("cargo");
-    command.args(["test"]);
+    command.args(["test", "--no-fail-fast"]);
 
     let test_output = command.output().expect("failed to execute process");
     let test_output_string = String::from_utf8_lossy(&test_output.stdout);
