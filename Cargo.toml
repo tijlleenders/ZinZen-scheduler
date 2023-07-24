@@ -50,6 +50,7 @@ env_logger = "0.10.0"
 
 # soft assertions without panic
 soft = "0.1.1"
+rand = "0.8.5"
 
 
 [dev-dependencies]

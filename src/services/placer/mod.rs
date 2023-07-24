@@ -6,6 +6,7 @@ use crate::models::input::{PlacedSteps, StepsToPlace};
 use crate::models::slot::Slot;
 use crate::models::step::{NewStep, Step, StepStatus};
 use crate::models::timeline::Timeline;
+use crate::services::utils::generate_step_id;
 
 /// The Step Placer receives a list of steps from the Step Generator and attempts to assign each
 /// step a confirmed start and deadline.
@@ -98,7 +99,7 @@ fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
                 let new_title = steps_to_place.steps[index].title.clone();
                 if steps_to_place.steps[index].duration >= slot_budget.used {
                     let new_duration = steps_to_place.steps[index].duration - slot_budget.used;
-                    let step_id = steps_to_place.steps[index].id;
+                    let step_id = generate_step_id();
                     let goal = Goal {
                         id: steps_to_place.steps[index].goal_id.clone(),
                         title: new_title.clone(),
@@ -180,7 +181,8 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     template_step.status = StepStatus::Scheduled;
     // template_step.duration = 1;
     // TODO 2023-07-23: develop consistent way to assign step.id for steps
-    template_step.id = steps_to_place.steps.len();
+    // TODO 2023-07-24: Is that possible to assign same step.id to template_step.id?
+    template_step.id = generate_step_id();
     template_step.slots.clear();
     dbg!(&template_step);
     for slot in chosen_slots.iter() {
@@ -189,16 +191,16 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
             break;
         }
 
-        /* 
+        /*
         DEBUG 2023-07-23: below logic is not accurate which causing to make Impossible steps.
-        - Found while debugging case children_with_over_duration 
+        - Found while debugging case children_with_over_duration
         - Found a Step `Project B filler` assigned on first week, then because first week is not allowed, status changed to Impossible.
             - Correct solution: to ask for different week if possible
             - Why chosen_slots is just only one, although there are another slots.
 
         TODO: Debug Research step here beacuse it is assigned in first week
 
- 
+
         */
         dbg!(&steps_to_place.step_budgets);
         if !steps_to_place
@@ -211,7 +213,8 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         dbg!(&steps_to_place.step_budgets);
         dbg!(&slot.duration_as_hours());
         remaining_hours -= slot.duration_as_hours();
-        template_step.id += 1;
+        // TODO 2023-07-24: change this way to assigning Ids; this will leads to multiple steps with the same id
+        // template_step.id += 1;
         template_step.start = Some(slot.start);
         template_step.deadline = Some(slot.end);
         dbg!(&template_step);

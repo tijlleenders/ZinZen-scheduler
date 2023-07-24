@@ -1,11 +1,11 @@
-use crate::models::{
+use crate::{models::{
     budget::{BudgetType, StepBudget, StepBudgets},
     goal::{Goal, GoalsMap, Tag},
     repetition::Repetition,
     slot::Slot,
     slots_iterator::TimeSlotsIterator,
     step::{NewStep, Step, StepStatus},
-};
+}, services::utils::generate_step_id};
 use chrono::NaiveDateTime;
 
 impl StepBudgets {
@@ -116,7 +116,7 @@ impl StepBudgets {
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
-                let step_id = *counter;
+                let step_id = generate_step_id();
                 *counter += 1;
                 if !timeline.slots.is_empty() {
                     let duration = step_budget.min.unwrap();

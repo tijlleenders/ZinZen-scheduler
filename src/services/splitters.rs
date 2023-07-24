@@ -11,6 +11,8 @@ use crate::{
 use chrono::{Days, Duration, Timelike};
 use std::{collections::BTreeSet, ops::Add};
 
+use super::utils::generate_step_id;
+
 impl Timeline {
     /// Get splitted timeline into slots with 1 day interval
     pub fn split_into_days(&self) -> Timeline {
@@ -74,7 +76,7 @@ impl Step {
 
         for _ in 0..self.duration {
             let mut step = Step::new(new_step.clone());
-            step.id = *counter;
+            step.id = generate_step_id();
             step.status = StepStatus::ReadyToSchedule;
             step.tags = vec![];
             *counter += 1;

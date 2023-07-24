@@ -1,3 +1,4 @@
+use super::utils::generate_step_id;
 use crate::models::goal::{Goal, Tag};
 use crate::models::slots_iterator::TimeSlotsIterator;
 use crate::models::step::{NewStep, Step, StepStatus};
@@ -77,7 +78,7 @@ impl Goal {
         );
 
         for timeline in time_slots_iterator {
-            let step_id = *counter;
+            let step_id = generate_step_id();
             *counter += 1;
 
             if !timeline.slots.is_empty() && self.min_duration.is_some() {
@@ -101,8 +102,6 @@ impl Goal {
                     let thresholded_steps = step.apply_duration_threshold();
 
                     steps.extend(thresholded_steps);
-
-                    let _i = 0;
                 } else {
                     steps.push(step);
                 }

@@ -14,3 +14,5 @@ pub mod transform;
 pub mod splitters;
 /// Generates Steps from Goals, giving each Step their [MECE part](https://en.wikipedia.org/wiki/MECE_principle) of the Goal MaybeSlots Timeline
 pub mod step_generator;
+/// Contains some common utilty functions
+pub mod utils;
