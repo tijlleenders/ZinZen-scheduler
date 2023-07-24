@@ -174,12 +174,23 @@ impl Step {
     ///     - It returns sorted list of SlotConflict based on slot.start then num_conflicts
     ///     - Splitting slots into schedulable slots based on slot's timing and step's duration
     fn get_conflicts_in_steps(&self, steps_list: &[Step]) -> Vec<SlotConflict> {
+        dbg!(&self, &steps_list, &steps_list.len());
         // Remove given_step from steps_list to avoid wrong conflicts calculation
         let steps_list: Vec<Step> = steps_list
             .iter()
-            .filter(|step| step.id != self.id)
+            .filter(|step| {
+                dbg!(&step, &self);
+                // DEBUG 2023-07-24: Because of no consistent step.id (which you can find many different steps with the same id, this will filter needed steps which leads to not avoid  conflicts)
+                let result = step.id != self.id;
+                dbg!(&result);
+
+                result
+
+            }
+            )
             .cloned()
             .collect();
+        dbg!(&steps_list, &steps_list.len());
 
         let mut conflicts_list: Vec<SlotConflict> = vec![];
 
@@ -199,6 +210,8 @@ impl Step {
 
         conflicts_list.sort_by(|a, b| b.slot.start.partial_cmp(&a.slot.start).unwrap());
         conflicts_list.sort_by(|a, b| b.num_conflicts.partial_cmp(&a.num_conflicts).unwrap());
+
+        dbg!(&conflicts_list);
 
         conflicts_list
     }
