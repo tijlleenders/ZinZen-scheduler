@@ -179,51 +179,43 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     let mut remaining_hours = steps_to_place.steps[0].duration;
     let mut template_step = steps_to_place.steps[0].clone();
     template_step.status = StepStatus::Scheduled;
-    // template_step.duration = 1;
-    // TODO 2023-07-23: develop consistent way to assign step.id for steps
-    // TODO 2023-07-24: Is that possible to assign same step.id to template_step.id?
     template_step.id = generate_step_id();
     template_step.slots.clear();
     dbg!(&template_step);
+    let mut chosen_slot = chosen_slots[0];
+    
     for slot in chosen_slots.iter() {
         dbg!(&slot);
         if remaining_hours == 0 {
             break;
         }
 
-        /*
-        DEBUG 2023-07-23: below logic is not accurate which causing to make Impossible steps.
-        - Found while debugging case children_with_over_duration
-        - Found a Step `Project B filler` assigned on first week, then because first week is not allowed, status changed to Impossible.
-            - Correct solution: to ask for different week if possible
-            - Why chosen_slots is just only one, although there are another slots.
-
-        TODO: Debug Research step here beacuse it is assigned in first week
-
-
-        */
         dbg!(&steps_to_place.step_budgets);
         if !steps_to_place
             .step_budgets
             .is_allowed_by_budget(slot, &template_step.goal_id)
         {
             dbg!(&steps_to_place.step_budgets);
+            // TODO 2023-07-24: when found slot not in budget, remove_conflicted_slots
             continue;
         }
         dbg!(&steps_to_place.step_budgets);
         dbg!(&slot.duration_as_hours());
+        chosen_slot = slot.clone();
+        dbg!(&chosen_slot);
         remaining_hours -= slot.duration_as_hours();
-        // TODO 2023-07-24: change this way to assigning Ids; this will leads to multiple steps with the same id
-        // template_step.id += 1;
         template_step.start = Some(slot.start);
         template_step.deadline = Some(slot.end);
         dbg!(&template_step);
         steps_to_place.steps.push(template_step.clone());
     }
 
-    let chosen_slot = chosen_slots[0];
+    
     for step in steps_to_place.steps.iter_mut() {
+        dbg!(&step, &chosen_slot);
         step.remove_conflicted_slots(chosen_slot.to_owned());
+        dbg!(&step);
+        let _i = 0;
     }
 
     //Todo remove chosen_slots from StepBudgets
