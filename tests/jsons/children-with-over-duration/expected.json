@@ -137,7 +137,7 @@
         },
         {
           "taskid": 14,
-          "goalid": "3",
+          "goalid": "5",
           "title": "Write report",
           "duration": 1,
           "start": "2018-03-09T11:00:00",
@@ -145,7 +145,7 @@
         },
         {
           "taskid": 15,
-          "goalid": "5",
+          "goalid": "3",
           "title": "Project B filler",
           "duration": 4,
           "start": "2018-03-09T12:00:00",
@@ -174,7 +174,7 @@
         },
         {
           "taskid": 18,
-          "goalid": "5",
+          "goalid": "3",
           "title": "Project B filler",
           "duration": 5,
           "start": "2018-03-10T08:00:00",
@@ -216,7 +216,7 @@
         },
         {
           "taskid": 22,
-          "goalid": "5",
+          "goalid": "3",
           "title": "Project B filler",
           "duration": 2,
           "start": "2018-03-12T08:00:00",
