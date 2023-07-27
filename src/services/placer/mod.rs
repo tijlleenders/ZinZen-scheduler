@@ -147,6 +147,7 @@ fn schedule(steps_to_place: &mut StepsToPlace) {
     loop {
         steps_to_place.sort_on_flexibility();
         dbg!(&steps_to_place);
+        // let first_step = get_first_step(&steps_to_place.steps);
         let first_step = steps_to_place.steps[0].clone();
         dbg!(&first_step);
         if first_step.status != StepStatus::ReadyToSchedule {
@@ -161,6 +162,62 @@ fn schedule(steps_to_place: &mut StepsToPlace) {
             None => break,
         }
     }
+}
+
+/// Get first step based on criteria as below priorities:
+/// - Step.flexibility = 1, if not available
+/// - Highest Step.flexibility
+fn get_first_step(steps: &Vec<Step>) -> Step {
+    let steps_ready_to_schedule: Vec<Step> = steps
+        .iter()
+        .filter(|step| step.status == StepStatus::ReadyToSchedule)
+        .cloned()
+        .collect();
+    dbg!(&steps_ready_to_schedule);
+    let steps_flex_is_1: Vec<Step> = steps_ready_to_schedule
+        .iter()
+        .filter(|step| step.flexibility == 1)
+        .cloned()
+        .collect();
+    dbg!(&steps_flex_is_1);
+    if !steps_flex_is_1.is_empty() {
+        return steps_ready_to_schedule[0].clone();
+    } else {
+        match steps_ready_to_schedule.iter().max_by_key(|x| x.flexibility) {
+            Some(highest_step_flex) => {
+                return highest_step_flex.clone();
+            }
+            None => {
+                return steps[0].clone();
+            }
+        }
+    }
+}
+
+/// Apply custom sorting to steps as below:
+/// - Child steps should be before Parent steps
+/// - Other steps which not ReadyToSchedule should be at the end of final list
+fn get_sorted_steps(steps: &Vec<Step>, goals: &Vec<Goal>) -> Vec<Step> {
+    let steps_not_ready_to_schedule: Vec<Step> = steps
+        .iter()
+        .filter(|step| step.status != StepStatus::ReadyToSchedule)
+        .cloned()
+        .collect();
+
+    let steps_ready_to_schedule: Vec<Step> = steps
+        .iter()
+        .filter(|step| step.status == StepStatus::ReadyToSchedule)
+        .cloned()
+        .collect();
+
+    
+
+    // steps
+    //     .iter()
+    //     .sorted_by(|a, b| a.flexibility.cmp(&b.flexibility))
+    //     .cloned()
+    //     .collect()
+    vec![]
 }
 
 fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>) {
@@ -183,7 +240,7 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
     template_step.slots.clear();
     dbg!(&template_step);
     let mut chosen_slot = chosen_slots[0];
-    
+
     for slot in chosen_slots.iter() {
         dbg!(&slot);
         if remaining_hours == 0 {
@@ -210,7 +267,6 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         steps_to_place.steps.push(template_step.clone());
     }
 
-    
     for step in steps_to_place.steps.iter_mut() {
         dbg!(&step, &chosen_slot);
         step.remove_conflicted_slots(chosen_slot.to_owned());
