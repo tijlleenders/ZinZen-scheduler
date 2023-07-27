@@ -65,8 +65,8 @@
 //! quality perception of the ZinZen&reg; projects.
 
 use errors::Error;
-use models::input::Input;
 use models::output::FinalTasks;
+use models::{goal::Goal, input::Input};
 use serde_wasm_bindgen::{from_value, to_value};
 use services::output::output_formatter;
 use services::placer::step_placer;
@@ -83,10 +83,14 @@ pub mod services;
 #[cfg(test)]
 mod tests;
 
-use std::sync::Once;
+use std::sync::{Once, RwLock};
 
 // Static flag to ensure logger init happens only once
 static LOGGER_INITIALIZED: Once = Once::new();
+
+/// Static list of goals which defined once and can be read many times
+/// - Note: to read the GOALS, use try_read to avoid blocking (deadlock)
+static GOALS: RwLock<Vec<Goal>> = RwLock::new(Vec::new());
 
 fn initialize_logger() {
     // Use the Once flag to ensure initialization happens only once
@@ -131,8 +135,10 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
     initialize_logger();
     log::debug!("Input: {:#?}", &input);
     let steps = generate_steps_to_place(input);
+    dbg!(&steps);
     log::debug!("{:#?}", &steps);
     let placed_steps = step_placer(steps);
+    dbg!(&placed_steps);
     log::debug!("{:#?}", &placed_steps);
     match output_formatter(placed_steps) {
         Err(Error::NoConfirmedDate(title, id)) => {

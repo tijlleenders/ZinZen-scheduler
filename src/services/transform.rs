@@ -1,6 +1,6 @@
 use crate::models::{
     budget::StepBudgets,
-    goal::{Goal, GoalsMap, Tag},
+    goal::{impls::initialize_goals_globally, Goal, GoalsMap, Tag},
     input::{Input, StepsToPlace},
     repetition::Repetition,
     step::Step,
@@ -27,13 +27,19 @@ pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
 
     let mut counter: usize = 0;
     let mut steps: Vec<Step> = step_budgets.generate_steps(&mut goals, &mut counter);
+    dbg!(&steps);
+
+    initialize_goals_globally(goals.values().cloned().collect());
 
     for (_, goal) in goals {
         dbg!(&goal);
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
         let steps_for_goal: Vec<Step> =
             goal.generate_steps(calendar_start, calendar_end, &mut counter);
+        dbg!(&steps_for_goal);
         steps.extend(steps_for_goal);
+        dbg!(&steps);
+        let _i = 0;
     }
 
     StepsToPlace {

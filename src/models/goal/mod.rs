@@ -3,14 +3,21 @@ pub mod impls;
 use crate::models::repetition::Repetition;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use std::{collections::BTreeMap, option::Option};
+use std::{
+    collections::BTreeMap,
+    option::Option,
+    sync::{Once, RwLock},
+};
 
 use super::{budget::Budget, slot::Slot};
 
-// TODO 2023-07-14: Apply new concept to all the system becuase still parts 
+// TODO 2023-07-14: Apply new concept to all the system becuase still parts
 //of the system using GoalMap.0 as goal_id
 /// Goal's Map of id to Goal. That Id is not goal_id.
 pub type GoalsMap = BTreeMap<String, Goal>;
+
+/// Static flag to ensure goals initialization happens only once to the static variable GOALS
+static GOALS_INITIALIZED: Once = Once::new();
 
 /// An aim or desired result someone wants to reach.  
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]
@@ -81,7 +88,7 @@ pub struct TimeFilter {
 // As agreed in a meeting to refactor this and seperate Tag for Goals and Taasks
 // ===
 /// Helper tags for the algorithm
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, PartialOrd, Eq, Clone, Copy)]
 pub enum Tag {
     Donotsplit,
     Weekly,
@@ -92,3 +99,5 @@ pub enum Tag {
     Filler,
     Budget,
 }
+
+
