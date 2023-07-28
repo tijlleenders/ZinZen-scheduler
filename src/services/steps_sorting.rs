@@ -1,8 +1,11 @@
 use std::cmp::Ordering;
 
-use crate::models::{
-    goal::{Goal, Tag},
-    step::{Step, StepStatus},
+use crate::{
+    models::{
+        goal::{Goal, Tag},
+        step::{Step, StepStatus},
+    },
+    GOALS,
 };
 
 impl PartialEq for Step {
@@ -11,11 +14,11 @@ impl PartialEq for Step {
     }
 }
 
-// impl PartialOrd for Step {
-//     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-//         Some(self.cmp(other))
-//     }
-// }
+impl PartialOrd for Step {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
 
 impl Ord for Step {
     /// ### Custom ordering for collections of Steps:
@@ -47,45 +50,12 @@ impl Ord for Step {
     /// - If there is a Steps with flexibility 1, pick that one
     /// - If there are no more Steps with flexibility 1 - pick the Step with **highest** flexibility
     fn cmp(&self, other: &Self) -> Ordering {
-        // TODO 2023-06-01  | Refactor for readability
-        if (self.status == StepStatus::ReadyToSchedule)
-            && !(other.status == StepStatus::ReadyToSchedule)
-        {
-            Ordering::Less
-        } else if (other.status == StepStatus::ReadyToSchedule)
-            && !(self.status == StepStatus::ReadyToSchedule)
-        {
-            Ordering::Greater
-        } else if !self.tags.contains(&Tag::Optional) && other.tags.contains(&Tag::Optional) {
-            Ordering::Less
-        } else if self.tags.contains(&Tag::Optional) && !other.tags.contains(&Tag::Optional) {
-            Ordering::Greater
-        } else if !self.tags.contains(&Tag::Filler) && other.tags.contains(&Tag::Filler) {
-            Ordering::Less
-        } else if self.tags.contains(&Tag::Filler) && !other.tags.contains(&Tag::Filler) {
-            Ordering::Greater
-        } else if self.flexibility == other.flexibility {
-            Ordering::Equal
-        } else if self.flexibility == 1 {
-            Ordering::Less
-        } else if other.flexibility == 1 {
-            Ordering::Greater
-        } else if self.flexibility > other.flexibility {
-            Ordering::Less
-        } else if other.flexibility > self.flexibility {
-            Ordering::Greater
+        if let Ok(goals_lock) = GOALS.try_read() {
+            let goals = goals_lock.clone();
+            self.custom_compare(other, &goals)
         } else {
-            Ordering::Equal
+            self.original_compare(other)
         }
-
-        /*
-
-        - if is_parent_for_other:
-            - Less
-        - if is_child_of_other:
-            - Greater
-
-        */
     }
 }
 
@@ -128,7 +98,15 @@ impl Step {
         false
     }
 
+    /// Compare a step with another one using custom compare logic
+    /// - Currently it give a priority to child step over parent step
     pub fn custom_compare(&self, other: &Step, goals: &Vec<Goal>) -> Ordering {
+        if self.is_parent_of_other(other, goals) {
+            return Ordering::Less;
+        } else if self.is_child_of_other(other, goals) {
+            return Ordering::Greater;
+        }
+
         if (self.status == StepStatus::ReadyToSchedule)
             && !(other.status == StepStatus::ReadyToSchedule)
         {
@@ -155,9 +133,40 @@ impl Step {
             Ordering::Less
         } else if other.flexibility > self.flexibility {
             Ordering::Greater
-        } else if self.is_parent_of_other(other, goals) {
+        } else {
+            Ordering::Equal
+        }
+    }
+
+    /// Compare a step with another one using original comparison when
+    ///  developed this system
+    pub fn original_compare(&self, other: &Step) -> Ordering {
+        // TODO 2023-06-01  | Refactor for readability
+        if (self.status == StepStatus::ReadyToSchedule)
+            && !(other.status == StepStatus::ReadyToSchedule)
+        {
             Ordering::Less
-        } else if self.is_child_of_other(other, goals) {
+        } else if (other.status == StepStatus::ReadyToSchedule)
+            && !(self.status == StepStatus::ReadyToSchedule)
+        {
+            Ordering::Greater
+        } else if !self.tags.contains(&Tag::Optional) && other.tags.contains(&Tag::Optional) {
+            Ordering::Less
+        } else if self.tags.contains(&Tag::Optional) && !other.tags.contains(&Tag::Optional) {
+            Ordering::Greater
+        } else if !self.tags.contains(&Tag::Filler) && other.tags.contains(&Tag::Filler) {
+            Ordering::Less
+        } else if self.tags.contains(&Tag::Filler) && !other.tags.contains(&Tag::Filler) {
+            Ordering::Greater
+        } else if self.flexibility == other.flexibility {
+            Ordering::Equal
+        } else if self.flexibility == 1 {
+            Ordering::Less
+        } else if other.flexibility == 1 {
+            Ordering::Greater
+        } else if self.flexibility > other.flexibility {
+            Ordering::Less
+        } else if other.flexibility > self.flexibility {
             Ordering::Greater
         } else {
             Ordering::Equal
@@ -167,75 +176,203 @@ impl Step {
 
 mod tests {
 
-    use crate::models::{goal::Goal, slot::Slot};
-    use crate::{
-        models::step::{Step, StepStatus},
-        services::utils::{generate_step_id, unify_steps_ids},
-    };
+    mod parential_relation {
+        use crate::{
+            mocking::goals::parent_and_childs,
+            models::{
+                goal::Goal,
+                slot::Slot,
+                step::{Step, StepStatus},
+            },
+        };
 
-    #[test]
-    fn test_step_have_parent() {
-        let mut parent_goal = Goal::mock("1", "parent goal", Slot::mock_sample());
-        let child_goal = Goal::mock("2", "child goal", Slot::mock_sample());
-        parent_goal.children = Some(vec![child_goal.id.to_string()]);
-        let goals = vec![parent_goal.clone(), child_goal.clone()];
+        #[test]
+        fn test_step_have_parent() {
+            let goals = parent_and_childs(1);
+            let mut parent_step = Step::mock(
+                "parent step",
+                1,
+                1,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            parent_step.id = 1;
+            parent_step.goal_id = goals[0].id.to_string();
 
-        let mut parent_step = Step::mock(
-            "parent step",
-            1,
-            1,
-            StepStatus::ReadyToSchedule,
-            vec![],
-            None,
-        );
-        parent_step.id = 1;
-        parent_step.goal_id = "1".to_string();
+            let mut child_step = Step::mock(
+                "child step",
+                1,
+                1,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            child_step.id = 2;
+            child_step.goal_id = goals[1].id.to_string();
 
-        let mut child_step = Step::mock(
-            "child step",
-            1,
-            1,
-            StepStatus::ReadyToSchedule,
-            vec![],
-            None,
-        );
-        child_step.id = 2;
-        child_step.goal_id = "2".to_string();
+            assert!(parent_step.is_parent_of_other(&child_step, &goals));
+            assert!(!child_step.is_parent_of_other(&child_step, &goals));
+        }
 
-        assert!(parent_step.is_parent_of_other(&child_step, &goals));
-        assert!(!child_step.is_parent_of_other(&child_step, &goals));
+        #[test]
+        fn test_step_have_child() {
+            let goals = parent_and_childs(1);
+
+            let mut parent_step = Step::mock(
+                "parent step",
+                1,
+                1,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            parent_step.id = 1;
+            parent_step.goal_id = goals[0].id.to_string();
+
+            let mut child_step = Step::mock(
+                "child step",
+                1,
+                1,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            child_step.id = 2;
+            child_step.goal_id = goals[1].id.to_string();
+
+            assert!(child_step.is_child_of_other(&parent_step, &goals));
+            assert!(!parent_step.is_child_of_other(&child_step, &goals));
+        }
     }
 
-    #[test]
-    fn test_step_have_child() {
-        let mut parent_goal = Goal::mock("1", "parent goal", Slot::mock_sample());
-        let child_goal = Goal::mock("2", "child goal", Slot::mock_sample());
-        parent_goal.children = Some(vec![child_goal.id.to_string()]);
-        let goals = vec![parent_goal.clone(), child_goal.clone()];
+    mod sorting {
+        use crate::{
+            mocking::goals::parent_and_childs,
+            models::{
+                goal::{impls::initialize_goals_globally, Goal},
+                slot::Slot,
+                step::{Step, StepStatus},
+            },
+        };
 
-        let mut parent_step = Step::mock(
-            "parent step",
-            1,
-            1,
-            StepStatus::ReadyToSchedule,
-            vec![],
-            None,
-        );
-        parent_step.id = 1;
-        parent_step.goal_id = "1".to_string();
+        /// Test sorting list of steps wihtout initialize static GOALS,
+        /// so it will compare based on original comparison logic which
+        /// doesn't check parential relation between steps
+        #[test]
+        fn test_sort_steps_without_global_goals() {
+            let mut goals = parent_and_childs(1);
+            goals.extend(parent_and_childs(1));
 
-        let mut child_step = Step::mock(
-            "child step",
-            1,
-            1,
-            StepStatus::ReadyToSchedule,
-            vec![],
-            None,
-        );
-        child_step.id = 2;
-        child_step.goal_id = "2".to_string();
+            let mut parent_step_g1 = Step::mock(
+                "parent step",
+                1,
+                10,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            parent_step_g1.id = 1;
+            parent_step_g1.goal_id = goals[0].id.to_string();
 
-        assert!(child_step.is_child_of_other(&parent_step, &goals));
-        assert!(!parent_step.is_child_of_other(&child_step, &goals));
+            let mut child_step_g1 = Step::mock(
+                "child step",
+                1,
+                10,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            child_step_g1.id = 2;
+            child_step_g1.goal_id = goals[1].id.to_string();
+
+            let mut parent_step_g2 = Step::mock(
+                "parent step",
+                1,
+                10,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            parent_step_g2.id = 3;
+            parent_step_g2.goal_id = goals[2].id.to_string();
+
+            let mut child_step_g2 = Step::mock(
+                "child step",
+                1,
+                20,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            child_step_g2.id = 4;
+            child_step_g2.goal_id = goals[3].id.to_string();
+
+            let mut steps = vec![
+                parent_step_g1,
+                child_step_g1,
+                parent_step_g2,
+                child_step_g2.clone(),
+            ];
+            dbg!(&steps);
+            steps.sort();
+            dbg!(&steps);
+            assert!(steps[0].id == child_step_g2.id);
+        }
+
+        /// Test sorting list of steps wihtout initialize static GOALS,
+        /// so it will compare based on original comparison logic which
+        /// doesn't check parential relation between steps
+        #[test]
+        fn test_sort_steps_with_initialize_global_goals() {
+            // simulate part of case children_with_over_duration
+
+            let mut goals = parent_and_childs(2);
+            goals[0].title = "Project B".to_string();
+            goals[1].title = "Research".to_string();
+            goals[2].title = "Write report".to_string();
+            dbg!(&goals);
+
+            initialize_goals_globally(goals.clone());
+
+            let mut parent_step = Step::mock(
+                "Project B",
+                1,
+                168,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            parent_step.id = 1;
+            parent_step.goal_id = goals[0].id.to_string();
+
+            let mut child_step_1 = Step::mock(
+                "Research ",
+                3,
+                126,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            child_step_1.id = 2;
+            child_step_1.goal_id = goals[1].id.to_string();
+
+            let mut child_step_2 = Step::mock(
+                "Write report",
+                1,
+                168,
+                StepStatus::ReadyToSchedule,
+                vec![],
+                None,
+            );
+            child_step_2.id = 3;
+            child_step_2.goal_id = goals[2].id.to_string();
+
+            let mut steps = vec![parent_step, child_step_1, child_step_2];
+            dbg!(&steps);
+            steps.sort();
+            dbg!(&steps);
+            // assert!(steps[0].id == child_step_g1.id);
+        }
     }
 }

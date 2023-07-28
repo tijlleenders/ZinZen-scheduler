@@ -7,12 +7,35 @@ impl StepsToPlace {
     /// Calculate flexibility for each step in steps then sort them
     pub fn sort_on_flexibility(&mut self) {
         self.calculate_flexibilities();
+        let steps_before_sort: Vec<String> = self
+            .steps
+            .iter()
+            .map(|step| {
+                format!(
+                    "name: {:?}, flex: {:?}, status: {:?}, id: {:?}",
+                    step.title, step.flexibility, step.status, step.id
+                )
+            })
+            .collect();
+        dbg!(steps_before_sort);
         self.steps.sort();
+        let steps_after_sort: Vec<String> = self
+            .steps
+            .iter()
+            .map(|step| {
+                format!(
+                    "name: {:?}, flex: {:?}, status: {:?}, id: {:?}",
+                    step.title, step.flexibility, step.status, step.id
+                )
+            })
+            .collect();
+        dbg!(steps_after_sort);
     }
 
     fn calculate_flexibilities(&mut self) {
         for step in self.steps.iter_mut() {
             step.calculate_flexibility();
+            dbg!(&step);
         }
     }
 }
