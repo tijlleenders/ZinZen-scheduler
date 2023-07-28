@@ -225,9 +225,67 @@ impl Goal {
     }
 }
 
+// TODO 2023-07-27: CONT DEV
+pub mod goals {
+    use crate::{
+        models::{goal::Goal, slot::Slot},
+        services::utils::generate_step_id,
+    };
+
+    pub fn parent_and_childs(childs_count: usize) -> Vec<Goal> {
+        let parent_goal_id = "1".to_string();
+        let mut childs: Vec<Goal> = vec![];
+
+        let parent_goal = Goal::mock(&parent_goal_id, "parent goal", Slot::mock_sample());
+
+        (0..childs_count).into_iter().for_each(|_| {
+            let id = generate_step_id();
+            let child_goal = Goal::mock(
+                &format!("{}", id),
+                &format!("child {}", id),
+                Slot::mock_sample(),
+            );
+            childs.push(child_goal);
+        });
+
+        let mut goals: Vec<Goal> = vec![];
+        let mut childs_ids: Vec<String> = vec![];
+
+        goals.push(parent_goal);
+        childs.iter().for_each(|goal| {
+            childs_ids.push(goal.id.clone());
+            goals.push(goal.clone());
+        });
+
+        goals
+            .iter_mut()
+            .filter(|goal| goal.id == parent_goal_id)
+            .for_each(|goal| {
+                goal.children = Some(childs_ids.clone());
+            });
+
+        goals
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    mod goals {
+        use crate::mocking::goals::parent_and_childs;
 
+        #[test]
+        fn test_parent_and_childs() {
+            let count: usize = 2;
+            let goals = parent_and_childs(count);
+            assert_eq!(goals.len(), count + 1);
+
+            let parent = goals.iter().find(|goal| goal.id == "1").unwrap();
+            assert!(parent.children.is_some());
+
+            let childs_ids = vec![goals[1].id.clone(), goals[2].id.clone()];
+            assert_eq!(parent.children, Some(childs_ids));
+        }
+    }
     mod goal {
         use chrono::Duration;
 
@@ -257,12 +315,11 @@ mod tests {
         }
     }
     mod step {
-        use chrono::Duration;
-
         use crate::models::{
             slot::Slot,
             step::{Step, StepStatus},
         };
+        use chrono::Duration;
 
         #[test]
         fn test_mock() {
@@ -318,9 +375,9 @@ mod tests {
             assert_eq!(expected, result);
         }
     }
-    use chrono::{Datelike, Timelike};
 
     use super::*;
+    use chrono::{Datelike, Timelike};
 
     #[test]
     fn test_mock_slot() {
