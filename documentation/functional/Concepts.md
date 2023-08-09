@@ -18,18 +18,24 @@ day of the week and a duration of 4 hours.
 
 n.b. some older terminology and documentation describes this concept as 'Tasks'.
 
-### 3) Slots
-Slots are units of time in which steps can be planned. The current implementation of the algorithm
-divides the universe into slots of 1 hour.
+### 3) Tasks  
+Tasks are only relevant once _all_ scheduling is done. At that point all scheduled Steps are transformed into Tasks. A Task is something you'll see on the final calendar.  
+Since not all scheduled Slots of a Step will be next to each other, a Task is necessary for each combination of Slots that are next to each other.  
+Sometimes a Step only has one Slot, so then only one Task. If a Step has two scheduled Slots, but they are next to each other, this still is only one Task.
 
-### 4) Flexibility
+### 4) Slots
+Slots are units of time in which steps can be planned. The current implementation of the algorithm
+divides the universe into slots of 1 hour. A Slot can be occupied (used by a Step) or free. A single Slot can only be occupied by one Step.  
+Multiple Steps could 'want' the same Slot.
+
+### 5) Flexibility
 Each step - at any point of the algorithm execution - has a 'flexibility score'. This number represents
 in how many different ways the desired step can be planned in the available slots.
 
 e.g. a 4-hour step that has to be scheduled between 8h and 14h a given day can be placed in 3 ways
 (8:00-12:00 OR 09:00-13:00 OR 10:00-14:00) and thus has a flexibility of 3.
 
-### 5) Budget
+### 6) Budget
 A budget is a range of hours that are allowed (and required) to be spent in a given timeframe on a goal.
 It is defined by a minimum number of hours, a maximum number of hours and a timeframe.
 
