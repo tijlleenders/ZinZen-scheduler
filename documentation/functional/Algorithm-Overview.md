@@ -31,7 +31,7 @@ Go over the timeline and - for each step - calculate all the time slots that are
 ### 4) Calculate flexibility
 From the results of the previous step, calculate the flexibility of each step
 
-### 4) Schedule steps with flexibility 1
+### 5) Schedule steps with flexibility 1
 They can only be scheduled on 1 place: we need to schedule them immediately.
 Update flexibility for remaining steps (+ remove slot from those steps).
 Decrease budget if the goal corresponding to the step has one,
