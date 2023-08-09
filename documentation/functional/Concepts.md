@@ -37,8 +37,7 @@ A 4-hour step that has to be scheduled between 8h and 14h a given day can be pla
 (8:00-12:00 OR 09:00-13:00 OR 10:00-14:00) and thus has a flexibility of 3.
 
 ### 6) Budget
-A budget is a range of hours that are allowed (and required) to be spent in a given timeframe on a goal.
-It is defined by a minimum number of hours, a maximum number of hours and a timeframe.
+A budget is a minimum number of hours _required_ to be spent in a given timeframe on a goal, and a maximum number of hours _if possible_ for that same timeframe.
 
 Example:  
 On goal 'learn Spanish' I want to spend a minimum of 4 hours and a maximum of 8 hours every week.
