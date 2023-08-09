@@ -13,7 +13,7 @@ Steps are concrete steps to reach a goal with all it's restrictions and modifier
 They contain a start time, a deadline and a duration.
 
 The example above ('walk 4 hours every week between 6p.m. and 10p.m from Sep. 1st until Oct. 1st')
-can be split into 1 step per relevant week, with a start time on the first time of the week, a deadline on the last
+can be split into mulitple Steps of a week each, beginning with the start date-time and incrementing in 'steps' of 7 day intervals. The last Step can be shortened if the deadline is reached.
 day of the week and a duration of 4 hours.
 
 n.b. some older terminology and documentation describes this concept as 'Tasks'.
