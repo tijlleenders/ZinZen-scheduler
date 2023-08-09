@@ -16,7 +16,7 @@ Goal 'Project X 20 hours' has a _only_ a subGoal 'Make project planning 3 hours'
 A 'filler Goal' of 'Project X 17 hours' is required next to the planning subGoal.
   
 ### 1)
-Extract any budgets - and register which Goals need to respect which budgets.  
+Extract any budgets - and register which Goals need to respect which budgets for which time periods.  
 A budget can be specified 'on' the Goal itself, or on any of the parents/ancestors in the DAG.  
 A single Goal can have multiple budgets. A budget can impact multiple Goals.
   
