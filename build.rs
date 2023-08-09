@@ -6,8 +6,8 @@ fn write_test(file: &mut std::fs::File, content: &mut str) -> Result<(), std::io
     Ok(())
 }
 
-fn get_test_dirs() -> Result<Vec<PathBuf>, std::io::Error> {
-    let mut dirs = std::fs::read_dir("./tests/jsons")?
+fn get_test_dirs(path: &str) -> Result<Vec<PathBuf>, std::io::Error> {
+    let mut dirs = std::fs::read_dir(path)?
         .map(|res| res.map(|e| e.path()))
         .collect::<Result<Vec<_>, std::io::Error>>()?;
 
@@ -35,15 +35,14 @@ fn get_run_test() -> String {
     include_str!("build_templates/run_test.rs").to_string()
 }
 
-fn get_test_fn_template(dir_name: &str, is_warn: bool) -> String {
+fn get_test_fn_template(dir_name: &str, test_type: TestType) -> String {
     let test_name = dir_name.replace('-', "_");
-    let mut test_fn_template: String;
+    let mut test_fn_template: String = match test_type {
+        TestType::STABLE => {include_str!("build_templates/test_fn_stable.rs").to_string()}
+        TestType::BROKEN => {include_str!("build_templates/test_fn_broken.rs").to_string()}
+        TestType::EXPERIMENTAL => {include_str!("build_templates/test_fn_experimental.rs").to_string()}
+    };
 
-    if is_warn {
-        test_fn_template = include_str!("build_templates/test_fn _soft_assertion.rs").to_string();
-    } else {
-        test_fn_template = include_str!("build_templates/test_fn.rs").to_string();
-    }
 
     test_fn_template = test_fn_template.replace("TEST_NAME", &test_name);
     test_fn_template = test_fn_template.replace("DIR_NAME", dir_name);
@@ -57,30 +56,26 @@ fn create_tests_module() -> String {
     let mut tests_mod = include_str!("build_templates/tests_mod.rs").to_string();
 
     tests_mod = tests_mod.replace("TEST_MODULE_NAME", module_name);
-    tests_mod = tests_mod.replace("//TEST_FUNCTIONS", &create_test_functions());
+    tests_mod = tests_mod.replace("//TEST_FUNCTIONS_STABLE", &create_test_functions("./tests/jsons/stable", TestType::STABLE));
+    tests_mod = tests_mod.replace("//TEST_FUNCTIONS_BROKEN", &create_test_functions("./tests/jsons/broken", TestType::BROKEN));
+    tests_mod = tests_mod.replace("//TEST_FUNCTIONS_EXPERIMENTAL", &create_test_functions("./tests/jsons/experimental", TestType::EXPERIMENTAL));
+
 
     tests_mod
 }
 
-fn create_test_functions() -> String {
-    let mut dirs = get_test_dirs().expect("Unable to read tests directory");
+fn create_test_functions(root_dir: &str, test_type: TestType) -> String {
+    let mut dirs = get_test_dirs(root_dir).expect("Unable to read tests directory");
     let mut result = vec!["".to_string()];
 
     dirs.retain(|d| !d.file_name().unwrap().eq("benchmark-tests") && (d.is_dir()));
 
     for d in dirs.iter() {
-        if let Ok(mut dir) = d.read_dir() {
-            if dir.next().is_none() {
-                result.push(get_test_fn_template(
-                    d.file_name().unwrap().to_str().unwrap(),
-                    true,
-                ));
-            } else {
-                result.push(get_test_fn_template(
-                    d.file_name().unwrap().to_str().unwrap(),
-                    false,
-                ));
-            }
+        if let Ok(mut _dir) = d.read_dir() {
+            result.push(get_test_fn_template(
+                d.file_name().unwrap().to_str().unwrap(),
+                test_type,
+            ));
         }
     }
 
@@ -89,4 +84,11 @@ fn create_test_functions() -> String {
         .collect::<String>()
         .trim_end()
         .to_string()
+}
+
+#[derive(Clone, Copy)]
+enum TestType {
+    STABLE,
+    BROKEN,
+    EXPERIMENTAL
 }
