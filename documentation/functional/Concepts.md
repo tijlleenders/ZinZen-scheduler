@@ -3,7 +3,7 @@ To create a ubiquitous language for talking about the algorithm, all concepts us
 
 ### 1) Goals
 A goal is the most important concept in ZinZen&reg;. A goal is a description of something 
-you want to get done, e.g. 'walk 4 hours'.
+you want to get done, e.g. 'walk 4 hours'. Goals come from the frontend/UI and are specified by the user.
 
 Goals can be modified with restrictions and repeats, e.g. 'walk 4 hours every week between 6p.m. and 10p.m from Sep. 1st until Oct. 1st'
 
