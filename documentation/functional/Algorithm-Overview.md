@@ -36,7 +36,7 @@ They can only be scheduled on 1 place: we need to schedule them immediately.
 Update flexibility for remaining steps (+ remove slot from those steps).
 Decrease budget if the goal corresponding to the step has one,
 
-### 5) If no steps with flexibility 1, schedule the step with the largest flexibility
+### 6) If no steps with flexibility 1, schedule the step with the largest flexibility
 Schedule it at a timeslot that has no conflict with other unscheduled steps. 
 If not possible choose the timeslot with the least conflicts.
 Update flexibility for remaining steps (+ remove slot from those steps).
