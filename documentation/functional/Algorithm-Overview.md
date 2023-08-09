@@ -43,7 +43,7 @@ Update flexibility for remaining steps (+ remove slot from those steps).
 Decrease budget if the goal corresponding to the step has one,
 
 
-### 7) Repeat step step 4 and 5 until fully scheduled
+### 7) Repeat step step 5 and 6 until fully scheduled
 
 ### 7) See if each minimum budget is reached
 if not: generate filler steps for that goal and schedule them, repeating steps 2 to 6 for the newly generated steps.
