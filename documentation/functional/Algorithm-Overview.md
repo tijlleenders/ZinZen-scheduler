@@ -28,7 +28,7 @@ week between the start and end date
 ### 3) Generate slots
 Go over the timeline and - for each step - calculate all the time slots that are available for that step.
 
-### 3) Calculate flexibility
+### 4) Calculate flexibility
 From the results of the previous step, calculate the flexibility of each step
 
 ### 4) Schedule steps with flexibility 1
