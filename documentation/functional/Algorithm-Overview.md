@@ -7,7 +7,7 @@ we start with defined goals with constraints and modifiers.
 We can also have budgets with a minimum and a maximum amount of time to spend on a goal in a given timeframe
 (e.g. spend between 4 and 8 hours weekly of studying Rust)
 
-### 1) process goals into steps
+### 2) process goals into steps
 goals are processed to form concrete steps. Modifiers are parsed.
 e.g. 'run 4 hours every week' generates a step 'run 4 hours between monday and sunday' for every
 week between the start and end date
