@@ -30,7 +30,7 @@ Multiple Steps could 'want' the same Slot.
 
 ### 5) Flexibility
 Each step - at any point of the algorithm execution - has a 'flexibility score'. This number represents
-in how many different ways the desired step can be planned in the available slots.
+in how many different ways the desired step can be planned in the available slots, given constraints.
 
 e.g. a 4-hour step that has to be scheduled between 8h and 14h a given day can be placed in 3 ways
 (8:00-12:00 OR 09:00-13:00 OR 10:00-14:00) and thus has a flexibility of 3.
