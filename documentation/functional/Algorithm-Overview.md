@@ -25,7 +25,7 @@ goals are processed to form concrete steps. Modifiers are parsed.
 e.g. 'run 4 hours every week' generates a step 'run 4 hours between monday and sunday' for every
 week between the start and end date
 
-### 2) Generate slots
+### 3) Generate slots
 Go over the timeline and - for each step - calculate all the time slots that are available for that step.
 
 ### 3) Calculate flexibility
