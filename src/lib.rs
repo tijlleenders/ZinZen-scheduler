@@ -125,7 +125,6 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     Ok(to_value(&final_tasks)?)
 }
 
-//Todo why is there a schedule function and a run_scheduler function?
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
     initialize_logger();
