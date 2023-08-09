@@ -5,6 +5,9 @@ mod common;
 use scheduler::models::{input::Input, output::FinalTasks};
 use std::path::Path;
 
+/// AUTO-GENERATED FILE. Do not change.
+/// Will be overwritten on build. Edit the file in build_templates or change test generation in build.rs
+
 /// Function to run tests
 fn run_test(directory: &str) -> (String, String) {
     let input_path_str = format!("./tests/jsons/{}/input.json", directory);
