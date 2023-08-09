@@ -110,6 +110,8 @@ impl StepBudgets {
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
+                dbg!(&goal);
+                dbg!(&timeline);
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
@@ -125,11 +127,9 @@ impl StepBudgets {
                         timeframe: None,
                     };
 
-                    let mut step = Step::new(new_step);
+                    let step = Step::new(new_step);
 
-                    let splitted_steps = step.split(counter).unwrap();
-
-                    steps_result.extend(splitted_steps);
+                    steps_result.push(step);
                 } else {
                     panic!("No timeline slots found")
                 }
