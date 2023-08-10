@@ -1,0 +1,694 @@
+{
+  "scheduled": [
+    {
+      "day": "2018-01-01",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "3-sleep",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2018-01-01T00:00:00",
+          "deadline": "2018-01-01T06:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "2-breakfast",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2018-01-01T06:00:00",
+          "deadline": "2018-01-01T07:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-01T07:00:00",
+          "deadline": "2018-01-01T09:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "7-me_time",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2018-01-01T09:00:00",
+          "deadline": "2018-01-01T10:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-01T10:00:00",
+          "deadline": "2018-01-01T12:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "5-lunch",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2018-01-01T12:00:00",
+          "deadline": "2018-01-01T13:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-01-01T13:00:00",
+          "deadline": "2018-01-01T14:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "6-walk",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2018-01-01T14:00:00",
+          "deadline": "2018-01-01T15:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2018-01-01T15:00:00",
+          "deadline": "2018-01-01T18:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "1-dinner",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2018-01-01T18:00:00",
+          "deadline": "2018-01-01T19:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2018-01-01T19:00:00",
+          "deadline": "2018-01-02T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-02",
+      "tasks": [
+        {
+          "taskid": 11,
+          "goalid": "3-sleep",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2018-01-02T00:00:00",
+          "deadline": "2018-01-02T06:00:00"
+        },
+        {
+          "taskid": 12,
+          "goalid": "2-breakfast",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2018-01-02T06:00:00",
+          "deadline": "2018-01-02T07:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-02T07:00:00",
+          "deadline": "2018-01-02T09:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "7-me_time",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2018-01-02T09:00:00",
+          "deadline": "2018-01-02T10:00:00"
+        },
+        {
+          "taskid": 15,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-02T10:00:00",
+          "deadline": "2018-01-02T12:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "5-lunch",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2018-01-02T12:00:00",
+          "deadline": "2018-01-02T13:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-01-02T13:00:00",
+          "deadline": "2018-01-02T14:00:00"
+        },
+        {
+          "taskid": 18,
+          "goalid": "6-walk",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2018-01-02T14:00:00",
+          "deadline": "2018-01-02T15:00:00"
+        },
+        {
+          "taskid": 19,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2018-01-02T15:00:00",
+          "deadline": "2018-01-02T18:00:00"
+        },
+        {
+          "taskid": 20,
+          "goalid": "1-dinner",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2018-01-02T18:00:00",
+          "deadline": "2018-01-02T19:00:00"
+        },
+        {
+          "taskid": 21,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2018-01-02T19:00:00",
+          "deadline": "2018-01-03T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-03",
+      "tasks": [
+        {
+          "taskid": 22,
+          "goalid": "3-sleep",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2018-01-03T00:00:00",
+          "deadline": "2018-01-03T06:00:00"
+        },
+        {
+          "taskid": 23,
+          "goalid": "2-breakfast",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2018-01-03T06:00:00",
+          "deadline": "2018-01-03T07:00:00"
+        },
+        {
+          "taskid": 24,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-03T07:00:00",
+          "deadline": "2018-01-03T09:00:00"
+        },
+        {
+          "taskid": 25,
+          "goalid": "7-me_time",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2018-01-03T09:00:00",
+          "deadline": "2018-01-03T10:00:00"
+        },
+        {
+          "taskid": 26,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-03T10:00:00",
+          "deadline": "2018-01-03T12:00:00"
+        },
+        {
+          "taskid": 27,
+          "goalid": "5-lunch",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2018-01-03T12:00:00",
+          "deadline": "2018-01-03T13:00:00"
+        },
+        {
+          "taskid": 28,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-01-03T13:00:00",
+          "deadline": "2018-01-03T14:00:00"
+        },
+        {
+          "taskid": 29,
+          "goalid": "6-walk",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2018-01-03T14:00:00",
+          "deadline": "2018-01-03T15:00:00"
+        },
+        {
+          "taskid": 30,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2018-01-03T15:00:00",
+          "deadline": "2018-01-03T18:00:00"
+        },
+        {
+          "taskid": 31,
+          "goalid": "1-dinner",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2018-01-03T18:00:00",
+          "deadline": "2018-01-03T19:00:00"
+        },
+        {
+          "taskid": 32,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2018-01-03T19:00:00",
+          "deadline": "2018-01-04T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-04",
+      "tasks": [
+        {
+          "taskid": 33,
+          "goalid": "3-sleep",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2018-01-04T00:00:00",
+          "deadline": "2018-01-04T06:00:00"
+        },
+        {
+          "taskid": 34,
+          "goalid": "2-breakfast",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2018-01-04T06:00:00",
+          "deadline": "2018-01-04T07:00:00"
+        },
+        {
+          "taskid": 35,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-04T07:00:00",
+          "deadline": "2018-01-04T09:00:00"
+        },
+        {
+          "taskid": 36,
+          "goalid": "7-me_time",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2018-01-04T09:00:00",
+          "deadline": "2018-01-04T10:00:00"
+        },
+        {
+          "taskid": 37,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-04T10:00:00",
+          "deadline": "2018-01-04T12:00:00"
+        },
+        {
+          "taskid": 38,
+          "goalid": "5-lunch",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2018-01-04T12:00:00",
+          "deadline": "2018-01-04T13:00:00"
+        },
+        {
+          "taskid": 39,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-01-04T13:00:00",
+          "deadline": "2018-01-04T14:00:00"
+        },
+        {
+          "taskid": 40,
+          "goalid": "6-walk",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2018-01-04T14:00:00",
+          "deadline": "2018-01-04T15:00:00"
+        },
+        {
+          "taskid": 41,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2018-01-04T15:00:00",
+          "deadline": "2018-01-04T18:00:00"
+        },
+        {
+          "taskid": 42,
+          "goalid": "1-dinner",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2018-01-04T18:00:00",
+          "deadline": "2018-01-04T19:00:00"
+        },
+        {
+          "taskid": 43,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2018-01-04T19:00:00",
+          "deadline": "2018-01-05T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-05",
+      "tasks": [
+        {
+          "taskid": 44,
+          "goalid": "3-sleep",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2018-01-05T00:00:00",
+          "deadline": "2018-01-05T06:00:00"
+        },
+        {
+          "taskid": 45,
+          "goalid": "2-breakfast",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2018-01-05T06:00:00",
+          "deadline": "2018-01-05T07:00:00"
+        },
+        {
+          "taskid": 46,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-05T07:00:00",
+          "deadline": "2018-01-05T09:00:00"
+        },
+        {
+          "taskid": 47,
+          "goalid": "7-me_time",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2018-01-05T09:00:00",
+          "deadline": "2018-01-05T10:00:00"
+        },
+        {
+          "taskid": 48,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-05T10:00:00",
+          "deadline": "2018-01-05T12:00:00"
+        },
+        {
+          "taskid": 49,
+          "goalid": "5-lunch",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2018-01-05T12:00:00",
+          "deadline": "2018-01-05T13:00:00"
+        },
+        {
+          "taskid": 50,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-01-05T13:00:00",
+          "deadline": "2018-01-05T14:00:00"
+        },
+        {
+          "taskid": 51,
+          "goalid": "6-walk",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2018-01-05T14:00:00",
+          "deadline": "2018-01-05T15:00:00"
+        },
+        {
+          "taskid": 52,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2018-01-05T15:00:00",
+          "deadline": "2018-01-05T18:00:00"
+        },
+        {
+          "taskid": 53,
+          "goalid": "1-dinner",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2018-01-05T18:00:00",
+          "deadline": "2018-01-05T19:00:00"
+        },
+        {
+          "taskid": 54,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2018-01-05T19:00:00",
+          "deadline": "2018-01-06T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-06",
+      "tasks": [
+        {
+          "taskid": 55,
+          "goalid": "3-sleep",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2018-01-06T00:00:00",
+          "deadline": "2018-01-06T06:00:00"
+        },
+        {
+          "taskid": 56,
+          "goalid": "2-breakfast",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2018-01-06T06:00:00",
+          "deadline": "2018-01-06T07:00:00"
+        },
+        {
+          "taskid": 57,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-06T07:00:00",
+          "deadline": "2018-01-06T09:00:00"
+        },
+        {
+          "taskid": 58,
+          "goalid": "7-me_time",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2018-01-06T09:00:00",
+          "deadline": "2018-01-06T10:00:00"
+        },
+        {
+          "taskid": 59,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-06T10:00:00",
+          "deadline": "2018-01-06T12:00:00"
+        },
+        {
+          "taskid": 60,
+          "goalid": "5-lunch",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2018-01-06T12:00:00",
+          "deadline": "2018-01-06T13:00:00"
+        },
+        {
+          "taskid": 61,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-01-06T13:00:00",
+          "deadline": "2018-01-06T14:00:00"
+        },
+        {
+          "taskid": 62,
+          "goalid": "6-walk",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2018-01-06T14:00:00",
+          "deadline": "2018-01-06T15:00:00"
+        },
+        {
+          "taskid": 63,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2018-01-06T15:00:00",
+          "deadline": "2018-01-06T18:00:00"
+        },
+        {
+          "taskid": 64,
+          "goalid": "1-dinner",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2018-01-06T18:00:00",
+          "deadline": "2018-01-06T19:00:00"
+        },
+        {
+          "taskid": 65,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2018-01-06T19:00:00",
+          "deadline": "2018-01-07T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-07",
+      "tasks": [
+        {
+          "taskid": 66,
+          "goalid": "3-sleep",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
+          "start": "2018-01-07T00:00:00",
+          "deadline": "2018-01-07T06:00:00"
+        },
+        {
+          "taskid": 67,
+          "goalid": "2-breakfast",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2018-01-07T06:00:00",
+          "deadline": "2018-01-07T07:00:00"
+        },
+        {
+          "taskid": 68,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-07T07:00:00",
+          "deadline": "2018-01-07T09:00:00"
+        },
+        {
+          "taskid": 69,
+          "goalid": "7-me_time",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2018-01-07T09:00:00",
+          "deadline": "2018-01-07T10:00:00"
+        },
+        {
+          "taskid": 70,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2018-01-07T10:00:00",
+          "deadline": "2018-01-07T12:00:00"
+        },
+        {
+          "taskid": 71,
+          "goalid": "5-lunch",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2018-01-07T12:00:00",
+          "deadline": "2018-01-07T13:00:00"
+        },
+        {
+          "taskid": 72,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2018-01-07T13:00:00",
+          "deadline": "2018-01-07T14:00:00"
+        },
+        {
+          "taskid": 73,
+          "goalid": "6-walk",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2018-01-07T14:00:00",
+          "deadline": "2018-01-07T15:00:00"
+        },
+        {
+          "taskid": 74,
+          "goalid": "free",
+          "title": "free",
+          "duration": 3,
+          "start": "2018-01-07T15:00:00",
+          "deadline": "2018-01-07T18:00:00"
+        },
+        {
+          "taskid": 75,
+          "goalid": "1-dinner",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2018-01-07T18:00:00",
+          "deadline": "2018-01-07T19:00:00"
+        },
+        {
+          "taskid": 76,
+          "goalid": "free",
+          "title": "free",
+          "duration": 5,
+          "start": "2018-01-07T19:00:00",
+          "deadline": "2018-01-08T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2018-01-01",
+      "tasks": [
+        {
+          "taskid": 77,
+          "goalid": "4-work",
+          "title": "Work",
+          "duration": 40,
+          "start": "2018-01-01T00:00:00",
+          "deadline": "2018-01-08T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-01-02",
+      "tasks": []
+    },
+    {
+      "day": "2018-01-03",
+      "tasks": []
+    },
+    {
+      "day": "2018-01-04",
+      "tasks": []
+    },
+    {
+      "day": "2018-01-05",
+      "tasks": []
+    },
+    {
+      "day": "2018-01-06",
+      "tasks": []
+    },
+    {
+      "day": "2018-01-07",
+      "tasks": []
+    }
+  ]
+}

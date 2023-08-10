@@ -1,0 +1,206 @@
+{
+  "scheduled": [
+    {
+      "day": "2018-03-09",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-09T08:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 8,
+          "start": "2018-03-09T08:00:00",
+          "deadline": "2018-03-09T16:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-09T16:00:00",
+          "deadline": "2018-03-10T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-10",
+      "tasks": [
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-10T00:00:00",
+          "deadline": "2018-03-10T08:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 8,
+          "start": "2018-03-10T08:00:00",
+          "deadline": "2018-03-10T16:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-10T16:00:00",
+          "deadline": "2018-03-11T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-11",
+      "tasks": [
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-11T00:00:00",
+          "deadline": "2018-03-11T08:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "2",
+          "title": "Project A",
+          "duration": 4,
+          "start": "2018-03-11T08:00:00",
+          "deadline": "2018-03-11T12:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "5",
+          "title": "Write report",
+          "duration": 1,
+          "start": "2018-03-11T12:00:00",
+          "deadline": "2018-03-11T13:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "4",
+          "title": "Research",
+          "duration": 3,
+          "start": "2018-03-11T13:00:00",
+          "deadline": "2018-03-11T16:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "free",
+          "title": "free",
+          "duration": 8,
+          "start": "2018-03-11T16:00:00",
+          "deadline": "2018-03-12T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-12",
+      "tasks": [
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-12T00:00:00",
+          "deadline": "2018-03-13T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-13",
+      "tasks": [
+        {
+          "taskid": 12,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-13T00:00:00",
+          "deadline": "2018-03-14T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-14",
+      "tasks": [
+        {
+          "taskid": 13,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-14T00:00:00",
+          "deadline": "2018-03-15T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-15",
+      "tasks": [
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2018-03-15T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2018-03-09",
+      "tasks": [
+        {
+          "taskid": 15,
+          "goalid": "1",
+          "title": "work",
+          "duration": 35,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 11,
+          "start": "2018-03-09T00:00:00",
+          "deadline": "2018-03-16T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2018-03-10",
+      "tasks": []
+    },
+    {
+      "day": "2018-03-11",
+      "tasks": []
+    },
+    {
+      "day": "2018-03-12",
+      "tasks": []
+    },
+    {
+      "day": "2018-03-13",
+      "tasks": []
+    },
+    {
+      "day": "2018-03-14",
+      "tasks": []
+    },
+    {
+      "day": "2018-03-15",
+      "tasks": []
+    }
+  ]
+}

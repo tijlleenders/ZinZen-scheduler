@@ -1,4 +1,4 @@
-use chrono::{Duration, NaiveDate, NaiveDateTime};
+use chrono::{Duration, NaiveDate};
 
 use crate::models::{
     goal::Goal,
@@ -6,34 +6,6 @@ use crate::models::{
     step::{Step, StepStatus},
     timeline::Timeline,
 };
-
-pub struct DateTime {
-    pub datetime: NaiveDateTime,
-}
-impl DateTime {
-    /// Get a NaiveDateTime based on a ymd with 0 for hms
-    pub fn get_by_date(year: i32, month: u32, day: u32) -> NaiveDateTime {
-        NaiveDate::from_ymd_opt(year, month, day)
-            .unwrap()
-            .and_hms_opt(0, 0, 0)
-            .unwrap()
-    }
-
-    /// Get a NaiveDateTime based on a ymd and hms
-    pub fn get_by_datetime(
-        year: i32,
-        month: u32,
-        day: u32,
-        hour: u32,
-        minute: u32,
-        second: u32,
-    ) -> NaiveDateTime {
-        NaiveDate::from_ymd_opt(year, month, day)
-            .unwrap()
-            .and_hms_opt(hour, minute, second)
-            .unwrap()
-    }
-}
 
 impl Slot {
     pub fn mock(

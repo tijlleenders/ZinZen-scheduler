@@ -113,7 +113,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     let steps = generate_steps_to_place(input);
     let placed_steps = step_placer(steps);
     let final_tasks = match output_formatter(placed_steps) {
-        Err(Error::NoConfirmedDate(title, id)) => {
+        Err(Error::NoConfirmedDate(_title, _id)) => {
             panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.")
         }
         Err(e) => {
@@ -125,7 +125,6 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     Ok(to_value(&final_tasks)?)
 }
 
-//Todo why is there a schedule function and a run_scheduler function?
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
     initialize_logger();
