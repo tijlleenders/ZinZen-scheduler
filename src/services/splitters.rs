@@ -44,11 +44,10 @@ impl Step {
     /// Split a Step into list of Steps based on given Step duration.
     /// - Note: This function will change below in the resulted steps:
     ///     - Step.status = StepStatus::ReadyToSchedule
-    ///     - Step.tags = empty list
+    ///     - Step.tags = inherited from parent
     pub fn split(&mut self, counter: &mut usize) -> Result<Vec<Step>, Error> {
         // TODO 2023-06-22: Debug notes: This function not clone step.start and step.deadline
         if self.duration == 1 {
-            // && !self.tags.contains(&Tag::DoNotSort) {
             return Err(Error::CannotSplit);
         }
         let mut steps = Vec::new();
@@ -76,7 +75,7 @@ impl Step {
             let mut step = Step::new(new_step.clone());
             step.id = *counter;
             step.status = StepStatus::ReadyToSchedule;
-            step.tags = vec![];
+            step.tags = self.tags.clone();
             *counter += 1;
             steps.push(step);
         }
