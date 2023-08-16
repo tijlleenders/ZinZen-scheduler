@@ -24,10 +24,7 @@ fn main() -> Result<(), std::io::Error> {
     result.push(create_tests_module());
 
     let mut rust_tests_file = std::fs::File::create(format!("{}/rust_tests.rs", out_dir))?;
-    write_test(
-        &mut rust_tests_file,
-        result.join("\n").trim(),
-    )?;
+    write_test(&mut rust_tests_file, result.join("\n").trim())?;
     Ok(())
 }
 
