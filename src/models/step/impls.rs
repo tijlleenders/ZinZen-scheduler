@@ -225,7 +225,7 @@ mod tests {
                 1,
                 12,
                 StepStatus::ReadyToSchedule,
-                vec![step_slot.clone()],
+                vec![step_slot],
                 None,
             );
 
@@ -253,7 +253,7 @@ mod tests {
                 1,
                 12,
                 StepStatus::ReadyToSchedule,
-                vec![step_slot.clone()],
+                vec![step_slot],
                 None,
             );
 

@@ -109,9 +109,9 @@ fn test_is_conflicts_with() {
     let is_not_conflicted_with_base = base_slot.is_conflicts_with(&not_conflicted_with_base);
 
     // assert_eq!(expected_result, result);
-    assert_eq!(true, is_conflicted_last_of_base);
-    assert_eq!(true, is_conflicted_start_of_base);
-    assert_eq!(false, is_not_conflicted_with_base);
+    assert!(is_conflicted_last_of_base);
+    assert!(is_conflicted_start_of_base);
+    assert!(!is_not_conflicted_with_base);
 }
 
 #[test]
@@ -140,11 +140,11 @@ fn test_is_contains_slot() {
 
     let is_not_contained_in_base = base_slot.is_contains_slot(&not_contained_in_base);
 
-    assert_eq!(true, is_contained_in_base);
-    assert_eq!(true, is_equal_to_base_contained);
-    assert_eq!(false, is_overflow_base_from_start);
-    assert_eq!(false, is_overflow_base_from_end);
-    assert_eq!(false, is_not_contained_in_base);
+    assert!(is_contained_in_base);
+    assert!(is_equal_to_base_contained);
+    assert!(!is_overflow_base_from_start);
+    assert!(!is_overflow_base_from_end);
+    assert!(!is_not_contained_in_base);
 }
 
 #[test]
@@ -168,7 +168,7 @@ fn test_is_intersect_with_slot() {
     let is_not_intersected_with_base = base_slot.is_intersect_with_slot(&not_intersected_with_base);
 
     // assert_eq!(expected_result, result);
-    assert_eq!(true, is_intersected_last_of_base);
-    assert_eq!(true, is_intersected_start_of_base);
-    assert_eq!(false, is_not_intersected_with_base);
+    assert!(is_intersected_last_of_base);
+    assert!(is_intersected_start_of_base);
+    assert!(!is_not_intersected_with_base);
 }

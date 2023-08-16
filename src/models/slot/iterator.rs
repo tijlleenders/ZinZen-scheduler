@@ -135,7 +135,7 @@ mod tests {
         let mut result: Vec<Slot> = vec![];
 
         for mut slot in slot_iterator {
-            slot.end = slot.end - Duration::hours(14);
+            slot.end -= Duration::hours(14);
             result.push(slot);
         }
 

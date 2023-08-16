@@ -38,11 +38,12 @@ fn get_run_test() -> String {
 fn get_test_fn_template(dir_name: &str, test_type: TestType) -> String {
     let test_name = dir_name.replace('-', "_");
     let mut test_fn_template: String = match test_type {
-        TestType::STABLE => {include_str!("build_templates/test_fn_stable.rs").to_string()}
-        TestType::BROKEN => {include_str!("build_templates/test_fn_broken.rs").to_string()}
-        TestType::EXPERIMENTAL => {include_str!("build_templates/test_fn_experimental.rs").to_string()}
+        TestType::Stable => include_str!("build_templates/test_fn_stable.rs").to_string(),
+        TestType::Broken => include_str!("build_templates/test_fn_broken.rs").to_string(),
+        TestType::Experimental => {
+            include_str!("build_templates/test_fn_experimental.rs").to_string()
+        }
     };
-
 
     test_fn_template = test_fn_template.replace("TEST_NAME", &test_name);
     test_fn_template = test_fn_template.replace("DIR_NAME", dir_name);
@@ -56,10 +57,18 @@ fn create_tests_module() -> String {
     let mut tests_mod = include_str!("build_templates/tests_mod.rs").to_string();
 
     tests_mod = tests_mod.replace("TEST_MODULE_NAME", module_name);
-    tests_mod = tests_mod.replace("//TEST_FUNCTIONS_STABLE", &create_test_functions("./tests/jsons/stable", TestType::STABLE));
-    tests_mod = tests_mod.replace("//TEST_FUNCTIONS_BROKEN", &create_test_functions("./tests/jsons/broken", TestType::BROKEN));
-    tests_mod = tests_mod.replace("//TEST_FUNCTIONS_EXPERIMENTAL", &create_test_functions("./tests/jsons/experimental", TestType::EXPERIMENTAL));
-
+    tests_mod = tests_mod.replace(
+        "//TEST_FUNCTIONS_STABLE",
+        &create_test_functions("./tests/jsons/stable", TestType::Stable),
+    );
+    tests_mod = tests_mod.replace(
+        "//TEST_FUNCTIONS_BROKEN",
+        &create_test_functions("./tests/jsons/broken", TestType::Broken),
+    );
+    tests_mod = tests_mod.replace(
+        "//TEST_FUNCTIONS_EXPERIMENTAL",
+        &create_test_functions("./tests/jsons/experimental", TestType::Experimental),
+    );
 
     tests_mod
 }
@@ -88,7 +97,7 @@ fn create_test_functions(root_dir: &str, test_type: TestType) -> String {
 
 #[derive(Clone, Copy)]
 enum TestType {
-    STABLE,
-    BROKEN,
-    EXPERIMENTAL
+    Stable,
+    Broken,
+    Experimental,
 }

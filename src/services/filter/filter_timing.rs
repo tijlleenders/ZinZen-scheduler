@@ -44,7 +44,7 @@ pub(crate) fn filter_timing(
             // If the timing scenario is `AfterOnly`, adjust the start time of each slot
             // Rule: make sure that 'after_time' within slot boundaries
             for mut walking_slots in timeline_iterator {
-                walking_slots.iter_mut().for_each(|mut slot| {
+                walking_slots.iter_mut().for_each(|slot| {
                     let after_time = after_time.unwrap() as u32;
                     let slot_start_hour = slot.start.hour();
                     if after_time < slot_start_hour {
@@ -65,7 +65,7 @@ pub(crate) fn filter_timing(
 
             // If the timing scenario is `BeforeOnly`, adjust the end time of each slot
             for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
-                for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
+                for (walking_index, slot) in walking_slots.iter_mut().enumerate() {
                     if iterator_index == 0 && walking_index == 0 {
                         let origin_start_hour = timeline.slots.first().unwrap().start.hour();
                         slot.start = slot.start.with_hour(origin_start_hour).unwrap();
@@ -83,7 +83,7 @@ pub(crate) fn filter_timing(
         TimingScenario::Bounded => {
             // If the timing scenario is `Bounded`, adjust both the start and end times of each slot
             for mut walking_slots in timeline_iterator {
-                walking_slots.iter_mut().for_each(|mut slot| {
+                walking_slots.iter_mut().for_each(|slot| {
                     slot.start = slot.start.with_hour(after_time.unwrap() as u32).unwrap();
                     slot.end = slot.end.with_hour(before_time.unwrap() as u32).unwrap()
                         - Duration::days(1);
@@ -95,7 +95,7 @@ pub(crate) fn filter_timing(
             // If the timing scenario is `Overflow`
             for (iterator_index, mut walking_slots) in timeline_iterator.enumerate() {
                 let walking_slots_len = walking_slots.len();
-                for (walking_index, mut slot) in walking_slots.iter_mut().enumerate() {
+                for (walking_index, slot) in walking_slots.iter_mut().enumerate() {
                     // ===
                     // Below condition to handle case as comment: https://github.com/tijlleenders/ZinZen-scheduler/pull/295#issuecomment-1550956264
                     // If this is the first slot in the first day of the timeline,

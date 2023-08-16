@@ -219,8 +219,8 @@ mod tests {
         let mut result: Vec<Slot> = vec![];
 
         for mut walking_slots in timeline_iterator {
-            walking_slots.iter_mut().for_each(|mut slot| {
-                slot.end = slot.end - Duration::hours(14);
+            walking_slots.iter_mut().for_each(|slot| {
+                slot.end -= Duration::hours(14);
             });
             result.extend(walking_slots);
         }

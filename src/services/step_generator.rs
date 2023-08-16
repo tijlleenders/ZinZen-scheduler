@@ -131,7 +131,7 @@ mod tests {
                 let mut counter: usize = 1;
 
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-                let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
+                let mut goal = Goal::mock("1", "test", goal_timeframe);
                 goal.min_duration = Some(duration);
 
                 let steps =
@@ -160,7 +160,7 @@ mod tests {
                 let mut counter: usize = 1;
 
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-                let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
+                let mut goal = Goal::mock("1", "test", goal_timeframe);
                 goal.min_duration = Some(duration);
 
                 let steps =
@@ -238,7 +238,7 @@ mod tests {
                 let mut counter: usize = 1;
 
                 let goal_timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
-                let mut goal = Goal::mock("1", "test", goal_timeframe.clone());
+                let mut goal = Goal::mock("1", "test", goal_timeframe);
                 goal.min_duration = Some(duration);
                 goal.children = Some(vec!["2".to_string()]);
 

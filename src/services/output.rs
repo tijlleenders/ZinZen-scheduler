@@ -166,8 +166,8 @@ fn combine(tasks: &mut Vec<Task>) {
         break;
     }
 
-    while !indexes_to_remove.is_empty() {
-        tasks.remove(indexes_to_remove.pop().unwrap());
+    while let Some(element) = indexes_to_remove.pop() {
+        tasks.remove(element);
     }
 }
 

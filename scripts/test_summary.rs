@@ -7,21 +7,16 @@ fn main() {
     let test_output = command.output().expect("failed to execute process");
     let test_output_string = String::from_utf8_lossy(&test_output.stdout);
 
-    let final_output: String;
-
-    match test_output_string.rfind("failures:") {
+    let final_output: String = match test_output_string.rfind("failures:") {
         Some(fails_index) => {
             let filtered_string = &test_output_string[fails_index..test_output_string.len()];
-            final_output = sort_tests(filtered_string);
+            sort_tests(filtered_string)
         }
         None => {
             let final_index = test_output_string.rfind("test result:").unwrap();
-            final_output = format!(
-                "{}",
-                &test_output_string[final_index..test_output_string.len()]
-            );
+            (test_output_string[final_index..test_output_string.len()]).to_string()
         }
-    }
+    };
     println!("{}", final_output);
 }
 

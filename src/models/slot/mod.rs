@@ -80,7 +80,7 @@ mod tests {
         let slot = Slot::mock(Duration::hours(12), 2023, 6, 1, 9, 0);
         let debug_output = format!("{:?}", slot);
         let expected =
-            format!("Slot {{ \n\tstart:\t 2023-06-01 09,\n\t end:\t 2023-06-01 21, \n}}");
+            "Slot { \n\tstart:\t 2023-06-01 09,\n\t end:\t 2023-06-01 21, \n}".to_string();
 
         assert_eq!(debug_output, expected);
     }
@@ -92,7 +92,7 @@ mod tests {
         let debug_output_fomratted = format!("{:#?}", slot);
 
         let expected =
-            format!("Slot {{ \n\tstart:\t 2023-06-01 09,\n\t end:\t 2023-06-01 21, \n}}");
+            "Slot { \n\tstart:\t 2023-06-01 09,\n\t end:\t 2023-06-01 21, \n}".to_string();
 
         assert_eq!(debug_output, expected);
         assert_eq!(debug_output_fomratted, expected);
