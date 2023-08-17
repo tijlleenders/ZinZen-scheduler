@@ -18,11 +18,11 @@ cp $CARGO_BINARY $BINARY
 wasm-bindgen $BINARY --out-dir js-api/ --target deno --reference-types --no-typescript
 echo " ok"
 
-# Process final binary
-echo -n "Optimizing wasm..."
-wasm-strip $BINARY
-wasm-opt -o js-api/scheduler.wasm -O3 $BINARY
-echo " ok"
+## Process final binary
+#echo -n "Optimizing wasm..."
+#wasm-strip $BINARY
+#wasm-opt -o js-api/scheduler.wasm -O3 $BINARY
+#echo " ok"
 
 # Run JS test
 echo "Running deno tests"
