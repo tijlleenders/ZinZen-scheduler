@@ -76,7 +76,7 @@ fn test_next_week_on_friday() {
 fn get_next_weekend() {
     let repetition = Repetition::WEEKENDS;
 
-    let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
+    let monday = NaiveDate::from_ymd_opt(2022, 9, 26)
         .unwrap()
         .and_hms_opt(0, 0, 0)
         .unwrap();
@@ -84,7 +84,7 @@ fn get_next_weekend() {
         .unwrap()
         .and_hms_opt(0, 0, 0)
         .unwrap();
-    let monday_with_time = NaiveDate::from_ymd_opt(2022, 09, 26)
+    let monday_with_time = NaiveDate::from_ymd_opt(2022, 9, 26)
         .unwrap()
         .and_hms_opt(1, 33, 7)
         .unwrap();

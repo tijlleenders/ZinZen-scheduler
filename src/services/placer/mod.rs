@@ -204,7 +204,7 @@ mod tests {
         - Steps after function `step_placer` have inaccurate fields "id" and "goal_id"
         */
 
-        let calendar_timing = Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0);
+        let calendar_timing = Slot::mock(Duration::days(7), 2023, 1, 3, 0, 0);
 
         let steps: Vec<Step> = vec![
             Step::mock(
@@ -261,13 +261,13 @@ mod tests {
                 0,
                 StepStatus::ReadyToSchedule,
                 vec![
-                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 3, 06, 0),
-                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 4, 06, 0),
-                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 5, 06, 0),
-                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 6, 06, 0),
-                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 7, 06, 0),
-                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 8, 06, 0),
-                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 9, 06, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 3, 6, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 4, 6, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 5, 6, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 6, 6, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 7, 6, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 8, 6, 0),
+                    Slot::mock(chrono::Duration::hours(3), 2023, 1, 9, 6, 0),
                 ],
                 None,
             ),
@@ -317,14 +317,14 @@ mod tests {
                 0,
                 StepStatus::ReadyToSchedule,
                 vec![
-                    Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 04, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 05, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 06, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 07, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 08, 22, 0),
-                    Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
+                    Slot::mock(Duration::hours(8), 2023, 1, 3, 0, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 3, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 4, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 5, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 6, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 7, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 8, 22, 0),
+                    Slot::mock(Duration::hours(2), 2023, 1, 9, 22, 0),
                 ],
                 None,
             ),
@@ -351,7 +351,7 @@ mod tests {
                 "me time",
                 1,
                 168,
-                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 09, 0),
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 9, 0),
             ),
             Step::mock_scheduled(
                 9,
@@ -375,7 +375,7 @@ mod tests {
                 "breakfast",
                 1,
                 21,
-                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 08, 0),
+                Slot::mock(chrono::Duration::hours(1), 2023, 1, 3, 8, 0),
             ),
             Step::mock_scheduled(
                 9,
@@ -383,7 +383,7 @@ mod tests {
                 "sleep",
                 8,
                 19,
-                Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
+                Slot::mock(Duration::hours(8), 2023, 1, 3, 0, 0),
             ),
             Step::mock_scheduled(
                 9,

@@ -100,7 +100,7 @@ fn test_is_conflicts_with() {
     let duration = Duration::hours(10);
 
     let base_slot = Slot::mock(duration, year, month, day, hour, min);
-    let conflicted_last_of_base = Slot::mock(duration, year, month, day, 09, min);
+    let conflicted_last_of_base = Slot::mock(duration, year, month, day, 9, min);
     let conflicted_start_of_base = Slot::mock(duration, year, month, day - 1, 20, min);
     let not_conflicted_with_base = Slot::mock(duration, year, month, day + 1, hour, min);
 
@@ -124,10 +124,10 @@ fn test_is_contains_slot() {
     let duration = Duration::hours(10);
 
     let base_slot = Slot::mock(duration, year, month, day, hour, min);
-    let contained_in_base = Slot::mock(Duration::hours(3), year, month, day, 02, min);
+    let contained_in_base = Slot::mock(Duration::hours(3), year, month, day, 2, min);
     let equal_to_base = Slot::mock(duration, year, month, day, hour, min);
     let overflow_base_from_start = Slot::mock(Duration::hours(3), year, month, day - 1, 23, min);
-    let overflow_base_from_end = Slot::mock(Duration::hours(3), year, month, day, 09, min);
+    let overflow_base_from_end = Slot::mock(Duration::hours(3), year, month, day, 9, min);
     let not_contained_in_base = Slot::mock(duration, year, month, day + 1, hour, min);
 
     let is_contained_in_base = base_slot.is_contains_slot(&contained_in_base);
@@ -157,7 +157,7 @@ fn test_is_intersect_with_slot() {
     let duration = Duration::hours(10);
 
     let base_slot = Slot::mock(duration, year, month, day, hour, min);
-    let intersected_last_of_base = Slot::mock(duration, year, month, day, 09, min);
+    let intersected_last_of_base = Slot::mock(duration, year, month, day, 9, min);
     let intersected_start_of_base = Slot::mock(duration, year, month, day - 1, 20, min);
     let not_intersected_with_base = Slot::mock(duration, year, month, day + 1, hour, min);
 

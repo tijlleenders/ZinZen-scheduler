@@ -180,7 +180,7 @@ mod tests {
     /// Expected to return same timeline
     #[test]
     fn test_unbounded() {
-        let timeline = Timeline::mock(Duration::days(5), 2023, 05, 1);
+        let timeline = Timeline::mock(Duration::days(5), 2023, 5, 1);
 
         let result = filter_timing(timeline.clone(), None, None);
         assert_eq!(timeline, result);
@@ -196,15 +196,15 @@ mod tests {
         let timeline_duration = Duration::days(5);
         let after: u32 = 5;
 
-        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        let timeline = Timeline::mock(timeline_duration, 2023, 5, 1);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 1, after, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 2, after, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 3, after, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 4, after, 0),
-                Slot::mock(Duration::hours(24 - 5), 2023, 05, 5, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 5, 1, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 5, 2, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 5, 3, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 5, 4, after, 0),
+                Slot::mock(Duration::hours(24 - 5), 2023, 5, 5, after, 0),
             ]
             .into_iter()
             .collect(),
@@ -225,15 +225,15 @@ mod tests {
         let timeline_duration = Duration::days(5);
         let before: u32 = 20;
 
-        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        let timeline = Timeline::mock(timeline_duration, 2023, 5, 1);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(20), 2023, 05, 1, 0, 0),
-                Slot::mock(Duration::hours(20), 2023, 05, 2, 0, 0),
-                Slot::mock(Duration::hours(20), 2023, 05, 3, 0, 0),
-                Slot::mock(Duration::hours(20), 2023, 05, 4, 0, 0),
-                Slot::mock(Duration::hours(20), 2023, 05, 5, 0, 0),
+                Slot::mock(Duration::hours(20), 2023, 5, 1, 0, 0),
+                Slot::mock(Duration::hours(20), 2023, 5, 2, 0, 0),
+                Slot::mock(Duration::hours(20), 2023, 5, 3, 0, 0),
+                Slot::mock(Duration::hours(20), 2023, 5, 4, 0, 0),
+                Slot::mock(Duration::hours(20), 2023, 5, 5, 0, 0),
             ]
             .into_iter()
             .collect(),
@@ -255,15 +255,15 @@ mod tests {
         let after: u32 = 5;
         let before: u32 = 20;
 
-        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        let timeline = Timeline::mock(timeline_duration, 2023, 5, 1);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(15), 2023, 05, 1, after, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 2, after, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 3, after, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 4, after, 0),
-                Slot::mock(Duration::hours(15), 2023, 05, 5, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 5, 1, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 5, 2, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 5, 3, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 5, 4, after, 0),
+                Slot::mock(Duration::hours(15), 2023, 5, 5, after, 0),
             ]
             .into_iter()
             .collect(),
@@ -296,12 +296,12 @@ mod tests {
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(9), 2023, 04, 30, after, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 1, after, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 2, after, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 3, after, 0),
-                Slot::mock(Duration::hours(9), 2023, 05, 4, after, 0),
-                Slot::mock(Duration::hours(24), 2023, 05, 5, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 4, 30, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 5, 1, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 5, 2, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 5, 3, after, 0),
+                Slot::mock(Duration::hours(9), 2023, 5, 4, after, 0),
+                Slot::mock(Duration::hours(24), 2023, 5, 5, after, 0),
             ]
             .into_iter()
             .collect(),
@@ -322,13 +322,13 @@ mod tests {
     #[test]
     fn test_after_time_within_timeline_boundaries() {
         let timeline: Timeline = Timeline {
-            slots: vec![Slot::mock(Duration::hours(1), 2022, 04, 30, 10, 0)]
+            slots: vec![Slot::mock(Duration::hours(1), 2022, 4, 30, 10, 0)]
                 .into_iter()
                 .collect(),
         };
 
         let expected_result: Timeline = Timeline {
-            slots: vec![Slot::mock(Duration::hours(1), 2022, 04, 30, 10, 0)]
+            slots: vec![Slot::mock(Duration::hours(1), 2022, 4, 30, 10, 0)]
                 .into_iter()
                 .collect(),
         };

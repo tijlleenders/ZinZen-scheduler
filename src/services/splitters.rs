@@ -295,9 +295,9 @@ mod tests {
             // Test when threshold < slot.duration whcih return splitted slots based on threshold
             let result = slot.split_into_custom_hours(2);
             let expected = vec![
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 0, 0),
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 2, 0),
-                Slot::mock(Duration::hours(1), 2023, 06, 01, 4, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 0, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 2, 0),
+                Slot::mock(Duration::hours(1), 2023, 6, 1, 4, 0),
             ];
             assert_eq!(result.len(), 3);
             assert_eq!(result, expected);
@@ -631,9 +631,9 @@ mod tests {
 
             // Test when threshold < slot.duration whcih return splitted slots based on threshold
             let expected = vec![
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 0, 0),
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 2, 0),
-                Slot::mock(Duration::hours(1), 2023, 06, 01, 4, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 0, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 2, 0),
+                Slot::mock(Duration::hours(1), 2023, 6, 1, 4, 0),
             ];
             let result = step.split_into_custom_hours(2);
             assert_eq!(result.len(), 3);

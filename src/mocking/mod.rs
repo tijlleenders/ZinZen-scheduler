@@ -298,7 +298,7 @@ mod tests {
     fn test_mock_slot() {
         let duration = Duration::hours(1);
         let year = 2023;
-        let month = 05;
+        let month = 5;
         let day = 1;
         let hour = 5;
         let minute = 0;
@@ -319,7 +319,7 @@ mod tests {
     fn test_mock_slot_for_day() {
         let duration = Duration::days(1);
         let year = 2023;
-        let month = 05;
+        let month = 5;
         let day = 1;
         let hour = 5;
         let minute = 0;

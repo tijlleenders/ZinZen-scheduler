@@ -26,7 +26,7 @@ fn run_test(directory: &str) -> (String, String) {
     let output: FinalTasks = scheduler::run_scheduler(input);
     let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
-    common::write_to_file(&actual_output_path, &actual_output).unwrap();
+    common::write_to_file(actual_output_path, &actual_output).unwrap();
 
     (actual_output, desired_output)
 }
