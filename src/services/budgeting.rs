@@ -92,7 +92,7 @@ impl StepBudgets {
     }
 
     /// Generate Steps only for goals which have budgets
-    pub fn generate_steps(&mut self, goals: &mut GoalsMap, counter: &mut usize) -> Vec<Step> {
+    pub fn generate_steps(&mut self, goals: &GoalsMap, counter: &mut usize) -> Vec<Step> {
         let mut steps_result: Vec<Step> = Vec::new();
 
         //for each budget create a min step (and optional max step) per corresponding time period
@@ -284,7 +284,7 @@ mod tests {
             let mut goals: GoalsMap = GoalsMap::new();
             goals.insert(work_goal.id.clone(), work_goal);
             let mut counter = 0;
-            let result_steps = step_budgets.generate_steps(&mut goals, &mut counter);
+            let result_steps = step_budgets.generate_steps(&goals, &mut counter);
 
             // Expected steps data
             let goal_id: String = "4-work".to_string();

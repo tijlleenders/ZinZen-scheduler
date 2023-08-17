@@ -111,7 +111,7 @@ fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
 
 /// Get a task from a given Step
 fn get_task_from_step(
-    step: &mut Step,
+    step: &Step,
     calendar_start: NaiveDateTime,
     calendar_end: NaiveDateTime,
 ) -> Task {

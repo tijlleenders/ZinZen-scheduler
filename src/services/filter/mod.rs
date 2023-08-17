@@ -35,7 +35,6 @@ impl Timeline {
             }
 
             *self = filtered_timeline;
-        } else {
         }
     }
 }
