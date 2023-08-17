@@ -22,7 +22,7 @@ fn main() {
 
 fn sort_tests(failed_tests: &str) -> String {
     let start_index = failed_tests.find("failures:").unwrap() + "failures:".len();
-    let header = failed_tests.lines().next().unwrap().clone().trim();
+    let header = failed_tests.lines().next().unwrap().trim();
 
     let end_index = failed_tests.find("test result:").unwrap();
     let footer = &failed_tests[end_index..failed_tests.len()].trim();
