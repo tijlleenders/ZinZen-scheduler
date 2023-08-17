@@ -181,13 +181,13 @@ mod tests {
         /// ```
         #[test]
         fn test_intersected_bigger_slot() {
-            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 1, 3, 0, 0);
             let mut step = Step::mock(
                 "test",
                 1,
                 12,
                 StepStatus::ReadyToSchedule,
-                vec![Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0)],
+                vec![Slot::mock(Duration::hours(2), 2023, 1, 3, 1, 0)],
                 None,
             );
 
@@ -198,14 +198,14 @@ mod tests {
 
         #[test]
         fn test_step_is_scheduled() {
-            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 1, 3, 0, 0);
             let mut step = Step::mock_scheduled(
                 1,
                 "1",
                 "test",
                 1,
                 12,
-                Slot::mock(Duration::hours(2), 2023, 01, 03, 1, 0),
+                Slot::mock(Duration::hours(2), 2023, 1, 3, 1, 0),
             );
 
             step.remove_conflicted_slots(slot_to_remove);
@@ -218,14 +218,14 @@ mod tests {
         /// which returns the same step_slot
         #[test]
         fn test_nonintersected_slot() {
-            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0);
-            let step_slot = Slot::mock(Duration::hours(10), 2023, 01, 04, 1, 0);
+            let slot_to_remove = Slot::mock(Duration::hours(8), 2023, 1, 3, 0, 0);
+            let step_slot = Slot::mock(Duration::hours(10), 2023, 1, 4, 1, 0);
             let mut step = Step::mock(
                 "test",
                 1,
                 12,
                 StepStatus::ReadyToSchedule,
-                vec![step_slot.clone()],
+                vec![step_slot],
                 None,
             );
 
@@ -246,20 +246,20 @@ mod tests {
         /// ```
         #[test]
         fn test_normal() {
-            let slot_to_remove = Slot::mock(Duration::hours(3), 2023, 01, 03, 0, 0);
-            let step_slot = Slot::mock(Duration::hours(10), 2023, 01, 03, 1, 0);
+            let slot_to_remove = Slot::mock(Duration::hours(3), 2023, 1, 3, 0, 0);
+            let step_slot = Slot::mock(Duration::hours(10), 2023, 1, 3, 1, 0);
             let mut step = Step::mock(
                 "test",
                 1,
                 12,
                 StepStatus::ReadyToSchedule,
-                vec![step_slot.clone()],
+                vec![step_slot],
                 None,
             );
 
             step.remove_conflicted_slots(slot_to_remove);
 
-            let expected_step_slot = Slot::mock(Duration::hours(8), 2023, 01, 03, 3, 0);
+            let expected_step_slot = Slot::mock(Duration::hours(8), 2023, 1, 3, 3, 0);
 
             assert_eq!(step.slots[0], expected_step_slot);
         }

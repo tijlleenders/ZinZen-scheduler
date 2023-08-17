@@ -11,7 +11,7 @@ pub fn get_start_of_repeat_step(
     match repeat {
         Repetition::DAILY(_) => result.checked_add_days(Days::new(1)).unwrap(),
         Repetition::HOURLY => result.checked_add_signed(Duration::hours(1)).unwrap(),
-        Repetition::Weekly(_) => next_week(&mut result),
+        Repetition::Weekly(_) => next_week(&result),
         Repetition::WEEKDAYS => match result.weekday() {
             Weekday::Sat => result
                 .checked_add_days(Days::new(2))
@@ -278,7 +278,7 @@ pub fn get_start_of_repeat_step(
 }
 
 /// Get next week for a current datetime
-pub(crate) fn next_week(result: &mut NaiveDateTime) -> NaiveDateTime {
+pub(crate) fn next_week(result: &NaiveDateTime) -> NaiveDateTime {
     result
         .checked_add_days(Days::new(7))
         .unwrap()

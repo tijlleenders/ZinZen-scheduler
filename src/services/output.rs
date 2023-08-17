@@ -111,7 +111,7 @@ fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
 
 /// Get a task from a given Step
 fn get_task_from_step(
-    step: &mut Step,
+    step: &Step,
     calendar_start: NaiveDateTime,
     calendar_end: NaiveDateTime,
 ) -> Task {
@@ -166,8 +166,8 @@ fn combine(tasks: &mut Vec<Task>) {
         break;
     }
 
-    while !indexes_to_remove.is_empty() {
-        tasks.remove(indexes_to_remove.pop().unwrap());
+    while let Some(element) = indexes_to_remove.pop() {
+        tasks.remove(element);
     }
 }
 

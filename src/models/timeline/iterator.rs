@@ -135,14 +135,14 @@ mod tests {
         let timeline_duration = Duration::days(5);
         let interval_duration = Duration::days(1);
 
-        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        let timeline = Timeline::mock(timeline_duration, 2023, 5, 1);
 
         let expected_result: Vec<Slot> = vec![
-            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 2, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 2, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 4, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 5, 0, 0),
         ];
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
@@ -166,22 +166,22 @@ mod tests {
 
         let timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::days(5), 2023, 05, 1, 0, 0),
-                Slot::mock(Duration::days(3), 2023, 06, 1, 0, 0),
+                Slot::mock(Duration::days(5), 2023, 5, 1, 0, 0),
+                Slot::mock(Duration::days(3), 2023, 6, 1, 0, 0),
             ]
             .into_iter()
             .collect(),
         };
 
         let expected_result: Vec<Slot> = vec![
-            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 2, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 06, 1, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 06, 2, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 06, 3, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 2, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 4, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 5, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 6, 1, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 6, 2, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 6, 3, 0, 0),
         ];
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
@@ -204,14 +204,14 @@ mod tests {
         let timeline_duration = Duration::days(5);
         let interval_duration = Duration::days(1);
 
-        let timeline = Timeline::mock(timeline_duration, 2023, 05, 1);
+        let timeline = Timeline::mock(timeline_duration, 2023, 5, 1);
 
         let expected_result: Vec<Slot> = vec![
-            Slot::mock(Duration::hours(10), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 2, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 3, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 4, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 5, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 2, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 3, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 4, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 5, 0, 0),
         ];
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);
@@ -219,8 +219,8 @@ mod tests {
         let mut result: Vec<Slot> = vec![];
 
         for mut walking_slots in timeline_iterator {
-            walking_slots.iter_mut().for_each(|mut slot| {
-                slot.end = slot.end - Duration::hours(14);
+            walking_slots.iter_mut().for_each(|slot| {
+                slot.end -= Duration::hours(14);
             });
             result.extend(walking_slots);
         }
@@ -240,22 +240,22 @@ mod tests {
 
         let timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(10), year, 05, 1, start_time, 0),
-                Slot::mock(Duration::hours(10), year, 05, 2, start_time, 0),
-                Slot::mock(Duration::hours(10), year, 05, 3, start_time, 0),
-                Slot::mock(Duration::hours(10), year, 05, 4, start_time, 0),
-                Slot::mock(Duration::hours(10), year, 05, 5, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 5, 1, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 5, 2, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 5, 3, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 5, 4, start_time, 0),
+                Slot::mock(Duration::hours(10), year, 5, 5, start_time, 0),
             ]
             .into_iter()
             .collect(),
         };
 
         let expected_result: Vec<Slot> = vec![
-            Slot::mock(Duration::hours(10), 2023, 05, 1, start_time, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 2, start_time, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 3, start_time, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 4, start_time, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 5, start_time, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 1, start_time, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 2, start_time, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 3, start_time, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 4, start_time, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 5, start_time, 0),
         ];
 
         let timeline_iterator = TimelineIterator::new(timeline.clone(), interval_duration);

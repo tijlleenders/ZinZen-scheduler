@@ -224,11 +224,11 @@ mod tests {
             1,
             168,
             StepStatus::ReadyToSchedule,
-            vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+            vec![Slot::mock(Duration::days(6), 2023, 5, 1, 0, 0)],
             None,
         );
 
-        let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 05, 01, 0, 0)]);
+        let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 5, 1, 0, 0)]);
 
         let result = find_best_slots(&vec![step]);
 

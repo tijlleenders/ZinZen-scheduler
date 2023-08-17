@@ -20,7 +20,7 @@ fn new_step() {
     };
     let timeline = Timeline::new();
     let status = StepStatus::ReadyToSchedule;
-    let timeframe = Some(Slot::mock(Duration::days(2), 2023, 05, 01, 0, 0));
+    let timeframe = Some(Slot::mock(Duration::days(2), 2023, 5, 1, 0, 0));
 
     let new_step = NewStep {
         step_id,

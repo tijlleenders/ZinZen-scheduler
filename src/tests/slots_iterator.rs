@@ -24,50 +24,50 @@ mod mocking {
 
 #[test]
 fn test_next_week_on_monday() {
-    let mut input = mocking::DateTime::get_by_date(2023, 5, 1);
+    let input = mocking::DateTime::get_by_date(2023, 5, 1);
     let expected = mocking::DateTime::get_by_date(2023, 5, 8);
 
-    let output = next_week(&mut input);
+    let output = next_week(&input);
 
     assert_eq!(output, expected);
 }
 
 #[test]
 fn test_next_week_on_tuesday() {
-    let mut input = mocking::DateTime::get_by_date(2023, 5, 2);
+    let input = mocking::DateTime::get_by_date(2023, 5, 2);
     let expected = mocking::DateTime::get_by_date(2023, 5, 9);
 
-    let output = next_week(&mut input);
+    let output = next_week(&input);
 
     assert_eq!(output, expected);
 }
 
 #[test]
 fn test_next_week_on_wednesday() {
-    let mut input = mocking::DateTime::get_by_date(2023, 5, 3);
+    let input = mocking::DateTime::get_by_date(2023, 5, 3);
     let expected = mocking::DateTime::get_by_date(2023, 5, 10);
 
-    let output = next_week(&mut input);
+    let output = next_week(&input);
 
     assert_eq!(output, expected);
 }
 
 #[test]
 fn test_next_week_on_thursday() {
-    let mut input = mocking::DateTime::get_by_date(2023, 5, 4);
+    let input = mocking::DateTime::get_by_date(2023, 5, 4);
     let expected = mocking::DateTime::get_by_date(2023, 5, 11);
 
-    let output = next_week(&mut input);
+    let output = next_week(&input);
 
     assert_eq!(output, expected);
 }
 
 #[test]
 fn test_next_week_on_friday() {
-    let mut input = mocking::DateTime::get_by_date(2023, 5, 5);
+    let input = mocking::DateTime::get_by_date(2023, 5, 5);
     let expected = mocking::DateTime::get_by_date(2023, 5, 12);
 
-    let output = next_week(&mut input);
+    let output = next_week(&input);
 
     assert_eq!(output, expected);
 }
@@ -76,7 +76,7 @@ fn test_next_week_on_friday() {
 fn get_next_weekend() {
     let repetition = Repetition::WEEKENDS;
 
-    let monday = NaiveDate::from_ymd_opt(2022, 09, 26)
+    let monday = NaiveDate::from_ymd_opt(2022, 9, 26)
         .unwrap()
         .and_hms_opt(0, 0, 0)
         .unwrap();
@@ -84,7 +84,7 @@ fn get_next_weekend() {
         .unwrap()
         .and_hms_opt(0, 0, 0)
         .unwrap();
-    let monday_with_time = NaiveDate::from_ymd_opt(2022, 09, 26)
+    let monday_with_time = NaiveDate::from_ymd_opt(2022, 9, 26)
         .unwrap()
         .and_hms_opt(1, 33, 7)
         .unwrap();

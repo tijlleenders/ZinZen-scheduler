@@ -283,7 +283,7 @@ mod tests {
 
             // Test when threshold > slot.duration which return same slot
             let result = slot.split_into_custom_hours(10);
-            let expected = slot.clone();
+            let expected = slot;
             assert_eq!(result.len(), 1);
             assert_eq!(result[0], expected);
 
@@ -295,9 +295,9 @@ mod tests {
             // Test when threshold < slot.duration whcih return splitted slots based on threshold
             let result = slot.split_into_custom_hours(2);
             let expected = vec![
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 0, 0),
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 2, 0),
-                Slot::mock(Duration::hours(1), 2023, 06, 01, 4, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 0, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 2, 0),
+                Slot::mock(Duration::hours(1), 2023, 6, 1, 4, 0),
             ];
             assert_eq!(result.len(), 3);
             assert_eq!(result, expected);
@@ -330,7 +330,7 @@ mod tests {
                     step_id: 1,
                     title: "test".to_string(),
                     duration,
-                    goal: Goal::mock("1", "test", timeframe.clone()),
+                    goal: Goal::mock("1", "test", timeframe),
                     timeline: Timeline::new(),
                     status: StepStatus::ReadyToSchedule,
                     timeframe: Some(timeframe),
@@ -401,14 +401,14 @@ mod tests {
                 let duration: usize = 10;
                 let timeframe = Slot::mock(Duration::days(5), 2023, 6, 1, 0, 0);
                 let timeline = Timeline {
-                    slots: vec![timeframe.clone()].into_iter().collect(),
+                    slots: vec![timeframe].into_iter().collect(),
                 };
 
                 let new_step = NewStep {
                     step_id: 1,
                     title: "test".to_string(),
                     duration,
-                    goal: Goal::mock("1", "test", timeframe.clone()),
+                    goal: Goal::mock("1", "test", timeframe),
                     timeline,
                     status: StepStatus::ReadyToSchedule,
                     timeframe: None,
@@ -631,9 +631,9 @@ mod tests {
 
             // Test when threshold < slot.duration whcih return splitted slots based on threshold
             let expected = vec![
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 0, 0),
-                Slot::mock(Duration::hours(2), 2023, 06, 01, 2, 0),
-                Slot::mock(Duration::hours(1), 2023, 06, 01, 4, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 0, 0),
+                Slot::mock(Duration::hours(2), 2023, 6, 1, 2, 0),
+                Slot::mock(Duration::hours(1), 2023, 6, 1, 4, 0),
             ];
             let result = step.split_into_custom_hours(2);
             assert_eq!(result.len(), 3);
@@ -736,7 +736,7 @@ mod tests {
                 impossible: false,
             };
 
-            assert_eq!(false, is_cross_day(&task));
+            assert!(!is_cross_day(&task));
         }
     }
 }

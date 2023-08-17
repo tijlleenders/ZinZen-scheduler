@@ -3,10 +3,10 @@ use chrono::Duration;
 
 #[test]
 fn test_remove_from() {
-    let sample_slot = Slot::mock(Duration::hours(15), 2022, 10, 1, 05, 0);
+    let sample_slot = Slot::mock(Duration::hours(15), 2022, 10, 1, 5, 0);
 
     if let Some(mut timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
-        let slot_to_remove = Slot::mock(Duration::hours(5), 2022, 10, 1, 05, 0);
+        let slot_to_remove = Slot::mock(Duration::hours(5), 2022, 10, 1, 5, 0);
 
         timeline.remove_slots(vec![slot_to_remove]);
         let result: Vec<Slot> = timeline.slots.clone().into_iter().collect();
@@ -14,7 +14,7 @@ fn test_remove_from() {
 
         assert_eq!(expected_result, result);
     } else {
-        assert!(false);
+        panic!();
     }
 }
 
@@ -101,20 +101,20 @@ fn test_based_on_i284_7days() {
 #[test]
 fn test_based_on_edge_case_in_filter_not_on() {
     let slots_to_filter: Vec<Slot> = vec![
-        Slot::mock(Duration::hours(5), 2023, 05, 2, 0, 0),
-        Slot::mock(Duration::hours(4), 2023, 05, 4, 13, 0),
+        Slot::mock(Duration::hours(5), 2023, 5, 2, 0, 0),
+        Slot::mock(Duration::hours(4), 2023, 5, 4, 13, 0),
     ];
 
-    let mut timeline = Timeline::mock_as_days(5, 2023, 05, 1);
+    let mut timeline = Timeline::mock_as_days(5, 2023, 5, 1);
 
     let expected_result: Timeline = Timeline {
         slots: vec![
-            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::hours(19), 2023, 05, 2, 05, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-            Slot::mock(Duration::hours(13), 2023, 05, 4, 0, 0),
-            Slot::mock(Duration::hours(7), 2023, 05, 4, 17, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::hours(19), 2023, 5, 2, 5, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+            Slot::mock(Duration::hours(13), 2023, 5, 4, 0, 0),
+            Slot::mock(Duration::hours(7), 2023, 5, 4, 17, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 5, 0, 0),
         ]
         .into_iter()
         .collect(),
@@ -142,22 +142,22 @@ fn test_based_on_edge_case_in_filter_not_on() {
 #[test]
 fn test_many_filters_same_day() {
     let slots_to_filter: Vec<Slot> = vec![
-        Slot::mock(Duration::hours(5), 2023, 05, 2, 0, 0),
-        Slot::mock(Duration::hours(2), 2023, 05, 2, 20, 0),
-        Slot::mock(Duration::hours(4), 2023, 05, 4, 13, 0),
+        Slot::mock(Duration::hours(5), 2023, 5, 2, 0, 0),
+        Slot::mock(Duration::hours(2), 2023, 5, 2, 20, 0),
+        Slot::mock(Duration::hours(4), 2023, 5, 4, 13, 0),
     ];
 
-    let mut timeline = Timeline::mock_as_days(5, 2023, 05, 1);
+    let mut timeline = Timeline::mock_as_days(5, 2023, 5, 1);
 
     let expected_result: Timeline = Timeline {
         slots: vec![
-            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::hours(15), 2023, 05, 2, 05, 0),
-            Slot::mock(Duration::hours(2), 2023, 05, 2, 22, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-            Slot::mock(Duration::hours(13), 2023, 05, 4, 0, 0),
-            Slot::mock(Duration::hours(7), 2023, 05, 4, 17, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::hours(15), 2023, 5, 2, 5, 0),
+            Slot::mock(Duration::hours(2), 2023, 5, 2, 22, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+            Slot::mock(Duration::hours(13), 2023, 5, 4, 0, 0),
+            Slot::mock(Duration::hours(7), 2023, 5, 4, 17, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 5, 0, 0),
         ]
         .into_iter()
         .collect(),

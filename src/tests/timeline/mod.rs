@@ -7,7 +7,7 @@ use std::collections::BTreeSet;
 
 #[test]
 fn test_initialize() {
-    let sample_slot = Slot::mock(Duration::hours(15), 2022, 10, 1, 05, 0);
+    let sample_slot = Slot::mock(Duration::hours(15), 2022, 10, 1, 5, 0);
 
     let expected_slot_in_timeline = Slot {
         start: sample_slot.start,
@@ -22,16 +22,16 @@ fn test_initialize() {
     if let Some(timeline) = Timeline::initialize(sample_slot.start, sample_slot.end) {
         assert_eq!(expected_timeline, timeline);
     } else {
-        assert!(false);
+        panic!();
     }
 }
 
 #[test]
 fn test_get_next() {
     let (slot1, slot2, slot3, slot4) = (
-        Slot::mock(Duration::hours(2), 2022, 10, 1, 01, 0),
-        Slot::mock(Duration::hours(3), 2022, 10, 1, 03, 0),
-        Slot::mock(Duration::hours(4), 2022, 10, 1, 07, 0),
+        Slot::mock(Duration::hours(2), 2022, 10, 1, 1, 0),
+        Slot::mock(Duration::hours(3), 2022, 10, 1, 3, 0),
+        Slot::mock(Duration::hours(4), 2022, 10, 1, 7, 0),
         Slot::mock(Duration::hours(10), 2022, 10, 1, 12, 0),
     );
 
@@ -42,6 +42,6 @@ fn test_get_next() {
     if let Some(next_slot) = timeline.get_slot(1) {
         assert_eq!(slot2, next_slot);
     } else {
-        assert!(false);
+        panic!();
     }
 }

@@ -5,3 +5,4 @@ outputformat.txt
 target/
 tests/rust_tests.rs
 _logs/
+js-api/

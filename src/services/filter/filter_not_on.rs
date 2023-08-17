@@ -47,17 +47,17 @@ mod tests {
     /// - Expected list of all 5 days except first 5 hours of 2023-05-02
     #[test]
     fn test_when_timeline_have_many_slots() {
-        let slots_to_filter: Vec<Slot> = vec![Slot::mock(Duration::hours(5), 2023, 05, 2, 0, 0)];
+        let slots_to_filter: Vec<Slot> = vec![Slot::mock(Duration::hours(5), 2023, 5, 2, 0, 0)];
 
-        let timeline = Timeline::mock_as_days(5, 2023, 05, 1);
+        let timeline = Timeline::mock_as_days(5, 2023, 5, 1);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-                Slot::mock(Duration::hours(19), 2023, 05, 2, 05, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+                Slot::mock(Duration::hours(19), 2023, 5, 2, 5, 0),
+                Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 5, 4, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 5, 5, 0, 0),
             ]
             .into_iter()
             .collect(),
@@ -77,20 +77,20 @@ mod tests {
     #[test]
     fn test_timeline_have_many_slots_many_to_filter() {
         let slots_to_filter: Vec<Slot> = vec![
-            Slot::mock(Duration::hours(5), 2023, 05, 2, 0, 0),
-            Slot::mock(Duration::hours(4), 2023, 05, 4, 13, 0),
+            Slot::mock(Duration::hours(5), 2023, 5, 2, 0, 0),
+            Slot::mock(Duration::hours(4), 2023, 5, 4, 13, 0),
         ];
 
-        let timeline = Timeline::mock_as_days(5, 2023, 05, 1);
+        let timeline = Timeline::mock_as_days(5, 2023, 5, 1);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-                Slot::mock(Duration::hours(19), 2023, 05, 2, 05, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-                Slot::mock(Duration::hours(13), 2023, 05, 4, 0, 0),
-                Slot::mock(Duration::hours(7), 2023, 05, 4, 17, 0),
-                Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+                Slot::mock(Duration::hours(19), 2023, 5, 2, 5, 0),
+                Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+                Slot::mock(Duration::hours(13), 2023, 5, 4, 0, 0),
+                Slot::mock(Duration::hours(7), 2023, 5, 4, 17, 0),
+                Slot::mock(Duration::days(1), 2023, 5, 5, 0, 0),
             ]
             .into_iter()
             .collect(),
@@ -109,21 +109,21 @@ mod tests {
     #[test]
     fn test_i293_postpone_2() {
         let slots_to_filter: Vec<Slot> = vec![
-            Slot::mock(Duration::hours(3), 2023, 04, 1, 0, 0),
-            Slot::mock(Duration::hours(1), 2023, 04, 1, 5, 0),
+            Slot::mock(Duration::hours(3), 2023, 4, 1, 0, 0),
+            Slot::mock(Duration::hours(1), 2023, 4, 1, 5, 0),
         ];
 
         let timeline = Timeline::mock_as_days(6, 2023, 4, 1);
 
         let expected_result: Timeline = Timeline {
             slots: vec![
-                Slot::mock(Duration::hours(2), 2023, 04, 1, 3, 0),
-                Slot::mock(Duration::hours(18), 2023, 04, 1, 6, 0),
-                Slot::mock(Duration::days(1), 2023, 04, 2, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 04, 3, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 04, 4, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 04, 5, 0, 0),
-                Slot::mock(Duration::days(1), 2023, 04, 6, 0, 0),
+                Slot::mock(Duration::hours(2), 2023, 4, 1, 3, 0),
+                Slot::mock(Duration::hours(18), 2023, 4, 1, 6, 0),
+                Slot::mock(Duration::days(1), 2023, 4, 2, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 4, 3, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 4, 4, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 4, 5, 0, 0),
+                Slot::mock(Duration::days(1), 2023, 4, 6, 0, 0),
             ]
             .into_iter()
             .collect(),

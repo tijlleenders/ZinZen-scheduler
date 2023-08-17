@@ -62,14 +62,14 @@ mod tests {
         let slot_duration = Duration::days(5);
         let interval_duration = Duration::days(1);
 
-        let slot = Slot::mock(slot_duration, 2023, 05, 1, 0, 0);
+        let slot = Slot::mock(slot_duration, 2023, 5, 1, 0, 0);
 
         let expected_result: Vec<Slot> = vec![
-            Slot::mock(Duration::days(1), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 2, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 3, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 4, 0, 0),
-            Slot::mock(Duration::days(1), 2023, 05, 5, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 2, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 3, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 4, 0, 0),
+            Slot::mock(Duration::days(1), 2023, 5, 5, 0, 0),
         ];
 
         let slot_iterator = SlotIterator::new(slot, interval_duration);
@@ -89,14 +89,14 @@ mod tests {
         let slot_duration = Duration::hours(5);
         let interval_duration = Duration::hours(1);
 
-        let slot = Slot::mock(slot_duration, 2023, 05, 1, 0, 0);
+        let slot = Slot::mock(slot_duration, 2023, 5, 1, 0, 0);
 
         let expected_result: Vec<Slot> = vec![
-            Slot::mock(Duration::hours(1), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::hours(1), 2023, 05, 1, 1, 0),
-            Slot::mock(Duration::hours(1), 2023, 05, 1, 2, 0),
-            Slot::mock(Duration::hours(1), 2023, 05, 1, 3, 0),
-            Slot::mock(Duration::hours(1), 2023, 05, 1, 4, 0),
+            Slot::mock(Duration::hours(1), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::hours(1), 2023, 5, 1, 1, 0),
+            Slot::mock(Duration::hours(1), 2023, 5, 1, 2, 0),
+            Slot::mock(Duration::hours(1), 2023, 5, 1, 3, 0),
+            Slot::mock(Duration::hours(1), 2023, 5, 1, 4, 0),
         ];
 
         let slot_iterator = SlotIterator::new(slot, interval_duration);
@@ -120,14 +120,14 @@ mod tests {
         let slot_duration = Duration::days(5);
         let interval_duration = Duration::days(1);
 
-        let slot = Slot::mock(slot_duration, 2023, 05, 1, 0, 0);
+        let slot = Slot::mock(slot_duration, 2023, 5, 1, 0, 0);
 
         let expected_result: Vec<Slot> = vec![
-            Slot::mock(Duration::hours(10), 2023, 05, 1, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 2, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 3, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 4, 0, 0),
-            Slot::mock(Duration::hours(10), 2023, 05, 5, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 1, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 2, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 3, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 4, 0, 0),
+            Slot::mock(Duration::hours(10), 2023, 5, 5, 0, 0),
         ];
 
         let slot_iterator = SlotIterator::new(slot, interval_duration);
@@ -135,7 +135,7 @@ mod tests {
         let mut result: Vec<Slot> = vec![];
 
         for mut slot in slot_iterator {
-            slot.end = slot.end - Duration::hours(14);
+            slot.end -= Duration::hours(14);
             result.push(slot);
         }
 

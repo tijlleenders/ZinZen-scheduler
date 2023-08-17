@@ -2,12 +2,12 @@ import { schedule } from "../js-api/scheduler.js";
 import { assertEquals, assertThrows } from "https://deno.land/std@0.141.0/testing/asserts.ts";
 import {existsSync} from "https://deno.land/std/fs/mod.ts";
 
-const testFolder = './tests/jsons/';
+const testFolder = './tests/jsons/stable/';
 
 const getFiles = (directory: string): [string, string] => {
   const dir = testFolder + directory;  
   const inputFile = Deno.readTextFileSync(dir + '/input.json');
-  const outputFile = Deno.readTextFileSync(dir + '/output.json');
+  const outputFile = Deno.readTextFileSync(dir + '/observed.json');
   return [inputFile, outputFile];
 };
 
@@ -17,7 +17,7 @@ for (const dirEntry of tests) {
     continue;
   }
   const input_path =testFolder+`${dirEntry.name}`+"/input.json";
-  const output_path =testFolder+`${dirEntry.name}`+"/input.json";
+  const output_path =testFolder+`${dirEntry.name}`+"/observed.json";
   
   if (dirEntry.isDirectory ) {
     if ( existsSync(input_path) && existsSync(output_path)){
@@ -29,7 +29,7 @@ for (const dirEntry of tests) {
       });
     }
     else {
-      console.log('%cWARN Empty directory : {'+`${dirEntry.name}`+'} Or one of input.json & output.json not exist ', 'background: #222; color: #bada55')
+      console.log('%cWARN Empty directory : {'+`${dirEntry.name}`+'} Or one of input.json & observed.json not exist ', 'background: #222; color: #bada55')
     }
   
   }

@@ -76,7 +76,7 @@ mod tests {
                 1,
                 168,
                 StepStatus::Blocked,
-                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                vec![Slot::mock(Duration::days(6), 2023, 5, 1, 0, 0)],
                 None,
             );
             step.calculate_flexibility();
@@ -93,7 +93,7 @@ mod tests {
                 1,
                 168,
                 StepStatus::BudgetMinWaitingForAdjustment,
-                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                vec![Slot::mock(Duration::days(6), 2023, 5, 1, 0, 0)],
                 None,
             );
             step.calculate_flexibility();
@@ -110,7 +110,7 @@ mod tests {
                 1,
                 168,
                 StepStatus::Impossible,
-                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                vec![Slot::mock(Duration::days(6), 2023, 5, 1, 0, 0)],
                 None,
             );
             step.calculate_flexibility();
@@ -127,7 +127,7 @@ mod tests {
                 1,
                 168,
                 StepStatus::Scheduled,
-                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                vec![Slot::mock(Duration::days(6), 2023, 5, 1, 0, 0)],
                 None,
             );
             step.calculate_flexibility();
@@ -144,7 +144,7 @@ mod tests {
                 1,
                 168,
                 StepStatus::Uninitialized,
-                vec![Slot::mock(Duration::days(6), 2023, 05, 01, 0, 0)],
+                vec![Slot::mock(Duration::days(6), 2023, 5, 1, 0, 0)],
                 None,
             );
             step.calculate_flexibility();
@@ -173,15 +173,15 @@ mod tests {
                 0,
                 StepStatus::ReadyToSchedule,
                 vec![
-                    Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 04, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 05, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 06, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 07, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 08, 22, 0),
+                    Slot::mock(Duration::hours(8), 2023, 1, 3, 0, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 3, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 4, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 5, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 6, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 7, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 8, 22, 0),
                     // Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 09, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 9, 22, 0),
                 ],
                 None,
             );
@@ -205,7 +205,7 @@ mod tests {
                 1,
                 0,
                 StepStatus::ReadyToSchedule,
-                vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
+                vec![Slot::mock(Duration::days(7), 2023, 1, 3, 0, 0)],
                 None,
             );
 
@@ -229,13 +229,13 @@ mod tests {
                 0,
                 StepStatus::ReadyToSchedule,
                 vec![
-                    Slot::mock(Duration::hours(3), 2023, 01, 03, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 04, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 05, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 06, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 07, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 08, 18, 0),
-                    Slot::mock(Duration::hours(3), 2023, 01, 09, 18, 0),
+                    Slot::mock(Duration::hours(3), 2023, 1, 3, 18, 0),
+                    Slot::mock(Duration::hours(3), 2023, 1, 4, 18, 0),
+                    Slot::mock(Duration::hours(3), 2023, 1, 5, 18, 0),
+                    Slot::mock(Duration::hours(3), 2023, 1, 6, 18, 0),
+                    Slot::mock(Duration::hours(3), 2023, 1, 7, 18, 0),
+                    Slot::mock(Duration::hours(3), 2023, 1, 8, 18, 0),
+                    Slot::mock(Duration::hours(3), 2023, 1, 9, 18, 0),
                 ],
                 None,
             );
@@ -276,15 +276,15 @@ mod tests {
                 0,
                 StepStatus::ReadyToSchedule,
                 vec![
-                    Slot::mock(Duration::hours(8), 2023, 01, 03, 0, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 03, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 04, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 05, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 06, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 07, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 08, 22, 0),
+                    Slot::mock(Duration::hours(8), 2023, 1, 3, 0, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 3, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 4, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 5, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 6, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 7, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 8, 22, 0),
                     // Slot::mock(Duration::hours(2), 2023, 01, 09, 22, 0),
-                    Slot::mock(Duration::hours(10), 2023, 01, 09, 22, 0),
+                    Slot::mock(Duration::hours(10), 2023, 1, 9, 22, 0),
                 ],
                 None,
             );
@@ -294,7 +294,7 @@ mod tests {
                 1,
                 0,
                 StepStatus::ReadyToSchedule,
-                vec![Slot::mock(Duration::days(7), 2023, 01, 03, 0, 0)],
+                vec![Slot::mock(Duration::days(7), 2023, 1, 3, 0, 0)],
                 None,
             );
 
@@ -308,7 +308,7 @@ mod tests {
                 } else if step.duration == 1 {
                     assert_eq!(168, step.flexibility);
                 } else {
-                    assert!(false);
+                    panic!();
                 }
             }
         }
