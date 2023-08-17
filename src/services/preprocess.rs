@@ -26,7 +26,7 @@ pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
     step_budgets.configure_budgets(&mut goals);
 
     let mut counter: usize = 0;
-    let mut steps: Vec<Step> = step_budgets.generate_steps(&mut goals, &mut counter);
+    let mut steps: Vec<Step> = step_budgets.generate_steps(&goals, &mut counter);
 
     for (_, goal) in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
