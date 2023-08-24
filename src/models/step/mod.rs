@@ -55,8 +55,6 @@ pub enum StepStatus {
     Blocked,
     /// Task is available for scheduling, but its relative flexibility and Tags will determine if it gets picked first
     ReadyToSchedule,
-    /// Special Task that will try to fill in any missing hours to reach the minimum budget for a time period.
-    BudgetMinWaitingForAdjustment,
 }
 
 #[derive(Debug, Clone)]
