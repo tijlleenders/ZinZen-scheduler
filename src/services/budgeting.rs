@@ -110,8 +110,6 @@ impl StepBudgets {
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
-                dbg!(&goal);
-                dbg!(&timeline);
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
