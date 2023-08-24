@@ -110,8 +110,6 @@ impl StepBudgets {
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
-                dbg!(&goal);
-                dbg!(&timeline);
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
@@ -123,13 +121,15 @@ impl StepBudgets {
                         duration,
                         goal: goal.clone(),
                         timeline,
-                        status: StepStatus::BudgetMinWaitingForAdjustment,
+                        status: StepStatus::ReadyToSchedule,
                         timeframe: None,
                     };
 
                     let step = Step::new(new_step);
 
-                    steps_result.push(step);
+                    let mut tresholded_steps = step.apply_duration_threshold();
+
+                    steps_result.append(&mut tresholded_steps);
                 } else {
                     panic!("No timeline slots found")
                 }

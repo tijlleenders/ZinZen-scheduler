@@ -101,8 +101,6 @@ impl Goal {
                     let thresholded_steps = step.apply_duration_threshold();
 
                     steps.extend(thresholded_steps);
-
-                    let _i = 0;
                 } else {
                     steps.push(step);
                 }
