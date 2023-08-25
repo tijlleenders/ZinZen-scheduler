@@ -1,110 +1,21 @@
 mod conflicts;
 
 //For a visual step-by-step breakdown of the scheduler algorithm see https://docs.google.com/presentation/d/1Tj0Bg6v_NVkS8mpa-aRtbDQXM-WFkb3MloWuouhTnAM/edit?usp=sharing
-use crate::models::goal::{Goal, Tag};
 use crate::models::input::{PlacedSteps, StepsToPlace};
 use crate::models::slot::Slot;
-use crate::models::step::{NewStep, Step, StepStatus};
-use crate::models::timeline::Timeline;
+use crate::models::step::StepStatus;
 
 /// The Step Placer receives a list of steps from the Step Generator and attempts to assign each
 /// step a confirmed start and deadline.
 /// The scheduler optimizes for the minimum amount of Impossible steps.
 pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
-    //first pass of scheduler while steps are unsplit
     schedule(&mut steps_to_place);
-
-    // TODO 2023-04-29: Fix function adjust_min_budget_steps based on debug feedback check:
-    // https://github.com/tijlleenders/ZinZen-scheduler/issues/300#issuecomment-1528727445
-
-    adjust_min_budget_step(&mut steps_to_place); //TODO
-    schedule(&mut steps_to_place); //TODO
 
     PlacedSteps {
         calendar_start: steps_to_place.calendar_start,
         calendar_end: steps_to_place.calendar_end,
         steps: steps_to_place.steps,
     }
-}
-
-fn adjust_min_budget_step(steps_to_place: &mut StepsToPlace) {
-    let mut steps_to_add: Vec<Step> = Vec::new();
-
-    for index in 0..steps_to_place.steps.len() {
-        if steps_to_place.steps[index].status == StepStatus::BudgetMinWaitingForAdjustment {
-            for slot_budget in &steps_to_place
-                .step_budgets
-                .budget_map
-                .get(&steps_to_place.steps[index].goal_id)
-                .unwrap()
-                .slot_budgets
-            {
-                //TODO If any remaining hours in slot_budget:
-                // Loop through BudgetStepMinWaitingForAdjustment Step Vec<Slot> and chop off anything that is outside of the slot_budget Slot
-                // Make Step with those slots and remaining hours
-                // If not enough hours - mark impossible? No will happen during scheduling.
-                // TODO 2023-06-20: idea to refactor below code into a separate function
-                let mut step_slots_to_adjust = steps_to_place.steps[index].slots.clone();
-                for slot in step_slots_to_adjust.iter_mut() {
-                    if slot.start.lt(&slot_budget.slot.start) {
-                        slot.start = slot_budget.slot.start;
-                    }
-                    if slot.end.lt(&slot_budget.slot.start) {
-                        slot.end = slot_budget.slot.start;
-                    }
-                    if slot.end.gt(&slot_budget.slot.end) {
-                        slot.end = slot_budget.slot.end;
-                    }
-                    if slot.start.gt(&slot_budget.slot.end) {
-                        slot.start = slot_budget.slot.end;
-                    }
-                }
-                let mut result_slots: Vec<Slot> = Vec::new();
-                for step_slot in step_slots_to_adjust {
-                    if step_slot.start.ne(&step_slot.end) {
-                        result_slots.push(step_slot);
-                    }
-                }
-
-                // TODO 2023-06-04  | fix this by using retain instead of this way
-                steps_to_place.steps[index].tags.push(Tag::Remove);
-
-                let new_title = steps_to_place.steps[index].title.clone();
-                if steps_to_place.steps[index].duration >= slot_budget.used {
-                    let new_duration = steps_to_place.steps[index].duration - slot_budget.used;
-                    let step_id = steps_to_place.steps[index].id;
-                    let goal = Goal {
-                        id: steps_to_place.steps[index].goal_id.clone(),
-                        title: new_title.clone(),
-                        tags: steps_to_place.steps[index].tags.clone(),
-                        after_goals: steps_to_place.steps[index].after_goals.clone(),
-                        ..Default::default()
-                    };
-                    let timeline = Timeline {
-                        slots: result_slots.into_iter().collect(),
-                    };
-
-                    let new_step = NewStep {
-                        step_id,
-                        title: new_title,
-                        duration: new_duration,
-                        goal,
-                        timeline,
-                        status: StepStatus::ReadyToSchedule,
-                        timeframe: None,
-                    };
-
-                    let step_to_add = Step::new(new_step);
-
-                    steps_to_add.push(step_to_add);
-                }
-            }
-        }
-    }
-    steps_to_place
-        .steps
-        .retain(|x| !x.tags.contains(&Tag::Remove));
-    steps_to_place.steps.extend(steps_to_add);
 }
 
 fn schedule(steps_to_place: &mut StepsToPlace) {
@@ -187,6 +98,7 @@ mod tests {
     use crate::models::budget::StepBudgets;
 
     use super::*;
+    use crate::models::step::Step;
     use chrono::Duration;
 
     /// Simulating test case bug_215 when coming to the function `step_placer`

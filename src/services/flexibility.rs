@@ -82,23 +82,6 @@ mod tests {
             step.calculate_flexibility();
         }
 
-        /// Test when StepStatus::BudgetMinWaitingForAdjustment
-        /// - Expected Should panic when StepStatus is not ReadyToSchedule
-        #[test]
-        #[should_panic]
-        #[ignore]
-        fn test_budget_min_for_adjstmnt() {
-            let mut step = Step::mock(
-                "test",
-                1,
-                168,
-                StepStatus::BudgetMinWaitingForAdjustment,
-                vec![Slot::mock(Duration::days(6), 2023, 5, 1, 0, 0)],
-                None,
-            );
-            step.calculate_flexibility();
-        }
-
         /// Test when StepStatus::Impossible
         /// - Expected Should panic when StepStatus is not ReadyToSchedule
         #[test]

@@ -29,13 +29,11 @@ impl Ord for Step {
     /// - Impossible
     /// - Uninitialized (should not be there - panic if you find it!)
     /// - Blocked
-    /// - BudgetMinWaitingForAdjustment
     /// - ReadyToSchedule with Remove Tag
     ///
     /// 1. Sort on Step Status first using following order:
     /// - ReadyToSchedule without Optional Tag,  without Filler Tag
     /// - ReadyToSchedule without Optional Tag, with Filler Tag
-    /// - BudgetMinWaitingForAdjustment - should always be without Optional Tag
     /// - ReadyToSchedule with Optional Tag - with or without FlexDur/FlexNumber Tag
     /// - BudgetMaxWaitingForAdjustment
     ///

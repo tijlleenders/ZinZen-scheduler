@@ -48,9 +48,6 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
             StepStatus::ReadyToSchedule => {
                 panic!("no ReadyToSchedule steps should be present in placed_steps")
             }
-            StepStatus::BudgetMinWaitingForAdjustment => {
-                panic!("no BudgetMinWaitingForAdjustment steps should be present in placed_steps")
-            }
         }
     }
 
@@ -139,7 +136,6 @@ fn get_task_from_step(
         StepStatus::Uninitialized => todo!(),
         StepStatus::Blocked => todo!(),
         StepStatus::ReadyToSchedule => todo!(),
-        StepStatus::BudgetMinWaitingForAdjustment => todo!(),
     }
 }
 

@@ -110,8 +110,6 @@ impl StepBudgets {
                 TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
 
             for timeline in time_slots_iterator {
-                dbg!(&goal);
-                dbg!(&timeline);
                 let step_id = *counter;
                 *counter += 1;
                 if !timeline.slots.is_empty() {
@@ -123,13 +121,15 @@ impl StepBudgets {
                         duration,
                         goal: goal.clone(),
                         timeline,
-                        status: StepStatus::BudgetMinWaitingForAdjustment,
+                        status: StepStatus::ReadyToSchedule,
                         timeframe: None,
                     };
 
                     let step = Step::new(new_step);
 
-                    steps_result.push(step);
+                    let mut tresholded_steps = step.apply_duration_threshold();
+
+                    steps_result.append(&mut tresholded_steps);
                 } else {
                     panic!("No timeline slots found")
                 }
@@ -229,28 +229,30 @@ mod tests {
         use chrono::Duration;
         use std::collections::HashMap;
 
-        /// Test budgeted goal "4-work" simulating case "budget_with_no_children" but with little horus for simplicity
+        /// Test generate_steps with a budget with < 8 hours weekly.
+        /// Should generate a single step corresponding to the minimal step needed to satisfy the budget min
+        /// This step should be ready to schedule
         #[test]
-        #[ignore] // 2023-08-13 already broken, disabled for now to achieve green pipeline
-        fn test_work_in_case_budget_with_no_children() {
+        fn generate_steps_generates_minimal_step_to_satify_budget_min() {
+            // Data
+            let title: String = "4-work".to_string();
             let calendar = Slot::mock(Duration::days(7), 2018, 1, 1, 0, 0);
-            let budget_min: usize = 5;
 
             let mut goal_id_to_budget_ids: HashMap<String, Vec<String>> = HashMap::new();
-            goal_id_to_budget_ids.insert("4-work".to_string(), vec!["4-work".to_string()]);
+            goal_id_to_budget_ids.insert(title.clone(), vec![title.clone()]);
 
             let mut budget_id_to_budget: HashMap<String, StepBudget> = HashMap::new();
             budget_id_to_budget.insert(
-                "4-work".to_string(),
+                title.clone(),
                 StepBudget {
                     step_budget_type: BudgetType::Weekly,
                     slot_budgets: vec![SlotBudget {
                         slot: calendar,
-                        min: Some(budget_min),
+                        min: Some(5),
                         max: None,
                         used: 0,
                     }],
-                    min: Some(budget_min),
+                    min: Some(5),
                     max: None,
                 },
             );
@@ -263,13 +265,13 @@ mod tests {
             };
 
             let work_goal = Goal {
-                id: "4-work".to_string(),
-                title: "Work".to_string(),
+                id: title.clone(),
+                title: title.clone(),
                 min_duration: None,
                 max_duration: None,
                 budgets: Some(vec![Budget {
                     budget_type: BudgetType::Weekly,
-                    min: Some(40),
+                    min: Some(5),
                     max: None,
                 }]),
                 repeat: Some(Repetition::Weekly(1)),
@@ -287,97 +289,102 @@ mod tests {
             let result_steps = step_budgets.generate_steps(&goals, &mut counter);
 
             // Expected steps data
-            let goal_id: String = "4-work".to_string();
-            let title = "Work".to_string();
-            let status = StepStatus::ReadyToSchedule;
-            let expected_steps: Vec<Step> = vec![
-                Step {
-                    id: 1,
-                    goal_id: goal_id.clone(),
-                    title: title.clone(),
-                    duration: 1,
-                    status: status.clone(),
-                    flexibility: 0,
-                    start: None,
-                    deadline: None,
-                    slots: vec![calendar],
-                    tags: vec![],
-                    after_goals: None,
-                },
-                Step {
-                    id: 2,
-                    goal_id: goal_id.clone(),
-                    title: title.clone(),
-                    duration: 1,
-                    status: status.clone(),
-                    flexibility: 0,
-                    start: None,
-                    deadline: None,
-                    slots: vec![calendar],
-                    tags: vec![],
-                    after_goals: None,
-                },
-                Step {
-                    id: 3,
-                    goal_id: goal_id.clone(),
-                    title: title.clone(),
-                    duration: 1,
-                    status: status.clone(),
-                    flexibility: 0,
-                    start: None,
-                    deadline: None,
-                    slots: vec![calendar],
-                    tags: vec![],
-                    after_goals: None,
-                },
-                Step {
-                    id: 4,
-                    goal_id: goal_id.clone(),
-                    title: title.clone(),
-                    duration: 1,
-                    status: status.clone(),
-                    flexibility: 0,
-                    start: None,
-                    deadline: None,
-                    slots: vec![calendar],
-                    tags: vec![],
-                    after_goals: None,
-                },
-                Step {
-                    id: 5,
-                    goal_id: goal_id.clone(),
-                    title: title.clone(),
-                    duration: 1,
-                    status: status.clone(),
-                    flexibility: 0,
-                    start: None,
-                    deadline: None,
-                    slots: vec![calendar],
-                    tags: vec![],
-                    after_goals: None,
-                },
-            ];
+            let expected_steps: Vec<Step> = vec![Step {
+                id: 1,
+                goal_id: title.clone(),
+                title: title.clone(),
+                duration: 5,
+                status: StepStatus::ReadyToSchedule,
+                flexibility: 0,
+                start: None,
+                deadline: None,
+                slots: vec![calendar],
+                tags: vec![Tag::Budget],
+                after_goals: None,
+            }];
 
             assert_eq!(result_steps, expected_steps);
-            assert_eq!(result_steps[0].duration, expected_steps[0].duration);
-            assert_eq!(result_steps[0].status, expected_steps[0].status);
-            assert_eq!(result_steps[0].tags, expected_steps[0].tags);
+        }
 
-            assert_eq!(result_steps[1].duration, expected_steps[1].duration);
-            assert_eq!(result_steps[1].status, expected_steps[1].status);
-            assert_eq!(result_steps[1].tags, expected_steps[1].tags);
+        /// Test generate_steps with a budget with > 8 hours weekly.
+        /// Should generate splitted steps in 1 hour blocks that combined add up to the budget min.
+        /// This step should be ready to schedule
+        #[test]
+        fn generate_steps_generates_splitted_steps_to_satify_budget_min() {
+            // Data
+            let title: String = "4-work".to_string();
+            let calendar = Slot::mock(Duration::days(7), 2018, 1, 1, 0, 0);
 
-            assert_eq!(result_steps[2].duration, expected_steps[2].duration);
-            assert_eq!(result_steps[2].status, expected_steps[2].status);
-            assert_eq!(result_steps[2].tags, expected_steps[2].tags);
+            let mut goal_id_to_budget_ids: HashMap<String, Vec<String>> = HashMap::new();
+            goal_id_to_budget_ids.insert(title.clone(), vec![title.clone()]);
 
-            assert_eq!(result_steps[3].duration, expected_steps[3].duration);
-            assert_eq!(result_steps[3].status, expected_steps[3].status);
-            assert_eq!(result_steps[3].tags, expected_steps[3].tags);
+            let mut budget_id_to_budget: HashMap<String, StepBudget> = HashMap::new();
+            budget_id_to_budget.insert(
+                title.clone(),
+                StepBudget {
+                    step_budget_type: BudgetType::Weekly,
+                    slot_budgets: vec![SlotBudget {
+                        slot: calendar,
+                        min: Some(9),
+                        max: None,
+                        used: 0,
+                    }],
+                    min: Some(9),
+                    max: None,
+                },
+            );
 
-            assert_eq!(result_steps[4].duration, expected_steps[4].duration);
-            assert_eq!(result_steps[4].status, expected_steps[4].status);
-            assert_eq!(result_steps[4].tags, expected_steps[4].tags);
+            let mut step_budgets = StepBudgets {
+                calendar_start: calendar.start,
+                calendar_end: calendar.end,
+                budget_ids_map: goal_id_to_budget_ids,
+                budget_map: budget_id_to_budget,
+            };
+
+            let work_goal = Goal {
+                id: title.clone(),
+                title: title.clone(),
+                min_duration: None,
+                max_duration: None,
+                budgets: Some(vec![Budget {
+                    budget_type: BudgetType::Weekly,
+                    min: Some(9),
+                    max: None,
+                }]),
+                repeat: Some(Repetition::Weekly(1)),
+                start: Some(calendar.start),
+                deadline: Some(calendar.end),
+                tags: vec![Tag::Budget],
+                filters: None,
+                children: None,
+                after_goals: None,
+            };
+
+            let mut goals: GoalsMap = GoalsMap::new();
+            goals.insert(work_goal.id.clone(), work_goal);
+            let mut counter = 0;
+            let result_steps = step_budgets.generate_steps(&goals, &mut counter);
+
+            // Expected steps data: 9 different identical steps (differing only in id) with duration 1
+            let indices: Vec<usize> = vec![0, 1, 2, 3, 4, 5, 6, 7, 8];
+            let expected_steps: Vec<Step> = indices
+                .iter()
+                .map(|index| Step {
+                    id: *index,
+                    goal_id: title.clone(),
+                    title: title.clone(),
+                    duration: 1,
+                    status: StepStatus::ReadyToSchedule,
+                    flexibility: 0,
+                    start: None,
+                    deadline: None,
+                    slots: vec![calendar],
+                    tags: vec![Tag::Budget],
+                    after_goals: None,
+                })
+                .collect();
+
+            assert_eq!(result_steps, expected_steps);
         }
     }
 
