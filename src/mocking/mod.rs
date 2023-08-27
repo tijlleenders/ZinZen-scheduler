@@ -1,5 +1,7 @@
 use chrono::{Duration, NaiveDate};
 
+use rand::prelude::*;
+
 use crate::models::{
     goal::Goal,
     slot::{iterator::SlotIterator, Slot},
@@ -106,8 +108,10 @@ impl Step {
         let start = timeframe.map(|time| time.start);
         let deadline = timeframe.map(|time| time.end);
 
+        let id = rand::thread_rng().gen_range(0..10000);
+
         Step {
-            id: 1,
+            id,
             title: title.to_string(),
             duration,
             status,

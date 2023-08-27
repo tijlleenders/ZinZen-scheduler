@@ -339,7 +339,7 @@ mod tests {
 
                 let generated_steps = new_step.apply_duration_threshold();
 
-                let expected_step = Step::mock(
+                let mut expected_step = Step::mock(
                     "test",
                     7,
                     0,
@@ -347,6 +347,7 @@ mod tests {
                     vec![timeframe],
                     None,
                 );
+                expected_step.id = 1;
 
                 assert_eq!(generated_steps, vec![expected_step.clone()]);
                 assert_eq!(generated_steps[0].id, expected_step.id);
@@ -497,6 +498,7 @@ mod tests {
                         None,
                     ),
                 ];
+                expected_steps[0].id = 1;
                 expected_steps[1].id = 2;
                 expected_steps[2].id = 3;
                 expected_steps[3].id = 4;
@@ -587,6 +589,7 @@ mod tests {
                     None,
                 ),
             ];
+            expected_steps[0].id = 1;
             expected_steps[1].id = 2;
             expected_steps[2].id = 3;
 
