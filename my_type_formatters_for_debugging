@@ -1,0 +1,5 @@
+command script import simd.py 
+
+type summary add -F simd.ChronoNaiveDateTimeProvider chrono::naive::datetime::NaiveDateTime
+type summary add -F simd.ChronoNaiveDateProvider chrono::naive::date::NaiveDate
+type summary add -F simd.ChronoNaiveTimeProvider chrono::naive::time::NaiveTime
