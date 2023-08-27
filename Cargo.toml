@@ -57,6 +57,8 @@ soft = "0.1.1"
 
 # random number generator for tests
 rand = "0.8.5"
+# getrandom with js features should be included to make sure the wasm-unknown build target can use the crate in js context (even though we only use this crate in test code)
+getrandom = { version = "0.2", features = ["js"] }
 
 
 [dev-dependencies]
