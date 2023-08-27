@@ -98,8 +98,7 @@ impl Goal {
 
                 // Apply split on threshold (8 hours) rule if goal is a leaf, or if goal is a filler goal
                 if self.children.is_none() || self.tags.contains(&Tag::Filler) {
-                    let thresholded_steps = step.apply_duration_threshold();
-
+                    let thresholded_steps = step.apply_duration_threshold(counter);
                     steps.extend(thresholded_steps);
                 } else {
                     steps.push(step);

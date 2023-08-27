@@ -6,33 +6,9 @@ use chrono::Duration;
 
 /// Find best slots for steps by splitting, finding conflicts and return list of slots which can be scheduled
 pub(crate) fn find_best_slots_for_first_step(steps: &Vec<Step>) -> Option<Vec<Slot>> {
-    // TODO 2023-05-25  \ Avoid spliting slots which causing wrong scheduling
-    // Issued while debugging test case bug_215
-
     if steps.is_empty() {
         return None;
     }
-
-    /*
-    TODO 2023-06-04  \
-    - Isolate checking conflicts in a seperate function
-    - Check step duration and split based on that list of
-    potential slots as below example:
-        - Consider below step:
-            ```markdown
-            Step{
-                title: sleep
-                duration: 8
-                slots: 22-08 (10 hours)
-            }
-
-            So 3 slots will be generated:
-                Slot: 22-06
-                Slot: 23-07
-                Slot: 22-08
-
-            ```
-    */
 
     let step = &steps[0];
     let mut slot_conflicts = step.get_conflicts_in_steps(steps);
@@ -171,16 +147,11 @@ impl Step {
     fn get_conflicts_in_steps(&self, steps_list: &[Step]) -> Vec<SlotConflict> {
         // Remove given_step from steps_list to avoid wrong conflicts calculation
 
-        //TODO re-enable below block when the bug causing duplicate ids is solved. for now it doesn't
-        // hurt to leave this disabled, because an added self-conflict for each slot/step should not
-        // cause the order to change.
-        // let steps_list: Vec<Step> = steps_list
-        //     .iter()
-        //     .filter(|step| step.id != self.id)
-        //     .cloned()
-        //     .collect();
-
-        let steps_list: Vec<Step> = Vec::from(steps_list);
+        let steps_list: Vec<Step> = steps_list
+            .iter()
+            .filter(|step| step.id != self.id)
+            .cloned()
+            .collect();
 
         let mut conflicts_list: Vec<SlotConflict> = vec![];
 

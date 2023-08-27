@@ -127,9 +127,9 @@ impl StepBudgets {
 
                     let step = Step::new(new_step);
 
-                    let mut tresholded_steps = step.apply_duration_threshold();
+                    let mut thresholded_steps = step.apply_duration_threshold(counter);
 
-                    steps_result.append(&mut tresholded_steps);
+                    steps_result.append(&mut thresholded_steps);
                 } else {
                     panic!("No timeline slots found")
                 }
