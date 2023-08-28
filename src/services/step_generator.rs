@@ -98,8 +98,7 @@ impl Goal {
 
                 // Apply split on threshold (8 hours) rule if goal is a leaf, or if goal is a filler goal
                 if self.children.is_none() || self.tags.contains(&Tag::Filler) {
-                    let thresholded_steps = step.apply_duration_threshold();
-
+                    let thresholded_steps = step.apply_duration_threshold(counter);
                     steps.extend(thresholded_steps);
                 } else {
                     steps.push(step);
@@ -135,7 +134,7 @@ mod tests {
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
 
-                let expected_steps = vec![Step::mock(
+                let mut expected_steps = vec![Step::mock(
                     "test",
                     duration,
                     0,
@@ -143,6 +142,7 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
+                expected_steps[0].id = 1;
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
@@ -164,7 +164,7 @@ mod tests {
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
 
-                let expected_steps = vec![Step::mock(
+                let mut expected_steps = vec![Step::mock(
                     "test",
                     duration,
                     0,
@@ -172,6 +172,7 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
+                expected_steps[0].id = 1;
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
@@ -243,7 +244,7 @@ mod tests {
                 let steps =
                     goal.generate_steps(goal_timeframe.start, goal_timeframe.end, &mut counter);
 
-                let expected_steps = vec![Step::mock(
+                let mut expected_steps = vec![Step::mock(
                     "test",
                     10,
                     0,
@@ -251,6 +252,7 @@ mod tests {
                     vec![goal_timeframe],
                     None,
                 )];
+                expected_steps[0].id = 1;
 
                 assert_eq!(steps, expected_steps);
                 assert_eq!(counter, 2);
