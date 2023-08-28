@@ -28,7 +28,7 @@ impl Timeline {
 impl Step {
     /// When a step duration exceeded threshold, it will be splitted
     /// into 1 hour steps
-    pub fn apply_duration_threshold(&self) -> Vec<Step> {
+    pub fn apply_duration_threshold(&self, counter: &mut usize) -> Vec<Step> {
         let threshold: usize = 8;
         let mut new_step = self.clone();
 
@@ -36,7 +36,7 @@ impl Step {
             vec![new_step]
         } else {
             let mut steps: Vec<Step> = Vec::new();
-            steps.extend(new_step.split(&mut 1).unwrap());
+            steps.extend(new_step.split(counter).unwrap());
             steps
         }
     }
@@ -337,9 +337,9 @@ mod tests {
                 };
                 let new_step = Step::new(new_step);
 
-                let generated_steps = new_step.apply_duration_threshold();
+                let generated_steps = new_step.apply_duration_threshold(&mut 1);
 
-                let expected_step = Step::mock(
+                let mut expected_step = Step::mock(
                     "test",
                     7,
                     0,
@@ -347,6 +347,7 @@ mod tests {
                     vec![timeframe],
                     None,
                 );
+                expected_step.id = 1;
 
                 assert_eq!(generated_steps, vec![expected_step.clone()]);
                 assert_eq!(generated_steps[0].id, expected_step.id);
@@ -414,7 +415,7 @@ mod tests {
                     timeframe: None,
                 };
                 let new_step = Step::new(new_step);
-                let generated_steps = new_step.apply_duration_threshold();
+                let generated_steps = new_step.apply_duration_threshold(&mut 1);
                 let mut expected_steps = vec![
                     Step::mock(
                         "test",
@@ -497,6 +498,7 @@ mod tests {
                         None,
                     ),
                 ];
+                expected_steps[0].id = 1;
                 expected_steps[1].id = 2;
                 expected_steps[2].id = 3;
                 expected_steps[3].id = 4;
@@ -587,6 +589,7 @@ mod tests {
                     None,
                 ),
             ];
+            expected_steps[0].id = 1;
             expected_steps[1].id = 2;
             expected_steps[2].id = 3;
 

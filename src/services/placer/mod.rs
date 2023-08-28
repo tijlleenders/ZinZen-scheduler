@@ -27,7 +27,7 @@ fn schedule(steps_to_place: &mut StepsToPlace) {
         if first_step.status != StepStatus::ReadyToSchedule {
             break;
         }
-        match conflicts::find_best_slots(&steps_to_place.steps) {
+        match conflicts::find_best_slots_for_first_step(&steps_to_place.steps) {
             Some(chosen_slots) => {
                 do_the_scheduling(steps_to_place, chosen_slots);
             }
