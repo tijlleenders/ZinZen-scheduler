@@ -26,14 +26,14 @@ def ChronoNaiveTimeProvider(valobj, _dict):
     (mins, sec) = div_mod_floor(origin_secs, 60)
     (hour, minutes) = div_mod_floor(mins, 60)
     (micro, _) = div_mod_floor(nanos, 1000)
-    return '{:02d}:{:02d}:{:02d}.{:06d}Z'.format(hour, minutes, sec, micro)
+    return '{:02d}:{:02d}'.format(hour, minutes)
 
 
 def ChronoNaiveDateTimeProvider(valobj, _dict):
     # type: (SBValue, dict) -> str
     date = ChronoNaiveDateProvider(valobj.GetChildMemberWithName("date"), _dict)
     time = ChronoNaiveTimeProvider(valobj.GetChildMemberWithName("time"), _dict)
-    return '\"{}T{}\"'.format(date, time)
+    return '\"{} {}\"'.format(date, time)
 
 
 def ChronoDateTimeProvider(valobj, _dict):
