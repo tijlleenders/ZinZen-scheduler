@@ -40,3 +40,35 @@
    # Run tests by cargo
    cargo test
    ```
+
+## Debug with better formatter
+To debug tests with better `NaiveDateTime` formatter, kindly add custom configuration inside `launch.json` as below:
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug 'rust_tests' with pprint",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=rust_tests",
+                    "--package=zinzen"
+                ],
+                "filter": {
+                    "name": "rust_tests",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "initCommands": [
+                "command source '${workspaceFolder}/scripts/debug_formatter/chrono_formatter'"
+            ]
+        }
+    ]
+}
+```
