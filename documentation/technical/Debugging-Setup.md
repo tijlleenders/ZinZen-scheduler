@@ -18,4 +18,33 @@ A similar solution should also work for GDB-based debuggers: https://github.com/
 Rust introduced debugger visualization attributes in 1.71.0: https://doc.rust-lang.org/nightly/reference/attributes/debugger.html#the-debugger_visualizer-attribute. This should also work, but is not yet tested in the context of this codebase.
 
 #### A.3) VSCode
-There is an existing workaround for VSCode - not yet tested in context of this codebase: https://stackoverflow.com/questions/68553738/how-do-i-see-a-user-friendly-format-when-debugging-chronodatetime-in-vscode-ll
+To debug tests with better `NaiveDateTime` formatter, kindly add custom configuration inside `launch.json` as below:
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug 'rust_tests' with pprint",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=rust_tests",
+                    "--package=zinzen"
+                ],
+                "filter": {
+                    "name": "rust_tests",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "initCommands": [
+                "command source '${workspaceFolder}/scripts/debug_formatter/chrono_formatter'"
+            ]
+        }
+    ]
+}
+```
