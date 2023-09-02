@@ -10,12 +10,6 @@ use chrono::NaiveDateTime;
 
 impl StepBudgets {
     pub fn configure_budgets(&mut self, goals: &mut GoalsMap) {
-        // Todo: create a shadow steps per budget period that have a tag so the won't be handled by initial call to schedule
-        // Once all Steps are scheduled, if a minimum budget per period is not reached,
-        // give the step a duration to get to the minimum per period, remove don't schedule tag, mark ready to schedule and schedule
-        // ! How to avoid overlapping budgets? Go from inner to outer budgets (/day first => then /week)
-        // This way of shadowing is required so that the min budget scheduling at the end also takes into account the relevant filters and what slots have been taken already
-        // It is also necessary to make the steps being scheduled earlier (Regular and Filler) aware of the slots the budget_min is 'vying for' so they can try to 'keep away'
         if goals.is_empty() {
             panic!("expected goals for making StepBudgets");
         }
@@ -98,6 +92,15 @@ impl StepBudgets {
         //for each budget create a min step (and optional max step) per corresponding time period
         for (goal_id, step_budget) in &self.budget_map {
             let goal = goals.get(goal_id).unwrap();
+            if goal
+                .children
+                .clone()
+                .is_some_and(|concrete_children| !concrete_children.is_empty())
+            {
+                // If a goal is no 'leaf node' (it has children), we do not want to generate
+                // steps from this goal
+                continue;
+            }
 
             let start: NaiveDateTime = goal.start.unwrap();
             let deadline: NaiveDateTime = goal.deadline.unwrap();
