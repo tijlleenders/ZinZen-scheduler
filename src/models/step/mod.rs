@@ -11,7 +11,7 @@ pub mod impls;
 
 /// Steps are generated to achieve a Goal in one or more Steps.
 /// A leaf Goal can generate one or more Steps.
-#[derive(Deserialize, Debug, Eq, Clone)]
+#[derive(Deserialize, Debug, Eq, Clone, PartialEq)]
 pub struct Step {
     /// Only used by the scheduler.
     /// Unstable between scheduler runs if input changes.

@@ -258,7 +258,15 @@ mod tests {
                 goal_id: "1".to_string(),
             };
 
-            let result = Step::mock("test", 1, 168, StepStatus::ReadyToSchedule, slots, None);
+            let mut result = Step::mock(
+                "A sample step",
+                1,
+                168,
+                StepStatus::ReadyToSchedule,
+                slots,
+                None,
+            );
+            result.id = 1;
 
             assert_eq!(expected, result);
         }
