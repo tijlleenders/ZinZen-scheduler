@@ -36,7 +36,6 @@ fn get_test_fn_template(dir_name: &str, test_type: TestType) -> String {
     let test_name = dir_name.replace('-', "_");
     let mut test_fn_template: String = match test_type {
         TestType::Stable => include_str!("build_templates/test_fn_stable.rs").to_string(),
-        TestType::Broken => include_str!("build_templates/test_fn_broken.rs").to_string(),
         TestType::Experimental => {
             include_str!("build_templates/test_fn_experimental.rs").to_string()
         }
@@ -57,10 +56,6 @@ fn create_tests_module() -> String {
     tests_mod = tests_mod.replace(
         "//TEST_FUNCTIONS_STABLE",
         &create_test_functions("./tests/jsons/stable", TestType::Stable),
-    );
-    tests_mod = tests_mod.replace(
-        "//TEST_FUNCTIONS_BROKEN",
-        &create_test_functions("./tests/jsons/broken", TestType::Broken),
     );
     tests_mod = tests_mod.replace(
         "//TEST_FUNCTIONS_EXPERIMENTAL",
@@ -95,6 +90,5 @@ fn create_test_functions(root_dir: &str, test_type: TestType) -> String {
 #[derive(Clone, Copy)]
 enum TestType {
     Stable,
-    Broken,
     Experimental,
 }
