@@ -8,7 +8,7 @@
             "budgets": [{
                 "budget_type": "Weekly",
                 "min": 35,
-                "max": 45
+                "max": 40
             }],
             "filters": {
                 "after_time": 8,

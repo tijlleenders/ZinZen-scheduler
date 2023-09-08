@@ -2,12 +2,6 @@ use super::{Step, StepStatus};
 use crate::models::{goal::Tag, slot::Slot};
 use std::cmp::Ordering;
 
-impl PartialEq for Step {
-    fn eq(&self, other: &Self) -> bool {
-        self.flexibility == other.flexibility
-    }
-}
-
 impl PartialOrd for Step {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))

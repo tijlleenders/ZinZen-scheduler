@@ -344,15 +344,12 @@ mod tests {
                     7,
                     0,
                     StepStatus::ReadyToSchedule,
-                    vec![timeframe],
-                    None,
+                    vec![],
+                    Option::from(timeframe),
                 );
                 expected_step.id = 1;
 
                 assert_eq!(generated_steps, vec![expected_step.clone()]);
-                assert_eq!(generated_steps[0].id, expected_step.id);
-                assert_eq!(generated_steps[0].duration, expected_step.duration);
-                assert_eq!(generated_steps[0].status, expected_step.status);
             }
 
             /// Test Step::apply_duration_threshold when goal.min_duration > 8 hours
