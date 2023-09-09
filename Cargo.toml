@@ -12,7 +12,6 @@ categories = ["algorithms", "date-and-time", "wasm"]
 
 [features]
 experimental-testset = []
-broken-testset = []
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095

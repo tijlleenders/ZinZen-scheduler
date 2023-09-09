@@ -18,5 +18,5 @@ We can also run the tests in a javascript environment as WASM=module using Deno 
 The entrypoint for these tests is tests/deno_tests.ts, and it can be run by executing ./scripts/deno_tests.sh.
 This is meant as an integration test to see everything runs fine in a javascript context.
 
-The tests are divided into 3 testsets: stable, broken and experimental. Stable tests always run.
-The other 2 testsets can be run by providing the right feature flags (see Cargo.toml)
+The tests are divided into 2 testsets: stable and experimental. Stable tests always run.
+The other testset can be run by providing the right feature flag (see Cargo.toml)
