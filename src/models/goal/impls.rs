@@ -1,7 +1,9 @@
 use super::{Day, Goal, TimeFilter};
+use crate::models::budget::Budget;
 use crate::models::repetition::Repetition;
 use chrono::NaiveDateTime;
 use log::info;
+use serde::{Deserialize, Deserializer};
 
 impl From<String> for Day {
     fn from(day: String) -> Self {
@@ -68,6 +70,19 @@ impl Goal {
     pub fn deadline(mut self, deadline: NaiveDateTime) -> Self {
         self.deadline = Some(deadline);
         self
+    }
+
+    pub fn deserialize_budget_vec<'de, D>(deserializer: D) -> Result<Option<Vec<Budget>>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s: Option<Vec<Budget>> = Option::deserialize(deserializer)?;
+        if let Some(s) = s {
+            if !s.is_empty() {
+                return Ok(Some(s));
+            }
+        }
+        Ok(None)
     }
 }
 
