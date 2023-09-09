@@ -96,3 +96,62 @@ impl std::fmt::Display for TimeFilter {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    mod serializing_deserializing {
+        use crate::models::budget::Budget;
+        use crate::models::budget::BudgetType::Weekly;
+        use crate::models::goal::Goal;
+
+        #[test]
+        fn deserializing_of_empty_budgetlist_produces_none() {
+            let goal_deserialized: Goal = serde_json::from_str(
+                r#"{    
+                  "id": "1",
+                  "title": "testing new api",
+                  "budgets": []
+                  }"#,
+            )
+            .unwrap();
+            assert_eq!(goal_deserialized.budgets, None);
+        }
+
+        #[test]
+        fn deserializing_of_non_empty_budgetlist_produces_correct_budgetlist() {
+            let goal_deserialized: Goal = serde_json::from_str(
+                r#"{    
+                  "id": "1",
+                  "title": "testing new api",
+                  "budgets": [{
+                    "budget_type": "Weekly",
+                    "min": 40
+                    }]
+                  }"#,
+            )
+            .unwrap();
+            assert_eq!(
+                goal_deserialized.budgets,
+                Some(vec![Budget {
+                    budget_type: Weekly,
+                    min: Some(40),
+                    max: None
+                }])
+            );
+        }
+
+        // test that we can add a 'created_at' field without breaking the deserialization
+        // the unwrap() would panic if it was impossible
+        #[test]
+        fn extra_fields_are_ignored() {
+            let _: Goal = serde_json::from_str(
+                r#"{    
+                  "id": "1",
+                  "title": "testing new api",
+                  "created_at": "2023-09-03T10:38:35.505Z"
+                  }"#,
+            )
+            .unwrap();
+        }
+    }
+}
