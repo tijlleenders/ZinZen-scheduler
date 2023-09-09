@@ -23,7 +23,7 @@ pub struct Goal {
     #[serde(default)]
     pub max_duration: Option<usize>,
     /// Budgets that apply to this Goal, and all of its subGoals - if any.
-    #[serde(default)]
+    #[serde(deserialize_with = "Goal::deserialize_budget_vec", default)]
     pub budgets: Option<Vec<Budget>>,
     /// Repetition like 'daily' or 'weekly'.
     pub repeat: Option<Repetition>,

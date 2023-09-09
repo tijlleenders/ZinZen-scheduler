@@ -1,0 +1,31 @@
+{
+    "scheduled": [
+        {
+            "day": "2023-09-04",
+            "tasks": [
+                {
+                    "taskid": 0,
+                    "goalid": "1",
+                    "title": "testing new api",
+                    "duration": 1,
+                    "start": "2023-09-04T00:00:00",
+                    "deadline": "2023-09-04T01:00:00"
+                },
+                {
+                    "taskid": 1,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 23,
+                    "start": "2023-09-04T01:00:00",
+                    "deadline": "2023-09-05T00:00:00"
+                }
+            ]
+        }
+    ],
+    "impossible": [
+        {
+            "day": "2023-09-04",
+            "tasks": []
+        }
+    ]
+}
