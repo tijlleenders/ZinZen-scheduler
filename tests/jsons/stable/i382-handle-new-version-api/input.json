@@ -1,120 +1,15 @@
 {
-  "startDate": "2023-09-03T00:00:00",
-  "endDate": "2023-09-10T00:00:00",
+  "startDate": "2023-09-04T00:00:00",
+  "endDate": "2023-09-05T00:00:00",
   "goals": {
-    "f7ba81f6-7701-4068-9d9d-4a6d03ce0dc6": {
-      "id": "f7ba81f6-7701-4068-9d9d-4a6d03ce0dc6",
-      "title": "Sleep 😴🌙",
-      "filters": {
-        "after_time": 0,
-        "before_time": 6,
-        "on_days": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
-        ]
-      },
-      "created_at": "2023-09-03T10:38:35.505Z",
-      "min_duration": 6,
-      "repeat": "weekly",
-      "budgets": []
-    },
-    "e649fa2d-424d-43ff-922d-8c598fcd22a9": {
-      "id": "e649fa2d-424d-43ff-922d-8c598fcd22a9",
-      "title": "Walk 🚶🏽",
-      "filters": {
-        "after_time": 14,
-        "before_time": 20,
-        "on_days": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
-        ]
-      },
-      "created_at": "2023-09-03T10:38:35.507Z",
+    "1": {
+      "id": "1",
+      "title": "testing new api",
       "min_duration": 1,
-      "repeat": "weekly",
-      "budgets": []
-    },
-    "90f2e89e-8c94-4212-bbdf-cab74217e9d3": {
-      "id": "90f2e89e-8c94-4212-bbdf-cab74217e9d3",
-      "title": "Me time 🧘🏽😌",
-      "filters": {
-        "after_time": 7,
-        "before_time": 21,
-        "on_days": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
-        ]
-      },
-      "created_at": "2023-09-03T10:38:35.508Z",
-      "min_duration": 1,
-      "repeat": "weekly",
-      "budgets": []
-    },
-    "711967a3-47f0-4107-8bda-4e3b36a43806": {
-      "id": "711967a3-47f0-4107-8bda-4e3b36a43806",
-      "title": "Dinner 🍽️",
-      "filters": {
-        "after_time": 18,
-        "before_time": 21,
-        "on_days": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
-        ]
-      },
-      "created_at": "2023-09-03T10:38:35.507Z",
-      "min_duration": 1,
-      "repeat": "weekly",
-      "budgets": []
-    },
-    "173d7acc-c93b-4a49-8d08-bd5db00e77e4": {
-      "id": "173d7acc-c93b-4a49-8d08-bd5db00e77e4",
-      "title": "Breakfast 🥐🥣",
-      "filters": {
-        "after_time": 6,
-        "before_time": 9,
-        "on_days": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
-        ]
-      },
-      "created_at": "2023-09-03T10:38:35.505Z",
-      "min_duration": 1,
-      "repeat": "weekly",
-      "budgets": []
-    },
-    "016f1f85-d4fb-4f0d-b64e-ac077632b6a4": {
-      "id": "016f1f85-d4fb-4f0d-b64e-ac077632b6a4",
-      "title": "Lunch 🥪",
-      "filters": {
-        "after_time": 12,
-        "before_time": 14,
-        "on_days": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
-        ]
-      },
-      "created_at": "2023-09-03T10:38:35.506Z",
-      "min_duration": 1,
-      "repeat": "weekly",
-      "budgets": []
+      "start": "2023-09-04T00:00:00",
+      "deadline": "2023-09-05T00:00:00",
+      "budgets": [],
+      "created_at": "2023-09-03T10:38:35.505Z"
     }
   }
 }

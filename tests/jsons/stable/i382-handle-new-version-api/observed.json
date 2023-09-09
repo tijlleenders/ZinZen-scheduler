@@ -1,204 +1,30 @@
 {
   "scheduled": [
     {
-      "day": "2023-09-03",
-      "tasks": [
-        {
-          "taskid": 0,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2023-09-03T00:00:00",
-          "deadline": "2023-09-04T00:00:00"
-        }
-      ]
-    },
-    {
       "day": "2023-09-04",
       "tasks": [
         {
-          "taskid": 1,
-          "goalid": "f7ba81f6-7701-4068-9d9d-4a6d03ce0dc6",
-          "title": "Sleep 😴🌙",
-          "duration": 6,
+          "taskid": 0,
+          "goalid": "1",
+          "title": "testing new api",
+          "duration": 1,
           "start": "2023-09-04T00:00:00",
-          "deadline": "2023-09-04T06:00:00"
+          "deadline": "2023-09-04T01:00:00"
         },
         {
-          "taskid": 2,
-          "goalid": "173d7acc-c93b-4a49-8d08-bd5db00e77e4",
-          "title": "Breakfast 🥐🥣",
-          "duration": 1,
-          "start": "2023-09-04T06:00:00",
-          "deadline": "2023-09-04T07:00:00"
-        },
-        {
-          "taskid": 3,
+          "taskid": 1,
           "goalid": "free",
           "title": "free",
-          "duration": 2,
-          "start": "2023-09-04T07:00:00",
-          "deadline": "2023-09-04T09:00:00"
-        },
-        {
-          "taskid": 4,
-          "goalid": "90f2e89e-8c94-4212-bbdf-cab74217e9d3",
-          "title": "Me time 🧘🏽😌",
-          "duration": 1,
-          "start": "2023-09-04T09:00:00",
-          "deadline": "2023-09-04T10:00:00"
-        },
-        {
-          "taskid": 5,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2023-09-04T10:00:00",
-          "deadline": "2023-09-04T12:00:00"
-        },
-        {
-          "taskid": 6,
-          "goalid": "016f1f85-d4fb-4f0d-b64e-ac077632b6a4",
-          "title": "Lunch 🥪",
-          "duration": 1,
-          "start": "2023-09-04T12:00:00",
-          "deadline": "2023-09-04T13:00:00"
-        },
-        {
-          "taskid": 7,
-          "goalid": "free",
-          "title": "free",
-          "duration": 1,
-          "start": "2023-09-04T13:00:00",
-          "deadline": "2023-09-04T14:00:00"
-        },
-        {
-          "taskid": 8,
-          "goalid": "e649fa2d-424d-43ff-922d-8c598fcd22a9",
-          "title": "Walk 🚶🏽",
-          "duration": 1,
-          "start": "2023-09-04T14:00:00",
-          "deadline": "2023-09-04T15:00:00"
-        },
-        {
-          "taskid": 9,
-          "goalid": "free",
-          "title": "free",
-          "duration": 3,
-          "start": "2023-09-04T15:00:00",
-          "deadline": "2023-09-04T18:00:00"
-        },
-        {
-          "taskid": 10,
-          "goalid": "711967a3-47f0-4107-8bda-4e3b36a43806",
-          "title": "Dinner 🍽️",
-          "duration": 1,
-          "start": "2023-09-04T18:00:00",
-          "deadline": "2023-09-04T19:00:00"
-        },
-        {
-          "taskid": 11,
-          "goalid": "free",
-          "title": "free",
-          "duration": 5,
-          "start": "2023-09-04T19:00:00",
+          "duration": 23,
+          "start": "2023-09-04T01:00:00",
           "deadline": "2023-09-05T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2023-09-05",
-      "tasks": [
-        {
-          "taskid": 12,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2023-09-05T00:00:00",
-          "deadline": "2023-09-06T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2023-09-06",
-      "tasks": [
-        {
-          "taskid": 13,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2023-09-06T00:00:00",
-          "deadline": "2023-09-07T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2023-09-07",
-      "tasks": [
-        {
-          "taskid": 14,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2023-09-07T00:00:00",
-          "deadline": "2023-09-08T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2023-09-08",
-      "tasks": [
-        {
-          "taskid": 15,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2023-09-08T00:00:00",
-          "deadline": "2023-09-09T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2023-09-09",
-      "tasks": [
-        {
-          "taskid": 16,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2023-09-09T00:00:00",
-          "deadline": "2023-09-10T00:00:00"
         }
       ]
     }
   ],
   "impossible": [
     {
-      "day": "2023-09-03",
-      "tasks": []
-    },
-    {
       "day": "2023-09-04",
-      "tasks": []
-    },
-    {
-      "day": "2023-09-05",
-      "tasks": []
-    },
-    {
-      "day": "2023-09-06",
-      "tasks": []
-    },
-    {
-      "day": "2023-09-07",
-      "tasks": []
-    },
-    {
-      "day": "2023-09-08",
-      "tasks": []
-    },
-    {
-      "day": "2023-09-09",
       "tasks": []
     }
   ]
