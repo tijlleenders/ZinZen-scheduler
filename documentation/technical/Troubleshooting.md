@@ -13,6 +13,12 @@ on running deno_test_script.sh
 
 * solution: make sure you run the script with your current working dir in root.
 
+#### Bindgen..../scripts/deno_test.sh: line 18: wasm-bindgen: command not found
+* issue: wasm-bindgen is not installed but called from deno_test.sh  
+
+* solution: install wasm-bindgen using `cargo install -f wasm-bindgen-cli`
+(make sure openssl and pkg-config are installed on your system first)
+
 #### wasm-strip: command not found
 * issue: `wasm-strip: command not found` message when running deno_test_script.sh
 
