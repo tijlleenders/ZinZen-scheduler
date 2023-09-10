@@ -5,11 +5,11 @@ This should be the first place to look when you encounter any difficulties.
 
 Feel free to add to this when encountering any troubles.
 
-### Running deno_test_script
+### Running deno_test script
 
 #### scheduler.wasm: no such file or directory
 * issue: `Bindgen...cp: target/wasm32-unknown-unknown/release/scheduler.wasm: No such file or directory`
-on running deno_test_script.sh
+on running deno_test.sh
 
 * solution: make sure you run the script with your current working dir in root.
 
@@ -20,7 +20,7 @@ on running deno_test_script.sh
 (make sure openssl and pkg-config are installed on your system first)
 
 #### wasm-strip: command not found
-* issue: `wasm-strip: command not found` message when running deno_test_script.sh
+* issue: `wasm-strip: command not found` message when running deno_test.sh
 
 * proposed solution: install wasm-strip. Comes with 'wabt': `brew install wabt`. Confirmed to work on MacOS
 
