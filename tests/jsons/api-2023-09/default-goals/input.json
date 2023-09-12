@@ -1,0 +1,326 @@
+{
+    "startDate": "2022-10-10T00:00:00",
+    "endDate": "2022-10-17T00:00:00",
+    "goals": [
+        {
+            "id": "1",
+            "title": "Daily routine",
+            "children": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7"
+            ]
+        },
+        {
+            "id": "2",
+            "title": "Sleep 😴🌙",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 22,
+                    "before_time": 8,
+                    "min_hours_per_day": 6,
+                    "max_hours_per_day": 8,
+                    "min_hours_per_week": 42,
+                    "max_hours_per_week": 56
+                }
+            ]
+        },
+        {
+            "id": "3",
+            "title": "Me time 🧘🏽😌",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 7,
+                    "before_time": 21,
+                    "min_hours_per_day": 1,
+                    "max_hours_per_day": 1,
+                    "min_hours_per_week": 7,
+                    "max_hours_per_week": 7
+                }
+            ]
+        },
+        {
+            "id": "4",
+            "title": "Walk 🚶🏽",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 14,
+                    "before_time": 20,
+                    "min_hours_per_day": 1,
+                    "max_hours_per_day": 1,
+                    "min_hours_per_week": 7,
+                    "max_hours_per_week": 7
+                }
+            ]
+        },
+        {
+            "id": "5",
+            "title": "Breakfast 🥐🥣",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 6,
+                    "before_time": 9,
+                    "min_hours_per_day": 1,
+                    "max_hours_per_day": 1,
+                    "min_hours_per_week": 7,
+                    "max_hours_per_week": 7
+                }
+            ]
+        },
+        {
+            "id": "6",
+            "title": "Lunch 🥪",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 12,
+                    "before_time": 14,
+                    "min_hours_per_day": 1,
+                    "max_hours_per_day": 1,
+                    "min_hours_per_week": 7,
+                    "max_hours_per_week": 7
+                }
+            ]
+        },
+        {
+            "id": "7",
+            "title": "Dinner 🍽️",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 18,
+                    "before_time": 21,
+                    "min_hours_per_day": 1,
+                    "max_hours_per_day": 1,
+                    "min_hours_per_week": 7,
+                    "max_hours_per_week": 7
+                }
+            ]
+        },
+        {
+            "id": "8",
+            "title": "Work 💪🏽📈🤑",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 8,
+                    "before_time": 18,
+                    "min_hours_per_day": 6,
+                    "max_hours_per_day": 9,
+                    "min_hours_per_week": 36,
+                    "max_hours_per_week": 40
+                }
+            ],
+            "children": [
+                "14",
+                "15",
+                "16"
+            ]
+        },
+        {
+            "id": "9",
+            "title": "Sports 🏃🏋🏽‍♀️",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 8,
+                    "before_time": 21,
+                    "min_hours_per_day": 0,
+                    "max_hours_per_day": 2,
+                    "min_hours_per_week": 4,
+                    "max_hours_per_week": 6
+                }
+            ]
+        },
+        {
+            "id": "10",
+            "title": "Family time 👪🏽",
+            "budget": [
+                {
+                    "on_days": [
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 17,
+                    "before_time": 22,
+                    "min_hours_per_day": 1,
+                    "max_hours_per_day": 4,
+                    "min_hours_per_week": 7,
+                    "max_hours_per_week": 12
+                }
+            ],
+            "children": [
+                "11"
+            ]
+        },
+        {
+            "id": "11",
+            "title": "Do something fun together 🎉",
+            "budget": [
+                {
+                    "on_days": [
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 9,
+                    "before_time": 18,
+                    "min_hours_per_day": 0,
+                    "max_hours_per_day": 2,
+                    "min_hours_per_week": 2,
+                    "max_hours_per_week": 4
+                }
+            ]
+        },
+        {
+            "id": "12",
+            "title": "House chores 🏡🧹🛠️",
+            "budget": [
+                {
+                    "on_days": [
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 12,
+                    "before_time": 18,
+                    "min_hours_per_day": 0,
+                    "max_hours_per_day": 2,
+                    "min_hours_per_week": 1,
+                    "max_hours_per_week": 2
+                }
+            ],
+            "children": [
+                "17",
+                "18",
+                "19"
+            ]
+        },
+        {
+            "id": "13",
+            "title": "Hobby project 🚂🚋",
+            "budget": [
+                {
+                    "on_days": [
+                        "Fri",
+                        "Sat",
+                        "Sun"
+                    ],
+                    "after_time": 6,
+                    "before_time": 23,
+                    "min_hours_per_day": 0,
+                    "max_hours_per_day": 2,
+                    "min_hours_per_week": 1,
+                    "max_hours_per_week": 2
+                }
+            ]
+        },
+        {
+            "id": "14",
+            "title": "Research something important",
+            "duration": 2
+        },
+        {
+            "id": "15",
+            "title": "Write the report",
+            "duration": 1
+        },
+        {
+            "id": "16",
+            "title": "Prepare for meeting",
+            "duration": 1
+        },
+        {
+            "id": "17",
+            "title": "Clean the house",
+            "duration": 1
+        },
+        {
+            "id": "18",
+            "title": "Fix the door",
+            "duration": 2
+        },
+        {
+            "id": "19",
+            "title": "Grocery shopping 🛒🍎🛍️",
+            "duration": 1,
+            "repeat_every": 1,
+            "repeat_unit": "week"
+        }
+    ]
+}
