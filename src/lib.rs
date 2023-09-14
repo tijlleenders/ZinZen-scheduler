@@ -108,6 +108,7 @@ interface Input {
 /// The main wasm function to call
 #[wasm_bindgen]
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
+    console_error_panic_hook::set_once();
     // JsError implements From<Error>, so we can just use `?` on any Error
     let input: Input = from_value(input.clone()).unwrap();
     let steps = generate_steps_to_place(input);
