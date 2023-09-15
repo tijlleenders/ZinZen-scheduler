@@ -20,7 +20,7 @@ impl MyDurationRound for NaiveDateTime {
             if self.timestamp().abs() > MAX_SECONDS_TIMESTAMP_FOR_NANOS {
                 return Err(MyRoundingError::TimestampExceedsLimit);
             }
-            let stamp = self.timestamp_nanos();
+            let stamp = self.timestamp_nanos_opt().unwrap();
             if span > stamp.abs() {
                 return Err(MyRoundingError::DurationExceedsTimestamp);
             }
@@ -49,7 +49,7 @@ impl MyDurationRound for NaiveDateTime {
             if self.timestamp().abs() > MAX_SECONDS_TIMESTAMP_FOR_NANOS {
                 return Err(MyRoundingError::TimestampExceedsLimit);
             }
-            let stamp = self.timestamp_nanos();
+            let stamp = self.timestamp_nanos_opt().unwrap();
             if span > stamp.abs() {
                 return Err(MyRoundingError::DurationExceedsTimestamp);
             }
