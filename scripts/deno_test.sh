@@ -9,7 +9,7 @@ BINARY=js-api/scheduler.wasm
 # Build
 echo -n "Build..."
 # remove the -q flag to see cargo ouput
-cargo build --target $TARGET --release
+cargo build --target --features generate-tests $TARGET --release
 
 # wasm-bindgen
 echo -n "Bindgen..."
