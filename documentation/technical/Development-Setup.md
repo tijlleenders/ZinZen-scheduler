@@ -38,7 +38,9 @@
    ./deno_test.sh
 
    # Run tests by cargo
-   cargo test
+   cargo test --features generate-tests
    ```
+(!) important to note here is that the end-to-end tests need to be generated with the feature flag 'generate-tests' on first run and when tests are added, removed or moved renamed.
+
 
 7. Debugging: extra, useful information for an efficient debugging setup can be found at [Debugging-Setup](Debugging-Setup.md)
