@@ -42,3 +42,4 @@
    ```
 
 7. Debugging: extra, useful information for an efficient debugging setup can be found at [Debugging-Setup](Debugging-Setup.md)
+8. Profiling: methods for profiling are described in [Profiling](Profiling.md)
