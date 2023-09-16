@@ -24,10 +24,6 @@ path = "src/lib.rs"
 name = "flamegraph"
 path = "src/bin/flamegraph-bin.rs"
 
-[[bin]]
-name = "test-summary"
-path = "scripts/test_summary.rs"
-
 
 [profile.release]
 lto = true
