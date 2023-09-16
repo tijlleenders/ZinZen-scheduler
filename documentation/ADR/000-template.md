@@ -1,7 +1,7 @@
 # Title
 Template
 # Status
-Proposed (Proposed/ Accepted / Deprecated / Superseded by x / ...)
+Accepted (Proposed/ Accepted / Deprecated / Superseded by x / ...)
 # Context
 We needed a structured template to write down Architectural Decision Records (ADRs) in a uniform way
 # Decision
@@ -17,4 +17,4 @@ There now is an ADR folder where decisions are registered
 #### Proposed on
 2023-09-16
 #### Accepted on
-?
+2023-09-16
