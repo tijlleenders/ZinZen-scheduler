@@ -7,3 +7,7 @@ defines the tests to run. Flamegraph can be invoked by running
 cargo flamegraph --bin flamegraph
 ```
 (!) note: this does not currently work on MacOS (see the section `Running flamegraph` in [Troubleshooting](Troubleshooting.md))
+
+### B) Samply
+Samply is a general-purpose sampler that uses the firefox profiler.
+https://github.com/mstange/samply/
