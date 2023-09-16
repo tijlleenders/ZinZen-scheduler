@@ -38,10 +38,7 @@
    ./deno_test.sh
 
    # Run tests by cargo
-   cargo test --features generate-tests
+   cargo test
    ```
-(!) important to note here is that the end-to-end tests need to be generated with the feature flag 'generate-tests' on first run and when tests are added, removed or moved renamed.
-For more information see [ADR-001: Generation of end-to-end tests happens with a feature flag
-](../ADR/001-generation-of-tests-feature-flag.md).
 
 7. Debugging: extra, useful information for an efficient debugging setup can be found at [Debugging-Setup](Debugging-Setup.md)

@@ -1,15 +1,15 @@
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 use std::io::Write;
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 use std::path::PathBuf;
 
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 fn write_test(file: &mut std::fs::File, content: &str) -> Result<(), std::io::Error> {
     writeln!(file, "{}", content)?;
     Ok(())
 }
 
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 fn get_test_dirs(path: &str) -> Result<Vec<PathBuf>, std::io::Error> {
     let mut dirs = std::fs::read_dir(path)?
         .map(|res| res.map(|e| e.path()))
@@ -19,7 +19,7 @@ fn get_test_dirs(path: &str) -> Result<Vec<PathBuf>, std::io::Error> {
 
     Ok(dirs)
 }
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 fn main() -> Result<(), std::io::Error> {
     let out_dir = String::from("./tests/");
     let mut result = vec!["".to_string()];
@@ -32,17 +32,17 @@ fn main() -> Result<(), std::io::Error> {
     Ok(())
 }
 
-#[cfg(not(feature = "generate-tests"))]
+#[cfg(feature = "skip-test-generation")]
 fn main() -> Result<(), std::io::Error> {
     Ok(())
 }
 
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 fn get_run_test() -> String {
     include_str!("build_templates/run_test.rs").to_string()
 }
 
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 fn get_test_fn_template(dir_name: &str, test_type: TestType) -> String {
     let test_name = dir_name.replace('-', "_");
     let mut test_fn_template: String = match test_type {
@@ -58,7 +58,7 @@ fn get_test_fn_template(dir_name: &str, test_type: TestType) -> String {
     test_fn_template
 }
 
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 fn create_tests_module() -> String {
     // let mut result = vec!["".to_string()];
     let module_name = "e2e";
@@ -77,7 +77,7 @@ fn create_tests_module() -> String {
     tests_mod
 }
 
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 fn create_test_functions(root_dir: &str, test_type: TestType) -> String {
     let mut dirs = get_test_dirs(root_dir).expect("Unable to read tests directory");
     let mut result = vec!["".to_string()];
@@ -100,7 +100,7 @@ fn create_test_functions(root_dir: &str, test_type: TestType) -> String {
         .to_string()
 }
 
-#[cfg(feature = "generate-tests")]
+#[cfg(not(feature = "skip-test-generation"))]
 #[derive(Clone, Copy)]
 enum TestType {
     Stable,
