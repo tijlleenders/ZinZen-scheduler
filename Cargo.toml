@@ -12,7 +12,7 @@ categories = ["algorithms", "date-and-time", "wasm"]
 
 [features]
 experimental-testset = []
-generate-tests = []
+skip-test-generation = []
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095

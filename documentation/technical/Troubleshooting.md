@@ -29,3 +29,18 @@ on running deno_test.sh
 
 * proposed solution: install wasm-opt: `cargo install wasm-opt --locked`
 
+
+
+### Publishing to cargo registry
+* issue: when running cargo publish we get an error message 
+```shell
+error: failed to verify package tarball
+
+Caused by:
+  Source directory was modified by build.rs during cargo publish. Build scripts should not modify anything outside of OUT_DIR.
+  Added: <your_root_path>/target/package/zinzen-0.2.0/tests/rust_tests.rs
+```
+* solution: add the flag '--features skip-test-generation' to the publish command. For more information see [ADR-001: Generation of end-to-end tests happens with a feature flag
+  ](../ADR/001-skip-generation-of-tests-feature-flag.md).
+
+
