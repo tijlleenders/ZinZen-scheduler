@@ -84,8 +84,13 @@ impl Slot {
         (other.start >= self.start) && (other.end <= self.end)
     }
 
-    pub fn is_intersect_with_slot(&self, other: &Slot) -> bool {
+    pub fn hours_intersecting_with_slot(&self, other: &Slot) -> usize {
         let overlap = min(self.end, other.end) - max(self.start, other.start);
-        overlap.num_hours() > 0
+
+        if overlap.num_hours().is_positive() {
+            usize::try_from(overlap.num_hours()).unwrap()
+        } else {
+            0
+        }
     }
 }

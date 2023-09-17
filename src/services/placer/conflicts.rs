@@ -29,16 +29,8 @@ impl Slot {
     fn get_conflicts_in_slots(&self, slots_list: &[Slot]) -> SlotConflict {
         let mut count: usize = 0;
 
-        // Split slots_list into 1 hour slots
-        let mut splitted_slots: Vec<Slot> = vec![];
-        slots_list
-            .iter()
-            .for_each(|slot| splitted_slots.extend(slot.split_into_1h_slots()));
-
-        splitted_slots.iter().for_each(|slot| {
-            if self.is_intersect_with_slot(slot) {
-                count += 1;
-            }
+        slots_list.iter().for_each(|slot| {
+            count += self.hours_intersecting_with_slot(slot);
         });
 
         SlotConflict {
