@@ -24,11 +24,6 @@ if [[ "${PARAM}" == "--help" || "${PARAM}" == "-h" ]]; then
     echo "  and saves the output to a log file in the _logs directory."
     echo ""
     exit 0
-elif [[ "${PARAM}" == "summary" ]]; then
-    # Update FILE_NAME and LOG_FILE 
-    FILE_NAME="summary_${CURRENTDATE}.log"
-    LOG_FILE="${LOG_BASE}/${FILE_NAME}"
-    cargo run --bin test-summary --manifest-path "$ZIN_BASE" >> "$LOG_FILE"
 elif [[ "${PARAM}" == "" ]]; then
     # Update FILE_NAME and LOG_FILE to avoid PARAM inside it
     FILE_NAME="test_${CURRENTDATE}.log"

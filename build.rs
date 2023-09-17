@@ -82,7 +82,7 @@ fn create_test_functions(root_dir: &str, test_type: TestType) -> String {
     let mut dirs = get_test_dirs(root_dir).expect("Unable to read tests directory");
     let mut result = vec!["".to_string()];
 
-    dirs.retain(|d| !d.file_name().unwrap().eq("benchmark-tests") && (d.is_dir()));
+    dirs.retain(|d| (d.is_dir()));
 
     for d in dirs.iter() {
         if let Ok(mut _dir) = d.read_dir() {

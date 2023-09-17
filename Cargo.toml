@@ -21,12 +21,8 @@ name = 'scheduler'
 path = "src/lib.rs"
 
 [[bin]]
-name = "scheduler-bin"
+name = "flamegraph"
 path = "src/bin/flamegraph-bin.rs"
-
-[[bin]]
-name = "test-summary"
-path = "scripts/test_summary.rs"
 
 
 [profile.release]
