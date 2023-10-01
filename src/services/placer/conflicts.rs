@@ -11,17 +11,11 @@ pub(crate) fn find_best_slots_for_first_step(steps: &Vec<Step>) -> Option<Vec<Sl
     }
 
     let step = &steps[0];
-    let mut slot_conflicts = step.get_conflicts_in_steps(steps);
+    let slot_conflicts = step.get_conflicts_in_steps(steps);
 
-    let mut result = vec![];
-    for _dur in 0..step.duration {
-        match slot_conflicts.pop() {
-            Some(s) => result.push(s.slot),
-            None => break,
-        }
-    }
-
-    Some(result)
+    // return the full array of potential slots in order of most ideal to least
+    // get_conflicts_in_steps returns the reverse order, so iterate in reverse
+    Some(slot_conflicts.iter().rev().map(|sc| sc.slot).collect())
 }
 
 impl Slot {
@@ -198,9 +192,9 @@ mod tests {
             None,
         );
 
-        let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 5, 1, 0, 0)]);
+        let expected = Some(Slot::mock(Duration::hours(1), 2023, 5, 1, 0, 0));
 
-        let result = find_best_slots_for_first_step(&vec![step]);
+        let result = find_best_slots_for_first_step(&vec![step]).and_then(|v| v.first().cloned());
 
         assert_eq!(result, expected);
     }
@@ -235,13 +229,13 @@ mod tests {
             None,
         );
 
-        let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 5, 1, 14, 0)]);
+        let expected = Some(Slot::mock(Duration::hours(1), 2023, 5, 1, 14, 0));
 
         let result = find_best_slots_for_first_step(&vec![
             first_step,
             conflicting_step_1,
             conflicting_step_2,
-        ]);
+        ]).and_then(|v| v.first().cloned());
 
         assert_eq!(result, expected);
     }
@@ -288,13 +282,13 @@ mod tests {
             None,
         );
 
-        let expected = Some(vec![Slot::mock(Duration::hours(1), 2023, 5, 1, 14, 0)]);
+        let expected = Some(Slot::mock(Duration::hours(1), 2023, 5, 1, 14, 0));
 
         let result = find_best_slots_for_first_step(&vec![
             first_step,
             conflicting_step_1,
             conflicting_step_2,
-        ]);
+        ]).and_then(|v| v.first().cloned());
 
         assert_eq!(result, expected);
     }

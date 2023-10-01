@@ -67,16 +67,17 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         {
             continue;
         }
+
         remaining_hours -= slot.duration_as_hours();
         template_step.id += 1;
         template_step.start = Some(slot.start);
         template_step.deadline = Some(slot.end);
-        steps_to_place.steps.push(template_step.clone());
-    }
 
-    let chosen_slot = chosen_slots[0];
-    for step in steps_to_place.steps.iter_mut() {
-        step.remove_conflicted_slots(chosen_slot.to_owned());
+        steps_to_place.steps.push(template_step.clone());
+        
+        for step in steps_to_place.steps.iter_mut() {
+            step.remove_conflicted_slots(*slot);
+        }
     }
 
     //Todo remove chosen_slots from StepBudgets

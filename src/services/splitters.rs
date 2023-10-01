@@ -82,6 +82,42 @@ impl Step {
         Ok(steps)
     }
 
+    /// Split a Step into list of Steps with a specified maximum duration.
+    /// - Note: This function will change below in the resulted steps:
+    ///     - Step.status = StepStatus::ReadyToSchedule
+    ///     - Step.tags = inherited from parent
+    pub fn split_into_duration(&self, max_duration: usize, counter: &mut usize) -> Vec<Step> {
+        if self.duration <= max_duration {
+            return vec![self.clone()];
+        }
+
+        let mut steps = Vec::new();
+
+        let mut remaining_duration = self.duration;
+        while remaining_duration > 0 {
+            let step = Step { 
+                id: *counter, 
+                goal_id: self.goal_id.clone(), 
+                title: self.title.clone(), 
+                duration: self.duration.min(max_duration), 
+                status: StepStatus::ReadyToSchedule, 
+                flexibility: self.flexibility, 
+                start: self.start, 
+                deadline: self.deadline, 
+                slots: self.slots.clone(), 
+                tags: self.tags.clone(), 
+                after_goals: self.after_goals.clone(),
+            };
+
+            steps.push(step);
+
+            remaining_duration = remaining_duration.saturating_sub(max_duration);
+            *counter += 1;
+        }
+
+        steps
+    }
+
     /// Split a Step slots into list of slots based on given threshold.
     pub fn split_into_custom_hours(&self, threshold: usize) -> Vec<Slot> {
         let given_step = self.clone();
