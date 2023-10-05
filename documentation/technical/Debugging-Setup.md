@@ -48,3 +48,9 @@ To debug tests with better `NaiveDateTime` formatter, kindly add custom configur
     ]
 }
 ```
+
+To debug a single, specific test, from the rust_tests:  
+add the test name to the root args (not the cargo args) as such:
+```
+"args": ["test_name_here"], 
+```
