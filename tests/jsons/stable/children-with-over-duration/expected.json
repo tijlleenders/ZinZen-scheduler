@@ -184,16 +184,16 @@
           "taskid": 19,
           "goalid": "3",
           "title": "Project B filler",
-          "duration": 5,
+          "duration": 2,
           "start": "2018-03-10T08:00:00",
-          "deadline": "2018-03-10T13:00:00"
+          "deadline": "2018-03-10T10:00:00"
         },
         {
           "taskid": 20,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2018-03-10T13:00:00",
+          "duration": 14,
+          "start": "2018-03-10T10:00:00",
           "deadline": "2018-03-11T00:00:00"
         }
       ]
@@ -226,16 +226,16 @@
           "taskid": 23,
           "goalid": "3",
           "title": "Project B filler",
-          "duration": 5,
+          "duration": 8,
           "start": "2018-03-12T08:00:00",
-          "deadline": "2018-03-12T13:00:00"
+          "deadline": "2018-03-12T16:00:00"
         },
         {
           "taskid": 24,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
-          "start": "2018-03-12T13:00:00",
+          "duration": 8,
+          "start": "2018-03-12T16:00:00",
           "deadline": "2018-03-13T00:00:00"
         }
       ]

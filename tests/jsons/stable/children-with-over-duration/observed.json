@@ -218,24 +218,8 @@
           "taskid": 22,
           "goalid": "free",
           "title": "free",
-          "duration": 8,
+          "duration": 24,
           "start": "2018-03-12T00:00:00",
-          "deadline": "2018-03-12T08:00:00"
-        },
-        {
-          "taskid": 23,
-          "goalid": "3",
-          "title": "Project B filler",
-          "duration": 5,
-          "start": "2018-03-12T08:00:00",
-          "deadline": "2018-03-12T13:00:00"
-        },
-        {
-          "taskid": 24,
-          "goalid": "free",
-          "title": "free",
-          "duration": 11,
-          "start": "2018-03-12T13:00:00",
           "deadline": "2018-03-13T00:00:00"
         }
       ]
@@ -244,7 +228,7 @@
       "day": "2018-03-13",
       "tasks": [
         {
-          "taskid": 25,
+          "taskid": 23,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -257,7 +241,7 @@
       "day": "2018-03-14",
       "tasks": [
         {
-          "taskid": 26,
+          "taskid": 24,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -270,7 +254,7 @@
       "day": "2018-03-15",
       "tasks": [
         {
-          "taskid": 27,
+          "taskid": 25,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -283,7 +267,7 @@
       "day": "2018-03-16",
       "tasks": [
         {
-          "taskid": 28,
+          "taskid": 26,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -296,7 +280,7 @@
       "day": "2018-03-17",
       "tasks": [
         {
-          "taskid": 29,
+          "taskid": 27,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -309,7 +293,7 @@
       "day": "2018-03-18",
       "tasks": [
         {
-          "taskid": 30,
+          "taskid": 28,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -322,7 +306,7 @@
       "day": "2018-03-19",
       "tasks": [
         {
-          "taskid": 31,
+          "taskid": 29,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -335,7 +319,7 @@
       "day": "2018-03-20",
       "tasks": [
         {
-          "taskid": 32,
+          "taskid": 30,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -348,7 +332,7 @@
       "day": "2018-03-21",
       "tasks": [
         {
-          "taskid": 33,
+          "taskid": 31,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -361,7 +345,7 @@
       "day": "2018-03-22",
       "tasks": [
         {
-          "taskid": 34,
+          "taskid": 32,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -374,7 +358,7 @@
       "day": "2018-03-23",
       "tasks": [
         {
-          "taskid": 35,
+          "taskid": 33,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -387,7 +371,7 @@
       "day": "2018-03-24",
       "tasks": [
         {
-          "taskid": 36,
+          "taskid": 34,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -400,7 +384,7 @@
       "day": "2018-03-25",
       "tasks": [
         {
-          "taskid": 37,
+          "taskid": 35,
           "goalid": "free",
           "title": "free",
           "duration": 24,
@@ -413,7 +397,48 @@
   "impossible": [
     {
       "day": "2018-03-05",
-      "tasks": []
+      "tasks": [
+        {
+          "taskid": 36,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 37,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 38,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 39,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        },
+        {
+          "taskid": 40,
+          "goalid": "3",
+          "title": "Project B filler",
+          "duration": 1,
+          "start": "2018-03-05T00:00:00",
+          "deadline": "2018-03-26T00:00:00"
+        }
+      ]
     },
     {
       "day": "2018-03-06",
