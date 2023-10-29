@@ -99,7 +99,7 @@ impl StepBudgets {
 
             if let Some(children) = &goal.children {
                 if !children.is_empty() {
-                    // If a goal is not a 'leaf node' (it has children), 
+                    // If a goal is not a 'leaf node' (it has children),
                     // we do not want to generate steps from this goal
                     continue;
                 }
@@ -108,24 +108,33 @@ impl StepBudgets {
             let start: NaiveDateTime = goal.start.unwrap();
             let deadline: NaiveDateTime = goal.deadline.unwrap();
 
-            // if there's no min_duration, no steps have to be scheduled
+            // if there's no min_duration, steps are scheduled based on the min for a step_budget
             let duration = if let Some(duration) = goal.min_duration {
                 duration
             } else {
-                continue;
+                step_budgets
+                    .iter()
+                    .map(|step_budget| step_budget.min.unwrap_or(0))
+                    .sum()
             };
+
+            if duration <= 0 {
+                continue;
+            }
 
             // TODO 2023-09-27: related to issue https://github.com/tijlleenders/ZinZen-scheduler/issues/300
 
             // use the most constraining budget time primarily
-            let mut minimum_budget_step_size = step_budgets.iter()
+            let mut minimum_budget_step_size = step_budgets
+                .iter()
                 .filter(|sb| sb.step_budget_type == BudgetType::Daily)
                 .map(|sb| sb.min.unwrap_or(0))
                 .max();
 
             // if there's no applicable daily constraint, constrain based on weekly constraints
             if minimum_budget_step_size.is_none() {
-                minimum_budget_step_size = step_budgets.iter()
+                minimum_budget_step_size = step_budgets
+                    .iter()
                     .filter(|sb| sb.step_budget_type == BudgetType::Weekly)
                     .map(|sb| sb.min.unwrap_or(0))
                     .max();
@@ -162,8 +171,9 @@ impl StepBudgets {
                         vec![step]
                     };
 
-                    // apply the duration threshold to the resulting steps 
-                    let mut thresholded_steps = steps.iter()
+                    // apply the duration threshold to the resulting steps
+                    let mut thresholded_steps = steps
+                        .iter()
                         .map(|step| step.apply_duration_threshold(counter))
                         .flatten()
                         .collect();
@@ -285,19 +295,17 @@ mod tests {
             let mut budget_id_to_budget: HashMap<String, Vec<StepBudget>> = HashMap::new();
             budget_id_to_budget.insert(
                 title.clone(),
-                vec![
-                    StepBudget {
-                        step_budget_type: BudgetType::Weekly,
-                        slot_budgets: vec![SlotBudget {
-                            slot: calendar,
-                            min: Some(5),
-                            max: None,
-                            used: 0,
-                        }],
+                vec![StepBudget {
+                    step_budget_type: BudgetType::Weekly,
+                    slot_budgets: vec![SlotBudget {
+                        slot: calendar,
                         min: Some(5),
                         max: None,
-                    },
-                ]
+                        used: 0,
+                    }],
+                    min: Some(5),
+                    max: None,
+                }],
             );
 
             let mut step_budgets = StepBudgets {
@@ -364,19 +372,17 @@ mod tests {
             let mut budget_id_to_budget: HashMap<String, Vec<StepBudget>> = HashMap::new();
             budget_id_to_budget.insert(
                 title.clone(),
-                vec![
-                    StepBudget {
-                        step_budget_type: BudgetType::Weekly,
-                        slot_budgets: vec![SlotBudget {
-                            slot: calendar,
-                            min: Some(9),
-                            max: None,
-                            used: 0,
-                        }],
+                vec![StepBudget {
+                    step_budget_type: BudgetType::Weekly,
+                    slot_budgets: vec![SlotBudget {
+                        slot: calendar,
                         min: Some(9),
                         max: None,
-                    },
-                ]
+                        used: 0,
+                    }],
+                    min: Some(9),
+                    max: None,
+                }],
             );
 
             let mut step_budgets = StepBudgets {
@@ -448,35 +454,31 @@ mod tests {
             let mut budget_id_to_budget: HashMap<String, Vec<StepBudget>> = HashMap::new();
             budget_id_to_budget.insert(
                 parent_title.clone(),
-                vec![
-                    StepBudget {
-                        step_budget_type: BudgetType::Weekly,
-                        slot_budgets: vec![SlotBudget {
-                            slot: calendar,
-                            min: Some(5),
-                            max: None,
-                            used: 0,
-                        }],
+                vec![StepBudget {
+                    step_budget_type: BudgetType::Weekly,
+                    slot_budgets: vec![SlotBudget {
+                        slot: calendar,
                         min: Some(5),
                         max: None,
-                    },
-                ]
+                        used: 0,
+                    }],
+                    min: Some(5),
+                    max: None,
+                }],
             );
             budget_id_to_budget.insert(
                 child_title.clone(),
-                vec![
-                    StepBudget {
-                        step_budget_type: BudgetType::Weekly,
-                        slot_budgets: vec![SlotBudget {
-                            slot: calendar,
-                            min: Some(3),
-                            max: None,
-                            used: 0,
-                        }],
+                vec![StepBudget {
+                    step_budget_type: BudgetType::Weekly,
+                    slot_budgets: vec![SlotBudget {
+                        slot: calendar,
                         min: Some(3),
                         max: None,
-                    },
-                ]
+                        used: 0,
+                    }],
+                    min: Some(3),
+                    max: None,
+                }],
             );
 
             let mut step_budgets = StepBudgets {
