@@ -45,15 +45,23 @@ fn get_run_test() -> String {
 #[cfg(not(feature = "skip-test-generation"))]
 fn get_test_fn_template(dir_name: &str, test_type: TestType) -> String {
     let test_name = dir_name.replace('-', "_");
-    let mut test_fn_template: String = match test_type {
-        TestType::Stable => include_str!("build_templates/test_fn_stable.rs").to_string(),
-        TestType::Experimental => {
-            include_str!("build_templates/test_fn_experimental.rs").to_string()
-        }
+    let mut test_fn_template: String = if let TestType::Experimental = test_type {
+        "    #[cfg_attr(not(feature = \"experimental-testset\"), ignore)]\n".to_string()
+    } else {
+        String::new()
     };
+    test_fn_template.push_str(include_str!("build_templates/test_fn.rs"));
 
     test_fn_template = test_fn_template.replace("TEST_NAME", &test_name);
     test_fn_template = test_fn_template.replace("DIR_NAME", dir_name);
+    test_fn_template = test_fn_template.replace(
+        "FOLDER_NAME",
+        if let TestType::Experimental = test_type {
+            "experimental"
+        } else {
+            "stable"
+        },
+    );
 
     test_fn_template
 }
