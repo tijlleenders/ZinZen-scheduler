@@ -21,12 +21,12 @@ impl TimeFilter {
     /// Determines the timing scenario based on the `TimeFilter.after_time` and `TimeFilter.before_time` inputs.
     /// - Returns a `TimingScenario` variant that represents the corresponding timing scenario.
     pub fn determine_timing_scenario(&self) -> TimingScenario {
-        match (self.after_time, self.before_time) {
+        match (self.before_time, self.after_time) {
             (None, None) => TimingScenario::Unbounded,
-            (Some(_), None) => TimingScenario::AfterOnly,
-            (None, Some(_)) => TimingScenario::BeforeOnly,
-            (Some(after), Some(before)) if after <= before => TimingScenario::Bounded,
-            (Some(after), Some(before)) if after > before => TimingScenario::Overflow,
+            (None, Some(_)) => TimingScenario::AfterOnly,
+            (Some(_), None) => TimingScenario::BeforeOnly,
+            (Some(before), Some(after)) if before >= after => TimingScenario::Bounded,
+            (Some(before), Some(after)) if before < after => TimingScenario::Overflow,
             _ => TimingScenario::Unbounded,
         }
     }
