@@ -67,8 +67,6 @@
 use errors::Error;
 use models::input::Input;
 use models::output::FinalTasks;
-use serde_wasm_bindgen::{from_value, to_value};
-use services::output::output_formatter;
 use services::placer::step_placer;
 use services::preprocess::generate_steps_to_place;
 use wasm_bindgen::prelude::*;
@@ -80,14 +78,19 @@ pub mod mocking;
 pub mod models;
 /// The services handling the data structures
 pub mod services;
+
 #[cfg(test)]
 mod tests;
 
+#[cfg(feature = "with-logging")]
 use std::sync::Once;
+use crate::services::output::output_formatter;
 
 // Static flag to ensure logger init happens only once
+#[cfg(feature = "with-logging")]
 static LOGGER_INITIALIZED: Once = Once::new();
 
+#[cfg(feature = "with-logging")]
 fn initialize_logger() {
     // Use the Once flag to ensure initialization happens only once
     LOGGER_INITIALIZED.call_once(|| {
@@ -109,30 +112,22 @@ interface Input {
 #[wasm_bindgen]
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     console_error_panic_hook::set_once();
-    // JsError implements From<Error>, so we can just use `?` on any Error
-    let input: Input = from_value(input.clone()).unwrap();
-    let steps = generate_steps_to_place(input);
-    let placed_steps = step_placer(steps);
-    let final_tasks = match output_formatter(placed_steps) {
-        Err(Error::NoConfirmedDate(title, id)) => {
-            panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.")
-        }
-        Err(e) => {
-            panic!("Unexpected error: {:?}", e);
-        }
-        Ok(final_tasks) => final_tasks,
-    };
-
-    Ok(to_value(&final_tasks)?)
+    let input: Input = serde_wasm_bindgen::from_value(input.clone())?;
+    let final_tasks = run_scheduler(input);
+    Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
 }
 
 /// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
+    #[cfg(feature = "with-logging")]
     initialize_logger();
 
     let steps = generate_steps_to_place(input);
+
     log::debug!("{:#?}", &steps);
+
     let placed_steps = step_placer(steps);
+
     match output_formatter(placed_steps) {
         Err(Error::NoConfirmedDate(title, id)) => {
             panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.");
