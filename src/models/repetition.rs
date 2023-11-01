@@ -11,7 +11,6 @@ use std::fmt;
 /// determine how many steps to generate from a goal.
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Repetition {
-
     MONDAYS,
     TUESDAYS,
     WEDNESDAYS,
@@ -36,7 +35,6 @@ pub enum Repetition {
     FLEX_DAILY(usize, usize),
     #[allow(non_camel_case_types)]
     FLEX_WEEKLY(usize, usize),
-
 }
 
 //How to implement serde deserialize: https://serde.rs/impl-deserialize.html
@@ -64,14 +62,14 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
             "fridays" => Ok(Repetition::FRIDAYS),
             "saturdays" => Ok(Repetition::SATURDAYS),
             "sundays" => Ok(Repetition::SUNDAYS),
- 
+
             "daily" => Ok(Repetition::DAILY(1)),
             "hourly" => Ok(Repetition::HOURLY),
             "weekly" => Ok(Repetition::WEEKLY(1)),
- 
+
             "weekdays" => Ok(Repetition::WEEKDAYS),
             "weekends" => Ok(Repetition::WEEKENDS),
- 
+
             _ => {
                 if s.contains('-') && s.contains('/') {
                     //e.g. '3-5/week'
