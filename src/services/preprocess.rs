@@ -78,10 +78,10 @@ fn populate_goal_dates(
 fn generate_flex_weekly_goals(goals: &mut GoalsMap) {
     let mut generated_goals: GoalsMap = BTreeMap::new();
     for (goal_id, goal) in goals.iter_mut() {
-        if let Some(Repetition::FlexWeekly(min, max)) = goal.repeat {
+        if let Some(Repetition::FLEX_WEEKLY(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
             //If given a goal with 3-5x/week, create 3 goals and 2 extra optional goals
-            goal.repeat = Some(Repetition::Weekly(1));
+            goal.repeat = Some(Repetition::WEEKLY(1));
 
             // Create repeated goals and optional repeated goals
             for number in 1..max {
@@ -205,7 +205,7 @@ mod tests {
 
             let mut input_goal = Goal::mock("1", "side project", goal_dates);
             input_goal.min_duration = Some(8);
-            input_goal.repeat = Some(Repetition::FlexWeekly(1, 3));
+            input_goal.repeat = Some(Repetition::FLEX_WEEKLY(1, 3));
 
             let mut input_goals: GoalsMap = BTreeMap::new();
             input_goals.insert(input_goal.id.clone(), input_goal);
@@ -214,7 +214,7 @@ mod tests {
 
             let mut expected_goal_1 = Goal::mock("1", "side project", goal_dates);
             expected_goal_1.min_duration = Some(8);
-            expected_goal_1.repeat = Some(Repetition::Weekly(1));
+            expected_goal_1.repeat = Some(Repetition::WEEKLY(1));
 
             let mut expected_goal_2 = expected_goal_1.clone();
             expected_goal_2.id = "1-repeat-opt-1".to_string();

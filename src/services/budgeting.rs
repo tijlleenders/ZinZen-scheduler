@@ -198,7 +198,7 @@ impl Goal {
             if budget.step_budget_type == BudgetType::Daily {
                 goal.repeat = Some(Repetition::DAILY(repeatance));
             } else {
-                goal.repeat = Some(Repetition::Weekly(repeatance));
+                goal.repeat = Some(Repetition::WEEKLY(repeatance));
             }
         } else {
             // get goal.budgets:
@@ -212,7 +212,7 @@ impl Goal {
                 if found_daily_budget {
                     goal.repeat = Some(Repetition::DAILY(repeatance));
                 } else {
-                    goal.repeat = Some(Repetition::Weekly(repeatance));
+                    goal.repeat = Some(Repetition::WEEKLY(repeatance));
                 }
             }
         }
@@ -277,7 +277,7 @@ mod tests {
                     min: Some(5),
                     max: None,
                 }]),
-                repeat: Some(Repetition::Weekly(1)),
+                repeat: Some(Repetition::WEEKLY(1)),
                 start: Some(calendar.start),
                 deadline: Some(calendar.end),
                 tags: vec![Tag::Budget],
@@ -354,7 +354,7 @@ mod tests {
                     min: Some(9),
                     max: None,
                 }]),
-                repeat: Some(Repetition::Weekly(1)),
+                repeat: Some(Repetition::WEEKLY(1)),
                 start: Some(calendar.start),
                 deadline: Some(calendar.end),
                 tags: vec![Tag::Budget],
@@ -450,7 +450,7 @@ mod tests {
                     min: Some(5),
                     max: None,
                 }]),
-                repeat: Some(Repetition::Weekly(1)),
+                repeat: Some(Repetition::WEEKLY(1)),
                 start: Some(calendar.start),
                 deadline: Some(calendar.end),
                 tags: vec![Tag::Budget],
@@ -469,7 +469,7 @@ mod tests {
                     min: Some(3),
                     max: None,
                 }]),
-                repeat: Some(Repetition::Weekly(1)),
+                repeat: Some(Repetition::WEEKLY(1)),
                 start: Some(calendar.start),
                 deadline: Some(calendar.end),
                 tags: vec![Tag::Budget],
@@ -569,7 +569,7 @@ mod tests {
                 let budgets = Some(vec![budget]);
                 goal.budgets = budgets.clone();
 
-                let repeat = Some(Repetition::Weekly(1));
+                let repeat = Some(Repetition::WEEKLY(1));
                 goal.repeat = repeat;
 
                 goal.configure_repeatance(None);
@@ -593,7 +593,7 @@ mod tests {
 
                 goal.configure_repeatance(None);
 
-                let expected_repeat = Some(Repetition::Weekly(1));
+                let expected_repeat = Some(Repetition::WEEKLY(1));
 
                 assert_eq!(goal.repeat, expected_repeat);
                 assert_eq!(goal.budgets, budgets);
