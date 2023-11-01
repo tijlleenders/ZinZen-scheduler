@@ -29,6 +29,7 @@ jobs:
     - name: Run rust fmt
       uses: actions-rs/cargo@v1
       with:
+          toolchain: nightly
           command: fmt
           args: --all -- --check
     - name: Install clippy component
@@ -38,5 +39,3 @@ jobs:
       with:
           command: clippy
           args: --release -- -D warnings
-
-

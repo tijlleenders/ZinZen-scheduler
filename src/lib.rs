@@ -82,9 +82,9 @@ pub mod services;
 #[cfg(test)]
 mod tests;
 
+use crate::services::output::output_formatter;
 #[cfg(feature = "with-logging")]
 use std::sync::Once;
-use crate::services::output::output_formatter;
 
 // Static flag to ensure logger init happens only once
 #[cfg(feature = "with-logging")]
