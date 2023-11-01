@@ -26,7 +26,7 @@ impl TimeFilter {
             (None, Some(_)) => TimingScenario::AfterOnly,
             (Some(_), None) => TimingScenario::BeforeOnly,
             (Some(before), Some(after)) if before >= after => TimingScenario::Bounded,
-            (Some(before), Some(after)) if before <  after => TimingScenario::Overflow,
+            (Some(before), Some(after)) if before < after => TimingScenario::Overflow,
             _ => TimingScenario::Unbounded,
         }
     }
