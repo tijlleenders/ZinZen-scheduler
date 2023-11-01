@@ -11,13 +11,7 @@ use std::fmt;
 /// determine how many steps to generate from a goal.
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Repetition {
-    DAILY(usize),
-    HOURLY,
-    Weekly(usize),
-    WEEKDAYS,
-    WEEKENDS,
-    EveryXdays(usize),
-    EveryXhours(usize),
+
     MONDAYS,
     TUESDAYS,
     WEDNESDAYS,
@@ -25,8 +19,24 @@ pub enum Repetition {
     FRIDAYS,
     SATURDAYS,
     SUNDAYS,
-    FlexDaily(usize, usize),
-    FlexWeekly(usize, usize),
+
+    WEEKDAYS,
+    WEEKENDS,
+
+    HOURLY,
+    DAILY(usize),
+    WEEKLY(usize),
+
+    #[allow(non_camel_case_types)]
+    EVERY_X_HOURS(usize),
+    #[allow(non_camel_case_types)]
+    EVERY_X_DAYS(usize),
+
+    #[allow(non_camel_case_types)]
+    FLEX_DAILY(usize, usize),
+    #[allow(non_camel_case_types)]
+    FLEX_WEEKLY(usize, usize),
+
 }
 
 //How to implement serde deserialize: https://serde.rs/impl-deserialize.html
@@ -47,11 +57,6 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
         E: de::Error,
     {
         match s {
-            "daily" => Ok(Repetition::DAILY(1)),
-            "hourly" => Ok(Repetition::HOURLY),
-            "weekly" => Ok(Repetition::Weekly(1)),
-            "weekdays" => Ok(Repetition::WEEKDAYS),
-            "weekends" => Ok(Repetition::WEEKENDS),
             "mondays" => Ok(Repetition::MONDAYS),
             "tuesdays" => Ok(Repetition::TUESDAYS),
             "wednesdays" => Ok(Repetition::WEDNESDAYS),
@@ -59,6 +64,14 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
             "fridays" => Ok(Repetition::FRIDAYS),
             "saturdays" => Ok(Repetition::SATURDAYS),
             "sundays" => Ok(Repetition::SUNDAYS),
+ 
+            "daily" => Ok(Repetition::DAILY(1)),
+            "hourly" => Ok(Repetition::HOURLY),
+            "weekly" => Ok(Repetition::WEEKLY(1)),
+ 
+            "weekdays" => Ok(Repetition::WEEKDAYS),
+            "weekends" => Ok(Repetition::WEEKENDS),
+ 
             _ => {
                 if s.contains('-') && s.contains('/') {
                     //e.g. '3-5/week'
@@ -73,8 +86,8 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
                         .parse::<usize>()
                         .expect("expected format to be x-y/period"); //e.g. 5
                     match rep {
-                        "week" => Ok(Repetition::FlexWeekly(min, max)),
-                        "day" => Ok(Repetition::FlexDaily(min, max)),
+                        "week" => Ok(Repetition::FLEX_WEEKLY(min, max)),
+                        "day" => Ok(Repetition::FLEX_DAILY(min, max)),
                         _ => panic!("unrecognized repetition: {}", rep),
                     }
                 } else if s.contains('/') {
@@ -84,7 +97,7 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
                         .parse::<usize>()
                         .expect("expected format to be x/period");
                     match split[1] {
-                        "week" => Ok(Repetition::Weekly(num)),
+                        "week" => Ok(Repetition::WEEKLY(num)),
                         "day" => Ok(Repetition::DAILY(num)),
                         _ => panic!("unrecognized repetition: {}", s),
                     }
@@ -96,9 +109,9 @@ impl<'de> Visitor<'de> for RepetitionVisitor {
                         .expect("front end should use format 'every x days' or 'every x hours' ");
                     let rep = split[2];
                     if rep == "days" {
-                        Ok(Repetition::EveryXdays(num))
+                        Ok(Repetition::EVERY_X_DAYS(num))
                     } else if rep == "hours" {
-                        Ok(Repetition::EveryXhours(num))
+                        Ok(Repetition::EVERY_X_HOURS(num))
                     } else {
                         panic!("front end should use format 'every x days' or 'every x hours' ");
                     }
@@ -129,11 +142,11 @@ impl fmt::Display for Repetition {
         f.write_str(match *self {
             Repetition::DAILY(_) => "DAILY",
             Repetition::HOURLY => "HOURLY",
-            Repetition::Weekly(_) => "Weekly",
+            Repetition::WEEKLY(_) => "Weekly",
             Repetition::WEEKDAYS => "WEEKDAYS",
             Repetition::WEEKENDS => "WEEKENDS",
-            Repetition::EveryXdays(_) => "EveryXdays",
-            Repetition::EveryXhours(_) => "EveryXhours",
+            Repetition::EVERY_X_DAYS(_) => "EveryXdays",
+            Repetition::EVERY_X_HOURS(_) => "EveryXhours",
             Repetition::MONDAYS => "Mon",
             Repetition::TUESDAYS => "Tue",
             Repetition::WEDNESDAYS => "Wed",
@@ -141,8 +154,8 @@ impl fmt::Display for Repetition {
             Repetition::FRIDAYS => "Fri",
             Repetition::SATURDAYS => "Sat",
             Repetition::SUNDAYS => "Sun",
-            Repetition::FlexDaily(_, _) => "FlexDaily",
-            Repetition::FlexWeekly(_, _) => "FlexWeekly",
+            Repetition::FLEX_DAILY(_, _) => "FlexDaily",
+            Repetition::FLEX_WEEKLY(_, _) => "FlexWeekly",
         })
     }
 }
