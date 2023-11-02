@@ -11,7 +11,7 @@ pub fn get_start_of_repeat_step(
     match repeat {
         Repetition::DAILY(_) => result.checked_add_days(Days::new(1)).unwrap(),
         Repetition::HOURLY => result.checked_add_signed(Duration::hours(1)).unwrap(),
-        Repetition::Weekly(_) => next_week(&result),
+        Repetition::WEEKLY(_) => next_week(&result),
         Repetition::WEEKDAYS => match result.weekday() {
             Weekday::Sat => result
                 .checked_add_days(Days::new(2))
@@ -78,7 +78,7 @@ pub fn get_start_of_repeat_step(
             }
             panic!("Shouldn't reach this");
         }
-        Repetition::EveryXdays(day_interval) => result
+        Repetition::EVERY_X_DAYS(day_interval) => result
             .checked_add_days(Days::new(day_interval.try_into().unwrap()))
             .unwrap()
             .with_hour(0)
@@ -87,7 +87,7 @@ pub fn get_start_of_repeat_step(
             .unwrap()
             .with_second(0)
             .unwrap(),
-        Repetition::EveryXhours(hour_interval) => result
+        Repetition::EVERY_X_HOURS(hour_interval) => result
             .checked_add_signed(Duration::hours(hour_interval.try_into().unwrap()))
             .unwrap(),
         Repetition::MONDAYS => {
@@ -272,8 +272,8 @@ pub fn get_start_of_repeat_step(
             }
             panic!("Shouldn't reach this");
         }
-        Repetition::FlexDaily(_, _) => todo!(),
-        Repetition::FlexWeekly(_, _) => todo!(),
+        Repetition::FLEX_DAILY(_, _) => todo!(),
+        Repetition::FLEX_WEEKLY(_, _) => todo!(),
     }
 }
 

@@ -33,7 +33,7 @@ impl StepBudget {
     }
 
     pub fn initialize(&mut self, budget_start: NaiveDateTime, budget_end: NaiveDateTime) {
-        let mut repetition: Repetition = Repetition::Weekly(1);
+        let mut repetition: Repetition = Repetition::WEEKLY(1);
         match self.step_budget_type {
             BudgetType::Weekly => (),
             BudgetType::Daily => repetition = Repetition::DAILY(1),
