@@ -19,7 +19,7 @@ impl StepBudgets {
         self.add_descendants(goals);
 
         for budget in self.budget_map.values_mut() {
-            budget.initialize(self.calendar_start, self.calendar_end);
+            budget.initialize(self.start_date, self.end_date);
         }
 
         configure_goals_repeatance(goals, Some(self));
@@ -261,8 +261,8 @@ mod tests {
             );
 
             let mut step_budgets = StepBudgets {
-                calendar_start: calendar.start,
-                calendar_end: calendar.end,
+                start_date: calendar.start,
+                end_date: calendar.end,
                 budget_ids_map: goal_id_to_budget_ids,
                 budget_map: budget_id_to_budget,
             };
@@ -338,8 +338,8 @@ mod tests {
             );
 
             let mut step_budgets = StepBudgets {
-                calendar_start: calendar.start,
-                calendar_end: calendar.end,
+                start_date: calendar.start,
+                end_date: calendar.end,
                 budget_ids_map: goal_id_to_budget_ids,
                 budget_map: budget_id_to_budget,
             };
@@ -434,8 +434,8 @@ mod tests {
             );
 
             let mut step_budgets = StepBudgets {
-                calendar_start: calendar.start,
-                calendar_end: calendar.end,
+                start_date: calendar.start,
+                end_date: calendar.end,
                 budget_ids_map: goal_id_to_budget_ids,
                 budget_map: budget_id_to_budget,
             };

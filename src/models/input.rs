@@ -11,23 +11,23 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 pub struct Input {
     #[serde(rename = "startDate")]
-    pub calendar_start: NaiveDateTime,
+    pub start_date: NaiveDateTime,
     #[serde(rename = "endDate")]
-    pub calendar_end: NaiveDateTime,
+    pub end_date: NaiveDateTime,
     pub goals: GoalsMap,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct StepsToPlace {
-    pub calendar_start: NaiveDateTime,
-    pub calendar_end: NaiveDateTime,
+    pub start_date: NaiveDateTime,
+    pub end_date: NaiveDateTime,
     pub steps: Vec<Step>,
     pub step_budgets: StepBudgets,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct PlacedSteps {
-    pub calendar_start: NaiveDateTime,
-    pub calendar_end: NaiveDateTime,
+    pub start_date: NaiveDateTime,
+    pub end_date: NaiveDateTime,
     pub steps: Vec<Step>,
 }

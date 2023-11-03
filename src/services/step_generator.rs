@@ -38,8 +38,8 @@ impl Goal {
     /// - Budget Tag
     pub fn generate_steps(
         self,
-        calendar_start: NaiveDateTime,
-        calendar_end: NaiveDateTime,
+        start_date: NaiveDateTime,
+        end_date: NaiveDateTime,
         counter: &mut usize,
     ) -> Vec<Step> {
         let mut steps: Vec<Step> = Vec::new();
@@ -50,8 +50,8 @@ impl Goal {
         if self.tags.contains(&Tag::Budget) {
             return steps;
         }
-        let mut start = self.start.unwrap_or(calendar_start);
-        let mut deadline = self.deadline.unwrap_or(calendar_end);
+        let mut start = self.start.unwrap_or(start_date);
+        let mut deadline = self.deadline.unwrap_or(end_date);
 
         if let Some(filter) = self.filters.clone() {
             let timing_scenario = filter.determine_timing_scenario();

@@ -54,10 +54,10 @@ impl StepBudget {
 }
 
 impl StepBudgets {
-    pub fn new(calendar_start: &NaiveDateTime, calendar_end: &NaiveDateTime) -> Self {
+    pub fn new(start_date: &NaiveDateTime, end_date: &NaiveDateTime) -> Self {
         Self {
-            calendar_start: *calendar_start,
-            calendar_end: *calendar_end,
+            start_date: *start_date,
+            end_date: *end_date,
             budget_ids_map: HashMap::new(),
             budget_map: HashMap::new(),
         }

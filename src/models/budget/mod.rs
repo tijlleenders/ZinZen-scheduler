@@ -24,8 +24,8 @@ pub enum BudgetType {
 
 #[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
 pub struct StepBudgets {
-    pub calendar_start: NaiveDateTime,
-    pub calendar_end: NaiveDateTime,
+    pub start_date: NaiveDateTime,
+    pub end_date: NaiveDateTime,
     /// A map from goal IDs to a vector of budget IDs associated with that goal
     pub budget_ids_map: HashMap<String, Vec<String>>,
     /// A map from goal IDs to the `StepBudget` objects associated with that goal.

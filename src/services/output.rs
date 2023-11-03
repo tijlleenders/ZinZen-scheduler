@@ -25,8 +25,8 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
                 }
                 scheduled_tasks.push(get_task_from_step(
                     step,
-                    placed_steps.calendar_start,
-                    placed_steps.calendar_end,
+                    placed_steps.start_date,
+                    placed_steps.end_date,
                 ));
             }
             StepStatus::Impossible => {
@@ -37,8 +37,8 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
                 }
                 impossible_tasks.push(get_task_from_step(
                     step,
-                    placed_steps.calendar_start,
-                    placed_steps.calendar_end,
+                    placed_steps.start_date,
+                    placed_steps.end_date,
                 ));
             }
             StepStatus::Uninitialized => {
@@ -58,8 +58,8 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
     split_crossed_tasks(&mut scheduled_tasks);
     generate_free_tasks(
         &mut scheduled_tasks,
-        placed_steps.calendar_start,
-        placed_steps.calendar_end,
+        placed_steps.start_date,
+        placed_steps.end_date,
     );
     //assign task ids
     let mut i = 0;
@@ -79,13 +79,13 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
     let final_tasks = FinalTasks {
         scheduled: get_tasks_with_date(
             scheduled_tasks,
-            placed_steps.calendar_start,
-            placed_steps.calendar_end,
+            placed_steps.start_date,
+            placed_steps.end_date,
         ),
         impossible: get_tasks_with_date(
             impossible_tasks,
-            placed_steps.calendar_start,
-            placed_steps.calendar_end,
+            placed_steps.start_date,
+            placed_steps.end_date,
         ),
     };
 
@@ -109,8 +109,8 @@ fn get_calendar_days(start: NaiveDateTime, end: NaiveDateTime) -> Vec<NaiveDate>
 /// Get a task from a given Step
 fn get_task_from_step(
     step: &Step,
-    calendar_start: NaiveDateTime,
-    calendar_end: NaiveDateTime,
+    start_date: NaiveDateTime,
+    end_date: NaiveDateTime,
 ) -> Task {
     match step.status {
         StepStatus::Scheduled => Task {
@@ -128,8 +128,8 @@ fn get_task_from_step(
             goalid: step.goal_id.clone(),
             title: step.title.clone(),
             duration: step.duration,
-            start: calendar_start,
-            deadline: calendar_end,
+            start: start_date,
+            deadline: end_date,
             tags: step.tags.clone(),
             impossible: true,
         },

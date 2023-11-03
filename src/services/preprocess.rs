@@ -18,11 +18,11 @@ use std::collections::BTreeMap;
 /// - create min and max budgets (step_budgets.create_step_budgets_config)
 /// - step_budgets.generate_budget_min_and_max_steps
 pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
-    let calendar_start = input.calendar_start;
-    let calendar_end = input.calendar_end;
+    let start_date = input.start_date;
+    let end_date = input.end_date;
 
     let mut goals = manipulate_input_goals(input);
-    let mut step_budgets = StepBudgets::new(&calendar_start, &calendar_end);
+    let mut step_budgets = StepBudgets::new(&start_date, &end_date);
     step_budgets.configure_budgets(&mut goals);
 
     let mut counter: usize = 0;
@@ -31,13 +31,13 @@ pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
     for (_, goal) in goals {
         //for regular, filler, optional flexduration regular, optional flexnumber and/or flexduration habit goals
         let steps_for_goal: Vec<Step> =
-            goal.generate_steps(calendar_start, calendar_end, &mut counter);
+            goal.generate_steps(start_date, end_date, &mut counter);
         steps.extend(steps_for_goal);
     }
 
     StepsToPlace {
-        calendar_start,
-        calendar_end,
+        start_date,
+        end_date,
         steps,
         step_budgets,
     }
@@ -46,11 +46,11 @@ pub fn generate_steps_to_place(input: Input) -> StepsToPlace {
 /// Manipulate input which contains goals with start and end dates.
 /// Returns list of Goals after manipulation
 fn manipulate_input_goals(input: Input) -> GoalsMap {
-    let calendar_start = input.calendar_start;
-    let calendar_end = input.calendar_end;
+    let start_date = input.start_date;
+    let end_date = input.end_date;
     let goals = input.goals;
 
-    let mut goals: GoalsMap = populate_goal_dates(goals, calendar_start, calendar_end);
+    let mut goals: GoalsMap = populate_goal_dates(goals, start_date, end_date);
 
     add_filler_goals(&mut goals);
 
@@ -63,12 +63,12 @@ fn manipulate_input_goals(input: Input) -> GoalsMap {
 
 fn populate_goal_dates(
     mut goals: GoalsMap,
-    calendar_start: NaiveDateTime,
-    calendar_end: NaiveDateTime,
+    start_date: NaiveDateTime,
+    end_date: NaiveDateTime,
 ) -> GoalsMap {
     for goal in goals.iter_mut() {
-        goal.1.start.get_or_insert(calendar_start);
-        goal.1.deadline.get_or_insert(calendar_end);
+        goal.1.start.get_or_insert(start_date);
+        goal.1.deadline.get_or_insert(end_date);
     }
     goals
 }

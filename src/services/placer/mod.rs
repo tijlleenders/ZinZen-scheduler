@@ -12,8 +12,8 @@ pub fn step_placer(mut steps_to_place: StepsToPlace) -> PlacedSteps {
     schedule(&mut steps_to_place);
 
     PlacedSteps {
-        calendar_start: steps_to_place.calendar_start,
-        calendar_end: steps_to_place.calendar_end,
+        start_date: steps_to_place.start_date,
+        end_date: steps_to_place.end_date,
         steps: steps_to_place.steps,
     }
 }
@@ -243,15 +243,15 @@ mod tests {
         ];
 
         let step_budgets = StepBudgets {
-            calendar_start: calendar_timing.start,
-            calendar_end: calendar_timing.end,
+            start_date: calendar_timing.start,
+            end_date: calendar_timing.end,
             budget_ids_map: HashMap::new(),
             budget_map: HashMap::new(),
         };
 
         let steps_to_place = StepsToPlace {
-            calendar_start: calendar_timing.start,
-            calendar_end: calendar_timing.end,
+            start_date: calendar_timing.start,
+            end_date: calendar_timing.end,
             steps,
             step_budgets,
         };

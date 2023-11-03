@@ -80,7 +80,7 @@ pub struct TimeFilter {
 /// Helper tags for the algorithm
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Tag {
-    Donotsplit,
+    DoNotSplit,
     Weekly,
     Optional,
     FlexDur,
