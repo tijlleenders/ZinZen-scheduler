@@ -69,8 +69,8 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         }
         remaining_hours -= slot.duration_as_hours();
         template_step.id += 1;
-        template_step.start = Some(slot.start);
-        template_step.deadline = Some(slot.end);
+        template_step.start_date = Some(slot.start);
+        template_step.end_date = Some(slot.end);
         steps_to_place.steps.push(template_step.clone());
     }
 

@@ -20,7 +20,7 @@ pub fn output_formatter(mut placed_steps: PlacedSteps) -> Result<FinalTasks, Err
         match step.status {
             StepStatus::Scheduled => {
                 //convert scheduled steps to output objects and add to scheduled_outputs vec
-                if step.start.is_none() || step.deadline.is_none() {
+                if step.start_date.is_none() || step.end_date.is_none() {
                     return Err(Error::NoConfirmedDate(step.title.clone(), step.id));
                 }
                 scheduled_tasks.push(get_task_from_step(
@@ -118,8 +118,8 @@ fn get_task_from_step(
             goalid: step.goal_id.clone(),
             title: step.title.clone(),
             duration: step.duration,
-            start: step.start.unwrap(),
-            deadline: step.deadline.unwrap(),
+            start: step.start_date.unwrap(),
+            deadline: step.end_date.unwrap(),
             tags: step.tags.clone(),
             impossible: false,
         },

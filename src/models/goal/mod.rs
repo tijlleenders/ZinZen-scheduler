@@ -16,7 +16,7 @@ pub struct Goal {
     pub id: String,
     /// The title given to the Goal, ie "Run", "Read a book" or "Become a nuclear scientist".
     pub title: String,
-    /// The minimum duration per Step towards the Goal.
+    /// The minimum duration in Slots per Step towards the Goal.
     #[serde(default)]
     pub min_duration: Option<usize>,
     /// The maximum duration, if the other Goals allow for it.
@@ -29,10 +29,10 @@ pub struct Goal {
     pub repeat: Option<Repetition>,
     /// Schedule on calender after this datetime only.
     #[serde(default)]
-    pub start: Option<NaiveDateTime>,
+    pub start_date: Option<NaiveDateTime>,
     /// Goal has to be achieved by this datetime.
     #[serde(default)]
-    pub deadline: Option<NaiveDateTime>,
+    pub end_date: Option<NaiveDateTime>,
     /// Internal - should be private
     #[serde(default)]
     pub tags: Vec<Tag>,

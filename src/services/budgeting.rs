@@ -102,8 +102,8 @@ impl StepBudgets {
                 continue;
             }
 
-            let start: NaiveDateTime = goal.start.unwrap();
-            let deadline: NaiveDateTime = goal.deadline.unwrap();
+            let start: NaiveDateTime = goal.start_date.unwrap();
+            let deadline: NaiveDateTime = goal.end_date.unwrap();
 
             /*
             TODO 2023-07-4: Found issue that goal.repeat doesn't consider budget_type, which means will not repeat based on budget_type
@@ -278,8 +278,8 @@ mod tests {
                     max: None,
                 }]),
                 repeat: Some(Repetition::WEEKLY(1)),
-                start: Some(calendar.start),
-                deadline: Some(calendar.end),
+                start_date: Some(calendar.start),
+                end_date: Some(calendar.end),
                 tags: vec![Tag::Budget],
                 filters: None,
                 children: None,
@@ -299,8 +299,8 @@ mod tests {
                 duration: 5,
                 status: StepStatus::ReadyToSchedule,
                 flexibility: 0,
-                start: None,
-                deadline: None,
+                start_date: None,
+                end_date: None,
                 slots: vec![calendar],
                 tags: vec![Tag::Budget],
                 after_goals: None,
@@ -355,8 +355,8 @@ mod tests {
                     max: None,
                 }]),
                 repeat: Some(Repetition::WEEKLY(1)),
-                start: Some(calendar.start),
-                deadline: Some(calendar.end),
+                start_date: Some(calendar.start),
+                end_date: Some(calendar.end),
                 tags: vec![Tag::Budget],
                 filters: None,
                 children: None,
@@ -379,8 +379,8 @@ mod tests {
                     duration: 1,
                     status: StepStatus::ReadyToSchedule,
                     flexibility: 0,
-                    start: None,
-                    deadline: None,
+                    start_date: None,
+                    end_date: None,
                     slots: vec![calendar],
                     tags: vec![Tag::Budget],
                     after_goals: None,
@@ -451,8 +451,8 @@ mod tests {
                     max: None,
                 }]),
                 repeat: Some(Repetition::WEEKLY(1)),
-                start: Some(calendar.start),
-                deadline: Some(calendar.end),
+                start_date: Some(calendar.start),
+                end_date: Some(calendar.end),
                 tags: vec![Tag::Budget],
                 filters: None,
                 children: Some(vec!["child".to_string()]),
@@ -470,8 +470,8 @@ mod tests {
                     max: None,
                 }]),
                 repeat: Some(Repetition::WEEKLY(1)),
-                start: Some(calendar.start),
-                deadline: Some(calendar.end),
+                start_date: Some(calendar.start),
+                end_date: Some(calendar.end),
                 tags: vec![Tag::Budget],
                 filters: None,
                 children: None,
@@ -492,8 +492,8 @@ mod tests {
                 duration: 3,
                 status: StepStatus::ReadyToSchedule,
                 flexibility: 0,
-                start: None,
-                deadline: None,
+                start_date: None,
+                end_date: None,
                 slots: vec![calendar],
                 tags: vec![Tag::Budget],
                 after_goals: None,

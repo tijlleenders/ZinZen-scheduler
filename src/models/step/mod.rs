@@ -29,9 +29,9 @@ pub struct Step {
     /// Used for finding next Step to be scheduled in combination with Step Status and Tags.
     pub flexibility: usize,
     /// Final start time for Step on Calendar - should be removed in favor of Timeline + SlotStatus combination.
-    pub start: Option<NaiveDateTime>,
+    pub start_date: Option<NaiveDateTime>,
     /// Final end time for Step on Calendar - should be removed in favor of Timeline + SlotStatus combination.
-    pub deadline: Option<NaiveDateTime>,
+    pub end_date: Option<NaiveDateTime>,
     /// The places on Calendar that could potentially be used given the Goal constraints - and what other scheduled Steps already have consumed.
     pub slots: Vec<Slot>,
     /// Used for finding next Step to be scheduled in combination with Step flexibility and Status.

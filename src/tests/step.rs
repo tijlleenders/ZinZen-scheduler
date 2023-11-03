@@ -40,8 +40,8 @@ fn new_step() {
     assert_eq!(step.goal_id, goal.id);
     assert_eq!(step.status, status);
     assert_eq!(step.flexibility, 0);
-    assert_eq!(step.start, timeframe.map(|t| t.start));
-    assert_eq!(step.deadline, timeframe.map(|t| t.end));
+    assert_eq!(step.start_date, timeframe.map(|t| t.start));
+    assert_eq!(step.end_date, timeframe.map(|t| t.end));
     assert_eq!(step.slots, timeline.slots.into_iter().collect::<Vec<_>>());
     assert_eq!(step.tags, goal.tags);
     assert_eq!(step.after_goals, goal.after_goals);

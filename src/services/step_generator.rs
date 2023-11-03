@@ -17,8 +17,8 @@ impl Step {
             duration: new_step.duration,
             status: new_step.status,
             flexibility: 0,
-            start,
-            deadline,
+            start_date: start,
+            end_date: deadline,
             slots: new_step.timeline.slots.into_iter().collect(),
             tags: new_step.goal.tags,
             after_goals: new_step.goal.after_goals,
@@ -50,8 +50,8 @@ impl Goal {
         if self.tags.contains(&Tag::Budget) {
             return steps;
         }
-        let mut start = self.start.unwrap_or(start_date);
-        let mut deadline = self.deadline.unwrap_or(end_date);
+        let mut start = self.start_date.unwrap_or(start_date);
+        let mut deadline = self.end_date.unwrap_or(end_date);
 
         if let Some(filter) = self.filters.clone() {
             let timing_scenario = filter.determine_timing_scenario();

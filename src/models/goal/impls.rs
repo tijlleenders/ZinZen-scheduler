@@ -63,12 +63,12 @@ impl Goal {
     }
 
     pub fn start(mut self, start: NaiveDateTime) -> Self {
-        self.start = Some(start);
+        self.start_date = Some(start);
         self
     }
 
     pub fn deadline(mut self, deadline: NaiveDateTime) -> Self {
-        self.deadline = Some(deadline);
+        self.end_date = Some(deadline);
         self
     }
 

@@ -67,8 +67,8 @@ fn populate_goal_dates(
     end_date: NaiveDateTime,
 ) -> GoalsMap {
     for goal in goals.iter_mut() {
-        goal.1.start.get_or_insert(start_date);
-        goal.1.deadline.get_or_insert(end_date);
+        goal.1.start_date.get_or_insert(start_date);
+        goal.1.end_date.get_or_insert(end_date);
     }
     goals
 }
