@@ -23,17 +23,17 @@ pub struct Goal {
     // calculation of the slots
 
     /// Schedule on calender after this datetime only.
+    #[serde(default)]
+    pub start: Option<NaiveDateTime>,
+    /// Goal has to be achieved until this datetime.
+    #[serde(default)]
+    pub deadline: Option<NaiveDateTime>,
     /// The minimum duration per Step towards the Goal.
     #[serde(default)]
     pub min_duration: Option<usize>,
     /// The maximum duration, if the other Goals allow for it.
     #[serde(default)]
     pub max_duration: Option<usize>,
-    #[serde(default)]
-    pub start: Option<NaiveDateTime>,
-    /// Goal has to be achieved by this datetime.
-    #[serde(default)]
-    pub deadline: Option<NaiveDateTime>,
 
     // repeatability
 
