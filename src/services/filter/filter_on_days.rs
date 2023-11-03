@@ -69,7 +69,7 @@ mod tests {
     fn test_when_timeline_is_empty() {
         let timeline = Timeline::new();
 
-        let days_to_filter: Vec<Day> = vec![Day::Mon];
+        let days_to_filter: Vec<Day> = vec![Day::Monday];
         let result = filter_on_days(timeline.clone(), &days_to_filter);
         assert_eq!(timeline, result);
     }
@@ -80,7 +80,7 @@ mod tests {
     /// - Expected list of 5 days (Mon, Fri) between Mon 2023-05-01 to Mon 2023-05-15
     #[test]
     fn test_when_timeline_have_many_slots() {
-        let days_to_filter: Vec<Day> = vec![Day::Mon, Day::Fri];
+        let days_to_filter: Vec<Day> = vec![Day::Monday, Day::Friday];
 
         let timeline = Timeline::mock_as_days(15, 2023, 5, 1);
 
@@ -107,7 +107,7 @@ mod tests {
     /// - Expected list of 4 days (Sun, Thu) between Mon 2023-05-01 to Mon 2023-05-15
     #[test]
     fn test_when_timeline_have_single_slot() {
-        let days_to_filter: Vec<Day> = vec![Day::Sun, Day::Thu];
+        let days_to_filter: Vec<Day> = vec![Day::Sunday, Day::Thursday];
 
         let timeline = Timeline::mock(Duration::days(15), 2023, 5, 1);
 
@@ -140,7 +140,7 @@ mod tests {
 
         let start_time: u32 = 5;
 
-        let days_to_filter: Vec<Day> = vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu];
+        let days_to_filter: Vec<Day> = vec![Day::Sunday, Day::Monday, Day::Tuesday, Day::Wednesday, Day::Thursday];
 
         let timeline = Timeline {
             slots: vec![

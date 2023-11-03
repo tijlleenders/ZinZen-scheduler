@@ -57,7 +57,7 @@ mod tests {
             not_on: None,
             after_time: None,
             before_time: None,
-            on_days: Some(vec![Day::Fri]),
+            on_days: Some(vec![Day::Friday]),
         });
         let mut result_timeline = timeline.clone();
         result_timeline.apply_filter(&filters);
@@ -101,7 +101,7 @@ mod tests {
         let before: u32 = 15;
         let before_time: Option<usize> = Some(before as usize);
         let on_days: Option<Vec<Day>> =
-            Some(vec![Day::Sun, Day::Mon, Day::Tue, Day::Wed, Day::Thu]);
+            Some(vec![Day::Sunday, Day::Monday, Day::Tuesday, Day::Wednesday, Day::Thursday]);
         let not_on: Option<Vec<Slot>> = Some(vec![
             Slot::mock(Duration::hours(10), year, month, 2, after, 0),
             Slot::mock(Duration::hours(10), year, month, 6, after, 0),

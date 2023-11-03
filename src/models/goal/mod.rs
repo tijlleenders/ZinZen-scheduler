@@ -52,13 +52,13 @@ pub struct Goal {
 /// Mon Tue Wed Thu Fri Sat Sun
 #[derive(Deserialize, Debug, Clone, PartialEq, PartialOrd, Ord, Eq)]
 pub enum Day {
-    Fri,
-    Sat,
-    Sun,
-    Mon,
-    Tue,
-    Wed,
-    Thu,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday,
 }
 
 /// Filters used to reduce the Timeline on which a Goal can be scheduled.
@@ -80,7 +80,7 @@ pub struct TimeFilter {
 /// Helper tags for the algorithm
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Tag {
-    Donotsplit,
+    DoNotSplit,
     Weekly,
     Optional,
     FlexDur,
