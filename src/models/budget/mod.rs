@@ -9,7 +9,7 @@ use crate::models::date::deserialize_normalized_date;
 pub mod impls;
 
 /// Keeps track of the min and max time allowed and scheduled per time period for a collection of Steps/Tasks.
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq)]
 pub struct Budget {
     pub budget_type: BudgetType,
     pub min: Option<usize>,
@@ -17,7 +17,7 @@ pub struct Budget {
 }
 
 /// weekly or daily
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq)]
 pub enum BudgetType {
     Weekly,
     Daily,
@@ -32,7 +32,7 @@ pub struct StepBudgets {
     /// A map from goal IDs to a vector of budget IDs associated with that goal
     pub budget_ids_map: HashMap<String, Vec<String>>,
     /// A map from goal IDs to the `StepBudget` objects associated with that goal.
-    pub budget_map: HashMap<String, StepBudget>,
+    pub budget_map: HashMap<String, Vec<StepBudget>>,
 }
 
 #[derive(Debug, Deserialize)]

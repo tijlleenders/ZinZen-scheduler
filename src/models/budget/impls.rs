@@ -63,17 +63,23 @@ impl StepBudgets {
         }
     }
 
-    /// Insert new Goal to the StepBudgets
+    /// Insert `goal`'s budgets into this [`StepBudgets`] budget map.
     pub fn insert_goal(&mut self, goal: &Goal) {
-        for budget in goal.budgets.clone().unwrap() {
-            let budget = StepBudget {
-                step_budget_type: budget.budget_type.clone(),
+        // create a step budget for each budget
+        let step_budgets = goal
+            .budgets
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|b| StepBudget {
+                step_budget_type: b.budget_type,
                 slot_budgets: Vec::new(),
-                min: budget.min,
-                max: budget.max,
-            };
-            self.budget_map.insert(goal.id.clone(), budget);
-        }
+                min: b.min,
+                max: b.max,
+            })
+            .collect();
+
+        self.budget_map.insert(goal.id.clone(), step_budgets);
     }
 }
 
