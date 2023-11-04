@@ -94,18 +94,18 @@ fn divide_half_a_day_in_days() {
 #[test]
 fn test_convert_day_object_from_string() {
     let day: Day = Day::from("Tue".to_string());
-    assert_eq!(day, Day::Tue);
+    assert_eq!(day, Day::Tuesday);
 
     let day: Day = Day::from("tue".to_string());
-    assert_eq!(day, Day::Tue);
+    assert_eq!(day, Day::Tuesday);
 
     let day: Day = Day::from("thu".to_string());
-    assert_eq!(day, Day::Thu);
+    assert_eq!(day, Day::Thursday);
 }
 
 #[test]
 fn test_convert_day_object_into_string() {
-    let fri_converted: String = Day::Fri.into();
+    let fri_converted: String = Day::Friday.into();
 
     let fri_str: String = "Fri".to_string();
     assert_eq!(fri_str, fri_converted);

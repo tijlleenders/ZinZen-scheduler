@@ -150,7 +150,7 @@ impl Slot {
     /// ```
     pub fn split_into_1h_slots(&self) -> Vec<Slot> {
         let mut result = vec![];
-        let duration = self.duration_as_hours();
+        let duration = self.span();
 
         for hour in 0..duration {
             result.push(Slot {
@@ -164,7 +164,7 @@ impl Slot {
     /// Split a Slot into list of slots based on given threshold.
     pub fn split_into_custom_hours(&self, threshold: usize) -> Vec<Slot> {
         let given_slot = *self;
-        let duration = given_slot.duration_as_hours();
+        let duration = given_slot.span();
         if threshold == 0 || threshold > duration {
             return vec![given_slot];
         }
@@ -282,7 +282,7 @@ pub fn split_crossed_tasks(tasks: &mut Vec<Task>) {
                 start: task.start,
                 end: task.deadline,
             }
-            .duration_as_hours();
+            .span();
             task2.duration -= task.duration;
 
             new_tasks.push(task.clone());

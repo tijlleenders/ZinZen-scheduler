@@ -24,7 +24,7 @@ impl Slot {
         let mut count: usize = 0;
 
         slots_list.iter().for_each(|slot| {
-            count += self.hours_intersecting_with_slot(slot);
+            count += self.intersection(slot);
         });
 
         SlotConflict {
@@ -87,7 +87,7 @@ impl Slot {
             return schedulable_slots
         */
         // ===
-        let slot_duration = self.duration_as_hours();
+        let slot_duration = self.span();
         let mut schedulable_slots = vec![];
 
         match slot_duration.cmp(&duration) {

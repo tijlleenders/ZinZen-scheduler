@@ -1,10 +1,10 @@
 //new module for outputting the result of step_placer in
 //whichever format required by front-end
+use crate::models::date::deserialize_normalized_date;
 use crate::models::goal::Tag;
 use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
-
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Task {
@@ -12,7 +12,9 @@ pub struct Task {
     pub goalid: String,
     pub title: String,
     pub duration: usize,
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub start: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub deadline: NaiveDateTime,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(skip)]

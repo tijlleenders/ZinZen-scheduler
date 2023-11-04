@@ -12,34 +12,40 @@ pub type GoalsMap = BTreeMap<String, Goal>;
 /// An aim or desired result someone wants to reach.  
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]
 pub struct Goal {
+    // mandatory fields
     /// The id passed by the frontend, usually a uuid.
     pub id: String,
     /// The title given to the Goal, ie "Run", "Read a book" or "Become a nuclear scientist".
     pub title: String,
+
+    // calculation of the slots
+    /// Schedule on calender after this datetime only.
+    #[serde(default)]
+    pub start: Option<NaiveDateTime>,
+    /// Goal has to be achieved until this datetime.
+    #[serde(default)]
+    pub deadline: Option<NaiveDateTime>,
     /// The minimum duration per Step towards the Goal.
     #[serde(default)]
     pub min_duration: Option<usize>,
     /// The maximum duration, if the other Goals allow for it.
     #[serde(default)]
     pub max_duration: Option<usize>,
-    /// Budgets that apply to this Goal, and all of its subGoals - if any.
-    #[serde(deserialize_with = "Goal::deserialize_budget_vec", default)]
-    pub budgets: Option<Vec<Budget>>,
+
+    // repeatability
     /// Repetition like 'daily' or 'weekly'.
     pub repeat: Option<Repetition>,
-    /// Schedule on calender after this datetime only.
-    #[serde(default)]
-    pub start: Option<NaiveDateTime>,
-    /// Goal has to be achieved by this datetime.
-    #[serde(default)]
-    pub deadline: Option<NaiveDateTime>,
-    /// Internal - should be private
-    #[serde(default)]
-    pub tags: Vec<Tag>,
+
+    // constraints
     /// Filters that reduce the potential Timeline of the Steps for this Goal.
     /// Examples: After 8, Weekends, not this afternoon
     #[serde(default)]
     pub filters: Option<TimeFilter>,
+    /// Budgets that apply to this Goal, and all of its subGoals - if any.
+    #[serde(deserialize_with = "Goal::deserialize_budget_vec", default)]
+    pub budgets: Option<Vec<Budget>>,
+
+    // additional stuff; yet not necessary for the algorithm
     /// Ids of the subGoals this Goal has - if any.
     /// Example: Goal 'Work' has subGoal 'ProjectA', which has subGoals 'Prepare for meeting', 'Meeting', etc...
     #[serde(default)]
@@ -47,18 +53,30 @@ pub struct Goal {
     /// If there is a specific order, this Goal can only be scheduled after certain other Goals complete.
     #[serde(default)]
     pub after_goals: Option<Vec<String>>,
+
+    // ???
+    /// Internal - should be private
+    #[serde(default)]
+    pub tags: Vec<Tag>,
 }
 
 /// Mon Tue Wed Thu Fri Sat Sun
 #[derive(Deserialize, Debug, Clone, PartialEq, PartialOrd, Ord, Eq)]
 pub enum Day {
-    Fri,
-    Sat,
-    Sun,
-    Mon,
-    Tue,
-    Wed,
-    Thu,
+    #[serde(rename = "Mon")]
+    Monday,
+    #[serde(rename = "Tue")]
+    Tuesday,
+    #[serde(rename = "Wed")]
+    Wednesday,
+    #[serde(rename = "Thu")]
+    Thursday,
+    #[serde(rename = "Fri")]
+    Friday,
+    #[serde(rename = "Sat")]
+    Saturday,
+    #[serde(rename = "Sun")]
+    Sunday,
 }
 
 /// Filters used to reduce the Timeline on which a Goal can be scheduled.
@@ -80,7 +98,7 @@ pub struct TimeFilter {
 /// Helper tags for the algorithm
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Tag {
-    Donotsplit,
+    DoNotSplit,
     Weekly,
     Optional,
     FlexDur,

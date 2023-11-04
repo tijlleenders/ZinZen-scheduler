@@ -4,6 +4,7 @@ use chrono::NaiveDateTime;
 use serde::Deserialize;
 
 use super::slot::Slot;
+use crate::models::date::deserialize_normalized_date;
 
 pub mod impls;
 
@@ -24,7 +25,9 @@ pub enum BudgetType {
 
 #[derive(Debug, Deserialize)] //Todo deserialize not needed as this is not in input, only TaskBudget is
 pub struct StepBudgets {
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_start: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_end: NaiveDateTime,
     /// A map from goal IDs to a vector of budget IDs associated with that goal
     pub budget_ids_map: HashMap<String, Vec<String>>,

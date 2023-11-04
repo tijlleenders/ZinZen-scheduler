@@ -10,13 +10,13 @@ impl From<String> for Day {
         info!("From<String> day-string: {:?}", day);
 
         match day.to_lowercase().as_str() {
-            "fri" => Day::Fri,
-            "sat" => Day::Sat,
-            "sun" => Day::Sun,
-            "mon" => Day::Mon,
-            "tue" => Day::Tue,
-            "wed" => Day::Wed,
-            "thu" => Day::Thu,
+            "fri" => Day::Friday,
+            "sat" => Day::Saturday,
+            "sun" => Day::Sunday,
+            "mon" => Day::Monday,
+            "tue" => Day::Tuesday,
+            "wed" => Day::Wednesday,
+            "thu" => Day::Thursday,
             _ => panic!("Invalid day selection"),
         }
     }
@@ -26,13 +26,13 @@ impl From<Day> for String {
     fn from(day: Day) -> Self {
         info!("From<Days> day: {:?}", day);
         match day {
-            Day::Fri => "Fri".into(),
-            Day::Sat => "Sat".into(),
-            Day::Sun => "Sun".into(),
-            Day::Mon => "Mon".into(),
-            Day::Tue => "Tue".into(),
-            Day::Wed => "Wed".into(),
-            Day::Thu => "Thu".into(),
+            Day::Friday => "Fri".into(),
+            Day::Saturday => "Sat".into(),
+            Day::Sunday => "Sun".into(),
+            Day::Monday => "Mon".into(),
+            Day::Tuesday => "Tue".into(),
+            Day::Wednesday => "Wed".into(),
+            Day::Thursday => "Thu".into(),
         }
     }
 }
