@@ -31,7 +31,7 @@ impl Step {
 
         let step_duration = self.duration;
         let flexibility = self.slots.iter().fold(0, |acc, slot| {
-            let slot_duration = slot.duration_as_hours();
+            let slot_duration = slot.span();
 
             if slot_duration >= step_duration {
                 acc + slot_duration - step_duration + 1

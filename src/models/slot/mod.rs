@@ -4,6 +4,7 @@ pub mod iterator;
 use chrono::{Datelike, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::fmt::{self, Debug, Display};
+use crate::models::date::deserialize_normalized_date;
 
 // TODO 2023-04-26  | Slot rules as below:
 // - A rule that slot.end must not be before slot.start
@@ -11,7 +12,9 @@ use std::fmt::{self, Debug, Display};
 
 #[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy, Deserialize)]
 pub struct Slot {
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub start: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub end: NaiveDateTime,
 }
 
