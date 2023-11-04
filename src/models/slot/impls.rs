@@ -1,10 +1,10 @@
 use super::Slot;
+use crate::models::date::slot_span;
 use chrono::NaiveDateTime;
 use std::{
     cmp::{max, min},
     ops::{Add, Sub},
 };
-use crate::models::date::slot_span;
 
 impl Sub for Slot {
     type Output = Vec<Slot>;

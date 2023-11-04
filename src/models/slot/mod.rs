@@ -1,10 +1,10 @@
 pub mod impls;
 pub mod iterator;
 
+use crate::models::date::deserialize_normalized_date;
 use chrono::{Datelike, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::fmt::{self, Debug, Display};
-use crate::models::date::deserialize_normalized_date;
 
 // TODO 2023-04-26  | Slot rules as below:
 // - A rule that slot.end must not be before slot.start

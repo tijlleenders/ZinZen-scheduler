@@ -161,14 +161,11 @@ fn test_hours_intersecting_with_slot() {
     let intersected_start_of_base = Slot::mock(duration, year, month, day - 1, 20, min);
     let not_intersected_with_base = Slot::mock(duration, year, month, day + 1, hour, min);
 
-    let is_intersected_start_of_base =
-        base_slot.intersection(&intersected_start_of_base);
+    let is_intersected_start_of_base = base_slot.intersection(&intersected_start_of_base);
 
-    let is_intersected_last_of_base =
-        base_slot.intersection(&intersected_last_of_base);
+    let is_intersected_last_of_base = base_slot.intersection(&intersected_last_of_base);
 
-    let is_not_intersected_with_base =
-        base_slot.intersection(&not_intersected_with_base);
+    let is_not_intersected_with_base = base_slot.intersection(&not_intersected_with_base);
 
     assert_eq!(is_intersected_last_of_base, 1);
     assert_eq!(is_intersected_start_of_base, 6);

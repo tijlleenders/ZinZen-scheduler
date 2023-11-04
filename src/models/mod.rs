@@ -15,7 +15,7 @@ pub mod slots_iterator;
 /// An Step for the realization of a Goal.
 pub mod step;
 
+pub mod date;
 pub mod timeline;
 /// Contains models used as a utility
 pub mod utils;
-pub mod date;
