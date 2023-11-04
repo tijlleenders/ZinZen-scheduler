@@ -11,7 +11,7 @@ pub fn is_date_between(date: &NaiveDateTime, start: &NaiveDateTime, end: &NaiveD
 }
 
 pub fn slot_span(start: &NaiveDateTime, end: &NaiveDateTime) -> usize {
-    end.signed_duration_since(*start).num_hours().abs() as usize
+    normalize_date(end).signed_duration_since(normalize_date(start)).num_hours().abs() as usize
 }
 
 pub fn deserialize_normalized_date<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>
