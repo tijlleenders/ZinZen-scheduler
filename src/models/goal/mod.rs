@@ -63,12 +63,19 @@ pub struct Goal {
 /// Mon Tue Wed Thu Fri Sat Sun
 #[derive(Deserialize, Debug, Clone, PartialEq, PartialOrd, Ord, Eq)]
 pub enum Day {
+    #[serde(rename = "Mon")]
     Monday,
+    #[serde(rename = "Tue")]
     Tuesday,
+    #[serde(rename = "Wed")]
     Wednesday,
+    #[serde(rename = "Thu")]
     Thursday,
+    #[serde(rename = "Fri")]
     Friday,
+    #[serde(rename = "Sat")]
     Saturday,
+    #[serde(rename = "Sun")]
     Sunday,
 }
 
