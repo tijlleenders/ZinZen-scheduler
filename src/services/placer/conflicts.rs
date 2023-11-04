@@ -235,7 +235,8 @@ mod tests {
             first_step,
             conflicting_step_1,
             conflicting_step_2,
-        ]).and_then(|v| v.first().cloned());
+        ])
+        .and_then(|v| v.first().cloned());
 
         assert_eq!(result, expected);
     }
@@ -288,7 +289,8 @@ mod tests {
             first_step,
             conflicting_step_1,
             conflicting_step_2,
-        ]).and_then(|v| v.first().cloned());
+        ])
+        .and_then(|v| v.first().cloned());
 
         assert_eq!(result, expected);
     }

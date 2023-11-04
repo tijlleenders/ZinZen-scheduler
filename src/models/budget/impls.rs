@@ -65,15 +65,17 @@ impl StepBudgets {
 
     /// Insert `goal`'s budgets into this [`StepBudgets`] budget map.
     pub fn insert_goal(&mut self, goal: &Goal) {
-
         // create a step budget for each budget
-        let step_budgets = goal.budgets.as_ref().unwrap()
+        let step_budgets = goal
+            .budgets
+            .as_ref()
+            .unwrap()
             .iter()
-            .map(|b| StepBudget { 
-                step_budget_type: b.budget_type, 
+            .map(|b| StepBudget {
+                step_budget_type: b.budget_type,
                 slot_budgets: Vec::new(),
                 min: b.min,
-                max: b.max, 
+                max: b.max,
             })
             .collect();
 

@@ -96,6 +96,7 @@ impl StepBudgets {
         //for each budget create a min step (and optional max step) per corresponding time period
         for (goal_id, step_budgets) in &self.budget_map {
             let goal = goals.get(goal_id).unwrap();
+            let mut repetition: Option<Repetition> = goal.repeat;
 
             if let Some(children) = &goal.children {
                 if !children.is_empty() {
@@ -112,13 +113,30 @@ impl StepBudgets {
             let duration = if let Some(duration) = goal.min_duration {
                 duration
             } else {
-                step_budgets
+                //TODO 2023-11-04 PR395 for issue388: this block does not work when there are both weekly and daily
+                // constraints, for which the weekly is the most constraining factor.
+                // however, this is a bug that has already been present so at this point we ignore it.
+                // documented bug to be fixed in https://github.com/tijlleenders/ZinZen-scheduler/issues/406
+                let daily_duration: usize = step_budgets
                     .iter()
-                    .map(|step_budget| step_budget.min.unwrap_or(0))
-                    .sum()
+                    .filter(|sb| sb.step_budget_type == BudgetType::Daily)
+                    .map(|sb| sb.min.unwrap_or(0))
+                    .sum();
+                if daily_duration > 0 {
+                    repetition = Some(Repetition::DAILY(daily_duration));
+                    daily_duration
+                } else {
+                    let weekly_duration: usize = step_budgets
+                        .iter()
+                        .filter(|sb| sb.step_budget_type == BudgetType::Weekly)
+                        .map(|sb| sb.min.unwrap_or(0))
+                        .sum();
+                    repetition = Some(Repetition::WEEKLY(weekly_duration));
+                    weekly_duration
+                }
             };
 
-            if duration <= 0 {
+            if duration == 0 {
                 continue;
             }
 
@@ -140,12 +158,8 @@ impl StepBudgets {
                     .max();
             }
 
-            /*
-            TODO 2023-07-4: Found issue that goal.repeat doesn't consider budget_type, which means will not repeat based on budget_type
-            - Related to PR https://github.com/tijlleenders/ZinZen-scheduler/pull/358
-            */
             let time_slots_iterator =
-                TimeSlotsIterator::new(start, deadline, goal.repeat, goal.filters.clone());
+                TimeSlotsIterator::new(start, deadline, repetition, goal.filters.clone());
 
             for timeline in time_slots_iterator {
                 if !timeline.slots.is_empty() {
@@ -174,8 +188,7 @@ impl StepBudgets {
                     // apply the duration threshold to the resulting steps
                     let mut thresholded_steps = steps
                         .iter()
-                        .map(|step| step.apply_duration_threshold(counter))
-                        .flatten()
+                        .flat_map(|step| step.apply_duration_threshold(counter))
                         .collect();
 
                     steps_result.append(&mut thresholded_steps);

@@ -95,17 +95,17 @@ impl Step {
 
         let mut remaining_duration = self.duration;
         while remaining_duration > 0 {
-            let step = Step { 
-                id: *counter, 
-                goal_id: self.goal_id.clone(), 
-                title: self.title.clone(), 
-                duration: self.duration.min(max_duration), 
-                status: StepStatus::ReadyToSchedule, 
-                flexibility: self.flexibility, 
-                start: self.start, 
-                deadline: self.deadline, 
-                slots: self.slots.clone(), 
-                tags: self.tags.clone(), 
+            let step = Step {
+                id: *counter,
+                goal_id: self.goal_id.clone(),
+                title: self.title.clone(),
+                duration: self.duration.min(max_duration),
+                status: StepStatus::ReadyToSchedule,
+                flexibility: self.flexibility,
+                start: self.start,
+                deadline: self.deadline,
+                slots: self.slots.clone(),
+                tags: self.tags.clone(),
                 after_goals: self.after_goals.clone(),
             };
 

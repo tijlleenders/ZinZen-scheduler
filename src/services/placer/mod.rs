@@ -74,7 +74,7 @@ fn do_the_scheduling(steps_to_place: &mut StepsToPlace, chosen_slots: Vec<Slot>)
         template_step.deadline = Some(slot.end);
 
         steps_to_place.steps.push(template_step.clone());
-        
+
         for step in steps_to_place.steps.iter_mut() {
             step.remove_conflicted_slots(*slot);
         }
