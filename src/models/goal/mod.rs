@@ -12,16 +12,13 @@ pub type GoalsMap = BTreeMap<String, Goal>;
 /// An aim or desired result someone wants to reach.  
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]
 pub struct Goal {
-
     // mandatory fields
-
     /// The id passed by the frontend, usually a uuid.
     pub id: String,
     /// The title given to the Goal, ie "Run", "Read a book" or "Become a nuclear scientist".
     pub title: String,
 
     // calculation of the slots
-
     /// Schedule on calender after this datetime only.
     #[serde(default)]
     pub start: Option<NaiveDateTime>,
@@ -36,12 +33,10 @@ pub struct Goal {
     pub max_duration: Option<usize>,
 
     // repeatability
-
     /// Repetition like 'daily' or 'weekly'.
     pub repeat: Option<Repetition>,
 
     // constraints
-
     /// Filters that reduce the potential Timeline of the Steps for this Goal.
     /// Examples: After 8, Weekends, not this afternoon
     #[serde(default)]
@@ -51,7 +46,6 @@ pub struct Goal {
     pub budgets: Option<Vec<Budget>>,
 
     // additional stuff; yet not necessary for the algorithm
-
     /// Ids of the subGoals this Goal has - if any.
     /// Example: Goal 'Work' has subGoal 'ProjectA', which has subGoals 'Prepare for meeting', 'Meeting', etc...
     #[serde(default)]
@@ -61,7 +55,6 @@ pub struct Goal {
     pub after_goals: Option<Vec<String>>,
 
     // ???
-
     /// Internal - should be private
     #[serde(default)]
     pub tags: Vec<Tag>,

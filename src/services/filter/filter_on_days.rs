@@ -140,7 +140,13 @@ mod tests {
 
         let start_time: u32 = 5;
 
-        let days_to_filter: Vec<Day> = vec![Day::Sunday, Day::Monday, Day::Tuesday, Day::Wednesday, Day::Thursday];
+        let days_to_filter: Vec<Day> = vec![
+            Day::Sunday,
+            Day::Monday,
+            Day::Tuesday,
+            Day::Wednesday,
+            Day::Thursday,
+        ];
 
         let timeline = Timeline {
             slots: vec![

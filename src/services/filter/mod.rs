@@ -100,8 +100,13 @@ mod tests {
         let after_time: Option<usize> = Some(after as usize);
         let before: u32 = 15;
         let before_time: Option<usize> = Some(before as usize);
-        let on_days: Option<Vec<Day>> =
-            Some(vec![Day::Sunday, Day::Monday, Day::Tuesday, Day::Wednesday, Day::Thursday]);
+        let on_days: Option<Vec<Day>> = Some(vec![
+            Day::Sunday,
+            Day::Monday,
+            Day::Tuesday,
+            Day::Wednesday,
+            Day::Thursday,
+        ]);
         let not_on: Option<Vec<Slot>> = Some(vec![
             Slot::mock(Duration::hours(10), year, month, 2, after, 0),
             Slot::mock(Duration::hours(10), year, month, 6, after, 0),
