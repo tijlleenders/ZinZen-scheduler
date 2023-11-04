@@ -1,6 +1,7 @@
 pub mod impls;
 pub mod iterator;
 
+use crate::models::date::deserialize_normalized_date;
 use chrono::{Datelike, NaiveDateTime, Timelike};
 use serde::Deserialize;
 use std::fmt::{self, Debug, Display};
@@ -11,7 +12,9 @@ use std::fmt::{self, Debug, Display};
 
 #[derive(Eq, PartialEq, Ord, PartialOrd, Clone, Copy, Deserialize)]
 pub struct Slot {
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub start: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub end: NaiveDateTime,
 }
 

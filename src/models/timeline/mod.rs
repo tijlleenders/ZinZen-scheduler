@@ -106,7 +106,7 @@ impl Timeline {
             let timeline_slots = self.slots.clone();
             match timeline_slots
                 .iter()
-                .find(|slot| slot.is_contains_slot(&slot_to_filter))
+                .find(|slot| slot.contains_slot(&slot_to_filter))
             {
                 Some(overlapped_timeline_slot) => {
                     let slots_after_subtraction = *overlapped_timeline_slot - slot_to_filter;

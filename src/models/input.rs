@@ -1,5 +1,6 @@
 use super::goal::GoalsMap;
 use crate::models::budget::StepBudgets;
+use crate::models::date::deserialize_normalized_date;
 use crate::models::step::Step;
 use chrono::prelude::*;
 use serde::Deserialize;
@@ -11,15 +12,19 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 pub struct Input {
     #[serde(rename = "startDate")]
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_start: NaiveDateTime,
     #[serde(rename = "endDate")]
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_end: NaiveDateTime,
     pub goals: GoalsMap,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct StepsToPlace {
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_start: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_end: NaiveDateTime,
     pub steps: Vec<Step>,
     pub step_budgets: StepBudgets,
@@ -27,7 +32,9 @@ pub struct StepsToPlace {
 
 #[derive(Deserialize, Debug)]
 pub struct PlacedSteps {
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_start: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_normalized_date")]
     pub calendar_end: NaiveDateTime,
     pub steps: Vec<Step>,
 }

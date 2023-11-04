@@ -1,4 +1,5 @@
 use super::Slot;
+use crate::models::date::slot_span;
 use chrono::NaiveDateTime;
 use std::{
     cmp::{max, min},
@@ -71,26 +72,21 @@ impl Slot {
         Slot { start, end }
     }
 
-    pub fn duration_as_hours(&self) -> usize {
-        (self.end - self.start).num_hours() as usize
+    pub fn span(&self) -> usize {
+        slot_span(&self.start, &self.end)
     }
 
-    pub fn is_conflicts_with(&self, other_slot: &Slot) -> bool {
+    pub fn conflicts_with(&self, other_slot: &Slot) -> bool {
         !((self.start < other_slot.start && self.end <= other_slot.start)
             || (self.start >= other_slot.end && self.end > other_slot.end))
     }
 
-    pub fn is_contains_slot(&self, other: &Slot) -> bool {
+    pub fn contains_slot(&self, other: &Slot) -> bool {
         (other.start >= self.start) && (other.end <= self.end)
     }
 
-    pub fn hours_intersecting_with_slot(&self, other: &Slot) -> usize {
+    pub fn intersection(&self, other: &Slot) -> usize {
         let overlap = min(self.end, other.end) - max(self.start, other.start);
-
-        if overlap.num_hours().is_positive() {
-            usize::try_from(overlap.num_hours()).unwrap()
-        } else {
-            0
-        }
+        overlap.num_hours().max(0) as usize
     }
 }
