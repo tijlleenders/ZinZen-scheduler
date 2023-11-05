@@ -58,5 +58,6 @@ Decrease budget if the goal corresponding to the step has one,
 
 ### 4) Repeat step step 1 2 and 3 until fully scheduled
 
-### 8) See if each minimum budget is reached
-If not: generate filler steps for that goal budget time period and schedule them, repeating steps 3 to 6 for the newly generated steps.
+
+### 5) See if each maximum budget is reached
+If not: generate filler steps for that goal budget time period and schedule them, repeating steps 1 2 and 3 for the newly generated steps. Any of these Steps that are impossible to place can be discarded - as these are optional to 'top up' - the minimum Budgets have already been satisfied.
