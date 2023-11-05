@@ -45,18 +45,22 @@ Calculate the flexibility of each Step, based upon the currently available Timel
 
 ### 2) Schedule steps with flexibility 1
 They can only be scheduled on 1 place: we need to schedule them immediately.
-Remove the scheduled Slot from the Timeline of any Steps that still had this Slot (or part of it) as 'available'.  
-Decrease budget if the goal corresponding to the step has one.  
 
 ### 3) If no steps with flexibility 1, schedule the step with the largest flexibility
 Schedule it at a timeslot that has no conflict with other unscheduled steps. 
 If not possible choose the timeslot with the least conflicts.
-Update flexibility for remaining steps (+ remove slot from those steps).
-Decrease budget if the goal corresponding to the step has one,
+
+### 4) Update Timeline of other Steps where needed  
+Remove the scheduled Slot(s) from the Timeline of any Steps that still had the Slot(s) (or part of it) as 'available'.  
 
 
-### 4) Repeat step step 1 2 and 3 until fully scheduled
+### 5) Update Budgets and Budget Steps  
+
+Decrease budget if the goal corresponding to the step has one, and remove any minimum Budget Steps for corresponding period and duration.
 
 
-### 5) See if each maximum budget is reached
+### 6) Repeat step step 1-5 until fully scheduled or impossible
+
+
+### 7) See if each maximum budget is reached
 If not: generate filler steps for that goal budget time period and schedule them, repeating steps 1 2 and 3 for the newly generated steps. Any of these Steps that are impossible to place can be discarded - as these are optional to 'top up' - the minimum Budgets have already been satisfied.
