@@ -1,9 +1,9 @@
 ## ZinZen algorithm
 
-this document contains a high-level overview of the scheduling algorithm
+This document contains a high-level overview of the scheduling algorithm
 
 ### Given: goals and budgets
-we start with defined goals with constraints and modifiers.
+We start with defined goals with constraints and modifiers.
 We can also have budgets with a minimum and a maximum amount of time to spend on a goal in a given timeframe
 (e.g. spend between 4 and 8 hours weekly of studying Rust)  
 
@@ -20,7 +20,7 @@ Extract any budgets - and register which Goals need to respect which budgets for
 A single Goal can have multiple budgets. A budget can impact multiple Goals.   
   
 ### 2) Process Goals and Budgets into Steps
-goals are processed to form concrete steps. Modifiers are parsed.
+Goals are processed to form concrete steps. Modifiers are parsed.
 e.g. 'run 4 hours every week' generates a step 'run 4 hours between monday and sunday' for every
 week between the start and end date.
 
@@ -46,7 +46,7 @@ Update flexibility for remaining steps (+ remove slot from those steps).
 Decrease budget if the goal corresponding to the step has one,
 
 
-### 7) Repeat step step 5 and 6 until fully scheduled
+### 7) Repeat step step 4 5 and 6 until fully scheduled
 
 ### 8) See if each minimum budget is reached
-if not: generate filler steps for that goal budget time period and schedule them, repeating steps 3 to 6 for the newly generated steps.
+If not: generate filler steps for that goal budget time period and schedule them, repeating steps 3 to 6 for the newly generated steps.
