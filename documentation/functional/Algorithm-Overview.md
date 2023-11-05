@@ -41,12 +41,12 @@ These slots can be much larger than the required time; it represents the time sl
 ## Running the 'placing' algorithm
 
 ### 1) Calculate flexibility
-From the results of the previous step, calculate the flexibility of each step
+Calculate the flexibility of each Step, based upon the currently available Timeline with possible Slots.
 
 ### 2) Schedule steps with flexibility 1
 They can only be scheduled on 1 place: we need to schedule them immediately.
-Update flexibility for remaining steps (+ remove slot from those steps).
-Decrease budget if the goal corresponding to the step has one,
+Remove the scheduled Slot from the Timeline of any Steps that still had this Slot (or part of it) as 'available'.  
+Decrease budget if the goal corresponding to the step has one.  
 
 ### 3) If no steps with flexibility 1, schedule the step with the largest flexibility
 Schedule it at a timeslot that has no conflict with other unscheduled steps. 
