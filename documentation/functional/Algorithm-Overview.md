@@ -13,7 +13,7 @@ We start with defined goals with constraints and modifiers.
 We can also have budgets with a minimum and a maximum amount of time to spend on a goal per day and per week (e.g. spend between 4 to 8 hours weekly of studying Rust, but 0-2 hours per day to keep it effective).  
 
 ### 1) Add filler Goals if required  
-The Goals and Budgets are presented in a Directed Acyclic Graph (DAG), like a tree. Only the Goals at the 'bottom of the DAG' will be considered for generating Steps. We call these the 'leaves' of the tree.  
+The Goals and Budgets are presented in a Directed Acyclic Graph (DAG), like a tree. Only the Goals at the 'bottom of the DAG' will be considered for generating Filler Goals. We call these the 'leaves' of the tree.  
 Sometimes a leaf Goal does not 'consume' all the hours of its parent Goal.  
 In those cases a 'filler Goal' is required as a 'brother/sister' of the leaf Goal to add the remaining hours.  
 Example:  
