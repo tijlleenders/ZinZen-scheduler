@@ -8,9 +8,9 @@ It has two parts:
 
 ## Preparation of Steps and Budgets
 
-### Given: Goals and budgets
+### Given: Goals and Budgets
 We start with defined Goals with constraints and modifiers.
-We can also have budgets with a minimum and a maximum amount of time to spend on a Goal per day and per week (e.g. spend between 4 to 8 hours weekly of studying Rust, but 0-2 hours per day to keep it effective).  
+We can also have Budgets with a minimum and a maximum amount of time to spend on a Goal per day and per week (e.g. spend between 4 to 8 hours weekly of studying Rust, but 0-2 hours per day to keep it effective).  
 
 ### 1) Add filler Goals if required  
 The Goals and Budgets are presented in a Directed Acyclic Graph (DAG), like a tree. Only the Goals at the 'bottom of the DAG' will be considered for generating Filler Goals. We call these the 'leaves' of the tree.  
@@ -21,8 +21,8 @@ Goal 'Project X 20 hours' has a _only_ a subGoal 'Make project planning 3 hours'
 A 'filler Goal' of 'Project X 17 hours' is required next to the planning subGoal.
   
 ### 2) Extract Budgets
-Extract any budgets - and register which Goals need to respect which budgets for which time periods. All the Steps generated from the subGoals/children of a Budget need to comply to the Budget - and that's why they need a single budget coordination point.  
-A single Goal can have multiple budgets. A budget can impact multiple Goals.   
+Extract any Budgets - and register which Goals need to respect which Budgets for which time periods. All the Steps generated from the subGoals/children of a Budget need to comply to the Budget - and that's why they need a single Budget coordination point.  
+A single Goal can have multiple Budgets. A Budget can impact multiple Goals.   
   
 ### 3) Process Goals and Budgets into Steps
 Goals are processed to form concrete Steps. Modifiers are parsed.
@@ -32,7 +32,7 @@ week between the start and end date.
 Goals with durations <= 8 hours are kept as a single block. Goals with a longer duration are split into 1-hour sized Steps.  
 
 Budgets can also generate Steps - irrespective of their place in the hierarchy. They are only placed after all 'regular' Steps are placed.  
-NB!: Whenever a 'regular' Step belonging to the Budget is placed, any corresponding budget Steps get removed for the corresponding time periods and durations.  
+NB!: Whenever a 'regular' Step belonging to the Budget is placed, any corresponding Budget Steps get removed for the corresponding time periods and durations.  
 
 ### 4) Generate slots
 Go over the timeline and - for each Step - calculate all the time slots that are available for that Step.  
@@ -56,11 +56,11 @@ Remove the scheduled Slot(s) from the Timeline of any Steps that still had the S
 
 ### 5) Update Budgets and Budget Steps  
 
-Decrease budget if the Goal corresponding to the Step has one, and remove any minimum Budget Steps for corresponding period and duration.
+Decrease Budget if the Goal corresponding to the Step has one, and remove any minimum Budget Steps for corresponding period and duration.
 
 
 ### 6) Repeat 1-5 until fully scheduled or impossible
 
 
-### 7) See if each maximum budget is reached
-If not: generate filler Steps for that Goal budget time period and schedule them, repeating 1-5 for the newly generated Steps. Any of these Steps that are impossible to place can be discarded - as these are optional to 'top up' - the minimum Budgets have already been satisfied.
+### 7) See if each maximum Budget is reached
+If not: generate filler Steps for that Goal Budget time period and schedule them, repeating 1-5 for the newly generated Steps. Any of these Steps that are impossible to place can be discarded - as these are optional to 'top up' - the minimum Budgets have already been satisfied.
