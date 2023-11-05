@@ -10,8 +10,7 @@ It has two parts:
 
 ### Given: goals and budgets
 We start with defined goals with constraints and modifiers.
-We can also have budgets with a minimum and a maximum amount of time to spend on a goal in a given timeframe
-(e.g. spend between 4 and 8 hours weekly of studying Rust)  
+We can also have budgets with a minimum and a maximum amount of time to spend on a goal per day and per week (e.g. spend between 4 to 8 hours weekly of studying Rust, but 0-2 hours per day to keep it effective).  
 
 ### 1) Add filler Goals if required  
 The Goals and Budgets are presented in a Directed Acyclic Graph (DAG), like a tree. Only the Goals at the 'bottom of the DAG' will be considered for generating Steps. We call these the 'leaves' of the tree.  
