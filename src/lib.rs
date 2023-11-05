@@ -64,11 +64,9 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
-use errors::Error;
 use models::input::Input;
 use models::output::FinalTasks;
-use services::placer::step_placer;
-use services::preprocess::generate_steps_to_place;
+use std::ops::Sub;
 use wasm_bindgen::prelude::*;
 
 mod errors;
@@ -76,13 +74,17 @@ mod errors;
 pub mod mocking;
 /// The data structures
 pub mod models;
+pub mod new_models;
 /// The services handling the data structures
 pub mod services;
 
 #[cfg(test)]
 mod tests;
 
-use crate::services::output::output_formatter;
+use crate::models::date::{inc_span, is_date_between};
+use crate::models::goal::{Goal, TimeFilter};
+use crate::models::output::{DayTasks, Task};
+use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime, NaiveTime};
 #[cfg(feature = "with-logging")]
 use std::sync::Once;
 
@@ -118,6 +120,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 }
 
 /// The main binary function to call
+#[cfg(not(feature = "new-scheduler"))]
 pub fn run_scheduler(input: Input) -> FinalTasks {
     #[cfg(feature = "with-logging")]
     initialize_logger();
@@ -142,6 +145,52 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
     }
 }
 
+#[cfg(feature = "new-scheduler")]
+pub fn run_scheduler(input: Input) -> FinalTasks {
+    #[cfg(feature = "with-logging")]
+    initialize_logger();
+
+    // new scheduler
+    let mut flexibilities = input
+        .goals
+        .iter()
+        .map(|(_, goal)| {
+            let mut slots = generate_slots(&input);
+            apply_goal_to_slots(&mut slots, goal);
+            let flexibility = slots.iter().fold(0_usize, |num, slot| match slot {
+                Slot::Goal(_, _) => num + 1,
+                _ => num,
+            });
+            Flexibility { flexibility, slots }
+        })
+        .collect::<Vec<_>>();
+
+    flexibilities.sort_by(|a, b| a.flexibility.cmp(&b.flexibility));
+    // flexibilities.iter().for_each(|f| println!("{f:?}"));
+
+    let mut slots = generate_slots(&input);
+    for flexibility in flexibilities.iter() {
+        apply_flexibility_to_slots(&mut slots, flexibility);
+    }
+
+    let mut tasks = vec![];
+    gather_tasks(&mut tasks, &slots);
+
+    let out = FinalTasks {
+        scheduled: vec![DayTasks {
+            day: tasks[0].start.date(),
+            tasks: tasks.clone(),
+        }],
+        impossible: vec![DayTasks {
+            day: tasks[0].start.date(),
+            tasks: vec![],
+        }],
+    };
+    // new scheduler - end
+
+    out
+}
+
 /* TODO DEBUG NOTES
 
 IDEA: This is to uniform location for notes related to similar bugs/concepts/issues/ideas in many files or modules.
@@ -157,3 +206,161 @@ IDEA: This is to uniform location for notes related to similar bugs/concepts/iss
 more out of deadline than it should.
 
 */
+
+use crate::new_models::flexibility::Flexibility;
+use crate::new_models::slot::Slot;
+fn generate_slots(input: &Input) -> Vec<Slot> {
+    let mut out = vec![Slot::Empty(input.calendar_start.clone())];
+
+    while out
+        .last()
+        .unwrap()
+        .date()
+        .lt(&input.calendar_end.sub(Duration::hours(1)))
+    {
+        out.push(Slot::Empty(inc_span(out.last().unwrap().date())))
+    }
+
+    out
+}
+
+fn apply_goal_to_slots<'a, 'b: 'a>(slots: &'a mut Vec<Slot<'b>>, goal: &'b Goal) {
+    for slot in &mut *slots {
+        if !is_in_filter(slot, &goal.filters) {
+            continue;
+        }
+        // continue if it doesn't fit into the slot
+        match (goal.start, goal.deadline) {
+            (Some(ref start), Some(ref end)) => {
+                if !is_date_between(slot.date(), start, end) {
+                    continue;
+                }
+            }
+            (Some(ref start), _) => {
+                if slot.date().lt(start) {
+                    continue;
+                }
+            }
+            (_, Some(ref end)) => {
+                if slot.date().ge(end) {
+                    continue;
+                }
+            }
+            _ => {}
+        }
+        *slot = Slot::Goal(slot.date().clone(), goal);
+    }
+}
+
+fn apply_flexibility_to_slots<'a, 'b: 'a>(
+    slots: &'a mut Vec<Slot<'b>>,
+    flexibility: &'b Flexibility<'b>,
+) {
+    let filtered_slots = flexibility
+        .slots
+        .iter()
+        .filter(|&slot| {
+            if let Slot::Goal(_, _) = slot {
+                true
+            } else {
+                false
+            }
+        })
+        .collect::<Vec<_>>();
+
+    let mut span = 0_usize;
+    'a_loop: for slot in slots {
+        if let Slot::Goal(_, _) = slot {
+            continue;
+        }
+        for &f_slot in &filtered_slots {
+            if f_slot.date().eq(slot.date()) {
+                let goal = f_slot.goal().unwrap();
+                span += 1;
+                if span <= goal.min_duration.unwrap_or(1) {
+                    *slot = f_slot.clone();
+                    // println!("{slot:?}");
+                } else {
+                    break 'a_loop;
+                }
+            }
+        }
+    }
+}
+
+fn is_in_filter(slot: &mut Slot, filter: &Option<TimeFilter>) -> bool {
+    // println!("{filter:?}");
+    if let Some(filter) = filter {
+        is_date_between(
+            slot.date(),
+            &get_date_by_hour(slot.date(), filter.after_time.unwrap()),
+            &get_date_by_hour(slot.date(), filter.before_time.unwrap()),
+        )
+    } else {
+        false
+    }
+}
+fn get_date_by_hour(date: &NaiveDateTime, hour: usize) -> NaiveDateTime {
+    NaiveDateTime::new(
+        NaiveDate::from_ymd_opt(date.year(), date.month(), date.day()).unwrap(),
+        NaiveTime::from_hms_opt(hour as u32, 0, 0).unwrap(),
+    )
+}
+
+fn gather_tasks<'a, 'b: 'a>(tasks: &'a mut Vec<Task>, slots: &'b Vec<Slot<'b>>) {
+    if slots.is_empty() {
+        return;
+    }
+
+    let mut taskid = 0;
+    let mut task = {
+        let slot = &slots[0];
+        if let Some(goal) = slot.goal() {
+            create_task(taskid, goal.id.clone(), goal.title.clone(), slot.date())
+        } else {
+            create_task(taskid, "free".to_owned(), "free".to_owned(), slot.date())
+        }
+    };
+
+    for idx in 1..slots.len() {
+        let slot = &slots[idx];
+        if let Some(goal) = slot.goal() {
+            if task.goalid.eq("free") {
+                tasks.push(task.clone());
+                taskid += 1;
+                task = create_task(taskid, goal.id.clone(), goal.title.clone(), slot.date());
+            } else if task.goalid.ne(&goal.id) {
+                tasks.push(task.clone());
+                taskid += 1;
+                task = create_task(taskid, goal.id.clone(), goal.title.clone(), slot.date());
+            } else {
+                task.duration += 1;
+                task.deadline = inc_span(&task.deadline);
+            }
+        } else {
+            if task.goalid.eq("free") {
+                task.duration += 1;
+                task.deadline = inc_span(&task.deadline);
+            } else {
+                tasks.push(task.clone());
+                taskid += 1;
+                task = create_task(taskid, "free".to_owned(), "free".to_owned(), slot.date());
+            }
+        }
+    }
+
+    tasks.push(task);
+}
+
+fn create_task(id: usize, goalid: String, title: String, start: &NaiveDateTime) -> Task {
+    Task {
+        taskid: id,
+        goalid,
+        title,
+        duration: 1,
+        start: start.clone(),
+        deadline: inc_span(start),
+        tags: vec![],
+        impossible: false,
+    }
+}

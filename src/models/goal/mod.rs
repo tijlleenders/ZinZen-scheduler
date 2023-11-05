@@ -3,11 +3,11 @@ pub mod impls;
 use crate::models::repetition::Repetition;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use std::{collections::BTreeMap, option::Option};
+use std::{collections::HashMap, option::Option};
 
 use super::{budget::Budget, slot::Slot};
 
-pub type GoalsMap = BTreeMap<String, Goal>;
+pub type GoalsMap = HashMap<String, Goal>;
 
 /// An aim or desired result someone wants to reach.  
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]

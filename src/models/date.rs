@@ -1,5 +1,6 @@
-use chrono::{NaiveDateTime, NaiveTime, Timelike};
+use chrono::{Duration, NaiveDateTime, NaiveTime, Timelike};
 use serde::{Deserialize, Deserializer};
+use std::ops::Add;
 
 // date functions
 /// trim NaiveDateTime down to the hour
@@ -18,6 +19,10 @@ pub fn slot_span(start: &NaiveDateTime, end: &NaiveDateTime) -> usize {
         .signed_duration_since(normalize_date(start))
         .num_hours()
         .unsigned_abs() as usize
+}
+
+pub fn inc_span(date: &NaiveDateTime) -> NaiveDateTime {
+    date.add(Duration::hours(1))
 }
 
 pub fn deserialize_normalized_date<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>

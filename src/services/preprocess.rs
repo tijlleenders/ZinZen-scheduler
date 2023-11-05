@@ -6,7 +6,7 @@ use crate::models::{
     step::Step,
 };
 use chrono::NaiveDateTime;
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 
 // Todo 2023-05-05  | Move preprocessing Goals into separate module(s) - generating Steps then becomes simple
 /// Preprocesses the hierarchy of goals, then for each Goal call Goal.generate_steps
@@ -76,7 +76,7 @@ fn populate_goal_dates(
 /// Generate new goals based on given goals' FlexWeekly repetition
 /// - Note: this function generating goals for goals with FlexWeekly repetition only
 fn generate_flex_weekly_goals(goals: &mut GoalsMap) {
-    let mut generated_goals: GoalsMap = BTreeMap::new();
+    let mut generated_goals: GoalsMap = HashMap::new();
     for (goal_id, goal) in goals.iter_mut() {
         if let Some(Repetition::FLEX_WEEKLY(min, max)) = goal.repeat {
             //Flex repeat goals are handled as follows:
@@ -109,7 +109,7 @@ fn generate_flex_weekly_goals(goals: &mut GoalsMap) {
 }
 
 fn add_filler_goals(goals: &mut GoalsMap) {
-    let mut results: GoalsMap = BTreeMap::new();
+    let mut results: GoalsMap = HashMap::new();
     let mut ignore: Vec<String> = Vec::new();
     let mut children_to_add: Vec<(String, String)> = Vec::new();
     for goal in goals.iter() {
@@ -165,7 +165,7 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
 #[cfg(test)]
 mod tests {
     mod generate_flex_weekly_goals {
-        use std::collections::BTreeMap;
+        use std::collections::{BTreeMap, HashMap};
 
         use chrono::Duration;
 
@@ -207,7 +207,7 @@ mod tests {
             input_goal.min_duration = Some(8);
             input_goal.repeat = Some(Repetition::FLEX_WEEKLY(1, 3));
 
-            let mut input_goals: GoalsMap = BTreeMap::new();
+            let mut input_goals: GoalsMap = HashMap::new();
             input_goals.insert(input_goal.id.clone(), input_goal);
 
             generate_flex_weekly_goals(&mut input_goals);
