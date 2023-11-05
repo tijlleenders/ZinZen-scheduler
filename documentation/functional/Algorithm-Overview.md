@@ -70,4 +70,4 @@ If not: generate filler Steps for that Goal Budget time period and schedule them
 ### Why this algorithm?
 If you'r not convinced this algorithm is good - please suggest a better one. I'm all ears!  
 Here's a short explanation / test case to show that working from most flexible to least flexible works out better in practice:  
-<img src="/documentation/functional/why-most-flex-to-least-is-better.png" alt="Why-this-is-better" width="400"/>
+<img src="/documentation/functional/why-most-flex-to-least-is-better.png" alt="Why-this-is-better" width="800"/>
