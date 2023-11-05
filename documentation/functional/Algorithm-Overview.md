@@ -64,3 +64,10 @@ Decrease Budget if the Goal corresponding to the Step has one, and remove any mi
 
 ### 7) See if each maximum Budget is reached
 If not: generate filler Steps for that Goal Budget time period and schedule them, repeating 1-5 for the newly generated Steps. Any of these Steps that are impossible to place can be discarded - as these are optional to 'top up' - the minimum Budgets have already been satisfied.
+
+
+
+### Why this algorithm?
+If you'r not convinced this algorithm is good - please suggest a better one. I'm all ears!  
+Here's a short explanation / test case to show that working from most flexible to least flexible works out better in practice:  
+<img src="/documentation/functional/why-most-flex-to-least-is-better.png" alt="Why-this-is-better" width="400"/>
