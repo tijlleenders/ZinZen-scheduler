@@ -5,13 +5,12 @@
     "1": {
       "id": "1",
       "title": "work",
-      "budgets": [
-        {
-          "budget_type": "Weekly",
-          "min": 35,
-          "max": 40
-        }
-      ]
+      "budget": {
+        "minPerDay": 0,
+        "maxPerDay": 24,
+        "minPerWeek": 35,
+        "maxPerWeek": 40
+      }
     }
   }
 }

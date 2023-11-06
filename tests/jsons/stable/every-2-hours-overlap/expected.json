@@ -1,7 +1,9 @@
 {
-    "scheduled": [{
+    "scheduled": [
+        {
             "day": "2022-11-21",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 0,
                     "goalid": "1",
                     "title": "check on baby",
@@ -85,7 +87,8 @@
         },
         {
             "day": "2022-11-22",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 10,
                     "goalid": "1",
                     "title": "check on baby",
@@ -168,7 +171,8 @@
             ]
         }
     ],
-    "impossible": [{
+    "impossible": [
+        {
             "day": "2022-11-21",
             "tasks": []
         },

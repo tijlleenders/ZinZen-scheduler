@@ -1,0 +1,103 @@
+{
+    "scheduled": [
+        {
+            "day": "2022-11-19",
+            "tasks": [
+                {
+                    "taskid": 0,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 8,
+                    "start": "2022-11-19T00:00:00",
+                    "deadline": "2022-11-19T08:00:00"
+                },
+                {
+                    "taskid": 1,
+                    "goalid": "1",
+                    "title": "drink water",
+                    "duration": 1,
+                    "start": "2022-11-19T08:00:00",
+                    "deadline": "2022-11-19T09:00:00"
+                },
+                {
+                    "taskid": 2,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 1,
+                    "start": "2022-11-19T09:00:00",
+                    "deadline": "2022-11-19T10:00:00"
+                },
+                {
+                    "taskid": 3,
+                    "goalid": "1",
+                    "title": "drink water",
+                    "duration": 1,
+                    "start": "2022-11-19T10:00:00",
+                    "deadline": "2022-11-19T11:00:00"
+                },
+                {
+                    "taskid": 4,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 1,
+                    "start": "2022-11-19T11:00:00",
+                    "deadline": "2022-11-19T12:00:00"
+                },
+                {
+                    "taskid": 5,
+                    "goalid": "1",
+                    "title": "drink water",
+                    "duration": 1,
+                    "start": "2022-11-19T12:00:00",
+                    "deadline": "2022-11-19T13:00:00"
+                },
+                {
+                    "taskid": 6,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 1,
+                    "start": "2022-11-19T13:00:00",
+                    "deadline": "2022-11-19T14:00:00"
+                },
+                {
+                    "taskid": 7,
+                    "goalid": "1",
+                    "title": "drink water",
+                    "duration": 1,
+                    "start": "2022-11-19T14:00:00",
+                    "deadline": "2022-11-19T15:00:00"
+                },
+                {
+                    "taskid": 8,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 1,
+                    "start": "2022-11-19T15:00:00",
+                    "deadline": "2022-11-19T16:00:00"
+                },
+                {
+                    "taskid": 9,
+                    "goalid": "1",
+                    "title": "drink water",
+                    "duration": 1,
+                    "start": "2022-11-19T16:00:00",
+                    "deadline": "2022-11-19T17:00:00"
+                },
+                {
+                    "taskid": 10,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 7,
+                    "start": "2022-11-19T17:00:00",
+                    "deadline": "2022-11-20T00:00:00"
+                }
+            ]
+        }
+    ],
+    "impossible": [
+        {
+            "day": "2022-11-19",
+            "tasks": []
+        }
+    ]
+}

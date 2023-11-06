@@ -5,8 +5,12 @@
     "1": {
       "id": "1",
       "title": "piano practice",
-      "min_duration": 2,
-      "repeat": "1/week",
+      "budget": {
+        "minPerDay": 2,
+        "maxPerDay": 2,
+        "minPerWeek": 2,
+        "maxPerWeek": 2
+      },
       "filters": {
         "after_time": 12,
         "before_time": 14,

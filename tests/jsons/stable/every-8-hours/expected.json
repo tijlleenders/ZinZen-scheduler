@@ -1,7 +1,9 @@
 {
-    "scheduled": [{
+    "scheduled": [
+        {
             "day": "2022-11-19",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 0,
                     "goalid": "1",
                     "title": "drink water",
@@ -53,7 +55,8 @@
         },
         {
             "day": "2022-11-20",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 6,
                     "goalid": "1",
                     "title": "drink water",
@@ -105,7 +108,8 @@
         },
         {
             "day": "2022-11-21",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 12,
                     "goalid": "1",
                     "title": "drink water",
@@ -156,7 +160,8 @@
             ]
         }
     ],
-    "impossible": [{
+    "impossible": [
+        {
             "day": "2022-11-19",
             "tasks": []
         },
