@@ -1,13 +1,16 @@
 use chrono::{Duration, NaiveDateTime, NaiveTime, Timelike};
 use serde::{Deserialize, Deserializer};
-use std::ops::Add;
+use std::ops::{Add, Sub};
 
 // date functions
 /// trim NaiveDateTime down to the hour
 pub fn normalize_date(date: &NaiveDateTime) -> NaiveDateTime {
+    create_date_by_hour(date, date.hour() as usize)
+}
+pub fn create_date_by_hour(date: &NaiveDateTime, hour: usize) -> NaiveDateTime {
     NaiveDateTime::new(
         date.date(),
-        NaiveTime::from_hms_opt(date.time().hour(), 0, 0).unwrap(),
+        NaiveTime::from_hms_opt(hour as u32, 0, 0).unwrap(),
     )
 }
 pub fn is_date_between(date: &NaiveDateTime, start: &NaiveDateTime, end: &NaiveDateTime) -> bool {
@@ -22,7 +25,16 @@ pub fn slot_span(start: &NaiveDateTime, end: &NaiveDateTime) -> usize {
 }
 
 pub fn inc_span(date: &NaiveDateTime) -> NaiveDateTime {
-    date.add(Duration::hours(1))
+    inc_span_by(date, 1)
+}
+pub fn inc_span_by(date: &NaiveDateTime, by: i64) -> NaiveDateTime {
+    date.add(Duration::hours(by))
+}
+pub fn dec_span(date: &NaiveDateTime) -> NaiveDateTime {
+    dec_span_by(date, 1)
+}
+pub fn dec_span_by(date: &NaiveDateTime, by: i64) -> NaiveDateTime {
+    date.sub(Duration::hours(by))
 }
 
 pub fn deserialize_normalized_date<'de, D>(deserializer: D) -> Result<NaiveDateTime, D::Error>

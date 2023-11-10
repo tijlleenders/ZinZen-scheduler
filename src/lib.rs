@@ -81,7 +81,7 @@ pub mod services;
 #[cfg(test)]
 mod tests;
 
-use crate::models::date::{inc_span, is_date_between};
+use crate::models::date::{create_date_by_hour, dec_span_by, inc_span, inc_span_by, is_date_between, normalize_date};
 use crate::models::goal::{Goal, TimeFilter};
 use crate::models::output::{DayTasks, Task};
 use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime, NaiveTime};
@@ -150,27 +150,28 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
     #[cfg(feature = "with-logging")]
     initialize_logger();
 
-    // new scheduler
-    let mut flexibilities = input
-        .goals
-        .iter()
-        .map(|(_, goal)| {
-            let mut slots = generate_slots(&input);
-            apply_goal_to_slots(&mut slots, goal);
-            let flexibility = slots.iter().fold(0_usize, |num, slot| match slot {
-                Slot::Goal(_, _) => num + 1,
-                _ => num,
-            });
-            Flexibility { flexibility, slots }
-        })
-        .collect::<Vec<_>>();
+    let mut slots = generate_slots(&input.calendar_start, &input.calendar_end);
 
-    flexibilities.sort_by(|a, b| a.flexibility.cmp(&b.flexibility));
-    // flexibilities.iter().for_each(|f| println!("{f:?}"));
+    let mut goals = get_goals(&input);
+    while !goals.is_empty() {
+        let flexibilities = get_flexibilities(&goals, &input.calendar_start, &input.calendar_end);
+        let flexibilities = remove_flexibilities(flexibilities, &slots);
+        let flexibility_of_1 = flexibilities.iter().filter(|f| f.flexibility == 1).collect::<Vec<_>>();
+        if !flexibility_of_1.is_empty() {
+            let active_flexibility = &flexibility_of_1[0];
+            apply_flexibility_to_slots(&mut slots, active_flexibility);
+            goals = remove_goal(&goals, active_flexibility.goal);
+            continue;
+        }
 
-    let mut slots = generate_slots(&input);
-    for flexibility in flexibilities.iter() {
-        apply_flexibility_to_slots(&mut slots, flexibility);
+        let active_flexibility = find_greatest_flexibility(&flexibilities);
+        println!("{active_flexibility:?}");
+        let ref_flexibilities = flexibilities.iter().filter(|f| f.flexibility != active_flexibility.flexibility).collect::<Vec<_>>();
+
+        let working_slots = find_least_conflicting_slots(active_flexibility, ref_flexibilities);
+        apply_slots(&mut slots, &working_slots, active_flexibility.goal);
+
+        goals = remove_goal(&goals, active_flexibility.goal);
     }
 
     let mut tasks = vec![];
@@ -209,14 +210,127 @@ more out of deadline than it should.
 
 use crate::new_models::flexibility::Flexibility;
 use crate::new_models::slot::Slot;
-fn generate_slots(input: &Input) -> Vec<Slot> {
-    let mut out = vec![Slot::Empty(input.calendar_start.clone())];
+
+fn get_goals(input: &Input) -> Vec<&Goal> {
+    input.goals.values().collect()
+}
+
+fn get_flexibilities<'a, 'b: 'a>(goals: &'a Vec<&'b Goal>, start: &'a NaiveDateTime, end: &'a NaiveDateTime) -> Vec<Flexibility<'b>> {
+    goals
+        .iter()
+        .map(|&goal| {
+            let slots = generate_slots(&start, &end).into_iter()
+                .map(|s| if is_date_between(s.date(), &create_date_by_hour(start, goal.filters.as_ref().map(|f| f.after_time).unwrap_or(None).unwrap_or(0)), &create_date_by_hour(start, goal.filters.as_ref().map(|f| f.before_time).unwrap_or(None).unwrap_or(24))) {
+                    Slot::Goal(s.date().clone(), goal)
+                } else {
+                    s
+                })
+                .collect::<Vec<_>>()
+                ;
+            let flexibility = slots.iter().fold(0_usize, |num, slot| match slot {
+                Slot::Goal(_, _) => num + 1,
+                _ => num,
+            });
+            Flexibility { flexibility, goal, slots }
+        })
+        .collect::<Vec<_>>()
+}
+
+fn apply_slots<'a, 'b: 'a>(slots: &'a mut Vec<Slot<'b>>, working_slots: &'a Vec<Slot<'b>>, goal: &'b Goal) {
+    let dates = working_slots.iter().map(|s| s.date()).collect::<Vec<_>>();
+    for idx in 0..slots.len() {
+        let d = slots[idx].date();
+        if dates.contains(&d) {
+            slots[idx] = Slot::Goal(d.clone(), goal);
+        }
+    }
+}
+
+fn remove_flexibilities<'a, 'b: 'a>(mut flexibilities: Vec<Flexibility<'b>>, slots: &'a Vec<Slot<'b>>) -> Vec<Flexibility<'b>> {
+    for f in &mut flexibilities {
+        for idx in 0..f.slots.len() {
+            if let Some(Slot::Goal(_, _)) = slots.get(idx) {
+                f.slots[idx] = Slot::Empty(f.slots[idx].date().clone())
+            }
+        }
+    }
+    flexibilities
+}
+
+fn remove_goal<'a>(goals: &Vec<&'a Goal>, goal: &Goal) -> Vec<&'a Goal> {
+    goals.iter().filter(|&& g| g.id.ne(&goal.id)).map(|&g| g).collect::<Vec<_>>()
+}
+
+fn find_greatest_flexibility<'a, 'b>(flexibilities: &'a Vec<Flexibility<'b>>) -> &'a Flexibility<'b> {
+    let init = &flexibilities[0];
+    flexibilities.iter().fold(init, |acc, f| if f.flexibility > acc.flexibility { f } else { acc })
+}
+
+fn find_least_conflicting_slots<'a, 'b: 'a>(active_flexibility: &'a Flexibility<'b>, ref_flexibilities: Vec<&'a Flexibility<'b>>) -> Vec<Slot<'b>> {
+    ref_flexibilities.iter()
+        .map(|&f| {
+            let (count, slot, duration) = find_least_conflicting_slot(active_flexibility, f);
+            (count, generate_slots(slot.date(), &inc_span_by(slot.date(), duration as i64)))
+        })
+        .fold((0_usize, vec![]), |acc, item| if acc.0 > item.0 {
+            item
+        } else {
+            acc
+        }).1
+}
+fn find_least_conflicting_slot<'a>(active_flexibility: &Flexibility<'a>, ref_flexibility: &'a Flexibility<'a>) -> (usize, Slot<'a>, usize) {
+    let start = find_start_date(active_flexibility);
+    let end = find_end_date(active_flexibility);
+    let duration = active_flexibility.goal.min_duration.unwrap_or(1);
+
+    let out = ref_flexibility.slots.iter()
+        .filter(|&s| s.date().ge(&start) || s.date().lt(&dec_span_by(&end, duration as i64)))
+        .map(|s| (count_slots(&ref_flexibility.slots, s.date(), &inc_span_by(s.date(), duration as i64)), s))
+        .fold((usize::MAX, ref_flexibility.slots.first().unwrap().clone()), |(acc_count, acc_slot), (count, slot)| if acc_count > count {
+            (count, slot.clone())
+        } else {
+            (acc_count, acc_slot)
+        });
+    (out.0, out.1, duration)
+}
+
+fn find_start_date(flexibility: &Flexibility<'_>) -> NaiveDateTime {
+    flexibility
+        .goal
+        .filters.clone()
+        .map(|f| f.after_time)
+        .unwrap_or(None)
+        .map(|hour| create_date_by_hour(flexibility.slots.first().unwrap().date(), hour))
+        .unwrap_or(flexibility.slots.first().unwrap().date().clone())
+        .clone()
+}
+fn find_end_date(flexibility: &Flexibility<'_>) -> NaiveDateTime {
+    flexibility
+        .goal
+        .filters.clone()
+        .map(|f| f.before_time)
+        .unwrap_or(None)
+        .map(|hour| create_date_by_hour(flexibility.slots.first().unwrap().date(), hour))
+        .unwrap_or(flexibility.slots.last().unwrap().date().clone())
+}
+fn count_slots(slots: &Vec<Slot>, start: &NaiveDateTime, end: &NaiveDateTime) -> usize {
+    slots.iter()
+        .filter(|&s| s.date().ge(start) || s.date().lt(end))
+        .fold(0_usize, |count, s| if let Slot::Goal(_, _) = s {
+            count + 1
+        } else {
+            count
+        })
+}
+
+fn generate_slots<'a, 'b>(start: &'a NaiveDateTime, end: &'a NaiveDateTime) -> Vec<Slot<'b>> {
+    let mut out = vec![Slot::Empty(start.clone())];
 
     while out
         .last()
         .unwrap()
         .date()
-        .lt(&input.calendar_end.sub(Duration::hours(1)))
+        .lt(&end.sub(Duration::hours(1)))
     {
         out.push(Slot::Empty(inc_span(out.last().unwrap().date())))
     }
@@ -224,37 +338,9 @@ fn generate_slots(input: &Input) -> Vec<Slot> {
     out
 }
 
-fn apply_goal_to_slots<'a, 'b: 'a>(slots: &'a mut Vec<Slot<'b>>, goal: &'b Goal) {
-    for slot in &mut *slots {
-        if !is_in_filter(slot, &goal.filters) {
-            continue;
-        }
-        // continue if it doesn't fit into the slot
-        match (goal.start, goal.deadline) {
-            (Some(ref start), Some(ref end)) => {
-                if !is_date_between(slot.date(), start, end) {
-                    continue;
-                }
-            }
-            (Some(ref start), _) => {
-                if slot.date().lt(start) {
-                    continue;
-                }
-            }
-            (_, Some(ref end)) => {
-                if slot.date().ge(end) {
-                    continue;
-                }
-            }
-            _ => {}
-        }
-        *slot = Slot::Goal(slot.date().clone(), goal);
-    }
-}
-
 fn apply_flexibility_to_slots<'a, 'b: 'a>(
     slots: &'a mut Vec<Slot<'b>>,
-    flexibility: &'b Flexibility<'b>,
+    flexibility: &'a Flexibility<'b>,
 ) {
     let filtered_slots = flexibility
         .slots
@@ -288,24 +374,15 @@ fn apply_flexibility_to_slots<'a, 'b: 'a>(
     }
 }
 
-fn is_in_filter(slot: &mut Slot, filter: &Option<TimeFilter>) -> bool {
-    // println!("{filter:?}");
-    if let Some(filter) = filter {
-        is_date_between(
-            slot.date(),
-            &get_date_by_hour(slot.date(), filter.after_time.unwrap()),
-            &get_date_by_hour(slot.date(), filter.before_time.unwrap()),
-        )
-    } else {
-        false
-    }
-}
-fn get_date_by_hour(date: &NaiveDateTime, hour: usize) -> NaiveDateTime {
-    NaiveDateTime::new(
-        NaiveDate::from_ymd_opt(date.year(), date.month(), date.day()).unwrap(),
-        NaiveTime::from_hms_opt(hour as u32, 0, 0).unwrap(),
-    )
-}
+
+
+
+
+
+
+
+
+
 
 fn gather_tasks<'a, 'b: 'a>(tasks: &'a mut Vec<Task>, slots: &'b Vec<Slot<'b>>) {
     if slots.is_empty() {

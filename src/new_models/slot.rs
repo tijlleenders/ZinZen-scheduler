@@ -1,14 +1,14 @@
-use crate::models::goal::Goal;
-use chrono::NaiveDateTime;
+use crate::new_models::goal::Goal;
+use crate::new_models::date::DateTime;
 
 #[derive(Debug, Clone)]
 pub enum Slot<'a> {
-    Empty(NaiveDateTime),
-    Goal(NaiveDateTime, &'a Goal),
+    Empty(DateTime),
+    Goal(DateTime, &'a Goal),
 }
 
 impl<'a> Slot<'a> {
-    pub fn date(&self) -> &NaiveDateTime {
+    pub fn date(&self) -> &DateTime {
         match self {
             Slot::Empty(date) => date,
             Slot::Goal(date, _) => date,
