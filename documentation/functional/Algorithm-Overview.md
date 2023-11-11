@@ -10,7 +10,7 @@ It has two parts:
 
 ### Given: Goals and Budgets
 We start with a Directed Acyclical Graph (DAG) of Goals and Budgets, like a tree.  
-See [Concepts](documentation/functional/Concepts.md) for more info on Goals and Budgets.
+See [Concepts](./Concepts.md) for more info on Goals and Budgets.
 
 ### 1) Add filler Goals if required  
 Only the Goals at the 'bottom of the DAG', the 'leaves of the tree', will be considered for generating Filler Goals. 
@@ -26,7 +26,7 @@ All the Steps generated from the subGoals/children of a Budget need to comply to
 A single Goal can have multiple Budgets. A Budget can impact multiple Goals.   
   
 ### 3) Generate Steps from the DAG
-See [Concepts](documentation/functional/Concepts.md) for more info on Steps.
+See [Concepts](./Concepts.md) for more info on Steps.
 
 ## Running the 'placing' algorithm
 
