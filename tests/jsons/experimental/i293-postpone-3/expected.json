@@ -683,24 +683,8 @@
                     "taskid": 67,
                     "goalid": "free",
                     "title": "free",
-                    "duration": 19,
+                    "duration": 23,
                     "start": "2023-05-29T01:00:00",
-                    "deadline": "2023-05-29T20:00:00"
-                },
-                {
-                    "taskid": 68,
-                    "goalid": "2",
-                    "title": "Walking",
-                    "duration": 2,
-                    "start": "2023-05-29T20:00:00",
-                    "deadline": "2023-05-29T22:00:00"
-                },
-                {
-                    "taskid": 69,
-                    "goalid": "free",
-                    "title": "free",
-                    "duration": 2,
-                    "start": "2023-05-29T22:00:00",
                     "deadline": "2023-05-30T00:00:00"
                 }
             ]
