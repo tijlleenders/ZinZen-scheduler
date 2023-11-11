@@ -56,5 +56,8 @@ These Budgets also generated a set of minimum and optional Steps. These Steps ne
 
 ### Why this algorithm?
 If you'r not convinced this algorithm is good - please suggest a better one. I'm all ears!  
-Here's a short explanation / test case to show that working from most flexible to least flexible works out better in practice:  
-<img src="/documentation/functional/why-most-flex-to-least-is-better.png" alt="Why-this-is-better" width="800"/>
+Here's a short explanation / test case to show that giving priority to least flexible Steps is wrong:     
+<img src="/documentation/functional/the-wrong-way-of-scheduling.png" alt="The-wrong-way" width="800"/>  
+
+To make it extra clear, here is the correct way of scheduling:
+<img src="/documentation/functional/the-correct-way-of-scheduling.png" alt="The-correct-way" width="800"/>  
