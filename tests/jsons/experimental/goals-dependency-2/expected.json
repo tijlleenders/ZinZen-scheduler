@@ -1,7 +1,9 @@
 {
-    "scheduled": [{
+    "scheduled": [
+        {
             "day": "2018-01-01",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 0,
                     "goalid": "3",
                     "title": "Brush my teeth",
@@ -45,50 +47,59 @@
         },
         {
             "day": "2018-01-02",
-            "tasks": [{
-                "taskid": 5,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2018-01-02T00:00:00",
-                "deadline": "2018-01-03T00:00:00"
-            }]
+            "tasks": [
+                {
+                    "taskid": 5,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2018-01-02T00:00:00",
+                    "deadline": "2018-01-03T00:00:00"
+                }
+            ]
         },
         {
             "day": "2018-01-03",
-            "tasks": [{
-                "taskid": 6,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2018-01-03T00:00:00",
-                "deadline": "2018-01-04T00:00:00"
-            }]
+            "tasks": [
+                {
+                    "taskid": 6,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2018-01-03T00:00:00",
+                    "deadline": "2018-01-04T00:00:00"
+                }
+            ]
         },
         {
             "day": "2018-01-04",
-            "tasks": [{
-                "taskid": 7,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2018-01-04T00:00:00",
-                "deadline": "2018-01-05T00:00:00"
-            }]
+            "tasks": [
+                {
+                    "taskid": 7,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2018-01-04T00:00:00",
+                    "deadline": "2018-01-05T00:00:00"
+                }
+            ]
         },
         {
             "day": "2018-01-05",
-            "tasks": [{
-                "taskid": 8,
-                "goalid": "free",
-                "title": "free",
-                "duration": 24,
-                "start": "2018-01-05T00:00:00",
-                "deadline": "2018-01-06T00:00:00"
-            }]
+            "tasks": [
+                {
+                    "taskid": 8,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 24,
+                    "start": "2018-01-05T00:00:00",
+                    "deadline": "2018-01-06T00:00:00"
+                }
+            ]
         }
     ],
-    "impossible": [{
+    "impossible": [
+        {
             "day": "2018-01-01",
             "tasks": []
         },
