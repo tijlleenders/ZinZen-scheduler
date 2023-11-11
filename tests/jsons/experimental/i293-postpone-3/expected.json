@@ -1,7 +1,9 @@
 {
-    "scheduled": [{
+    "scheduled": [
+        {
             "day": "2023-05-01",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 0,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -37,7 +39,8 @@
         },
         {
             "day": "2023-05-02",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 4,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -57,7 +60,8 @@
         },
         {
             "day": "2023-05-03",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 6,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -77,7 +81,8 @@
         },
         {
             "day": "2023-05-04",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 8,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -97,7 +102,8 @@
         },
         {
             "day": "2023-05-05",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 10,
                     "goalid": "free",
                     "title": "free",
@@ -117,7 +123,8 @@
         },
         {
             "day": "2023-05-06",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 12,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -137,7 +144,8 @@
         },
         {
             "day": "2023-05-07",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 14,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -157,7 +165,8 @@
         },
         {
             "day": "2023-05-08",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 16,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -193,7 +202,8 @@
         },
         {
             "day": "2023-05-09",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 20,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -213,7 +223,8 @@
         },
         {
             "day": "2023-05-10",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 22,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -233,7 +244,8 @@
         },
         {
             "day": "2023-05-11",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 24,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -253,7 +265,8 @@
         },
         {
             "day": "2023-05-12",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 26,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -273,7 +286,8 @@
         },
         {
             "day": "2023-05-13",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 28,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -293,7 +307,8 @@
         },
         {
             "day": "2023-05-14",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 30,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -313,7 +328,8 @@
         },
         {
             "day": "2023-05-15",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 32,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -349,7 +365,8 @@
         },
         {
             "day": "2023-05-16",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 36,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -369,7 +386,8 @@
         },
         {
             "day": "2023-05-17",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 38,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -389,7 +407,8 @@
         },
         {
             "day": "2023-05-18",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 40,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -409,7 +428,8 @@
         },
         {
             "day": "2023-05-19",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 42,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -429,7 +449,8 @@
         },
         {
             "day": "2023-05-20",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 44,
                     "goalid": "free",
                     "title": "free",
@@ -457,7 +478,8 @@
         },
         {
             "day": "2023-05-21",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 47,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -477,7 +499,8 @@
         },
         {
             "day": "2023-05-22",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 49,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -513,7 +536,8 @@
         },
         {
             "day": "2023-05-23",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 53,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -533,7 +557,8 @@
         },
         {
             "day": "2023-05-24",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 55,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -553,7 +578,8 @@
         },
         {
             "day": "2023-05-25",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 57,
                     "goalid": "free",
                     "title": "free",
@@ -581,7 +607,8 @@
         },
         {
             "day": "2023-05-26",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 60,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -601,7 +628,8 @@
         },
         {
             "day": "2023-05-27",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 62,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -621,7 +649,8 @@
         },
         {
             "day": "2023-05-28",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 64,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -641,7 +670,8 @@
         },
         {
             "day": "2023-05-29",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 66,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -677,7 +707,8 @@
         },
         {
             "day": "2023-05-30",
-            "tasks": [{
+            "tasks": [
+                {
                     "taskid": 70,
                     "goalid": "1",
                     "title": "Learn Rust",
@@ -696,7 +727,8 @@
             ]
         }
     ],
-    "impossible": [{
+    "impossible": [
+        {
             "day": "2023-05-01",
             "tasks": []
         },
