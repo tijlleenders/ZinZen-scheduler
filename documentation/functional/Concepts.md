@@ -65,6 +65,7 @@ Steps are organized in a list and have the following (optional) attributes:
   - Goal
   - Budget
   - Optional budget
+- (Budgets) - A list of Budgets the Step needs to comply with
 
 Example on calculating Step Flexibility:  
 A Step with Duration 4 and a Timeline with one Slot of [8-14] can placed in 3 ways:  
