@@ -11,3 +11,5 @@ A high-level overview of the structure of the code-base can be found in [the Pro
 
 If an important architectural decision is made, it is best practice to document it as an ADR (Architectural Decision Record).
 This way there is always a reference of what architectural decisions are already made. You can find them in [the ADR folder](../ADR).
+
+We have some [contributing conventions](../../CONTRIBUTING.md).
