@@ -77,10 +77,14 @@ fn create_tests_module() -> String {
         "//TEST_FUNCTIONS_STABLE",
         &create_test_functions("./tests/jsons/stable", TestType::Stable),
     );
-    tests_mod = tests_mod.replace(
-        "//TEST_FUNCTIONS_EXPERIMENTAL",
-        &create_test_functions("./tests/jsons/experimental", TestType::Experimental),
-    );
+    let experimental_testdir = "./tests/jsons/experimental";
+    if std::fs::read_dir(experimental_testdir).is_ok_and(|dir| dir.count() > 0) {
+        //ignore empty experimental directory
+        tests_mod = tests_mod.replace(
+            "//TEST_FUNCTIONS_EXPERIMENTAL",
+            &create_test_functions(experimental_testdir, TestType::Experimental),
+        );
+    }
 
     tests_mod
 }

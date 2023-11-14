@@ -1,0 +1,47 @@
+{
+  "scheduled": [
+    {
+      "day": "2022-09-01",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 13,
+          "start": "2022-09-01T00:00:00",
+          "deadline": "2022-09-01T13:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "3",
+          "title": "walk",
+          "duration": 1,
+          "start": "2022-09-01T13:00:00",
+          "deadline": "2022-09-01T14:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "2",
+          "title": "dentist",
+          "duration": 1,
+          "start": "2022-09-01T14:00:00",
+          "deadline": "2022-09-01T15:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 9,
+          "start": "2022-09-01T15:00:00",
+          "deadline": "2022-09-02T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2022-09-01",
+      "tasks": []
+    }
+  ]
+}

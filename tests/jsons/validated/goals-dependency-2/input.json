@@ -1,0 +1,41 @@
+{
+  "startDate": "2018-01-01T00:00:00",
+  "endDate": "2018-01-06T00:00:00",
+  "goals": {
+    "1": {
+      "id": "1",
+      "title": "Eat breakfast at home",
+      "min_duration": 1,
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "filters": {
+        "after_time": 6,
+        "before_time": 8
+      }
+    },
+    "2": {
+      "id": "2",
+      "title": "Catch the bus to work",
+      "min_duration": 1,
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_goals": [
+        "1"
+      ],
+      "filters": {
+        "after_time": 6,
+        "before_time": 8
+      }
+    },
+    "3": {
+      "id": "3",
+      "title": "Brush my teeth",
+      "min_duration": 1,
+      "start": "2018-01-01T00:00:00",
+      "deadline": "2018-01-06T00:00:00",
+      "after_goals": [
+        "1"
+      ]
+    }
+  }
+}

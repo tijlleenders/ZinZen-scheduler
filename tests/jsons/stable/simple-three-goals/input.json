@@ -1,0 +1,27 @@
+{
+  "startDate": "2022-01-01T00:00:00",
+  "endDate": "2022-01-02T00:00:00",
+  "goals": {
+    "1": {
+      "id": "1",
+      "title": "shopping",
+      "min_duration": 1,
+      "start": "2022-01-01T10:00:00",
+      "deadline": "2022-01-01T13:00:00"
+    },
+    "2": {
+      "id": "2",
+      "title": "dentist",
+      "min_duration": 1,
+      "start": "2022-01-01T10:00:00",
+      "deadline": "2022-01-01T13:00:00"
+    },
+    "3": {
+      "id": "3",
+      "title": "exercise",
+      "min_duration": 1,
+      "start": "2022-01-01T10:00:00",
+      "deadline": "2022-01-01T18:00:00"
+    }
+  }
+}

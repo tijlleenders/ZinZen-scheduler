@@ -14,9 +14,10 @@ Goals are organized together with Budgets in a Directed Acyclical Graph (DAG) an
 - (Repeat) - The number of repeats. This translates into number of Steps to generate.  
 - (Repeat interval) - Time between the repeats (x hours/days/weeks/months/years).  
 - (Dependencies):  
-  - Starts after / before:  
-    - DateTime. Defaults to midnight if no time chosen.
-    - Goal. For example: I can only 'Cook dinner' _after_ I 'Do shopping'.  
+  - Starts:  
+    - DateTime after which this should start. Defaults to midnight if no time chosen.
+    - Goal with which this should start  
+    For example: I can only 'Cook dinner' _after_ I 'Do shopping'.  
   - Ends with:  
     - DateTime. Defaults to midnight if no time chosen.  
     - Number hours spent - For example, consider the goal 'Write first draft of report' completed after investing 3 hours.  
