@@ -6,8 +6,9 @@ Resolves #
 - [x] If no issue is referenced, my changes are simple and summarized in title - and in max three sentences in the description.  
       If not please make an issue - so the need for change is motivated and validated.
 - [x] I'll be patient as I understand responses can take days.
-- [x] I have formatted with `cargo fmt`.
-- [x] I have not introduced any new failing lints or tests.
+- [x] I have formatted with `cargo fmt --all -- --check`.
+- [x] `cargo clippy --release --all-targets -- -D warnings` passes.
+- [x] All tests pass.
 - [x] I tried to apply the [clean code guidelines](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29).
 
 ### Change summary
