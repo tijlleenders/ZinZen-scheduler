@@ -1,6 +1,6 @@
 use crate::new_models::day_filter::DayFilter;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Goal {
     id: String,
     title: String,
@@ -26,10 +26,10 @@ impl From<&crate::models::goal::Goal> for Goal {
 
             min_span: goal.min_duration.clone(),
 
-            day_filter: goal.filters
+            day_filter: goal.filters.clone()
                 .map(|f| DayFilter::from_str(
-                    f.after_time.map(|hour| to_string(hour).as_ref()),
-                    f.before_time.map(|hour| to_string(hour).as_ref()),
+                    f.after_time.map(|hour| to_string(hour)).as_deref(),
+                    f.before_time.map(|hour| to_string(hour)).as_deref(),
                 ))
         }
     }

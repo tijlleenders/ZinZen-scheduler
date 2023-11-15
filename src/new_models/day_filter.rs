@@ -1,6 +1,7 @@
 use std::ops::Add;
 use chrono::{Duration, NaiveDateTime, NaiveTime};
 
+#[derive(Debug, Clone)]
 pub struct DayFilter {
     apply_after: Option<NaiveTime>,
     apply_before: Option<NaiveTime>,
