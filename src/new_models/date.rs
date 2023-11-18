@@ -1,7 +1,11 @@
 use std::cmp::Ordering;
+use std::convert::Infallible;
 use std::fmt::{Display, Formatter};
-use chrono::{Duration, NaiveDate, NaiveDateTime, NaiveTime};
+use std::str::FromStr;
+use std::string::ParseError;
+use chrono::{NaiveDate, NaiveDateTime, NaiveTime, Duration};
 use lazy_static::lazy_static;
+use crate::new_models::date::DateTimeRangeContainerResult::{FitAtEnd, FitAtStart, FitInBetween, NoFit, PerfectFit};
 
 lazy_static!{
     static ref SLOT_DURATION: Duration = Duration::hours(1);
@@ -20,6 +24,11 @@ impl DateTime {
     }
     pub fn from_naive_time(time: &NaiveTime) -> Self {
         Self { naive: normalize_date(&NaiveDateTime::new(NaiveDate::default(), time.clone())) }
+    }
+    fn from_str(date_str: &str) -> Option<Self> {
+        NaiveDateTime::from_str(date_str)
+            .map(|ndt| Self::from_naive_date_time(&ndt))
+            .ok()
     }
     pub fn make_range(&self, span: usize) -> DateTimeRange {
         let mut current = self.naive.clone();
@@ -70,8 +79,22 @@ impl Display for DateTime {
         self.naive.fmt(f)
     }
 }
+impl From<&DateTime> for NaiveDateTime {
+    fn from(date: &DateTime) -> Self {
+        date.naive.clone()
+    }
+}
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
+pub enum DateTimeRangeContainerResult {
+    NoFit,
+    PerfectFit,
+    FitAtStart(DateTimeRange, DateTimeRange),
+    FitAtEnd(DateTimeRange, DateTimeRange),
+    FitInBetween(DateTimeRange, DateTimeRange, DateTimeRange),
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct DateTimeRange {
     start: DateTime,
     end: DateTime,
@@ -127,6 +150,33 @@ impl DateTimeRange {
             }
         }
     }
+
+    pub fn is_fitting(&self, range: &DateTimeRange) -> DateTimeRangeContainerResult {
+        if self.contains(range) {
+            match (&range.start, &range.end) {
+                (start, end) if start == &self.start && end == &self.end =>
+                    PerfectFit,
+                (start, end) if start == &self.start =>
+                    FitAtStart(
+                        DateTimeRange::new(range.start.clone(), range.end.clone()),
+                        DateTimeRange::new(range.end.clone(), self.end.clone()),
+                    ),
+                (start, end) if end == &self.end =>
+                    FitAtEnd(
+                        DateTimeRange::new(self.start.clone(), range.start.clone()),
+                        DateTimeRange::new(range.start.clone(), range.end.clone()),
+                    ),
+                _ => FitInBetween(
+                    DateTimeRange::new(self.start.clone(), range.start.clone()),
+                    DateTimeRange::new(range.start.clone(), range.end.clone()),
+                    DateTimeRange::new(range.end.clone(), self.end.clone()),
+                ),
+            }
+        }
+        else {
+            NoFit
+        }
+    }
 }
 
 fn normalize_date(date_time: &NaiveDateTime) -> NaiveDateTime {
@@ -145,18 +195,12 @@ fn normalize_date(date_time: &NaiveDateTime) -> NaiveDateTime {
 
 #[cfg(test)]
 mod test {
+    use super::util::create_date;
     use super::*;
-    use std::str::FromStr;
-    use crate::models::date::create_date_by_hour;
 
     #[test]
     fn test_date_time_range() {
-        let date_start = DateTime::from_naive_date_time(&create_date("2022-01-01T00:00:00"));
-        let date_end = date_start.inc_by(3);
-        assert!(date_start < date_end);
-        assert!(!(date_start >= date_end));
-
-        let range = date_start.make_range(3);
+        let (range, date_start, date_end) = create_range("2022-01-01T00:00:00", 3);
         assert_eq!(range.start(), &date_start);
         assert_eq!(range.end(), &date_end);
 
@@ -164,40 +208,71 @@ mod test {
         assert_eq!(range.start(), &date_start.inc_by(2));
         assert_eq!(range.end(), &date_end.inc_by(2));
 
-        let date_between = DateTime::from_naive_date_time(&create_date("2022-01-01T04:00:00"));
+        let date_between = DateTime::from_str("2022-01-01T04:00:00").unwrap();
         assert!(range.contains_date_time(&date_between));
-        let date_between = DateTime::from_naive_date_time(&create_date("2022-01-01T03:00:00"));
+        let date_between = DateTime::from_str("2022-01-01T03:00:00").unwrap();
         assert!(range.contains_date_time(&date_between));
-        let date_between = DateTime::from_naive_date_time(&create_date("2022-01-01T01:00:00"));
+        let date_between = DateTime::from_str("2022-01-01T01:00:00").unwrap();
         assert!(!range.contains_date_time(&date_between));
-        let date_between = DateTime::from_naive_date_time(&create_date("2022-01-01T05:00:00"));
+        let date_between = DateTime::from_str("2022-01-01T05:00:00").unwrap();
         assert!(!range.contains_date_time(&date_between));
     }
 
     #[test]
     fn test_date_time_range_contains() {
-        let date_start = DateTime::from_naive_date_time(&create_date("2022-01-01T03:00:00"));
+        let date_start = DateTime::from_str("2022-01-01T03:00:00").unwrap();
         let range = date_start.make_range(3);
 
-        let range1 = DateTime::from_naive_date_time(&create_date("2022-01-01T04:00:00"))
+        let range1 = DateTime::from_str("2022-01-01T04:00:00").unwrap()
             .make_range(1);
         assert!(range.contains(&range1));
 
-        let range1 = DateTime::from_naive_date_time(&create_date("2022-01-01T02:00:00"))
+        let range1 = DateTime::from_str("2022-01-01T02:00:00").unwrap()
             .make_range(6);
         assert!(!range.contains(&range1));
 
-        let range1 = DateTime::from_naive_date_time(&create_date("2022-01-01T02:00:00"))
+        let range1 = DateTime::from_str("2022-01-01T02:00:00").unwrap()
             .make_range(4);
         assert!(!range.contains(&range1));
 
-        let range1 = DateTime::from_naive_date_time(&create_date("2022-01-01T03:00:00"))
+        let range1 = DateTime::from_str("2022-01-01T03:00:00").unwrap()
             .make_range(4);
         assert!(!range.contains(&range1));
 
     }
 
-    fn create_date(date_str: &str) -> NaiveDateTime {
-        NaiveDateTime::from_str(date_str).unwrap()
+    #[test]
+    fn is_fitting() {
+        let (ref_range, _, _) = create_range("2022-01-01T00:00:00", 3);
+
+        let (range, _, _) = create_range("2022-01-01T00:00:00", 3);
+        assert_eq!(ref_range.is_fitting(&range), PerfectFit);
+
+        let (range, _, _) = create_range("2022-01-01T00:00:00", 2);
+        let (start, _, _) = create_range("2022-01-01T00:00:00", 2);
+        let (end, _, _) = create_range("2022-01-01T02:00:00", 1);
+        assert_eq!(ref_range.is_fitting(&range), FitAtStart(start, end));
+
+        let (range, _, _) = create_range("2022-01-01T01:00:00", 2);
+        let (start, _, _) = create_range("2022-01-01T00:00:00", 1);
+        let (end, _, _) = create_range("2022-01-01T01:00:00", 2);
+        assert_eq!(ref_range.is_fitting(&range), FitAtEnd(start, end));
+
+        let (range, _, _) = create_range("2022-01-01T01:00:00", 1);
+        let (start, _, _) = create_range("2022-01-01T00:00:00", 1);
+        let (mid, _, _) = create_range("2022-01-01T01:00:00", 1);
+        let (end, _, _) = create_range("2022-01-01T02:00:00", 1);
+        assert_eq!(ref_range.is_fitting(&range), FitInBetween(start, mid, end));
+
+        let (range, _, _) = create_range("2022-01-01T00:00:00", 5);
+        assert_eq!(ref_range.is_fitting(&range), NoFit);
+    }
+
+    fn create_range(date: &str, span: usize) -> (DateTimeRange, DateTime, DateTime) {
+        let date_start = DateTime::from_str(date).unwrap();
+        let date_end = date_start.inc_by(span);
+        assert!(date_start < date_end);
+        assert!(!(date_start >= date_end));
+        (date_start.make_range(span), date_start, date_end)
     }
 }

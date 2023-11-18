@@ -10,6 +10,20 @@ pub struct Goal {
     day_filter: Option<DayFilter>,
 }
 impl Goal {
+    pub(crate) fn new(id: &str, title: &str) -> Self {
+        Self {
+            id: id.to_string(),
+            title: title.to_string(),
+            min_span: None,
+            day_filter: None,
+        }
+    }
+    pub fn id(&self) -> String {
+        self.id.clone()
+    }
+    pub fn title(&self) -> String {
+        self.title.clone()
+    }
     pub fn min_span(&self) -> usize {
         self.min_span.unwrap_or(1)
     }
