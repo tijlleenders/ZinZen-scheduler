@@ -39,7 +39,7 @@ pub struct DayTasks {
     pub day: NaiveDate,
     pub tasks: Vec<Task>,
 }
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Default)]
 pub struct FinalTasks {
     pub scheduled: Vec<DayTasks>,
     pub impossible: Vec<DayTasks>,

@@ -1,10 +1,11 @@
-use std::ops::Add;
-use chrono::{Duration, NaiveDateTime, NaiveTime};
+use std::cmp::Ordering;
+use chrono::NaiveTime;
+use crate::new_models::date::DateTime;
 
 #[derive(Debug, Clone)]
 pub struct DayFilter {
-    apply_after: Option<NaiveTime>,
-    apply_before: Option<NaiveTime>,
+    apply_after: Option<DateTime>,
+    apply_before: Option<DateTime>,
 }
 
 impl DayFilter {
@@ -16,32 +17,22 @@ impl DayFilter {
         }
     }
 
-    pub fn after(&self, date: &NaiveDateTime) -> NaiveDateTime {
-        if let Some(ref time) = self.apply_after {
-            NaiveDateTime::new(date.date(), time.clone())
-
-        } else {
-            NaiveDateTime::new(date.date(), NaiveTime::default())
-        }
+    pub fn after(&self, date: &DateTime) -> DateTime {
+        date.time_after(&self.apply_after)
     }
-    pub fn before(&self, date: &NaiveDateTime) -> NaiveDateTime {
-        if let Some(ref time) = self.apply_before {
-            NaiveDateTime::new(date.date(), time.clone())
-
-        } else {
-            NaiveDateTime::new(date.date().add(Duration::days(1)), NaiveTime::default())
-        }
+    pub fn before(&self, date: &DateTime) -> DateTime {
+        date.time_before(&self.apply_before)
     }
 
-    fn get_time(time_str: Option<&str>) -> Option<NaiveTime> {
+    fn get_time(time_str: Option<&str>) -> Option<DateTime> {
         time_str.map(|time_str| {
-            if time_str.len() != 5 {
+            if time_str.len() != 5 && &time_str[2..3] != ":"  {
                 None
             }
             else {
                 match (
-                    u32::from_str_radix(&time_str[..2], 10).ok(),
-                    u32::from_str_radix(&time_str[..2], 10).ok(),
+                    time_str[..2].parse::<u32>().ok(),
+                    time_str[3..].parse::<u32>().ok(),
                 ) {
                     (Some(hour), Some(minute)) => NaiveTime::from_hms_opt(hour, minute, 0),
                     _ => None,
@@ -49,5 +40,29 @@ impl DayFilter {
             }
         })
             .unwrap().or(None)
+            .map(|ref nt| DateTime::from_naive_time(nt))
+    }
+}
+
+impl Eq for DayFilter {}
+impl PartialEq for DayFilter {
+    fn eq(&self, other: &Self) -> bool {
+        self.apply_after.eq(&other.apply_after)
+        && self.apply_before.eq(&other.apply_before)
+    }
+}
+
+impl Ord for DayFilter {
+    fn cmp(&self, other: &Self) -> Ordering {
+        let after = self.apply_after.cmp(&other.apply_after);
+        if after != Ordering::Equal {
+            return after;
+        }
+        self.apply_before.cmp(&other.apply_before)
+    }
+}
+impl PartialOrd for DayFilter {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }

@@ -66,7 +66,7 @@
 
 use models::input::Input;
 use models::output::FinalTasks;
-use std::ops::Sub;
+use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 
 mod errors;
@@ -81,12 +81,14 @@ pub mod services;
 #[cfg(test)]
 mod tests;
 
-use crate::models::date::{create_date_by_hour, dec_span_by, inc_span, inc_span_by, is_date_between, normalize_date};
-use crate::models::goal::{Goal, TimeFilter};
 use crate::models::output::{DayTasks, Task};
-use chrono::{Datelike, Duration, NaiveDate, NaiveDateTime, NaiveTime};
 #[cfg(feature = "with-logging")]
 use std::sync::Once;
+use crate::new_models::calendar::{Calendar, Goals};
+use crate::new_models::date::{DateTime, DateTimeRange};
+use crate::new_models::flexibility::Flexibility;
+use crate::new_models::goal::Goal;
+use crate::new_models::day::Day;
 
 // Static flag to ensure logger init happens only once
 #[cfg(feature = "with-logging")]
@@ -150,52 +152,138 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
     #[cfg(feature = "with-logging")]
     initialize_logger();
 
-    // let mut slots = generate_slots(&input.calendar_start, &input.calendar_end);
-    //
-    // let mut goals = get_goals(&input);
-    // while !goals.is_empty() {
-    //     let flexibilities = get_flexibilities(&goals, &input.calendar_start, &input.calendar_end);
-    //     let flexibilities = remove_flexibilities(flexibilities, &slots);
-    //     let flexibility_of_1 = flexibilities.iter().filter(|f| f.flexibility == 1).collect::<Vec<_>>();
-    //     if !flexibility_of_1.is_empty() {
-    //         let active_flexibility = &flexibility_of_1[0];
-    //         apply_flexibility_to_slots(&mut slots, active_flexibility);
-    //         goals = remove_goal(&goals, active_flexibility.goal);
-    //         continue;
-    //     }
-    //
-    //     let active_flexibility = find_greatest_flexibility(&flexibilities);
-    //     println!("{active_flexibility:?}");
-    //     let ref_flexibilities = flexibilities.iter().filter(|f| f.flexibility != active_flexibility.flexibility).collect::<Vec<_>>();
-    //
-    //     let working_slots = find_least_conflicting_slots(active_flexibility, ref_flexibilities);
-    //     apply_slots(&mut slots, &working_slots, active_flexibility.goal);
-    //
-    //     goals = remove_goal(&goals, active_flexibility.goal);
-    // }
-    //
-    // let mut tasks = vec![];
-    // gather_tasks(&mut tasks, &slots);
-    //
-    let out = FinalTasks {
-        // scheduled: vec![DayTasks {
-        //     day: tasks[0].start.date(),
-        //     tasks: tasks.clone(),
-        // }],
-        // impossible: vec![DayTasks {
-        //     day: tasks[0].start.date(),
-        //     tasks: vec![],
-        // }],
-        scheduled: vec![DayTasks {
-            day: NaiveDate::default(),
-            tasks: vec![],
-        }],
-        impossible: vec![DayTasks {
-            day: NaiveDate::default(),
-            tasks: vec![],
-        }],
-    };
-    // new scheduler - end
+    let date_start = DateTime::from_naive_date_time(&input.calendar_start);
+    let date_end = DateTime::from_naive_date_time(&input.calendar_end);
+    let goals = get_goals(&input);
 
-    out
+    let calendar = Calendar::new(&input, &goals);
+
+    while calendar.has_finished_scheduling() {
+        log::info!("\n{calendar:?}");
+
+        let flexibilities = calendar.unprocessed().iter()
+            .map(|pos| calendar.flexibility(*pos).unwrap())
+            .collect::<Vec<_>>();
+
+        #[derive(PartialEq)]
+        enum Handling {
+            DoNothing,
+            Flexibility1(Flexibility),
+            MostFlexibility(Flexibility),
+            Impossible(Flexibility),
+        }
+        let mut handling = (Handling::DoNothing, 0, usize::MAX);
+        for (pos, flex, f) in flexibilities {
+            match flex {
+                0 => {
+                    handling = (Handling::Impossible(f), flex, pos);
+                    break;
+                }
+                1 => {
+                    handling = (Handling::Flexibility1(f), flex, pos);
+                    break;
+                }
+                _ => handling = if handling.1 < flex {
+                    (Handling::MostFlexibility(f), flex, pos)
+                } else {
+                    handling
+                }
+            }
+        }
+
+        let (handling, flex, selected) = handling;
+
+        match handling {
+            Handling::DoNothing => break,
+            Handling::Impossible(flexibility) => {
+                if let Some((flexibility, _tail)) = calendar.take(selected) {
+                    calendar.push_impossible(selected, DateTimeRange::new(date_start.clone(), date_end.clone()));
+                }
+            }
+            Handling::Flexibility1(flexibility) => {
+                if let Some((flexibility, _tail)) = calendar.take(selected) {
+                    let slot = flexibility.day.first_fit(flexibility.goal.min_span());
+                    calendar.push_scheduled(selected, slot);
+                }
+            }
+            Handling::MostFlexibility(flexibility) => {
+                if let Some((flexibility, tail)) = calendar.take(selected) {
+                    if tail.is_empty() {
+                        let slot = flexibility.day.first_fit(flexibility.goal.min_span());
+                        calendar.push_scheduled(selected, slot);
+                    } else {
+                        let slots = flexibility.day.slots(flexibility.goal.min_span());
+                        let (_, to_occupy) = tail.iter()
+                            .map(|pos| calendar.flexibility_at(*pos).unwrap().day.overlap(&slots))
+                            .map(|v| v.into_iter()
+                                .min_by(|(a, _), (b, _)| a.cmp(b)).unwrap()
+                            )
+                            .min_by(|(a, _), (b, _)| a.cmp(b))
+                            .unwrap()
+                            ;
+
+                        calendar.occupy_unprocessed(&to_occupy);
+
+                        calendar.push_scheduled(selected, to_occupy);
+                    }
+                }
+            }
+        }
+    }
+    log::info!("\n{calendar:?}");
+
+    calendar.result()
+}
+
+fn get_goals(input: &Input) -> Goals {
+    input.goals.values().map(|g| Rc::new(g.into()))
+        .collect::<Vec<_>>()
+}
+
+fn get_flexibilities(goal: Rc<Goal>, start: &DateTime, end: &DateTime) -> Flexibility {
+    let goals = vec![goal];
+    goals.into_iter()
+        .map(|g| (g.clone(), Flexibility {
+                goal: g,
+                day: Rc::new(Day::new(start.clone())),
+            }))
+        .map(|(g, f)| {
+            let window = f.day;
+            window.occupy_inverse_range(&DateTimeRange::new(start.clone(), end.clone()));
+            (g, Flexibility {
+                goal: f.goal,
+                day: window,
+            })
+        })
+        .map(|(g, f)| {
+            let window = f.day;
+            window.occupy_inverse_range(&g.day_filter(start));
+            Flexibility {
+                goal: f.goal,
+                day: window,
+            }
+        })
+        .collect::<Vec<_>>()
+        .pop()
+        .unwrap()
+
+}
+
+fn gather_tasks(tasks: &mut Vec<Task>, slots: &[(DateTimeRange, Flexibility)], impossible: bool) {
+    slots.iter().enumerate().for_each(|(idx, (slot, f))| {
+
+        let start = slot.start().naive_date_time();
+        let deadline = slot.end().naive_date_time();
+
+        tasks.push(Task {
+            taskid: idx,
+            goalid: f.goal.id(),
+            title: f.goal.title(),
+            duration: f.goal.min_span(),
+            start,
+            deadline,
+            tags: vec![],
+            impossible,
+        })
+    })
 }

@@ -165,7 +165,7 @@ fn get_1_hr_goals(goal: Goal) -> Vec<Goal> {
 #[cfg(test)]
 mod tests {
     mod generate_flex_weekly_goals {
-        use std::collections::{BTreeMap, HashMap};
+        use std::collections::HashMap;
 
         use chrono::Duration;
 

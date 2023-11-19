@@ -1,127 +1,177 @@
+use std::cell::RefCell;
+use std::fmt::{Debug, Display, Formatter};
+use std::rc::Rc;
+use crate::models::input::Input;
 use crate::models::output::{DayTasks, FinalTasks, Task};
-use crate::new_models::calendar::CalendarItem::{Expanded, Filler, Occupied};
-use crate::new_models::date::{DateTime, DateTimeRange, DateTimeRangeContainerResult};
+use crate::new_models::date::{DateTime, DateTimeRange};
+use crate::new_models::flexibility::Flexibility;
 use crate::new_models::goal::Goal;
+use crate::new_models::day::Day;
+use crate::schedule;
 
-#[derive(Clone)]
-pub enum CalendarItem<'a> {
-    Filler(DateTimeRange),
-    Expanded(DateTimeRangeContainerResult, &'a Goal),
-    Occupied(DateTimeRange, &'a Goal),
+pub type Goals = Vec<Rc<Goal>>;
+pub type Span = usize;
+pub type Position = usize;
+pub type Flex = usize;
+pub type Unprocessed = RefCell<Vec<Position>>;
+pub type Scheduled = RefCell<Vec<(Position, DateTimeRange, Rc<Goal>)>>;
+
+pub type Data = RefCell<Vec<Flexibility>>;
+
+pub struct Calendar {
+    day: DateTime,
+    span_of_day: Span,
+
+    flexibilities: Data,
+
+    unprocessed: Unprocessed,
+
+    scheduled: Scheduled,
+    impossible: Scheduled,
 }
 
-pub struct Calendar<'a> {
-    calendar: Vec<CalendarItem<'a>>,
-    no_fit: Vec<&'a Goal>,
-}
+impl Calendar {
+    pub fn new(input: &Input, goals: &Goals) -> Self {
 
-impl<'a> Calendar<'a> {
-    pub fn new(date_start: &DateTime, date_end: &DateTime) -> Self {
+        let date_start = DateTime::from_naive_date_time(&input.calendar_start);
+        let date_end = DateTime::from_naive_date_time(&input.calendar_end);
+        let day = date_start.start_of_day();
+        let span_of_day = day.span_of_day();
+
+        let flexibilities = RefCell::new(goals.into_iter()
+            .map(|goal| get_flexibilities(goal.clone(), &date_start, &date_end))
+            .collect::<Vec<_>>()
+        );
+
+        let unprocessed: Unprocessed = RefCell::new((0..flexibilities.borrow().len()).collect());
+
+        let scheduled = RefCell::new(vec![]);
+        let impossible = RefCell::new(vec![]);
+
         Self {
-            calendar: vec![Filler(DateTimeRange::new(date_start.clone(), date_end.clone()))],
-            no_fit: vec![],
+            day,
+            span_of_day,
+
+            flexibilities,
+
+            unprocessed,
+
+            scheduled,
+            impossible,
         }
     }
+
+    pub fn has_finished_scheduling(&self) -> bool {
+        !self.unprocessed.borrow().is_empty()
+    }
+
+    pub fn flexibility_at(&self, pos: Position) -> Option<Flexibility> {
+        self.flexibilities.borrow().get(pos).cloned()
+    }
+    pub fn flexibility(&self, pos: Position) -> Option<(Position, Flex, Flexibility)> {
+        self.flexibility_at(pos)
+            .map(|f| (pos, f.day.flexibility(f.goal.min_span()), f))
+    }
+    pub fn unprocessed(&self) -> Vec<Position> {
+        self.unprocessed.borrow().clone()
+    }
+    pub fn push_impossible(&self, position: Position, range: DateTimeRange) {
+        self.flexibility_at(position).unwrap().day.occupy(&range);
+        self.impossible.borrow_mut().push((position, range, self.flexibility_at(position).unwrap().goal.clone()))
+    }
+    pub fn push_scheduled(&self, position: Position, range: DateTimeRange) {
+        self.flexibility_at(position).unwrap().day.occupy(&range);
+        self.scheduled.borrow_mut().push((position, range, self.flexibility_at(position).unwrap().goal.clone()))
+    }
+    pub fn occupy_unprocessed(&self, range: &DateTimeRange) {
+        self.unprocessed.borrow().iter().for_each(|pos|
+            self.flexibility_at(*pos).unwrap().day.occupy(range)
+        );
+    }
+    pub fn take(&self, position: Position) -> Option<(Flexibility, Vec<Position>)> {
+        let (head, tail): (Vec<_>, Vec<_>) = self.unprocessed.borrow().iter()
+            .partition(|&p| *p == position);
+        *self.unprocessed.borrow_mut() = tail;
+        head.first()
+            .map(|position| self.flexibility_at(*position))
+            .unwrap_or(None)
+            .map(|f| (f, self.unprocessed()))
+    }
     pub fn result(&self) -> FinalTasks {
-
-        let mut scheduled = vec![];
-        for (idx, item) in self.calendar.iter().enumerate() {
-            match item {
-                Filler(ref range) => scheduled.push(create_task_from_filler(idx, range)),
-                Occupied(ref range, goal) => scheduled.push(create_task_from_goal(idx, range, goal)),
-                Expanded(_, _) => unreachable!(),
-            }
-        }
-
-        let date = scheduled[0].start;
-        let no_range = DateTimeRange::new(DateTime::from_naive_date_time(&date), DateTime::from_naive_date_time(&date));
-        let impossible= self.no_fit.iter()
-            .enumerate()
-            .map(|(idx, &goal)| create_task_from_goal(idx, &no_range, goal))
-            .collect::<Vec<_>>()
-            ;
+        let mut tasks = vec![];
+        self.gather_tasks(&mut tasks, &self.scheduled, false);
+        let mut impossible_tasks = vec![];
+        self.gather_tasks(&mut impossible_tasks, &self.impossible, true);
 
         FinalTasks {
             scheduled: vec![DayTasks {
-                day: date.date(),
-                tasks: scheduled,
+                day: self.day.naive_date(),
+                tasks,
             }],
             impossible: vec![DayTasks {
-                day: date.date(),
-                tasks: impossible,
+                day: self.day.naive_date(),
+                tasks: impossible_tasks,
             }],
         }
     }
-    pub fn fit<'b: 'a>(&'a mut self, range: &DateTimeRange, goal: &'b Goal) {
-        let result = self.try_to_fit(range, goal);
-        if let Some(goal) = result {
-            self.no_fit.push(goal);
-        }
-        else {
-            self.optimize();
-        }
-    }
-    fn try_to_fit<'b: 'a>(&'a mut self, range: &DateTimeRange, goal: &'b Goal) -> Option<&'b Goal> {
-        for item in &mut self.calendar {
-            if let CalendarItem::Filler(item_range) = item {
-                match item_range.is_fitting(range) {
-                    DateTimeRangeContainerResult::NoFit => {}
-                    DateTimeRangeContainerResult::PerfectFit => {
-                        *item = Occupied(item_range.clone(), goal);
-                        return None;
-                    }
-                    result => {
-                        *item = Expanded(result, goal);
-                        return None;
-                    }
-                }
-            }
-        }
-        Some(goal)
-    }
-    fn optimize<'b: 'a>(&'a mut self) {
-        let mut new_vec = vec![];
 
-        for item in &self.calendar {
-            if let Expanded(result, goal) = item {
-                match result {
-                    DateTimeRangeContainerResult::FitAtStart(start, end) => {
-                        new_vec.push(Occupied(start.clone(), goal));
-                        new_vec.push(Filler(end.clone()))
-                    }
-                    DateTimeRangeContainerResult::FitAtEnd(start, end) => {
-                        new_vec.push(Filler(start.clone()));
-                        new_vec.push(Occupied(end.clone(), goal));
-                    }
-                    DateTimeRangeContainerResult::FitInBetween(start, mid, end) => {
-                        new_vec.push(Filler(start.clone()));
-                        new_vec.push(Occupied(mid.clone(), goal));
-                        new_vec.push(Filler(end.clone()))
-                    }
-                    _ => unreachable!(),
-                }
-            }
-            else {
-                new_vec.push(item.clone());
-            }
-        }
+    fn gather_tasks(&self, tasks: &mut Vec<Task>, slots: &Scheduled, impossible: bool) {
+        slots.borrow().iter().enumerate().for_each(|(idx, (position, range, goal))| {
 
-        self.calendar = new_vec;
+            let start = range.start().naive_date_time();
+            let deadline = range.end().naive_date_time();
+
+            if let Some(f) = self.flexibility_at(*position) {
+                tasks.push(Task {
+                    taskid: idx,
+                    goalid: f.goal.id(),
+                    title: f.goal.title(),
+                    duration: f.goal.min_span(),
+                    start,
+                    deadline,
+                    tags: vec![],
+                    impossible,
+                })
+            }
+        })
     }
 }
 
-fn create_task_from_goal(idx: usize, range: &DateTimeRange, goal: &Goal) -> Task {
-    Task {
-        taskid: idx,
-        goalid: goal.id(),
-        title: goal.title(),
-        duration: range.span(),
-        start: range.start().into(),
-        deadline: range.end().into(),
-        tags: vec![],
-        impossible: range.span() == 0,
-    }
+fn get_flexibilities(goal: Rc<Goal>, start: &DateTime, end: &DateTime) -> Flexibility {
+    let goals = vec![goal];
+    goals.into_iter()
+        .map(|g| (g.clone(), Flexibility {
+            goal: g,
+            day: Rc::new(Day::new(start.clone())),
+        }))
+        .map(|(g, f)| {
+            let day = f.day;
+            day.occupy_inverse_range(&DateTimeRange::new(start.clone(), end.clone()));
+            (g, Flexibility {
+                goal: f.goal,
+                day,
+            })
+        })
+        .map(|(g, f)| {
+            let day = f.day;
+            day.occupy_inverse_range(&g.day_filter(start));
+            Flexibility {
+                goal: f.goal,
+                day,
+            }
+        })
+        .collect::<Vec<_>>()
+        .pop()
+        .unwrap()
 }
-fn create_task_from_filler(idx: usize, range: &DateTimeRange) -> Task {
-    create_task_from_goal(idx, range, &Goal::new("filler", "filler"))
+
+impl Debug for Calendar {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.write_str(
+            &self.flexibilities.borrow().iter()
+                .map(|f| f.day.to_string())
+                .collect::<Vec<_>>()
+                .join("\n")
+        )
+    }
 }

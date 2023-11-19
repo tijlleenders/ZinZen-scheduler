@@ -1,9 +1,14 @@
-use crate::models::goal::Goal;
-use crate::new_models::slot::Slot;
+use std::rc::Rc;
+use crate::new_models::goal::Goal;
+use crate::new_models::day::Day;
 
-#[derive(Debug)]
-pub struct Flexibility<'a> {
-    pub flexibility: usize,
-    pub goal: &'a Goal,
-    pub slots: Vec<Slot<'a>>,
+#[derive(Debug, Clone)]
+pub struct Flexibility {
+    pub goal: Rc<Goal>,
+    pub day: Rc<Day>,
+}
+impl PartialEq for Flexibility {
+    fn eq(&self, other: &Self) -> bool {
+        self.goal.eq(&other.goal) && self.day.eq(&other.day)
+    }
 }

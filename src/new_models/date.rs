@@ -1,10 +1,10 @@
 use std::cmp::Ordering;
-use std::convert::Infallible;
 use std::fmt::{Display, Formatter};
+use std::ops::Add;
 use std::str::FromStr;
-use std::string::ParseError;
 use chrono::{NaiveDate, NaiveDateTime, NaiveTime, Duration};
 use lazy_static::lazy_static;
+use crate::new_models::calendar::Span;
 use crate::new_models::date::DateTimeRangeContainerResult::{FitAtEnd, FitAtStart, FitInBetween, NoFit, PerfectFit};
 
 lazy_static!{
@@ -20,10 +20,10 @@ impl DateTime {
         Self { naive: normalize_date(date_time) }
     }
     pub fn from_naive_date(date: &NaiveDate) -> Self {
-        Self { naive: NaiveDateTime::new(date.clone(), NaiveTime::default()) }
+        Self { naive: NaiveDateTime::new(*date, NaiveTime::default()) }
     }
     pub fn from_naive_time(time: &NaiveTime) -> Self {
-        Self { naive: normalize_date(&NaiveDateTime::new(NaiveDate::default(), time.clone())) }
+        Self { naive: normalize_date(&NaiveDateTime::new(NaiveDate::default(), *time)) }
     }
     fn from_str(date_str: &str) -> Option<Self> {
         NaiveDateTime::from_str(date_str)
@@ -31,7 +31,7 @@ impl DateTime {
             .ok()
     }
     pub fn make_range(&self, span: usize) -> DateTimeRange {
-        let mut current = self.naive.clone();
+        let mut current = self.naive;
         for _ in 0..span {
             current += *SLOT_DURATION;
         }
@@ -57,15 +57,60 @@ impl DateTime {
         }
         out
     }
-}
-impl PartialEq<Self> for DateTime {
+    pub fn start_of_day(&self) -> DateTime {
+        DateTime::from_naive_date_time(
+            &NaiveDateTime::new(self.naive.date(), NaiveTime::default())
+        )
+    }
+    pub fn end_of_day(&self) -> DateTime {
+        let beginning = self.start_of_day();
+        DateTime::from_naive_date_time(
+            &beginning.naive.add(Duration::days(1))
+        )
+    }
+    pub fn span_of_day(&self) -> Span {
+        let end_of_day = self.end_of_day();
+        let mut current = self.start_of_day();
+        let mut count = 0;
+        while current.lt(&end_of_day) {
+            count += 1;
+            current = current.inc();
+        }
+        count
+    }
+    pub fn with_new_time(&self, time: &DateTime) -> DateTime {
+        DateTime::from_naive_date_time(
+            &NaiveDateTime::new(self.naive.date(), time.naive.time())
+        )
+    }
+    pub fn time_after(&self, other: &Option<DateTime>) -> DateTime {
+        other.as_ref().map(|time|
+            self.with_new_time(time)
+        ).unwrap_or(
+            self.start_of_day()
+        )
+    }
+    pub fn time_before(&self, other: &Option<DateTime>) -> DateTime {
+        other.as_ref().map(|time|
+            self.with_new_time(time)
+        ).unwrap_or(
+            self.end_of_day()
+        )
+    }
+    pub fn naive_date(&self) -> NaiveDate {
+        self.naive.date()
+    }
+    pub fn naive_date_time(&self) -> NaiveDateTime {
+        self.naive
+    }
+}impl PartialEq<Self> for DateTime {
     fn eq(&self, other: &Self) -> bool {
         self.naive.eq(&other.naive)
     }
 }
 impl PartialOrd<Self> for DateTime {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.naive.partial_cmp(&other.naive)
+        Some(self.cmp(other))
     }
 }
 impl Eq for DateTime {}
@@ -81,7 +126,7 @@ impl Display for DateTime {
 }
 impl From<&DateTime> for NaiveDateTime {
     fn from(date: &DateTime) -> Self {
-        date.naive.clone()
+        date.naive
     }
 }
 
@@ -129,7 +174,6 @@ impl DateTimeRange {
     }
 
     pub fn contains_date_time(&self, date: &DateTime) -> bool {
-        println!("{:?}<={:?}<{:?}", self.start, date, self.end);
         self.start.naive.le(&date.naive) && date.naive.lt(&self.end.naive)
     }
 
@@ -146,7 +190,7 @@ impl DateTimeRange {
         } else {
             Self {
                 start: self.start.dec_by(span as usize),
-                end: self.end.dec_by(span.abs() as usize),
+                end: self.end.dec_by(span.unsigned_abs() as usize),
             }
         }
     }
@@ -156,12 +200,12 @@ impl DateTimeRange {
             match (&range.start, &range.end) {
                 (start, end) if start == &self.start && end == &self.end =>
                     PerfectFit,
-                (start, end) if start == &self.start =>
+                (start, _) if start == &self.start =>
                     FitAtStart(
                         DateTimeRange::new(range.start.clone(), range.end.clone()),
                         DateTimeRange::new(range.end.clone(), self.end.clone()),
                     ),
-                (start, end) if end == &self.end =>
+                (_, end) if end == &self.end =>
                     FitAtEnd(
                         DateTimeRange::new(self.start.clone(), range.start.clone()),
                         DateTimeRange::new(range.start.clone(), range.end.clone()),
@@ -195,7 +239,6 @@ fn normalize_date(date_time: &NaiveDateTime) -> NaiveDateTime {
 
 #[cfg(test)]
 mod test {
-    use super::util::create_date;
     use super::*;
 
     #[test]
@@ -242,7 +285,7 @@ mod test {
     }
 
     #[test]
-    fn is_fitting() {
+    fn test_is_fitting() {
         let (ref_range, _, _) = create_range("2022-01-01T00:00:00", 3);
 
         let (range, _, _) = create_range("2022-01-01T00:00:00", 3);
