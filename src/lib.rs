@@ -161,30 +161,33 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
     while calendar.has_finished_scheduling() {
         log::info!("\n{calendar:?}");
 
-        let flexibilities = calendar.unprocessed().iter()
-            .map(|pos| calendar.flexibility(*pos).unwrap())
-            .collect::<Vec<_>>();
-
         #[derive(PartialEq)]
         enum Handling {
             DoNothing,
-            Flexibility1(Flexibility),
-            MostFlexibility(Flexibility),
-            Impossible(Flexibility),
+            Flexibility1,
+            MostFlexibility,
+            Impossible,
         }
-        let mut handling = (Handling::DoNothing, 0, usize::MAX);
-        for (pos, flex, f) in flexibilities {
+
+        let mut handling = (Handling::DoNothing, 0, 2);
+        for (pos, flex, f) in calendar.unprocessed().iter()
+            .map(|pos| calendar.flexibility(*pos).unwrap())
+            .collect::<Vec<_>>()
+        {
             match flex {
                 0 => {
-                    handling = (Handling::Impossible(f), flex, pos);
+                    handling = (Handling::Impossible, flex, pos);
+                    log::info!("Impossible {flex} {pos}");
                     break;
                 }
                 1 => {
-                    handling = (Handling::Flexibility1(f), flex, pos);
+                    handling = (Handling::Flexibility1, flex, pos);
+                    log::info!("Flexibility1 {flex} {pos}");
                     break;
                 }
-                _ => handling = if handling.1 < flex {
-                    (Handling::MostFlexibility(f), flex, pos)
+                _ => handling = if handling.1 <= 2 || handling.1 > flex {
+                    log::info!("MostFlexibiltiy {flex} {pos}");
+                    (Handling::MostFlexibility, flex, pos)
                 } else {
                     handling
                 }
@@ -195,22 +198,29 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
 
         match handling {
             Handling::DoNothing => break,
-            Handling::Impossible(flexibility) => {
-                if let Some((flexibility, _tail)) = calendar.take(selected) {
+            Handling::Impossible => {
+                log::info!("Impossible {selected}");
+                if let Some((_flexibility, _tail)) = calendar.take(selected) {
                     calendar.push_impossible(selected, DateTimeRange::new(date_start.clone(), date_end.clone()));
+                    log::info!("Impossible {selected}");
                 }
             }
-            Handling::Flexibility1(flexibility) => {
+            Handling::Flexibility1 => {
+                log::info!("Flexibility1 {selected}");
                 if let Some((flexibility, _tail)) = calendar.take(selected) {
                     let slot = flexibility.day.first_fit(flexibility.goal.min_span());
                     calendar.push_scheduled(selected, slot);
+                    log::info!("Flexibility1 {selected}");
                 }
             }
-            Handling::MostFlexibility(flexibility) => {
+            Handling::MostFlexibility => {
+                log::info!("MostFlexibiltiy {selected}");
                 if let Some((flexibility, tail)) = calendar.take(selected) {
+                    log::info!("MostFlexibiltiy {selected}");
                     if tail.is_empty() {
                         let slot = flexibility.day.first_fit(flexibility.goal.min_span());
                         calendar.push_scheduled(selected, slot);
+                        log::info!("asdf");
                     } else {
                         let slots = flexibility.day.slots(flexibility.goal.min_span());
                         let (_, to_occupy) = tail.iter()
@@ -221,9 +231,6 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
                             .min_by(|(a, _), (b, _)| a.cmp(b))
                             .unwrap()
                             ;
-
-                        calendar.occupy_unprocessed(&to_occupy);
-
                         calendar.push_scheduled(selected, to_occupy);
                     }
                 }
@@ -238,52 +245,4 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
 fn get_goals(input: &Input) -> Goals {
     input.goals.values().map(|g| Rc::new(g.into()))
         .collect::<Vec<_>>()
-}
-
-fn get_flexibilities(goal: Rc<Goal>, start: &DateTime, end: &DateTime) -> Flexibility {
-    let goals = vec![goal];
-    goals.into_iter()
-        .map(|g| (g.clone(), Flexibility {
-                goal: g,
-                day: Rc::new(Day::new(start.clone())),
-            }))
-        .map(|(g, f)| {
-            let window = f.day;
-            window.occupy_inverse_range(&DateTimeRange::new(start.clone(), end.clone()));
-            (g, Flexibility {
-                goal: f.goal,
-                day: window,
-            })
-        })
-        .map(|(g, f)| {
-            let window = f.day;
-            window.occupy_inverse_range(&g.day_filter(start));
-            Flexibility {
-                goal: f.goal,
-                day: window,
-            }
-        })
-        .collect::<Vec<_>>()
-        .pop()
-        .unwrap()
-
-}
-
-fn gather_tasks(tasks: &mut Vec<Task>, slots: &[(DateTimeRange, Flexibility)], impossible: bool) {
-    slots.iter().enumerate().for_each(|(idx, (slot, f))| {
-
-        let start = slot.start().naive_date_time();
-        let deadline = slot.end().naive_date_time();
-
-        tasks.push(Task {
-            taskid: idx,
-            goalid: f.goal.id(),
-            title: f.goal.title(),
-            duration: f.goal.min_span(),
-            start,
-            deadline,
-            tags: vec![],
-            impossible,
-        })
-    })
 }

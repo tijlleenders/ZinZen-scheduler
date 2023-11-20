@@ -54,8 +54,8 @@ impl Day {
         }
         let mut out = vec![];
         let start_of_day = self.range.start();
-        for idx in 0..self.seats.len() {
-            if self.all_occupied(idx, span) {
+        for idx in 0..self.seats.len() - span {
+            if self.all_free(idx, span) {
                 let date = start_of_day.inc_by(idx);
                 out.push(DateTimeRange::new(date.clone(), date.inc_by(span).clone()));
             }
@@ -79,11 +79,11 @@ impl Day {
     pub fn first_fit(&self, span: usize) -> DateTimeRange {
         self.slots(span)[0].clone()
     }
-    fn all_occupied(&self, idx: usize, span: usize) -> bool {
+    fn all_free(&self, idx: usize, span: usize) -> bool {
         self.seats[idx..idx + span].iter()
             .all(|seat| match *seat.borrow() {
-                Seat::Occupied => true,
-                Seat::Free => false,
+                Seat::Occupied => false,
+                Seat::Free => true,
             })
     }
     pub fn differences(&self, other: &Day) -> usize {

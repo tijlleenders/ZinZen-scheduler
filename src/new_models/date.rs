@@ -78,6 +78,18 @@ impl DateTime {
         }
         count
     }
+    pub fn span_by(&self, other: &DateTime) -> Span {
+        let mut current = self.clone();
+        let mut count = 0;
+        while current.le(other) {
+            current = current.inc();
+            count += 1;
+        }
+        if count > 0 {
+            count -= 1;
+        }
+        count
+    }
     pub fn with_new_time(&self, time: &DateTime) -> DateTime {
         DateTime::from_naive_date_time(
             &NaiveDateTime::new(self.naive.date(), time.naive.time())
@@ -103,7 +115,8 @@ impl DateTime {
     pub fn naive_date_time(&self) -> NaiveDateTime {
         self.naive
     }
-}impl PartialEq<Self> for DateTime {
+}
+impl PartialEq<Self> for DateTime {
     fn eq(&self, other: &Self) -> bool {
         self.naive.eq(&other.naive)
     }
@@ -139,7 +152,7 @@ pub enum DateTimeRangeContainerResult {
     FitInBetween(DateTimeRange, DateTimeRange, DateTimeRange),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct DateTimeRange {
     start: DateTime,
     end: DateTime,
@@ -220,6 +233,22 @@ impl DateTimeRange {
         else {
             NoFit
         }
+    }
+}
+impl PartialEq<Self> for DateTimeRange {
+    fn eq(&self, other: &Self) -> bool {
+        self.start().eq(&other.start()) && self.end().eq(&other.end())
+    }
+}
+impl PartialOrd<Self> for DateTimeRange {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.start().cmp(other.start()))
+    }
+}
+impl Eq for DateTimeRange {}
+impl Ord for DateTimeRange {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.start().cmp(&other.start())
     }
 }
 
