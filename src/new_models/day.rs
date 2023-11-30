@@ -1,7 +1,7 @@
-use std::cell::RefCell;
-use std::fmt::{Display, Formatter};
 use crate::new_models::calendar::{Flex, Span};
 use crate::new_models::date::{DateTime, DateTimeRange};
+use std::cell::RefCell;
+use std::fmt::{Display, Formatter};
 
 #[derive(Debug, PartialEq)]
 enum Seat {
@@ -42,8 +42,14 @@ impl Day {
         }
     }
     pub fn occupy_inverse_range(&self, range: &DateTimeRange) {
-        self.occupy(&DateTimeRange::new(self.range.start().start_of_day(), range.start().clone()));
-        self.occupy(&DateTimeRange::new(range.end().clone(), self.range.end().start_of_day()));
+        self.occupy(&DateTimeRange::new(
+            self.range.start().start_of_day(),
+            range.start().clone(),
+        ));
+        self.occupy(&DateTimeRange::new(
+            range.end().clone(),
+            self.range.end().start_of_day(),
+        ));
     }
     pub fn flexibility(&self, span: Span) -> Flex {
         self.slots(span).len()
@@ -74,23 +80,27 @@ impl Day {
             }
             out.push(count);
         }
-        out.iter().zip(range).map(|(idx, range)| (*idx, range.clone())).collect()
+        out.iter()
+            .zip(range)
+            .map(|(idx, range)| (*idx, range.clone()))
+            .collect()
     }
     pub fn first_fit(&self, span: usize) -> DateTimeRange {
         self.slots(span)[0].clone()
     }
     fn all_free(&self, idx: usize, span: usize) -> bool {
-        self.seats[idx..idx + span].iter()
+        self.seats[idx..idx + span]
+            .iter()
             .all(|seat| match *seat.borrow() {
                 Seat::Occupied => false,
                 Seat::Free => true,
             })
     }
     pub fn differences(&self, other: &Day) -> usize {
-        self.seats.iter().zip(&other.seats)
-            .map(|(a, b)|
-                if a == b { 0 } else { 1 }
-            )
+        self.seats
+            .iter()
+            .zip(&other.seats)
+            .map(|(a, b)| if a == b { 0 } else { 1 })
             .sum()
     }
 }
@@ -98,13 +108,15 @@ impl Day {
 impl Display for Day {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.write_str(
-            &self.seats.iter()
+            &self
+                .seats
+                .iter()
                 .map(|s| match *s.borrow() {
                     Seat::Free => ".",
                     Seat::Occupied => "#",
                 })
                 .collect::<Vec<_>>()
-                .join("")
+                .join(""),
         )
     }
 }

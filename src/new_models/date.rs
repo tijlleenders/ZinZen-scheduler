@@ -1,13 +1,15 @@
+use crate::new_models::calendar::Span;
+use crate::new_models::date::DateTimeRangeContainerResult::{
+    FitAtEnd, FitAtStart, FitInBetween, NoFit, PerfectFit,
+};
+use chrono::{Duration, NaiveDate, NaiveDateTime, NaiveTime};
+use lazy_static::lazy_static;
 use std::cmp::Ordering;
 use std::fmt::{Display, Formatter};
 use std::ops::Add;
 use std::str::FromStr;
-use chrono::{NaiveDate, NaiveDateTime, NaiveTime, Duration};
-use lazy_static::lazy_static;
-use crate::new_models::calendar::Span;
-use crate::new_models::date::DateTimeRangeContainerResult::{FitAtEnd, FitAtStart, FitInBetween, NoFit, PerfectFit};
 
-lazy_static!{
+lazy_static! {
     static ref SLOT_DURATION: Duration = Duration::hours(1);
 }
 
@@ -17,13 +19,19 @@ pub struct DateTime {
 }
 impl DateTime {
     pub fn from_naive_date_time(date_time: &NaiveDateTime) -> Self {
-        Self { naive: normalize_date(date_time) }
+        Self {
+            naive: normalize_date(date_time),
+        }
     }
     pub fn from_naive_date(date: &NaiveDate) -> Self {
-        Self { naive: NaiveDateTime::new(*date, NaiveTime::default()) }
+        Self {
+            naive: NaiveDateTime::new(*date, NaiveTime::default()),
+        }
     }
     pub fn from_naive_time(time: &NaiveTime) -> Self {
-        Self { naive: normalize_date(&NaiveDateTime::new(NaiveDate::default(), *time)) }
+        Self {
+            naive: normalize_date(&NaiveDateTime::new(NaiveDate::default(), *time)),
+        }
     }
     fn from_str(date_str: &str) -> Option<Self> {
         NaiveDateTime::from_str(date_str)
@@ -58,15 +66,11 @@ impl DateTime {
         out
     }
     pub fn start_of_day(&self) -> DateTime {
-        DateTime::from_naive_date_time(
-            &NaiveDateTime::new(self.naive.date(), NaiveTime::default())
-        )
+        DateTime::from_naive_date_time(&NaiveDateTime::new(self.naive.date(), NaiveTime::default()))
     }
     pub fn end_of_day(&self) -> DateTime {
         let beginning = self.start_of_day();
-        DateTime::from_naive_date_time(
-            &beginning.naive.add(Duration::days(1))
-        )
+        DateTime::from_naive_date_time(&beginning.naive.add(Duration::days(1)))
     }
     pub fn span_of_day(&self) -> Span {
         let end_of_day = self.end_of_day();
@@ -91,23 +95,19 @@ impl DateTime {
         count
     }
     pub fn with_new_time(&self, time: &DateTime) -> DateTime {
-        DateTime::from_naive_date_time(
-            &NaiveDateTime::new(self.naive.date(), time.naive.time())
-        )
+        DateTime::from_naive_date_time(&NaiveDateTime::new(self.naive.date(), time.naive.time()))
     }
     pub fn time_after(&self, other: &Option<DateTime>) -> DateTime {
-        other.as_ref().map(|time|
-            self.with_new_time(time)
-        ).unwrap_or(
-            self.start_of_day()
-        )
+        other
+            .as_ref()
+            .map(|time| self.with_new_time(time))
+            .unwrap_or(self.start_of_day())
     }
     pub fn time_before(&self, other: &Option<DateTime>) -> DateTime {
-        other.as_ref().map(|time|
-            self.with_new_time(time)
-        ).unwrap_or(
-            self.end_of_day()
-        )
+        other
+            .as_ref()
+            .map(|time| self.with_new_time(time))
+            .unwrap_or(self.end_of_day())
     }
     pub fn naive_date(&self) -> NaiveDate {
         self.naive.date()
@@ -211,26 +211,22 @@ impl DateTimeRange {
     pub fn is_fitting(&self, range: &DateTimeRange) -> DateTimeRangeContainerResult {
         if self.contains(range) {
             match (&range.start, &range.end) {
-                (start, end) if start == &self.start && end == &self.end =>
-                    PerfectFit,
-                (start, _) if start == &self.start =>
-                    FitAtStart(
-                        DateTimeRange::new(range.start.clone(), range.end.clone()),
-                        DateTimeRange::new(range.end.clone(), self.end.clone()),
-                    ),
-                (_, end) if end == &self.end =>
-                    FitAtEnd(
-                        DateTimeRange::new(self.start.clone(), range.start.clone()),
-                        DateTimeRange::new(range.start.clone(), range.end.clone()),
-                    ),
+                (start, end) if start == &self.start && end == &self.end => PerfectFit,
+                (start, _) if start == &self.start => FitAtStart(
+                    DateTimeRange::new(range.start.clone(), range.end.clone()),
+                    DateTimeRange::new(range.end.clone(), self.end.clone()),
+                ),
+                (_, end) if end == &self.end => FitAtEnd(
+                    DateTimeRange::new(self.start.clone(), range.start.clone()),
+                    DateTimeRange::new(range.start.clone(), range.end.clone()),
+                ),
                 _ => FitInBetween(
                     DateTimeRange::new(self.start.clone(), range.start.clone()),
                     DateTimeRange::new(range.start.clone(), range.end.clone()),
                     DateTimeRange::new(range.end.clone(), self.end.clone()),
                 ),
             }
-        }
-        else {
+        } else {
             NoFit
         }
     }
@@ -295,22 +291,25 @@ mod test {
         let date_start = DateTime::from_str("2022-01-01T03:00:00").unwrap();
         let range = date_start.make_range(3);
 
-        let range1 = DateTime::from_str("2022-01-01T04:00:00").unwrap()
+        let range1 = DateTime::from_str("2022-01-01T04:00:00")
+            .unwrap()
             .make_range(1);
         assert!(range.contains(&range1));
 
-        let range1 = DateTime::from_str("2022-01-01T02:00:00").unwrap()
+        let range1 = DateTime::from_str("2022-01-01T02:00:00")
+            .unwrap()
             .make_range(6);
         assert!(!range.contains(&range1));
 
-        let range1 = DateTime::from_str("2022-01-01T02:00:00").unwrap()
+        let range1 = DateTime::from_str("2022-01-01T02:00:00")
+            .unwrap()
             .make_range(4);
         assert!(!range.contains(&range1));
 
-        let range1 = DateTime::from_str("2022-01-01T03:00:00").unwrap()
+        let range1 = DateTime::from_str("2022-01-01T03:00:00")
+            .unwrap()
             .make_range(4);
         assert!(!range.contains(&range1));
-
     }
 
     #[test]

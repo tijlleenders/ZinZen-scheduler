@@ -82,13 +82,13 @@ pub mod services;
 mod tests;
 
 use crate::models::output::{DayTasks, Task};
-#[cfg(feature = "with-logging")]
-use std::sync::Once;
 use crate::new_models::calendar::{Calendar, Goals};
 use crate::new_models::date::{DateTime, DateTimeRange};
+use crate::new_models::day::Day;
 use crate::new_models::flexibility::Flexibility;
 use crate::new_models::goal::Goal;
-use crate::new_models::day::Day;
+#[cfg(feature = "with-logging")]
+use std::sync::Once;
 
 // Static flag to ensure logger init happens only once
 #[cfg(feature = "with-logging")]
@@ -170,12 +170,13 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
         }
 
         let mut handling = (Handling::DoNothing, 0, None);
-        let mut unprocessed = calendar.unprocessed().iter()
+        let mut unprocessed = calendar
+            .unprocessed()
+            .iter()
             .map(|pos| calendar.flexibility(*pos).unwrap())
             .collect::<Vec<_>>();
         unprocessed.sort_by(|(_, _, a), (_, _, b)| a.goal.id().cmp(&b.goal.id()));
-        for (pos, flex, f) in unprocessed
-        {
+        for (pos, flex, f) in unprocessed {
             match flex {
                 0 => {
                     handling = (Handling::Impossible, flex, Some(pos));
@@ -187,28 +188,33 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
                     log::info!("Flexibility1 {flex} {pos}");
                     break;
                 }
-                _ if handling.2 == None => handling = {
-                    log::info!("MostFlexibiltiy {flex} {pos}");
-                    (Handling::MostFlexibility, flex, Some(pos))
-                },
-                _ => handling = if handling.1 < flex {
-                    log::info!("MostFlexibiltiy {flex} {pos}");
-                    (Handling::MostFlexibility, flex, Some(pos))
+                _ if handling.2 == None => {
+                    handling = {
+                        log::info!("MostFlexibiltiy {flex} {pos}");
+                        (Handling::MostFlexibility, flex, Some(pos))
+                    }
                 }
-                else {
-                    handling
-                },
+                _ => {
+                    handling = if handling.1 < flex {
+                        log::info!("MostFlexibiltiy {flex} {pos}");
+                        (Handling::MostFlexibility, flex, Some(pos))
+                    } else {
+                        handling
+                    }
+                }
             }
         }
 
         log::info!("after {:?}", handling.2);
         if let (handling, flex, Some(selected)) = handling {
-
             match handling {
                 Handling::DoNothing => break,
                 Handling::Impossible => {
                     if let Some((_flexibility, _tail)) = calendar.take(selected) {
-                        calendar.push_impossible(selected, DateTimeRange::new(date_start.clone(), date_end.clone()));
+                        calendar.push_impossible(
+                            selected,
+                            DateTimeRange::new(date_start.clone(), date_end.clone()),
+                        );
                     }
                 }
                 Handling::Flexibility1 => {
@@ -224,21 +230,20 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
                             calendar.push_scheduled(selected, slot);
                         } else {
                             let slots = flexibility.day.slots(flexibility.goal.min_span());
-                            let (_, to_occupy) = tail.iter()
-                                .map(|pos| calendar.flexibility_at(*pos).unwrap().day.overlap(&slots))
-                                .map(|v| v.into_iter()
-                                    .min_by(|(a, _), (b, _)| a.cmp(b)).unwrap()
-                                )
+                            let (_, to_occupy) = tail
+                                .iter()
+                                .map(|pos| {
+                                    calendar.flexibility_at(*pos).unwrap().day.overlap(&slots)
+                                })
+                                .map(|v| v.into_iter().min_by(|(a, _), (b, _)| a.cmp(b)).unwrap())
                                 .min_by(|(a, _), (b, _)| a.cmp(b))
-                                .unwrap()
-                                ;
+                                .unwrap();
                             calendar.push_scheduled(selected, to_occupy);
                         }
                     }
                 }
             }
-        }
-        else {
+        } else {
             break;
         }
     }
@@ -248,6 +253,9 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
 }
 
 fn get_goals(input: &Input) -> Goals {
-    input.goals.values().map(|g| Rc::new(g.into()))
+    input
+        .goals
+        .values()
+        .map(|g| Rc::new(g.into()))
         .collect::<Vec<_>>()
 }

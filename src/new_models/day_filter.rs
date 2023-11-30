@@ -1,6 +1,6 @@
-use std::cmp::Ordering;
-use chrono::NaiveTime;
 use crate::new_models::date::DateTime;
+use chrono::NaiveTime;
+use std::cmp::Ordering;
 
 #[derive(Debug, Clone)]
 pub struct DayFilter {
@@ -25,21 +25,22 @@ impl DayFilter {
     }
 
     fn get_time(time_str: Option<&str>) -> Option<DateTime> {
-        time_str.map(|time_str| {
-            if time_str.len() != 5 && &time_str[2..3] != ":"  {
-                None
-            }
-            else {
-                match (
-                    time_str[..2].parse::<u32>().ok(),
-                    time_str[3..].parse::<u32>().ok(),
-                ) {
-                    (Some(hour), Some(minute)) => NaiveTime::from_hms_opt(hour, minute, 0),
-                    _ => None,
+        time_str
+            .map(|time_str| {
+                if time_str.len() != 5 && &time_str[2..3] != ":" {
+                    None
+                } else {
+                    match (
+                        time_str[..2].parse::<u32>().ok(),
+                        time_str[3..].parse::<u32>().ok(),
+                    ) {
+                        (Some(hour), Some(minute)) => NaiveTime::from_hms_opt(hour, minute, 0),
+                        _ => None,
+                    }
                 }
-            }
-        })
-            .unwrap().or(None)
+            })
+            .unwrap()
+            .or(None)
             .map(|ref nt| DateTime::from_naive_time(nt))
     }
 }
@@ -47,8 +48,7 @@ impl DayFilter {
 impl Eq for DayFilter {}
 impl PartialEq for DayFilter {
     fn eq(&self, other: &Self) -> bool {
-        self.apply_after.eq(&other.apply_after)
-        && self.apply_before.eq(&other.apply_before)
+        self.apply_after.eq(&other.apply_after) && self.apply_before.eq(&other.apply_before)
     }
 }
 

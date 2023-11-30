@@ -1,8 +1,8 @@
-use std::hash::{Hash, Hasher};
-use std::rc::Rc;
 use crate::new_models::calendar::Span;
 use crate::new_models::date::{DateTime, DateTimeRange};
 use crate::new_models::day_filter::DayFilter;
+use std::hash::{Hash, Hasher};
+use std::rc::Rc;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Goal {
@@ -33,8 +33,14 @@ impl Goal {
     }
     pub fn day_filter(&self, date: &DateTime) -> DateTimeRange {
         let out = DateTimeRange::new(
-            self.day_filter.as_ref().map(|f| f.after(date)).unwrap_or(date.start_of_day()),
-            self.day_filter.as_ref().map(|f| f.before(date)).unwrap_or(date.end_of_day()),
+            self.day_filter
+                .as_ref()
+                .map(|f| f.after(date))
+                .unwrap_or(date.start_of_day()),
+            self.day_filter
+                .as_ref()
+                .map(|f| f.before(date))
+                .unwrap_or(date.end_of_day()),
         );
         out
     }
@@ -45,11 +51,12 @@ impl From<&crate::models::goal::Goal> for Goal {
         fn to_string(hour: usize) -> String {
             format!("{hour:0>2}:00")
         }
-        let filter = goal.filters.clone()
-            .map(|f| DayFilter::from_str(
+        let filter = goal.filters.clone().map(|f| {
+            DayFilter::from_str(
                 f.after_time.map(to_string).as_deref(),
                 f.before_time.map(to_string).as_deref(),
-            ));
+            )
+        });
 
         Self {
             id: goal.id.clone(),
