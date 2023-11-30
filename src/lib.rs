@@ -170,9 +170,11 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
         }
 
         let mut handling = (Handling::DoNothing, 0, 2);
-        for (pos, flex, f) in calendar.unprocessed().iter()
+        let mut unprocessed = calendar.unprocessed().iter()
             .map(|pos| calendar.flexibility(*pos).unwrap())
-            .collect::<Vec<_>>()
+            .collect::<Vec<_>>();
+        unprocessed.sort_by(|(_, _, a), (_, _, b)| a.goal.id().cmp(&b.goal.id()));
+        for (pos, flex, f) in unprocessed
         {
             match flex {
                 0 => {
