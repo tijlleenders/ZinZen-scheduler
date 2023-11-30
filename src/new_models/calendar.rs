@@ -38,10 +38,12 @@ impl Calendar {
         let day = date_start.start_of_day();
         let span_of_day = day.span_of_day();
 
-        let flexibilities = RefCell::new(goals.into_iter()
+        let mut flexibilities = goals.into_iter()
             .map(|goal| get_flexibilities(goal.clone(), &date_start, &date_end))
             .collect::<Vec<_>>()
-        );
+            ;
+        flexibilities.sort_by(|a, b| a.goal.id().cmp(&b.goal.id()));
+        let flexibilities = RefCell::new(flexibilities);
 
         let unprocessed: Unprocessed = RefCell::new((0..flexibilities.borrow().len()).collect());
 
@@ -74,9 +76,6 @@ impl Calendar {
     }
     pub fn unprocessed(&self) -> Vec<Position> {
         self.unprocessed.borrow().clone()
-        // let mut out = self.unprocessed.borrow().clone();
-        // out.sort_by(|a, b| self.flexibility_at(*a).unwrap().goal.id().cmp(&self.flexibility_at(*b).unwrap().goal.id()));
-        // out
     }
     pub fn push_impossible(&self, position: Position, range: DateTimeRange) {
         self.flexibility_at(position).unwrap().day.occupy(&range);

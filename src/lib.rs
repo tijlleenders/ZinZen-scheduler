@@ -169,7 +169,7 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
             Impossible,
         }
 
-        let mut handling = (Handling::DoNothing, 0, 2);
+        let mut handling = (Handling::DoNothing, 0, None);
         let mut unprocessed = calendar.unprocessed().iter()
             .map(|pos| calendar.flexibility(*pos).unwrap())
             .collect::<Vec<_>>();
@@ -178,65 +178,68 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
         {
             match flex {
                 0 => {
-                    handling = (Handling::Impossible, flex, pos);
+                    handling = (Handling::Impossible, flex, Some(pos));
                     log::info!("Impossible {flex} {pos}");
                     break;
                 }
                 1 => {
-                    handling = (Handling::Flexibility1, flex, pos);
+                    handling = (Handling::Flexibility1, flex, Some(pos));
                     log::info!("Flexibility1 {flex} {pos}");
                     break;
                 }
-                _ => handling = if handling.1 <= 2 || handling.1 > flex {
+                _ if handling.2 == None => handling = {
                     log::info!("MostFlexibiltiy {flex} {pos}");
-                    (Handling::MostFlexibility, flex, pos)
-                } else {
-                    handling
+                    (Handling::MostFlexibility, flex, Some(pos))
+                },
+                _ => handling = if handling.1 < flex {
+                    log::info!("MostFlexibiltiy {flex} {pos}");
+                    (Handling::MostFlexibility, flex, Some(pos))
                 }
+                else {
+                    handling
+                },
             }
         }
 
-        let (handling, flex, selected) = handling;
+        log::info!("after {:?}", handling.2);
+        if let (handling, flex, Some(selected)) = handling {
 
-        match handling {
-            Handling::DoNothing => break,
-            Handling::Impossible => {
-                log::info!("Impossible {selected}");
-                if let Some((_flexibility, _tail)) = calendar.take(selected) {
-                    calendar.push_impossible(selected, DateTimeRange::new(date_start.clone(), date_end.clone()));
-                    log::info!("Impossible {selected}");
+            match handling {
+                Handling::DoNothing => break,
+                Handling::Impossible => {
+                    if let Some((_flexibility, _tail)) = calendar.take(selected) {
+                        calendar.push_impossible(selected, DateTimeRange::new(date_start.clone(), date_end.clone()));
+                    }
                 }
-            }
-            Handling::Flexibility1 => {
-                log::info!("Flexibility1 {selected}");
-                if let Some((flexibility, _tail)) = calendar.take(selected) {
-                    let slot = flexibility.day.first_fit(flexibility.goal.min_span());
-                    calendar.push_scheduled(selected, slot);
-                    log::info!("Flexibility1 {selected}");
-                }
-            }
-            Handling::MostFlexibility => {
-                log::info!("MostFlexibiltiy {selected}");
-                if let Some((flexibility, tail)) = calendar.take(selected) {
-                    log::info!("MostFlexibiltiy {selected}");
-                    if tail.is_empty() {
+                Handling::Flexibility1 => {
+                    if let Some((flexibility, _tail)) = calendar.take(selected) {
                         let slot = flexibility.day.first_fit(flexibility.goal.min_span());
                         calendar.push_scheduled(selected, slot);
-                        log::info!("asdf");
-                    } else {
-                        let slots = flexibility.day.slots(flexibility.goal.min_span());
-                        let (_, to_occupy) = tail.iter()
-                            .map(|pos| calendar.flexibility_at(*pos).unwrap().day.overlap(&slots))
-                            .map(|v| v.into_iter()
-                                .min_by(|(a, _), (b, _)| a.cmp(b)).unwrap()
-                            )
-                            .min_by(|(a, _), (b, _)| a.cmp(b))
-                            .unwrap()
-                            ;
-                        calendar.push_scheduled(selected, to_occupy);
+                    }
+                }
+                Handling::MostFlexibility => {
+                    if let Some((flexibility, tail)) = calendar.take(selected) {
+                        if tail.is_empty() {
+                            let slot = flexibility.day.first_fit(flexibility.goal.min_span());
+                            calendar.push_scheduled(selected, slot);
+                        } else {
+                            let slots = flexibility.day.slots(flexibility.goal.min_span());
+                            let (_, to_occupy) = tail.iter()
+                                .map(|pos| calendar.flexibility_at(*pos).unwrap().day.overlap(&slots))
+                                .map(|v| v.into_iter()
+                                    .min_by(|(a, _), (b, _)| a.cmp(b)).unwrap()
+                                )
+                                .min_by(|(a, _), (b, _)| a.cmp(b))
+                                .unwrap()
+                                ;
+                            calendar.push_scheduled(selected, to_occupy);
+                        }
                     }
                 }
             }
+        }
+        else {
+            break;
         }
     }
     log::info!("\n{calendar:?}");
