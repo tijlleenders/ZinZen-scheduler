@@ -5,7 +5,7 @@ use crate::models::{
 use chrono::Duration;
 
 /// Find best slots for steps by splitting, finding conflicts and return list of slots which can be scheduled
-pub(crate) fn find_best_slots_for_first_step(steps: &Vec<Step>) -> Option<Vec<Slot>> {
+pub(crate) fn find_best_slots_for_first_step(steps: &[Step]) -> Option<Vec<Slot>> {
     if steps.is_empty() {
         return None;
     }

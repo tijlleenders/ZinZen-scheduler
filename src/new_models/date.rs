@@ -33,6 +33,7 @@ impl DateTime {
             naive: normalize_date(&NaiveDateTime::new(NaiveDate::default(), *time)),
         }
     }
+    #[allow(dead_code)]
     fn from_str(date_str: &str) -> Option<Self> {
         NaiveDateTime::from_str(date_str)
             .map(|ndt| Self::from_naive_date_time(&ndt))
@@ -84,14 +85,12 @@ impl DateTime {
     }
     pub fn span_by(&self, other: &DateTime) -> Span {
         let mut current = self.clone();
-        let mut count = 0;
+        let mut count: Span = 0;
         while current.le(other) {
             current = current.inc();
             count += 1;
         }
-        if count > 0 {
-            count -= 1;
-        }
+        count = count.saturating_sub(1);
         count
     }
     pub fn with_new_time(&self, time: &DateTime) -> DateTime {
@@ -233,7 +232,7 @@ impl DateTimeRange {
 }
 impl PartialEq<Self> for DateTimeRange {
     fn eq(&self, other: &Self) -> bool {
-        self.start().eq(&other.start()) && self.end().eq(&other.end())
+        self.start().eq(other.start()) && self.end().eq(other.end())
     }
 }
 impl PartialOrd<Self> for DateTimeRange {
@@ -244,7 +243,7 @@ impl PartialOrd<Self> for DateTimeRange {
 impl Eq for DateTimeRange {}
 impl Ord for DateTimeRange {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.start().cmp(&other.start())
+        self.start().cmp(other.start())
     }
 }
 

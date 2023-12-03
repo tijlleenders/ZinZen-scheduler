@@ -4,9 +4,8 @@ use crate::new_models::date::{DateTime, DateTimeRange};
 use crate::new_models::day::Day;
 use crate::new_models::flexibility::Flexibility;
 use crate::new_models::goal::Goal;
-use crate::schedule;
 use std::cell::RefCell;
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::{Debug, Formatter};
 use std::rc::Rc;
 
 pub type Goals = Vec<Rc<Goal>>;
@@ -20,6 +19,7 @@ pub type Data = RefCell<Vec<Flexibility>>;
 
 pub struct Calendar {
     day: DateTime,
+    #[allow(dead_code)]
     span_of_day: Span,
 
     flexibilities: Data,
@@ -38,7 +38,7 @@ impl Calendar {
         let span_of_day = day.span_of_day();
 
         let mut flexibilities = goals
-            .into_iter()
+            .iter()
             .map(|goal| get_flexibilities(goal.clone(), &date_start, &date_end))
             .collect::<Vec<_>>();
         flexibilities.sort_by(|a, b| a.goal.id().cmp(&b.goal.id()));
@@ -136,7 +136,7 @@ impl Calendar {
         slots
             .iter()
             .enumerate()
-            .for_each(|(idx, (position, range, goal))| {
+            .for_each(|(idx, (position, range, _goal))| {
                 let start = range.start().naive_date_time();
                 let deadline = range.end().naive_date_time();
 
@@ -162,7 +162,7 @@ impl Calendar {
         slots
             .iter()
             .enumerate()
-            .for_each(|(idx, (position, range, goal))| {
+            .for_each(|(idx, (position, range, _goal))| {
                 if current.lt(range.start()) {
                     let span = current.span_by(range.start());
                     tasks.push(Task {

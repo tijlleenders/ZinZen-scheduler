@@ -81,12 +81,8 @@ pub mod services;
 #[cfg(test)]
 mod tests;
 
-use crate::models::output::{DayTasks, Task};
 use crate::new_models::calendar::{Calendar, Goals};
 use crate::new_models::date::{DateTime, DateTimeRange};
-use crate::new_models::day::Day;
-use crate::new_models::flexibility::Flexibility;
-use crate::new_models::goal::Goal;
 #[cfg(feature = "with-logging")]
 use std::sync::Once;
 
@@ -121,33 +117,6 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
 }
 
-/// The main binary function to call
-#[cfg(not(feature = "new-scheduler"))]
-pub fn run_scheduler(input: Input) -> FinalTasks {
-    #[cfg(feature = "with-logging")]
-    initialize_logger();
-
-    let steps = generate_steps_to_place(input);
-
-    log::debug!("{:#?}", &steps);
-
-    let placed_steps = step_placer(steps);
-
-    match output_formatter(placed_steps) {
-        Err(Error::NoConfirmedDate(title, id)) => {
-            panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.");
-        }
-        Err(e) => {
-            panic!("Unexpected error: {:?}", e);
-        }
-        Ok(final_tasks) => {
-            log::debug!("{:#?}", &final_tasks);
-            final_tasks
-        }
-    }
-}
-
-#[cfg(feature = "new-scheduler")]
 pub fn run_scheduler(input: Input) -> FinalTasks {
     #[cfg(feature = "with-logging")]
     initialize_logger();
@@ -176,7 +145,7 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
             .map(|pos| calendar.flexibility(*pos).unwrap())
             .collect::<Vec<_>>();
         unprocessed.sort_by(|(_, _, a), (_, _, b)| a.goal.id().cmp(&b.goal.id()));
-        for (pos, flex, f) in unprocessed {
+        for (pos, flex, _f) in unprocessed {
             match flex {
                 0 => {
                     handling = (Handling::Impossible, flex, Some(pos));
@@ -188,7 +157,7 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
                     log::info!("Flexibility1 {flex} {pos}");
                     break;
                 }
-                _ if handling.2 == None => {
+                _ if handling.2.is_none() => {
                     handling = {
                         log::info!("MostFlexibiltiy {flex} {pos}");
                         (Handling::MostFlexibility, flex, Some(pos))
@@ -206,7 +175,7 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
         }
 
         log::info!("after {:?}", handling.2);
-        if let (handling, flex, Some(selected)) = handling {
+        if let (handling, _flex, Some(selected)) = handling {
             match handling {
                 Handling::DoNothing => break,
                 Handling::Impossible => {

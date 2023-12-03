@@ -2,7 +2,6 @@ use crate::new_models::calendar::Span;
 use crate::new_models::date::{DateTime, DateTimeRange};
 use crate::new_models::day_filter::DayFilter;
 use std::hash::{Hash, Hasher};
-use std::rc::Rc;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Goal {
@@ -14,6 +13,7 @@ pub struct Goal {
     day_filter: Option<DayFilter>,
 }
 impl Goal {
+    #[allow(dead_code)]
     pub(crate) fn new(id: &str, title: &str) -> Self {
         Self {
             id: id.to_string(),
