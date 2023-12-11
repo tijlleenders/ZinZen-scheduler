@@ -1,6 +1,4 @@
-pub mod impls;
-
-use crate::models::repetition::Repetition;
+use super::repetition::Repetition;
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, option::Option};
@@ -9,7 +7,7 @@ use super::{budget::Budget, slot::Slot};
 
 pub type GoalsMap = HashMap<String, Goal>;
 
-/// An aim or desired result someone wants to reach.  
+/// An aim or desired result someone wants to reach.
 #[derive(Deserialize, Debug, Default, Clone, PartialEq)]
 pub struct Goal {
     // mandatory fields
@@ -42,7 +40,7 @@ pub struct Goal {
     #[serde(default)]
     pub filters: Option<TimeFilter>,
     /// Budgets that apply to this Goal, and all of its subGoals - if any.
-    #[serde(deserialize_with = "Goal::deserialize_budget_vec", default)]
+    #[serde(default)]
     pub budgets: Option<Vec<Budget>>,
 
     // additional stuff; yet not necessary for the algorithm

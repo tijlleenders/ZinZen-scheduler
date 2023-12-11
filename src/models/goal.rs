@@ -1,6 +1,6 @@
-use crate::new_models::calendar::Span;
-use crate::new_models::date::{DateTime, DateTimeRange};
-use crate::new_models::day_filter::DayFilter;
+use crate::models::calendar::Span;
+use crate::models::date::{DateTime, DateTimeRange};
+use crate::models::day_filter::DayFilter;
 use std::hash::{Hash, Hasher};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -45,8 +45,8 @@ impl Goal {
         out
     }
 }
-impl From<&crate::models::goal::Goal> for Goal {
-    fn from(goal: &crate::models::goal::Goal) -> Self {
+impl From<&crate::legacy::goal::Goal> for Goal {
+    fn from(goal: &crate::legacy::goal::Goal) -> Self {
         #[inline]
         fn to_string(hour: usize) -> String {
             format!("{hour:0>2}:00")

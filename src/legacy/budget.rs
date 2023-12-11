@@ -3,10 +3,8 @@ use std::collections::HashMap;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 
+use super::date::deserialize_normalized_date;
 use super::slot::Slot;
-use crate::models::date::deserialize_normalized_date;
-
-pub mod impls;
 
 /// Keeps track of the min and max time allowed and scheduled per time period for a collection of Steps/Tasks.
 #[derive(Debug, Deserialize, Clone, Copy, PartialEq)]
@@ -37,9 +35,11 @@ pub struct StepBudgets {
 
 #[derive(Debug, Deserialize)]
 pub struct StepBudget {
+    #[allow(dead_code)]
     pub(crate) step_budget_type: BudgetType,
     pub slot_budgets: Vec<SlotBudget>,
     pub min: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
+    #[allow(dead_code)]
     pub(crate) max: Option<usize>, //only needed once, can't remove as used for subsequent SlotBudget initialization?
 }
 

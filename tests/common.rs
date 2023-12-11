@@ -1,4 +1,4 @@
-use scheduler::models::{input::Input, output::FinalTasks};
+use scheduler::legacy::{input::Input, output::FinalTasks};
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;

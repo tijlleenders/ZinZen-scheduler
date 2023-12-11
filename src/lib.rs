@@ -5,7 +5,7 @@
 //! Output: A calendar that successfully allocates all Goals - or the maximum amount of Goals in that time period.  
 //!
 //! ```
-//! use scheduler::models::input::Input;
+//! use scheduler::legacy::input::Input;
 //!
 //!     let json_input: serde_json::Value = serde_json::json!({
 //!       "startDate": "2022-01-01T00:00:00",
@@ -64,40 +64,18 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
-use models::input::Input;
-use models::output::FinalTasks;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 
-mod errors;
-/// Mocking module to generate objects for testing
-pub mod mocking;
+pub mod legacy;
 /// The data structures
 pub mod models;
-pub mod new_models;
+use crate::legacy::input::Input;
+use crate::legacy::output::FinalTasks;
+
 /// The services handling the data structures
-pub mod services;
-
-#[cfg(test)]
-mod tests;
-
-use crate::new_models::calendar::{Calendar, Goals};
-use crate::new_models::date::{DateTime, DateTimeRange};
-#[cfg(feature = "with-logging")]
-use std::sync::Once;
-
-// Static flag to ensure logger init happens only once
-#[cfg(feature = "with-logging")]
-static LOGGER_INITIALIZED: Once = Once::new();
-
-#[cfg(feature = "with-logging")]
-fn initialize_logger() {
-    // Use the Once flag to ensure initialization happens only once
-    LOGGER_INITIALIZED.call_once(|| {
-        env_logger::init();
-    });
-}
-
+use crate::models::calendar::{Calendar, Goals};
+use crate::models::date::{DateTime, DateTimeRange};
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 interface Input {
@@ -118,9 +96,6 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
 }
 
 pub fn run_scheduler(input: Input) -> FinalTasks {
-    #[cfg(feature = "with-logging")]
-    initialize_logger();
-
     let date_start = DateTime::from_naive_date_time(&input.calendar_start);
     let date_end = DateTime::from_naive_date_time(&input.calendar_end);
     let goals = get_goals(&input);

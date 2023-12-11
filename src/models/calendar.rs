@@ -1,9 +1,9 @@
-use crate::models::input::Input;
-use crate::models::output::{DayTasks, FinalTasks, Task};
-use crate::new_models::date::{DateTime, DateTimeRange};
-use crate::new_models::day::Day;
-use crate::new_models::flexibility::Flexibility;
-use crate::new_models::goal::Goal;
+use crate::legacy::input::Input;
+use crate::legacy::output::{DayTasks, FinalTasks, Task};
+use crate::models::date::{DateTime, DateTimeRange};
+use crate::models::day::Day;
+use crate::models::flexibility::Flexibility;
+use crate::models::goal::Goal;
 use std::cell::RefCell;
 use std::fmt::{Debug, Formatter};
 use std::rc::Rc;

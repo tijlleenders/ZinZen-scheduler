@@ -1,4 +1,4 @@
-use crate::new_models::date::DateTime;
+use crate::models::date::DateTime;
 use chrono::NaiveTime;
 use std::cmp::Ordering;
 

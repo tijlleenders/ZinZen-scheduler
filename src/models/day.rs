@@ -1,5 +1,5 @@
-use crate::new_models::calendar::{Flex, Span};
-use crate::new_models::date::{DateTime, DateTimeRange};
+use crate::models::calendar::{Flex, Span};
+use crate::models::date::{DateTime, DateTimeRange};
 use std::cell::RefCell;
 use std::fmt::{Display, Formatter};
 

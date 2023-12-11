@@ -1,5 +1,5 @@
-use crate::new_models::day::Day;
-use crate::new_models::goal::Goal;
+use crate::models::day::Day;
+use crate::models::goal::Goal;
 use std::rc::Rc;
 
 #[derive(Debug, Clone)]
