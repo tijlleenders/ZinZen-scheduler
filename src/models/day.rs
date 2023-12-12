@@ -1,4 +1,4 @@
-use crate::models::calendar::{Flex, Span};
+use crate::models::calendar::{FlexValue, Span};
 use crate::models::date::{DateTime, DateTimeRange};
 use std::cell::RefCell;
 use std::fmt::{Display, Formatter};
@@ -51,7 +51,7 @@ impl Day {
             self.range.end().start_of_day(),
         ));
     }
-    pub fn flexibility(&self, span: Span) -> Flex {
+    pub fn flexibility(&self, span: Span) -> FlexValue {
         self.slots(span).len()
     }
     pub fn slots(&self, span: usize) -> Vec<DateTimeRange> {

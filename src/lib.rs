@@ -102,7 +102,7 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
 
     let calendar = Calendar::new(&input, &goals);
 
-    while calendar.has_finished_scheduling() {
+    while !calendar.has_finished_scheduling() {
         log::info!("\n{calendar:?}");
 
         #[derive(PartialEq)]
@@ -113,6 +113,8 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
             Impossible,
         }
 
+        // determine flexibility
+        // (Handling marker, flexibility measure, position in the calender unproccessed vector)
         let mut handling = (Handling::DoNothing, 0, None);
         let mut unprocessed = calendar
             .unprocessed()
@@ -148,8 +150,12 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
                 }
             }
         }
+        log::info!(
+            "selected position in unprocesse vec of calendar {:?}",
+            handling.2,
+        );
 
-        log::info!("after {:?}", handling.2);
+        // calculate placement
         if let (handling, _flex, Some(selected)) = handling {
             match handling {
                 Handling::DoNothing => break,
@@ -196,6 +202,7 @@ pub fn run_scheduler(input: Input) -> FinalTasks {
     calendar.result()
 }
 
+/// helper function for legacy code
 fn get_goals(input: &Input) -> Goals {
     input
         .goals

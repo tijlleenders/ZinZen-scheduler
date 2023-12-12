@@ -11,7 +11,7 @@ use std::rc::Rc;
 pub type Goals = Vec<Rc<Goal>>;
 pub type Span = usize;
 pub type Position = usize;
-pub type Flex = usize;
+pub type FlexValue = usize;
 pub type Unprocessed = RefCell<Vec<Position>>;
 pub type Scheduled = RefCell<Vec<(Position, DateTimeRange, Rc<Goal>)>>;
 
@@ -19,8 +19,6 @@ pub type Data = RefCell<Vec<Flexibility>>;
 
 pub struct Calendar {
     day: DateTime,
-    #[allow(dead_code)]
-    span_of_day: Span,
 
     flexibilities: Data,
 
@@ -35,7 +33,6 @@ impl Calendar {
         let date_start = DateTime::from_naive_date_time(&input.calendar_start);
         let date_end = DateTime::from_naive_date_time(&input.calendar_end);
         let day = date_start.start_of_day();
-        let span_of_day = day.span_of_day();
 
         let mut flexibilities = goals
             .iter()
@@ -51,7 +48,6 @@ impl Calendar {
 
         Self {
             day,
-            span_of_day,
 
             flexibilities,
 
@@ -63,13 +59,13 @@ impl Calendar {
     }
 
     pub fn has_finished_scheduling(&self) -> bool {
-        !self.unprocessed.borrow().is_empty()
+        self.unprocessed.borrow().is_empty()
     }
 
     pub fn flexibility_at(&self, pos: Position) -> Option<Flexibility> {
         self.flexibilities.borrow().get(pos).cloned()
     }
-    pub fn flexibility(&self, pos: Position) -> Option<(Position, Flex, Flexibility)> {
+    pub fn flexibility(&self, pos: Position) -> Option<(Position, FlexValue, Flexibility)> {
         self.flexibility_at(pos)
             .map(|f| (pos, f.day.flexibility(f.goal.min_span()), f))
     }
@@ -101,13 +97,15 @@ impl Calendar {
             .for_each(|pos| self.flexibility_at(*pos).unwrap().day.occupy(range));
     }
     pub fn take(&self, position: Position) -> Option<(Flexibility, Vec<Position>)> {
-        let (head, tail): (Vec<_>, Vec<_>) = self
+        let (selected, remaining): (Vec<_>, Vec<_>) = self
             .unprocessed
             .borrow()
             .iter()
             .partition(|&p| *p == position);
-        *self.unprocessed.borrow_mut() = tail;
-        head.first()
+        *self.unprocessed.borrow_mut() = remaining;
+        assert_eq!(selected.len(), 1);
+        selected
+            .first()
             .map(|position| self.flexibility_at(*position))
             .unwrap_or(None)
             .map(|f| (f, self.unprocessed()))
