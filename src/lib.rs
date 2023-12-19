@@ -5,7 +5,7 @@
 //! Output: A calendar that successfully allocates all Goals - or the maximum amount of Goals in that time period.  
 //!
 //! ```
-//! use scheduler::models::input::Input;
+//! use scheduler::legacy::input::Input;
 //!
 //!     let json_input: serde_json::Value = serde_json::json!({
 //!       "startDate": "2022-01-01T00:00:00",
@@ -64,40 +64,18 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
-use errors::Error;
-use models::input::Input;
-use models::output::FinalTasks;
-use services::placer::step_placer;
-use services::preprocess::generate_steps_to_place;
+use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 
-mod errors;
-/// Mocking module to generate objects for testing
-pub mod mocking;
+pub mod legacy;
 /// The data structures
 pub mod models;
+use crate::legacy::input::Input;
+use crate::legacy::output::FinalTasks;
+
 /// The services handling the data structures
-pub mod services;
-
-#[cfg(test)]
-mod tests;
-
-use crate::services::output::output_formatter;
-#[cfg(feature = "with-logging")]
-use std::sync::Once;
-
-// Static flag to ensure logger init happens only once
-#[cfg(feature = "with-logging")]
-static LOGGER_INITIALIZED: Once = Once::new();
-
-#[cfg(feature = "with-logging")]
-fn initialize_logger() {
-    // Use the Once flag to ensure initialization happens only once
-    LOGGER_INITIALIZED.call_once(|| {
-        env_logger::init();
-    });
-}
-
+use crate::models::calendar::{Calendar, Goals};
+use crate::models::date::{DateTime, DateTimeRange};
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 interface Input {
@@ -117,43 +95,118 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
 }
 
-/// The main binary function to call
 pub fn run_scheduler(input: Input) -> FinalTasks {
-    #[cfg(feature = "with-logging")]
-    initialize_logger();
+    let date_start = DateTime::from_naive_date_time(&input.calendar_start);
+    let date_end = DateTime::from_naive_date_time(&input.calendar_end);
+    let goals = get_goals(&input);
 
-    let steps = generate_steps_to_place(input);
+    let calendar = Calendar::new(&input, &goals);
 
-    log::debug!("{:#?}", &steps);
+    while !calendar.has_finished_scheduling() {
+        log::info!("\n{calendar:?}");
 
-    let placed_steps = step_placer(steps);
-
-    match output_formatter(placed_steps) {
-        Err(Error::NoConfirmedDate(title, id)) => {
-            panic!("Error with step {title}:{id}. Steps passed to output formatter should always have a confirmed_start/deadline.");
+        #[derive(PartialEq)]
+        enum Handling {
+            DoNothing,
+            Flexibility1,
+            MostFlexibility,
+            Impossible,
         }
-        Err(e) => {
-            panic!("Unexpected error: {:?}", e);
+
+        // determine flexibility
+        // (Handling marker, flexibility measure, position in the calender unproccessed vector)
+        let mut handling = (Handling::DoNothing, 0, None);
+        let mut unprocessed = calendar
+            .unprocessed()
+            .iter()
+            .map(|pos| calendar.flexibility(*pos).unwrap())
+            .collect::<Vec<_>>();
+        unprocessed.sort_by(|(_, _, a), (_, _, b)| a.goal.id().cmp(&b.goal.id()));
+        for (pos, flex, _f) in unprocessed {
+            match flex {
+                0 => {
+                    handling = (Handling::Impossible, flex, Some(pos));
+                    log::info!("Impossible {flex} {pos}");
+                    break;
+                }
+                1 => {
+                    handling = (Handling::Flexibility1, flex, Some(pos));
+                    log::info!("Flexibility1 {flex} {pos}");
+                    break;
+                }
+                _ if handling.2.is_none() => {
+                    handling = {
+                        log::info!("MostFlexibiltiy {flex} {pos}");
+                        (Handling::MostFlexibility, flex, Some(pos))
+                    }
+                }
+                _ => {
+                    handling = if handling.1 < flex {
+                        log::info!("MostFlexibiltiy {flex} {pos}");
+                        (Handling::MostFlexibility, flex, Some(pos))
+                    } else {
+                        handling
+                    }
+                }
+            }
         }
-        Ok(final_tasks) => {
-            log::debug!("{:#?}", &final_tasks);
-            final_tasks
+        log::info!(
+            "selected position in unprocesse vec of calendar {:?}",
+            handling.2,
+        );
+
+        // calculate placement
+        if let (handling, _flex, Some(selected)) = handling {
+            match handling {
+                Handling::DoNothing => break,
+                Handling::Impossible => {
+                    if let Some((_flexibility, _tail)) = calendar.take(selected) {
+                        calendar.push_impossible(
+                            selected,
+                            DateTimeRange::new(date_start.clone(), date_end.clone()),
+                        );
+                    }
+                }
+                Handling::Flexibility1 => {
+                    if let Some((flexibility, _tail)) = calendar.take(selected) {
+                        let slot = flexibility.day.first_fit(flexibility.goal.min_span());
+                        calendar.push_scheduled(selected, slot);
+                    }
+                }
+                Handling::MostFlexibility => {
+                    if let Some((flexibility, tail)) = calendar.take(selected) {
+                        if tail.is_empty() {
+                            let slot = flexibility.day.first_fit(flexibility.goal.min_span());
+                            calendar.push_scheduled(selected, slot);
+                        } else {
+                            let slots = flexibility.day.slots(flexibility.goal.min_span());
+                            let (_, to_occupy) = tail
+                                .iter()
+                                .map(|pos| {
+                                    calendar.flexibility_at(*pos).unwrap().day.overlap(&slots)
+                                })
+                                .map(|v| v.into_iter().min_by(|(a, _), (b, _)| a.cmp(b)).unwrap())
+                                .min_by(|(a, _), (b, _)| a.cmp(b))
+                                .unwrap();
+                            calendar.push_scheduled(selected, to_occupy);
+                        }
+                    }
+                }
+            }
+        } else {
+            break;
         }
     }
+    log::info!("\n{calendar:?}");
+
+    calendar.result()
 }
 
-/* TODO DEBUG NOTES
-
-IDEA: This is to uniform location for notes related to similar bugs/concepts/issues/ideas in many files or modules.
-
-# 2023-06-06
-- Found many functions achieve the same concept "remove slots" as below samples:
-    - Step::remove_slot(&mut self, s: Slot)
-    - Step::remove_taken_slots(&mut self, s: Slot)
-    - Timeline::remove_slots(&mut self, slots_to_remove: Vec<Slot>)
-
-# 2023-06-07
-- For filter_timing, "sleep" step in bug_215, on the last slot it consider few hours
-more out of deadline than it should.
-
-*/
+/// helper function for legacy code
+fn get_goals(input: &Input) -> Goals {
+    input
+        .goals
+        .values()
+        .map(|g| Rc::new(g.into()))
+        .collect::<Vec<_>>()
+}

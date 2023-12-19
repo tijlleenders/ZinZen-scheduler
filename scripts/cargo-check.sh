@@ -2,5 +2,5 @@
 
 cargo check \
     && cargo +nightly fmt --all --check \
-    && cargo test \
+    && cargo test -- --nocapture \
     && cargo build

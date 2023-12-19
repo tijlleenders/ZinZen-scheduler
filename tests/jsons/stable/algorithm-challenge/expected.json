@@ -1,0 +1,63 @@
+{
+    "scheduled": [
+        {
+            "day": "2022-01-01",
+            "tasks": [
+                {
+                    "taskid": 0,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 10,
+                    "start": "2022-01-01T00:00:00",
+                    "deadline": "2022-01-01T10:00:00"
+                },
+                {
+                    "taskid": 1,
+                    "goalid": "2",
+                    "title": "dentist",
+                    "duration": 1,
+                    "start": "2022-01-01T10:00:00",
+                    "deadline": "2022-01-01T11:00:00"
+                },
+                {
+                    "taskid": 2,
+                    "goalid": "1",
+                    "title": "shopping",
+                    "duration": 2,
+                    "start": "2022-01-01T11:00:00",
+                    "deadline": "2022-01-01T13:00:00"
+                },
+                {
+                    "taskid": 3,
+                    "goalid": "4",
+                    "title": "lunch",
+                    "duration": 1,
+                    "start": "2022-01-01T13:00:00",
+                    "deadline": "2022-01-01T14:00:00"
+                },
+                {
+                    "taskid": 4,
+                    "goalid": "3",
+                    "title": "Visit friend",
+                    "duration": 2,
+                    "start": "2022-01-01T14:00:00",
+                    "deadline": "2022-01-01T16:00:00"
+                },
+                {
+                    "taskid": 5,
+                    "goalid": "free",
+                    "title": "free",
+                    "duration": 8,
+                    "start": "2022-01-01T16:00:00",
+                    "deadline": "2022-01-02T00:00:00"
+                }
+            ]
+        }
+    ],
+    "impossible": [
+        {
+            "day": "2022-01-01",
+            "tasks": []
+        }
+    ]
+}

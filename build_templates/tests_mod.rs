@@ -7,7 +7,7 @@ mod TEST_MODULE_NAME {
     // experimental tests
 //TEST_FUNCTIONS_EXPERIMENTAL
 
-    use scheduler::models::{input::Input, output::FinalTasks};
+    use scheduler::legacy::{input::Input, output::FinalTasks};
     use std::path::Path;
     use crate::common;
         
