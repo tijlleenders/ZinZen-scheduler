@@ -2,7 +2,6 @@ use crate::legacy::input::Input;
 use crate::legacy::output::{DayTasks, FinalTasks, Task};
 use crate::models::date::{DateTime, DateTimeRange};
 use crate::models::day::Day;
-use crate::models::flexibility::Flexibility;
 use crate::models::goal::Goal;
 use std::cell::RefCell;
 use std::fmt::{Debug, Formatter};
@@ -15,12 +14,8 @@ pub type FlexValue = usize;
 pub type Unprocessed = RefCell<Vec<Position>>;
 pub type Scheduled = RefCell<Vec<(Position, DateTimeRange, Rc<Goal>)>>;
 
-pub type Data = RefCell<Vec<Flexibility>>;
-
 pub struct Calendar {
     day: DateTime,
-
-    flexibilities: Data,
 
     unprocessed: Unprocessed,
 
@@ -34,25 +29,14 @@ impl Calendar {
         let date_end = DateTime::from_naive_date_time(&input.calendar_end);
         let day = date_start.start_of_day();
 
-        let mut flexibilities = goals
-            .iter()
-            .map(|goal| get_flexibilities(goal.clone(), &date_start, &date_end))
-            .collect::<Vec<_>>();
-        flexibilities.sort_by(|a, b| a.goal.id().cmp(&b.goal.id()));
-        let flexibilities = RefCell::new(flexibilities);
-
-        let unprocessed: Unprocessed = RefCell::new((0..flexibilities.borrow().len()).collect());
-
+        let unprocessed: Unprocessed = RefCell::new(vec![]);
         let scheduled = RefCell::new(vec![]);
         let impossible = RefCell::new(vec![]);
 
         Self {
             day,
 
-            flexibilities,
-
             unprocessed,
-
             scheduled,
             impossible,
         }
@@ -62,54 +46,10 @@ impl Calendar {
         self.unprocessed.borrow().is_empty()
     }
 
-    pub fn flexibility_at(&self, pos: Position) -> Option<Flexibility> {
-        self.flexibilities.borrow().get(pos).cloned()
-    }
-    pub fn flexibility(&self, pos: Position) -> Option<(Position, FlexValue, Flexibility)> {
-        self.flexibility_at(pos)
-            .map(|f| (pos, f.day.flexibility(f.goal.min_span()), f))
-    }
     pub fn unprocessed(&self) -> Vec<Position> {
         self.unprocessed.borrow().clone()
     }
-    pub fn push_impossible(&self, position: Position, range: DateTimeRange) {
-        self.flexibility_at(position).unwrap().day.occupy(&range);
-        self.occupy_unprocessed(&range);
-        self.impossible.borrow_mut().push((
-            position,
-            range,
-            self.flexibility_at(position).unwrap().goal.clone(),
-        ));
-    }
-    pub fn push_scheduled(&self, position: Position, range: DateTimeRange) {
-        self.flexibility_at(position).unwrap().day.occupy(&range);
-        self.occupy_unprocessed(&range);
-        self.scheduled.borrow_mut().push((
-            position,
-            range,
-            self.flexibility_at(position).unwrap().goal.clone(),
-        ));
-    }
-    pub fn occupy_unprocessed(&self, range: &DateTimeRange) {
-        self.unprocessed
-            .borrow()
-            .iter()
-            .for_each(|pos| self.flexibility_at(*pos).unwrap().day.occupy(range));
-    }
-    pub fn take(&self, position: Position) -> Option<(Flexibility, Vec<Position>)> {
-        let (selected, remaining): (Vec<_>, Vec<_>) = self
-            .unprocessed
-            .borrow()
-            .iter()
-            .partition(|&p| *p == position);
-        *self.unprocessed.borrow_mut() = remaining;
-        assert_eq!(selected.len(), 1);
-        selected
-            .first()
-            .map(|position| self.flexibility_at(*position))
-            .unwrap_or(None)
-            .map(|f| (f, self.unprocessed()))
-    }
+
     pub fn result(&self) -> FinalTasks {
         let mut tasks = vec![];
         self.gather_tasks_with_filler(&mut tasks, &self.scheduled, false);
@@ -138,18 +78,18 @@ impl Calendar {
                 let start = range.start().naive_date_time();
                 let deadline = range.end().naive_date_time();
 
-                if let Some(f) = self.flexibility_at(*position) {
-                    tasks.push(Task {
-                        taskid: idx,
-                        goalid: f.goal.id(),
-                        title: f.goal.title(),
-                        duration: f.goal.min_span(),
-                        start,
-                        deadline,
-                        tags: vec![],
-                        impossible,
-                    })
-                }
+                // if let Some(f) = self.flexibility_at(*position) {
+                //     tasks.push(Task {
+                //         taskid: idx,
+                //         goalid: f.goal.id(),
+                //         title: f.goal.title(),
+                //         duration: f.goal.min_span(),
+                //         start,
+                //         deadline,
+                //         tags: vec![],
+                //         impossible,
+                //     })
+                // }
             })
     }
     fn gather_tasks_with_filler(&self, tasks: &mut Vec<Task>, slots: &Scheduled, impossible: bool) {
@@ -180,18 +120,18 @@ impl Calendar {
                 let start = range.start().naive_date_time();
                 let deadline = range.end().naive_date_time();
 
-                if let Some(f) = self.flexibility_at(*position) {
-                    tasks.push(Task {
-                        taskid: idx + filler_offset,
-                        goalid: f.goal.id(),
-                        title: f.goal.title(),
-                        duration: f.goal.min_span(),
-                        start,
-                        deadline,
-                        tags: vec![],
-                        impossible,
-                    })
-                }
+                // if let Some(f) = self.flexibility_at(*position) {
+                //     tasks.push(Task {
+                //         taskid: idx + filler_offset,
+                //         goalid: f.goal.id(),
+                //         title: f.goal.title(),
+                //         duration: f.goal.min_span(),
+                //         start,
+                //         deadline,
+                //         tags: vec![],
+                //         impossible,
+                //     })
+                // }
             });
         if current.lt(&self.day.end_of_day()) {
             let span = current.span_by(&self.day.end_of_day());
@@ -209,44 +149,8 @@ impl Calendar {
     }
 }
 
-fn get_flexibilities(goal: Rc<Goal>, start: &DateTime, end: &DateTime) -> Flexibility {
-    let goals = vec![goal];
-    goals
-        .into_iter()
-        .map(|g| {
-            (
-                g.clone(),
-                Flexibility {
-                    goal: g,
-                    day: Rc::new(Day::new(start.clone())),
-                },
-            )
-        })
-        .map(|(g, f)| {
-            let day = f.day;
-            day.occupy_inverse_range(&DateTimeRange::new(start.clone(), end.clone()));
-            (g, Flexibility { goal: f.goal, day })
-        })
-        .map(|(g, f)| {
-            let day = f.day;
-            day.occupy_inverse_range(&g.day_filter(start));
-            Flexibility { goal: f.goal, day }
-        })
-        .collect::<Vec<_>>()
-        .pop()
-        .unwrap()
-}
-
 impl Debug for Calendar {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        f.write_str(
-            &self
-                .flexibilities
-                .borrow()
-                .iter()
-                .map(|f| f.day.to_string())
-                .collect::<Vec<_>>()
-                .join("\n"),
-        )
+        f.write_str("Calendar debug output\n")
     }
 }
