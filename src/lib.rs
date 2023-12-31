@@ -1,27 +1,14 @@
 //! # ZinZen scheduler
 //!
 //! The ZinZen scheduler is a "calendar as a function".  
-//! Input: A calendar start datetime and end datetime, plus some Goals with flexible time constraints.  
+//! Input: A calendar start datetime and end datetime, plus a Directed Acyclical Graph of Goals/Budgets with time constraints.  
 //! Output: A calendar that successfully allocates all Goals - or the maximum amount of Goals in that time period.  
 //!
 //! ```
 //! use scheduler::legacy::input::Input;
 //!
 //!     let json_input: serde_json::Value = serde_json::json!({
-//!       "startDate": "2022-01-01T00:00:00",
-//!       "endDate": "2022-01-09T00:00:00",
-//!       "goals": {
-//!         "uuid1": {
-//!           "id": "uuid1",
-//!           "title": "sleep",
-//!           "min_duration": 8,
-//!           "repeat": "daily",
-//!           "filters": {
-//!             "after_time": 22,
-//!             "before_time": 8
-//!           }
-//!         }
-//!       }
+//!       "TODO_working_example"
 //!     });
 //!     let input: Input = serde_json::from_value(json_input).unwrap();
 //!     let output = scheduler::run_scheduler(input);
