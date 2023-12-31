@@ -64,6 +64,7 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
+use chrono::DateTime;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
@@ -76,7 +77,6 @@ use crate::legacy::output::FinalTasks;
 
 /// The services handling the data structures
 use crate::models::calendar::{Calendar, Goals};
-use crate::models::date::{DateTime, DateTimeRange};
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 interface Input {
@@ -96,46 +96,45 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
 }
 
-pub fn run_scheduler(input: Input) -> FinalTasks {
-    let date_start = DateTime::from_naive_date_time(&input.calendar_start);
-    let date_end = DateTime::from_naive_date_time(&input.calendar_end);
-    let goals = get_goals(&input);
+pub fn run_scheduler(input: Input) -> () {
+    // let date_start = DateTime::from_naive_date_time(&input.calendar_start);
+    // let date_end = DateTime::from_naive_date_time(&input.calendar_end);
+    // let goals = get_goals(&input);
 
-    let calendar = Calendar::new(&input, &goals);
+    // let calendar = Calendar::new(&input, &goals);
 
-    while !calendar.has_finished_scheduling() {
-        log::info!("\n{calendar:?}");
+    // while !calendar.has_finished_scheduling() {
+    //     log::info!("\n{calendar:?}");
 
-        #[derive(PartialEq)]
-        enum Handling {
-            DoNothing,
-            Flexibility1,
-            MostFlexibility,
-            Impossible,
-        }
+    //     #[derive(PartialEq)]
+    //     enum Handling {
+    //         DoNothing,
+    //         Flexibility1,
+    //         MostFlexibility,
+    //         Impossible,
+    //     }
 
-        // determine flexibility
-        // (Handling marker, flexibility measure, position in the calender unproccessed vector)
-        let mut handling: (Handling, i32, Option<usize>) = (Handling::DoNothing, 0, None);
-        let mut unprocessed: RefCell<Vec<usize>> = RefCell::new(vec![]);
+    //     // determine flexibility
+    //     // (Handling marker, flexibility measure, position in the calender unproccessed vector)
+    //     let mut handling: (Handling, i32, Option<usize>) = (Handling::DoNothing, 0, None);
+    //     let mut unprocessed: RefCell<Vec<usize>> = RefCell::new(vec![]);
 
-        log::info!(
-            "selected position in unprocesse vec of calendar {:?}",
-            handling.2,
-        );
+    //     log::info!(
+    //         "selected position in unprocesse vec of calendar {:?}",
+    //         handling.2,
+    //     );
 
-        // calculate placement
-    }
-    log::info!("\n{calendar:?}");
+    //     // calculate placement
+    // }
+    // log::info!("\n{calendar:?}");
 
-    calendar.result()
+    // calendar.result()
 }
 
-/// helper function for legacy code
-fn get_goals(input: &Input) -> Goals {
-    input
-        .goals
-        .values()
-        .map(|g| Rc::new(g.into()))
-        .collect::<Vec<_>>()
-}
+// fn get_goals(input: &Input) -> Goals {
+//     input
+//         .goals
+//         .values()
+//         .map(|g| Rc::new(g.into()))
+//         .collect::<Vec<_>>()
+// }
