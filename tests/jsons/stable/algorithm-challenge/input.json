@@ -1,7 +1,7 @@
 {
   "startDate": "2022-01-01T00:00:00",
   "endDate": "2022-01-02T00:00:00",
-  "nodes": [
+  "goals": [
     {
       "id": "1",
       "title": "shopping",
