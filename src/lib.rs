@@ -5,7 +5,7 @@
 //! Output: A calendar that successfully allocates all Goals - or the maximum amount of Goals in that time period.  
 //!
 //! ```
-//! use scheduler::legacy::input::Input;
+//! use scheduler::scheduler
 //!
 //!     let json_input: serde_json::Value = serde_json::json!({
 //!       "TODO_working_example"
@@ -51,40 +51,23 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
-use chrono::DateTime;
-use std::cell::RefCell;
-use std::rc::Rc;
 use wasm_bindgen::prelude::*;
-
-pub mod legacy;
 /// The data structures
 pub mod models;
-use crate::legacy::input::Input;
-use crate::legacy::output::FinalTasks;
-
-/// The services handling the data structures
-use crate::models::calendar::{Calendar, Goals};
-#[wasm_bindgen(typescript_custom_section)]
-const TS_APPEND_CONTENT: &'static str = r#"
-interface Input {
-    startDate: string;
-    endDate: string;
-    goals: number
-}
-"#;
 
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
 /// The main wasm function to call
-#[wasm_bindgen]
-pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
-    console_error_panic_hook::set_once();
-    let input: Input = serde_wasm_bindgen::from_value(input.clone())?;
-    let final_tasks = run_scheduler(input);
-    Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
-}
+// #[wasm_bindgen]
+// pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
+//     console_error_panic_hook::set_once();
+//     let input = serde_wasm_bindgen::from_value(input.clone())?;
+//     let final_tasks = run_scheduler();
+//     Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
+// }
 
-pub fn run_scheduler(input: Input) -> () {
-    // let date_start = DateTime::from_naive_date_time(&input.calendar_start);
+pub fn run_scheduler(start_date: String, end_date: String) -> () {
+
+    // let date_start = &input;
     // let date_end = DateTime::from_naive_date_time(&input.calendar_end);
     // let goals = get_goals(&input);
 
@@ -117,11 +100,3 @@ pub fn run_scheduler(input: Input) -> () {
 
     // calendar.result()
 }
-
-// fn get_goals(input: &Input) -> Goals {
-//     input
-//         .goals
-//         .values()
-//         .map(|g| Rc::new(g.into()))
-//         .collect::<Vec<_>>()
-// }

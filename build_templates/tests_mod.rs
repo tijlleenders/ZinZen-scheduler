@@ -2,15 +2,14 @@
 mod TEST_MODULE_NAME {
 
     // stable tests
-//TEST_FUNCTIONS_STABLE
+    //TEST_FUNCTIONS_STABLE
 
     // experimental tests
-//TEST_FUNCTIONS_EXPERIMENTAL
+    //TEST_FUNCTIONS_EXPERIMENTAL
 
-    use scheduler::legacy::{input::Input, output::FinalTasks};
-    use std::path::Path;
     use crate::common;
-        
+    use std::path::Path;
+
     fn test(folder: &str) {
         let (actual_output, desired_output) = generate_outputs(folder);
         assert_eq!(actual_output, desired_output);
