@@ -2,6 +2,7 @@ use serde::Deserialize;
 use serde_json::{self, Value};
 use std::{fs, path::Path};
 extern crate scheduler;
+use scheduler::models::goal::Goal;
 fn main() {
     println!("Running!");
     let path = Path::new("./tests/jsons/stable/algorithm-challenge/input.json");
@@ -18,20 +19,5 @@ fn main() {
 struct Input {
     start_date: String,
     end_date: String,
-    nodes: Vec<Node>,
-}
-
-#[derive(Deserialize, Debug)]
-struct Node {
-    id: String,
-    deadline: String,
-    filters: Filters,
-    min_duration: usize,
-    title: String,
-}
-
-#[derive(Deserialize, Debug)]
-struct Filters {
-    after_time: usize,
-    before_time: usize,
+    goals: Vec<Goal>,
 }
