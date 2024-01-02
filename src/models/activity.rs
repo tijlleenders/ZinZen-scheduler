@@ -13,6 +13,7 @@ pub struct Activity {
     budget: Vec<Option<Budget>>,
     total_duration: usize,
     duration_left: usize,
+    status: Status,
 }
 impl Activity {
     pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Activity {
@@ -47,8 +48,15 @@ impl Activity {
             budget: vec![None],
             total_duration: goal.min_duration.clone(),
             duration_left: goal.min_duration,
+            status: Status::Unprocessed,
         }
     }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+enum Status {
+    Unprocessed,
+    Scheduled,
 }
 
 #[derive(Debug)]
