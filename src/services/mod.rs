@@ -1,2 +1,2 @@
 pub mod activity_generator;
-pub mod scheduler;
+pub mod activity_placer;

@@ -4,6 +4,11 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
 
+use chrono::NaiveDateTime;
+use scheduler::input::input::Input;
+use scheduler::models::goal::Goal;
+use serde::Deserialize;
+
 pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Error>> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
@@ -14,7 +19,8 @@ pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Err
 pub fn get_output_string_from_json<P: AsRef<Path>>(path: P) -> Result<String, serde_json::Error> {
     let file = File::open(path).expect("Error reading file");
     let reader = BufReader::new(file);
-    let output: FinalTasks = serde_json::from_reader(reader)?;
+    // let output: FinalTasks = serde_json::from_reader(reader)?;
+    let output = "".to_string();
     serde_json::to_string_pretty(&output)
 }
 

@@ -2,7 +2,6 @@
 
 extern crate scheduler;
 extern crate soft;
-mod common;
 
 /// AUTO-GENERATED FILE. Do not change.
 /// Will be overwritten on build. Edit the file in build_templates or change test generation in build.rs

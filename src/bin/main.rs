@@ -1,8 +1,12 @@
+use chrono::{NaiveDate, NaiveDateTime};
 use serde::Deserialize;
 use serde_json::{self, Value};
 use std::{fs, path::Path};
 extern crate scheduler;
-use scheduler::models::goal::Goal;
+use scheduler::{
+    models::{calendar::Calendar, goal::Goal},
+    services::activity_placer,
+};
 fn main() {
     println!("Running!");
     let path = Path::new("./tests/jsons/stable/algorithm-challenge/input.json");
@@ -11,13 +15,17 @@ fn main() {
     dbg!(&json);
     let input: Input = serde_json::from_value(json).unwrap();
     dbg!(&input);
-    let _output = scheduler::run_scheduler(input.start_date, input.end_date);
+    let calendar = Calendar::new(input.start_date, input.end_date);
+    dbg!(&calendar);
+    let activities =
+        scheduler::services::activity_generator::generate_activities(&calendar, input.goals);
+    let _output = activity_placer::place(calendar, activities);
 }
 
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 struct Input {
-    start_date: String,
-    end_date: String,
+    start_date: NaiveDateTime,
+    end_date: NaiveDateTime,
     goals: Vec<Goal>,
 }

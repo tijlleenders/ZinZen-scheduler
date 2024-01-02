@@ -1,9 +1,11 @@
+use chrono::NaiveDateTime;
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
 pub struct Goal {
     id: String,
-    deadline: String,
+    start: NaiveDateTime,
+    deadline: NaiveDateTime,
     filters: Filters,
     min_duration: usize,
     title: String,

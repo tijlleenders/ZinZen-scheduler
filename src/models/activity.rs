@@ -1,6 +1,6 @@
+use crate::models::budget::Budget;
 use crate::models::calendar::Hour;
 use std::rc::Rc;
-
 #[derive(Debug)]
 pub struct Activity {
     id: String,
@@ -20,22 +20,7 @@ enum CalendarFilter {
     DaysOfTheWeek,
     HoursOfTheDay,
 }
-#[derive(Debug)]
-struct Budget {
-    calendar_start_index: usize,
-    calendar_end_index: usize,
-    scheduled: usize,
-    minimum: usize,
-    maximum: usize,
-}
 
-// impl Budget {
-//     fn new(node) -> Self {
-//         Budget {
-//             vec![],
-//         }
-//     }
-// }
 #[derive(Debug)]
 enum BudgetInput {
     HoursPerDay,

@@ -51,9 +51,14 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
+use chrono::{NaiveDateTime, NaiveTime};
+use models::{activity::Activity, calendar::Calendar, goal::Goal};
+use services::activity_placer;
 use wasm_bindgen::prelude::*;
 /// The data structures
+pub mod input;
 pub mod models;
+pub mod services;
 
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
 /// The main wasm function to call
@@ -65,38 +70,7 @@ pub mod models;
 //     Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
 // }
 
-pub fn run_scheduler(start_date: String, end_date: String) -> () {
-
-    // let date_start = &input;
-    // let date_end = DateTime::from_naive_date_time(&input.calendar_end);
-    // let goals = get_goals(&input);
-
-    // let calendar = Calendar::new(&input, &goals);
-
-    // while !calendar.has_finished_scheduling() {
-    //     log::info!("\n{calendar:?}");
-
-    //     #[derive(PartialEq)]
-    //     enum Handling {
-    //         DoNothing,
-    //         Flexibility1,
-    //         MostFlexibility,
-    //         Impossible,
-    //     }
-
-    //     // determine flexibility
-    //     // (Handling marker, flexibility measure, position in the calender unproccessed vector)
-    //     let mut handling: (Handling, i32, Option<usize>) = (Handling::DoNothing, 0, None);
-    //     let mut unprocessed: RefCell<Vec<usize>> = RefCell::new(vec![]);
-
-    //     log::info!(
-    //         "selected position in unprocesse vec of calendar {:?}",
-    //         handling.2,
-    //     );
-
-    //     // calculate placement
-    // }
-    // log::info!("\n{calendar:?}");
-
-    // calendar.result()
+pub fn schedule(start_date: NaiveDateTime, end_date: NaiveTime, goals: Vec<Goal>) -> () {
+    // logic
+    // calendar.print()
 }
