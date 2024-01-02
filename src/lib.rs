@@ -55,10 +55,10 @@ use chrono::{NaiveDateTime, NaiveTime};
 use models::{activity::Activity, calendar::Calendar, goal::Goal};
 use services::activity_placer;
 use wasm_bindgen::prelude::*;
-/// The data structures
-pub mod input;
 pub mod models;
 pub mod services;
+/// The data structures
+pub mod technical;
 
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
 /// The main wasm function to call

@@ -7,6 +7,8 @@ mod TEST_MODULE_NAME {
     // experimental tests
     //TEST_FUNCTIONS_EXPERIMENTAL
 
+    use crate::technical;
+    use crate::Input;
     use std::path::Path;
 
     fn test(folder: &str) {
@@ -24,14 +26,14 @@ mod TEST_MODULE_NAME {
         let output_path = Path::new(&output_path_str[..]);
         let actual_output_path = Path::new(&actual_output_path_str[..]);
 
-        // let input: Input = common::get_input_from_json(input_path).unwrap();
-        // let desired_output: String = common::get_output_string_from_json(output_path).unwrap();
+        let input: Input = technical::get_input_from_json(input_path).unwrap();
+        let desired_output: String = technical::get_output_string_from_json(output_path).unwrap();
 
         // let output = scheduler::services::activity_generator(input);
         let actual_output = "".to_string();
         // let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
-        // common::write_to_file(actual_output_path, &actual_output).unwrap();
+        technical::write_to_file(actual_output_path, &actual_output).unwrap();
 
         (actual_output, desired_output)
     }

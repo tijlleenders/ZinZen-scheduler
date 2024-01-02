@@ -1,10 +1,19 @@
+use crate::models::goal::Goal;
+use chrono::NaiveDateTime;
+use serde::Deserialize;
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
 
-use scheduler::input::input::Input;
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct Input {
+    start_date: NaiveDateTime,
+    end_date: NaiveDateTime,
+    goals: Vec<Goal>,
+}
 
 pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Error>> {
     let file = File::open(path)?;
