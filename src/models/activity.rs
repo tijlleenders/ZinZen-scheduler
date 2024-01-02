@@ -2,8 +2,11 @@ use super::calendar::Calendar;
 use super::goal::Goal;
 use crate::models::budget::Budget;
 use crate::models::calendar::Hour;
-use std::rc::{Rc, Weak};
-#[derive(Debug)]
+use std::{
+    fmt,
+    rc::{Rc, Weak},
+};
+
 pub struct Activity {
     id: String,
     title: String,
@@ -51,6 +54,30 @@ impl Activity {
             status: Status::Unprocessed,
         }
     }
+
+    fn flex(&self) -> usize {
+        let mut flex = 0;
+        let mut buffer = 0;
+        for hour_index in 0..self.calendar_overlay.len() {
+            match &self.calendar_overlay[hour_index] {
+                None => {
+                    buffer = 0;
+                }
+                Some(hour_pointer) => {
+                    //if free and buffer size > duration : add to flex and buffer
+                    buffer += 1;
+                    if hour_pointer.upgrade().is_none() {
+                        buffer = 0;
+                    } else if hour_pointer.upgrade().unwrap() == Hour::Free.into()
+                        && self.min_block_size <= buffer
+                    {
+                        flex += 1;
+                    }
+                }
+            }
+        }
+        flex
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -81,4 +108,31 @@ struct HoursPerDay {
 struct HoursPerWeek {
     min_per_week: usize,
     max_per_week: usize,
+}
+
+impl fmt::Debug for Activity {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "\n").unwrap();
+        write!(f, "title: {:?}\n", self.title).unwrap();
+        write!(f, "status:{:?}\n", self.status).unwrap();
+        write!(f, "total duration: {:?}\n", self.total_duration).unwrap();
+        write!(f, "duration left: {:?}\n", self.duration_left).unwrap();
+        write!(f, "flex:{:?}\n", self.flex()).unwrap();
+        for hour_index in 0..self.calendar_overlay.capacity() {
+            match &self.calendar_overlay[hour_index] {
+                None => (),
+                Some(weak) => {
+                    write!(
+                        f,
+                        "hours {:?}: {:?} claims but {:?}\n",
+                        hour_index,
+                        weak.weak_count(),
+                        weak.upgrade().unwrap()
+                    )
+                    .unwrap();
+                }
+            }
+        }
+        Ok(())
+    }
 }
