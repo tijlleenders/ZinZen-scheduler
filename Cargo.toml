@@ -17,7 +17,7 @@ with-logging = []
 
 new-tests = []
 
-default = [ "new-tests", "with-logging" ]
+default = ["new-tests", "with-logging"]
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095
@@ -53,9 +53,6 @@ console_error_panic_hook = "0.1.7"
 # display logs
 log = "0.4.19"
 env_logger = "0.10.0"
-
-# soft assertions without panic
-soft = "0.1.1"
 
 # random number generator for tests
 rand = "0.8.5"
