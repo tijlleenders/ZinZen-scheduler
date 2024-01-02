@@ -9,9 +9,9 @@ pub enum Hour {
 }
 
 pub struct Calendar {
-    start_date_time: NaiveDateTime,
-    end_date_time: NaiveDateTime,
-    hours: Vec<Rc<Hour>>,
+    pub start_date_time: NaiveDateTime,
+    pub end_date_time: NaiveDateTime,
+    pub hours: Vec<Rc<Hour>>,
 }
 
 impl Calendar {

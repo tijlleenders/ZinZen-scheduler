@@ -19,6 +19,7 @@ fn main() {
     dbg!(&calendar);
     let activities =
         scheduler::services::activity_generator::generate_activities(&calendar, input.goals);
+    dbg!(&activities);
     let _output = activity_placer::place(calendar, activities);
 }
 
