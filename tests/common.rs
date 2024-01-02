@@ -4,10 +4,7 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
 
-use chrono::NaiveDateTime;
 use scheduler::input::input::Input;
-use scheduler::models::goal::Goal;
-use serde::Deserialize;
 
 pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Error>> {
     let file = File::open(path)?;
