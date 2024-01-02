@@ -21,26 +21,34 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> () {
             &activities[act_index_to_schedule.unwrap()].total_duration
         );
         for duration_offset in 0..activities[act_index_to_schedule.unwrap()].total_duration {
-            println!(
-                "weak counters:{:?}",
-                Rc::weak_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-            );
-            println!(
-                "stong counters:{:?}\n",
-                Rc::strong_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-            );
+            //print statements
+            {
+                println!(
+                    "weak counters:{:?}",
+                    Rc::weak_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
+                );
+                println!(
+                    "stong counters:{:?}\n",
+                    Rc::strong_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
+                );
+            }
             Rc::make_mut(&mut calendar.hours[best_hour_index.unwrap() + duration_offset]);
             calendar.hours[best_hour_index.unwrap() + duration_offset] = Rc::new(Hour::Occupied {
                 activity_id: act_index_to_schedule.unwrap(),
             });
-            println!(
-                "weak counters:{:?}",
-                Rc::weak_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-            );
-            println!(
-                "stong counters:{:?}\n",
-                Rc::strong_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-            );
+            //TODO: call activity.release_claims() so it doesn't count for conflicts anymore
+
+            //print statements
+            {
+                println!(
+                    "weak counters:{:?}",
+                    Rc::weak_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
+                );
+                println!(
+                    "stong counters:{:?}\n",
+                    Rc::strong_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
+                );
+            }
         }
         dbg!(&calendar);
     }
