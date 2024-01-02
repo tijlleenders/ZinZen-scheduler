@@ -7,6 +7,7 @@ mod TEST_MODULE_NAME {
     // experimental tests
     //TEST_FUNCTIONS_EXPERIMENTAL
 
+    use crate::calendar::Calendar;
     use crate::technical;
     use crate::Input;
     use std::path::Path;
@@ -29,9 +30,12 @@ mod TEST_MODULE_NAME {
         let input: Input = technical::get_input_from_json(input_path).unwrap();
         let desired_output: String = technical::get_output_string_from_json(output_path).unwrap();
 
-        // let output = scheduler::services::activity_generator(input);
-        let actual_output = "".to_string();
-        // let actual_output = serde_json::to_string_pretty(&output).unwrap();
+        let calendar = Calendar::new(input.start_date, input.end_date);
+        let activities =
+            scheduler::services::activity_generator::generate_activities(&calendar, input.goals);
+        let output = scheduler::services::activity_placer::place(calendar, activities);
+
+        let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
         technical::write_to_file(actual_output_path, &actual_output).unwrap();
 

@@ -10,9 +10,9 @@ use std::path::Path;
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct Input {
-    start_date: NaiveDateTime,
-    end_date: NaiveDateTime,
-    goals: Vec<Goal>,
+    pub start_date: NaiveDateTime,
+    pub end_date: NaiveDateTime,
+    pub goals: Vec<Goal>,
 }
 
 pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Error>> {
