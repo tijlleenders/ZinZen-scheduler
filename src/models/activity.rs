@@ -8,15 +8,15 @@ use std::{
 };
 
 pub struct Activity {
-    id: String,
-    title: String,
-    min_block_size: usize,
-    max_block_size: usize,
-    calendar_overlay: Vec<Option<Weak<Hour>>>,
-    budget: Vec<Option<Budget>>,
-    total_duration: usize,
-    duration_left: usize,
-    status: Status,
+    pub id: String,
+    pub title: String,
+    pub min_block_size: usize,
+    pub max_block_size: usize,
+    pub calendar_overlay: Vec<Option<Weak<Hour>>>,
+    pub budget: Vec<Option<Budget>>,
+    pub total_duration: usize,
+    pub duration_left: usize,
+    pub status: Status,
 }
 impl Activity {
     pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Activity {
@@ -55,7 +55,7 @@ impl Activity {
         }
     }
 
-    fn flex(&self) -> usize {
+    pub fn flex(&self) -> usize {
         let mut flex = 0;
         let mut buffer = 0;
         for hour_index in 0..self.calendar_overlay.len() {
@@ -78,10 +78,58 @@ impl Activity {
         }
         flex
     }
+
+    pub fn get_best_scheduling_index(&self) -> Option<usize> {
+        let mut best_scheduling_index_and_conflicts: Option<(usize, usize)> = None;
+        for hour_index in 0..self.calendar_overlay.len() {
+            let mut conflicts = 0;
+            match &self.calendar_overlay[hour_index] {
+                None => {
+                    continue;
+                }
+                Some(_) => {
+                    for offset in 0..self.total_duration {
+                        match &self.calendar_overlay[hour_index + offset] {
+                            None => {
+                                continue;
+                            }
+                            Some(weak) => {
+                                if weak.upgrade().is_none() {
+                                    conflicts = 0;
+                                    break;
+                                }
+                                conflicts += weak.weak_count();
+                                //if last position check if best so far - or so little we can break
+                                if offset == self.min_block_size - 1 {
+                                    match best_scheduling_index_and_conflicts {
+                                        None => {
+                                            best_scheduling_index_and_conflicts =
+                                                Some((hour_index, conflicts));
+                                        }
+                                        Some((_, best_conflicts)) => {
+                                            if conflicts < best_conflicts || conflicts == 0 {
+                                                best_scheduling_index_and_conflicts =
+                                                    Some((hour_index, conflicts));
+                                            }
+                                        }
+                                    }
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        match best_scheduling_index_and_conflicts {
+            None => return None,
+            Some((best_index, _)) => return Some(best_index),
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
-enum Status {
+pub enum Status {
     Unprocessed,
     Scheduled,
 }
