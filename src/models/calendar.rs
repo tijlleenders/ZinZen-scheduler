@@ -9,7 +9,7 @@ use std::thread::current;
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Hour {
     Free,
-    Occupied { activity_id: usize },
+    Occupied { activity_index: usize },
 }
 
 pub struct Calendar {
@@ -65,13 +65,13 @@ impl Calendar {
                         current_task.duration = 1;
                     }
                 }
-                Hour::Occupied { activity_id } => {
+                Hour::Occupied { activity_index } => {
                     if current_task.title.eq(&"free".to_string()) {
                         day_tasks.tasks.push(current_task.clone());
                         current_task.duration = 1;
-                        current_task.title = activity_id.to_string();
+                        current_task.title = activity_index.to_string();
                     } else {
-                        current_task.title = activity_id.to_string();
+                        current_task.title = activity_index.to_string();
                         current_task.duration += 1;
                         current_task.deadline = current_task.deadline.add(Duration::hours(1));
                     }
