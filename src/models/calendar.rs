@@ -39,6 +39,7 @@ impl Calendar {
             day: self.start_date_time.date(),
             tasks: Vec::with_capacity(1),
         };
+        impossible.push(day_tasks.clone());
         let mut task_counter = 0 as usize;
         let mut current_task = Task {
             taskid: task_counter,

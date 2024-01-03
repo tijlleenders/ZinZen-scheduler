@@ -2,7 +2,6 @@
 
 extern crate scheduler;
 use scheduler::technical::technical::Input;
-use scheduler::technical::technical;
 use scheduler::services::activity_generator;
 use scheduler::services::activity_placer;
 use scheduler::models::calendar;

@@ -8,8 +8,8 @@ mod TEST_MODULE_NAME {
     //TEST_FUNCTIONS_EXPERIMENTAL
 
     use crate::calendar::Calendar;
-    use crate::technical;
     use crate::Input;
+    use scheduler::technical::technical;
     use std::path::Path;
 
     fn test(folder: &str) {
@@ -29,6 +29,9 @@ mod TEST_MODULE_NAME {
 
         let input: Input = technical::get_input_from_json(input_path).unwrap();
         let desired_output: String = technical::get_output_string_from_json(output_path).unwrap();
+
+        // ONLY do this if expected is malformatted ... check that contents don't change!
+        // technical::write_to_file(output_path, &desired_output).unwrap();
 
         let calendar = Calendar::new(input.start_date, input.end_date);
         let activities =
