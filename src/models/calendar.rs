@@ -49,35 +49,51 @@ impl Calendar {
             deadline: self.start_date_time.clone(),
         };
         for hour_offset in 0..self.hours.capacity() {
-            println!(
-                "hour is {:?} and offset is {:?}",
-                &starting_hour, &hour_offset
-            );
-            dbg!(&self.hours[starting_hour + hour_offset]);
             match *self.hours[starting_hour + hour_offset] {
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
-                        current_task.deadline = current_task.deadline.add(Duration::hours(1));
+                        current_task.goalid = "free".to_string();
+                        current_task.deadline = current_task
+                            .start
+                            .add(Duration::hours(current_task.duration as i64));
                     } else {
+                        current_task.deadline = current_task
+                            .start
+                            .add(Duration::hours(current_task.duration as i64));
                         day_tasks.tasks.push(current_task.clone());
                         current_task.title = "free".to_string();
                         current_task.duration = 1;
+                        current_task.start = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64));
+                        task_counter += 1;
+                        current_task.taskid = task_counter;
                     }
                 }
                 Hour::Occupied { activity_index } => {
-                    if current_task.title.eq(&"free".to_string()) {
+                    if current_task.title.eq(&"free".to_string())
+                        || current_task.title.ne(&activities[activity_index].title)
+                    {
+                        current_task.deadline = current_task
+                            .start
+                            .add(Duration::hours(current_task.duration as i64));
                         day_tasks.tasks.push(current_task.clone());
                         current_task.duration = 1;
-                        current_task.title = activity_index.to_string();
+                        current_task.goalid = activities[activity_index].id.clone();
+                        current_task.title = activities[activity_index].title.clone();
+                        current_task.start = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64));
+                        task_counter += 1;
+                        current_task.taskid = task_counter;
                     } else {
-                        current_task.title = activity_index.to_string();
                         current_task.duration += 1;
-                        current_task.deadline = current_task.deadline.add(Duration::hours(1));
                     }
                 }
             }
         }
+        day_tasks.tasks.push(current_task);
         scheduled.push(day_tasks);
         FinalTasks {
             scheduled: scheduled,

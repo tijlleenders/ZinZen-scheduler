@@ -52,7 +52,8 @@
 //! quality perception of the ZinZen&reg; projects.
 
 use chrono::{NaiveDateTime, NaiveTime};
-use models::{activity::Activity, calendar::Calendar, goal::Goal};
+use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
+use services::activity_generator;
 use services::activity_placer;
 use wasm_bindgen::prelude::*;
 pub mod models;
@@ -70,7 +71,14 @@ pub mod technical;
 //     Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
 // }
 
-pub fn schedule(start_date: NaiveDateTime, end_date: NaiveTime, goals: Vec<Goal>) -> () {
-    // logic
-    // calendar.print()
+pub fn schedule(
+    start_date: NaiveDateTime,
+    end_date: NaiveDateTime,
+    goals: Vec<Goal>,
+) -> FinalTasks {
+    let calendar = Calendar::new(start_date, end_date);
+    dbg!(&calendar);
+    let activities = activity_generator::generate_activities(&calendar, goals);
+    dbg!(&activities);
+    activity_placer::place(calendar, activities)
 }

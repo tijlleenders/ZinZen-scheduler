@@ -5,6 +5,7 @@ use std::{fs, path::Path};
 extern crate scheduler;
 use scheduler::{
     models::{calendar::Calendar, goal::Goal},
+    schedule,
     services::activity_placer,
 };
 fn main() {
@@ -15,12 +16,7 @@ fn main() {
     dbg!(&json);
     let input: Input = serde_json::from_value(json).unwrap();
     dbg!(&input);
-    let calendar = Calendar::new(input.start_date, input.end_date);
-    dbg!(&calendar);
-    let activities =
-        scheduler::services::activity_generator::generate_activities(&calendar, input.goals);
-    dbg!(&activities);
-    let _output = activity_placer::place(calendar, activities);
+    schedule(input.start_date, input.end_date, input.goals);
 }
 
 #[derive(Deserialize, Debug)]

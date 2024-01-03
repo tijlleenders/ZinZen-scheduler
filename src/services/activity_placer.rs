@@ -3,9 +3,10 @@ use std::rc::Rc;
 use crate::models::{
     activity::{Activity, Status},
     calendar::{Calendar, Hour},
+    task::FinalTasks,
 };
 
-pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> () {
+pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> FinalTasks {
     for _ in 0..activities.len() {
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
         println!(
@@ -34,7 +35,7 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> () {
             }
             Rc::make_mut(&mut calendar.hours[best_hour_index.unwrap() + duration_offset]);
             calendar.hours[best_hour_index.unwrap() + duration_offset] = Rc::new(Hour::Occupied {
-                activity_id: act_index_to_schedule.unwrap(),
+                activity_index: act_index_to_schedule.unwrap(),
             });
             (activities[act_index_to_schedule.unwrap()]).release_claims();
             //TODO: call activity.release_claims() so it doesn't count for conflicts anymore
@@ -50,11 +51,10 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> () {
                     Rc::strong_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
                 );
             }
+            dbg!(&calendar);
         }
-        dbg!(&calendar);
-        dbg!(calendar.get_tasks(&activities));
     }
-    ()
+    calendar.get_tasks(activities)
 }
 
 fn find_act_index_to_schedule(activities: &Vec<Activity>) -> Option<usize> {
