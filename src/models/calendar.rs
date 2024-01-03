@@ -1,3 +1,4 @@
+use super::task::{FinalTasks, Task};
 use chrono::NaiveDateTime;
 use std::fmt::{Debug, Formatter};
 use std::rc::Rc;
@@ -24,6 +25,13 @@ impl Calendar {
             start_date_time,
             end_date_time,
             hours,
+        }
+    }
+
+    pub fn get_tasks(&self) -> FinalTasks {
+        FinalTasks {
+            scheduled: vec![],
+            impossible: vec![],
         }
     }
 }
