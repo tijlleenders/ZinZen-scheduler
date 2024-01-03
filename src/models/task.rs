@@ -2,7 +2,7 @@
 use chrono::{NaiveDate, NaiveDateTime};
 use serde::Serialize;
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Task {
     pub taskid: usize,

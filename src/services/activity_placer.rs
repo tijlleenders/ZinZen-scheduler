@@ -52,6 +52,7 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> () {
             }
         }
         dbg!(&calendar);
+        dbg!(calendar.get_tasks(&activities));
     }
     ()
 }

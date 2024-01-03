@@ -1,7 +1,10 @@
-use super::task::{FinalTasks, Task};
-use chrono::NaiveDateTime;
+use super::activity::Activity;
+use super::task::{DayTasks, FinalTasks, Task};
+use chrono::{Duration, NaiveDateTime, Timelike};
 use std::fmt::{Debug, Formatter};
+use std::ops::Add;
 use std::rc::Rc;
+use std::thread::current;
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Hour {
@@ -28,10 +31,57 @@ impl Calendar {
         }
     }
 
-    pub fn get_tasks(&self) -> FinalTasks {
+    pub fn get_tasks(&self, activities: Vec<Activity>) -> FinalTasks {
+        let mut scheduled: Vec<DayTasks> = vec![];
+        let mut impossible: Vec<DayTasks> = vec![];
+        let starting_hour = self.start_date_time.hour() as usize;
+        let mut day_tasks = DayTasks {
+            day: self.start_date_time.date(),
+            tasks: Vec::with_capacity(1),
+        };
+        let mut task_counter = 0 as usize;
+        let mut current_task = Task {
+            taskid: task_counter,
+            goalid: "free".to_string(),
+            title: "free".to_string(),
+            duration: 0,
+            start: self.start_date_time.clone(),
+            deadline: self.start_date_time.clone(),
+        };
+        for hour_offset in 0..self.hours.capacity() {
+            println!(
+                "hour is {:?} and offset is {:?}",
+                &starting_hour, &hour_offset
+            );
+            dbg!(&self.hours[starting_hour + hour_offset]);
+            match *self.hours[starting_hour + hour_offset] {
+                Hour::Free => {
+                    if current_task.title.eq(&"free".to_string()) {
+                        current_task.duration += 1;
+                        current_task.deadline = current_task.deadline.add(Duration::hours(1));
+                    } else {
+                        day_tasks.tasks.push(current_task.clone());
+                        current_task.title = "free".to_string();
+                        current_task.duration = 1;
+                    }
+                }
+                Hour::Occupied { activity_id } => {
+                    if current_task.title.eq(&"free".to_string()) {
+                        day_tasks.tasks.push(current_task.clone());
+                        current_task.duration = 1;
+                        current_task.title = activity_id.to_string();
+                    } else {
+                        current_task.title = activity_id.to_string();
+                        current_task.duration += 1;
+                        current_task.deadline = current_task.deadline.add(Duration::hours(1));
+                    }
+                }
+            }
+        }
+        scheduled.push(day_tasks);
         FinalTasks {
-            scheduled: vec![],
-            impossible: vec![],
+            scheduled: scheduled,
+            impossible: impossible,
         }
     }
 }
