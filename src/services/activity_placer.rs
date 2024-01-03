@@ -36,6 +36,7 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> () {
             calendar.hours[best_hour_index.unwrap() + duration_offset] = Rc::new(Hour::Occupied {
                 activity_id: act_index_to_schedule.unwrap(),
             });
+            (activities[act_index_to_schedule.unwrap()]).release_claims();
             //TODO: call activity.release_claims() so it doesn't count for conflicts anymore
 
             //print statements

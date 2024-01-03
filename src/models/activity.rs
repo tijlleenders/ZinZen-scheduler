@@ -126,6 +126,15 @@ impl Activity {
             Some((best_index, _)) => return Some(best_index),
         }
     }
+
+    pub(crate) fn release_claims(&mut self) -> () {
+        let mut empty_overlay: Vec<Option<Weak<Hour>>> =
+            Vec::with_capacity(self.calendar_overlay.capacity());
+        for _ in 0..self.calendar_overlay.capacity() {
+            empty_overlay.push(None);
+        }
+        self.calendar_overlay = empty_overlay;
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
