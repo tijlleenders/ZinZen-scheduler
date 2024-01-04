@@ -27,12 +27,29 @@ impl Activity {
         for hour in 0..calendar.hours.capacity() {
             //Todo make time filters compatible for multiple days using modulo 24
             let mut compatible = true;
-            if goal.filters.clone().is_some() && hour < goal.filters.clone().unwrap().after_time {
-                compatible = false;
+            let filter_option = goal.filters.clone();
+            if filter_option.is_some() {
+                if filter_option.clone().unwrap().after_time
+                    < filter_option.clone().unwrap().before_time
+                {
+                    //normal case
+                    if hour < filter_option.clone().unwrap().after_time {
+                        compatible = false;
+                    }
+                    if hour >= filter_option.clone().unwrap().before_time {
+                        compatible = false;
+                    }
+                } else {
+                    // special case where we know that compatible times cross the midnight boundary
+                    if hour >= filter_option.clone().unwrap().before_time
+                        && hour < filter_option.clone().unwrap().after_time
+                    {
+                        compatible = false;
+                    }
+                }
             }
-            if goal.filters.clone().is_some() && hour >= goal.filters.clone().unwrap().before_time {
-                compatible = false;
-            }
+            dbg!(&compatible);
+
             if hour < goal.start.hour() as usize {
                 compatible = false;
             }
