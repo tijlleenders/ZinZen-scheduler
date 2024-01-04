@@ -54,7 +54,6 @@ impl Calendar {
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
-                        current_task.goalid = "free".to_string();
                         current_task.deadline = current_task
                             .start
                             .add(Duration::hours(current_task.duration as i64));
@@ -64,6 +63,7 @@ impl Calendar {
                             .add(Duration::hours(current_task.duration as i64));
                         day_tasks.tasks.push(current_task.clone());
                         current_task.title = "free".to_string();
+                        current_task.goalid = "free".to_string();
                         current_task.duration = 1;
                         current_task.start = self
                             .start_date_time
