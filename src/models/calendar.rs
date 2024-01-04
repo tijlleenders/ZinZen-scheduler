@@ -32,6 +32,7 @@ impl Calendar {
     }
 
     pub fn get_tasks(&self, activities: Vec<Activity>) -> FinalTasks {
+        //TODO Fix this mess below - it works somehow but not readable at all...
         let mut scheduled: Vec<DayTasks> = vec![];
         let mut impossible: Vec<DayTasks> = vec![];
         let starting_hour = self.start_date_time.hour() as usize;
