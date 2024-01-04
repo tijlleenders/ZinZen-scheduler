@@ -15,7 +15,7 @@ pub struct Activity {
     pub min_block_size: usize,
     pub max_block_size: usize,
     pub calendar_overlay: Vec<Option<Weak<Hour>>>,
-    pub budget: Vec<Option<Budget>>,
+    pub budget: Option<Budget>,
     pub total_duration: usize,
     pub duration_left: usize,
     pub status: Status,
@@ -50,8 +50,17 @@ impl Activity {
         //This is to not cut something like Sleep into pieces
         //Maybe better replaced by an if on title == 'Sleep'?
         //Is the default case that you allow splitting OK?
-        let mut min_block_size = goal.min_duration.clone();
-        if goal.min_duration > 8 {
+        let mut activity_total_duration = 1;
+        match goal.min_duration.clone() {
+            Some(min_duration) => {
+                activity_total_duration = min_duration;
+            }
+            None => {
+                activity_total_duration = goal.budget_config.unwrap().min_per_day;
+            }
+        }
+        let mut min_block_size = activity_total_duration;
+        if activity_total_duration > 8 {
             min_block_size = 1;
             todo!() //split into multiple activities so flexibilities are correct??
                     // or yield flex 1 or maximum of the set from activity.flex()?
@@ -61,11 +70,11 @@ impl Activity {
             id: goal.id,
             title: goal.title,
             min_block_size,
-            max_block_size: goal.min_duration.clone(),
+            max_block_size: min_block_size,
             calendar_overlay: compatible_hours_overlay,
-            budget: vec![None],
-            total_duration: goal.min_duration.clone(),
-            duration_left: goal.min_duration,
+            budget: None,
+            total_duration: activity_total_duration,
+            duration_left: min_block_size,
             status: Status::Unprocessed,
         }
     }
