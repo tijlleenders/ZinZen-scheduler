@@ -9,6 +9,10 @@ use crate::models::{
 pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> FinalTasks {
     for _ in 0..activities.len() {
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
+        if act_index_to_schedule.is_none() {
+            println!("Tried to schedule activity index None");
+            continue;
+        }
         println!(
             "Next to schedule: {:?}",
             &activities[act_index_to_schedule.unwrap()].title
@@ -60,13 +64,18 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> FinalTask
 fn find_act_index_to_schedule(activities: &Vec<Activity>) -> Option<usize> {
     let mut act_index_to_schedule = None;
     for index in 0..activities.len() {
-        if activities[index].status == Status::Scheduled {
+        if activities[index].status == Status::Scheduled
+            || activities[index].status == Status::Impossible
+        {
             continue;
         }
         match act_index_to_schedule {
             None => act_index_to_schedule = Some(index),
             Some(_) => match activities[index].flex() {
-                0 => panic!(),
+                0 => {
+                    println!("Found activity index {:?} with flex 0...", &index);
+                    continue;
+                }
                 1 => {
                     if activities[act_index_to_schedule.unwrap()].flex() == 1 {
                         break;

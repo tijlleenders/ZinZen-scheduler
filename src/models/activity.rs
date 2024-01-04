@@ -1,3 +1,5 @@
+use chrono::Timelike;
+
 use super::calendar::Calendar;
 use super::goal::Goal;
 use crate::models::budget::Budget;
@@ -24,9 +26,15 @@ impl Activity {
             Vec::with_capacity(calendar.hours.capacity());
         for hour in 0..calendar.hours.capacity() {
             //Todo make time filters compatible for multiple days using modulo 24
-            if hour < goal.filters.before_time && hour >= goal.filters.after_time {
-                compatible_hours_overlay.push(Some(Rc::downgrade(&calendar.hours[hour as usize])));
             //Todo add if for start end of goal filter
+            let mut compatible = true;
+            if hour >= goal.filters.before_time || hour < goal.filters.after_time {
+                compatible = false;
+            }
+            // && hour >= goal.start.hour() as usize
+            // && hour < goal.deadline.hour() as usize
+            if compatible {
+                compatible_hours_overlay.push(Some(Rc::downgrade(&calendar.hours[hour as usize])));
             } else {
                 compatible_hours_overlay.push(None);
             }
@@ -141,6 +149,7 @@ impl Activity {
 pub enum Status {
     Unprocessed,
     Scheduled,
+    Impossible,
 }
 
 #[derive(Debug)]
@@ -177,7 +186,9 @@ impl fmt::Debug for Activity {
         write!(f, "flex:{:?}\n", self.flex()).unwrap();
         for hour_index in 0..self.calendar_overlay.capacity() {
             match &self.calendar_overlay[hour_index] {
-                None => (),
+                None => {
+                    write!(f, "-").unwrap();
+                }
                 Some(weak) => {
                     write!(
                         f,
