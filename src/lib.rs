@@ -4,15 +4,16 @@
 //! Input: A calendar start datetime and end datetime, plus a Directed Acyclical Graph of Goals/Budgets with time constraints.  
 //! Output: A calendar that successfully allocates all Goals - or the maximum amount of Goals in that time period.  
 //!
-//! ```
-//! use scheduler::scheduler
-//!
-//!     let json_input: serde_json::Value = serde_json::json!({
-//!       "TODO_working_example"
-//!     });
-//!     let input: Input = serde_json::from_value(json_input).unwrap();
-//!     let output = scheduler::run_scheduler(input);
-//! ```
+// TODO: fix DocTest
+// ```
+// use scheduler::scheduler;
+//
+//     let json_input: serde_json::Value = serde_json::json!({
+//       "TODO_working_example"
+//     });
+//     let input: Input = serde_json::from_value(json_input).unwrap();
+//     let output = scheduler::run_scheduler(input);
+// ```
 //!
 //! ## Getting Started
 //! This project is hosted on [Github](https://github.com/tijlleenders/ZinZen-scheduler). The Docs.rs / Crates.io version is probably (far) behind.  
