@@ -26,7 +26,6 @@ impl Activity {
             Vec::with_capacity(calendar.hours.capacity());
         for hour in 0..calendar.hours.capacity() {
             //Todo make time filters compatible for multiple days using modulo 24
-            //Todo add if for start end of goal filter
             let mut compatible = true;
             if goal.filters.clone().is_some() && hour < goal.filters.clone().unwrap().after_time {
                 compatible = false;
