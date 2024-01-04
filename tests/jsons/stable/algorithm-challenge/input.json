@@ -5,28 +5,28 @@
     {
       "id": "1",
       "title": "shopping",
-      "min_duration": 2,
+      "minDuration": 2,
       "start": "2022-01-01T09:00:00",
       "deadline": "2022-01-01T15:00:00"
     },
     {
       "id": "2",
       "title": "dentist",
-      "min_duration": 1,
+      "minDuration": 1,
       "start": "2022-01-01T10:00:00",
       "deadline": "2022-01-01T11:00:00"
     },
     {
       "id": "3",
       "title": "Visit friend",
-      "min_duration": 2,
+      "minDuration": 2,
       "start": "2022-01-01T10:00:00",
       "deadline": "2022-01-01T16:00:00"
     },
     {
       "id": "4",
       "title": "lunch",
-      "min_duration": 1,
+      "minDuration": 1,
       "start": "2022-01-01T12:00:00",
       "deadline": "2022-01-01T14:00:00"
     }
