@@ -28,12 +28,19 @@ impl Activity {
             //Todo make time filters compatible for multiple days using modulo 24
             //Todo add if for start end of goal filter
             let mut compatible = true;
-            if hour >= goal.filters.before_time || hour < goal.filters.after_time {
+            if goal.filters.clone().is_some() && hour < goal.filters.clone().unwrap().after_time {
                 compatible = false;
             }
-            // && hour >= goal.start.hour() as usize
-            // && hour < goal.deadline.hour() as usize
-            if compatible {
+            if goal.filters.clone().is_some() && hour >= goal.filters.clone().unwrap().before_time {
+                compatible = false;
+            }
+            if hour < goal.start.hour() as usize {
+                compatible = false;
+            }
+            if hour >= goal.deadline.hour() as usize {
+                compatible = false;
+            }
+            if compatible == true {
                 compatible_hours_overlay.push(Some(Rc::downgrade(&calendar.hours[hour as usize])));
             } else {
                 compatible_hours_overlay.push(None);
