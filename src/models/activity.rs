@@ -27,6 +27,15 @@ impl Activity {
         for hour in 0..calendar.hours.capacity() {
             //Todo make time filters compatible for multiple days using modulo 24
             let mut compatible = true;
+
+            if hour < calendar.get_index_of(goal.start) {
+                compatible = false;
+            }
+            if hour >= calendar.get_index_of(goal.deadline) {
+                compatible = false;
+            }
+            println!("After start/deadline:{:?}", &compatible);
+
             let filter_option = goal.filters.clone();
             if filter_option.is_some() {
                 if filter_option.clone().unwrap().after_time
@@ -48,14 +57,8 @@ impl Activity {
                     }
                 }
             }
-            dbg!(&compatible);
+            println!("After filters:{:?}", &compatible);
 
-            if hour < goal.start.hour() as usize {
-                compatible = false;
-            }
-            if hour >= goal.deadline.hour() as usize {
-                compatible = false;
-            }
             if compatible == true {
                 compatible_hours_overlay.push(Some(Rc::downgrade(&calendar.hours[hour as usize])));
             } else {
@@ -217,6 +220,8 @@ impl fmt::Debug for Activity {
         write!(f, "duration left: {:?}\n", self.duration_left).unwrap();
         write!(f, "flex:{:?}\n", self.flex()).unwrap();
         for hour_index in 0..self.calendar_overlay.capacity() {
+            let day_index = hour_index / 24;
+            let hour_of_day = hour_index % 24 + 1;
             match &self.calendar_overlay[hour_index] {
                 None => {
                     write!(f, "-").unwrap();
@@ -224,7 +229,9 @@ impl fmt::Debug for Activity {
                 Some(weak) => {
                     write!(
                         f,
-                        "hours {:?}: {:?} claims but {:?}\n",
+                        "day {:?} - hour {:?} at index {:?}: {:?} claims but {:?}\n",
+                        day_index,
+                        hour_of_day,
                         hour_index,
                         weak.weak_count(),
                         weak.upgrade().unwrap()

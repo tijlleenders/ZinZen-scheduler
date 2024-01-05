@@ -1,6 +1,6 @@
 use super::activity::Activity;
 use super::task::{DayTasks, FinalTasks, Task};
-use chrono::{Duration, NaiveDateTime, Timelike};
+use chrono::{Days, Duration, NaiveDateTime, Timelike};
 use std::fmt::{Debug, Formatter};
 use std::ops::Add;
 use std::rc::Rc;
@@ -20,8 +20,8 @@ pub struct Calendar {
 
 impl Calendar {
     pub fn new(start_date_time: NaiveDateTime, end_date_time: NaiveDateTime) -> Self {
-        let mut hours = Vec::with_capacity(24);
-        for _ in 0..24 {
+        let mut hours = Vec::with_capacity(24 + 48);
+        for _ in 0..hours.capacity() {
             hours.push(Rc::new(Hour::Free));
         }
         Self {
@@ -29,6 +29,14 @@ impl Calendar {
             end_date_time,
             hours,
         }
+    }
+
+    pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
+        if date_time < self.start_date_time || date_time >= self.end_date_time {
+            panic!("can't request an index outside of calendar bounds")
+        }
+        (date_time - self.start_date_time.checked_sub_days(Days::new(1)).unwrap()).num_hours()
+            as usize
     }
 
     pub fn get_tasks(&self, activities: Vec<Activity>) -> FinalTasks {
