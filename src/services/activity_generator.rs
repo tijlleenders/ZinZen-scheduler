@@ -4,9 +4,9 @@ pub fn generate_activities(calendar: &Calendar, goals: Vec<Goal>) -> Vec<Activit
     dbg!(&goals);
     let mut activities: Vec<Activity> = Vec::with_capacity(goals.capacity());
     for goal in goals {
-        let activity = Activity::new_from(goal, calendar);
-        dbg!(&activity);
-        activities.push(activity);
+        let mut goal_activities = Activity::new_from(goal, calendar);
+        dbg!(&goal_activities);
+        activities.append(&mut goal_activities);
     }
     activities
 }
