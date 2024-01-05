@@ -4,6 +4,7 @@ use super::goal::Goal;
 use super::{calendar::Calendar, goal::Filters};
 use crate::models::budget::Budget;
 use crate::models::calendar::Hour;
+use core::num;
 use std::{
     f32::consts::LN_10,
     fmt,
@@ -70,7 +71,9 @@ impl Activity {
 
         let mut number_of_activites = 1;
         if filter_option.is_some() {
-            number_of_activites = 8;
+            number_of_activites =
+                (adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1;
+            println!("num_activities: {:?}", &number_of_activites);
             adjusted_goal_deadline = adjusted_goal_start.add(Days::new(number_of_activites));
         }
         for _ in 0..number_of_activites {
