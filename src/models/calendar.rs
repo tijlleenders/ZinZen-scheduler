@@ -63,18 +63,15 @@ impl Calendar {
             start: self.start_date_time.clone(),
             deadline: self.start_date_time.clone(),
         };
-        for hour_offset in 24..self.hours.capacity() - 24 {
+        for hour_offset in 24..(self.hours.capacity() - 24) {
             match *self.hours[hour_offset] {
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
-                        current_task.deadline = self
-                            .start_date_time
-                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                     } else {
-                        current_task.deadline = self
-                            .start_date_time
-                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
+                        current_task.deadline = current_task
+                            .start
+                            .add(Duration::hours(current_task.duration as i64));
                         if current_task.duration > 0 {
                             day_tasks.tasks.push(current_task.clone());
                             task_counter += 1;
@@ -92,10 +89,10 @@ impl Calendar {
                     if current_task.title.eq(&"free".to_string())
                         || current_task.title.ne(&activities[activity_index].title)
                     {
-                        current_task.deadline = self
-                            .start_date_time
-                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                         if current_task.duration > 0 {
+                            current_task.deadline = current_task
+                                .start
+                                .add(Duration::hours(current_task.duration as i64));
                             // TODO is this necessary?
                             day_tasks.tasks.push(current_task.clone());
                             task_counter += 1;
@@ -113,7 +110,9 @@ impl Calendar {
                 }
             }
         }
-        current_task.deadline = self.end_date_time;
+        current_task.deadline = current_task
+            .start
+            .add(Duration::hours(current_task.duration as i64));
         if current_task.duration > 0 {
             // TODO is this necessary?
             day_tasks.tasks.push(current_task);
