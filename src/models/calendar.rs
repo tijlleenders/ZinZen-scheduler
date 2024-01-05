@@ -61,7 +61,7 @@ impl Calendar {
             title: "free".to_string(),
             duration: 0,
             start: self.start_date_time.clone(),
-            deadline: self.start_date_time.clone(),
+            deadline: self.start_date_time.clone(), //just for init; will be overwritten
         };
         for hour_offset in 24..(self.hours.capacity() - 24) {
             match *self.hours[hour_offset] {
