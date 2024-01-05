@@ -20,7 +20,7 @@ pub struct Calendar {
 
 impl Calendar {
     pub fn new(start_date_time: NaiveDateTime, end_date_time: NaiveDateTime) -> Self {
-        let mut hours = Vec::with_capacity(24 + 48);
+        let mut hours = Vec::with_capacity(24 + 48); // TODO: Fix magic number offset everywhere in code
         for _ in 0..hours.capacity() {
             hours.push(Rc::new(Hour::Free));
         }
@@ -58,25 +58,25 @@ impl Calendar {
             start: self.start_date_time.clone(),
             deadline: self.start_date_time.clone(),
         };
-        for hour_offset in 0..self.hours.capacity() {
+        for hour_offset in 24..self.hours.capacity() - 24 {
             match *self.hours[starting_hour + hour_offset] {
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
-                        current_task.deadline = current_task
-                            .start
-                            .add(Duration::hours(current_task.duration as i64));
+                        current_task.deadline = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                     } else {
-                        current_task.deadline = current_task
-                            .start
-                            .add(Duration::hours(current_task.duration as i64));
+                        current_task.deadline = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                         day_tasks.tasks.push(current_task.clone());
                         current_task.title = "free".to_string();
                         current_task.goalid = "free".to_string();
                         current_task.duration = 1;
                         current_task.start = self
                             .start_date_time
-                            .add(Duration::hours(hour_offset as i64));
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                         task_counter += 1;
                         current_task.taskid = task_counter;
                     }
@@ -85,16 +85,16 @@ impl Calendar {
                     if current_task.title.eq(&"free".to_string())
                         || current_task.title.ne(&activities[activity_index].title)
                     {
-                        current_task.deadline = current_task
-                            .start
-                            .add(Duration::hours(current_task.duration as i64));
+                        current_task.deadline = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                         day_tasks.tasks.push(current_task.clone());
                         current_task.duration = 1;
                         current_task.goalid = activities[activity_index].id.clone();
                         current_task.title = activities[activity_index].title.clone();
                         current_task.start = self
                             .start_date_time
-                            .add(Duration::hours(hour_offset as i64));
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                         task_counter += 1;
                         current_task.taskid = task_counter;
                     } else {
@@ -103,6 +103,7 @@ impl Calendar {
                 }
             }
         }
+        current_task.deadline = self.end_date_time;
         day_tasks.tasks.push(current_task);
         scheduled.push(day_tasks);
         FinalTasks {
