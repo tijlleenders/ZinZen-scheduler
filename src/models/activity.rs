@@ -24,14 +24,14 @@ impl Activity {
     pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Activity {
         let mut compatible_hours_overlay: Vec<Option<Weak<Hour>>> =
             Vec::with_capacity(calendar.hours.capacity());
-        for hour in 0..calendar.hours.capacity() {
+        for hour_index in 0..calendar.hours.capacity() {
             //Todo make time filters compatible for multiple days using modulo 24
             let mut compatible = true;
 
-            if hour < calendar.get_index_of(goal.start) {
+            if hour_index < calendar.get_index_of(goal.start) {
                 compatible = false;
             }
-            if hour >= calendar.get_index_of(goal.deadline) {
+            if hour_index >= calendar.get_index_of(goal.deadline) {
                 compatible = false;
             }
             println!("After start/deadline:{:?}", &compatible);
@@ -42,16 +42,16 @@ impl Activity {
                     < filter_option.clone().unwrap().before_time
                 {
                     //normal case
-                    if hour < filter_option.clone().unwrap().after_time {
+                    if hour_index < filter_option.clone().unwrap().after_time {
                         compatible = false;
                     }
-                    if hour >= filter_option.clone().unwrap().before_time {
+                    if hour_index >= filter_option.clone().unwrap().before_time {
                         compatible = false;
                     }
                 } else {
                     // special case where we know that compatible times cross the midnight boundary
-                    if hour >= filter_option.clone().unwrap().before_time
-                        && hour < filter_option.clone().unwrap().after_time
+                    if hour_index >= filter_option.clone().unwrap().before_time
+                        && hour_index < filter_option.clone().unwrap().after_time
                     {
                         compatible = false;
                     }
@@ -60,7 +60,8 @@ impl Activity {
             println!("After filters:{:?}", &compatible);
 
             if compatible == true {
-                compatible_hours_overlay.push(Some(Rc::downgrade(&calendar.hours[hour as usize])));
+                compatible_hours_overlay
+                    .push(Some(Rc::downgrade(&calendar.hours[hour_index as usize])));
             } else {
                 compatible_hours_overlay.push(None);
             }
