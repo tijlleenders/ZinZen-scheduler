@@ -77,6 +77,7 @@ impl Calendar {
                             .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
                         if current_task.duration > 0 {
                             day_tasks.tasks.push(current_task.clone());
+                            task_counter += 1;
                         }
                         current_task.title = "free".to_string();
                         current_task.goalid = "free".to_string();
@@ -84,7 +85,6 @@ impl Calendar {
                         current_task.start = self
                             .start_date_time
                             .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
-                        task_counter += 1;
                         current_task.taskid = task_counter;
                     }
                 }
@@ -98,6 +98,7 @@ impl Calendar {
                         if current_task.duration > 0 {
                             // TODO is this necessary?
                             day_tasks.tasks.push(current_task.clone());
+                            task_counter += 1;
                         }
                         current_task.duration = 1;
                         current_task.goalid = activities[activity_index].id.clone();
@@ -105,7 +106,6 @@ impl Calendar {
                         current_task.start = self
                             .start_date_time
                             .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
-                        task_counter += 1;
                         current_task.taskid = task_counter;
                     } else {
                         current_task.duration += 1;
