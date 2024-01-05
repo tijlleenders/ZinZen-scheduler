@@ -20,7 +20,9 @@ pub struct Calendar {
 
 impl Calendar {
     pub fn new(start_date_time: NaiveDateTime, end_date_time: NaiveDateTime) -> Self {
-        let mut hours = Vec::with_capacity(24 + 48); // TODO: Fix magic number offset everywhere in code
+        let number_of_days = (end_date_time - start_date_time).num_days(); //Todo use this later to stop limiting compatible
+        println!("Calendar of {:?} days.", &number_of_days);
+        let mut hours = Vec::with_capacity(48 + number_of_days as usize * 24);
         for _ in 0..hours.capacity() {
             hours.push(Rc::new(Hour::Free));
         }
@@ -73,17 +75,22 @@ impl Calendar {
                     .add(Duration::hours(current_task.duration as i64));
                 if current_task.duration > 0 {
                     day_tasks.tasks.push(current_task.clone());
-                    task_counter += 1;
                 }
+                task_counter += 1;
+                current_task.taskid = task_counter;
                 // - push dayTasks copy to scheduled
                 scheduled.push(day_tasks);
                 // - update dayTasks for current day and reset Tasks vec
                 day_tasks = DayTasks {
-                    day: self.start_date_time.date(),
+                    day: self
+                        .start_date_time
+                        .date()
+                        .add(Duration::days(hour_offset as i64 / 24 - 1)),
                     tasks: Vec::with_capacity(1),
                 };
                 // - reset current_task and empty title to force new Task in loop
                 current_task.title = "".to_string();
+                current_task.duration = 0;
             }
             match *self.hours[hour_offset] {
                 Hour::Free => {

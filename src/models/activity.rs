@@ -1,4 +1,4 @@
-use chrono::{Duration, DurationRound, NaiveDateTime, Timelike};
+use chrono::{Days, Duration, DurationRound, NaiveDateTime, Timelike};
 
 use super::goal::Goal;
 use super::{calendar::Calendar, goal::Filters};
@@ -68,8 +68,11 @@ impl Activity {
                     // or yield flex 1 or maximum of the set from activity.flex()?
         };
 
-        let number_of_activites = 1;
-
+        let mut number_of_activites = 1;
+        if filter_option.is_some() {
+            number_of_activites = 8;
+            adjusted_goal_deadline = adjusted_goal_start.add(Days::new(number_of_activites));
+        }
         for _ in 0..number_of_activites {
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
                 &calendar,
@@ -89,6 +92,7 @@ impl Activity {
                 duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
                 status: Status::Unprocessed,
             };
+            dbg!(&activity);
             activities.push(activity);
         }
         activities
