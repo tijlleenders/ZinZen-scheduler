@@ -25,8 +25,6 @@ pub struct Activity {
 impl Activity {
     pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
-        let mut compatible_hours_overlay: Vec<Option<Weak<Hour>>> =
-            Vec::with_capacity(calendar.hours.capacity());
         let mut adjusted_goal_start = goal.start;
         let mut adjusted_goal_deadline = goal.deadline;
         let filter_option = goal.filters.clone();
@@ -51,13 +49,6 @@ impl Activity {
             }
         }
 
-        compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-            &calendar,
-            filter_option.clone(),
-            adjusted_goal_start.clone(),
-            adjusted_goal_deadline.clone(),
-        );
-
         //This is to not cut something like Sleep into pieces
         //Maybe better replaced by an if on title == 'Sleep'?
         //Is the default case that you allow splitting OK?
@@ -77,18 +68,29 @@ impl Activity {
                     // or yield flex 1 or maximum of the set from activity.flex()?
         };
 
-        let activity = Activity {
-            id: goal.id,
-            title: goal.title,
-            min_block_size,
-            max_block_size: min_block_size,
-            calendar_overlay: compatible_hours_overlay,
-            budget: None,
-            total_duration: activity_total_duration,
-            duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
-            status: Status::Unprocessed,
-        };
-        activities.push(activity);
+        let number_of_activites = 1;
+
+        for _ in 0..number_of_activites {
+            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+                &calendar,
+                filter_option.clone(),
+                adjusted_goal_start.clone(),
+                adjusted_goal_deadline.clone(),
+            );
+
+            let activity = Activity {
+                id: goal.id.clone(),
+                title: goal.title.clone(),
+                min_block_size,
+                max_block_size: min_block_size,
+                calendar_overlay: compatible_hours_overlay,
+                budget: None,
+                total_duration: activity_total_duration,
+                duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
+                status: Status::Unprocessed,
+            };
+            activities.push(activity);
+        }
         activities
     }
 
