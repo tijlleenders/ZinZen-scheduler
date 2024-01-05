@@ -52,7 +52,6 @@ impl Activity {
         }
 
         for hour_index in 0..calendar.hours.capacity() {
-            //Todo make time filters compatible for multiple days using modulo 24
             let mut compatible = true;
 
             if filter_option.is_some() {
