@@ -80,6 +80,13 @@ impl Calendar {
                 current_task.taskid = task_counter;
                 // - push dayTasks copy to scheduled
                 scheduled.push(day_tasks);
+                impossible.push(DayTasks {
+                    day: self
+                        .start_date_time
+                        .date()
+                        .add(Duration::days(hour_offset as i64 / 24 - 1)),
+                    tasks: vec![],
+                });
                 // - update dayTasks for current day and reset Tasks vec
                 day_tasks = DayTasks {
                     day: self
