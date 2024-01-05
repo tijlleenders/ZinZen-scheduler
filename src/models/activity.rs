@@ -42,16 +42,19 @@ impl Activity {
                     < filter_option.clone().unwrap().before_time
                 {
                     //normal case
-                    if hour_index < filter_option.clone().unwrap().after_time {
+                    let hour_of_day = hour_index % 24;
+                    if hour_of_day < filter_option.clone().unwrap().after_time {
                         compatible = false;
                     }
-                    if hour_index >= filter_option.clone().unwrap().before_time {
+                    if hour_of_day >= filter_option.clone().unwrap().before_time {
                         compatible = false;
                     }
                 } else {
                     // special case where we know that compatible times cross the midnight boundary
-                    if hour_index >= filter_option.clone().unwrap().before_time
-                        && hour_index < filter_option.clone().unwrap().after_time
+                    let hour_of_day = hour_index % 24;
+                    println!("Hour of day: {:?}", hour_of_day);
+                    if hour_of_day >= filter_option.clone().unwrap().before_time
+                        && hour_of_day < filter_option.clone().unwrap().after_time
                     {
                         compatible = false;
                     }
@@ -222,7 +225,7 @@ impl fmt::Debug for Activity {
         write!(f, "flex:{:?}\n", self.flex()).unwrap();
         for hour_index in 0..self.calendar_overlay.capacity() {
             let day_index = hour_index / 24;
-            let hour_of_day = hour_index % 24 + 1;
+            let hour_of_day = hour_index % 24;
             match &self.calendar_overlay[hour_index] {
                 None => {
                     write!(f, "-").unwrap();
