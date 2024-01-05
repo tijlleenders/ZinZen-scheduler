@@ -43,7 +43,6 @@ impl Calendar {
         //TODO Fix this mess below - it works somehow but not readable at all...
         let mut scheduled: Vec<DayTasks> = vec![];
         let mut impossible: Vec<DayTasks> = vec![];
-        let starting_hour = self.start_date_time.hour() as usize;
         let mut day_tasks = DayTasks {
             day: self.start_date_time.date(),
             tasks: Vec::with_capacity(1),
@@ -59,7 +58,7 @@ impl Calendar {
             deadline: self.start_date_time.clone(),
         };
         for hour_offset in 24..self.hours.capacity() - 24 {
-            match *self.hours[starting_hour + hour_offset] {
+            match *self.hours[hour_offset] {
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
