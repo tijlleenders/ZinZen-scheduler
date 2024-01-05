@@ -2,7 +2,7 @@ use super::activity::Activity;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Days, Duration, NaiveDateTime, Timelike};
 use std::fmt::{Debug, Formatter};
-use std::ops::Add;
+use std::ops::{Add, Sub};
 use std::rc::Rc;
 use std::thread::current;
 
@@ -32,8 +32,14 @@ impl Calendar {
     }
 
     pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
-        if date_time < self.start_date_time || date_time >= self.end_date_time {
-            panic!("can't request an index outside of calendar bounds")
+        if date_time < self.start_date_time.sub(Duration::hours(24))
+            || date_time >= self.end_date_time.add(Duration::hours(24))
+        {
+            // TODO: Fix magic number offset everywhere in code
+            panic!(
+                "can't request an index outside of calendar bounds for date {:?}\nCalendar starts at {:?}", self.start_date_time,
+                date_time
+            )
         }
         (date_time - self.start_date_time.checked_sub_days(Days::new(1)).unwrap()).num_hours()
             as usize
@@ -69,7 +75,9 @@ impl Calendar {
                         current_task.deadline = self
                             .start_date_time
                             .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
-                        day_tasks.tasks.push(current_task.clone());
+                        if current_task.duration > 0 {
+                            day_tasks.tasks.push(current_task.clone());
+                        }
                         current_task.title = "free".to_string();
                         current_task.goalid = "free".to_string();
                         current_task.duration = 1;
@@ -87,7 +95,10 @@ impl Calendar {
                         current_task.deadline = self
                             .start_date_time
                             .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
-                        day_tasks.tasks.push(current_task.clone());
+                        if current_task.duration > 0 {
+                            // TODO is this necessary?
+                            day_tasks.tasks.push(current_task.clone());
+                        }
                         current_task.duration = 1;
                         current_task.goalid = activities[activity_index].id.clone();
                         current_task.title = activities[activity_index].title.clone();
@@ -103,7 +114,10 @@ impl Calendar {
             }
         }
         current_task.deadline = self.end_date_time;
-        day_tasks.tasks.push(current_task);
+        if current_task.duration > 0 {
+            // TODO is this necessary?
+            day_tasks.tasks.push(current_task);
+        }
         scheduled.push(day_tasks);
         FinalTasks {
             scheduled: scheduled,

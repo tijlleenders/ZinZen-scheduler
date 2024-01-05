@@ -1,11 +1,13 @@
-use chrono::Timelike;
+use chrono::{Duration, DurationRound, Timelike};
 
 use super::calendar::Calendar;
 use super::goal::Goal;
 use crate::models::budget::Budget;
 use crate::models::calendar::Hour;
 use std::{
+    f32::consts::LN_10,
     fmt,
+    ops::{Add, Sub},
     rc::{Rc, Weak},
 };
 
@@ -24,19 +26,34 @@ impl Activity {
     pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Activity {
         let mut compatible_hours_overlay: Vec<Option<Weak<Hour>>> =
             Vec::with_capacity(calendar.hours.capacity());
+        let mut adjusted_goal_start = goal.start;
+        let mut adjusted_goal_deadline = goal.deadline;
+        let filter_option = goal.filters.clone();
+        if filter_option.is_some() {
+            if filter_option.clone().unwrap().after_time
+                < filter_option.clone().unwrap().before_time
+            {
+                //normal case
+            } else {
+                // special case where we know that compatible times cross the midnight boundary
+                println!(
+                    "Special case adjusting start from {:?}",
+                    &adjusted_goal_start
+                );
+                adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(
+                    24 - filter_option.clone().unwrap().after_time as i64,
+                ));
+                println!("... to {:?}", &adjusted_goal_start);
+                adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::hours(
+                    filter_option.clone().unwrap().before_time as i64,
+                ));
+            }
+        }
+
         for hour_index in 0..calendar.hours.capacity() {
             //Todo make time filters compatible for multiple days using modulo 24
             let mut compatible = true;
 
-            if hour_index < calendar.get_index_of(goal.start) {
-                compatible = false;
-            }
-            if hour_index >= calendar.get_index_of(goal.deadline) {
-                compatible = false;
-            }
-            println!("After start/deadline:{:?}", &compatible);
-
-            let filter_option = goal.filters.clone();
             if filter_option.is_some() {
                 if filter_option.clone().unwrap().after_time
                     < filter_option.clone().unwrap().before_time
@@ -61,6 +78,14 @@ impl Activity {
                 }
             }
             println!("After filters:{:?}", &compatible);
+
+            if hour_index < calendar.get_index_of(adjusted_goal_start) {
+                compatible = false;
+            }
+            if hour_index >= calendar.get_index_of(adjusted_goal_deadline) {
+                compatible = false;
+            }
+            println!("After start/deadline:{:?}", &compatible);
 
             if compatible == true {
                 compatible_hours_overlay
