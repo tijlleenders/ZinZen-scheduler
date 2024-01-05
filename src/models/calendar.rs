@@ -64,6 +64,27 @@ impl Calendar {
             deadline: self.start_date_time.clone(), //just for init; will be overwritten
         };
         for hour_offset in 24..(self.hours.capacity() - 24) {
+            if hour_offset % 24 == 0 && hour_offset != 24 {
+                // day boundary reached
+                println!("found day boundary at offset :{:?}", hour_offset);
+                // - push current to dayTasks and increase counter
+                current_task.deadline = current_task
+                    .start
+                    .add(Duration::hours(current_task.duration as i64));
+                if current_task.duration > 0 {
+                    day_tasks.tasks.push(current_task.clone());
+                    task_counter += 1;
+                }
+                // - push dayTasks copy to scheduled
+                scheduled.push(day_tasks);
+                // - update dayTasks for current day and reset Tasks vec
+                day_tasks = DayTasks {
+                    day: self.start_date_time.date(),
+                    tasks: Vec::with_capacity(1),
+                };
+                // - reset current_task and empty title to force new Task in loop
+                current_task.title = "".to_string();
+            }
             match *self.hours[hour_offset] {
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
