@@ -1,7 +1,7 @@
-use chrono::{Duration, DurationRound, Timelike};
+use chrono::{Duration, DurationRound, NaiveDateTime, Timelike};
 
-use super::calendar::Calendar;
 use super::goal::Goal;
+use super::{calendar::Calendar, goal::Filters};
 use crate::models::budget::Budget;
 use crate::models::calendar::Hour;
 use std::{
@@ -51,6 +51,55 @@ impl Activity {
             }
         }
 
+        compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+            &calendar,
+            filter_option.clone(),
+            adjusted_goal_start.clone(),
+            adjusted_goal_deadline.clone(),
+        );
+
+        //This is to not cut something like Sleep into pieces
+        //Maybe better replaced by an if on title == 'Sleep'?
+        //Is the default case that you allow splitting OK?
+        let mut activity_total_duration = 1;
+        match goal.min_duration.clone() {
+            Some(min_duration) => {
+                activity_total_duration = min_duration;
+            }
+            None => {
+                activity_total_duration = goal.budget_config.unwrap().min_per_day;
+            }
+        }
+        let mut min_block_size = activity_total_duration;
+        if activity_total_duration > 8 {
+            min_block_size = 1;
+            todo!() //split into multiple activities so flexibilities are correct??
+                    // or yield flex 1 or maximum of the set from activity.flex()?
+        };
+
+        let activity = Activity {
+            id: goal.id,
+            title: goal.title,
+            min_block_size,
+            max_block_size: min_block_size,
+            calendar_overlay: compatible_hours_overlay,
+            budget: None,
+            total_duration: activity_total_duration,
+            duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
+            status: Status::Unprocessed,
+        };
+        activities.push(activity);
+        activities
+    }
+
+    fn get_compatible_hours_overlay(
+        calendar: &Calendar,
+        filter_option: Option<Filters>,
+        adjusted_goal_start: NaiveDateTime,
+        adjusted_goal_deadline: NaiveDateTime,
+    ) -> Vec<Option<Weak<Hour>>> {
+        let mut compatible_hours_overlay: Vec<Option<Weak<Hour>>> =
+            Vec::with_capacity(calendar.hours.capacity());
         for hour_index in 0..calendar.hours.capacity() {
             let mut compatible = true;
 
@@ -94,39 +143,7 @@ impl Activity {
                 compatible_hours_overlay.push(None);
             }
         }
-
-        //This is to not cut something like Sleep into pieces
-        //Maybe better replaced by an if on title == 'Sleep'?
-        //Is the default case that you allow splitting OK?
-        let mut activity_total_duration = 1;
-        match goal.min_duration.clone() {
-            Some(min_duration) => {
-                activity_total_duration = min_duration;
-            }
-            None => {
-                activity_total_duration = goal.budget_config.unwrap().min_per_day;
-            }
-        }
-        let mut min_block_size = activity_total_duration;
-        if activity_total_duration > 8 {
-            min_block_size = 1;
-            todo!() //split into multiple activities so flexibilities are correct??
-                    // or yield flex 1 or maximum of the set from activity.flex()?
-        };
-
-        let activity = Activity {
-            id: goal.id,
-            title: goal.title,
-            min_block_size,
-            max_block_size: min_block_size,
-            calendar_overlay: compatible_hours_overlay,
-            budget: None,
-            total_duration: activity_total_duration,
-            duration_left: min_block_size,
-            status: Status::Unprocessed,
-        };
-        activities.push(activity);
-        activities
+        compatible_hours_overlay
     }
 
     pub fn flex(&self) -> usize {
