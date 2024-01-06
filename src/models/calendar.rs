@@ -21,7 +21,10 @@ pub struct Calendar {
 impl Calendar {
     pub fn new(start_date_time: NaiveDateTime, end_date_time: NaiveDateTime) -> Self {
         let number_of_days = (end_date_time - start_date_time).num_days(); //Todo use this later to stop limiting compatible
-        println!("Calendar of {:?} days.", &number_of_days);
+        println!(
+            "Calendar of {:?} days, from {:?} to {:?}",
+            &number_of_days, &start_date_time, &end_date_time
+        );
         let mut hours = Vec::with_capacity(48 + number_of_days as usize * 24);
         for _ in 0..hours.capacity() {
             hours.push(Rc::new(Hour::Free));
