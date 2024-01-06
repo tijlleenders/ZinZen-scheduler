@@ -14,6 +14,7 @@ pub struct Goal {
     pub filters: Option<Filters>,
     pub min_duration: Option<usize>,
     pub title: String,
+    pub children: Option<Vec<String>>,
 }
 
 #[derive(Deserialize, Debug, Clone)]

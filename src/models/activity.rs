@@ -25,6 +25,9 @@ pub struct Activity {
 }
 impl Activity {
     pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
+        if goal.children.is_some() {
+            return vec![];
+        };
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
         let mut adjusted_goal_start = goal.start;
         if goal.start.year() == 1970 {
