@@ -5,7 +5,9 @@ use serde::Deserialize;
 #[serde(rename_all = "camelCase")]
 pub struct Goal {
     pub id: String,
+    #[serde(default)]
     pub start: NaiveDateTime,
+    #[serde(default)]
     pub deadline: NaiveDateTime,
     #[serde(rename = "budget")]
     pub budget_config: Option<BudgetConfig>,
