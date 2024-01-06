@@ -5,11 +5,7 @@
     {
       "id": "eb11d6be-2dc7-4401-8134-d4032e9af0b5",
       "title": "Daily habits 🔁",
-      "filters": {
-        "on_days": []
-      },
       "createdAt": "2024-01-06T06:22:18.266Z",
-      "budget": {},
       "children": [
         "breakfast",
         "lunch",
