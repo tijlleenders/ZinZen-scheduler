@@ -18,9 +18,9 @@
       "id": "bc7ae8b1-2935-4970-a611-b76a618fe24c",
       "title": "Walk 🚶🏽",
       "filters": {
-        "after_time": 6,
-        "before_time": 21,
-        "on_days": [
+        "afterTime": 6,
+        "beforeTime": 21,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -42,9 +42,9 @@
       "id": "b427c5b5-335e-4954-8d55-4b7a78e8ca9f",
       "title": "Hobby project 🚂🚋",
       "filters": {
-        "after_time": 9,
-        "before_time": 24,
-        "on_days": [
+        "afterTime": 9,
+        "beforeTime": 24,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -66,9 +66,9 @@
       "id": "a67d8037-8866-4ac2-8a89-bcb130ad4835",
       "title": "House chores 🏡🧹🛠️",
       "filters": {
-        "after_time": 9,
-        "before_time": 24,
-        "on_days": [
+        "afterTime": 9,
+        "beforeTime": 24,
+        "onDays": [
           "Sat",
           "Sun"
         ]
@@ -85,9 +85,9 @@
       "id": "98067eb3-22f7-4f6b-8aa4-ca1e3a9324c2",
       "title": "Family time 🥰",
       "filters": {
-        "after_time": 9,
-        "before_time": 24,
-        "on_days": [
+        "afterTime": 9,
+        "beforeTime": 24,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -109,9 +109,9 @@
       "id": "9535983d-52d8-49a5-8355-e3c87b896822",
       "title": "Me time 🧘🏽😌",
       "filters": {
-        "after_time": 5,
-        "before_time": 23,
-        "on_days": [
+        "afterTime": 5,
+        "beforeTime": 23,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -133,9 +133,9 @@
       "id": "8ff0c2ce-7f03-4324-b1ea-ce5145526255",
       "title": "Work 💪🏽",
       "filters": {
-        "after_time": 6,
-        "before_time": 18,
-        "on_days": [
+        "afterTime": 6,
+        "beforeTime": 18,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -155,9 +155,9 @@
       "id": "89645b31-6b47-4522-98b9-dba408cf5a28",
       "title": "Sleep 😴🌙",
       "filters": {
-        "after_time": 22,
-        "before_time": 7,
-        "on_days": [
+        "afterTime": 22,
+        "beforeTime": 7,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -179,9 +179,9 @@
       "id": "6667abcf-aab4-46f5-9eae-a833f4f8d4a0",
       "title": "Dinner 🍽️",
       "filters": {
-        "after_time": 18,
-        "before_time": 20,
-        "on_days": [
+        "afterTime": 18,
+        "beforeTime": 20,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -203,9 +203,9 @@
       "id": "0a1c999d-4338-4f7a-85b0-68771f3ab0a4",
       "title": "Lunch 🥪",
       "filters": {
-        "after_time": 12,
-        "before_time": 14,
-        "on_days": [
+        "afterTime": 12,
+        "beforeTime": 14,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
@@ -227,9 +227,9 @@
       "id": "04f9e946-06ee-4327-8174-d5d5ca710c5e",
       "title": "Breakfast 🥐🥣",
       "filters": {
-        "after_time": 6,
-        "before_time": 9,
-        "on_days": [
+        "afterTime": 6,
+        "beforeTime": 9,
+        "onDays": [
           "Mon",
           "Tue",
           "Wed",
