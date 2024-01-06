@@ -1,4 +1,4 @@
-use chrono::{Days, Duration, DurationRound, NaiveDateTime, Timelike};
+use chrono::{Datelike, Days, Duration, DurationRound, NaiveDateTime, Timelike};
 
 use super::goal::Goal;
 use super::{calendar::Calendar, goal::Filters};
@@ -27,7 +27,13 @@ impl Activity {
     pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
         let mut adjusted_goal_start = goal.start;
+        if goal.start.year() == 1970 {
+            adjusted_goal_start = calendar.start_date_time.add(Duration::days(1));
+        }
         let mut adjusted_goal_deadline = goal.deadline;
+        if goal.deadline.year() == 1970 {
+            adjusted_goal_deadline = calendar.end_date_time.sub(Duration::days(1));
+        }
         let filter_option = goal.filters.clone();
         if filter_option.is_some() {
             if filter_option.clone().unwrap().after_time
