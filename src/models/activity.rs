@@ -1,12 +1,10 @@
-use chrono::{Datelike, Days, Duration, DurationRound, NaiveDateTime, Timelike};
+use chrono::{Datelike, Days, Duration, NaiveDateTime};
 
 use super::goal::Goal;
 use super::{calendar::Calendar, goal::Filters};
 use crate::models::budget::Budget;
 use crate::models::calendar::Hour;
-use core::num;
 use std::{
-    f32::consts::LN_10,
     fmt,
     ops::{Add, Sub},
     rc::{Rc, Weak},
