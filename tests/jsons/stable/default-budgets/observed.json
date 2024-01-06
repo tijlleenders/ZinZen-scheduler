@@ -1,0 +1,237 @@
+{
+  "scheduled": [
+    {
+      "day": "2022-10-10",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-10-10T00:00:00",
+          "deadline": "2022-10-10T12:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "1",
+          "title": "eat breakfast",
+          "duration": 1,
+          "start": "2022-10-10T12:00:00",
+          "deadline": "2022-10-10T13:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2022-10-10T13:00:00",
+          "deadline": "2022-10-11T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-11",
+      "tasks": [
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-10-11T00:00:00",
+          "deadline": "2022-10-11T12:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "1",
+          "title": "eat breakfast",
+          "duration": 1,
+          "start": "2022-10-11T12:00:00",
+          "deadline": "2022-10-11T13:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2022-10-11T13:00:00",
+          "deadline": "2022-10-12T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-12",
+      "tasks": [
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-10-12T00:00:00",
+          "deadline": "2022-10-12T12:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "1",
+          "title": "eat breakfast",
+          "duration": 1,
+          "start": "2022-10-12T12:00:00",
+          "deadline": "2022-10-12T13:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2022-10-12T13:00:00",
+          "deadline": "2022-10-13T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-13",
+      "tasks": [
+        {
+          "taskid": 9,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-10-13T00:00:00",
+          "deadline": "2022-10-13T12:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "1",
+          "title": "eat breakfast",
+          "duration": 1,
+          "start": "2022-10-13T12:00:00",
+          "deadline": "2022-10-13T13:00:00"
+        },
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2022-10-13T13:00:00",
+          "deadline": "2022-10-14T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-14",
+      "tasks": [
+        {
+          "taskid": 12,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-10-14T00:00:00",
+          "deadline": "2022-10-14T12:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "1",
+          "title": "eat breakfast",
+          "duration": 1,
+          "start": "2022-10-14T12:00:00",
+          "deadline": "2022-10-14T13:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2022-10-14T13:00:00",
+          "deadline": "2022-10-15T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-15",
+      "tasks": [
+        {
+          "taskid": 15,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-10-15T00:00:00",
+          "deadline": "2022-10-15T12:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "1",
+          "title": "eat breakfast",
+          "duration": 1,
+          "start": "2022-10-15T12:00:00",
+          "deadline": "2022-10-15T13:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2022-10-15T13:00:00",
+          "deadline": "2022-10-16T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2022-10-16",
+      "tasks": [
+        {
+          "taskid": 18,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2022-10-16T00:00:00",
+          "deadline": "2022-10-16T12:00:00"
+        },
+        {
+          "taskid": 19,
+          "goalid": "1",
+          "title": "eat breakfast",
+          "duration": 1,
+          "start": "2022-10-16T12:00:00",
+          "deadline": "2022-10-16T13:00:00"
+        },
+        {
+          "taskid": 20,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2022-10-16T13:00:00",
+          "deadline": "2022-10-17T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "day": "2022-10-10",
+      "tasks": []
+    },
+    {
+      "day": "2022-10-11",
+      "tasks": []
+    },
+    {
+      "day": "2022-10-12",
+      "tasks": []
+    },
+    {
+      "day": "2022-10-13",
+      "tasks": []
+    },
+    {
+      "day": "2022-10-14",
+      "tasks": []
+    },
+    {
+      "day": "2022-10-15",
+      "tasks": []
+    },
+    {
+      "day": "2022-10-16",
+      "tasks": []
+    }
+  ]
+}
