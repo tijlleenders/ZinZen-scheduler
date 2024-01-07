@@ -198,9 +198,9 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
             adjusted_goal_deadline.add(Duration::hours(filter_option.clone().before_time as i64));
     }
 
-    //This is to not cut something like Sleep into pieces
-    //Maybe better replaced by an if on title == 'Sleep'?
-    //Is the default case that you allow splitting OK?
+    //TODO: This is cutting something like Sleep into pieces
+    //Replace by an if on title == 'sleep' / "Sleep" / "Sleep 😴🌙"?
+    //Yes ... but what about translations? => better to match on goalid
     let number_of_activities = goal.budget_config.unwrap().min_per_day;
 
     for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1 {

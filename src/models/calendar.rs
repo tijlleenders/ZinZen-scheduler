@@ -9,7 +9,7 @@ use std::thread::current;
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Hour {
     Free,
-    Occupied { activity_index: usize },
+    Occupied { activity_index: usize }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
 }
 
 pub struct Calendar {
