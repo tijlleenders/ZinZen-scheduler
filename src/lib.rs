@@ -54,25 +54,37 @@
 
 use chrono::{NaiveDateTime, NaiveTime};
 use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
+use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
 use services::activity_placer;
+use technical::technical::Input;
 use wasm_bindgen::prelude::*;
 pub mod models;
 pub mod services;
 /// The data structures
 pub mod technical;
 
+#[wasm_bindgen(typescript_custom_section)]
+const TS_APPEND_CONTENT: &'static str = r#"
+interface Input {
+    startDate: string;
+    endDate: string;
+    goals: number
+}
+"#;
+
 // https://rustwasm.github.io/wasm-bindgen/reference/arbitrary-data-with-serde.html
 /// The main wasm function to call
-// #[wasm_bindgen]
-// pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
-//     console_error_panic_hook::set_once();
-//     let input = serde_wasm_bindgen::from_value(input.clone())?;
-//     let final_tasks = run_scheduler();
-//     Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
-// }
+#[wasm_bindgen]
+pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
+    console_error_panic_hook::set_once();
+    // JsError implements From<Error>, so we can just use `?` on any Error
+    let input: Input = from_value(input.clone()).unwrap();
+    let final_tasks = run_scheduler(input.start_date, input.end_date, input.goals);
+    Ok(to_value(&final_tasks)?)
+}
 
-pub fn schedule(
+pub fn run_scheduler(
     start_date: NaiveDateTime,
     end_date: NaiveDateTime,
     goals: Vec<Goal>,
