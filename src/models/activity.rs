@@ -201,32 +201,33 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     //This is to not cut something like Sleep into pieces
     //Maybe better replaced by an if on title == 'Sleep'?
     //Is the default case that you allow splitting OK?
-    let activity_total_duration = goal.budget_config.unwrap().min_per_day;
+    let number_of_activities = goal.budget_config.unwrap().min_per_day;
 
-    let number_of_activities = (adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1;
-    println!("num_activities: {:?}", &number_of_activities);
-    adjusted_goal_deadline = adjusted_goal_start.add(Days::new(number_of_activities));
-    for _ in 0..number_of_activities {
-        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-            &calendar,
-            Some(filter_option.clone()),
-            adjusted_goal_start.clone(),
-            adjusted_goal_deadline.clone(),
-        );
+    for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1 {
+        let activity_start = adjusted_goal_start.add(Days::new(day));
+        let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
+        for _ in 0..number_of_activities {
+            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+                &calendar,
+                Some(filter_option.clone()),
+                activity_start,
+                activity_deadline,
+            );
 
-        let activity = Activity {
-            id: goal.id.clone(),
-            title: goal.title.clone(),
-            min_block_size: 1,
-            max_block_size: 1,
-            calendar_overlay: compatible_hours_overlay,
-            budget: None,
-            total_duration: activity_total_duration,
-            duration_left: 0, //TODO: Correct this - is it even necessary to have duration_left?
-            status: Status::Unprocessed,
-        };
-        dbg!(&activity);
-        activities.push(activity);
+            let activity = Activity {
+                id: goal.id.clone(),
+                title: goal.title.clone(),
+                min_block_size: 1,
+                max_block_size: 1,
+                calendar_overlay: compatible_hours_overlay,
+                budget: None,
+                total_duration: 1,
+                duration_left: 0, //TODO: Correct this - is it even necessary to have duration_left?
+                status: Status::Unprocessed,
+            };
+            dbg!(&activity);
+            activities.push(activity);
+        }
     }
     activities
 }
@@ -242,7 +243,7 @@ fn get_activities_from_simple_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     }
     let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
-    let mut activity_total_duration = goal.min_duration.clone().unwrap();
+    let activity_total_duration = goal.min_duration.clone().unwrap();
     let mut min_block_size = activity_total_duration;
     if activity_total_duration > 8 {
         min_block_size = 1;
