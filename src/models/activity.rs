@@ -27,7 +27,7 @@ impl Activity {
             return vec![];
         };
         if goal.filters.as_ref().is_some() {
-            return get_activites_from_budget_goal(goal, calendar);
+            return get_activities_from_budget_goal(goal, calendar);
         } else {
             return get_activities_from_simple_goal(goal, calendar);
         }
@@ -169,7 +169,7 @@ impl Activity {
     }
 }
 
-fn get_activites_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
+fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
     let mut adjusted_goal_start = goal.start;
     if goal.start.year() == 1970 {
         adjusted_goal_start = calendar.start_date_time.add(Duration::days(1));
