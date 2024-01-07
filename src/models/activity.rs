@@ -180,24 +180,22 @@ fn get_activites_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activi
     }
 
     let mut activities: Vec<Activity> = Vec::with_capacity(1);
-    let filter_option = goal.filters.clone();
-    if filter_option.is_some() {
-        if filter_option.clone().unwrap().after_time < filter_option.clone().unwrap().before_time {
-            //normal case
-        } else {
-            // special case where we know that compatible times cross the midnight boundary
-            println!(
-                "Special case adjusting start from {:?}",
-                &adjusted_goal_start
-            );
-            adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(
-                24 - filter_option.clone().unwrap().after_time as i64,
-            ));
-            println!("... to {:?}", &adjusted_goal_start);
-            adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::hours(
-                filter_option.clone().unwrap().before_time as i64,
-            ));
-        }
+    let filter_option = goal.filters.clone().unwrap();
+
+    if filter_option.after_time < filter_option.clone().before_time {
+        //normal case
+    } else {
+        // special case where we know that compatible times cross the midnight boundary
+        println!(
+            "Special case adjusting start from {:?}",
+            &adjusted_goal_start
+        );
+        adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(
+            24 - filter_option.clone().after_time as i64,
+        ));
+        println!("... to {:?}", &adjusted_goal_start);
+        adjusted_goal_deadline =
+            adjusted_goal_deadline.add(Duration::hours(filter_option.clone().before_time as i64));
     }
 
     //This is to not cut something like Sleep into pieces
@@ -220,15 +218,13 @@ fn get_activites_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activi
     };
 
     let mut number_of_activites = 1;
-    if filter_option.is_some() {
-        number_of_activites = (adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1;
-        println!("num_activities: {:?}", &number_of_activites);
-        adjusted_goal_deadline = adjusted_goal_start.add(Days::new(number_of_activites));
-    }
+    number_of_activites = (adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1;
+    println!("num_activities: {:?}", &number_of_activites);
+    adjusted_goal_deadline = adjusted_goal_start.add(Days::new(number_of_activites));
     for _ in 0..number_of_activites {
         let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
             &calendar,
-            filter_option.clone(),
+            Some(filter_option.clone()),
             adjusted_goal_start.clone(),
             adjusted_goal_deadline.clone(),
         );
