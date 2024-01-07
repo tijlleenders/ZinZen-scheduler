@@ -27,9 +27,9 @@ impl Activity {
             return vec![];
         };
         if goal.filters.as_ref().is_some() {
-            return get_activities_from_simple_goal(goal, calendar);
-        } else {
             return get_activites_from_budget_goal(goal, calendar);
+        } else {
+            return get_activities_from_simple_goal(goal, calendar);
         }
     }
 
@@ -259,40 +259,9 @@ fn get_activities_from_simple_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     if goal.deadline.year() == 1970 {
         adjusted_goal_deadline = calendar.end_date_time.sub(Duration::days(1));
     }
-
     let mut activities: Vec<Activity> = Vec::with_capacity(1);
-    let filter_option = goal.filters.clone();
-    if filter_option.is_some() {
-        if filter_option.clone().unwrap().after_time < filter_option.clone().unwrap().before_time {
-            //normal case
-        } else {
-            // special case where we know that compatible times cross the midnight boundary
-            println!(
-                "Special case adjusting start from {:?}",
-                &adjusted_goal_start
-            );
-            adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(
-                24 - filter_option.clone().unwrap().after_time as i64,
-            ));
-            println!("... to {:?}", &adjusted_goal_start);
-            adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::hours(
-                filter_option.clone().unwrap().before_time as i64,
-            ));
-        }
-    }
 
-    //This is to not cut something like Sleep into pieces
-    //Maybe better replaced by an if on title == 'Sleep'?
-    //Is the default case that you allow splitting OK?
-    let mut activity_total_duration = 1;
-    match goal.min_duration.clone() {
-        Some(min_duration) => {
-            activity_total_duration = min_duration;
-        }
-        None => {
-            activity_total_duration = goal.budget_config.unwrap().min_per_day;
-        }
-    }
+    let mut activity_total_duration = goal.min_duration.clone().unwrap();
     let mut min_block_size = activity_total_duration;
     if activity_total_duration > 8 {
         min_block_size = 1;
@@ -300,34 +269,27 @@ fn get_activities_from_simple_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
                 // or yield flex 1 or maximum of the set from activity.flex()?
     };
 
-    let mut number_of_activites = 1;
-    if filter_option.is_some() {
-        number_of_activites = (adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1;
-        println!("num_activities: {:?}", &number_of_activites);
-        adjusted_goal_deadline = adjusted_goal_start.add(Days::new(number_of_activites));
-    }
-    for _ in 0..number_of_activites {
-        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-            &calendar,
-            filter_option.clone(),
-            adjusted_goal_start.clone(),
-            adjusted_goal_deadline.clone(),
-        );
+    let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+        &calendar,
+        goal.filters.clone(),
+        adjusted_goal_start.clone(),
+        adjusted_goal_deadline.clone(),
+    );
 
-        let activity = Activity {
-            id: goal.id.clone(),
-            title: goal.title.clone(),
-            min_block_size,
-            max_block_size: min_block_size,
-            calendar_overlay: compatible_hours_overlay,
-            budget: None,
-            total_duration: activity_total_duration,
-            duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
-            status: Status::Unprocessed,
-        };
-        dbg!(&activity);
-        activities.push(activity);
-    }
+    let activity = Activity {
+        id: goal.id.clone(),
+        title: goal.title.clone(),
+        min_block_size,
+        max_block_size: min_block_size,
+        calendar_overlay: compatible_hours_overlay,
+        budget: None,
+        total_duration: activity_total_duration,
+        duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
+        status: Status::Unprocessed,
+    };
+    dbg!(&activity);
+    activities.push(activity);
+
     activities
 }
 
