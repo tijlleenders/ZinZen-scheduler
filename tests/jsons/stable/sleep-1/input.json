@@ -15,7 +15,16 @@
       },
       "filters": {
         "afterTime": 22,
-        "beforeTime": 6
+        "beforeTime": 6,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
       }
     }
   ]

@@ -22,6 +22,7 @@ pub struct Goal {
 pub struct Filters {
     pub after_time: usize,
     pub before_time: usize,
+    pub on_days: Vec<WeekDay>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -31,4 +32,16 @@ pub struct BudgetConfig {
     pub max_per_day: usize,
     pub min_per_week: usize,
     pub max_per_week: usize,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub enum WeekDay {
+    Mon,
+    Tue,
+    Wed,
+    Thu,
+    Fri,
+    Sat,
+    Sun,
 }

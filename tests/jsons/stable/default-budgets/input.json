@@ -21,13 +21,13 @@
         "afterTime": 6,
         "beforeTime": 21,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.266Z",
@@ -45,13 +45,13 @@
         "afterTime": 9,
         "beforeTime": 24,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.264Z",
@@ -69,8 +69,8 @@
         "afterTime": 9,
         "beforeTime": 24,
         "onDays": [
-          "Sat",
-          "Sun"
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.265Z",
@@ -88,13 +88,13 @@
         "afterTime": 9,
         "beforeTime": 24,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.265Z",
@@ -112,13 +112,13 @@
         "afterTime": 5,
         "beforeTime": 23,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.267Z",
@@ -136,11 +136,11 @@
         "afterTime": 6,
         "beforeTime": 18,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.266Z",
@@ -158,13 +158,13 @@
         "afterTime": 22,
         "beforeTime": 7,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.263Z",
@@ -182,13 +182,13 @@
         "afterTime": 18,
         "beforeTime": 20,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.267Z",
@@ -206,13 +206,13 @@
         "afterTime": 12,
         "beforeTime": 14,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.267Z",
@@ -230,13 +230,13 @@
         "afterTime": 6,
         "beforeTime": 9,
         "onDays": [
-          "Mon",
-          "Tue",
-          "Wed",
-          "Thu",
-          "Fri",
-          "Sat",
-          "Sun"
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-06T06:22:18.268Z",
