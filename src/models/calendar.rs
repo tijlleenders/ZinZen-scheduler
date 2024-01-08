@@ -67,8 +67,7 @@ impl Calendar {
         {
             // TODO: Fix magic number offset everywhere in code
             panic!(
-                "can't request an index outside of calendar bounds for date {:?}\nCalendar starts at {:?}", self.start_date_time,
-                date_time
+                "can't request an index outside of calendar bounds for date {:?}\nCalendar starts at {:?}", date_time, self.start_date_time
             )
         }
         (date_time - self.start_date_time.checked_sub_days(Days::new(1)).unwrap()).num_hours()
