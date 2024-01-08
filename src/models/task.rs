@@ -2,10 +2,12 @@
 use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+use super::{activity::Activity, calendar::ImpossibleActivity};
+
+#[derive(Deserialize, Serialize, Debug)]
 pub struct FinalTasks {
     pub scheduled: Vec<DayTasks>,
-    pub impossible: Vec<DayTasks>,
+    pub impossible: Vec<ImpossibleActivity>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

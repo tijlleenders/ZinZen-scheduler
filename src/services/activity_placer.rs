@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use crate::models::{
     activity::{Activity, Status},
-    calendar::{Calendar, Hour},
+    calendar::{Calendar, Hour, ImpossibleActivity},
     task::FinalTasks,
 };
 
@@ -24,6 +24,12 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> FinalTask
         if best_hour_index.is_none() {
             activities[act_index_to_schedule.unwrap()].status = Status::Impossible;
             activities[act_index_to_schedule.unwrap()].release_claims();
+            let impossible_activity = ImpossibleActivity {
+                id: activities[act_index_to_schedule.unwrap()].id.clone(),
+                title: activities[act_index_to_schedule.unwrap()].title.clone(),
+                min_block_size: activities[act_index_to_schedule.unwrap()].min_block_size,
+            };
+            calendar.impossible_activities.push(impossible_activity);
             continue;
         }
         println!(
@@ -63,6 +69,7 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> FinalTask
             dbg!(&calendar);
         }
     }
+    dbg!(&calendar);
     calendar.get_tasks(activities)
 }
 

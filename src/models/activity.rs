@@ -1,4 +1,5 @@
 use chrono::{Datelike, Days, Duration, NaiveDateTime};
+use serde::{Deserialize, Serialize};
 
 use super::goal::Goal;
 use super::{calendar::Calendar, goal::Filters};
@@ -10,6 +11,7 @@ use std::{
     rc::{Rc, Weak},
 };
 
+#[derive(Clone)]
 pub struct Activity {
     pub id: String,
     pub title: String,
@@ -285,7 +287,7 @@ fn get_activities_from_simple_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     activities
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Deserialize)]
 pub enum Status {
     Unprocessed,
     Scheduled,

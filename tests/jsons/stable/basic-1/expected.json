@@ -54,10 +54,5 @@
       ]
     }
   ],
-  "impossible": [
-    {
-      "day": "2022-01-01",
-      "tasks": []
-    }
-  ]
+  "impossible": []
 }

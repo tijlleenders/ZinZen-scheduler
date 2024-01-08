@@ -790,32 +790,84 @@
   ],
   "impossible": [
     {
-      "day": "2024-01-08",
-      "tasks": []
+      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
+      "title": "House chores 🏡🧹🛠️",
+      "minBlockSize": 1
     },
     {
-      "day": "2024-01-09",
-      "tasks": []
+      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
+      "title": "House chores 🏡🧹🛠️",
+      "minBlockSize": 1
     },
     {
-      "day": "2024-01-10",
-      "tasks": []
+      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
+      "title": "House chores 🏡🧹🛠️",
+      "minBlockSize": 1
     },
     {
-      "day": "2024-01-11",
-      "tasks": []
+      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
+      "title": "House chores 🏡🧹🛠️",
+      "minBlockSize": 1
     },
     {
-      "day": "2024-01-12",
-      "tasks": []
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
     },
     {
-      "day": "2024-01-13",
-      "tasks": []
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
     },
     {
-      "day": "2024-01-14",
-      "tasks": []
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "minBlockSize": 1
     }
   ]
 }

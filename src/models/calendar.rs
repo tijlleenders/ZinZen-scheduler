@@ -1,6 +1,7 @@
 use super::activity::Activity;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
+use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Formatter};
 use std::ops::{Add, Sub};
 use std::rc::Rc;
@@ -11,10 +12,19 @@ pub enum Hour {
     Occupied { activity_index: usize }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct ImpossibleActivity {
+    pub id: String,
+    pub title: String,
+    pub min_block_size: usize,
+}
+
 pub struct Calendar {
     pub start_date_time: NaiveDateTime,
     pub end_date_time: NaiveDateTime,
     pub hours: Vec<Rc<Hour>>,
+    pub impossible_activities: Vec<ImpossibleActivity>,
 }
 
 impl Calendar {
@@ -32,6 +42,7 @@ impl Calendar {
             start_date_time,
             end_date_time,
             hours,
+            impossible_activities: vec![],
         }
     }
 
@@ -67,12 +78,10 @@ impl Calendar {
     pub fn get_tasks(&self, activities: Vec<Activity>) -> FinalTasks {
         //TODO Fix this mess below - it works somehow but not readable at all...
         let mut scheduled: Vec<DayTasks> = vec![];
-        let mut impossible: Vec<DayTasks> = vec![];
         let mut day_tasks = DayTasks {
             day: self.start_date_time.date(),
             tasks: Vec::with_capacity(1),
         };
-        impossible.push(day_tasks.clone());
         let mut task_counter = 0 as usize;
         let mut current_task = Task {
             taskid: task_counter,
@@ -97,13 +106,6 @@ impl Calendar {
                 current_task.taskid = task_counter;
                 // - push dayTasks copy to scheduled
                 scheduled.push(day_tasks);
-                impossible.push(DayTasks {
-                    day: self
-                        .start_date_time
-                        .date()
-                        .add(Duration::days(hour_offset as i64 / 24 - 1)),
-                    tasks: vec![],
-                });
                 // - update dayTasks for current day and reset Tasks vec
                 day_tasks = DayTasks {
                     day: self
@@ -172,7 +174,7 @@ impl Calendar {
         scheduled.push(day_tasks);
         FinalTasks {
             scheduled: scheduled,
-            impossible: impossible,
+            impossible: self.impossible_activities.clone(),
         }
     }
 }
@@ -198,6 +200,12 @@ impl Debug for Calendar {
                 write!(f, "{} {:?}\n", index, self.hours[index]).unwrap();
             }
         }
+        write!(
+            f,
+            "{:?} impossible activities\n",
+            self.impossible_activities.len()
+        )
+        .unwrap();
         Ok(())
     }
 }
