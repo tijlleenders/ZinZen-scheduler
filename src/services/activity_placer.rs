@@ -21,6 +21,11 @@ pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> FinalTask
         let best_hour_index: Option<usize> =
             activities[act_index_to_schedule.unwrap()].get_best_scheduling_index();
         println!("Best index:{:?}", &best_hour_index);
+        if best_hour_index.is_none() {
+            activities[act_index_to_schedule.unwrap()].status = Status::Impossible;
+            activities[act_index_to_schedule.unwrap()].release_claims();
+            continue;
+        }
         println!(
             "reserving {:?} hours...",
             &activities[act_index_to_schedule.unwrap()].total_duration
