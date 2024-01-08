@@ -79,7 +79,6 @@ impl Activity {
                     compatible = false;
                 }
             }
-            println!("After filters:{:?}", &compatible);
 
             if hour_index < calendar.get_index_of(adjusted_goal_start) {
                 compatible = false;
@@ -87,7 +86,6 @@ impl Activity {
             if hour_index >= calendar.get_index_of(adjusted_goal_deadline) {
                 compatible = false;
             }
-            println!("After start/deadline:{:?}", &compatible);
 
             if compatible == true {
                 compatible_hours_overlay
