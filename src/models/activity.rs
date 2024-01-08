@@ -247,11 +247,11 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
 fn get_activities_from_simple_goal(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
     let mut adjusted_goal_start = goal.start;
     if goal.start.year() == 1970 {
-        adjusted_goal_start = calendar.start_date_time.add(Duration::days(1));
+        adjusted_goal_start = calendar.start_date_time;
     }
     let mut adjusted_goal_deadline = goal.deadline;
     if goal.deadline.year() == 1970 {
-        adjusted_goal_deadline = calendar.end_date_time.sub(Duration::days(1));
+        adjusted_goal_deadline = calendar.end_date_time;
     }
     let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
