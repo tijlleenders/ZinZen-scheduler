@@ -61,7 +61,6 @@ impl Activity {
                 } else {
                     // special case where we know that compatible times cross the midnight boundary
                     let hour_of_day = hour_index % 24;
-                    println!("Hour of day: {:?}", hour_of_day);
                     if hour_of_day >= filter_option.clone().unwrap().before_time
                         && hour_of_day < filter_option.clone().unwrap().after_time
                     {
@@ -182,11 +181,11 @@ impl Activity {
 fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
     let mut adjusted_goal_start = goal.start;
     if goal.start.year() == 1970 {
-        adjusted_goal_start = calendar.start_date_time.add(Duration::days(1));
+        adjusted_goal_start = calendar.start_date_time;
     }
     let mut adjusted_goal_deadline = goal.deadline;
     if goal.deadline.year() == 1970 {
-        adjusted_goal_deadline = calendar.end_date_time.sub(Duration::days(1));
+        adjusted_goal_deadline = calendar.end_date_time;
     }
 
     let mut activities: Vec<Activity> = Vec::with_capacity(1);
@@ -200,12 +199,9 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
             "Special case adjusting start from {:?}",
             &adjusted_goal_start
         );
-        adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(
-            24 - filter_option.clone().after_time as i64,
-        ));
+        adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(24));
         println!("... to {:?}", &adjusted_goal_start);
-        adjusted_goal_deadline =
-            adjusted_goal_deadline.add(Duration::hours(filter_option.clone().before_time as i64));
+        adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::days(1));
     }
 
     //TODO: This is cutting something like Sleep into pieces
@@ -213,7 +209,7 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     //Yes ... but what about translations? => better to match on goalid
     let number_of_activities = goal.budget_config.unwrap().min_per_day;
 
-    for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 + 1 {
+    for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
         let activity_start = adjusted_goal_start.add(Days::new(day));
         let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
         for _ in 0..number_of_activities {

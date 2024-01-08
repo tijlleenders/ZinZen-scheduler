@@ -5,16 +5,120 @@
       "tasks": [
         {
           "taskid": 0,
-          "goalid": "free",
-          "title": "free",
-          "duration": 22,
+          "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
+          "title": "Sleep 😴🌙",
+          "duration": 6,
           "start": "2024-01-08T00:00:00",
-          "deadline": "2024-01-08T22:00:00"
+          "deadline": "2024-01-08T06:00:00"
         },
         {
           "taskid": 1,
-          "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
-          "title": "Sleep 😴🌙",
+          "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-01-08T06:00:00",
+          "deadline": "2024-01-08T07:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
+          "title": "Work 💪🏽",
+          "duration": 1,
+          "start": "2024-01-08T07:00:00",
+          "deadline": "2024-01-08T08:00:00"
+        },
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-01-08T08:00:00",
+          "deadline": "2024-01-08T09:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-01-08T09:00:00",
+          "deadline": "2024-01-08T10:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
+          "title": "Work 💪🏽",
+          "duration": 2,
+          "start": "2024-01-08T10:00:00",
+          "deadline": "2024-01-08T12:00:00"
+        },
+        {
+          "taskid": 6,
+          "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-01-08T12:00:00",
+          "deadline": "2024-01-08T13:00:00"
+        },
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-01-08T13:00:00",
+          "deadline": "2024-01-08T14:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
+          "title": "Work 💪🏽",
+          "duration": 3,
+          "start": "2024-01-08T14:00:00",
+          "deadline": "2024-01-08T17:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-01-08T17:00:00",
+          "deadline": "2024-01-08T18:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
+          "title": "Hobby project 🚂🚋",
+          "duration": 1,
+          "start": "2024-01-08T18:00:00",
+          "deadline": "2024-01-08T19:00:00"
+        },
+        {
+          "taskid": 11,
+          "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-01-08T19:00:00",
+          "deadline": "2024-01-08T20:00:00"
+        },
+        {
+          "taskid": 12,
+          "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-01-08T20:00:00",
+          "deadline": "2024-01-08T21:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-01-08T21:00:00",
+          "deadline": "2024-01-08T22:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
           "duration": 2,
           "start": "2024-01-08T22:00:00",
           "deadline": "2024-01-09T00:00:00"
@@ -25,23 +129,15 @@
       "day": "2024-01-09",
       "tasks": [
         {
-          "taskid": 2,
+          "taskid": 15,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
-          "duration": 4,
+          "duration": 6,
           "start": "2024-01-09T00:00:00",
-          "deadline": "2024-01-09T04:00:00"
-        },
-        {
-          "taskid": 3,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2024-01-09T04:00:00",
           "deadline": "2024-01-09T06:00:00"
         },
         {
-          "taskid": 4,
+          "taskid": 16,
           "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
@@ -49,7 +145,7 @@
           "deadline": "2024-01-09T07:00:00"
         },
         {
-          "taskid": 5,
+          "taskid": 17,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 1,
@@ -57,7 +153,7 @@
           "deadline": "2024-01-09T08:00:00"
         },
         {
-          "taskid": 6,
+          "taskid": 18,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -65,7 +161,7 @@
           "deadline": "2024-01-09T09:00:00"
         },
         {
-          "taskid": 7,
+          "taskid": 19,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
           "duration": 1,
@@ -73,7 +169,7 @@
           "deadline": "2024-01-09T10:00:00"
         },
         {
-          "taskid": 8,
+          "taskid": 20,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 2,
@@ -81,7 +177,7 @@
           "deadline": "2024-01-09T12:00:00"
         },
         {
-          "taskid": 9,
+          "taskid": 21,
           "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
           "title": "Lunch 🥪",
           "duration": 1,
@@ -89,7 +185,7 @@
           "deadline": "2024-01-09T13:00:00"
         },
         {
-          "taskid": 10,
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -97,7 +193,7 @@
           "deadline": "2024-01-09T14:00:00"
         },
         {
-          "taskid": 11,
+          "taskid": 23,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 3,
@@ -105,7 +201,7 @@
           "deadline": "2024-01-09T17:00:00"
         },
         {
-          "taskid": 12,
+          "taskid": 24,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -113,7 +209,7 @@
           "deadline": "2024-01-09T18:00:00"
         },
         {
-          "taskid": 13,
+          "taskid": 25,
           "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
           "title": "Hobby project 🚂🚋",
           "duration": 1,
@@ -121,7 +217,7 @@
           "deadline": "2024-01-09T19:00:00"
         },
         {
-          "taskid": 14,
+          "taskid": 26,
           "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
           "title": "Dinner 🍽️",
           "duration": 1,
@@ -129,7 +225,7 @@
           "deadline": "2024-01-09T20:00:00"
         },
         {
-          "taskid": 15,
+          "taskid": 27,
           "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -137,7 +233,7 @@
           "deadline": "2024-01-09T21:00:00"
         },
         {
-          "taskid": 16,
+          "taskid": 28,
           "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
@@ -145,9 +241,9 @@
           "deadline": "2024-01-09T22:00:00"
         },
         {
-          "taskid": 17,
-          "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
-          "title": "Sleep 😴🌙",
+          "taskid": 29,
+          "goalid": "free",
+          "title": "free",
           "duration": 2,
           "start": "2024-01-09T22:00:00",
           "deadline": "2024-01-10T00:00:00"
@@ -158,23 +254,15 @@
       "day": "2024-01-10",
       "tasks": [
         {
-          "taskid": 18,
+          "taskid": 30,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
-          "duration": 4,
+          "duration": 6,
           "start": "2024-01-10T00:00:00",
-          "deadline": "2024-01-10T04:00:00"
-        },
-        {
-          "taskid": 19,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2024-01-10T04:00:00",
           "deadline": "2024-01-10T06:00:00"
         },
         {
-          "taskid": 20,
+          "taskid": 31,
           "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
@@ -182,7 +270,7 @@
           "deadline": "2024-01-10T07:00:00"
         },
         {
-          "taskid": 21,
+          "taskid": 32,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 1,
@@ -190,7 +278,7 @@
           "deadline": "2024-01-10T08:00:00"
         },
         {
-          "taskid": 22,
+          "taskid": 33,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -198,7 +286,7 @@
           "deadline": "2024-01-10T09:00:00"
         },
         {
-          "taskid": 23,
+          "taskid": 34,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
           "duration": 1,
@@ -206,7 +294,7 @@
           "deadline": "2024-01-10T10:00:00"
         },
         {
-          "taskid": 24,
+          "taskid": 35,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 2,
@@ -214,7 +302,7 @@
           "deadline": "2024-01-10T12:00:00"
         },
         {
-          "taskid": 25,
+          "taskid": 36,
           "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
           "title": "Lunch 🥪",
           "duration": 1,
@@ -222,7 +310,7 @@
           "deadline": "2024-01-10T13:00:00"
         },
         {
-          "taskid": 26,
+          "taskid": 37,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -230,7 +318,7 @@
           "deadline": "2024-01-10T14:00:00"
         },
         {
-          "taskid": 27,
+          "taskid": 38,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 3,
@@ -238,7 +326,7 @@
           "deadline": "2024-01-10T17:00:00"
         },
         {
-          "taskid": 28,
+          "taskid": 39,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -246,7 +334,7 @@
           "deadline": "2024-01-10T18:00:00"
         },
         {
-          "taskid": 29,
+          "taskid": 40,
           "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
           "title": "Hobby project 🚂🚋",
           "duration": 1,
@@ -254,7 +342,7 @@
           "deadline": "2024-01-10T19:00:00"
         },
         {
-          "taskid": 30,
+          "taskid": 41,
           "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
           "title": "Dinner 🍽️",
           "duration": 1,
@@ -262,7 +350,7 @@
           "deadline": "2024-01-10T20:00:00"
         },
         {
-          "taskid": 31,
+          "taskid": 42,
           "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -270,7 +358,7 @@
           "deadline": "2024-01-10T21:00:00"
         },
         {
-          "taskid": 32,
+          "taskid": 43,
           "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
@@ -278,9 +366,9 @@
           "deadline": "2024-01-10T22:00:00"
         },
         {
-          "taskid": 33,
-          "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
-          "title": "Sleep 😴🌙",
+          "taskid": 44,
+          "goalid": "free",
+          "title": "free",
           "duration": 2,
           "start": "2024-01-10T22:00:00",
           "deadline": "2024-01-11T00:00:00"
@@ -291,23 +379,15 @@
       "day": "2024-01-11",
       "tasks": [
         {
-          "taskid": 34,
+          "taskid": 45,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
-          "duration": 4,
+          "duration": 6,
           "start": "2024-01-11T00:00:00",
-          "deadline": "2024-01-11T04:00:00"
-        },
-        {
-          "taskid": 35,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2024-01-11T04:00:00",
           "deadline": "2024-01-11T06:00:00"
         },
         {
-          "taskid": 36,
+          "taskid": 46,
           "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
@@ -315,7 +395,7 @@
           "deadline": "2024-01-11T07:00:00"
         },
         {
-          "taskid": 37,
+          "taskid": 47,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 1,
@@ -323,7 +403,7 @@
           "deadline": "2024-01-11T08:00:00"
         },
         {
-          "taskid": 38,
+          "taskid": 48,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -331,7 +411,7 @@
           "deadline": "2024-01-11T09:00:00"
         },
         {
-          "taskid": 39,
+          "taskid": 49,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
           "duration": 1,
@@ -339,7 +419,7 @@
           "deadline": "2024-01-11T10:00:00"
         },
         {
-          "taskid": 40,
+          "taskid": 50,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 2,
@@ -347,7 +427,7 @@
           "deadline": "2024-01-11T12:00:00"
         },
         {
-          "taskid": 41,
+          "taskid": 51,
           "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
           "title": "Lunch 🥪",
           "duration": 1,
@@ -355,7 +435,7 @@
           "deadline": "2024-01-11T13:00:00"
         },
         {
-          "taskid": 42,
+          "taskid": 52,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -363,7 +443,7 @@
           "deadline": "2024-01-11T14:00:00"
         },
         {
-          "taskid": 43,
+          "taskid": 53,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 3,
@@ -371,7 +451,7 @@
           "deadline": "2024-01-11T17:00:00"
         },
         {
-          "taskid": 44,
+          "taskid": 54,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -379,7 +459,7 @@
           "deadline": "2024-01-11T18:00:00"
         },
         {
-          "taskid": 45,
+          "taskid": 55,
           "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
           "title": "Hobby project 🚂🚋",
           "duration": 1,
@@ -387,7 +467,7 @@
           "deadline": "2024-01-11T19:00:00"
         },
         {
-          "taskid": 46,
+          "taskid": 56,
           "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
           "title": "Dinner 🍽️",
           "duration": 1,
@@ -395,7 +475,7 @@
           "deadline": "2024-01-11T20:00:00"
         },
         {
-          "taskid": 47,
+          "taskid": 57,
           "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -403,7 +483,7 @@
           "deadline": "2024-01-11T21:00:00"
         },
         {
-          "taskid": 48,
+          "taskid": 58,
           "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
@@ -411,9 +491,9 @@
           "deadline": "2024-01-11T22:00:00"
         },
         {
-          "taskid": 49,
-          "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
-          "title": "Sleep 😴🌙",
+          "taskid": 59,
+          "goalid": "free",
+          "title": "free",
           "duration": 2,
           "start": "2024-01-11T22:00:00",
           "deadline": "2024-01-12T00:00:00"
@@ -424,23 +504,15 @@
       "day": "2024-01-12",
       "tasks": [
         {
-          "taskid": 50,
+          "taskid": 60,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
-          "duration": 4,
+          "duration": 6,
           "start": "2024-01-12T00:00:00",
-          "deadline": "2024-01-12T04:00:00"
-        },
-        {
-          "taskid": 51,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2024-01-12T04:00:00",
           "deadline": "2024-01-12T06:00:00"
         },
         {
-          "taskid": 52,
+          "taskid": 61,
           "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
@@ -448,7 +520,7 @@
           "deadline": "2024-01-12T07:00:00"
         },
         {
-          "taskid": 53,
+          "taskid": 62,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 1,
@@ -456,7 +528,7 @@
           "deadline": "2024-01-12T08:00:00"
         },
         {
-          "taskid": 54,
+          "taskid": 63,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -464,7 +536,7 @@
           "deadline": "2024-01-12T09:00:00"
         },
         {
-          "taskid": 55,
+          "taskid": 64,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
           "duration": 1,
@@ -472,7 +544,7 @@
           "deadline": "2024-01-12T10:00:00"
         },
         {
-          "taskid": 56,
+          "taskid": 65,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 2,
@@ -480,7 +552,7 @@
           "deadline": "2024-01-12T12:00:00"
         },
         {
-          "taskid": 57,
+          "taskid": 66,
           "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
           "title": "Lunch 🥪",
           "duration": 1,
@@ -488,7 +560,7 @@
           "deadline": "2024-01-12T13:00:00"
         },
         {
-          "taskid": 58,
+          "taskid": 67,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -496,7 +568,7 @@
           "deadline": "2024-01-12T14:00:00"
         },
         {
-          "taskid": 59,
+          "taskid": 68,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
           "duration": 3,
@@ -504,7 +576,7 @@
           "deadline": "2024-01-12T17:00:00"
         },
         {
-          "taskid": 60,
+          "taskid": 69,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -512,7 +584,7 @@
           "deadline": "2024-01-12T18:00:00"
         },
         {
-          "taskid": 61,
+          "taskid": 70,
           "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
           "title": "Hobby project 🚂🚋",
           "duration": 1,
@@ -520,7 +592,7 @@
           "deadline": "2024-01-12T19:00:00"
         },
         {
-          "taskid": 62,
+          "taskid": 71,
           "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
           "title": "Dinner 🍽️",
           "duration": 1,
@@ -528,7 +600,7 @@
           "deadline": "2024-01-12T20:00:00"
         },
         {
-          "taskid": 63,
+          "taskid": 72,
           "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -536,7 +608,7 @@
           "deadline": "2024-01-12T21:00:00"
         },
         {
-          "taskid": 64,
+          "taskid": 73,
           "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
@@ -544,9 +616,9 @@
           "deadline": "2024-01-12T22:00:00"
         },
         {
-          "taskid": 65,
-          "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
-          "title": "Sleep 😴🌙",
+          "taskid": 74,
+          "goalid": "free",
+          "title": "free",
           "duration": 2,
           "start": "2024-01-12T22:00:00",
           "deadline": "2024-01-13T00:00:00"
@@ -557,23 +629,15 @@
       "day": "2024-01-13",
       "tasks": [
         {
-          "taskid": 66,
+          "taskid": 75,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
-          "duration": 4,
+          "duration": 6,
           "start": "2024-01-13T00:00:00",
-          "deadline": "2024-01-13T04:00:00"
-        },
-        {
-          "taskid": 67,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2024-01-13T04:00:00",
           "deadline": "2024-01-13T06:00:00"
         },
         {
-          "taskid": 68,
+          "taskid": 76,
           "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
@@ -581,7 +645,7 @@
           "deadline": "2024-01-13T07:00:00"
         },
         {
-          "taskid": 69,
+          "taskid": 77,
           "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
@@ -589,7 +653,7 @@
           "deadline": "2024-01-13T08:00:00"
         },
         {
-          "taskid": 70,
+          "taskid": 78,
           "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -597,7 +661,7 @@
           "deadline": "2024-01-13T09:00:00"
         },
         {
-          "taskid": 71,
+          "taskid": 79,
           "goalid": "a700170a-eb34-4162-a59a-3ce763f62205",
           "title": "House chores 🏡🧹🛠️",
           "duration": 1,
@@ -605,7 +669,7 @@
           "deadline": "2024-01-13T10:00:00"
         },
         {
-          "taskid": 72,
+          "taskid": 80,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
           "duration": 1,
@@ -613,7 +677,7 @@
           "deadline": "2024-01-13T11:00:00"
         },
         {
-          "taskid": 73,
+          "taskid": 81,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -621,7 +685,7 @@
           "deadline": "2024-01-13T12:00:00"
         },
         {
-          "taskid": 74,
+          "taskid": 82,
           "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
           "title": "Lunch 🥪",
           "duration": 1,
@@ -629,7 +693,7 @@
           "deadline": "2024-01-13T13:00:00"
         },
         {
-          "taskid": 75,
+          "taskid": 83,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -637,7 +701,7 @@
           "deadline": "2024-01-13T18:00:00"
         },
         {
-          "taskid": 76,
+          "taskid": 84,
           "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
           "title": "Dinner 🍽️",
           "duration": 1,
@@ -645,7 +709,7 @@
           "deadline": "2024-01-13T19:00:00"
         },
         {
-          "taskid": 77,
+          "taskid": 85,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -653,7 +717,7 @@
           "deadline": "2024-01-13T21:00:00"
         },
         {
-          "taskid": 78,
+          "taskid": 86,
           "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
           "title": "Hobby project 🚂🚋",
           "duration": 1,
@@ -661,9 +725,9 @@
           "deadline": "2024-01-13T22:00:00"
         },
         {
-          "taskid": 79,
-          "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
-          "title": "Sleep 😴🌙",
+          "taskid": 87,
+          "goalid": "free",
+          "title": "free",
           "duration": 2,
           "start": "2024-01-13T22:00:00",
           "deadline": "2024-01-14T00:00:00"
@@ -674,23 +738,15 @@
       "day": "2024-01-14",
       "tasks": [
         {
-          "taskid": 80,
+          "taskid": 88,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
-          "duration": 4,
+          "duration": 6,
           "start": "2024-01-14T00:00:00",
-          "deadline": "2024-01-14T04:00:00"
-        },
-        {
-          "taskid": 81,
-          "goalid": "free",
-          "title": "free",
-          "duration": 2,
-          "start": "2024-01-14T04:00:00",
           "deadline": "2024-01-14T06:00:00"
         },
         {
-          "taskid": 82,
+          "taskid": 89,
           "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
@@ -698,7 +754,7 @@
           "deadline": "2024-01-14T07:00:00"
         },
         {
-          "taskid": 83,
+          "taskid": 90,
           "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
@@ -706,7 +762,7 @@
           "deadline": "2024-01-14T08:00:00"
         },
         {
-          "taskid": 84,
+          "taskid": 91,
           "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -714,7 +770,7 @@
           "deadline": "2024-01-14T09:00:00"
         },
         {
-          "taskid": 85,
+          "taskid": 92,
           "goalid": "a700170a-eb34-4162-a59a-3ce763f62205",
           "title": "House chores 🏡🧹🛠️",
           "duration": 1,
@@ -722,7 +778,7 @@
           "deadline": "2024-01-14T10:00:00"
         },
         {
-          "taskid": 86,
+          "taskid": 93,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
           "duration": 1,
@@ -730,7 +786,7 @@
           "deadline": "2024-01-14T11:00:00"
         },
         {
-          "taskid": 87,
+          "taskid": 94,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -738,7 +794,7 @@
           "deadline": "2024-01-14T12:00:00"
         },
         {
-          "taskid": 88,
+          "taskid": 95,
           "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
           "title": "Lunch 🥪",
           "duration": 1,
@@ -746,7 +802,7 @@
           "deadline": "2024-01-14T13:00:00"
         },
         {
-          "taskid": 89,
+          "taskid": 96,
           "goalid": "free",
           "title": "free",
           "duration": 5,
@@ -754,7 +810,7 @@
           "deadline": "2024-01-14T18:00:00"
         },
         {
-          "taskid": 90,
+          "taskid": 97,
           "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
           "title": "Dinner 🍽️",
           "duration": 1,
@@ -762,7 +818,7 @@
           "deadline": "2024-01-14T19:00:00"
         },
         {
-          "taskid": 91,
+          "taskid": 98,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -770,7 +826,7 @@
           "deadline": "2024-01-14T21:00:00"
         },
         {
-          "taskid": 92,
+          "taskid": 99,
           "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
           "title": "Hobby project 🚂🚋",
           "duration": 1,
@@ -778,7 +834,7 @@
           "deadline": "2024-01-14T22:00:00"
         },
         {
-          "taskid": 93,
+          "taskid": 100,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -789,6 +845,11 @@
     }
   ],
   "impossible": [
+    {
+      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
+      "title": "House chores 🏡🧹🛠️",
+      "minBlockSize": 1
+    },
     {
       "id": "a700170a-eb34-4162-a59a-3ce763f62205",
       "title": "House chores 🏡🧹🛠️",
