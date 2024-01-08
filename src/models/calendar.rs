@@ -1,10 +1,9 @@
 use super::activity::Activity;
 use super::task::{DayTasks, FinalTasks, Task};
-use chrono::{Days, Duration, NaiveDateTime, Timelike};
+use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
 use std::fmt::{Debug, Formatter};
 use std::ops::{Add, Sub};
 use std::rc::Rc;
-use std::thread::current;
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Hour {
@@ -34,6 +33,21 @@ impl Calendar {
             end_date_time,
             hours,
         }
+    }
+
+    pub fn get_week_day_of(&self, index_to_test: usize) -> Weekday {
+        if index_to_test > self.hours.capacity() - 1 {
+            panic!(
+                "Can't request weekday for index {:?} outside of calendar capacity {:?}\nIndexes start at 0.\n",
+                index_to_test,
+                self.hours.capacity()
+            );
+        }
+        let date_time_of_index_to_test = self
+            .start_date_time
+            .sub(Days::new(1))
+            .add(Duration::hours(index_to_test as i64));
+        date_time_of_index_to_test.weekday()
     }
 
     pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
@@ -165,7 +179,9 @@ impl Calendar {
 
 impl Debug for Calendar {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        println!();
         for index in 0..self.hours.capacity() {
+            write!(f, "{:?} ", self.get_week_day_of(index)).unwrap();
             if self.hours[index] == Rc::new(Hour::Free) {
                 if Rc::weak_count(&self.hours[index]) == 0 {
                     write!(f, "{} -\n", index).unwrap();

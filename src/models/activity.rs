@@ -66,6 +66,16 @@ impl Activity {
                         compatible = false;
                     }
                 }
+                if filter_option
+                    .as_ref()
+                    .unwrap()
+                    .on_days
+                    .contains(&calendar.get_week_day_of(hour_index))
+                {
+                    // OK
+                } else {
+                    compatible = false;
+                }
             }
             println!("After filters:{:?}", &compatible);
 
