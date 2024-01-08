@@ -63,7 +63,7 @@ impl Calendar {
 
     pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
         if date_time < self.start_date_time.sub(Duration::days(1))
-            || date_time >= self.end_date_time.add(Duration::days(1))
+            || date_time > self.end_date_time.add(Duration::days(1))
         {
             // TODO: Fix magic number offset everywhere in code
             panic!(
