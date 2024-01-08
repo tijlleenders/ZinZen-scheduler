@@ -1,11 +1,11 @@
 {
-  "startDate": "2024-01-06T00:00:00",
-  "endDate": "2024-01-13T00:00:00",
+  "startDate": "2024-01-08T00:00:00",
+  "endDate": "2024-01-15T00:00:00",
   "goals": [
     {
-      "id": "eb11d6be-2dc7-4401-8134-d4032e9af0b5",
+      "id": "44faf46c-73ad-4140-a5cb-d9a69f51859b",
       "title": "Daily habits 🔁",
-      "createdAt": "2024-01-06T06:22:18.266Z",
+      "createdAt": "2024-01-08T10:59:47.134Z",
       "children": [
         "breakfast",
         "lunch",
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "id": "bc7ae8b1-2935-4970-a611-b76a618fe24c",
+      "id": "77e1f762-3a4f-44a3-8f24-1560641a3548",
       "title": "Walk 🚶🏽",
       "filters": {
         "afterTime": 6,
@@ -30,7 +30,7 @@
           "sun"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.266Z",
+      "createdAt": "2024-01-08T10:59:47.135Z",
       "budget": {
         "minPerDay": 1,
         "maxPerDay": 1,
@@ -39,7 +39,7 @@
       }
     },
     {
-      "id": "b427c5b5-335e-4954-8d55-4b7a78e8ca9f",
+      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
       "title": "Hobby project 🚂🚋",
       "filters": {
         "afterTime": 9,
@@ -54,7 +54,7 @@
           "sun"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.264Z",
+      "createdAt": "2024-01-08T10:59:47.130Z",
       "budget": {
         "minPerDay": 1,
         "maxPerDay": 4,
@@ -63,7 +63,7 @@
       }
     },
     {
-      "id": "a67d8037-8866-4ac2-8a89-bcb130ad4835",
+      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
       "title": "House chores 🏡🧹🛠️",
       "filters": {
         "afterTime": 9,
@@ -73,7 +73,7 @@
           "sun"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.265Z",
+      "createdAt": "2024-01-08T10:59:47.131Z",
       "budget": {
         "minPerDay": 1,
         "maxPerDay": 3,
@@ -82,7 +82,7 @@
       }
     },
     {
-      "id": "98067eb3-22f7-4f6b-8aa4-ca1e3a9324c2",
+      "id": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
       "title": "Family time 🥰",
       "filters": {
         "afterTime": 9,
@@ -97,7 +97,7 @@
           "sun"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.265Z",
+      "createdAt": "2024-01-08T10:59:47.132Z",
       "budget": {
         "minPerDay": 1,
         "maxPerDay": 6,
@@ -106,7 +106,7 @@
       }
     },
     {
-      "id": "9535983d-52d8-49a5-8355-e3c87b896822",
+      "id": "445f787b-d742-4441-9744-e81c286aa3c8",
       "title": "Me time 🧘🏽😌",
       "filters": {
         "afterTime": 5,
@@ -121,7 +121,7 @@
           "sun"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.267Z",
+      "createdAt": "2024-01-08T10:59:47.135Z",
       "budget": {
         "minPerDay": 1,
         "maxPerDay": 1,
@@ -130,7 +130,7 @@
       }
     },
     {
-      "id": "8ff0c2ce-7f03-4324-b1ea-ce5145526255",
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
       "title": "Work 💪🏽",
       "filters": {
         "afterTime": 6,
@@ -143,7 +143,7 @@
           "fri"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.266Z",
+      "createdAt": "2024-01-08T10:59:47.133Z",
       "budget": {
         "minPerDay": 6,
         "maxPerDay": 10,
@@ -152,7 +152,7 @@
       }
     },
     {
-      "id": "89645b31-6b47-4522-98b9-dba408cf5a28",
+      "id": "49b05463-56a0-4af5-9034-83822abf24f6",
       "title": "Sleep 😴🌙",
       "filters": {
         "afterTime": 22,
@@ -167,7 +167,7 @@
           "sun"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.263Z",
+      "createdAt": "2024-01-08T10:59:47.130Z",
       "budget": {
         "minPerDay": 6,
         "maxPerDay": 8,
@@ -176,55 +176,7 @@
       }
     },
     {
-      "id": "6667abcf-aab4-46f5-9eae-a833f4f8d4a0",
-      "title": "Dinner 🍽️",
-      "filters": {
-        "afterTime": 18,
-        "beforeTime": 20,
-        "onDays": [
-          "mon",
-          "tue",
-          "wed",
-          "thu",
-          "fri",
-          "sat",
-          "sun"
-        ]
-      },
-      "createdAt": "2024-01-06T06:22:18.267Z",
-      "budget": {
-        "minPerDay": 1,
-        "maxPerDay": 1,
-        "minPerWeek": 7,
-        "maxPerWeek": 7
-      }
-    },
-    {
-      "id": "0a1c999d-4338-4f7a-85b0-68771f3ab0a4",
-      "title": "Lunch 🥪",
-      "filters": {
-        "afterTime": 12,
-        "beforeTime": 14,
-        "onDays": [
-          "mon",
-          "tue",
-          "wed",
-          "thu",
-          "fri",
-          "sat",
-          "sun"
-        ]
-      },
-      "createdAt": "2024-01-06T06:22:18.267Z",
-      "budget": {
-        "minPerDay": 1,
-        "maxPerDay": 1,
-        "minPerWeek": 7,
-        "maxPerWeek": 7
-      }
-    },
-    {
-      "id": "04f9e946-06ee-4327-8174-d5d5ca710c5e",
+      "id": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
       "title": "Breakfast 🥐🥣",
       "filters": {
         "afterTime": 6,
@@ -239,7 +191,55 @@
           "sun"
         ]
       },
-      "createdAt": "2024-01-06T06:22:18.268Z",
+      "createdAt": "2024-01-08T10:59:47.137Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 1,
+        "minPerWeek": 7,
+        "maxPerWeek": 7
+      }
+    },
+    {
+      "id": "18be6978-ffac-46db-8b70-d321c311428a",
+      "title": "Lunch 🥪",
+      "filters": {
+        "afterTime": 12,
+        "beforeTime": 14,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.137Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 1,
+        "minPerWeek": 7,
+        "maxPerWeek": 7
+      }
+    },
+    {
+      "id": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
+      "title": "Dinner 🍽️",
+      "filters": {
+        "afterTime": 18,
+        "beforeTime": 20,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.137Z",
       "budget": {
         "minPerDay": 1,
         "maxPerDay": 1,
