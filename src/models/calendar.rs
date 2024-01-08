@@ -62,12 +62,12 @@ impl Calendar {
     }
 
     pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
-        if date_time < self.start_date_time.sub(Duration::hours(24))
-            || date_time >= self.end_date_time.add(Duration::hours(24))
+        if date_time < self.start_date_time.sub(Duration::days(1))
+            || date_time >= self.end_date_time.add(Duration::days(1))
         {
             // TODO: Fix magic number offset everywhere in code
             panic!(
-                "can't request an index outside of calendar bounds for date {:?}\nCalendar starts at {:?}", date_time, self.start_date_time
+                "can't request an index more than 1 day outside of calendar bounds for date {:?}\nCalendar starts at {:?} and ends at {:?}", date_time, self.start_date_time, self.end_date_time
             )
         }
         (date_time - self.start_date_time.checked_sub_days(Days::new(1)).unwrap()).num_hours()
