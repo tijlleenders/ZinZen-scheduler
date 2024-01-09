@@ -210,6 +210,15 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     let number_of_activities = goal.budget_config.unwrap().min_per_day;
 
     for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
+        if filter_option
+            .on_days
+            .contains(&adjusted_goal_start.add(Days::new(day)).weekday())
+        {
+            // OK
+        } else {
+            // This day is not allowed
+            continue;
+        }
         let activity_start = adjusted_goal_start.add(Days::new(day));
         let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
         for _ in 0..number_of_activities {
