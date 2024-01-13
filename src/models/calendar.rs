@@ -78,7 +78,7 @@ impl Calendar {
             as usize
     }
 
-    pub fn get_tasks(&self) -> FinalTasks {
+    pub fn print(&self) -> FinalTasks {
         //TODO Fix this mess below - it works somehow but not readable at all...
         let mut scheduled: Vec<DayTasks> = vec![];
         let mut day_tasks = DayTasks {

@@ -3,10 +3,9 @@ use std::rc::Rc;
 use crate::models::{
     activity::{Activity, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
-    task::FinalTasks,
 };
 
-pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> FinalTasks {
+pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
     for _ in 0..activities.len() {
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
         if act_index_to_schedule.is_none() {
@@ -72,7 +71,7 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> Fina
         }
     }
     dbg!(&calendar);
-    calendar.get_tasks()
+    ()
 }
 
 fn find_act_index_to_schedule(activities: &Vec<Activity>) -> Option<usize> {

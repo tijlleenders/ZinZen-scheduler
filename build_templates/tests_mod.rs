@@ -47,7 +47,8 @@ mod TEST_MODULE_NAME {
         let budget_goal_activities: Vec<Activity> =
             activity_generator::generate_budget_goal_activities(&calendar, &input.goals);
         dbg!(&calendar);
-        let output = activity_placer::place(&mut calendar, budget_goal_activities);
+        activity_placer::place(&mut calendar, budget_goal_activities);
+        let output = calendar.print();
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();
 

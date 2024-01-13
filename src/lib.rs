@@ -91,6 +91,7 @@ pub fn run_scheduler(
 ) -> FinalTasks {
     let mut calendar = Calendar::new(start_date, end_date);
     dbg!(&calendar);
+
     //generate and place simple goal activities
     let simple_goal_activities =
         activity_generator::generate_simple_goal_activities(&calendar, &goals);
@@ -101,5 +102,7 @@ pub fn run_scheduler(
     let budget_goal_activities: Vec<Activity> =
         activity_generator::generate_budget_goal_activities(&calendar, &goals);
     dbg!(&calendar);
-    activity_placer::place(&mut calendar, budget_goal_activities)
+    activity_placer::place(&mut calendar, budget_goal_activities);
+
+    calendar.print()
 }
