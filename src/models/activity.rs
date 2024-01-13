@@ -18,7 +18,7 @@ pub struct Activity {
     pub min_block_size: usize,
     pub max_block_size: usize,
     pub calendar_overlay: Vec<Option<Weak<Hour>>>,
-    pub budget: Option<Budget>,
+    pub budget: Vec<Budget>,
     pub total_duration: usize,
     pub duration_left: usize,
     pub status: Status,
@@ -208,7 +208,7 @@ impl Activity {
                     min_block_size: 1,
                     max_block_size: 1,
                     calendar_overlay: compatible_hours_overlay,
-                    budget: None,
+                    budget: vec![],
                     total_duration: 1,
                     duration_left: 0, //TODO: Correct this - is it even necessary to have duration_left?
                     status: Status::Unprocessed,
@@ -251,7 +251,7 @@ impl Activity {
             min_block_size,
             max_block_size: min_block_size,
             calendar_overlay: compatible_hours_overlay,
-            budget: None,
+            budget: vec![],
             total_duration: activity_total_duration,
             duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
             status: Status::Unprocessed,
