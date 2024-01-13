@@ -3,13 +3,17 @@ use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Formatter};
-use std::ops::{Add, Sub};
+use std::ops::{Add, Deref, Sub};
 use std::rc::Rc;
 
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Hour {
     Free,
-    Occupied { activity_index: usize }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
+    Occupied {
+        activity_index: usize,
+        activity_title: String,
+        activity_goalid: String,
+    }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -74,7 +78,7 @@ impl Calendar {
             as usize
     }
 
-    pub fn get_tasks(&self, activities: Vec<Activity>) -> FinalTasks {
+    pub fn get_tasks(&self) -> FinalTasks {
         //TODO Fix this mess below - it works somehow but not readable at all...
         let mut scheduled: Vec<DayTasks> = vec![];
         let mut day_tasks = DayTasks {
@@ -117,7 +121,7 @@ impl Calendar {
                 current_task.title = "".to_string();
                 current_task.duration = 0;
             }
-            match *self.hours[hour_offset] {
+            match self.hours[hour_offset].clone().deref() {
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
@@ -138,9 +142,13 @@ impl Calendar {
                         current_task.taskid = task_counter;
                     }
                 }
-                Hour::Occupied { activity_index } => {
+                Hour::Occupied {
+                    activity_index,
+                    activity_title,
+                    activity_goalid,
+                } => {
                     if current_task.title.eq(&"free".to_string())
-                        || current_task.title.ne(&activities[activity_index].title)
+                        || current_task.title.ne(activity_title)
                     {
                         if current_task.duration > 0 {
                             current_task.deadline = current_task
@@ -151,8 +159,8 @@ impl Calendar {
                             task_counter += 1;
                         }
                         current_task.duration = 1;
-                        current_task.goalid = activities[activity_index].id.clone();
-                        current_task.title = activities[activity_index].title.clone();
+                        current_task.goalid = activity_goalid.clone();
+                        current_task.title = activity_title.clone();
                         current_task.start = self
                             .start_date_time
                             .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code

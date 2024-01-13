@@ -51,6 +51,8 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> Fina
             Rc::make_mut(&mut calendar.hours[best_hour_index.unwrap() + duration_offset]);
             calendar.hours[best_hour_index.unwrap() + duration_offset] = Rc::new(Hour::Occupied {
                 activity_index: act_index_to_schedule.unwrap(),
+                activity_title: activities[act_index_to_schedule.unwrap()].title.clone(),
+                activity_goalid: activities[act_index_to_schedule.unwrap()].id.clone(),
             });
             (activities[act_index_to_schedule.unwrap()]).release_claims();
             //TODO: call activity.release_claims() so it doesn't count for conflicts anymore
@@ -70,7 +72,7 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> Fina
         }
     }
     dbg!(&calendar);
-    calendar.get_tasks(activities)
+    calendar.get_tasks()
 }
 
 fn find_act_index_to_schedule(activities: &Vec<Activity>) -> Option<usize> {

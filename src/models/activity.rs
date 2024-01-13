@@ -24,17 +24,6 @@ pub struct Activity {
     pub status: Status,
 }
 impl Activity {
-    pub(crate) fn new_from(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
-        if goal.children.is_some() {
-            return vec![];
-        };
-        if goal.filters.as_ref().is_some() {
-            return get_activities_from_budget_goal(goal, calendar);
-        } else {
-            return get_activities_from_simple_goal(goal, calendar);
-        }
-    }
-
     fn get_compatible_hours_overlay(
         calendar: &Calendar,
         filter_option: Option<Filters>,
@@ -176,118 +165,130 @@ impl Activity {
         }
         self.calendar_overlay = empty_overlay;
     }
-}
 
-fn get_activities_from_budget_goal(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
-    let mut adjusted_goal_start = goal.start;
-    if goal.start.year() == 1970 {
-        adjusted_goal_start = calendar.start_date_time;
-    }
-    let mut adjusted_goal_deadline = goal.deadline;
-    if goal.deadline.year() == 1970 {
-        adjusted_goal_deadline = calendar.end_date_time;
-    }
+    pub(crate) fn get_activities_from_budget_goal(
+        goal: &Goal,
+        calendar: &Calendar,
+    ) -> Vec<Activity> {
+        if goal.children.is_some() || goal.filters.as_ref().is_none() {
+            return vec![];
+        }
+        let mut adjusted_goal_start = goal.start;
+        if goal.start.year() == 1970 {
+            adjusted_goal_start = calendar.start_date_time;
+        }
+        let mut adjusted_goal_deadline = goal.deadline;
+        if goal.deadline.year() == 1970 {
+            adjusted_goal_deadline = calendar.end_date_time;
+        }
 
-    let mut activities: Vec<Activity> = Vec::with_capacity(1);
-    let filter_option = goal.filters.clone().unwrap();
+        let mut activities: Vec<Activity> = Vec::with_capacity(1);
+        let filter_option = goal.filters.clone().unwrap();
 
-    if filter_option.after_time < filter_option.clone().before_time {
-        //normal case
-    } else {
-        // special case where we know that compatible times cross the midnight boundary
-        println!(
-            "Special case adjusting start from {:?}",
-            &adjusted_goal_start
-        );
-        adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(24));
-        println!("... to {:?}", &adjusted_goal_start);
-        adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::days(1));
-    }
-
-    //TODO: This is cutting something like Sleep into pieces
-    //Replace by an if on title == 'sleep' / "Sleep" / "Sleep 😴🌙"?
-    //Yes ... but what about translations? => better to match on goalid
-    let number_of_activities = goal.budget_config.as_ref().unwrap().min_per_day;
-
-    for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
-        if filter_option
-            .on_days
-            .contains(&adjusted_goal_start.add(Days::new(day)).weekday())
-        {
-            // OK
+        if filter_option.after_time < filter_option.clone().before_time {
+            //normal case
         } else {
-            // This day is not allowed
-            continue;
-        }
-        let activity_start = adjusted_goal_start.add(Days::new(day));
-        let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
-        for _ in 0..number_of_activities {
-            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-                &calendar,
-                Some(filter_option.clone()),
-                activity_start,
-                activity_deadline,
+            // special case where we know that compatible times cross the midnight boundary
+            println!(
+                "Special case adjusting start from {:?}",
+                &adjusted_goal_start
             );
-
-            let activity = Activity {
-                id: goal.id.clone(),
-                title: goal.title.clone(),
-                min_block_size: 1,
-                max_block_size: 1,
-                calendar_overlay: compatible_hours_overlay,
-                budget: None,
-                total_duration: 1,
-                duration_left: 0, //TODO: Correct this - is it even necessary to have duration_left?
-                status: Status::Unprocessed,
-            };
-            dbg!(&activity);
-            activities.push(activity);
+            adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(24));
+            println!("... to {:?}", &adjusted_goal_start);
+            adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::days(1));
         }
+
+        //TODO: This is cutting something like Sleep into pieces
+        //Replace by an if on title == 'sleep' / "Sleep" / "Sleep 😴🌙"?
+        //Yes ... but what about translations? => better to match on goalid
+        let number_of_activities = goal.budget_config.as_ref().unwrap().min_per_day;
+
+        for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
+            if filter_option
+                .on_days
+                .contains(&adjusted_goal_start.add(Days::new(day)).weekday())
+            {
+                // OK
+            } else {
+                // This day is not allowed
+                continue;
+            }
+            let activity_start = adjusted_goal_start.add(Days::new(day));
+            let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
+            for _ in 0..number_of_activities {
+                let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+                    &calendar,
+                    Some(filter_option.clone()),
+                    activity_start,
+                    activity_deadline,
+                );
+
+                let activity = Activity {
+                    id: goal.id.clone(),
+                    title: goal.title.clone(),
+                    min_block_size: 1,
+                    max_block_size: 1,
+                    calendar_overlay: compatible_hours_overlay,
+                    budget: None,
+                    total_duration: 1,
+                    duration_left: 0, //TODO: Correct this - is it even necessary to have duration_left?
+                    status: Status::Unprocessed,
+                };
+                dbg!(&activity);
+                activities.push(activity);
+            }
+        }
+        activities
     }
-    activities
-}
 
-fn get_activities_from_simple_goal(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
-    let mut adjusted_goal_start = goal.start;
-    if goal.start.year() == 1970 {
-        adjusted_goal_start = calendar.start_date_time;
+    pub(crate) fn get_activities_from_simple_goal(
+        goal: &Goal,
+        calendar: &Calendar,
+    ) -> Vec<Activity> {
+        if goal.children.is_some() || goal.filters.as_ref().is_some() {
+            return vec![];
+        }
+        let mut adjusted_goal_start = goal.start;
+        if goal.start.year() == 1970 {
+            adjusted_goal_start = calendar.start_date_time;
+        }
+        let mut adjusted_goal_deadline = goal.deadline;
+        if goal.deadline.year() == 1970 {
+            adjusted_goal_deadline = calendar.end_date_time;
+        }
+        let mut activities: Vec<Activity> = Vec::with_capacity(1);
+
+        let activity_total_duration = goal.min_duration.clone().unwrap();
+        let mut min_block_size = activity_total_duration;
+        if activity_total_duration > 8 {
+            min_block_size = 1;
+            todo!() //split into multiple activities so flexibilities are correct??
+                    // or yield flex 1 or maximum of the set from activity.flex()?
+        };
+
+        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+            &calendar,
+            goal.filters.clone(),
+            adjusted_goal_start.clone(),
+            adjusted_goal_deadline.clone(),
+        );
+
+        let activity = Activity {
+            id: goal.id.clone(),
+            title: goal.title.clone(),
+            min_block_size,
+            max_block_size: min_block_size,
+            calendar_overlay: compatible_hours_overlay,
+            budget: None,
+            total_duration: activity_total_duration,
+            duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
+            status: Status::Unprocessed,
+        };
+        dbg!(&activity);
+        activities.push(activity);
+
+        activities
     }
-    let mut adjusted_goal_deadline = goal.deadline;
-    if goal.deadline.year() == 1970 {
-        adjusted_goal_deadline = calendar.end_date_time;
-    }
-    let mut activities: Vec<Activity> = Vec::with_capacity(1);
-
-    let activity_total_duration = goal.min_duration.clone().unwrap();
-    let mut min_block_size = activity_total_duration;
-    if activity_total_duration > 8 {
-        min_block_size = 1;
-        todo!() //split into multiple activities so flexibilities are correct??
-                // or yield flex 1 or maximum of the set from activity.flex()?
-    };
-
-    let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-        &calendar,
-        goal.filters.clone(),
-        adjusted_goal_start.clone(),
-        adjusted_goal_deadline.clone(),
-    );
-
-    let activity = Activity {
-        id: goal.id.clone(),
-        title: goal.title.clone(),
-        min_block_size,
-        max_block_size: min_block_size,
-        calendar_overlay: compatible_hours_overlay,
-        budget: None,
-        total_duration: activity_total_duration,
-        duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
-        status: Status::Unprocessed,
-    };
-    dbg!(&activity);
-    activities.push(activity);
-
-    activities
 }
 
 #[derive(Debug, PartialEq, Clone, Deserialize)]

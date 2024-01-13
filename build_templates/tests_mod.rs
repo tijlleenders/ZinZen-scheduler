@@ -9,6 +9,9 @@ mod TEST_MODULE_NAME {
 
     use crate::calendar::Calendar;
     use crate::Input;
+    use scheduler::models::activity::Activity;
+    use scheduler::services::{activity_generator, activity_placer};
+
     use scheduler::technical::technical;
     use std::path::Path;
 
@@ -34,9 +37,17 @@ mod TEST_MODULE_NAME {
         // technical::write_to_file(output_path, &desired_output).unwrap();
 
         let mut calendar = Calendar::new(input.start_date, input.end_date);
-        let activities =
-            scheduler::services::activity_generator::generate_activities(&calendar, &input.goals);
-        let output = scheduler::services::activity_placer::place(&mut calendar, activities);
+        //generate and place simple goal activities
+        let simple_goal_activities =
+            activity_generator::generate_simple_goal_activities(&calendar, &input.goals);
+        dbg!(&simple_goal_activities);
+        activity_placer::place(&mut calendar, simple_goal_activities);
+
+        //generate and place budget goal activities
+        let budget_goal_activities: Vec<Activity> =
+            activity_generator::generate_budget_goal_activities(&calendar, &input.goals);
+        dbg!(&calendar);
+        let output = activity_placer::place(&mut calendar, budget_goal_activities);
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
