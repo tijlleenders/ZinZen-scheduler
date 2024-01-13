@@ -92,6 +92,8 @@ pub fn run_scheduler(
     let mut calendar = Calendar::new(start_date, end_date);
     dbg!(&calendar);
 
+    calendar.get_budgets_from(&goals);
+
     //generate and place simple goal activities
     let simple_goal_activities =
         activity_generator::generate_simple_goal_activities(&calendar, &goals);

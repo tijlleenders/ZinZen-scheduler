@@ -1,7 +1,10 @@
 use super::activity::Activity;
+use super::budget::Budget;
+use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fmt::{Debug, Formatter};
 use std::ops::{Add, Deref, Sub};
 use std::rc::Rc;
@@ -29,6 +32,7 @@ pub struct Calendar {
     pub end_date_time: NaiveDateTime,
     pub hours: Vec<Rc<Hour>>,
     pub impossible_activities: Vec<ImpossibleActivity>,
+    pub budgets: HashMap<String, Vec<Budget>>,
 }
 
 impl Calendar {
@@ -47,6 +51,7 @@ impl Calendar {
             end_date_time,
             hours,
             impossible_activities: vec![],
+            budgets: HashMap::new(),
         }
     }
 
@@ -183,6 +188,29 @@ impl Calendar {
             scheduled: scheduled,
             impossible: self.impossible_activities.clone(),
         }
+    }
+
+    pub fn get_budgets_from(&mut self, goals: &Vec<Goal>) -> () {
+        for goal in goals {
+            match goal.budget_config.as_ref() {
+                Some(budget_config) => {
+                    let mut budgets: Vec<Budget> = Vec::with_capacity(1);
+                    //make relevant Vec<(start: NaiveDateTime, end: NaiveDateTime)
+                    //for each day make a budget
+                    let budget = Budget {
+                        calendar_start_index: 0,
+                        calendar_end_index: 1,
+                        scheduled: 0,
+                        min_scheduled: budget_config.min_per_day,
+                        max_scheduled: budget_config.max_per_day,
+                    };
+                    budgets.push(budget);
+                    self.budgets.insert(goal.id.clone(), budgets);
+                }
+                None => continue,
+            }
+        }
+        ()
     }
 }
 

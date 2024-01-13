@@ -37,6 +37,9 @@ mod TEST_MODULE_NAME {
         // technical::write_to_file(output_path, &desired_output).unwrap();
 
         let mut calendar = Calendar::new(input.start_date, input.end_date);
+
+        calendar.get_budgets_from(&input.goals);
+
         //generate and place simple goal activities
         let simple_goal_activities =
             activity_generator::generate_simple_goal_activities(&calendar, &input.goals);
