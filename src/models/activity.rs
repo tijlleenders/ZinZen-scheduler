@@ -173,30 +173,9 @@ impl Activity {
         if goal.children.is_some() || goal.filters.as_ref().is_none() {
             return vec![];
         }
-        let mut adjusted_goal_start = goal.start;
-        if goal.start.year() == 1970 {
-            adjusted_goal_start = calendar.start_date_time;
-        }
-        let mut adjusted_goal_deadline = goal.deadline;
-        if goal.deadline.year() == 1970 {
-            adjusted_goal_deadline = calendar.end_date_time;
-        }
-
+        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
         let filter_option = goal.filters.clone().unwrap();
-
-        if filter_option.after_time < filter_option.clone().before_time {
-            //normal case
-        } else {
-            // special case where we know that compatible times cross the midnight boundary
-            println!(
-                "Special case adjusting start from {:?}",
-                &adjusted_goal_start
-            );
-            adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(24));
-            println!("... to {:?}", &adjusted_goal_start);
-            adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::days(1));
-        }
 
         //TODO: This is cutting something like Sleep into pieces
         //Replace by an if on title == 'sleep' / "Sleep" / "Sleep 😴🌙"?
@@ -248,14 +227,7 @@ impl Activity {
         if goal.children.is_some() || goal.filters.as_ref().is_some() {
             return vec![];
         }
-        let mut adjusted_goal_start = goal.start;
-        if goal.start.year() == 1970 {
-            adjusted_goal_start = calendar.start_date_time;
-        }
-        let mut adjusted_goal_deadline = goal.deadline;
-        if goal.deadline.year() == 1970 {
-            adjusted_goal_deadline = calendar.end_date_time;
-        }
+        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
         let activity_total_duration = goal.min_duration.clone().unwrap();
