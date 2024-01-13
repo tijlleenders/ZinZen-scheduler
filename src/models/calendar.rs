@@ -6,6 +6,7 @@ use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt::{Debug, Formatter};
+use std::hash::Hash;
 use std::ops::{Add, Deref, Sub};
 use std::rc::Rc;
 
@@ -32,6 +33,7 @@ pub struct Calendar {
     pub end_date_time: NaiveDateTime,
     pub hours: Vec<Rc<Hour>>,
     pub impossible_activities: Vec<ImpossibleActivity>,
+    pub budget_descendants_map: HashMap<String, Vec<String>>,
     pub budgets: HashMap<String, Vec<Budget>>,
 }
 
@@ -52,6 +54,7 @@ impl Calendar {
             hours,
             impossible_activities: vec![],
             budgets: HashMap::new(),
+            budget_descendants_map: HashMap::new(),
         }
     }
 
@@ -191,29 +194,60 @@ impl Calendar {
     }
 
     pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) -> () {
+        let mut budget_ids_and_children: HashMap<String, Vec<String>> = HashMap::new();
+
+        //fill goal_map and budget_ids
+        let mut goal_map: HashMap<String, Goal> = HashMap::new();
+        let mut budget_ids: Vec<String> = vec![];
         for goal in goals {
+            goal_map.insert(goal.id.clone(), goal.clone());
             match goal.budget_config.as_ref() {
-                Some(budget_config) => {
-                    let mut budgets: Vec<Budget> = Vec::with_capacity(1);
-                    //make relevant Vec<(start: NaiveDateTime, end: NaiveDateTime)
-                    //for each day make a budget
-                    let budget = Budget {
-                        calendar_start_index: 0,
-                        calendar_end_index: 1,
-                        scheduled: 0,
-                        min_scheduled: budget_config.min_per_day,
-                        max_scheduled: budget_config.max_per_day,
-                    };
-                    budgets.push(budget);
-                    self.budgets.insert(goal.id.clone(), budgets);
+                Some(_) => {
+                    budget_ids.push(goal.id.clone());
                 }
                 None => continue,
             }
         }
+
+        //get all descendants
+        for budget_id in budget_ids {
+            let mut descendants_added: Vec<String> = vec![budget_id.clone()];
+
+            //get the first children if any
+            let mut descendants: Vec<String> = vec![];
+            match goal_map.get(&budget_id).as_ref().unwrap().children.as_ref() {
+                Some(children) => {
+                    descendants.append(children.clone().as_mut());
+                }
+                None => {
+                    budget_ids_and_children.insert(budget_id, descendants_added);
+                    continue;
+                }
+            }
+
+            loop {
+                //add children of each descendant until no more found
+                if descendants.len() == 0 {
+                    budget_ids_and_children.insert(budget_id, descendants_added);
+                    break;
+                }
+                let descendant_of_which_to_add_children = descendants.pop().unwrap();
+                descendants.extend(
+                    goal_map
+                        .get(&descendant_of_which_to_add_children)
+                        .unwrap()
+                        .children
+                        .as_ref()
+                        .unwrap()
+                        .clone(),
+                );
+                descendants_added.push(descendant_of_which_to_add_children);
+            }
+        }
+        self.budget_descendants_map = budget_ids_and_children;
         ()
     }
 }
-
 impl Debug for Calendar {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         println!();
