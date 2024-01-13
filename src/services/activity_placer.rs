@@ -6,7 +6,7 @@ use crate::models::{
     task::FinalTasks,
 };
 
-pub fn place(mut calendar: Calendar, mut activities: Vec<Activity>) -> FinalTasks {
+pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> FinalTasks {
     for _ in 0..activities.len() {
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
         if act_index_to_schedule.is_none() {

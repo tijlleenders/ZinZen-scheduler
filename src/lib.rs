@@ -89,9 +89,14 @@ pub fn run_scheduler(
     end_date: NaiveDateTime,
     goals: Vec<Goal>,
 ) -> FinalTasks {
-    let calendar = Calendar::new(start_date, end_date);
+    let mut calendar = Calendar::new(start_date, end_date);
     dbg!(&calendar);
-    let activities = activity_generator::generate_activities(&calendar, &goals);
-    dbg!(&activities);
-    activity_placer::place(calendar, activities)
+    //generate and place simple goal activities
+    let simple_goal_activities = activity_generator::generate_activities(&calendar, &goals);
+    dbg!(&simple_goal_activities);
+    activity_placer::place(&mut calendar, simple_goal_activities);
+
+    let new_activities: Vec<Activity> = vec![];
+    dbg!(&calendar);
+    activity_placer::place(&mut calendar, new_activities)
 }

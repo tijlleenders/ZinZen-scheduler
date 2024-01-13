@@ -33,10 +33,10 @@ mod TEST_MODULE_NAME {
         // ONLY do this if expected is malformatted ... check that contents don't change!
         // technical::write_to_file(output_path, &desired_output).unwrap();
 
-        let calendar = Calendar::new(input.start_date, input.end_date);
+        let mut calendar = Calendar::new(input.start_date, input.end_date);
         let activities =
             scheduler::services::activity_generator::generate_activities(&calendar, &input.goals);
-        let output = scheduler::services::activity_placer::place(calendar, activities);
+        let output = scheduler::services::activity_placer::place(&mut calendar, activities);
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
