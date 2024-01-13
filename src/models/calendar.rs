@@ -190,7 +190,7 @@ impl Calendar {
         }
     }
 
-    pub fn get_budgets_from(&mut self, goals: &Vec<Goal>) -> () {
+    pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) -> () {
         for goal in goals {
             match goal.budget_config.as_ref() {
                 Some(budget_config) => {
