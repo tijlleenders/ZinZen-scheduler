@@ -24,7 +24,7 @@ pub struct Activity {
     pub status: Status,
 }
 impl Activity {
-    pub(crate) fn new_from(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
+    pub(crate) fn new_from(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
         if goal.children.is_some() {
             return vec![];
         };
@@ -178,7 +178,7 @@ impl Activity {
     }
 }
 
-fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
+fn get_activities_from_budget_goal(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
     let mut adjusted_goal_start = goal.start;
     if goal.start.year() == 1970 {
         adjusted_goal_start = calendar.start_date_time;
@@ -207,7 +207,7 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     //TODO: This is cutting something like Sleep into pieces
     //Replace by an if on title == 'sleep' / "Sleep" / "Sleep 😴🌙"?
     //Yes ... but what about translations? => better to match on goalid
-    let number_of_activities = goal.budget_config.unwrap().min_per_day;
+    let number_of_activities = goal.budget_config.as_ref().unwrap().min_per_day;
 
     for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
         if filter_option
@@ -247,7 +247,7 @@ fn get_activities_from_budget_goal(goal: Goal, calendar: &Calendar) -> Vec<Activ
     activities
 }
 
-fn get_activities_from_simple_goal(goal: Goal, calendar: &Calendar) -> Vec<Activity> {
+fn get_activities_from_simple_goal(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
     let mut adjusted_goal_start = goal.start;
     if goal.start.year() == 1970 {
         adjusted_goal_start = calendar.start_date_time;

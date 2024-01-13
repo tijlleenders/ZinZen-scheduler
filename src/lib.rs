@@ -91,7 +91,7 @@ pub fn run_scheduler(
 ) -> FinalTasks {
     let calendar = Calendar::new(start_date, end_date);
     dbg!(&calendar);
-    let activities = activity_generator::generate_activities(&calendar, goals);
+    let activities = activity_generator::generate_activities(&calendar, &goals);
     dbg!(&activities);
     activity_placer::place(calendar, activities)
 }

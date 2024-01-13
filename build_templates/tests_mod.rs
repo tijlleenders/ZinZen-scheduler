@@ -35,7 +35,7 @@ mod TEST_MODULE_NAME {
 
         let calendar = Calendar::new(input.start_date, input.end_date);
         let activities =
-            scheduler::services::activity_generator::generate_activities(&calendar, input.goals);
+            scheduler::services::activity_generator::generate_activities(&calendar, &input.goals);
         let output = scheduler::services::activity_placer::place(calendar, activities);
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();
