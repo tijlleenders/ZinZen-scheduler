@@ -26,8 +26,11 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
         if best_hour_index.is_none() {
             activities[act_index_to_schedule.unwrap()].status = Status::Impossible;
             activities[act_index_to_schedule.unwrap()].release_claims();
-            //TODO: Only add to impossible if not an optional activity
+            //TODO: Only add to impossible if not an optional activity (could be added to activity specs)
             //          AND if time_budget minima not reached (or take those out at the end?)
+            //              This is hard because the overlay is gone ...
+            //                  so no idea which week-budget this activity belongs to...
+            // => Take this out at the end...
             let impossible_activity = ImpossibleActivity {
                 id: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
                 title: activities[act_index_to_schedule.unwrap()].title.clone(),
