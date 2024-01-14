@@ -7,6 +7,7 @@ use crate::models::{
 
 pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
     for _ in 0..activities.len() {
+        //TODO: update activiy.calendar_overlay for each activity so that no options that overrun the budgets are allowed
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
         if act_index_to_schedule.is_none() {
             println!("Tried to schedule activity index None");
@@ -37,6 +38,8 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
         );
         //TODO: Check if placing the total duration hours will not fail halfway due to a max budget being reached
         //          OR should that be done already in flex / get_best_hour_index already? YES - but which?
+        //              Neither - update calendar_overlay of each activity should be done in calendar.place
+        //                  before finding/placing each activity
         for duration_offset in 0..activities[act_index_to_schedule.unwrap()].total_duration {
             //print statements
             {
