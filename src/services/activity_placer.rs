@@ -25,12 +25,6 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
         println!("Best index:{:?}", &best_hour_index);
         if best_hour_index.is_none() {
             activities[act_index_to_schedule.unwrap()].release_claims();
-            //TODO: Only add to impossible if not an optional activity (could be added to activity specs)
-            //          AND if time_budget minima not reached (or take those out at the end?)
-            //              This is hard because the overlay is gone ...
-            //                  so no idea which week-budget this activity belongs to...
-            // => Take this out at the end... or attach all time_budgets to the activity so it can check itself??
-            // Nope add impossible at the end - just mark this as processed for now - unless it's a simple goal.
             if activities[act_index_to_schedule.unwrap()].activity_type == ActivityType::Budget {
                 activities[act_index_to_schedule.unwrap()].status = Status::Processed;
                 continue;
