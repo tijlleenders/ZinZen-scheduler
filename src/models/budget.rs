@@ -48,7 +48,10 @@ impl Budget {
                     hours_in_time_budget_window += 1;
                 }
             }
-            if time_budget.scheduled + hours_in_time_budget_window >= time_budget.max_scheduled {
+            if (hour_index + offset) >= time_budget.calendar_start_index
+                && (hour_index + offset) < time_budget.calendar_end_index
+                && time_budget.scheduled + hours_in_time_budget_window >= time_budget.max_scheduled
+            {
                 is_allowed = false;
             }
         }

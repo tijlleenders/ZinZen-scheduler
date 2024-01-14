@@ -52,16 +52,8 @@
           "taskid": 5,
           "goalid": "1",
           "title": "sleep",
-          "duration": 1,
+          "duration": 2,
           "start": "2022-01-02T22:00:00",
-          "deadline": "2022-01-02T23:00:00"
-        },
-        {
-          "taskid": 6,
-          "goalid": "free",
-          "title": "free",
-          "duration": 1,
-          "start": "2022-01-02T23:00:00",
           "deadline": "2022-01-03T00:00:00"
         }
       ]
@@ -70,7 +62,7 @@
       "day": "2022-01-03",
       "tasks": [
         {
-          "taskid": 7,
+          "taskid": 6,
           "goalid": "1",
           "title": "sleep",
           "duration": 6,
@@ -78,11 +70,19 @@
           "deadline": "2022-01-03T06:00:00"
         },
         {
-          "taskid": 8,
+          "taskid": 7,
           "goalid": "free",
           "title": "free",
-          "duration": 18,
+          "duration": 16,
           "start": "2022-01-03T06:00:00",
+          "deadline": "2022-01-03T22:00:00"
+        },
+        {
+          "taskid": 8,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-03T22:00:00",
           "deadline": "2022-01-04T00:00:00"
         }
       ]
@@ -102,8 +102,16 @@
           "taskid": 10,
           "goalid": "free",
           "title": "free",
-          "duration": 18,
+          "duration": 16,
           "start": "2022-01-04T06:00:00",
+          "deadline": "2022-01-04T22:00:00"
+        },
+        {
+          "taskid": 11,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-04T22:00:00",
           "deadline": "2022-01-05T00:00:00"
         }
       ]
@@ -112,7 +120,7 @@
       "day": "2022-01-05",
       "tasks": [
         {
-          "taskid": 11,
+          "taskid": 12,
           "goalid": "1",
           "title": "sleep",
           "duration": 6,
@@ -120,11 +128,19 @@
           "deadline": "2022-01-05T06:00:00"
         },
         {
-          "taskid": 12,
+          "taskid": 13,
           "goalid": "free",
           "title": "free",
-          "duration": 18,
+          "duration": 16,
           "start": "2022-01-05T06:00:00",
+          "deadline": "2022-01-05T22:00:00"
+        },
+        {
+          "taskid": 14,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-05T22:00:00",
           "deadline": "2022-01-06T00:00:00"
         }
       ]
@@ -133,7 +149,7 @@
       "day": "2022-01-06",
       "tasks": [
         {
-          "taskid": 13,
+          "taskid": 15,
           "goalid": "1",
           "title": "sleep",
           "duration": 6,
@@ -141,11 +157,19 @@
           "deadline": "2022-01-06T06:00:00"
         },
         {
-          "taskid": 14,
+          "taskid": 16,
           "goalid": "free",
           "title": "free",
-          "duration": 18,
+          "duration": 16,
           "start": "2022-01-06T06:00:00",
+          "deadline": "2022-01-06T22:00:00"
+        },
+        {
+          "taskid": 17,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-06T22:00:00",
           "deadline": "2022-01-07T00:00:00"
         }
       ]
@@ -154,7 +178,7 @@
       "day": "2022-01-07",
       "tasks": [
         {
-          "taskid": 15,
+          "taskid": 18,
           "goalid": "1",
           "title": "sleep",
           "duration": 6,
@@ -162,11 +186,19 @@
           "deadline": "2022-01-07T06:00:00"
         },
         {
-          "taskid": 16,
+          "taskid": 19,
           "goalid": "free",
           "title": "free",
-          "duration": 18,
+          "duration": 16,
           "start": "2022-01-07T06:00:00",
+          "deadline": "2022-01-07T22:00:00"
+        },
+        {
+          "taskid": 20,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-07T22:00:00",
           "deadline": "2022-01-08T00:00:00"
         }
       ]
@@ -175,7 +207,7 @@
       "day": "2022-01-08",
       "tasks": [
         {
-          "taskid": 17,
+          "taskid": 21,
           "goalid": "1",
           "title": "sleep",
           "duration": 6,
@@ -183,91 +215,23 @@
           "deadline": "2022-01-08T06:00:00"
         },
         {
-          "taskid": 18,
+          "taskid": 22,
           "goalid": "free",
           "title": "free",
-          "duration": 18,
+          "duration": 16,
           "start": "2022-01-08T06:00:00",
+          "deadline": "2022-01-08T22:00:00"
+        },
+        {
+          "taskid": 23,
+          "goalid": "1",
+          "title": "sleep",
+          "duration": 2,
+          "start": "2022-01-08T22:00:00",
           "deadline": "2022-01-09T00:00:00"
         }
       ]
     }
   ],
-  "impossible": [
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    },
-    {
-      "id": "1",
-      "title": "sleep",
-      "minBlockSize": 1
-    }
-  ]
+  "impossible": []
 }

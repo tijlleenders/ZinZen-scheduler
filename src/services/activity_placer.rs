@@ -27,6 +27,7 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             activities[act_index_to_schedule.unwrap()].status = Status::Impossible;
             activities[act_index_to_schedule.unwrap()].release_claims();
             //TODO: Only add to impossible if not an optional activity
+            //          AND if time_budget minima not reached (or take those out at the end?)
             let impossible_activity = ImpossibleActivity {
                 id: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
                 title: activities[act_index_to_schedule.unwrap()].title.clone(),
