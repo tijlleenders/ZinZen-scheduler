@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use super::goal::Goal;
 use super::{calendar::Calendar, goal::Filters};
-use crate::models::budget::Budget;
+use crate::models::budget::TimeBudget;
 use crate::models::calendar::Hour;
 use std::{
     fmt,
@@ -18,7 +18,7 @@ pub struct Activity {
     pub min_block_size: usize,
     pub max_block_size: usize,
     pub calendar_overlay: Vec<Option<Weak<Hour>>>,
-    pub budget: Vec<Budget>,
+    pub budget: Vec<TimeBudget>,
     pub total_duration: usize,
     pub duration_left: usize,
     pub status: Status,

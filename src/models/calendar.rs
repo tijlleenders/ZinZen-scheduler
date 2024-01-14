@@ -1,5 +1,5 @@
 use super::activity::Activity;
-use super::budget::Budget;
+use super::budget::{get_time_budgets_from, Budget, TimeBudget};
 use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
@@ -33,7 +33,6 @@ pub struct Calendar {
     pub end_date_time: NaiveDateTime,
     pub hours: Vec<Rc<Hour>>,
     pub impossible_activities: Vec<ImpossibleActivity>,
-    pub budget_descendants_map: HashMap<String, Vec<String>>,
     pub budgets: HashMap<String, Vec<Budget>>,
 }
 
@@ -54,7 +53,6 @@ impl Calendar {
             hours,
             impossible_activities: vec![],
             budgets: HashMap::new(),
-            budget_descendants_map: HashMap::new(),
         }
     }
 
@@ -194,8 +192,6 @@ impl Calendar {
     }
 
     pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) -> () {
-        let mut budget_ids_and_children: HashMap<String, Vec<String>> = HashMap::new();
-
         //fill goal_map and budget_ids
         let mut goal_map: HashMap<String, Goal> = HashMap::new();
         let mut budget_ids: Vec<String> = vec![];
@@ -220,7 +216,17 @@ impl Calendar {
                     descendants.append(children.clone().as_mut());
                 }
                 None => {
-                    budget_ids_and_children.insert(budget_id, descendants_added);
+                    self.budgets.insert(
+                        budget_id.clone(),
+                        vec![Budget {
+                            id: budget_id.clone(),
+                            participating_goals: descendants_added,
+                            time_budgets: get_time_budgets_from(
+                                &self,
+                                goal_map.get(&budget_id).as_ref().unwrap(),
+                            ),
+                        }],
+                    );
                     continue;
                 }
             }
@@ -228,7 +234,17 @@ impl Calendar {
             loop {
                 //add children of each descendant until no more found
                 if descendants.len() == 0 {
-                    budget_ids_and_children.insert(budget_id, descendants_added);
+                    self.budgets.insert(
+                        budget_id.clone(),
+                        vec![Budget {
+                            id: budget_id.clone(),
+                            participating_goals: descendants_added,
+                            time_budgets: get_time_budgets_from(
+                                &self,
+                                goal_map.get(&budget_id).as_ref().unwrap(),
+                            ),
+                        }],
+                    );
                     break;
                 }
                 let descendant_of_which_to_add_children = descendants.pop().unwrap();
@@ -244,7 +260,6 @@ impl Calendar {
                 descendants_added.push(descendant_of_which_to_add_children);
             }
         }
-        self.budget_descendants_map = budget_ids_and_children;
         ()
     }
 }
