@@ -35,6 +35,12 @@ pub struct TimeBudget {
     pub min_scheduled: usize,
     pub max_scheduled: usize,
 }
+impl TimeBudget {
+    pub(crate) fn reduce_by(&self, hours: usize) -> () {
+        println!("reducing by 1!");
+        ()
+    }
+}
 
 pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget> {
     let mut time_budgets: Vec<TimeBudget> = vec![];

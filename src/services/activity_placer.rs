@@ -53,6 +53,9 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
                 activity_title: activities[act_index_to_schedule.unwrap()].title.clone(),
                 activity_goalid: activities[act_index_to_schedule.unwrap()].id.clone(),
             });
+            for time_budget in &activities[act_index_to_schedule.unwrap()].budget {
+                time_budget.reduce_by(1);
+            }
             (activities[act_index_to_schedule.unwrap()]).release_claims();
             //TODO: call activity.release_claims() so it doesn't count for conflicts anymore
 
