@@ -106,12 +106,27 @@ pub fn run_scheduler(
     dbg!(&calendar);
     activity_placer::place(&mut calendar, budget_goal_activities);
 
-    //generate and place optional budget goal activities (the diff between min and max)
-    //Only try this if the min has been reached (and add impossible if not)
-    //(if min has not been reached adding optional will also not work)
-    let optional_budget_goal_activities =
-        activity_generator::generate_optional_budget_goal_activities(&calendar);
-    activity_placer::place(&mut calendar, optional_budget_goal_activities);
+    //TODO: check if min/day has been reached for all budgets
+    //          If not, mark goal as impossible for that amount of hours
+    //              (for example, work in default_budgets test case)
+    //          Calculate /week should yield the same number - but then we don't know the day
+
+    //TODO: check if min/week has been reached for all budgets
+    //          If not, for the days where min/day was reached AND there is room till max,
+    //              make get_to_week_min_budget activities for that difference
+    //              (for example, 'hobby project' and 'family time' in default_budgets test case)
+
+    let get_to_week_min_budget_activities =
+        activity_generator::generate_get_to_week_min_budget_activities(&calendar);
+    activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
+
+    //TODO: check if min/week now has been reached for all budgets
+    //          If not, mark goal as impossible for that amount of hours - and for that week
+
+    //TODO: create top_up_budget activities for any week budgets that weren't marked impossible but still have room till max
+    // let top_up_week_budget_activities =
+    //     activity_generator::generate_top_up_week_budget_activities(&calendar);
+    // activity_placer::place(&mut calendar, top_up_week_budget_activities);
 
     calendar.print()
 }
