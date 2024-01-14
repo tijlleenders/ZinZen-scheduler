@@ -257,7 +257,12 @@ impl Calendar {
         ()
     }
 
-    pub fn update_budgets_for(&self, goal: &str, duration_offset: usize) -> () {
+    pub fn update_budgets_for(&mut self, goal: &str, duration_offset: usize) -> () {
+        let mut budgets_updated = self.budgets.clone();
+        for budget_index in 0..self.budgets.len() {
+            budgets_updated[budget_index].reduce_for_(goal, duration_offset);
+        }
+        self.budgets = budgets_updated;
         ()
     }
 }

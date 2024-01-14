@@ -21,6 +21,21 @@ pub struct Budget {
     pub participating_goals: Vec<String>,
     pub time_budgets: Vec<TimeBudget>,
 }
+impl Budget {
+    pub fn reduce_for_(&mut self, goal: &str, duration_offset: usize) -> () {
+        if self.participating_goals.contains(&goal.clone().to_string()) {
+            let mut time_budgets_updated = self.time_budgets.clone();
+            for time_budget_index in 0..self.time_budgets.len() {
+                if duration_offset >= self.time_budgets[time_budget_index].calendar_start_index
+                    && duration_offset < self.time_budgets[time_budget_index].calendar_end_index
+                {
+                    time_budgets_updated[time_budget_index].scheduled += 1
+                }
+            }
+            self.time_budgets = time_budgets_updated;
+        }
+    }
+}
 
 #[derive(Deserialize, Debug, Clone)]
 pub enum TimeBudgetType {
