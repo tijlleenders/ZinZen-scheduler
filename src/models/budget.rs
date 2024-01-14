@@ -23,7 +23,7 @@ pub struct Budget {
 }
 impl Budget {
     pub fn reduce_for_(&mut self, goal: &str, duration_offset: usize) -> () {
-        if self.participating_goals.contains(&goal.clone().to_string()) {
+        if self.participating_goals.contains(&goal.to_string()) {
             let mut time_budgets_updated = self.time_budgets.clone();
             for time_budget_index in 0..self.time_budgets.len() {
                 if duration_offset >= self.time_budgets[time_budget_index].calendar_start_index
@@ -34,6 +34,25 @@ impl Budget {
             }
             self.time_budgets = time_budgets_updated;
         }
+    }
+
+    pub(crate) fn is_within_budget(&self, hour_index: usize, offset: usize) -> bool {
+        let mut is_allowed = true;
+        for time_budget in &self.time_budgets {
+            //figure out how many of the hours in hour_index till hour_index + offset are in the time_budget window
+            let mut hours_in_time_budget_window = 0;
+            for local_offset in 0..offset {
+                if (hour_index + local_offset) >= time_budget.calendar_start_index
+                    && (hour_index + local_offset) < time_budget.calendar_end_index
+                {
+                    hours_in_time_budget_window += 1;
+                }
+            }
+            if time_budget.scheduled + hours_in_time_budget_window >= time_budget.max_scheduled {
+                is_allowed = false;
+            }
+        }
+        is_allowed
     }
 }
 

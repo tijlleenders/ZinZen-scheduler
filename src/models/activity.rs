@@ -14,7 +14,7 @@ use std::{
 
 #[derive(Clone)]
 pub struct Activity {
-    pub id: String,
+    pub goal_id: String,
     pub title: String,
     pub min_block_size: usize,
     pub max_block_size: usize,
@@ -122,6 +122,9 @@ impl Activity {
                     for offset in 0..self.total_duration {
                         match &self.calendar_overlay[hour_index + offset] {
                             None => {
+                                // panic!("Does this ever happen?");
+                                //      Yes in algorithm_challenge test case
+                                //      TODO: do we need to mark all from hour_index till offset as None?"
                                 continue;
                             }
                             Some(weak) => {
@@ -204,7 +207,7 @@ impl Activity {
                 );
 
                 let activity = Activity {
-                    id: goal.id.clone(),
+                    goal_id: goal.id.clone(),
                     title: goal.title.clone(),
                     min_block_size: 1,
                     max_block_size: 1,
@@ -247,7 +250,7 @@ impl Activity {
         );
 
         let activity = Activity {
-            id: goal.id.clone(),
+            goal_id: goal.id.clone(),
             title: goal.title.clone(),
             min_block_size,
             max_block_size: min_block_size,
@@ -264,11 +267,64 @@ impl Activity {
     }
 
     pub fn update_overlay_with(&mut self, budgets: &Vec<Budget>) -> () {
-        for budget in budgets {
-            //check my overlay for valid placing options
-            //check placing option with budget
-            //if not allowed set all hours to None
+        if self.status == Status::Scheduled || self.status == Status::Impossible {
+            //return - no need to update overlay
+            return ();
         }
+        for budget in budgets {
+            if budget.participating_goals.contains(&self.goal_id) {
+                // great, process it
+            } else {
+                // budget not relevant to this activity
+                continue;
+            }
+            //check if activity goal id is in the budget - else don't bother
+            //check my overlay for valid placing options, with a loop like get_best_scheduling_index
+            for hour_index in 0..self.calendar_overlay.len() {
+                match &self.calendar_overlay[hour_index] {
+                    None => {
+                        continue;
+                    }
+                    Some(_) => {
+                        for offset in 0..self.total_duration {
+                            match &self.calendar_overlay[hour_index + offset] {
+                                None => {
+                                    //empty block found < min_block_size
+                                    self.set_overlay_to_none(hour_index.clone(), offset);
+                                    continue;
+                                }
+                                Some(weak) => {
+                                    if weak.upgrade().is_none() {
+                                        //empty block found < min_block_size
+                                        self.set_overlay_to_none(hour_index.clone(), offset);
+                                        break;
+                                    }
+                                    //if last position check if best so far - or so little we can break
+                                    if offset == self.min_block_size - 1 {
+                                        //check if not allowed by budgets
+                                        let is_allowed =
+                                            budget.is_within_budget(hour_index, offset);
+                                        if is_allowed {
+                                            // Cool!
+                                        } else {
+                                            self.set_overlay_to_none(hour_index.clone(), offset);
+                                        }
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fn set_overlay_to_none(&mut self, start_index: usize, offset: usize) -> () {
+        for index in start_index..start_index + 1 {
+            self.calendar_overlay[index] = None;
+        }
+        ()
     }
 }
 

@@ -26,8 +26,9 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
         if best_hour_index.is_none() {
             activities[act_index_to_schedule.unwrap()].status = Status::Impossible;
             activities[act_index_to_schedule.unwrap()].release_claims();
+            //TODO: Only add to impossible if not an optional activity
             let impossible_activity = ImpossibleActivity {
-                id: activities[act_index_to_schedule.unwrap()].id.clone(),
+                id: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
                 title: activities[act_index_to_schedule.unwrap()].title.clone(),
                 min_block_size: activities[act_index_to_schedule.unwrap()].min_block_size,
             };
@@ -58,11 +59,11 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             calendar.hours[best_hour_index.unwrap() + duration_offset] = Rc::new(Hour::Occupied {
                 activity_index: act_index_to_schedule.unwrap(),
                 activity_title: activities[act_index_to_schedule.unwrap()].title.clone(),
-                activity_goalid: activities[act_index_to_schedule.unwrap()].id.clone(),
+                activity_goalid: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
             });
             //TODO: activity doesn't need to know about time_budets => remove completely
             calendar.update_budgets_for(
-                &activities[act_index_to_schedule.unwrap()].id.clone(),
+                &activities[act_index_to_schedule.unwrap()].goal_id.clone(),
                 best_hour_index.unwrap() + duration_offset,
             );
             (activities[act_index_to_schedule.unwrap()]).release_claims();
