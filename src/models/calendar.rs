@@ -33,7 +33,7 @@ pub struct Calendar {
     pub end_date_time: NaiveDateTime,
     pub hours: Vec<Rc<Hour>>,
     pub impossible_activities: Vec<ImpossibleActivity>,
-    pub budgets: HashMap<String, Vec<Budget>>,
+    pub budgets: Vec<Budget>,
 }
 
 impl Calendar {
@@ -52,7 +52,7 @@ impl Calendar {
             end_date_time,
             hours,
             impossible_activities: vec![],
-            budgets: HashMap::new(),
+            budgets: vec![],
         }
     }
 
@@ -216,17 +216,14 @@ impl Calendar {
                     descendants.append(children.clone().as_mut());
                 }
                 None => {
-                    self.budgets.insert(
-                        budget_id.clone(),
-                        vec![Budget {
-                            originating_goal_id: budget_id.clone(),
-                            participating_goals: descendants_added,
-                            time_budgets: get_time_budgets_from(
-                                &self,
-                                goal_map.get(&budget_id).as_ref().unwrap(),
-                            ),
-                        }],
-                    );
+                    self.budgets.push(Budget {
+                        originating_goal_id: budget_id.clone(),
+                        participating_goals: descendants_added,
+                        time_budgets: get_time_budgets_from(
+                            &self,
+                            goal_map.get(&budget_id).as_ref().unwrap(),
+                        ),
+                    });
                     continue;
                 }
             }
@@ -234,17 +231,14 @@ impl Calendar {
             loop {
                 //add children of each descendant until no more found
                 if descendants.len() == 0 {
-                    self.budgets.insert(
-                        budget_id.clone(),
-                        vec![Budget {
-                            originating_goal_id: budget_id.clone(),
-                            participating_goals: descendants_added,
-                            time_budgets: get_time_budgets_from(
-                                &self,
-                                goal_map.get(&budget_id).as_ref().unwrap(),
-                            ),
-                        }],
-                    );
+                    self.budgets.push(Budget {
+                        originating_goal_id: budget_id.clone(),
+                        participating_goals: descendants_added,
+                        time_budgets: get_time_budgets_from(
+                            &self,
+                            goal_map.get(&budget_id).as_ref().unwrap(),
+                        ),
+                    });
                     break;
                 }
                 let descendant_of_which_to_add_children = descendants.pop().unwrap();
