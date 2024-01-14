@@ -1,13 +1,15 @@
 use std::rc::Rc;
 
 use crate::models::{
-    activity::{Activity, Status},
+    activity::{self, Activity, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
 };
 
 pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
     for _ in 0..activities.len() {
-        //TODO: update activiy.calendar_overlay for each activity so that no options that overrun the budgets are allowed
+        for activity_index in 0..activities.len() {
+            activities[activity_index].update_overlay_with(&calendar.budgets);
+        }
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
         if act_index_to_schedule.is_none() {
             println!("Tried to schedule activity index None");

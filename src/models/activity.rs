@@ -1,6 +1,7 @@
 use chrono::{Datelike, Days, Duration, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 
+use super::budget::Budget;
 use super::goal::Goal;
 use super::{calendar::Calendar, goal::Filters};
 use crate::models::budget::TimeBudget;
@@ -260,6 +261,14 @@ impl Activity {
         activities.push(activity);
 
         activities
+    }
+
+    pub fn update_overlay_with(&mut self, budgets: &Vec<Budget>) -> () {
+        for budget in budgets {
+            //check my overlay for valid placing options
+            //check placing option with budget
+            //if not allowed set all hours to None
+        }
     }
 }
 
