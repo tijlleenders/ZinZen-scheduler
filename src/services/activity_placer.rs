@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use crate::models::{
-    activity::{self, Activity, Status},
+    activity::{self, Activity, ActivityType, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
 };
 
@@ -24,13 +24,19 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             activities[act_index_to_schedule.unwrap()].get_best_scheduling_index();
         println!("Best index:{:?}", &best_hour_index);
         if best_hour_index.is_none() {
-            activities[act_index_to_schedule.unwrap()].status = Status::Impossible;
             activities[act_index_to_schedule.unwrap()].release_claims();
             //TODO: Only add to impossible if not an optional activity (could be added to activity specs)
             //          AND if time_budget minima not reached (or take those out at the end?)
             //              This is hard because the overlay is gone ...
             //                  so no idea which week-budget this activity belongs to...
-            // => Take this out at the end...
+            // => Take this out at the end... or attach all time_budgets to the activity so it can check itself??
+            // Nope add impossible at the end - just mark this as processed for now - unless it's a simple goal.
+            if activities[act_index_to_schedule.unwrap()].activity_type == ActivityType::Budget {
+                activities[act_index_to_schedule.unwrap()].status = Status::Processed;
+                continue;
+            } else {
+                activities[act_index_to_schedule.unwrap()].status = Status::Impossible;
+            }
             let impossible_activity = ImpossibleActivity {
                 id: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
                 title: activities[act_index_to_schedule.unwrap()].title.clone(),
@@ -91,6 +97,7 @@ fn find_act_index_to_schedule(activities: &Vec<Activity>) -> Option<usize> {
     for index in 0..activities.len() {
         if activities[index].status == Status::Scheduled
             || activities[index].status == Status::Impossible
+            || activities[index].status == Status::Processed
         {
             continue;
         }

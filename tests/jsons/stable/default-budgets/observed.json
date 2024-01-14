@@ -796,21 +796,5 @@
       ]
     }
   ],
-  "impossible": [
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "title": "Hobby project 🚂🚋",
-      "minBlockSize": 1
-    },
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "title": "Hobby project 🚂🚋",
-      "minBlockSize": 1
-    },
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "title": "Hobby project 🚂🚋",
-      "minBlockSize": 1
-    }
-  ]
+  "impossible": []
 }

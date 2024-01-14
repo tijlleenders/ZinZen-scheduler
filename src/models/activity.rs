@@ -15,6 +15,7 @@ use std::{
 #[derive(Clone)]
 pub struct Activity {
     pub goal_id: String,
+    pub activity_type: ActivityType,
     pub title: String,
     pub min_block_size: usize,
     pub max_block_size: usize,
@@ -208,6 +209,7 @@ impl Activity {
 
                 let activity = Activity {
                     goal_id: goal.id.clone(),
+                    activity_type: ActivityType::Budget,
                     title: goal.title.clone(),
                     min_block_size: 1,
                     max_block_size: 1,
@@ -251,6 +253,7 @@ impl Activity {
 
         let activity = Activity {
             goal_id: goal.id.clone(),
+            activity_type: ActivityType::SimpleGoal,
             title: goal.title.clone(),
             min_block_size,
             max_block_size: min_block_size,
@@ -267,7 +270,10 @@ impl Activity {
     }
 
     pub fn update_overlay_with(&mut self, budgets: &Vec<Budget>) -> () {
-        if self.status == Status::Scheduled || self.status == Status::Impossible {
+        if self.status == Status::Scheduled
+            || self.status == Status::Impossible
+            || self.status == Status::Processed
+        {
             //return - no need to update overlay
             return ();
         }
@@ -331,6 +337,7 @@ impl Activity {
 #[derive(Debug, PartialEq, Clone, Deserialize)]
 pub enum Status {
     Unprocessed,
+    Processed,
     Scheduled,
     Impossible,
 }
@@ -347,6 +354,12 @@ enum CalendarFilter {
 enum BudgetInput {
     HoursPerDay,
     HoursPerWeek,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum ActivityType {
+    SimpleGoal,
+    Budget,
 }
 
 struct HoursPerDay {

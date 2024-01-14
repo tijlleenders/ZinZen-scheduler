@@ -107,6 +107,8 @@ pub fn run_scheduler(
     activity_placer::place(&mut calendar, budget_goal_activities);
 
     //generate and place optional budget goal activities (the diff between min and max)
+    //Only try this if the min has been reached (and add impossible if not)
+    //(if min has not been reached adding optional will also not work)
     let optional_budget_goal_activities =
         activity_generator::generate_optional_budget_goal_activities(&calendar);
     activity_placer::place(&mut calendar, optional_budget_goal_activities);
