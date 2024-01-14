@@ -95,10 +95,10 @@ pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget
         }
     }
 
-    start_pointer = 0;
+    start_pointer = 24;
     //get a time_budget for each week
-    for hour_index in 0..calendar.hours.capacity() {
-        if hour_index % (24 * 7) == 0 && hour_index > 0 {
+    for hour_index in 24..calendar.hours.capacity() {
+        if (hour_index - 24) % (24 * 7) == 0 && hour_index > 24 {
             println!("Week boundary detected at hour_index {:?}", &hour_index);
             time_budgets.push(TimeBudget {
                 time_budget_type: TimeBudgetType::Week,
