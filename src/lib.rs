@@ -101,6 +101,7 @@ pub fn run_scheduler(
     activity_placer::place(&mut calendar, simple_goal_activities);
 
     //generate and place budget goal activities
+    //TODO: now only limiting when reaching max/week - it should limit when it reaches min/week
     let budget_goal_activities: Vec<Activity> =
         activity_generator::generate_budget_goal_activities(&calendar, &goals);
     dbg!(&calendar);
