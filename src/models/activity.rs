@@ -278,13 +278,13 @@ impl Activity {
             return ();
         }
         for budget in budgets {
+            //check if activity goal id is in the budget - else don't bother
             if budget.participating_goals.contains(&self.goal_id) {
                 // great, process it
             } else {
                 // budget not relevant to this activity
                 continue;
             }
-            //check if activity goal id is in the budget - else don't bother
             //check my overlay for valid placing options, with a loop like get_best_scheduling_index
             for hour_index in 0..self.calendar_overlay.len() {
                 match &self.calendar_overlay[hour_index] {
@@ -308,8 +308,11 @@ impl Activity {
                                     //if last position check if best so far - or so little we can break
                                     if offset == self.min_block_size - 1 {
                                         //check if not allowed by budgets
-                                        let is_allowed =
-                                            budget.is_within_budget(hour_index, offset);
+                                        let is_allowed = budget.is_within_budget(
+                                            hour_index,
+                                            offset,
+                                            self.activity_type.clone(),
+                                        );
                                         if is_allowed {
                                             // Cool!
                                         } else {

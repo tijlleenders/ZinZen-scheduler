@@ -2,7 +2,7 @@ use std::fmt::{Debug, Formatter};
 
 use serde::Deserialize;
 
-use super::{calendar::Calendar, goal::Goal};
+use super::{activity::ActivityType, calendar::Calendar, goal::Goal};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Budget {
@@ -25,9 +25,23 @@ impl Budget {
         }
     }
 
-    pub(crate) fn is_within_budget(&self, hour_index: usize, offset: usize) -> bool {
+    pub(crate) fn is_within_budget(
+        &self,
+        hour_index: usize,
+        offset: usize,
+        activity_type: ActivityType,
+    ) -> bool {
+        let mut budget_cut_off_number = 0;
         let mut is_allowed = true;
         for time_budget in &self.time_budgets {
+            match activity_type {
+                ActivityType::SimpleGoal => {
+                    budget_cut_off_number = time_budget.min_scheduled;
+                }
+                ActivityType::Budget => {
+                    budget_cut_off_number = time_budget.min_scheduled;
+                }
+            }
             //figure out how many of the hours in hour_index till hour_index + offset are in the time_budget window
             let mut hours_in_time_budget_window = 0;
             for local_offset in 0..offset {
@@ -39,7 +53,7 @@ impl Budget {
             }
             if (hour_index + offset) >= time_budget.calendar_start_index
                 && (hour_index + offset) < time_budget.calendar_end_index
-                && time_budget.scheduled + hours_in_time_budget_window >= time_budget.max_scheduled
+                && time_budget.scheduled + hours_in_time_budget_window >= budget_cut_off_number
             {
                 is_allowed = false;
             }
