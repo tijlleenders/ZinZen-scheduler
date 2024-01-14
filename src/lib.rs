@@ -107,8 +107,9 @@ pub fn run_scheduler(
     activity_placer::place(&mut calendar, budget_goal_activities);
 
     //generate and place optional budget goal activities (the diff between min and max)
-    //this requires the budgets to be up-to-date with the placed activities
-    // - scan the calendar and update ... or keep up to date realtime...?
+    let optional_budget_goal_activities =
+        activity_generator::generate_optional_budget_goal_activities(&calendar);
+    activity_placer::place(&mut calendar, optional_budget_goal_activities);
 
     calendar.print()
 }

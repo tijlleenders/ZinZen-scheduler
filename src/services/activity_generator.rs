@@ -21,3 +21,7 @@ pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &Vec<Goal>) -
     }
     activities
 }
+
+pub fn generate_optional_budget_goal_activities(calendar: &Calendar) -> Vec<Activity> {
+    vec![]
+}
