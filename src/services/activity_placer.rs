@@ -35,6 +35,8 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             "reserving {:?} hours...",
             &activities[act_index_to_schedule.unwrap()].total_duration
         );
+        //TODO: Check if placing the total duration hours will not fail halfway due to a max budget being reached
+        //          OR should that be done already in flex / get_best_hour_index already? YES - but which?
         for duration_offset in 0..activities[act_index_to_schedule.unwrap()].total_duration {
             //print statements
             {
@@ -53,9 +55,11 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
                 activity_title: activities[act_index_to_schedule.unwrap()].title.clone(),
                 activity_goalid: activities[act_index_to_schedule.unwrap()].id.clone(),
             });
-            for time_budget in &activities[act_index_to_schedule.unwrap()].time_budgets {
-                time_budget.reduce_by(1);
-            }
+            //TODO: activity doesn't need to know about time_budets => remove completely
+            calendar.update_budgets_for(
+                &activities[act_index_to_schedule.unwrap()].id.clone(),
+                best_hour_index.unwrap() + duration_offset,
+            );
             (activities[act_index_to_schedule.unwrap()]).release_claims();
 
             //print statements

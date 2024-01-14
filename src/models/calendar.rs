@@ -219,7 +219,7 @@ impl Calendar {
                     self.budgets.insert(
                         budget_id.clone(),
                         vec![Budget {
-                            id: budget_id.clone(),
+                            originating_goal_id: budget_id.clone(),
                             participating_goals: descendants_added,
                             time_budgets: get_time_budgets_from(
                                 &self,
@@ -237,7 +237,7 @@ impl Calendar {
                     self.budgets.insert(
                         budget_id.clone(),
                         vec![Budget {
-                            id: budget_id.clone(),
+                            originating_goal_id: budget_id.clone(),
                             participating_goals: descendants_added,
                             time_budgets: get_time_budgets_from(
                                 &self,
@@ -260,6 +260,10 @@ impl Calendar {
                 descendants_added.push(descendant_of_which_to_add_children);
             }
         }
+        ()
+    }
+
+    pub fn update_budgets_for(&self, goal: &str, duration_offset: usize) -> () {
         ()
     }
 }

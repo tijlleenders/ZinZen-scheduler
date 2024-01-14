@@ -15,7 +15,7 @@ use super::{calendar::Calendar, goal::Goal};
 // ... is that enough ... or do we need an extra check on placing?
 #[derive(Debug, Clone, Deserialize)]
 pub struct Budget {
-    pub id: String,
+    pub originating_goal_id: String,
     pub participating_goals: Vec<String>,
     pub time_budgets: Vec<TimeBudget>,
 }
