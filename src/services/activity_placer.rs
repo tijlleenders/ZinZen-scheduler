@@ -40,10 +40,6 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             "reserving {:?} hours...",
             &activities[act_index_to_schedule.unwrap()].total_duration
         );
-        //TODO: Check if placing the total duration hours will not fail halfway due to a max budget being reached
-        //          OR should that be done already in flex / get_best_hour_index already? YES - but which?
-        //              Neither - update calendar_overlay of each activity should be done in calendar.place
-        //                  before finding/placing each activity
         for duration_offset in 0..activities[act_index_to_schedule.unwrap()].total_duration {
             //print statements
             {
