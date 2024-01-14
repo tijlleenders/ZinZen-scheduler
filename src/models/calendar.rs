@@ -288,6 +288,9 @@ impl Debug for Calendar {
             self.impossible_activities.len()
         )
         .unwrap();
+        for budget in &self.budgets {
+            write!(f, "{:?}\n", &budget).unwrap();
+        }
         Ok(())
     }
 }

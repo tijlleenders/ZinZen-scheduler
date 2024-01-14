@@ -1,3 +1,5 @@
+use std::fmt::{Debug, Formatter};
+
 use serde::Deserialize;
 
 use super::{calendar::Calendar, goal::Goal};
@@ -26,7 +28,7 @@ pub enum TimeBudgetType {
     Week,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct TimeBudget {
     pub time_budget_type: TimeBudgetType,
     pub calendar_start_index: usize,
@@ -39,6 +41,23 @@ impl TimeBudget {
     pub(crate) fn reduce_by(&self, hours: usize) -> () {
         println!("reducing by 1!");
         ()
+    }
+}
+
+impl Debug for TimeBudget {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(
+            f,
+            "\n{:?} budget from index {:?}-{:?}: Scheduled {:?} / {:?}-{:?}\n",
+            &self.time_budget_type,
+            &self.calendar_start_index,
+            &self.calendar_end_index,
+            &self.scheduled,
+            &self.min_scheduled,
+            &self.max_scheduled
+        )
+        .unwrap();
+        Ok(())
     }
 }
 
