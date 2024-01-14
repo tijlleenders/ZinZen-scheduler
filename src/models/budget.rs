@@ -78,10 +78,10 @@ impl Debug for TimeBudget {
 
 pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget> {
     let mut time_budgets: Vec<TimeBudget> = vec![];
-    let mut start_pointer: usize = 0;
+    let mut start_pointer: usize = 24;
     //get a time_budget for each day
-    for hour_index in 0..calendar.hours.capacity() {
-        if hour_index % 24 == 0 && hour_index > 0 {
+    for hour_index in 24..calendar.hours.capacity() {
+        if (hour_index - 24) % 24 == 0 && hour_index > 24 {
             println!("Day boundary detected at hour_index {:?}", &hour_index);
             time_budgets.push(TimeBudget {
                 time_budget_type: TimeBudgetType::Day,
