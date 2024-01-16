@@ -363,31 +363,32 @@ impl Activity {
     ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = vec![];
 
-        //TODO : make this a function on Activity
-        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-            &calendar,
-            goal_to_use.filters.clone(),
-            calendar
-                .start_date_time
-                .sub(Duration::hours(24)) //TODO: fix magic number
-                .add(Duration::hours(time_budget.calendar_start_index as i64)),
-            calendar
-                .start_date_time
-                .sub(Duration::hours(24)) //TODO: fix magic number
-                .add(Duration::hours(time_budget.calendar_end_index as i64)),
-        );
-        activities.push(Activity {
-            goal_id: goal_to_use.id.clone(),
-            activity_type: ActivityType::GetToMinWeekBudget,
-            title: goal_to_use.title.clone(),
-            min_block_size: 1,
-            max_block_size: 1,
-            calendar_overlay: compatible_hours_overlay,
-            time_budgets: vec![],
-            total_duration: 1, //TODO: iterate to make time_budget.max_scheduled - time_budget.min_scheduled activities,
-            duration_left: 0,
-            status: Status::Unprocessed,
-        });
+        for _ in 0..time_budget.max_scheduled - time_budget.min_scheduled {
+            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+                &calendar,
+                goal_to_use.filters.clone(),
+                calendar
+                    .start_date_time
+                    .sub(Duration::hours(24)) //TODO: fix magic number
+                    .add(Duration::hours(time_budget.calendar_start_index as i64)),
+                calendar
+                    .start_date_time
+                    .sub(Duration::hours(24)) //TODO: fix magic number
+                    .add(Duration::hours(time_budget.calendar_end_index as i64)),
+            );
+            activities.push(Activity {
+                goal_id: goal_to_use.id.clone(),
+                activity_type: ActivityType::GetToMinWeekBudget,
+                title: goal_to_use.title.clone(),
+                min_block_size: 1,
+                max_block_size: 1,
+                calendar_overlay: compatible_hours_overlay,
+                time_budgets: vec![],
+                total_duration: 1,
+                duration_left: 0,
+                status: Status::Unprocessed,
+            });
+        }
 
         activities
     }
