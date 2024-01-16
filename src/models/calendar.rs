@@ -1,5 +1,5 @@
 use super::activity::Activity;
-use super::budget::{get_time_budgets_from, Budget, TimeBudget};
+use super::budget::{get_time_budgets_from, Budget, TimeBudget, TimeBudgetType};
 use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
@@ -24,8 +24,9 @@ pub enum Hour {
 #[serde(rename_all = "camelCase")]
 pub struct ImpossibleActivity {
     pub id: String,
-    pub title: String,
-    pub min_block_size: usize,
+    pub hours_missing: usize,
+    pub period_start_date_time: NaiveDateTime,
+    pub period_end_date_time: NaiveDateTime,
 }
 
 pub struct Calendar {
@@ -264,6 +265,32 @@ impl Calendar {
         }
         self.budgets = budgets_updated;
         ()
+    }
+
+    pub fn log_impossible_min_day_budgets(&mut self) -> () {
+        let mut impossible_activities = vec![];
+        for budget in &self.budgets {
+            for time_budget in &budget.time_budgets {
+                if time_budget.time_budget_type == TimeBudgetType::Day {
+                    // Good
+                } else {
+                    continue;
+                }
+                if time_budget.scheduled < time_budget.min_scheduled {
+                    impossible_activities.push(ImpossibleActivity {
+                        id: budget.originating_goal_id.clone(),
+                        hours_missing: time_budget.min_scheduled - time_budget.scheduled,
+                        period_start_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_start_index as i64)),
+                        period_end_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_end_index as i64)),
+                    });
+                }
+            }
+        }
+        self.impossible_activities.extend(impossible_activities);
     }
 }
 impl Debug for Calendar {

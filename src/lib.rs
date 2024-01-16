@@ -106,10 +106,7 @@ pub fn run_scheduler(
     dbg!(&calendar);
     activity_placer::place(&mut calendar, budget_goal_activities);
 
-    //TODO: check if min/day has been reached for all budgets
-    //          If not, mark goal as impossible for that amount of hours
-    //              (for example, work in default_budgets test case)
-    //          Calculate /week should yield the same number - but then we don't know the day
+    calendar.log_impossible_min_day_budgets();
 
     //TODO: check if min/week has been reached for all budgets
     //          If not, for the days where min/day was reached AND there is room till max,

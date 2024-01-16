@@ -51,6 +51,9 @@ mod TEST_MODULE_NAME {
             activity_generator::generate_budget_goal_activities(&calendar, &input.goals);
         dbg!(&calendar);
         activity_placer::place(&mut calendar, budget_goal_activities);
+
+        calendar.log_impossible_min_day_budgets();
+
         let output = calendar.print();
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();

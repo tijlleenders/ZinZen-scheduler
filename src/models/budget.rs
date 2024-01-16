@@ -62,7 +62,7 @@ impl Budget {
     }
 }
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, PartialEq)]
 pub enum TimeBudgetType {
     Day,
     Week,

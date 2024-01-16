@@ -33,8 +33,11 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             }
             let impossible_activity = ImpossibleActivity {
                 id: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
-                title: activities[act_index_to_schedule.unwrap()].title.clone(),
-                min_block_size: activities[act_index_to_schedule.unwrap()].min_block_size,
+                hours_missing: activities[act_index_to_schedule.unwrap()]
+                    .duration_left
+                    .clone(),
+                period_start_date_time: calendar.start_date_time,
+                period_end_date_time: calendar.end_date_time,
             };
             calendar.impossible_activities.push(impossible_activity);
             continue;
