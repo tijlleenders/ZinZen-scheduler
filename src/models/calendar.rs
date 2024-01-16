@@ -292,6 +292,33 @@ impl Calendar {
         }
         self.impossible_activities.extend(impossible_activities);
     }
+
+    pub fn log_impossible_min_week_budgets(&mut self) -> () {
+        //TODO: merge with log_imossible_min_day_budgets, passing budget type as param
+        let mut impossible_activities = vec![];
+        for budget in &self.budgets {
+            for time_budget in &budget.time_budgets {
+                if time_budget.time_budget_type == TimeBudgetType::Week {
+                    // Good
+                } else {
+                    continue;
+                }
+                if time_budget.scheduled < time_budget.min_scheduled {
+                    impossible_activities.push(ImpossibleActivity {
+                        id: budget.originating_goal_id.clone(),
+                        hours_missing: time_budget.min_scheduled - time_budget.scheduled,
+                        period_start_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_start_index as i64)),
+                        period_end_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_end_index as i64)),
+                    });
+                }
+            }
+        }
+        self.impossible_activities.extend(impossible_activities);
+    }
 }
 impl Debug for Calendar {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {

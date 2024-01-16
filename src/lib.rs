@@ -114,6 +114,7 @@ pub fn run_scheduler(
 
     //TODO: check if min/week now has been reached for all budgets
     //          If not, mark goal as impossible for that amount of hours - and for that week
+    calendar.log_impossible_min_week_budgets();
 
     //TODO: create top_up_budget activities for any week budgets that weren't marked impossible but still have room till max
     // let top_up_week_budget_activities =
