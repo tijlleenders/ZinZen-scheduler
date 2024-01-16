@@ -162,7 +162,9 @@
           "tue",
           "wed",
           "thu",
-          "fri"
+          "fri",
+          "sat",
+          "sun"
         ]
       },
       "createdAt": "2024-01-08T10:59:47.130Z",
