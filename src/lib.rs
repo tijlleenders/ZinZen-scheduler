@@ -108,13 +108,8 @@ pub fn run_scheduler(
 
     calendar.log_impossible_min_day_budgets();
 
-    //TODO: check if min/week has been reached for all budgets
-    //          If not, for the days where min/day was reached AND there is room till max,
-    //              make get_to_week_min_budget activities for that difference
-    //              (for example, 'hobby project' and 'family time' in default_budgets test case)
-
     let get_to_week_min_budget_activities =
-        activity_generator::generate_get_to_week_min_budget_activities(&calendar);
+        activity_generator::generate_get_to_week_min_budget_activities(&calendar, &goals);
     activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
 
     //TODO: check if min/week now has been reached for all budgets

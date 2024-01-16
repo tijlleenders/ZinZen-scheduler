@@ -26,7 +26,7 @@ pub struct Activity {
     pub status: Status,
 }
 impl Activity {
-    fn get_compatible_hours_overlay(
+    pub fn get_compatible_hours_overlay(
         calendar: &Calendar,
         filter_option: Option<Filters>,
         adjusted_goal_start: NaiveDateTime,
@@ -75,6 +75,18 @@ impl Activity {
             }
             if hour_index >= calendar.get_index_of(adjusted_goal_deadline) {
                 compatible = false;
+            }
+
+            //check if hour is already occupied by some other activity (for later rounds of scheduling partly occupied calendar)
+            match &*calendar.hours[hour_index] {
+                Hour::Free => {}
+                Hour::Occupied {
+                    activity_index,
+                    activity_title,
+                    activity_goalid,
+                } => {
+                    compatible = false;
+                }
             }
 
             if compatible == true {
@@ -277,6 +289,10 @@ impl Activity {
             //return - no need to update overlay
             return ();
         }
+        if self.flex() == 0 {
+            self.status = Status::Impossible;
+            return ();
+        }
         for budget in budgets {
             //check if activity goal id is in the budget - else don't bother
             if budget.participating_goals.contains(&self.goal_id) {
@@ -327,6 +343,9 @@ impl Activity {
                 }
             }
         }
+        if self.flex() == 0 {
+            self.status = Status::Impossible;
+        }
     }
 
     fn set_overlay_to_none(&mut self, start_index: usize, offset: usize) -> () {
@@ -363,6 +382,7 @@ enum BudgetInput {
 pub enum ActivityType {
     SimpleGoal,
     Budget,
+    GetToMinWeekBudget,
 }
 
 struct HoursPerDay {

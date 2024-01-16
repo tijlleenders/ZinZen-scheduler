@@ -41,6 +41,9 @@ impl Budget {
                 ActivityType::Budget => {
                     budget_cut_off_number = time_budget.min_scheduled;
                 }
+                ActivityType::GetToMinWeekBudget => {
+                    budget_cut_off_number = time_budget.max_scheduled;
+                }
             }
             //figure out how many of the hours in hour_index till hour_index + offset are in the time_budget window
             let mut hours_in_time_budget_window = 0;

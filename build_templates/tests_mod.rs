@@ -54,6 +54,10 @@ mod TEST_MODULE_NAME {
 
         calendar.log_impossible_min_day_budgets();
 
+        let get_to_week_min_budget_activities =
+            activity_generator::generate_get_to_week_min_budget_activities(&calendar, &input.goals);
+        activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
+
         let output = calendar.print();
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();

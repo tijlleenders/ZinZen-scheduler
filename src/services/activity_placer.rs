@@ -19,7 +19,6 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             "Next to schedule: {:?}",
             &activities[act_index_to_schedule.unwrap()].title
         );
-        activities[act_index_to_schedule.unwrap()].status = Status::Scheduled;
         let best_hour_index: Option<usize> =
             activities[act_index_to_schedule.unwrap()].get_best_scheduling_index();
         println!("Best index:{:?}", &best_hour_index);
