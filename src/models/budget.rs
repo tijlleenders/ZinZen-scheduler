@@ -42,6 +42,15 @@ impl Budget {
                     budget_cut_off_number = time_budget.min_scheduled;
                 }
                 ActivityType::GetToMinWeekBudget => {
+                    if time_budget.calendar_end_index - time_budget.calendar_start_index > 24 {
+                        //Week time_budget
+                        budget_cut_off_number = time_budget.min_scheduled; // this allows leaving room for other goals to get to min before topping up
+                    } else {
+                        //Day time_budget
+                        budget_cut_off_number = time_budget.max_scheduled;
+                    }
+                }
+                ActivityType::TopUpWeekBudget => {
                     budget_cut_off_number = time_budget.max_scheduled;
                 }
             }

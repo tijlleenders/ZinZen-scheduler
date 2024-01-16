@@ -76,3 +76,31 @@ pub fn generate_get_to_week_min_budget_activities(
     dbg!(&get_to_week_min_budget_activities);
     get_to_week_min_budget_activities
 }
+
+pub fn generate_top_up_week_budget_activities(
+    calendar: &Calendar,
+    goals: &Vec<Goal>,
+) -> Vec<Activity> {
+    let mut top_up_activities = vec![];
+    for budget in &calendar.budgets {
+        let goal_to_use: &Goal = goals
+            .iter()
+            .find(|g| g.id.eq(&budget.originating_goal_id))
+            .unwrap();
+        for time_budget in &budget.time_budgets {
+            if time_budget.time_budget_type == TimeBudgetType::Day {
+                if time_budget.min_scheduled < time_budget.max_scheduled
+                    && time_budget.scheduled < time_budget.max_scheduled
+                {
+                    top_up_activities.extend(Activity::get_activities_to_top_up_week_budget(
+                        goal_to_use,
+                        calendar,
+                        time_budget,
+                    ));
+                }
+            }
+        }
+    }
+    dbg!(&top_up_activities);
+    top_up_activities
+}

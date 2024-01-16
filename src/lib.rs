@@ -114,10 +114,9 @@ pub fn run_scheduler(
 
     calendar.log_impossible_min_week_budgets();
 
-    //TODO: create top_up_budget activities for any week budgets that weren't marked impossible but still have room till max
-    // let top_up_week_budget_activities =
-    //     activity_generator::generate_top_up_week_budget_activities(&calendar);
-    // activity_placer::place(&mut calendar, top_up_week_budget_activities);
+    let top_up_week_budget_activities =
+        activity_generator::generate_top_up_week_budget_activities(&calendar, &goals);
+    activity_placer::place(&mut calendar, top_up_week_budget_activities);
 
     calendar.print()
 }

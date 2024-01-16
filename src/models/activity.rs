@@ -363,7 +363,7 @@ impl Activity {
     ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = vec![];
 
-        for _ in 0..time_budget.max_scheduled - time_budget.min_scheduled {
+        for _ in 0..time_budget.max_scheduled - time_budget.scheduled {
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
                 &calendar,
                 goal_to_use.filters.clone(),
@@ -390,6 +390,41 @@ impl Activity {
             });
         }
 
+        activities
+    }
+
+    pub fn get_activities_to_top_up_week_budget(
+        goal_to_use: &Goal,
+        calendar: &Calendar,
+        time_budget: &TimeBudget,
+    ) -> Vec<Activity> {
+        let mut activities: Vec<Activity> = vec![];
+        for _ in 0..time_budget.max_scheduled - time_budget.scheduled {
+            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+                &calendar,
+                goal_to_use.filters.clone(),
+                calendar
+                    .start_date_time
+                    .sub(Duration::hours(24)) //TODO: fix magic number
+                    .add(Duration::hours(time_budget.calendar_start_index as i64)),
+                calendar
+                    .start_date_time
+                    .sub(Duration::hours(24)) //TODO: fix magic number
+                    .add(Duration::hours(time_budget.calendar_end_index as i64)),
+            );
+            activities.push(Activity {
+                goal_id: goal_to_use.id.clone(),
+                activity_type: ActivityType::TopUpWeekBudget,
+                title: goal_to_use.title.clone(),
+                min_block_size: 1,
+                max_block_size: 1,
+                calendar_overlay: compatible_hours_overlay,
+                time_budgets: vec![],
+                total_duration: 1,
+                duration_left: 0,
+                status: Status::Unprocessed,
+            });
+        }
         activities
     }
 }
@@ -421,6 +456,7 @@ pub enum ActivityType {
     SimpleGoal,
     Budget,
     GetToMinWeekBudget,
+    TopUpWeekBudget,
 }
 
 struct HoursPerDay {
