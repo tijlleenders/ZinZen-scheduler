@@ -112,8 +112,6 @@ pub fn run_scheduler(
         activity_generator::generate_get_to_week_min_budget_activities(&calendar, &goals);
     activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
 
-    //TODO: check if min/week now has been reached for all budgets
-    //          If not, mark goal as impossible for that amount of hours - and for that week
     calendar.log_impossible_min_week_budgets();
 
     //TODO: create top_up_budget activities for any week budgets that weren't marked impossible but still have room till max
