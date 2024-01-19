@@ -116,8 +116,6 @@ pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget
     for hour_index in 24..calendar.hours.capacity() - 24 {
         if (hour_index) % 24 == 0 {
             println!("Day boundary detected at hour_index {:?}", &hour_index);
-            //TODO: Budgets are being created even if the day is not_on
-            //          (example 'work' on sat and sun in default_budgets test case)
             let mut min = goal.budget_config.as_ref().unwrap().min_per_day;
             let mut max = goal.budget_config.as_ref().unwrap().max_per_day;
             if goal.filters.as_ref().unwrap().on_days.contains(
