@@ -191,6 +191,10 @@ impl Calendar {
     }
 
     pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) {
+        //TODO: panic if min/week is higher than the sum of each min/day
+
+        //TODO: panic if sum of each min/day is higher than the max/week
+
         //fill goal_map and budget_ids
         let mut goal_map: HashMap<String, Goal> = HashMap::new();
         let mut budget_ids: Vec<String> = vec![];
