@@ -1,13 +1,9 @@
-use chrono::{NaiveDate, NaiveDateTime};
+use chrono::NaiveDateTime;
 use serde::Deserialize;
 use serde_json::{self, Value};
 use std::{fs, path::Path};
 extern crate scheduler;
-use scheduler::{
-    models::{calendar::Calendar, goal::Goal},
-    run_scheduler,
-    services::activity_placer,
-};
+use scheduler::{models::goal::Goal, run_scheduler};
 fn main() {
     println!("Running!");
     let path = Path::new("./tests/jsons/stable/algorithm-challenge/input.json");

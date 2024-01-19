@@ -1,13 +1,4 @@
-use std::ops::{Add, Sub};
-
-use chrono::Duration;
-
-use crate::models::{
-    activity::{Activity, ActivityType, Status},
-    budget::TimeBudgetType,
-    calendar::Calendar,
-    goal::Goal,
-};
+use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calendar, goal::Goal};
 
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &Vec<Goal>) -> Vec<Activity> {
     dbg!(&goals);
@@ -33,7 +24,7 @@ pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &Vec<Goal>) -
 
 pub fn generate_get_to_week_min_budget_activities(
     calendar: &Calendar,
-    goals: &Vec<Goal>,
+    goals: &[Goal],
 ) -> Vec<Activity> {
     let mut get_to_week_min_budget_activities = vec![];
     for budget in &calendar.budgets {
@@ -57,18 +48,17 @@ pub fn generate_get_to_week_min_budget_activities(
                 .find(|g| g.id.eq(&budget.originating_goal_id))
                 .unwrap();
             for time_budget in &budget.time_budgets {
-                if time_budget.time_budget_type == TimeBudgetType::Day {
-                    if time_budget.scheduled == time_budget.min_scheduled
-                        && time_budget.max_scheduled > time_budget.min_scheduled
-                    {
-                        get_to_week_min_budget_activities.extend(
-                            Activity::get_activities_to_get_min_week_budget(
-                                goal_to_use,
-                                calendar,
-                                time_budget,
-                            ),
-                        );
-                    }
+                if time_budget.time_budget_type == TimeBudgetType::Day
+                    && time_budget.scheduled == time_budget.min_scheduled
+                    && time_budget.max_scheduled > time_budget.min_scheduled
+                {
+                    get_to_week_min_budget_activities.extend(
+                        Activity::get_activities_to_get_min_week_budget(
+                            goal_to_use,
+                            calendar,
+                            time_budget,
+                        ),
+                    );
                 }
             }
         }
@@ -79,7 +69,7 @@ pub fn generate_get_to_week_min_budget_activities(
 
 pub fn generate_top_up_week_budget_activities(
     calendar: &Calendar,
-    goals: &Vec<Goal>,
+    goals: &[Goal],
 ) -> Vec<Activity> {
     let mut top_up_activities = vec![];
     for budget in &calendar.budgets {
@@ -88,16 +78,15 @@ pub fn generate_top_up_week_budget_activities(
             .find(|g| g.id.eq(&budget.originating_goal_id))
             .unwrap();
         for time_budget in &budget.time_budgets {
-            if time_budget.time_budget_type == TimeBudgetType::Day {
-                if time_budget.min_scheduled < time_budget.max_scheduled
-                    && time_budget.scheduled < time_budget.max_scheduled
-                {
-                    top_up_activities.extend(Activity::get_activities_to_top_up_week_budget(
-                        goal_to_use,
-                        calendar,
-                        time_budget,
-                    ));
-                }
+            if time_budget.time_budget_type == TimeBudgetType::Day
+                && time_budget.min_scheduled < time_budget.max_scheduled
+                && time_budget.scheduled < time_budget.max_scheduled
+            {
+                top_up_activities.extend(Activity::get_activities_to_top_up_week_budget(
+                    goal_to_use,
+                    calendar,
+                    time_budget,
+                ));
             }
         }
     }

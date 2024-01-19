@@ -11,17 +11,16 @@ pub struct Budget {
     pub time_budgets: Vec<TimeBudget>,
 }
 impl Budget {
-    pub fn reduce_for_(&mut self, goal: &str, duration_offset: usize) -> () {
+    pub fn reduce_for_(&mut self, goal: &str, duration_offset: usize) {
         if self.participating_goals.contains(&goal.to_string()) {
-            let mut time_budgets_updated = self.time_budgets.clone();
-            for time_budget_index in 0..self.time_budgets.len() {
-                if duration_offset >= self.time_budgets[time_budget_index].calendar_start_index
-                    && duration_offset < self.time_budgets[time_budget_index].calendar_end_index
+            let iterator = self.time_budgets.iter_mut().enumerate();
+            for (_, time_budget) in iterator {
+                if duration_offset >= time_budget.calendar_start_index
+                    && duration_offset < time_budget.calendar_end_index
                 {
-                    time_budgets_updated[time_budget_index].scheduled += 1
+                    time_budget.scheduled += 1
                 }
             }
-            self.time_budgets = time_budgets_updated;
         }
     }
 
@@ -31,7 +30,7 @@ impl Budget {
         offset: usize,
         activity_type: ActivityType,
     ) -> bool {
-        let mut budget_cut_off_number = 0;
+        let mut budget_cut_off_number: usize;
         let mut is_allowed = true;
         for time_budget in &self.time_budgets {
             match activity_type {

@@ -1,14 +1,14 @@
 use std::rc::Rc;
 
 use crate::models::{
-    activity::{self, Activity, ActivityType, Status},
+    activity::{Activity, ActivityType, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
 };
 
-pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
+pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) {
     for _ in 0..activities.len() {
-        for activity_index in 0..activities.len() {
-            activities[activity_index].update_overlay_with(&calendar.budgets);
+        for activity in activities.iter_mut() {
+            activity.update_overlay_with(&calendar.budgets);
         }
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
         if act_index_to_schedule.is_none() {
@@ -32,9 +32,7 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
             }
             let impossible_activity = ImpossibleActivity {
                 id: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
-                hours_missing: activities[act_index_to_schedule.unwrap()]
-                    .duration_left
-                    .clone(),
+                hours_missing: activities[act_index_to_schedule.unwrap()].duration_left,
                 period_start_date_time: calendar.start_date_time,
                 period_end_date_time: calendar.end_date_time,
             };
@@ -85,7 +83,6 @@ pub fn place(mut calendar: &mut Calendar, mut activities: Vec<Activity>) -> () {
         }
     }
     dbg!(&calendar);
-    ()
 }
 
 fn find_act_index_to_schedule(activities: &Vec<Activity>) -> Option<usize> {

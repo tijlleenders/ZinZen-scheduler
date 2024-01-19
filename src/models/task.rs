@@ -2,7 +2,7 @@
 use chrono::{NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 
-use super::{activity::Activity, calendar::ImpossibleActivity};
+use super::calendar::ImpossibleActivity;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct FinalTasks {

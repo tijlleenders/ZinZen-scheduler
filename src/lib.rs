@@ -52,7 +52,7 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
-use chrono::{NaiveDateTime, NaiveTime};
+use chrono::NaiveDateTime;
 use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
 use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;

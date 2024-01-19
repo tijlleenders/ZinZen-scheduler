@@ -1,10 +1,4 @@
 extern crate scheduler;
-use std::error::Error;
-use std::fs::File;
-use std::io::BufReader;
-use std::path::Path;
-
-use wasm_bindgen::JsValue;
 
 /// To generate a flamegraph of the scheduler on your machine, follow the platform-specific instructions [here](https://github.com/flamegraph-rs/flamegraph).
 /// If you're running inside WSL2 you'll probably need to follow https://gist.github.com/abel0b/b1881e41b9e1c4b16d84e5e083c38a13

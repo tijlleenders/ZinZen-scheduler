@@ -1,12 +1,10 @@
-use super::activity::Activity;
-use super::budget::{get_time_budgets_from, Budget, TimeBudget, TimeBudgetType};
+use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
 use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt::{Debug, Formatter};
-use std::hash::Hash;
 use std::ops::{Add, Deref, Sub};
 use std::rc::Rc;
 
@@ -92,14 +90,14 @@ impl Calendar {
             day: self.start_date_time.date(),
             tasks: Vec::with_capacity(1),
         };
-        let mut task_counter = 0 as usize;
+        let mut task_counter = 0;
         let mut current_task = Task {
             taskid: task_counter,
             goalid: "free".to_string(),
             title: "free".to_string(),
             duration: 0,
-            start: self.start_date_time.clone(),
-            deadline: self.start_date_time.clone(), //just for init; will be overwritten
+            start: self.start_date_time,
+            deadline: self.start_date_time, //just for init; will be overwritten
         };
         for hour_offset in 24..(self.hours.capacity() - 24) {
             if hour_offset % 24 == 0 && hour_offset != 24 {
@@ -150,7 +148,7 @@ impl Calendar {
                     }
                 }
                 Hour::Occupied {
-                    activity_index,
+                    activity_index: _,
                     activity_title,
                     activity_goalid,
                 } => {
@@ -187,12 +185,12 @@ impl Calendar {
         }
         scheduled.push(day_tasks);
         FinalTasks {
-            scheduled: scheduled,
+            scheduled,
             impossible: self.impossible_activities.clone(),
         }
     }
 
-    pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) -> () {
+    pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) {
         //fill goal_map and budget_ids
         let mut goal_map: HashMap<String, Goal> = HashMap::new();
         let mut budget_ids: Vec<String> = vec![];
@@ -221,7 +219,7 @@ impl Calendar {
                         originating_goal_id: budget_id.clone(),
                         participating_goals: descendants_added,
                         time_budgets: get_time_budgets_from(
-                            &self,
+                            self,
                             goal_map.get(&budget_id).as_ref().unwrap(),
                         ),
                     });
@@ -231,12 +229,12 @@ impl Calendar {
 
             loop {
                 //add children of each descendant until no more found
-                if descendants.len() == 0 {
+                if descendants.is_empty() {
                     self.budgets.push(Budget {
                         originating_goal_id: budget_id.clone(),
                         participating_goals: descendants_added,
                         time_budgets: get_time_budgets_from(
-                            &self,
+                            self,
                             goal_map.get(&budget_id).as_ref().unwrap(),
                         ),
                     });
@@ -255,19 +253,16 @@ impl Calendar {
                 descendants_added.push(descendant_of_which_to_add_children);
             }
         }
-        ()
     }
 
-    pub fn update_budgets_for(&mut self, goal: &str, duration_offset: usize) -> () {
-        let mut budgets_updated = self.budgets.clone();
-        for budget_index in 0..self.budgets.len() {
-            budgets_updated[budget_index].reduce_for_(goal, duration_offset);
+    pub fn update_budgets_for(&mut self, goal: &str, duration_offset: usize) {
+        let iterator = self.budgets.iter_mut();
+        for budget in iterator {
+            budget.reduce_for_(goal, duration_offset);
         }
-        self.budgets = budgets_updated;
-        ()
     }
 
-    pub fn log_impossible_min_day_budgets(&mut self) -> () {
+    pub fn log_impossible_min_day_budgets(&mut self) {
         let mut impossible_activities = vec![];
         for budget in &self.budgets {
             for time_budget in &budget.time_budgets {
@@ -293,7 +288,7 @@ impl Calendar {
         self.impossible_activities.extend(impossible_activities);
     }
 
-    pub fn log_impossible_min_week_budgets(&mut self) -> () {
+    pub fn log_impossible_min_week_budgets(&mut self) {
         //TODO: merge with log_imossible_min_day_budgets, passing budget type as param
         let mut impossible_activities = vec![];
         for budget in &self.budgets {
@@ -322,33 +317,33 @@ impl Calendar {
 }
 impl Debug for Calendar {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
-        println!();
+        writeln!(f).unwrap();
         for index in 0..self.hours.capacity() {
             write!(f, "{:?} ", self.get_week_day_of(index)).unwrap();
             if self.hours[index] == Rc::new(Hour::Free) {
                 if Rc::weak_count(&self.hours[index]) == 0 {
-                    write!(f, "{} -\n", index).unwrap();
+                    writeln!(f, "{} -", index).unwrap();
                 } else {
-                    write!(
+                    writeln!(
                         f,
-                        "{} {:?} claims\n",
+                        "{} {:?} claims",
                         index,
                         Rc::weak_count(&self.hours[index])
                     )
                     .unwrap();
                 }
             } else {
-                write!(f, "{} {:?}\n", index, self.hours[index]).unwrap();
+                writeln!(f, "{} {:?}", index, self.hours[index]).unwrap();
             }
         }
-        write!(
+        writeln!(
             f,
-            "{:?} impossible activities\n",
+            "{:?} impossible activities",
             self.impossible_activities.len()
         )
         .unwrap();
         for budget in &self.budgets {
-            write!(f, "{:?}\n", &budget).unwrap();
+            writeln!(f, "{:?}", &budget).unwrap();
         }
         Ok(())
     }

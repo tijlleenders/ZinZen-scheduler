@@ -1,5 +1,5 @@
 use chrono::{Datelike, Days, Duration, NaiveDateTime};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use super::budget::Budget;
 use super::goal::Goal;
@@ -82,17 +82,16 @@ impl Activity {
             match &*calendar.hours[hour_index] {
                 Hour::Free => {}
                 Hour::Occupied {
-                    activity_index,
-                    activity_title,
-                    activity_goalid,
+                    activity_index: _,
+                    activity_title: _,
+                    activity_goalid: _activity_goalid,
                 } => {
                     compatible = false;
                 }
             }
 
-            if compatible == true {
-                compatible_hours_overlay
-                    .push(Some(Rc::downgrade(&calendar.hours[hour_index as usize])));
+            if compatible {
+                compatible_hours_overlay.push(Some(Rc::downgrade(&calendar.hours[hour_index])));
             } else {
                 compatible_hours_overlay.push(None);
             }
@@ -143,8 +142,7 @@ impl Activity {
                             }
                             Some(weak) => {
                                 if weak.upgrade().is_none() {
-                                    conflicts = 0;
-                                    break;
+                                    break; // this will reset conflicts too
                                 }
                                 conflicts += weak.weak_count();
                                 //if last position check if best so far - or so little we can break
@@ -169,13 +167,10 @@ impl Activity {
                 }
             }
         }
-        match best_scheduling_index_and_conflicts {
-            None => return None,
-            Some((best_index, _)) => return Some(best_index),
-        }
+        best_scheduling_index_and_conflicts.map(|(best_index, _)| best_index)
     }
 
-    pub(crate) fn release_claims(&mut self) -> () {
+    pub(crate) fn release_claims(&mut self) {
         let mut empty_overlay: Vec<Option<Weak<Hour>>> =
             Vec::with_capacity(self.calendar_overlay.capacity());
         for _ in 0..self.calendar_overlay.capacity() {
@@ -214,7 +209,7 @@ impl Activity {
             let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
             for _ in 0..number_of_activities {
                 let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-                    &calendar,
+                    calendar,
                     Some(filter_option.clone()),
                     activity_start,
                     activity_deadline,
@@ -249,19 +244,19 @@ impl Activity {
         let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
-        let activity_total_duration = goal.min_duration.clone().unwrap();
+        let activity_total_duration = goal.min_duration.unwrap();
         let mut min_block_size = activity_total_duration;
         if activity_total_duration > 8 {
             min_block_size = 1;
-            todo!() //split into multiple activities so flexibilities are correct??
-                    // or yield flex 1 or maximum of the set from activity.flex()?
+            //todo!() //split into multiple activities so flexibilities are correct??
+            // or yield flex 1 or maximum of the set from activity.flex()?
         };
 
         let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-            &calendar,
+            calendar,
             goal.filters.clone(),
-            adjusted_goal_start.clone(),
-            adjusted_goal_deadline.clone(),
+            adjusted_goal_start,
+            adjusted_goal_deadline,
         );
 
         let activity = Activity {
@@ -282,17 +277,17 @@ impl Activity {
         activities
     }
 
-    pub fn update_overlay_with(&mut self, budgets: &Vec<Budget>) -> () {
+    pub fn update_overlay_with(&mut self, budgets: &Vec<Budget>) {
         if self.status == Status::Scheduled
             || self.status == Status::Impossible
             || self.status == Status::Processed
         {
             //return - no need to update overlay
-            return ();
+            return;
         }
         if self.flex() == 0 {
             self.status = Status::Impossible;
-            return ();
+            return;
         }
         for budget in budgets {
             //check if activity goal id is in the budget - else don't bother
@@ -313,13 +308,13 @@ impl Activity {
                             match &self.calendar_overlay[hour_index + offset] {
                                 None => {
                                     //empty block found < min_block_size
-                                    self.set_overlay_to_none(hour_index.clone(), offset);
+                                    self.set_overlay_to_none(hour_index);
                                     continue;
                                 }
                                 Some(weak) => {
                                     if weak.upgrade().is_none() {
                                         //empty block found < min_block_size
-                                        self.set_overlay_to_none(hour_index.clone(), offset);
+                                        self.set_overlay_to_none(hour_index);
                                         break;
                                     }
                                     //if last position check if best so far - or so little we can break
@@ -333,7 +328,8 @@ impl Activity {
                                         if is_allowed {
                                             // Cool!
                                         } else {
-                                            self.set_overlay_to_none(hour_index.clone(), offset);
+                                            self.set_overlay_to_none(hour_index);
+                                            //Todo: why not use offset here to set multiple blocks to None?
                                         }
                                         continue;
                                     }
@@ -349,11 +345,10 @@ impl Activity {
         }
     }
 
-    fn set_overlay_to_none(&mut self, start_index: usize, offset: usize) -> () {
+    fn set_overlay_to_none(&mut self, start_index: usize) {
         for index in start_index..start_index + 1 {
             self.calendar_overlay[index] = None;
         }
-        ()
     }
 
     pub fn get_activities_to_get_min_week_budget(
@@ -365,7 +360,7 @@ impl Activity {
 
         for _ in 0..time_budget.max_scheduled - time_budget.scheduled {
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-                &calendar,
+                calendar,
                 goal_to_use.filters.clone(),
                 calendar
                     .start_date_time
@@ -401,7 +396,7 @@ impl Activity {
         let mut activities: Vec<Activity> = vec![];
         for _ in 0..time_budget.max_scheduled - time_budget.scheduled {
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-                &calendar,
+                calendar,
                 goal_to_use.filters.clone(),
                 calendar
                     .start_date_time
@@ -437,20 +432,6 @@ pub enum Status {
     Impossible,
 }
 
-#[derive(Debug)]
-enum CalendarFilter {
-    StartDateTime,
-    Deadline,
-    DaysOfTheWeek,
-    HoursOfTheDay,
-}
-
-#[derive(Debug)]
-enum BudgetInput {
-    HoursPerDay,
-    HoursPerWeek,
-}
-
 #[derive(Clone, Debug, PartialEq)]
 pub enum ActivityType {
     SimpleGoal,
@@ -459,24 +440,14 @@ pub enum ActivityType {
     TopUpWeekBudget,
 }
 
-struct HoursPerDay {
-    min_per_day: usize,
-    max_per_day: usize,
-}
-
-struct HoursPerWeek {
-    min_per_week: usize,
-    max_per_week: usize,
-}
-
 impl fmt::Debug for Activity {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "\n").unwrap();
-        write!(f, "title: {:?}\n", self.title).unwrap();
-        write!(f, "status:{:?}\n", self.status).unwrap();
-        write!(f, "total duration: {:?}\n", self.total_duration).unwrap();
-        write!(f, "duration left: {:?}\n", self.duration_left).unwrap();
-        write!(f, "flex:{:?}\n", self.flex()).unwrap();
+        writeln!(f).unwrap();
+        writeln!(f, "title: {:?}", self.title).unwrap();
+        writeln!(f, "status:{:?}", self.status).unwrap();
+        writeln!(f, "total duration: {:?}", self.total_duration).unwrap();
+        writeln!(f, "duration left: {:?}", self.duration_left).unwrap();
+        writeln!(f, "flex:{:?}", self.flex()).unwrap();
         for hour_index in 0..self.calendar_overlay.capacity() {
             let day_index = hour_index / 24;
             let hour_of_day = hour_index % 24;
@@ -485,9 +456,9 @@ impl fmt::Debug for Activity {
                     write!(f, "-").unwrap();
                 }
                 Some(weak) => {
-                    write!(
+                    writeln!(
                         f,
-                        "day {:?} - hour {:?} at index {:?}: {:?} claims but {:?}\n",
+                        "day {:?} - hour {:?} at index {:?}: {:?} claims but {:?}",
                         day_index,
                         hour_of_day,
                         hour_index,
