@@ -1,5 +1,9 @@
-use std::fmt::{Debug, Formatter};
+use std::{
+    fmt::{Debug, Formatter},
+    ops::{Add, Sub},
+};
 
+use chrono::{Datelike, Duration};
 use serde::Deserialize;
 
 use super::{activity::ActivityType, calendar::Calendar, goal::Goal};
@@ -108,26 +112,38 @@ impl Debug for TimeBudget {
 
 pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget> {
     let mut time_budgets: Vec<TimeBudget> = vec![];
-    let mut start_pointer: usize = 24;
     //get a time_budget for each day
-    for hour_index in 24..calendar.hours.capacity() {
-        if (hour_index - 24) % 24 == 0 && hour_index > 24 {
+    for hour_index in 24..calendar.hours.capacity() - 24 {
+        if (hour_index) % 24 == 0 {
             println!("Day boundary detected at hour_index {:?}", &hour_index);
             //TODO: Budgets are being created even if the day is not_on
             //          (example 'work' on sat and sun in default_budgets test case)
+            let mut min = goal.budget_config.as_ref().unwrap().min_per_day;
+            let mut max = goal.budget_config.as_ref().unwrap().max_per_day;
+            if goal.filters.as_ref().unwrap().on_days.contains(
+                &calendar
+                    .start_date_time
+                    .sub(Duration::hours(24))
+                    .add(Duration::hours(hour_index as i64))
+                    .weekday(),
+            ) {
+                //OK
+            } else {
+                min = 0;
+                max = 0;
+            }
             time_budgets.push(TimeBudget {
                 time_budget_type: TimeBudgetType::Day,
-                calendar_start_index: start_pointer,
-                calendar_end_index: hour_index,
+                calendar_start_index: hour_index,
+                calendar_end_index: hour_index + 24,
                 scheduled: 0,
-                min_scheduled: goal.budget_config.as_ref().unwrap().min_per_day,
-                max_scheduled: goal.budget_config.as_ref().unwrap().max_per_day,
+                min_scheduled: min,
+                max_scheduled: max,
             });
-            start_pointer = hour_index
         }
     }
 
-    start_pointer = 24;
+    let mut start_pointer = 24;
     //get a time_budget for each week
     for hour_index in 24..calendar.hours.capacity() {
         if (hour_index - 24) % (24 * 7) == 0 && hour_index > 24 {

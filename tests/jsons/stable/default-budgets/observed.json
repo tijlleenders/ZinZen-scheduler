@@ -788,50 +788,8 @@
     {
       "id": "a700170a-eb34-4162-a59a-3ce763f62205",
       "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-09T00:00:00",
-      "periodEndDateTime": "2024-01-10T00:00:00"
-    },
-    {
-      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-10T00:00:00",
-      "periodEndDateTime": "2024-01-11T00:00:00"
-    },
-    {
-      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-11T00:00:00",
-      "periodEndDateTime": "2024-01-12T00:00:00"
-    },
-    {
-      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-12T00:00:00",
-      "periodEndDateTime": "2024-01-13T00:00:00"
-    },
-    {
-      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-13T00:00:00",
-      "periodEndDateTime": "2024-01-14T00:00:00"
-    },
-    {
-      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
-      "hoursMissing": 1,
       "periodStartDateTime": "2024-01-14T00:00:00",
       "periodEndDateTime": "2024-01-15T00:00:00"
-    },
-    {
-      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
-      "hoursMissing": 6,
-      "periodStartDateTime": "2024-01-14T00:00:00",
-      "periodEndDateTime": "2024-01-15T00:00:00"
-    },
-    {
-      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
-      "hoursMissing": 6,
-      "periodStartDateTime": "2024-01-15T00:00:00",
-      "periodEndDateTime": "2024-01-16T00:00:00"
     }
   ]
 }
