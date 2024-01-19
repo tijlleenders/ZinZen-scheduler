@@ -57,7 +57,7 @@ use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTask
 use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
 use services::activity_placer;
-use technical::technical::Input;
+use technical::input_output::Input;
 use wasm_bindgen::prelude::*;
 pub mod models;
 pub mod services;

@@ -12,7 +12,7 @@ mod TEST_MODULE_NAME {
     use scheduler::models::activity::Activity;
     use scheduler::services::{activity_generator, activity_placer};
 
-    use scheduler::technical::technical;
+    use scheduler::technical::input_output;
     use std::path::Path;
 
     fn test(folder: &str) {
@@ -30,11 +30,12 @@ mod TEST_MODULE_NAME {
         let output_path = Path::new(&output_path_str[..]);
         let actual_output_path = Path::new(&actual_output_path_str[..]);
 
-        let input: Input = technical::get_input_from_json(input_path).unwrap();
-        let desired_output: String = technical::get_output_string_from_json(output_path).unwrap();
+        let input: Input = input_output::get_input_from_json(input_path).unwrap();
+        let desired_output: String =
+            input_output::get_output_string_from_json(output_path).unwrap();
 
         // ONLY do this if expected is malformatted ... check that contents don't change!
-        // technical::write_to_file(output_path, &desired_output).unwrap();
+        // input_output::write_to_file(output_path, &desired_output).unwrap();
 
         let mut calendar = Calendar::new(input.start_date, input.end_date);
 
@@ -66,7 +67,7 @@ mod TEST_MODULE_NAME {
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
-        technical::write_to_file(actual_output_path, &actual_output).unwrap();
+        input_output::write_to_file(actual_output_path, &actual_output).unwrap();
 
         (actual_output, desired_output)
     }
