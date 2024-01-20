@@ -1,4 +1,4 @@
-use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
+use super::budget::{self, get_time_budgets_from, Budget, TimeBudgetType};
 use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
@@ -199,16 +199,24 @@ impl Calendar {
             goal_map.insert(goal.id.clone(), goal.clone());
             match goal.budget_config.as_ref() {
                 Some(budget_config) => {
+                    //Check if budget_config is realistic
+
+                    //check 1
                     let mut min_per_day_sum = 0;
                     for _ in goal.filters.clone().unwrap().on_days {
                         min_per_day_sum += budget_config.min_per_day;
                     }
                     if min_per_day_sum > budget_config.min_per_week {
-                        panic!("Sum of min_per_day {:?} is not equal to min_per_week {:?} for goal {:?}", min_per_day_sum,budget_config.min_per_week, goal.title);
+                        panic!("Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}", min_per_day_sum,budget_config.min_per_week, goal.title);
                     }
 
-                    //TODO: panic if sum of each min/day is higher than the max/week
-
+                    //check 2
+                    if budget_config.max_per_day > budget_config.max_per_week {
+                        panic!(
+                            "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
+                            budget_config.max_per_day, budget_config.max_per_week, goal.title
+                        );
+                    }
                     budget_ids.push(goal.id.clone());
                 }
                 None => continue,
