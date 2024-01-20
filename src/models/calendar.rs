@@ -7,6 +7,7 @@ use std::collections::HashMap;
 use std::fmt::{Debug, Formatter};
 use std::ops::{Add, Deref, Sub};
 use std::rc::Rc;
+use std::thread::panicking;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Hour {
@@ -191,27 +192,34 @@ impl Calendar {
     }
 
     pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) {
-        //TODO: panic if min/week is higher than the sum of each min/day
-
-        //TODO: panic if sum of each min/day is higher than the max/week
-
         //fill goal_map and budget_ids
         let mut goal_map: HashMap<String, Goal> = HashMap::new();
         let mut budget_ids: Vec<String> = vec![];
         for goal in goals {
             goal_map.insert(goal.id.clone(), goal.clone());
             match goal.budget_config.as_ref() {
-                Some(_) => {
+                Some(budget_config) => {
+                    //TODO: panic if min/week is higher than the sum of each min/day
+                    let mut min_per_day_sum = 0;
+                    for _ in goal.filters.clone().unwrap().on_days {
+                        min_per_day_sum += budget_config.min_per_day;
+                    }
+                    if min_per_day_sum != budget_config.min_per_week {
+                        panic!("Sum of min_per_day {:?} is not equal to min_per_week {:?} for goal {:?}", min_per_day_sum,budget_config.min_per_week, goal.title);
+                    }
+
+                    //TODO: panic if sum of each min/day is higher than the max/week
+
                     budget_ids.push(goal.id.clone());
                 }
                 None => continue,
             }
         }
 
-        //get all descendants
         for budget_id in budget_ids {
+            //TODO: extract in function get_all_descendants
+            //get all descendants
             let mut descendants_added: Vec<String> = vec![budget_id.clone()];
-
             //get the first children if any
             let mut descendants: Vec<String> = vec![];
             match goal_map.get(&budget_id).as_ref().unwrap().children.as_ref() {
