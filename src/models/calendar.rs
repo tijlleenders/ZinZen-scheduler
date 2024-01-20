@@ -199,7 +199,6 @@ impl Calendar {
             goal_map.insert(goal.id.clone(), goal.clone());
             match goal.budget_config.as_ref() {
                 Some(budget_config) => {
-                    //TODO: panic if min/week is higher than the sum of each min/day
                     let mut min_per_day_sum = 0;
                     for _ in goal.filters.clone().unwrap().on_days {
                         min_per_day_sum += budget_config.min_per_day;
