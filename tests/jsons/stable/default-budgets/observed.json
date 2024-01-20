@@ -552,12 +552,28 @@
           "taskid": 65,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
-          "duration": 3,
+          "duration": 1,
           "start": "2024-01-13T09:00:00",
-          "deadline": "2024-01-13T12:00:00"
+          "deadline": "2024-01-13T10:00:00"
         },
         {
           "taskid": 66,
+          "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
+          "title": "Hobby project 🚂🚋",
+          "duration": 1,
+          "start": "2024-01-13T10:00:00",
+          "deadline": "2024-01-13T11:00:00"
+        },
+        {
+          "taskid": 67,
+          "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-01-13T11:00:00",
+          "deadline": "2024-01-13T12:00:00"
+        },
+        {
+          "taskid": 68,
           "goalid": "18be6978-ffac-46db-8b70-d321c311428a",
           "title": "Lunch 🥪",
           "duration": 1,
@@ -565,23 +581,15 @@
           "deadline": "2024-01-13T13:00:00"
         },
         {
-          "taskid": 67,
+          "taskid": 69,
           "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
           "title": "Hobby project 🚂🚋",
-          "duration": 1,
+          "duration": 2,
           "start": "2024-01-13T13:00:00",
-          "deadline": "2024-01-13T14:00:00"
-        },
-        {
-          "taskid": 68,
-          "goalid": "a700170a-eb34-4162-a59a-3ce763f62205",
-          "title": "House chores 🏡🧹🛠️",
-          "duration": 1,
-          "start": "2024-01-13T14:00:00",
           "deadline": "2024-01-13T15:00:00"
         },
         {
-          "taskid": 69,
+          "taskid": 70,
           "goalid": "free",
           "title": "free",
           "duration": 3,
@@ -589,7 +597,7 @@
           "deadline": "2024-01-13T18:00:00"
         },
         {
-          "taskid": 70,
+          "taskid": 71,
           "goalid": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
           "title": "Dinner 🍽️",
           "duration": 1,
@@ -597,7 +605,7 @@
           "deadline": "2024-01-13T19:00:00"
         },
         {
-          "taskid": 71,
+          "taskid": 72,
           "goalid": "free",
           "title": "free",
           "duration": 2,
@@ -605,15 +613,15 @@
           "deadline": "2024-01-13T21:00:00"
         },
         {
-          "taskid": 72,
-          "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-          "title": "Hobby project 🚂🚋",
+          "taskid": 73,
+          "goalid": "a700170a-eb34-4162-a59a-3ce763f62205",
+          "title": "House chores 🏡🧹🛠️",
           "duration": 1,
           "start": "2024-01-13T21:00:00",
           "deadline": "2024-01-13T22:00:00"
         },
         {
-          "taskid": 73,
+          "taskid": 74,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
           "duration": 1,
@@ -621,7 +629,7 @@
           "deadline": "2024-01-13T23:00:00"
         },
         {
-          "taskid": 74,
+          "taskid": 75,
           "goalid": "free",
           "title": "free",
           "duration": 1,
@@ -634,7 +642,7 @@
       "day": "2024-01-14",
       "tasks": [
         {
-          "taskid": 75,
+          "taskid": 76,
           "goalid": "49b05463-56a0-4af5-9034-83822abf24f6",
           "title": "Sleep 😴🌙",
           "duration": 6,
@@ -642,7 +650,7 @@
           "deadline": "2024-01-14T06:00:00"
         },
         {
-          "taskid": 76,
+          "taskid": 77,
           "goalid": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
           "title": "Breakfast 🥐🥣",
           "duration": 1,
@@ -650,7 +658,7 @@
           "deadline": "2024-01-14T07:00:00"
         },
         {
-          "taskid": 77,
+          "taskid": 78,
           "goalid": "445f787b-d742-4441-9744-e81c286aa3c8",
           "title": "Me time 🧘🏽😌",
           "duration": 1,
@@ -658,7 +666,7 @@
           "deadline": "2024-01-14T08:00:00"
         },
         {
-          "taskid": 78,
+          "taskid": 79,
           "goalid": "77e1f762-3a4f-44a3-8f24-1560641a3548",
           "title": "Walk 🚶🏽",
           "duration": 1,
@@ -666,19 +674,11 @@
           "deadline": "2024-01-14T09:00:00"
         },
         {
-          "taskid": 79,
+          "taskid": 80,
           "goalid": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
           "title": "Family time 🥰",
-          "duration": 2,
+          "duration": 3,
           "start": "2024-01-14T09:00:00",
-          "deadline": "2024-01-14T11:00:00"
-        },
-        {
-          "taskid": 80,
-          "goalid": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-          "title": "Hobby project 🚂🚋",
-          "duration": 1,
-          "start": "2024-01-14T11:00:00",
           "deadline": "2024-01-14T12:00:00"
         },
         {
@@ -748,48 +748,5 @@
       ]
     }
   ],
-  "impossible": [
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-09T00:00:00",
-      "periodEndDateTime": "2024-01-10T00:00:00"
-    },
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-10T00:00:00",
-      "periodEndDateTime": "2024-01-11T00:00:00"
-    },
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-11T00:00:00",
-      "periodEndDateTime": "2024-01-12T00:00:00"
-    },
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-12T00:00:00",
-      "periodEndDateTime": "2024-01-13T00:00:00"
-    },
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-13T00:00:00",
-      "periodEndDateTime": "2024-01-14T00:00:00"
-    },
-    {
-      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-15T00:00:00",
-      "periodEndDateTime": "2024-01-16T00:00:00"
-    },
-    {
-      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
-      "hoursMissing": 1,
-      "periodStartDateTime": "2024-01-14T00:00:00",
-      "periodEndDateTime": "2024-01-15T00:00:00"
-    }
-  ]
+  "impossible": []
 }

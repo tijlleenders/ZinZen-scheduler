@@ -203,7 +203,7 @@ impl Calendar {
                     for _ in goal.filters.clone().unwrap().on_days {
                         min_per_day_sum += budget_config.min_per_day;
                     }
-                    if min_per_day_sum != budget_config.min_per_week {
+                    if min_per_day_sum > budget_config.min_per_week {
                         panic!("Sum of min_per_day {:?} is not equal to min_per_week {:?} for goal {:?}", min_per_day_sum,budget_config.min_per_week, goal.title);
                     }
 
