@@ -123,8 +123,8 @@ impl Activity {
         flex
     }
 
-    pub fn get_best_scheduling_index(&self) -> Option<usize> {
-        let mut best_scheduling_index_and_conflicts: Option<(usize, usize)> = None;
+    pub fn get_best_scheduling_index_and_length(&self) -> Option<(usize, usize)> {
+        let mut best_scheduling_index_and_conflicts: Option<(usize, usize, usize)> = None;
         for hour_index in 0..self.calendar_overlay.len() {
             let mut conflicts = 0;
             match &self.calendar_overlay[hour_index] {
@@ -132,7 +132,14 @@ impl Activity {
                     continue;
                 }
                 Some(_) => {
-                    for offset in 0..self.total_duration {
+                    //TODO: shouldn't this logic be in creating the activity and then set to min_block_size so we can just use that here?
+                    let offset_size: usize = match self.activity_type {
+                        ActivityType::SimpleGoal => self.total_duration,
+                        ActivityType::Budget => self.min_block_size,
+                        ActivityType::GetToMinWeekBudget => 1,
+                        ActivityType::TopUpWeekBudget => 1,
+                    };
+                    for offset in 0..offset_size {
                         match &self.calendar_overlay[hour_index + offset] {
                             None => {
                                 // panic!("Does this ever happen?");
@@ -146,16 +153,16 @@ impl Activity {
                                 }
                                 conflicts += weak.weak_count();
                                 //if last position check if best so far - or so little we can break
-                                if offset == self.min_block_size - 1 {
+                                if offset == offset_size - 1 {
                                     match best_scheduling_index_and_conflicts {
                                         None => {
                                             best_scheduling_index_and_conflicts =
-                                                Some((hour_index, conflicts));
+                                                Some((hour_index, conflicts, offset_size));
                                         }
-                                        Some((_, best_conflicts)) => {
+                                        Some((_, best_conflicts, _)) => {
                                             if conflicts < best_conflicts || conflicts == 0 {
                                                 best_scheduling_index_and_conflicts =
-                                                    Some((hour_index, conflicts));
+                                                    Some((hour_index, conflicts, offset_size));
                                             }
                                         }
                                     }
@@ -167,7 +174,7 @@ impl Activity {
                 }
             }
         }
-        best_scheduling_index_and_conflicts.map(|(best_index, _)| best_index)
+        best_scheduling_index_and_conflicts.map(|(best_index, _, size)| (best_index, size))
     }
 
     pub(crate) fn release_claims(&mut self) {
@@ -186,6 +193,9 @@ impl Activity {
         if goal.children.is_some() || goal.filters.as_ref().is_none() {
             return vec![];
         }
+        if goal.budget_config.as_ref().unwrap().min_per_day == 0 {
+            return vec![];
+        }
         let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
         let filter_option = goal.filters.clone().unwrap();
@@ -193,7 +203,10 @@ impl Activity {
         //TODO: This is cutting something like Sleep into pieces
         //Replace by an if on title == 'sleep' / "Sleep" / "Sleep 😴🌙"?
         //Yes ... but what about translations? => better to match on goalid
-        let number_of_activities = goal.budget_config.as_ref().unwrap().min_per_day;
+        let mut adjusted_min_block_size = 1;
+        if goal.title.contains("leep") {
+            adjusted_min_block_size = goal.budget_config.as_ref().unwrap().min_per_day;
+        }
 
         for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
             if filter_option
@@ -207,29 +220,28 @@ impl Activity {
             }
             let activity_start = adjusted_goal_start.add(Days::new(day));
             let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
-            for _ in 0..number_of_activities {
-                let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-                    calendar,
-                    Some(filter_option.clone()),
-                    activity_start,
-                    activity_deadline,
-                );
 
-                let activity = Activity {
-                    goal_id: goal.id.clone(),
-                    activity_type: ActivityType::Budget,
-                    title: goal.title.clone(),
-                    min_block_size: 1,
-                    max_block_size: 1,
-                    calendar_overlay: compatible_hours_overlay,
-                    time_budgets: vec![],
-                    total_duration: 1,
-                    duration_left: 0, //TODO: Correct this - is it even necessary to have duration_left?
-                    status: Status::Unprocessed,
-                };
-                dbg!(&activity);
-                activities.push(activity);
-            }
+            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+                calendar,
+                Some(filter_option.clone()),
+                activity_start,
+                activity_deadline,
+            );
+
+            let activity = Activity {
+                goal_id: goal.id.clone(),
+                activity_type: ActivityType::Budget,
+                title: goal.title.clone(),
+                min_block_size: adjusted_min_block_size,
+                max_block_size: goal.budget_config.as_ref().unwrap().max_per_day,
+                calendar_overlay: compatible_hours_overlay,
+                time_budgets: vec![],
+                total_duration: adjusted_min_block_size,
+                duration_left: goal.budget_config.as_ref().unwrap().min_per_day,
+                status: Status::Unprocessed,
+            };
+            dbg!(&activity);
+            activities.push(activity);
         }
         activities
     }
@@ -285,69 +297,96 @@ impl Activity {
             //return - no need to update overlay
             return;
         }
-        if self.flex() == 0 {
-            self.status = Status::Impossible;
-            return;
+
+        //check if block is lost/stolen or not - as current weak pointer state could be disposed/stale/dead
+        for hour_index in 0..self.calendar_overlay.len() {
+            if self.calendar_overlay[hour_index].is_some()
+                && self.calendar_overlay[hour_index]
+                    .as_ref()
+                    .unwrap()
+                    .upgrade()
+                    .is_none()
+            {
+                //block was stolen/lost to some other activity
+                self.calendar_overlay[hour_index] = None;
+            }
         }
+
+        //Check if blocks are too small
+        let mut block_size_found: usize = 0;
+        for hour_index in 0..self.calendar_overlay.len() {
+            match &self.calendar_overlay[hour_index] {
+                None => {
+                    if block_size_found < self.min_block_size {
+                        // found block in calendar that is too small to fit min_block size
+                        let mut start_index = hour_index;
+                        if hour_index > block_size_found {
+                            start_index -= block_size_found;
+                        }
+                        for index_to_set_to_none in start_index..hour_index {
+                            self.calendar_overlay[index_to_set_to_none] = None;
+                        }
+                    }
+                    block_size_found = 0;
+                    continue;
+                }
+                Some(_) => {
+                    block_size_found += 1;
+                }
+            }
+        }
+        // This is for if we reach the end of the overlay and a block is still building
+        if block_size_found < self.min_block_size {
+            // found block in calendar that is too small to fit min_block size
+            for index_to_set_to_none in
+                self.calendar_overlay.len() - block_size_found..self.calendar_overlay.len()
+            {
+                self.calendar_overlay[index_to_set_to_none] = None;
+            }
+        }
+
+        //Check if hour is in at least one block that is allowed by all budgets
+        let mut is_part_of_at_least_one_valid_block_placing_option: Vec<bool> =
+            vec![false; self.calendar_overlay.len()];
+        let mut is_activity_part_of_budget = false;
         for budget in budgets {
             //check if activity goal id is in the budget - else don't bother
             if budget.participating_goals.contains(&self.goal_id) {
                 // great, process it
+                is_activity_part_of_budget = true;
             } else {
                 // budget not relevant to this activity
                 continue;
             }
-            //check my overlay for valid placing options, with a loop like get_best_scheduling_index
-            for hour_index in 0..self.calendar_overlay.len() {
-                match &self.calendar_overlay[hour_index] {
-                    None => {
-                        continue;
+
+            //set hour_option to true for any hour inside a block that satisfies all budgets
+            'outer: for index in 0..is_part_of_at_least_one_valid_block_placing_option.len() {
+                //check if block under validation is large enough
+                for offset in 0..self.min_block_size {
+                    if self.calendar_overlay[index + offset].is_none() {
+                        continue 'outer;
                     }
-                    Some(_) => {
-                        for offset in 0..self.total_duration {
-                            match &self.calendar_overlay[hour_index + offset] {
-                                None => {
-                                    //empty block found < min_block_size
-                                    self.set_overlay_to_none(hour_index);
-                                    continue;
-                                }
-                                Some(weak) => {
-                                    if weak.upgrade().is_none() {
-                                        //empty block found < min_block_size
-                                        self.set_overlay_to_none(hour_index);
-                                        break;
-                                    }
-                                    //if last position check if best so far - or so little we can break
-                                    if offset == self.min_block_size - 1 {
-                                        //check if not allowed by budgets
-                                        let is_allowed = budget.is_within_budget(
-                                            hour_index,
-                                            offset,
-                                            self.activity_type.clone(),
-                                        );
-                                        if is_allowed {
-                                            // Cool!
-                                        } else {
-                                            self.set_overlay_to_none(hour_index);
-                                            //Todo: why not use offset here to set multiple blocks to None?
-                                        }
-                                        continue;
-                                    }
-                                }
-                            }
-                        }
+                }
+                if budget.is_within_budget(index, self.min_block_size, self.activity_type.clone()) {
+                    for offset in 0..self.min_block_size {
+                        is_part_of_at_least_one_valid_block_placing_option[index + offset] = true;
                     }
                 }
             }
         }
+        if is_activity_part_of_budget {
+            for (index, hour_option) in is_part_of_at_least_one_valid_block_placing_option
+                .iter_mut()
+                .enumerate()
+            {
+                if self.calendar_overlay[index].is_some() && !*hour_option {
+                    self.calendar_overlay[index] = None;
+                }
+            }
+        }
+
         if self.flex() == 0 {
             self.status = Status::Impossible;
-        }
-    }
-
-    fn set_overlay_to_none(&mut self, start_index: usize) {
-        for index in start_index..start_index + 1 {
-            self.calendar_overlay[index] = None;
         }
     }
 
@@ -358,32 +397,33 @@ impl Activity {
     ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = vec![];
 
-        for _ in 0..time_budget.max_scheduled - time_budget.scheduled {
-            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-                calendar,
-                goal_to_use.filters.clone(),
-                calendar
-                    .start_date_time
-                    .sub(Duration::hours(24)) //TODO: fix magic number
-                    .add(Duration::hours(time_budget.calendar_start_index as i64)),
-                calendar
-                    .start_date_time
-                    .sub(Duration::hours(24)) //TODO: fix magic number
-                    .add(Duration::hours(time_budget.calendar_end_index as i64)),
-            );
-            activities.push(Activity {
-                goal_id: goal_to_use.id.clone(),
-                activity_type: ActivityType::GetToMinWeekBudget,
-                title: goal_to_use.title.clone(),
-                min_block_size: 1,
-                max_block_size: 1,
-                calendar_overlay: compatible_hours_overlay,
-                time_budgets: vec![],
-                total_duration: 1,
-                duration_left: 0,
-                status: Status::Unprocessed,
-            });
-        }
+        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+            calendar,
+            goal_to_use.filters.clone(),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_start_index as i64)),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_end_index as i64)),
+        );
+
+        let max_hours = time_budget.max_scheduled - time_budget.scheduled;
+
+        activities.push(Activity {
+            goal_id: goal_to_use.id.clone(),
+            activity_type: ActivityType::GetToMinWeekBudget,
+            title: goal_to_use.title.clone(),
+            min_block_size: 1,
+            max_block_size: max_hours,
+            calendar_overlay: compatible_hours_overlay,
+            time_budgets: vec![],
+            total_duration: max_hours,
+            duration_left: max_hours,
+            status: Status::Unprocessed,
+        });
 
         activities
     }
@@ -394,32 +434,35 @@ impl Activity {
         time_budget: &TimeBudget,
     ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = vec![];
-        for _ in 0..time_budget.max_scheduled - time_budget.scheduled {
-            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
-                calendar,
-                goal_to_use.filters.clone(),
-                calendar
-                    .start_date_time
-                    .sub(Duration::hours(24)) //TODO: fix magic number
-                    .add(Duration::hours(time_budget.calendar_start_index as i64)),
-                calendar
-                    .start_date_time
-                    .sub(Duration::hours(24)) //TODO: fix magic number
-                    .add(Duration::hours(time_budget.calendar_end_index as i64)),
-            );
-            activities.push(Activity {
-                goal_id: goal_to_use.id.clone(),
-                activity_type: ActivityType::TopUpWeekBudget,
-                title: goal_to_use.title.clone(),
-                min_block_size: 1,
-                max_block_size: 1,
-                calendar_overlay: compatible_hours_overlay,
-                time_budgets: vec![],
-                total_duration: 1,
-                duration_left: 0,
-                status: Status::Unprocessed,
-            });
-        }
+
+        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+            calendar,
+            goal_to_use.filters.clone(),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_start_index as i64)),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_end_index as i64)),
+        );
+
+        let max_hours = time_budget.max_scheduled - time_budget.scheduled;
+
+        activities.push(Activity {
+            goal_id: goal_to_use.id.clone(),
+            activity_type: ActivityType::TopUpWeekBudget,
+            title: goal_to_use.title.clone(),
+            min_block_size: 1,
+            max_block_size: max_hours,
+            calendar_overlay: compatible_hours_overlay,
+            time_budgets: vec![],
+            total_duration: max_hours,
+            duration_left: max_hours,
+            status: Status::Unprocessed,
+        });
+
         activities
     }
 }

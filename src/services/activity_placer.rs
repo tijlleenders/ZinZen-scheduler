@@ -6,23 +6,40 @@ use crate::models::{
 };
 
 pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) {
-    for _ in 0..activities.len() {
+    loop {
         for activity in activities.iter_mut() {
             activity.update_overlay_with(&calendar.budgets);
         }
         let act_index_to_schedule = find_act_index_to_schedule(&activities);
         if act_index_to_schedule.is_none() {
             println!("Tried to schedule activity index None");
-            continue;
+            break;
         }
-        println!(
-            "Next to schedule: {:?}",
-            &activities[act_index_to_schedule.unwrap()].title
-        );
-        let best_hour_index: Option<usize> =
-            activities[act_index_to_schedule.unwrap()].get_best_scheduling_index();
-        println!("Best index:{:?}", &best_hour_index);
-        if best_hour_index.is_none() {
+        if activities[act_index_to_schedule.unwrap()].goal_id.len() > 5 {
+            println!(
+                "Next to schedule: {:?} {:?}",
+                &activities[act_index_to_schedule.unwrap()].title,
+                &activities[act_index_to_schedule.unwrap()].goal_id[0..5]
+            );
+        } else {
+            println!(
+                "Next to schedule: {:?} {:?}",
+                &activities[act_index_to_schedule.unwrap()].title,
+                &activities[act_index_to_schedule.unwrap()].goal_id
+            );
+        }
+        let best_hour_index_and_size: Option<(usize, usize)> =
+            activities[act_index_to_schedule.unwrap()].get_best_scheduling_index_and_length();
+        let best_hour_index: usize;
+        let best_size: usize;
+        if best_hour_index_and_size.is_some() {
+            best_hour_index = best_hour_index_and_size.unwrap().0;
+            best_size = best_hour_index_and_size.unwrap().1;
+            println!(
+                "Best index:{:?} and size {:?}",
+                &best_hour_index, &best_size
+            );
+        } else {
             activities[act_index_to_schedule.unwrap()].release_claims();
             if activities[act_index_to_schedule.unwrap()].activity_type == ActivityType::Budget {
                 activities[act_index_to_schedule.unwrap()].status = Status::Processed;
@@ -39,24 +56,10 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) {
             calendar.impossible_activities.push(impossible_activity);
             continue;
         }
-        println!(
-            "reserving {:?} hours...",
-            &activities[act_index_to_schedule.unwrap()].total_duration
-        );
-        for duration_offset in 0..activities[act_index_to_schedule.unwrap()].total_duration {
-            //print statements
-            {
-                println!(
-                    "weak counters:{:?}",
-                    Rc::weak_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-                );
-                println!(
-                    "stong counters:{:?}\n",
-                    Rc::strong_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-                );
-            }
-            Rc::make_mut(&mut calendar.hours[best_hour_index.unwrap() + duration_offset]);
-            calendar.hours[best_hour_index.unwrap() + duration_offset] = Rc::new(Hour::Occupied {
+        println!("reserving {:?} hours...", best_size);
+        for duration_offset in 0..best_size {
+            Rc::make_mut(&mut calendar.hours[best_hour_index + duration_offset]);
+            calendar.hours[best_hour_index + duration_offset] = Rc::new(Hour::Occupied {
                 activity_index: act_index_to_schedule.unwrap(),
                 activity_title: activities[act_index_to_schedule.unwrap()].title.clone(),
                 activity_goalid: activities[act_index_to_schedule.unwrap()].goal_id.clone(),
@@ -64,23 +67,16 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) {
             //TODO: activity doesn't need to know about time_budets => remove completely
             calendar.update_budgets_for(
                 &activities[act_index_to_schedule.unwrap()].goal_id.clone(),
-                best_hour_index.unwrap() + duration_offset,
+                best_hour_index + duration_offset,
             );
-            (activities[act_index_to_schedule.unwrap()]).release_claims();
-
-            //print statements
-            {
-                println!(
-                    "weak counters:{:?}",
-                    Rc::weak_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-                );
-                println!(
-                    "stong counters:{:?}\n",
-                    Rc::strong_count(&calendar.hours[best_hour_index.unwrap() + duration_offset])
-                );
-            }
-            dbg!(&calendar);
+            activities[act_index_to_schedule.unwrap()].duration_left -= 1;
         }
+        if activities[act_index_to_schedule.unwrap()].duration_left == 0 {
+            activities[act_index_to_schedule.unwrap()].status = Status::Scheduled;
+            (activities[act_index_to_schedule.unwrap()]).release_claims();
+        }
+
+        dbg!(&calendar);
     }
     dbg!(&calendar);
 }
