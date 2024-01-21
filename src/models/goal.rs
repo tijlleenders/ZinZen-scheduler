@@ -61,9 +61,13 @@ impl Goal {
                 "Special case adjusting start from {:?}",
                 &adjusted_goal_start
             );
-            adjusted_goal_start = adjusted_goal_start.sub(Duration::hours(24));
+            adjusted_goal_start = adjusted_goal_start
+                .sub(Duration::hours(24))
+                .add(Duration::hours(filter_option.after_time as i64));
             println!("... to {:?}", &adjusted_goal_start);
-            adjusted_goal_deadline = adjusted_goal_deadline.add(Duration::days(1));
+            adjusted_goal_deadline = adjusted_goal_start.add(Duration::days(
+                (adjusted_goal_deadline - adjusted_goal_start).num_days() + 1,
+            ));
         }
         (adjusted_goal_start, adjusted_goal_deadline)
     }
