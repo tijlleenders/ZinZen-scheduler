@@ -339,20 +339,24 @@ impl Debug for Calendar {
         writeln!(f).unwrap();
         for index in 0..self.hours.capacity() {
             write!(f, "{:?} ", self.get_week_day_of(index)).unwrap();
+            let mut index_string = index.to_string();
+            if index > 23 {
+                index_string = index.to_string() + " " + &(index % 24).to_string();
+            }
             if self.hours[index] == Rc::new(Hour::Free) {
                 if Rc::weak_count(&self.hours[index]) == 0 {
-                    writeln!(f, "{} -", index).unwrap();
+                    writeln!(f, "{} -", index_string).unwrap();
                 } else {
                     writeln!(
                         f,
                         "{} {:?} claims",
-                        index,
+                        index_string,
                         Rc::weak_count(&self.hours[index])
                     )
                     .unwrap();
                 }
             } else {
-                writeln!(f, "{} {:?}", index, self.hours[index]).unwrap();
+                writeln!(f, "{} {:?}", index_string, self.hours[index]).unwrap();
             }
         }
         writeln!(
