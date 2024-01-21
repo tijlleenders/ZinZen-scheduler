@@ -68,7 +68,7 @@ impl Budget {
             }
             if (hour_index + offset) >= time_budget.calendar_start_index
                 && (hour_index + offset) < time_budget.calendar_end_index
-                && time_budget.scheduled + hours_in_time_budget_window >= budget_cut_off_number
+                && time_budget.scheduled + hours_in_time_budget_window > budget_cut_off_number
             {
                 is_allowed = false;
             }
