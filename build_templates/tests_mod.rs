@@ -59,6 +59,8 @@ mod TEST_MODULE_NAME {
             activity_generator::generate_get_to_week_min_budget_activities(&calendar, &input.goals);
         activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
 
+        calendar.log_impossible_min_week_budgets();
+
         let top_up_week_budget_activities =
             activity_generator::generate_top_up_week_budget_activities(&calendar, &input.goals);
         activity_placer::place(&mut calendar, top_up_week_budget_activities);
