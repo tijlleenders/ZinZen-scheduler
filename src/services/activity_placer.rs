@@ -81,7 +81,7 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) {
     dbg!(&calendar);
 }
 
-fn find_act_index_to_schedule(activities: &Vec<Activity>) -> Option<usize> {
+fn find_act_index_to_schedule(activities: &[Activity]) -> Option<usize> {
     let mut act_index_to_schedule = None;
     for index in 0..activities.len() {
         if activities[index].status == Status::Scheduled

@@ -1,4 +1,4 @@
-use super::budget::{self, get_time_budgets_from, Budget, TimeBudgetType};
+use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
 use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
@@ -7,7 +7,6 @@ use std::collections::HashMap;
 use std::fmt::{Debug, Formatter};
 use std::ops::{Add, Deref, Sub};
 use std::rc::Rc;
-use std::thread::panicking;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Hour {
