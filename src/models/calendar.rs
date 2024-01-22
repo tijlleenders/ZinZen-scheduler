@@ -1,252 +1,372 @@
-use crate::legacy::input::Input;
-use crate::legacy::output::{DayTasks, FinalTasks, Task};
-use crate::models::date::{DateTime, DateTimeRange};
-use crate::models::day::Day;
-use crate::models::flexibility::Flexibility;
-use crate::models::goal::Goal;
-use std::cell::RefCell;
+use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
+use super::goal::Goal;
+use super::task::{DayTasks, FinalTasks, Task};
+use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fmt::{Debug, Formatter};
+use std::ops::{Add, Deref, Sub};
 use std::rc::Rc;
 
-pub type Goals = Vec<Rc<Goal>>;
-pub type Span = usize;
-pub type Position = usize;
-pub type FlexValue = usize;
-pub type Unprocessed = RefCell<Vec<Position>>;
-pub type Scheduled = RefCell<Vec<(Position, DateTimeRange, Rc<Goal>)>>;
+#[derive(Debug, PartialEq, Clone)]
+pub enum Hour {
+    Free,
+    Occupied {
+        activity_index: usize,
+        activity_title: String,
+        activity_goalid: String,
+    }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
+}
 
-pub type Data = RefCell<Vec<Flexibility>>;
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct ImpossibleActivity {
+    pub id: String,
+    pub hours_missing: usize,
+    pub period_start_date_time: NaiveDateTime,
+    pub period_end_date_time: NaiveDateTime,
+}
 
 pub struct Calendar {
-    day: DateTime,
-
-    flexibilities: Data,
-
-    unprocessed: Unprocessed,
-
-    scheduled: Scheduled,
-    impossible: Scheduled,
+    pub start_date_time: NaiveDateTime,
+    pub end_date_time: NaiveDateTime,
+    pub hours: Vec<Rc<Hour>>,
+    pub impossible_activities: Vec<ImpossibleActivity>,
+    pub budgets: Vec<Budget>,
 }
 
 impl Calendar {
-    pub fn new(input: &Input, goals: &Goals) -> Self {
-        let date_start = DateTime::from_naive_date_time(&input.calendar_start);
-        let date_end = DateTime::from_naive_date_time(&input.calendar_end);
-        let day = date_start.start_of_day();
-
-        let mut flexibilities = goals
-            .iter()
-            .map(|goal| get_flexibilities(goal.clone(), &date_start, &date_end))
-            .collect::<Vec<_>>();
-        flexibilities.sort_by(|a, b| a.goal.id().cmp(&b.goal.id()));
-        let flexibilities = RefCell::new(flexibilities);
-
-        let unprocessed: Unprocessed = RefCell::new((0..flexibilities.borrow().len()).collect());
-
-        let scheduled = RefCell::new(vec![]);
-        let impossible = RefCell::new(vec![]);
-
+    pub fn new(start_date_time: NaiveDateTime, end_date_time: NaiveDateTime) -> Self {
+        let number_of_days = (end_date_time - start_date_time).num_days(); //Todo use this later to stop limiting compatible
+        println!(
+            "Calendar of {:?} days, from {:?} to {:?}",
+            &number_of_days, &start_date_time, &end_date_time
+        );
+        let mut hours = Vec::with_capacity(48 + number_of_days as usize * 24);
+        for _ in 0..hours.capacity() {
+            hours.push(Rc::new(Hour::Free));
+        }
         Self {
-            day,
-
-            flexibilities,
-
-            unprocessed,
-
-            scheduled,
-            impossible,
+            start_date_time,
+            end_date_time,
+            hours,
+            impossible_activities: vec![],
+            budgets: vec![],
         }
     }
 
-    pub fn has_finished_scheduling(&self) -> bool {
-        self.unprocessed.borrow().is_empty()
-    }
-
-    pub fn flexibility_at(&self, pos: Position) -> Option<Flexibility> {
-        self.flexibilities.borrow().get(pos).cloned()
-    }
-    pub fn flexibility(&self, pos: Position) -> Option<(Position, FlexValue, Flexibility)> {
-        self.flexibility_at(pos)
-            .map(|f| (pos, f.day.flexibility(f.goal.min_span()), f))
-    }
-    pub fn unprocessed(&self) -> Vec<Position> {
-        self.unprocessed.borrow().clone()
-    }
-    pub fn push_impossible(&self, position: Position, range: DateTimeRange) {
-        self.flexibility_at(position).unwrap().day.occupy(&range);
-        self.occupy_unprocessed(&range);
-        self.impossible.borrow_mut().push((
-            position,
-            range,
-            self.flexibility_at(position).unwrap().goal.clone(),
-        ));
-    }
-    pub fn push_scheduled(&self, position: Position, range: DateTimeRange) {
-        self.flexibility_at(position).unwrap().day.occupy(&range);
-        self.occupy_unprocessed(&range);
-        self.scheduled.borrow_mut().push((
-            position,
-            range,
-            self.flexibility_at(position).unwrap().goal.clone(),
-        ));
-    }
-    pub fn occupy_unprocessed(&self, range: &DateTimeRange) {
-        self.unprocessed
-            .borrow()
-            .iter()
-            .for_each(|pos| self.flexibility_at(*pos).unwrap().day.occupy(range));
-    }
-    pub fn take(&self, position: Position) -> Option<(Flexibility, Vec<Position>)> {
-        let (selected, remaining): (Vec<_>, Vec<_>) = self
-            .unprocessed
-            .borrow()
-            .iter()
-            .partition(|&p| *p == position);
-        *self.unprocessed.borrow_mut() = remaining;
-        assert_eq!(selected.len(), 1);
-        selected
-            .first()
-            .map(|position| self.flexibility_at(*position))
-            .unwrap_or(None)
-            .map(|f| (f, self.unprocessed()))
-    }
-    pub fn result(&self) -> FinalTasks {
-        let mut tasks = vec![];
-        self.gather_tasks_with_filler(&mut tasks, &self.scheduled, false);
-        let mut impossible_tasks = vec![];
-        self.gather_tasks(&mut impossible_tasks, &self.impossible, true);
-
-        FinalTasks {
-            scheduled: vec![DayTasks {
-                day: self.day.naive_date(),
-                tasks,
-            }],
-            impossible: vec![DayTasks {
-                day: self.day.naive_date(),
-                tasks: impossible_tasks,
-            }],
+    pub fn get_week_day_of(&self, index_to_test: usize) -> Weekday {
+        if index_to_test > self.hours.capacity() - 1 {
+            panic!(
+                "Can't request weekday for index {:?} outside of calendar capacity {:?}\nIndexes start at 0.\n",
+                index_to_test,
+                self.hours.capacity()
+            );
         }
+        let date_time_of_index_to_test = self
+            .start_date_time
+            .sub(Days::new(1))
+            .add(Duration::hours(index_to_test as i64));
+        date_time_of_index_to_test.weekday()
     }
 
-    fn gather_tasks(&self, tasks: &mut Vec<Task>, slots: &Scheduled, impossible: bool) {
-        let mut slots = slots.borrow().to_vec();
-        slots.sort_by(|a, b| a.1.cmp(&b.1));
-        slots
-            .iter()
-            .enumerate()
-            .for_each(|(idx, (position, range, _goal))| {
-                let start = range.start().naive_date_time();
-                let deadline = range.end().naive_date_time();
-
-                if let Some(f) = self.flexibility_at(*position) {
-                    tasks.push(Task {
-                        taskid: idx,
-                        goalid: f.goal.id(),
-                        title: f.goal.title(),
-                        duration: f.goal.min_span(),
-                        start,
-                        deadline,
-                        tags: vec![],
-                        impossible,
-                    })
-                }
-            })
-    }
-    fn gather_tasks_with_filler(&self, tasks: &mut Vec<Task>, slots: &Scheduled, impossible: bool) {
-        let mut current = self.day.start_of_day();
-        let mut filler_offset = 0;
-        let mut slots = slots.borrow().to_vec();
-        slots.sort_by(|a, b| a.1.cmp(&b.1));
-        slots
-            .iter()
-            .enumerate()
-            .for_each(|(idx, (position, range, _goal))| {
-                if current.lt(range.start()) {
-                    let span = current.span_by(range.start());
-                    tasks.push(Task {
-                        taskid: idx + filler_offset,
-                        goalid: "free".to_string(),
-                        title: "free".to_string(),
-                        duration: span,
-                        start: current.naive_date_time(),
-                        deadline: current.inc_by(span).naive_date_time(),
-                        tags: vec![],
-                        impossible: false,
-                    });
-                    filler_offset += 1;
-                }
-                current = range.end().clone();
-
-                let start = range.start().naive_date_time();
-                let deadline = range.end().naive_date_time();
-
-                if let Some(f) = self.flexibility_at(*position) {
-                    tasks.push(Task {
-                        taskid: idx + filler_offset,
-                        goalid: f.goal.id(),
-                        title: f.goal.title(),
-                        duration: f.goal.min_span(),
-                        start,
-                        deadline,
-                        tags: vec![],
-                        impossible,
-                    })
-                }
-            });
-        if current.lt(&self.day.end_of_day()) {
-            let span = current.span_by(&self.day.end_of_day());
-            tasks.push(Task {
-                taskid: slots.len() + filler_offset,
-                goalid: "free".to_string(),
-                title: "free".to_string(),
-                duration: span,
-                start: current.naive_date_time(),
-                deadline: current.inc_by(span).naive_date_time(),
-                tags: vec![],
-                impossible: false,
-            });
-        }
-    }
-}
-
-fn get_flexibilities(goal: Rc<Goal>, start: &DateTime, end: &DateTime) -> Flexibility {
-    let goals = vec![goal];
-    goals
-        .into_iter()
-        .map(|g| {
-            (
-                g.clone(),
-                Flexibility {
-                    goal: g,
-                    day: Rc::new(Day::new(start.clone())),
-                },
+    pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
+        if date_time < self.start_date_time.sub(Duration::days(1))
+            || date_time > self.end_date_time.add(Duration::days(1))
+        {
+            // TODO: Fix magic number offset everywhere in code
+            panic!(
+                "can't request an index more than 1 day outside of calendar bounds for date {:?}\nCalendar starts at {:?} and ends at {:?}", date_time, self.start_date_time, self.end_date_time
             )
-        })
-        .map(|(g, f)| {
-            let day = f.day;
-            day.occupy_inverse_range(&DateTimeRange::new(start.clone(), end.clone()));
-            (g, Flexibility { goal: f.goal, day })
-        })
-        .map(|(g, f)| {
-            let day = f.day;
-            day.occupy_inverse_range(&g.day_filter(start));
-            Flexibility { goal: f.goal, day }
-        })
-        .collect::<Vec<_>>()
-        .pop()
-        .unwrap()
-}
+        }
+        (date_time - self.start_date_time.checked_sub_days(Days::new(1)).unwrap()).num_hours()
+            as usize
+    }
 
+    pub fn print(&self) -> FinalTasks {
+        //TODO Fix this mess below - it works somehow but not readable at all...
+        let mut scheduled: Vec<DayTasks> = vec![];
+        let mut day_tasks = DayTasks {
+            day: self.start_date_time.date(),
+            tasks: Vec::with_capacity(1),
+        };
+        let mut task_counter = 0;
+        let mut current_task = Task {
+            taskid: task_counter,
+            goalid: "free".to_string(),
+            title: "free".to_string(),
+            duration: 0,
+            start: self.start_date_time,
+            deadline: self.start_date_time, //just for init; will be overwritten
+        };
+        for hour_offset in 24..(self.hours.capacity() - 24) {
+            if hour_offset % 24 == 0 && hour_offset != 24 {
+                // day boundary reached
+                println!("found day boundary at offset :{:?}", hour_offset);
+                // - push current to dayTasks and increase counter
+                current_task.deadline = current_task
+                    .start
+                    .add(Duration::hours(current_task.duration as i64));
+                if current_task.duration > 0 {
+                    day_tasks.tasks.push(current_task.clone());
+                }
+                task_counter += 1;
+                current_task.taskid = task_counter;
+                // - push dayTasks copy to scheduled
+                scheduled.push(day_tasks);
+                // - update dayTasks for current day and reset Tasks vec
+                day_tasks = DayTasks {
+                    day: self
+                        .start_date_time
+                        .date()
+                        .add(Duration::days(hour_offset as i64 / 24 - 1)),
+                    tasks: Vec::with_capacity(1),
+                };
+                // - reset current_task and empty title to force new Task in loop
+                current_task.title = "".to_string();
+                current_task.duration = 0;
+            }
+            match self.hours[hour_offset].clone().deref() {
+                Hour::Free => {
+                    if current_task.title.eq(&"free".to_string()) {
+                        current_task.duration += 1;
+                    } else {
+                        current_task.deadline = current_task
+                            .start
+                            .add(Duration::hours(current_task.duration as i64));
+                        if current_task.duration > 0 {
+                            day_tasks.tasks.push(current_task.clone());
+                            task_counter += 1;
+                        }
+                        current_task.title = "free".to_string();
+                        current_task.goalid = "free".to_string();
+                        current_task.duration = 1;
+                        current_task.start = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
+                        current_task.taskid = task_counter;
+                    }
+                }
+                Hour::Occupied {
+                    activity_index: _,
+                    activity_title,
+                    activity_goalid,
+                } => {
+                    if current_task.title.eq(&"free".to_string())
+                        || current_task.title.ne(activity_title)
+                    {
+                        if current_task.duration > 0 {
+                            current_task.deadline = current_task
+                                .start
+                                .add(Duration::hours(current_task.duration as i64));
+                            // TODO is this necessary?
+                            day_tasks.tasks.push(current_task.clone());
+                            task_counter += 1;
+                        }
+                        current_task.duration = 1;
+                        current_task.goalid = activity_goalid.clone();
+                        current_task.title = activity_title.clone();
+                        current_task.start = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
+                        current_task.taskid = task_counter;
+                    } else {
+                        current_task.duration += 1;
+                    }
+                }
+            }
+        }
+        current_task.deadline = current_task
+            .start
+            .add(Duration::hours(current_task.duration as i64));
+        if current_task.duration > 0 {
+            // TODO is this necessary?
+            day_tasks.tasks.push(current_task);
+        }
+        scheduled.push(day_tasks);
+        FinalTasks {
+            scheduled,
+            impossible: self.impossible_activities.clone(),
+        }
+    }
+
+    pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) {
+        //fill goal_map and budget_ids
+        let mut goal_map: HashMap<String, Goal> = HashMap::new();
+        let mut budget_ids: Vec<String> = vec![];
+        for goal in goals {
+            goal_map.insert(goal.id.clone(), goal.clone());
+            match goal.budget_config.as_ref() {
+                Some(budget_config) => {
+                    //Check if budget_config is realistic
+
+                    //check 1
+                    let mut min_per_day_sum = 0;
+                    for _ in goal.filters.clone().unwrap().on_days {
+                        min_per_day_sum += budget_config.min_per_day;
+                    }
+                    if min_per_day_sum > budget_config.min_per_week {
+                        panic!("Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}", min_per_day_sum,budget_config.min_per_week, goal.title);
+                    }
+
+                    //check 2
+                    if budget_config.max_per_day > budget_config.max_per_week {
+                        panic!(
+                            "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
+                            budget_config.max_per_day, budget_config.max_per_week, goal.title
+                        );
+                    }
+                    budget_ids.push(goal.id.clone());
+                }
+                None => continue,
+            }
+        }
+
+        for budget_id in budget_ids {
+            //TODO: extract in function get_all_descendants
+            //get all descendants
+            let mut descendants_added: Vec<String> = vec![budget_id.clone()];
+            //get the first children if any
+            let mut descendants: Vec<String> = vec![];
+            match goal_map.get(&budget_id).as_ref().unwrap().children.as_ref() {
+                Some(children) => {
+                    descendants.append(children.clone().as_mut());
+                }
+                None => {
+                    self.budgets.push(Budget {
+                        originating_goal_id: budget_id.clone(),
+                        participating_goals: descendants_added,
+                        time_budgets: get_time_budgets_from(
+                            self,
+                            goal_map.get(&budget_id).as_ref().unwrap(),
+                        ),
+                    });
+                    continue;
+                }
+            }
+
+            loop {
+                //add children of each descendant until no more found
+                if descendants.is_empty() {
+                    self.budgets.push(Budget {
+                        originating_goal_id: budget_id.clone(),
+                        participating_goals: descendants_added,
+                        time_budgets: get_time_budgets_from(
+                            self,
+                            goal_map.get(&budget_id).as_ref().unwrap(),
+                        ),
+                    });
+                    break;
+                }
+                let descendant_of_which_to_add_children = descendants.pop().unwrap();
+                descendants.extend(
+                    goal_map
+                        .get(&descendant_of_which_to_add_children)
+                        .unwrap()
+                        .children
+                        .as_ref()
+                        .unwrap()
+                        .clone(),
+                );
+                descendants_added.push(descendant_of_which_to_add_children);
+            }
+        }
+    }
+
+    pub fn update_budgets_for(&mut self, goal: &str, duration_offset: usize) {
+        let iterator = self.budgets.iter_mut();
+        for budget in iterator {
+            budget.reduce_for_(goal, duration_offset);
+        }
+    }
+
+    pub fn log_impossible_min_day_budgets(&mut self) {
+        let mut impossible_activities = vec![];
+        for budget in &self.budgets {
+            for time_budget in &budget.time_budgets {
+                if time_budget.time_budget_type == TimeBudgetType::Day {
+                    // Good
+                } else {
+                    continue;
+                }
+                if time_budget.scheduled < time_budget.min_scheduled {
+                    impossible_activities.push(ImpossibleActivity {
+                        id: budget.originating_goal_id.clone(),
+                        hours_missing: time_budget.min_scheduled - time_budget.scheduled,
+                        period_start_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_start_index as i64)),
+                        period_end_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_end_index as i64)),
+                    });
+                }
+            }
+        }
+        self.impossible_activities.extend(impossible_activities);
+    }
+
+    pub fn log_impossible_min_week_budgets(&mut self) {
+        //TODO: merge with log_imossible_min_day_budgets, passing budget type as param
+        let mut impossible_activities = vec![];
+        for budget in &self.budgets {
+            for time_budget in &budget.time_budgets {
+                if time_budget.time_budget_type == TimeBudgetType::Week {
+                    // Good
+                } else {
+                    continue;
+                }
+                if time_budget.scheduled < time_budget.min_scheduled {
+                    impossible_activities.push(ImpossibleActivity {
+                        id: budget.originating_goal_id.clone(),
+                        hours_missing: time_budget.min_scheduled - time_budget.scheduled,
+                        period_start_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_start_index as i64)),
+                        period_end_date_time: self
+                            .start_date_time
+                            .add(Duration::hours(time_budget.calendar_end_index as i64)),
+                    });
+                }
+            }
+        }
+        self.impossible_activities.extend(impossible_activities);
+    }
+}
 impl Debug for Calendar {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        f.write_str(
-            &self
-                .flexibilities
-                .borrow()
-                .iter()
-                .map(|f| f.day.to_string())
-                .collect::<Vec<_>>()
-                .join("\n"),
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        writeln!(f).unwrap();
+        for index in 0..self.hours.capacity() {
+            write!(f, "{:?} ", self.get_week_day_of(index)).unwrap();
+            let mut index_string = index.to_string();
+            if index > 23 {
+                index_string = index.to_string() + " " + &(index % 24).to_string();
+            }
+            if self.hours[index] == Rc::new(Hour::Free) {
+                if Rc::weak_count(&self.hours[index]) == 0 {
+                    writeln!(f, "{} -", index_string).unwrap();
+                } else {
+                    writeln!(
+                        f,
+                        "{} {:?} claims",
+                        index_string,
+                        Rc::weak_count(&self.hours[index])
+                    )
+                    .unwrap();
+                }
+            } else {
+                writeln!(f, "{} {:?}", index_string, self.hours[index]).unwrap();
+            }
+        }
+        writeln!(
+            f,
+            "{:?} impossible activities",
+            self.impossible_activities.len()
         )
+        .unwrap();
+        for budget in &self.budgets {
+            writeln!(f, "{:?}", &budget).unwrap();
+        }
+        Ok(())
     }
 }

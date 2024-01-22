@@ -393,12 +393,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "soft"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62483b0a930a082c57fe1f4aa56432c9653a3387a90a4e4cb6cffed31a1a3541"
-
-[[package]]
 name = "syn"
 version = "2.0.39"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -611,6 +605,5 @@ dependencies = [
  "serde",
  "serde-wasm-bindgen",
  "serde_json",
- "soft",
  "wasm-bindgen",
 ]

@@ -1,0 +1,31 @@
+{
+  "startDate": "2022-01-01T00:00:00",
+  "endDate": "2022-01-09T00:00:00",
+  "goals": [
+    {
+      "id": "1",
+      "title": "sleep",
+      "start": "2022-01-01T00:00:00",
+      "deadline": "2022-01-09T00:00:00",
+      "budget": {
+        "minPerDay": 8,
+        "maxPerDay": 8,
+        "minPerWeek": 56,
+        "maxPerWeek": 56
+      },
+      "filters": {
+        "afterTime": 22,
+        "beforeTime": 6,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      }
+    }
+  ]
+}

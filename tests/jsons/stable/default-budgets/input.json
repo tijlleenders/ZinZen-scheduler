@@ -1,0 +1,251 @@
+{
+  "startDate": "2024-01-08T00:00:00",
+  "endDate": "2024-01-15T00:00:00",
+  "goals": [
+    {
+      "id": "44faf46c-73ad-4140-a5cb-d9a69f51859b",
+      "title": "Daily habits 🔁",
+      "createdAt": "2024-01-08T10:59:47.134Z",
+      "children": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "meTime",
+        "walk"
+      ]
+    },
+    {
+      "id": "77e1f762-3a4f-44a3-8f24-1560641a3548",
+      "title": "Walk 🚶🏽",
+      "filters": {
+        "afterTime": 6,
+        "beforeTime": 21,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.135Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 1,
+        "minPerWeek": 7,
+        "maxPerWeek": 7
+      }
+    },
+    {
+      "id": "0eac2855-7fc3-4947-a560-81b5ebe88572",
+      "title": "Hobby project 🚂🚋",
+      "filters": {
+        "afterTime": 9,
+        "beforeTime": 24,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.130Z",
+      "budget": {
+        "minPerDay": 0,
+        "maxPerDay": 4,
+        "minPerWeek": 1,
+        "maxPerWeek": 4
+      }
+    },
+    {
+      "id": "a700170a-eb34-4162-a59a-3ce763f62205",
+      "title": "House chores 🏡🧹🛠️",
+      "filters": {
+        "afterTime": 9,
+        "beforeTime": 24,
+        "onDays": [
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.131Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 3,
+        "minPerWeek": 2,
+        "maxPerWeek": 3
+      }
+    },
+    {
+      "id": "f9a02a6a-8ba9-43d0-b4aa-c6503f77306f",
+      "title": "Family time 🥰",
+      "filters": {
+        "afterTime": 9,
+        "beforeTime": 24,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.132Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 6,
+        "minPerWeek": 10,
+        "maxPerWeek": 10
+      }
+    },
+    {
+      "id": "445f787b-d742-4441-9744-e81c286aa3c8",
+      "title": "Me time 🧘🏽😌",
+      "filters": {
+        "afterTime": 5,
+        "beforeTime": 23,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.135Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 1,
+        "minPerWeek": 7,
+        "maxPerWeek": 7
+      }
+    },
+    {
+      "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
+      "title": "Work 💪🏽",
+      "filters": {
+        "afterTime": 6,
+        "beforeTime": 18,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.133Z",
+      "budget": {
+        "minPerDay": 6,
+        "maxPerDay": 10,
+        "minPerWeek": 40,
+        "maxPerWeek": 40
+      }
+    },
+    {
+      "id": "49b05463-56a0-4af5-9034-83822abf24f6",
+      "title": "Sleep 😴🌙",
+      "filters": {
+        "afterTime": 22,
+        "beforeTime": 7,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.130Z",
+      "budget": {
+        "minPerDay": 6,
+        "maxPerDay": 8,
+        "minPerWeek": 42,
+        "maxPerWeek": 52
+      }
+    },
+    {
+      "id": "40842a7d-c282-406f-9cdf-3d1fbd8e4f61",
+      "title": "Breakfast 🥐🥣",
+      "filters": {
+        "afterTime": 6,
+        "beforeTime": 9,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.137Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 1,
+        "minPerWeek": 7,
+        "maxPerWeek": 7
+      }
+    },
+    {
+      "id": "18be6978-ffac-46db-8b70-d321c311428a",
+      "title": "Lunch 🥪",
+      "filters": {
+        "afterTime": 12,
+        "beforeTime": 14,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.137Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 1,
+        "minPerWeek": 7,
+        "maxPerWeek": 7
+      }
+    },
+    {
+      "id": "103b2eff-6ba5-47b5-ad4f-81d8e8ef5998",
+      "title": "Dinner 🍽️",
+      "filters": {
+        "afterTime": 18,
+        "beforeTime": 20,
+        "onDays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "createdAt": "2024-01-08T10:59:47.137Z",
+      "budget": {
+        "minPerDay": 1,
+        "maxPerDay": 1,
+        "minPerWeek": 7,
+        "maxPerWeek": 7
+      }
+    }
+  ]
+}

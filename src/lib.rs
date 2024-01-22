@@ -1,31 +1,19 @@
 //! # ZinZen scheduler
 //!
 //! The ZinZen scheduler is a "calendar as a function".  
-//! Input: A calendar start datetime and end datetime, plus some Goals with flexible time constraints.  
+//! Input: A calendar start datetime and end datetime, plus a Directed Acyclical Graph of Goals/Budgets with time constraints.  
 //! Output: A calendar that successfully allocates all Goals - or the maximum amount of Goals in that time period.  
 //!
-//! ```
-//! use scheduler::legacy::input::Input;
-//!
-//!     let json_input: serde_json::Value = serde_json::json!({
-//!       "startDate": "2022-01-01T00:00:00",
-//!       "endDate": "2022-01-09T00:00:00",
-//!       "goals": {
-//!         "uuid1": {
-//!           "id": "uuid1",
-//!           "title": "sleep",
-//!           "min_duration": 8,
-//!           "repeat": "daily",
-//!           "filters": {
-//!             "after_time": 22,
-//!             "before_time": 8
-//!           }
-//!         }
-//!       }
-//!     });
-//!     let input: Input = serde_json::from_value(json_input).unwrap();
-//!     let output = scheduler::run_scheduler(input);
-//! ```
+// TODO: fix DocTest
+// ```
+// use scheduler::scheduler;
+//
+//     let json_input: serde_json::Value = serde_json::json!({
+//       "TODO_working_example"
+//     });
+//     let input: Input = serde_json::from_value(json_input).unwrap();
+//     let output = scheduler::run_scheduler(input);
+// ```
 //!
 //! ## Getting Started
 //! This project is hosted on [Github](https://github.com/tijlleenders/ZinZen-scheduler). The Docs.rs / Crates.io version is probably (far) behind.  
@@ -64,18 +52,18 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
-use std::rc::Rc;
+use chrono::NaiveDateTime;
+use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
+use serde_wasm_bindgen::{from_value, to_value};
+use services::activity_generator;
+use services::activity_placer;
+use technical::input_output::Input;
 use wasm_bindgen::prelude::*;
-
-pub mod legacy;
-/// The data structures
 pub mod models;
-use crate::legacy::input::Input;
-use crate::legacy::output::FinalTasks;
+pub mod services;
+/// The data structures
+pub mod technical;
 
-/// The services handling the data structures
-use crate::models::calendar::{Calendar, Goals};
-use crate::models::date::{DateTime, DateTimeRange};
 #[wasm_bindgen(typescript_custom_section)]
 const TS_APPEND_CONTENT: &'static str = r#"
 interface Input {
@@ -90,123 +78,47 @@ interface Input {
 #[wasm_bindgen]
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     console_error_panic_hook::set_once();
-    let input: Input = serde_wasm_bindgen::from_value(input.clone())?;
-    let final_tasks = run_scheduler(input);
-    Ok(serde_wasm_bindgen::to_value(&final_tasks)?)
+    // JsError implements From<Error>, so we can just use `?` on any Error
+    let input: Input = from_value(input.clone()).unwrap();
+    let final_tasks = run_scheduler(input.start_date, input.end_date, input.goals);
+    Ok(to_value(&final_tasks)?)
 }
 
-pub fn run_scheduler(input: Input) -> FinalTasks {
-    let date_start = DateTime::from_naive_date_time(&input.calendar_start);
-    let date_end = DateTime::from_naive_date_time(&input.calendar_end);
-    let goals = get_goals(&input);
+pub fn run_scheduler(
+    start_date: NaiveDateTime,
+    end_date: NaiveDateTime,
+    goals: Vec<Goal>,
+) -> FinalTasks {
+    let mut calendar = Calendar::new(start_date, end_date);
+    dbg!(&calendar);
 
-    let calendar = Calendar::new(&input, &goals);
+    calendar.add_budgets_from(&goals);
 
-    while !calendar.has_finished_scheduling() {
-        log::info!("\n{calendar:?}");
+    //generate and place simple goal activities
+    let simple_goal_activities =
+        activity_generator::generate_simple_goal_activities(&calendar, &goals);
+    dbg!(&simple_goal_activities);
+    activity_placer::place(&mut calendar, simple_goal_activities);
 
-        #[derive(PartialEq)]
-        enum Handling {
-            DoNothing,
-            Flexibility1,
-            MostFlexibility,
-            Impossible,
-        }
+    //generate and place budget goal activities
+    let budget_goal_activities: Vec<Activity> =
+        activity_generator::generate_budget_goal_activities(&calendar, &goals);
+    dbg!(&calendar);
+    activity_placer::place(&mut calendar, budget_goal_activities);
 
-        // determine flexibility
-        // (Handling marker, flexibility measure, position in the calender unproccessed vector)
-        let mut handling = (Handling::DoNothing, 0, None);
-        let mut unprocessed = calendar
-            .unprocessed()
-            .iter()
-            .map(|pos| calendar.flexibility(*pos).unwrap())
-            .collect::<Vec<_>>();
-        unprocessed.sort_by(|(_, _, a), (_, _, b)| a.goal.id().cmp(&b.goal.id()));
-        for (pos, flex, _f) in unprocessed {
-            match flex {
-                0 => {
-                    handling = (Handling::Impossible, flex, Some(pos));
-                    log::info!("Impossible {flex} {pos}");
-                    break;
-                }
-                1 => {
-                    handling = (Handling::Flexibility1, flex, Some(pos));
-                    log::info!("Flexibility1 {flex} {pos}");
-                    break;
-                }
-                _ if handling.2.is_none() => {
-                    handling = {
-                        log::info!("MostFlexibiltiy {flex} {pos}");
-                        (Handling::MostFlexibility, flex, Some(pos))
-                    }
-                }
-                _ => {
-                    handling = if handling.1 < flex {
-                        log::info!("MostFlexibiltiy {flex} {pos}");
-                        (Handling::MostFlexibility, flex, Some(pos))
-                    } else {
-                        handling
-                    }
-                }
-            }
-        }
-        log::info!(
-            "selected position in unprocesse vec of calendar {:?}",
-            handling.2,
-        );
+    calendar.log_impossible_min_day_budgets();
 
-        // calculate placement
-        if let (handling, _flex, Some(selected)) = handling {
-            match handling {
-                Handling::DoNothing => break,
-                Handling::Impossible => {
-                    if let Some((_flexibility, _tail)) = calendar.take(selected) {
-                        calendar.push_impossible(
-                            selected,
-                            DateTimeRange::new(date_start.clone(), date_end.clone()),
-                        );
-                    }
-                }
-                Handling::Flexibility1 => {
-                    if let Some((flexibility, _tail)) = calendar.take(selected) {
-                        let slot = flexibility.day.first_fit(flexibility.goal.min_span());
-                        calendar.push_scheduled(selected, slot);
-                    }
-                }
-                Handling::MostFlexibility => {
-                    if let Some((flexibility, tail)) = calendar.take(selected) {
-                        if tail.is_empty() {
-                            let slot = flexibility.day.first_fit(flexibility.goal.min_span());
-                            calendar.push_scheduled(selected, slot);
-                        } else {
-                            let slots = flexibility.day.slots(flexibility.goal.min_span());
-                            let (_, to_occupy) = tail
-                                .iter()
-                                .map(|pos| {
-                                    calendar.flexibility_at(*pos).unwrap().day.overlap(&slots)
-                                })
-                                .map(|v| v.into_iter().min_by(|(a, _), (b, _)| a.cmp(b)).unwrap())
-                                .min_by(|(a, _), (b, _)| a.cmp(b))
-                                .unwrap();
-                            calendar.push_scheduled(selected, to_occupy);
-                        }
-                    }
-                }
-            }
-        } else {
-            break;
-        }
-    }
-    log::info!("\n{calendar:?}");
+    let get_to_week_min_budget_activities =
+        activity_generator::generate_get_to_week_min_budget_activities(&calendar, &goals);
+    activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
+    //TODO: Test that day stays below min when week min being reached so other goals can get to the week min too
 
-    calendar.result()
-}
+    calendar.log_impossible_min_week_budgets();
 
-/// helper function for legacy code
-fn get_goals(input: &Input) -> Goals {
-    input
-        .goals
-        .values()
-        .map(|g| Rc::new(g.into()))
-        .collect::<Vec<_>>()
+    let top_up_week_budget_activities =
+        activity_generator::generate_top_up_week_budget_activities(&calendar, &goals);
+    activity_placer::place(&mut calendar, top_up_week_budget_activities);
+    //TODO: Test that day stays below min or max when week max being reachd
+
+    calendar.print()
 }

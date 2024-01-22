@@ -1,50 +1,34 @@
 {
-    "startDate": "2022-01-01T00:00:00",
-    "endDate": "2022-01-02T00:00:00",
-    "goals": {
-      "1": {
-        "id": "1",
-        "title": "shopping",
-        "min_duration": 2,
-        "start": "2022-01-01T00:00:00",
-        "deadline": "2022-01-02T00:00:00",
-        "filters": {
-          "after_time": 9,
-          "before_time": 15
-        }
-      },
-      "2": {
-        "id": "2",
-        "title": "dentist",
-        "min_duration": 1,
-        "start": "2022-01-01T00:00:00",
-        "deadline": "2022-01-02T00:00:00",
-        "filters": {
-          "after_time": 10,
-          "before_time": 11
-        }
-      },
-      "3": {
-        "id": "3",
-        "title": "Visit friend",
-        "min_duration": 2,
-        "start": "2022-01-01T00:00:00",
-        "deadline": "2022-01-02T00:00:00",
-        "filters": {
-          "after_time": 10,
-          "before_time": 16
-        }
-      },
-      "4": {
-        "id": "4",
-        "title": "lunch",
-        "min_duration": 1,
-        "start": "2022-01-01T00:00:00",
-        "deadline": "2022-01-02T00:00:00",
-        "filters": {
-          "after_time": 12,
-          "before_time": 14
-        }
-      }
+  "startDate": "2022-01-01T00:00:00",
+  "endDate": "2022-01-02T00:00:00",
+  "goals": [
+    {
+      "id": "1",
+      "title": "shopping",
+      "minDuration": 2,
+      "start": "2022-01-01T09:00:00",
+      "deadline": "2022-01-01T15:00:00"
+    },
+    {
+      "id": "2",
+      "title": "dentist",
+      "minDuration": 1,
+      "start": "2022-01-01T10:00:00",
+      "deadline": "2022-01-01T11:00:00"
+    },
+    {
+      "id": "3",
+      "title": "Visit friend",
+      "minDuration": 2,
+      "start": "2022-01-01T10:00:00",
+      "deadline": "2022-01-01T16:00:00"
+    },
+    {
+      "id": "4",
+      "title": "lunch",
+      "minDuration": 1,
+      "start": "2022-01-01T12:00:00",
+      "deadline": "2022-01-01T14:00:00"
     }
-  }
+  ]
+}
