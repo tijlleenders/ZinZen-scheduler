@@ -11,7 +11,7 @@
 //     let json_input: serde_json::Value = serde_json::json!({
 //       "TODO_working_example"
 //     });
-//     let input: Input = serde_json::from_value(json_input).unwrap();
+//     let input: Input = serde_json::from_value(json_input)?;
 //     let output = scheduler::run_scheduler(input);
 // ```
 //!
@@ -79,7 +79,7 @@ interface Input {
 pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     console_error_panic_hook::set_once();
     // JsError implements From<Error>, so we can just use `?` on any Error
-    let input: Input = from_value(input.clone()).unwrap();
+    let input: Input = from_value(input.clone())?;
     let final_tasks = run_scheduler(input.start_date, input.end_date, input.goals);
     Ok(to_value(&final_tasks)?)
 }
@@ -108,9 +108,11 @@ pub fn run_scheduler(
 
     calendar.log_impossible_min_day_budgets();
 
-    let get_to_week_min_budget_activities =
-        activity_generator::generate_get_to_week_min_budget_activities(&calendar, &goals);
-    activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
+    if let Some(get_to_week_min_budget_activities) =
+        activity_generator::generate_get_to_week_min_budget_activities(&calendar, &goals)
+    {
+        activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
+    }
     //TODO: Test that day stays below min when week min being reached so other goals can get to the week min too
 
     calendar.log_impossible_min_week_budgets();
