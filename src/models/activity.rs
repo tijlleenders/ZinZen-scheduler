@@ -39,29 +39,29 @@ impl Activity {
             let mut compatible = true;
 
             if filter_option.is_some() {
-                if filter_option.clone().unwrap().after_time
-                    < filter_option.clone().unwrap().before_time
+                let filter_option = filter_option.clone().unwrap();
                 {
-                    //normal case
                     let hour_of_day = hour_index % 24;
-                    if hour_of_day < filter_option.clone().unwrap().after_time {
-                        compatible = false;
-                    }
-                    if hour_of_day >= filter_option.clone().unwrap().before_time {
-                        compatible = false;
-                    }
-                } else {
-                    // special case where we know that compatible times cross the midnight boundary
-                    let hour_of_day = hour_index % 24;
-                    if hour_of_day >= filter_option.clone().unwrap().before_time
-                        && hour_of_day < filter_option.clone().unwrap().after_time
+                    if filter_option.after_time
+                        < filter_option.before_time
                     {
-                        compatible = false;
+                        //normal case
+                        if hour_of_day < filter_option.after_time {
+                            compatible = false;
+                        }
+                        if hour_of_day >= filter_option.before_time {
+                            compatible = false;
+                        }
+                    } else {
+                        // special case where we know that compatible times cross the midnight boundary
+                        if hour_of_day >= filter_option.before_time
+                            && hour_of_day < filter_option.after_time
+                        {
+                            compatible = false;
+                        }
                     }
                 }
                 if filter_option
-                    .as_ref()
-                    .unwrap()
                     .on_days
                     .contains(&calendar.get_week_day_of(hour_index))
                 {
