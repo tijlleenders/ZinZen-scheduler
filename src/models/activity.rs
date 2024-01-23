@@ -127,46 +127,40 @@ impl Activity {
         let mut best_scheduling_index_and_conflicts: Option<(usize, usize, usize)> = None;
         for hour_index in 0..self.calendar_overlay.len() {
             let mut conflicts = 0;
-            match &self.calendar_overlay[hour_index] {
-                None => {
-                    continue;
-                }
-                Some(_) => {
-                    //TODO: shouldn't this logic be in creating the activity and then set to min_block_size so we can just use that here?
-                    let offset_size: usize = match self.activity_type {
-                        ActivityType::SimpleGoal => self.total_duration,
-                        ActivityType::Budget => self.min_block_size,
-                        ActivityType::GetToMinWeekBudget => 1,
-                        ActivityType::TopUpWeekBudget => 1,
-                    };
-                    for offset in 0..offset_size {
-                        match &self.calendar_overlay[hour_index + offset] {
-                            None => {
-                                // panic!("Does this ever happen?");
-                                //      Yes in algorithm_challenge test case
-                                //      TODO: do we need to mark all from hour_index till offset as None?"
-                                continue;
+            if self.calendar_overlay[hour_index].is_some() {
+                //TODO: shouldn't this logic be in creating the activity and then set to min_block_size so we can just use that here?
+                let offset_size: usize = match self.activity_type {
+                    ActivityType::SimpleGoal => self.total_duration,
+                    ActivityType::Budget => self.min_block_size,
+                    ActivityType::GetToMinWeekBudget => 1,
+                    ActivityType::TopUpWeekBudget => 1,
+                };
+                for offset in 0..offset_size {
+                    match &self.calendar_overlay[hour_index + offset] {
+                        None => {
+                            // panic!("Does this ever happen?");
+                            //      Yes in algorithm_challenge test case
+                            //      TODO: do we need to mark all from hour_index till offset as None?"
+                            continue;
+                        }
+                        Some(weak) => {
+                            if weak.upgrade().is_none() {
+                                break; // this will reset conflicts too
                             }
-                            Some(weak) => {
-                                if weak.upgrade().is_none() {
-                                    break; // this will reset conflicts too
-                                }
-                                conflicts += weak.weak_count();
-                                //if last position check if best so far - or so little we can break
-                                if offset == offset_size - 1 {
-                                    match best_scheduling_index_and_conflicts {
-                                        None => {
+                            conflicts += weak.weak_count();
+                            //if last position check if best so far - or so little we can break
+                            if offset == offset_size - 1 {
+                                match best_scheduling_index_and_conflicts {
+                                    None => {
+                                        best_scheduling_index_and_conflicts =
+                                            Some((hour_index, conflicts, offset_size));
+                                    }
+                                    Some((_, best_conflicts, _)) => {
+                                        if conflicts < best_conflicts || conflicts == 0 {
                                             best_scheduling_index_and_conflicts =
                                                 Some((hour_index, conflicts, offset_size));
                                         }
-                                        Some((_, best_conflicts, _)) => {
-                                            if conflicts < best_conflicts || conflicts == 0 {
-                                                best_scheduling_index_and_conflicts =
-                                                    Some((hour_index, conflicts, offset_size));
-                                            }
-                                        }
                                     }
-                                    continue;
                                 }
                             }
                         }
