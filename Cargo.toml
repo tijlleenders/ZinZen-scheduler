@@ -25,10 +25,6 @@ crate-type = ['cdylib', 'lib']
 name = 'scheduler'
 path = "src/lib.rs"
 
-[[bin]]
-name = "flamegraph"
-path = "src/bin/flamegraph-bin.rs"
-
 
 [profile.release]
 lto = true
