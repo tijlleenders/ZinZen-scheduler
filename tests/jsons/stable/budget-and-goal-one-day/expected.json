@@ -7,12 +7,20 @@
           "taskid": 0,
           "goalid": "free",
           "title": "free",
-          "duration": 12,
+          "duration": 8,
           "start": "2022-09-01T00:00:00",
-          "deadline": "2022-09-01T12:00:00"
+          "deadline": "2022-09-01T08:00:00"
         },
         {
           "taskid": 1,
+          "goalid": "2",
+          "title": "work",
+          "duration": 4,
+          "start": "2022-09-01T08:00:00",
+          "deadline": "2022-09-01T12:00:00"
+        },
+        {
+          "taskid": 2,
           "goalid": "1",
           "title": "dentist",
           "duration": 1,
@@ -20,28 +28,23 @@
           "deadline": "2022-09-01T13:00:00"
         },
         {
-          "taskid": 2,
+          "taskid": 3,
           "goalid": "2",
           "title": "work",
-          "duration": 8,
+          "duration": 4,
           "start": "2022-09-01T13:00:00",
-          "deadline": "2022-09-01T21:00:00"
+          "deadline": "2022-09-01T17:00:00"
         },
         {
-          "taskid": 3,
+          "taskid": 4,
           "goalid": "free",
           "title": "free",
-          "duration": 3,
-          "start": "2022-09-01T21:00:00",
+          "duration": 7,
+          "start": "2022-09-01T17:00:00",
           "deadline": "2022-09-02T00:00:00"
         }
       ]
     }
   ],
-  "impossible": [
-    {
-      "day": "2022-09-01",
-      "tasks": []
-    }
-  ]
+  "impossible": []
 }
