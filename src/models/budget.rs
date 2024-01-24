@@ -105,8 +105,6 @@ impl Debug for TimeBudget {
             &self.min_scheduled,
             &self.max_scheduled
         )
-        .unwrap();
-        Ok(())
     }
 }
 
@@ -116,28 +114,32 @@ pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget
     for hour_index in 24..calendar.hours.capacity() - 24 {
         if (hour_index) % 24 == 0 {
             println!("Day boundary detected at hour_index {:?}", &hour_index);
-            let mut min = goal.budget_config.as_ref().unwrap().min_per_day;
-            let mut max = goal.budget_config.as_ref().unwrap().max_per_day;
-            if goal.filters.as_ref().unwrap().on_days.contains(
-                &calendar
-                    .start_date_time
-                    .sub(Duration::hours(24))
-                    .add(Duration::hours(hour_index as i64))
-                    .weekday(),
-            ) {
-                //OK
-            } else {
-                min = 0;
-                max = 0;
+            if let Some(config) = &goal.budget_config {
+                let mut min = config.min_per_day;
+                let mut max = config.max_per_day;
+                if let Some(filters) = &goal.filters {
+                    if filters.on_days.contains(
+                        &calendar
+                            .start_date_time
+                            .sub(Duration::hours(24))
+                            .add(Duration::hours(hour_index as i64))
+                            .weekday(),
+                    ) {
+                        //OK
+                    } else {
+                        min = 0;
+                        max = 0;
+                    }
+                }
+                time_budgets.push(TimeBudget {
+                    time_budget_type: TimeBudgetType::Day,
+                    calendar_start_index: hour_index,
+                    calendar_end_index: hour_index + 24,
+                    scheduled: 0,
+                    min_scheduled: min,
+                    max_scheduled: max,
+                });
             }
-            time_budgets.push(TimeBudget {
-                time_budget_type: TimeBudgetType::Day,
-                calendar_start_index: hour_index,
-                calendar_end_index: hour_index + 24,
-                scheduled: 0,
-                min_scheduled: min,
-                max_scheduled: max,
-            });
         }
     }
 
@@ -146,14 +148,16 @@ pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget
     for hour_index in 24..calendar.hours.capacity() {
         if (hour_index - 24) % (24 * 7) == 0 && hour_index > 24 {
             println!("Week boundary detected at hour_index {:?}", &hour_index);
-            time_budgets.push(TimeBudget {
-                time_budget_type: TimeBudgetType::Week,
-                calendar_start_index: start_pointer,
-                calendar_end_index: hour_index,
-                scheduled: 0,
-                min_scheduled: goal.budget_config.as_ref().unwrap().min_per_week,
-                max_scheduled: goal.budget_config.as_ref().unwrap().max_per_week,
-            });
+            if let Some(config) = &goal.budget_config {
+                time_budgets.push(TimeBudget {
+                    time_budget_type: TimeBudgetType::Week,
+                    calendar_start_index: start_pointer,
+                    calendar_end_index: hour_index,
+                    scheduled: 0,
+                    min_scheduled: config.min_per_week,
+                    max_scheduled: config.max_per_week,
+                });
+            }
             start_pointer = hour_index
         }
     }
