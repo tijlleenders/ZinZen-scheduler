@@ -22,6 +22,12 @@
         "minDuration": 1,
         "start": "2022-01-01T10:00:00",
         "deadline": "2022-01-01T12:00:00"
+      },
+      {
+        "id": "4",
+        "title": "someday-but-not-impossible-since-no-deadline",
+        "minDuration": 1,
+        "start": "2022-01-01T10:00:00"
       }
     ]
   }
