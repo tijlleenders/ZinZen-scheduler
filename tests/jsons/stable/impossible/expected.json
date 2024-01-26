@@ -7,20 +7,28 @@
           "taskid": 0,
           "goalid": "free",
           "title": "free",
-          "duration": 11,
+          "duration": 10,
           "start": "2022-01-01T00:00:00",
-          "deadline": "2022-01-01T11:00:00"
+          "deadline": "2022-01-01T10:00:00"
         },
         {
           "taskid": 1,
           "goalid": "1",
           "title": "shopping",
           "duration": 1,
+          "start": "2022-01-01T10:00:00",
+          "deadline": "2022-01-01T11:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "2",
+          "title": "dentis",
+          "duration": 1,
           "start": "2022-01-01T11:00:00",
           "deadline": "2022-01-01T12:00:00"
         },
         {
-          "taskid": 2,
+          "taskid": 3,
           "goalid": "free",
           "title": "free",
           "duration": 12,
@@ -30,5 +38,12 @@
       ]
     }
   ],
-  "impossible": []
+  "impossible": [
+    {
+      "id": "3",
+      "hoursMissing": 1,
+      "periodStartDateTime": "2022-01-01T10:00:00",
+      "periodEndDateTime": "2022-01-01T12:00:00"
+    }
+  ]
 }
