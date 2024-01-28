@@ -194,37 +194,37 @@ impl Calendar {
         }
     }
 
-    pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) {
+    pub fn add_budgets_from(&mut self, goals: &[Goal]) {
         //fill goal_map and budget_ids
         let mut goal_map: HashMap<String, Goal> = HashMap::new();
         let mut budget_ids: Vec<String> = vec![];
         for goal in goals {
             goal_map.insert(goal.id.clone(), goal.clone());
-            match goal.budget_config.as_ref() {
-                Some(budget_config) => {
-                    //Check if budget_config is realistic
+            if let Some(budget_config) = &goal.budget_config {
+                //Check if budget_config is realistic
 
-                    //check 1
-                    let mut min_per_day_sum = 0;
-                    if let Some(filters) = &goal.filters {
-                        for _ in &filters.on_days {
-                            min_per_day_sum += budget_config.min_per_day;
-                        }
+                //check 1
+                let mut min_per_day_sum = 0;
+                if let Some(filters) = &goal.filters {
+                    for _ in &filters.on_days {
+                        min_per_day_sum += budget_config.min_per_day;
                     }
-                    if min_per_day_sum > budget_config.min_per_week {
-                        panic!("Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}", min_per_day_sum,budget_config.min_per_week, goal.title);
-                    }
-
-                    //check 2
-                    if budget_config.max_per_day > budget_config.max_per_week {
-                        panic!(
-                            "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
-                            budget_config.max_per_day, budget_config.max_per_week, goal.title
-                        );
-                    }
-                    budget_ids.push(goal.id.clone());
                 }
-                None => continue,
+                if min_per_day_sum > budget_config.min_per_week {
+                    panic!(
+                        "Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}",
+                        min_per_day_sum, budget_config.min_per_week, goal.title
+                    );
+                }
+
+                //check 2
+                if budget_config.max_per_day > budget_config.max_per_week {
+                    panic!(
+                        "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
+                        budget_config.max_per_day, budget_config.max_per_week, goal.title
+                    );
+                }
+                budget_ids.push(goal.id.clone());
             }
         }
 
@@ -235,7 +235,7 @@ impl Calendar {
             //get the first children if any
             let mut descendants: Vec<String> = vec![];
             if let Some(goal) = goal_map.get(&budget_id) {
-                match goal.children.as_ref() {
+                match &goal.children {
                     Some(children) => {
                         descendants.append(children.clone().as_mut());
                     }
