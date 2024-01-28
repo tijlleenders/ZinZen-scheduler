@@ -7,12 +7,8 @@ mod TEST_MODULE_NAME {
     // experimental tests
     //TEST_FUNCTIONS_EXPERIMENTAL
 
-    use crate::calendar::Calendar;
-    use crate::Input;
-    use scheduler::models::activity::Activity;
-    use scheduler::services::{activity_generator, activity_placer};
-
     use scheduler::technical::input_output;
+    use scheduler::technical::input_output::Input;
     use std::path::Path;
 
     fn test(folder: &str) {
@@ -36,37 +32,7 @@ mod TEST_MODULE_NAME {
 
         // ONLY do this if expected is malformatted ... check that contents don't change!
         // input_output::write_to_file(output_path, &desired_output).unwrap();
-
-        let mut calendar = Calendar::new(input.start_date, input.end_date);
-
-        calendar.add_budgets_from(&input.goals);
-
-        //generate and place simple goal activities
-        let simple_goal_activities =
-            activity_generator::generate_simple_goal_activities(&calendar, &input.goals);
-        dbg!(&simple_goal_activities);
-        activity_placer::place(&mut calendar, simple_goal_activities);
-
-        //generate and place budget goal activities
-        let budget_goal_activities: Vec<Activity> =
-            activity_generator::generate_budget_goal_activities(&calendar, &input.goals);
-        dbg!(&calendar);
-        activity_placer::place(&mut calendar, budget_goal_activities);
-
-        calendar.log_impossible_min_day_budgets();
-
-        if let Some(get_to_week_min_budget_activities) =
-            activity_generator::generate_get_to_week_min_budget_activities(&calendar, &input.goals) {
-            activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
-        }
-
-        calendar.log_impossible_min_week_budgets();
-
-        let top_up_week_budget_activities =
-            activity_generator::generate_top_up_week_budget_activities(&calendar, &input.goals);
-        activity_placer::place(&mut calendar, top_up_week_budget_activities);
-
-        let output = calendar.print();
+        let output = scheduler::run_scheduler(input.start_date, input.end_date, &input.goals);
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();
 
