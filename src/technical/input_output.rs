@@ -1,8 +1,8 @@
 use crate::models::goal::Goal;
-use crate::models::task::FinalTasks;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 use std::error::Error;
+use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
@@ -23,12 +23,9 @@ pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Err
     Ok(input)
 }
 
-pub fn get_output_string_from_json<P: AsRef<Path>>(path: P) -> Result<String, serde_json::Error> {
+pub fn get_output_string_from_json<P: AsRef<Path>>(path: P) -> String {
     println!("get_output_string_from_json\n");
-    let file = File::open(path).expect("Error reading file");
-    let reader = BufReader::new(file);
-    let output: FinalTasks = serde_json::from_reader(reader)?;
-    serde_json::to_string_pretty(&output)
+    fs::read_to_string(path).unwrap()
 }
 
 pub fn write_to_file<P: AsRef<Path>>(path: P, output: &str) -> Result<(), Box<dyn Error>> {
