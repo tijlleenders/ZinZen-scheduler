@@ -12,7 +12,7 @@ The scheduler algorithm is just a transformation function forged into a WASM.
 
 The calendar is the overaching datastructure which contains all scheduled tasks from a start date to an end date.
 
-In general, it helps calculating where Slots are occupied by tasks and results in possibly unplaceable tasks.
+In general, it helps calculating where Activities are occupied by tasks and results in possibly unplaceable tasks.
 
 ### 2) Goal
 
@@ -25,7 +25,7 @@ Goals are organized together with Budgets in a Directed Acyclical Graph (DAG) an
 - Title - The title. This is necessary only for easier debugging.  
 - (Children) - The sub-goals 'in' this Goal.  
 - Duration - A duration. Without this, the goal can be transparent in the DAG.  
-- (Repeat) - The number of repeats. This translates into number of Steps to generate.  
+- (Repeat) - The number of repeats. This translates into number of Activities to generate.  
 - (Repeat interval) - Time between the repeats (x hours/days/weeks/months/years).  
 - (Dependencies):  
   - Starts:  
@@ -35,7 +35,7 @@ Goals are organized together with Budgets in a Directed Acyclical Graph (DAG) an
   - Ends with:  
     - DateTime. Defaults to midnight if no time chosen.  
     - Number hours spent - For example, consider the goal 'Write first draft of report' completed after investing 3 hours.  
-- (Not on) - A collection of Slots that are not allowed to be used.
+- (Not on) - A collection of Activities that are not allowed to be used.
 
 
 
@@ -55,7 +55,7 @@ They also have (optional) attributes specific to Budgets:
 - Time of day - A pair of [0-23] numbers:
   - After time 
   - Before time  
-    If after time is greater than the before time, for example 'Sleep 22-6', the resulting Step Timeline Slot will span midnight.  
+    If after time is greater than the before time, for example 'Sleep 22-6', the resulting Step Timeline Activitie will span midnight.  
 - On days - The days of the week the Budget is allowed to use.
 - Min hours per day
 - Max hours per day
@@ -70,46 +70,9 @@ Goals and Budgets are broken down and represented as activities in the Calendar.
 ### 5) Task
 
 Tasks are only relevant once _all_ scheduling is done.  
-At that point all scheduled Steps are either impossible or scheduled.  
+At that point all scheduled Activities are either impossible or scheduled.  
 
-The Steps are then transformed into Tasks: 
-- Every Step becomes a Task
+The Activities are then transformed into Tasks: 
+- Every Activity becomes a Task
 - Any Tasks for that 'touch' AND have the same Goal should be merged.  
-
-### 6) Step
-
-Steps are the building blocks for the 'placing' algorithem of the scheduler.  
-Important!: Some older terminology and documentation describes this concept as 'Tasks' - but 'Task' is now reserved only for the final output sent to the frontend.
-
-Steps can be generated in two ways:  
-- From a Goal:  
-  - Make a new Step with corresponding Timeline for every Repeat.
-- From a Budget:  
-  - Make a new Step for every day interval using the minimum hours per day attribute. 
-  - Make a new optional Step for every day interval using the difference between min-max per day.
-
-Steps are organized in a list and have the following (optional) attributes:  
-- Duration  
-- Timeline - This is a collection of Slots that comply to the constraints set for this Step.  
-- Flexibility - This is how many different ways the Step can theoretically be 'placed' in the Timeline. It can be calculated using Duration and Timeline. This needs to be recalculated after every change to the Timeline.
-- Type - used by 'placer' together with Flexibility to determine priority:
-  - Goal
-  - Budget
-  - Optional budget
-- (Budgets) - A list of Budgets the Step needs to comply with
-
-Example on calculating Step Flexibility:  
-A Step with Duration 4 and a Timeline with one Slot of [8-14] can placed in 3 ways:  
-- 8-12
-- OR 9-13
-- OR 10-14  
-and thus has a flexibility of 3.
-
-### 7) Slot
-
-Slots are periods of time: [StartDateTime; EndDateTime[.  
-Currently the granularity of Slots is in hours. 
-A Slot can be 1h long, or max 7*24 hours (one week) long.  
-Important!: Slots are not unique:
-- Multiple Steps can have similar or overlapping Slots in their Timeline.
 
