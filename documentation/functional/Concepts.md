@@ -4,19 +4,16 @@ To move this doc page to Cargo docs there is [issue #414](https://github.com/tij
 
 ## Overall Concept
 
-The scheduler algorithm is just a transformation function forged into a WASM.
+The scheduler algorithm is just a transformation function of Goals/Budgets into Tasks on a Calendar.  Technically this function is placed into a WASM to be used by the frontend whenever Goals/Budgets change.
 
 **The scheduler translates the users goals into scheduled tasks.**
 
 ### 0) Calendar
 
-The calendar is the overaching datastructure which contains all scheduled tasks from a start date to an end date.
-
-In general, it helps calculating where Activities are occupied by tasks and results in possibly unplaceable tasks.
+The calendar is the overaching datastructure which contains all Hours. 
+Hours have status Free or Occupied. If Occupied, the Hour knows the Activity and Goal that occupied it.  
 
 ### 2) Goal
-
-A Goal is the most important concept in ZinZen&reg;.
 
 A Goal is a description of something you want to get done. This can be small, like 'walk 4 hours' - or big like 'Protect the oceans from overfishing'. Goals come from the frontend/UI and are specified by the user.
 
@@ -65,14 +62,13 @@ The min-max per week has to be compatible with the min-max per day in combinatio
 
 ### 4) Activity
 
-Goals and Budgets are broken down and represented as activities in the Calendar.
+Goals and Budgets are both broken down and represented as Activities to be placed on the Calendar by the activity_placer.
 
 ### 5) Task
 
 Tasks are only relevant once _all_ scheduling is done.  
 At that point all scheduled Activities are either impossible or scheduled.  
 
-The Activities are then transformed into Tasks: 
-- Every Activity becomes a Task
-- Any Tasks for that 'touch' AND have the same Goal should be merged.  
+The Hours on the Calendar are then transformed into Tasks: 
+- Every consecutive ('touching') set of Hours occupied by the same Goal becomes a Task with a start and end datetime.
 
