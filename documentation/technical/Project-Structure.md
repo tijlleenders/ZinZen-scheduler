@@ -3,9 +3,9 @@
 ### Entrypoints
 src/lib.rs contains the 2 main entrypoints of the code:
 
-1) run-scheduler 
+1) run_scheduler() 
    1) this is the main entry point for calling the scheduling algorithm as a Rust program
-2) schedule
+2) schedule()
    1) this is the entry point for the exposed WASM module. should do the same as run-scheduler, without the logging.
 
 ### Tests
