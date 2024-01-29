@@ -8,7 +8,13 @@ The scheduler algorithm is just a transformation function forged into a WASM.
 
 **The scheduler translates the users goals into scheduled tasks.**
 
-### 1) Goal
+### 0) Calendar
+
+The calendar is the overaching datastructure which contains all scheduled tasks from a start date to an end date.
+
+In general, it helps calculating where Slots are occupied by tasks and results in possibly unplaceable tasks.
+
+### 2) Goal
 
 A Goal is the most important concept in ZinZen&reg;.
 
@@ -33,7 +39,7 @@ Goals are organized together with Budgets in a Directed Acyclical Graph (DAG) an
 
 
 
-### 2) Budget
+### 3) Budget
 
 Budgets reserve time on your calendar for a certain purpose.  
 This time can be used by any Goals that are children of the Budget in the DAG.  
@@ -57,7 +63,11 @@ They also have (optional) attributes specific to Budgets:
 - Max hours per week  
 The min-max per week has to be compatible with the min-max per day in combination with the 'On days'.
 
-### 3) Task
+### 4) Activity
+
+Goals and Budgets are broken down and represented as activities in the Calendar.
+
+### 5) Task
 
 Tasks are only relevant once _all_ scheduling is done.  
 At that point all scheduled Steps are either impossible or scheduled.  
@@ -66,7 +76,7 @@ The Steps are then transformed into Tasks:
 - Every Step becomes a Task
 - Any Tasks for that 'touch' AND have the same Goal should be merged.  
 
-### 4) Step
+### 6) Step
 
 Steps are the building blocks for the 'placing' algorithem of the scheduler.  
 Important!: Some older terminology and documentation describes this concept as 'Tasks' - but 'Task' is now reserved only for the final output sent to the frontend.
@@ -95,7 +105,7 @@ A Step with Duration 4 and a Timeline with one Slot of [8-14] can placed in 3 wa
 - OR 10-14  
 and thus has a flexibility of 3.
 
-### 5) Slot
+### 7) Slot
 
 Slots are periods of time: [StartDateTime; EndDateTime[.  
 Currently the granularity of Slots is in hours. 
