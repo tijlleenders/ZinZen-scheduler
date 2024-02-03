@@ -7,24 +7,24 @@
           "taskid": 0,
           "goalid": "free",
           "title": "free",
-          "duration": 10,
+          "duration": 11,
           "start": "2022-01-01T00:00:00",
-          "deadline": "2022-01-01T10:00:00"
+          "deadline": "2022-01-01T11:00:00"
         },
         {
           "taskid": 1,
           "goalid": "1",
           "title": "shopping",
           "duration": 1,
-          "start": "2022-01-01T10:00:00",
-          "deadline": "2022-01-01T11:00:00"
+          "start": "2022-01-01T11:00:00",
+          "deadline": "2022-01-01T12:00:00"
         },
         {
           "taskid": 2,
           "goalid": "free",
           "title": "free",
-          "duration": 13,
-          "start": "2022-01-01T11:00:00",
+          "duration": 12,
+          "start": "2022-01-01T12:00:00",
           "deadline": "2022-01-02T00:00:00"
         }
       ]

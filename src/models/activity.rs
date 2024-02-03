@@ -69,6 +69,15 @@ impl Activity {
                 }
             }
 
+            let not_on = not_on.clone().unwrap_or_default();
+            for slot in not_on.iter() {
+                if hour_index >= calendar.get_index_of(slot.start)
+                    && hour_index < calendar.get_index_of(slot.end)
+                {
+                    compatible = false;
+                }
+            }
+
             if hour_index < calendar.get_index_of(adjusted_goal_start) {
                 compatible = false;
             }
