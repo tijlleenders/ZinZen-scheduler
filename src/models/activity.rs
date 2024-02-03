@@ -2,7 +2,7 @@ use chrono::{Datelike, Days, Duration, NaiveDateTime};
 use serde::Deserialize;
 
 use super::budget::Budget;
-use super::goal::Goal;
+use super::goal::{Goal, Slot};
 use super::{calendar::Calendar, goal::Filters};
 use crate::models::budget::TimeBudget;
 use crate::models::calendar::Hour;
@@ -32,6 +32,7 @@ impl Activity {
         filter_option: Option<Filters>,
         adjusted_goal_start: NaiveDateTime,
         adjusted_goal_deadline: NaiveDateTime,
+        not_on: Option<Vec<Slot>>,
     ) -> Vec<Option<Weak<Hour>>> {
         let mut compatible_hours_overlay: Vec<Option<Weak<Hour>>> =
             Vec::with_capacity(calendar.hours.capacity());
@@ -191,6 +192,7 @@ impl Activity {
                 goal.filters.clone(),
                 adjusted_goal_start,
                 adjusted_goal_deadline,
+                goal.not_on.clone(),
             );
 
             let activity = Activity {
@@ -246,6 +248,7 @@ impl Activity {
                     Some(filter_option.clone()),
                     activity_start,
                     activity_deadline,
+                    goal.not_on.clone(),
                 );
 
                 if let Some(config) = &goal.budget_config {
@@ -295,6 +298,7 @@ impl Activity {
                 .start_date_time
                 .sub(Duration::hours(24)) //TODO: fix magic number
                 .add(Duration::hours(time_budget.calendar_end_index as i64)),
+            goal_to_use.not_on.clone(),
         );
         let max_hours = time_budget.max_scheduled - time_budget.scheduled;
 
@@ -332,6 +336,7 @@ impl Activity {
                 .start_date_time
                 .sub(Duration::hours(24)) //TODO: fix magic number
                 .add(Duration::hours(time_budget.calendar_end_index as i64)),
+            goal_to_use.not_on.clone(),
         );
 
         let max_hours = time_budget.max_scheduled - time_budget.scheduled;
