@@ -103,7 +103,6 @@ pub fn run_scheduler(
     let budget_goal_activities: Vec<Activity> =
         activity_generator::generate_budget_goal_activities(&calendar, goals);
     dbg!(&budget_goal_activities);
-
     dbg!(&calendar);
 
     activity_placer::place(&mut calendar, simple_goal_activities);

@@ -270,6 +270,7 @@ impl Calendar {
                         }
                     }
                 }
+
                 let descendant_of_which_to_add_children = descendants.pop().unwrap();
                 if goal_map
                     .get(&descendant_of_which_to_add_children)
@@ -288,6 +289,7 @@ impl Calendar {
                     );
                 }
                 descendants_added.push(descendant_of_which_to_add_children);
+
             }
         }
     }
