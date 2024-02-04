@@ -186,9 +186,11 @@ impl Activity {
                 // or yield flex 1 or maximum of the set from activity.flex()?
             };
 
+            let filters_option: Option<Filters> = calendar.get_filters_for(goal.id.clone());
+
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
                 calendar,
-                goal.filters.clone(),
+                filters_option,
                 adjusted_goal_start,
                 adjusted_goal_deadline,
             );
