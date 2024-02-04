@@ -218,7 +218,7 @@ impl Activity {
         goal: &Goal,
         calendar: &Calendar,
     ) -> Vec<Activity> {
-        if goal.children.is_some() || goal.filters.as_ref().is_none() {
+        if goal.filters.as_ref().is_none() {
             return vec![];
         }
         if let Some(config) = &goal.budget_config {
