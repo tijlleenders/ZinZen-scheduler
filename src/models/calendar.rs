@@ -266,8 +266,8 @@ impl Calendar {
                     if let Some(goal) = goal_map.get(&descendant_of_which_to_add_children) {
                         if let Some(children) = &goal.children {
                             descendants.extend(children.clone());
-                            descendants_added.push(descendant_of_which_to_add_children);
                         }
+                        descendants_added.push(descendant_of_which_to_add_children);
                     }
                 }
             }

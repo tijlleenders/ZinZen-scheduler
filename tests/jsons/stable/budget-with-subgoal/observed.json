@@ -139,16 +139,16 @@
           "taskid": 14,
           "goalid": "678eab49-960e-4519-ad0b-031a2f22aaba",
           "title": "Work 💪🏽",
-          "duration": 8,
+          "duration": 7,
           "start": "2024-01-12T06:00:00",
-          "deadline": "2024-01-12T14:00:00"
+          "deadline": "2024-01-12T13:00:00"
         },
         {
           "taskid": 15,
           "goalid": "free",
           "title": "free",
-          "duration": 10,
-          "start": "2024-01-12T14:00:00",
+          "duration": 11,
+          "start": "2024-01-12T13:00:00",
           "deadline": "2024-01-13T00:00:00"
         }
       ]
@@ -183,7 +183,7 @@
   "impossible": [
     {
       "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
-      "hoursMissing": 6,
+      "hoursMissing": 5,
       "periodStartDateTime": "2024-01-09T00:00:00",
       "periodEndDateTime": "2024-01-10T00:00:00"
     },
@@ -213,7 +213,7 @@
     },
     {
       "id": "678eab49-960e-4519-ad0b-031a2f22aaba",
-      "hoursMissing": 6,
+      "hoursMissing": 5,
       "periodStartDateTime": "2024-01-09T00:00:00",
       "periodEndDateTime": "2024-01-10T00:00:00"
     },
