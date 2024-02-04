@@ -270,26 +270,6 @@ impl Calendar {
                         }
                     }
                 }
-
-                let descendant_of_which_to_add_children = descendants.pop().unwrap();
-                if goal_map
-                    .get(&descendant_of_which_to_add_children)
-                    .unwrap()
-                    .children
-                    .is_some()
-                {
-                    descendants.extend(
-                        goal_map
-                            .get(&descendant_of_which_to_add_children)
-                            .unwrap()
-                            .children
-                            .as_ref()
-                            .unwrap()
-                            .clone(),
-                    );
-                }
-                descendants_added.push(descendant_of_which_to_add_children);
-
             }
         }
     }
