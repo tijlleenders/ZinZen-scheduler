@@ -1,10 +1,48 @@
 use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calendar, goal::Goal};
+use std::slice::Iter;
 
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
-    goals
+    preprocess_goals(goals)
         .iter()
         .flat_map(|goal| Activity::get_activities_from_simple_goal(goal, calendar))
         .collect::<Vec<_>>()
+}
+
+pub fn preprocess_goals(goals: &[Goal]) -> Vec<Goal> {
+    let mut out = vec![];
+    let mut iter = goals.iter();
+    while iter.clone().peekable().peek().is_some() {
+        let _ = preprocess_goals_rec(&mut out, &mut iter, None);
+    }
+    out
+}
+pub fn preprocess_goals_rec(
+    new_goals: &mut Vec<Goal>,
+    iter: &mut Iter<Goal>,
+    parent: Option<&Goal>,
+) -> Option<usize> {
+    if let Some(goal) = iter.next() {
+        let mut goal = goal.clone();
+        let mut min_duration = goal.min_duration;
+        if let Some(parent) = parent {
+            goal.start = parent.start;
+            goal.deadline = parent.deadline;
+        }
+        if let Some(children) = &goal.children {
+            for _child in children {
+                if let Some(duration) = preprocess_goals_rec(new_goals, iter, Some(&goal)) {
+                    min_duration = min_duration
+                        .map(|md| md.checked_sub(duration))
+                        .unwrap_or_default();
+                    goal.min_duration = min_duration
+                }
+            }
+        }
+        new_goals.push(goal);
+        min_duration
+    } else {
+        None
+    }
 }
 
 pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {

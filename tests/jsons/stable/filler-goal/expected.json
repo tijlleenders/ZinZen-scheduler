@@ -31,7 +31,7 @@
           "taskid": 3,
           "goalid": "1",
           "title": "Plan a party",
-          "duration": 1,
+          "duration": 2,
           "start": "2022-01-01T12:00:00",
           "deadline": "2022-01-01T14:00:00"
         },
