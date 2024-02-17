@@ -309,7 +309,7 @@ impl Activity {
                 .start_date_time
                 .sub(Duration::hours(24)) //TODO: fix magic number
                 .add(Duration::hours(time_budget.calendar_end_index as i64)),
-                goal_to_use.not_on.clone(),
+            goal_to_use.not_on.clone(),
         );
         let max_hours = time_budget.max_scheduled - time_budget.scheduled;
 
@@ -347,7 +347,7 @@ impl Activity {
                 .start_date_time
                 .sub(Duration::hours(24)) //TODO: fix magic number
                 .add(Duration::hours(time_budget.calendar_end_index as i64)),
-                goal_to_use.not_on.clone(),
+            goal_to_use.not_on.clone(),
         );
 
         let max_hours = time_budget.max_scheduled - time_budget.scheduled;
