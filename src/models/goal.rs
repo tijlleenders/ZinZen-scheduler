@@ -19,6 +19,13 @@ pub struct Goal {
     pub min_duration: Option<usize>,
     pub title: String,
     pub children: Option<Vec<String>>,
+    pub not_on: Option<Vec<Slot>>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Slot {
+    pub start: NaiveDateTime,
+    pub end: NaiveDateTime,
 }
 
 #[derive(Deserialize, Debug, Clone)]

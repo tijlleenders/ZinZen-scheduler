@@ -2,7 +2,7 @@ use chrono::{Datelike, Days, Duration, NaiveDateTime};
 use serde::Deserialize;
 
 use super::budget::Budget;
-use super::goal::Goal;
+use super::goal::{Goal, Slot};
 use super::{calendar::Calendar, goal::Filters};
 use crate::models::budget::TimeBudget;
 use crate::models::calendar::Hour;
@@ -32,6 +32,7 @@ impl Activity {
         filter_option: Option<Filters>,
         adjusted_goal_start: NaiveDateTime,
         adjusted_goal_deadline: NaiveDateTime,
+        not_on: Option<Vec<Slot>>,
     ) -> Vec<Option<Weak<Hour>>> {
         let mut compatible_hours_overlay: Vec<Option<Weak<Hour>>> =
             Vec::with_capacity(calendar.hours.capacity());
@@ -65,6 +66,15 @@ impl Activity {
                     } else {
                         compatible = false;
                     }
+                }
+            }
+
+            let not_on = not_on.clone().unwrap_or_default();
+            for slot in not_on.iter() {
+                if hour_index >= calendar.get_index_of(slot.start)
+                    && hour_index < calendar.get_index_of(slot.end)
+                {
+                    compatible = false;
                 }
             }
 
@@ -191,6 +201,7 @@ impl Activity {
                 goal.filters.clone(),
                 adjusted_goal_start,
                 adjusted_goal_deadline,
+                goal.not_on.clone(),
             );
 
             let activity = Activity {
@@ -246,6 +257,7 @@ impl Activity {
                     Some(filter_option.clone()),
                     activity_start,
                     activity_deadline,
+                    goal.not_on.clone(),
                 );
 
                 if let Some(config) = &goal.budget_config {
@@ -284,9 +296,19 @@ impl Activity {
     ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = vec![];
 
-        let compatible_hours_overlay =
-            Self::get_compatible_overlay_hours(goal_to_use, calendar, time_budget);
-
+        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+            calendar,
+            goal_to_use.filters.clone(),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_start_index as i64)),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_end_index as i64)),
+            goal_to_use.not_on.clone(),
+        );
         let max_hours = time_budget.max_scheduled - time_budget.scheduled;
 
         activities.push(Activity {
@@ -312,8 +334,19 @@ impl Activity {
     ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = vec![];
 
-        let compatible_hours_overlay =
-            Self::get_compatible_overlay_hours(goal_to_use, calendar, time_budget);
+        let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+            calendar,
+            goal_to_use.filters.clone(),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_start_index as i64)),
+            calendar
+                .start_date_time
+                .sub(Duration::hours(24)) //TODO: fix magic number
+                .add(Duration::hours(time_budget.calendar_end_index as i64)),
+            goal_to_use.not_on.clone(),
+        );
 
         let max_hours = time_budget.max_scheduled - time_budget.scheduled;
 
@@ -436,25 +469,6 @@ impl Activity {
             empty_overlay.push(None);
         }
         self.calendar_overlay = empty_overlay;
-    }
-
-    fn get_compatible_overlay_hours(
-        goal_to_use: &Goal,
-        calendar: &Calendar,
-        time_budget: &TimeBudget,
-    ) -> Vec<Option<Weak<Hour>>> {
-        Activity::get_compatible_hours_overlay(
-            calendar,
-            goal_to_use.filters.clone(),
-            calendar
-                .start_date_time
-                .sub(Duration::hours(24)) //TODO: fix magic number
-                .add(Duration::hours(time_budget.calendar_start_index as i64)),
-            calendar
-                .start_date_time
-                .sub(Duration::hours(24)) //TODO: fix magic number
-                .add(Duration::hours(time_budget.calendar_end_index as i64)),
-        )
     }
 }
 
