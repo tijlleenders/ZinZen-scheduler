@@ -244,6 +244,7 @@ impl Calendar {
                             originating_goal_id: budget_id.clone(),
                             participating_goals: descendants_added,
                             time_budgets: get_time_budgets_from(self, goal),
+                            time_filters: goal.filters.clone().unwrap(),
                         });
                         continue;
                     }
@@ -258,6 +259,7 @@ impl Calendar {
                             originating_goal_id: budget_id.clone(),
                             participating_goals: descendants_added,
                             time_budgets: get_time_budgets_from(self, goal),
+                            time_filters: goal.filters.clone().unwrap(),
                         });
                         break;
                     }
@@ -266,8 +268,8 @@ impl Calendar {
                     if let Some(goal) = goal_map.get(&descendant_of_which_to_add_children) {
                         if let Some(children) = &goal.children {
                             descendants.extend(children.clone());
-                            descendants_added.push(descendant_of_which_to_add_children);
                         }
+                        descendants_added.push(descendant_of_which_to_add_children);
                     }
                 }
             }
@@ -316,6 +318,15 @@ impl Calendar {
             }
         }
         impossible_activities
+    }
+
+    pub(crate) fn get_filters_for(&self, id: String) -> Option<super::goal::Filters> {
+        for budget in self.budgets.iter() {
+            if budget.participating_goals.contains(&id) {
+                return Some(budget.time_filters.clone());
+            }
+        }
+        None
     }
 }
 impl Debug for Calendar {

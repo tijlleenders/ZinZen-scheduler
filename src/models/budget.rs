@@ -6,13 +6,18 @@ use std::{
 use chrono::{Datelike, Duration};
 use serde::Deserialize;
 
-use super::{activity::ActivityType, calendar::Calendar, goal::Goal};
+use super::{
+    activity::ActivityType,
+    calendar::Calendar,
+    goal::{Filters, Goal},
+};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Budget {
     pub originating_goal_id: String,
     pub participating_goals: Vec<String>,
     pub time_budgets: Vec<TimeBudget>,
+    pub time_filters: Filters,
 }
 impl Budget {
     pub fn reduce_for_(&mut self, goal: &str, duration_offset: usize) {

@@ -196,9 +196,11 @@ impl Activity {
                 // or yield flex 1 or maximum of the set from activity.flex()?
             };
 
+            let filters_option: Option<Filters> = calendar.get_filters_for(goal.id.clone());
+
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
                 calendar,
-                goal.filters.clone(),
+                filters_option,
                 adjusted_goal_start,
                 adjusted_goal_deadline,
                 goal.not_on.clone(),
@@ -227,7 +229,7 @@ impl Activity {
         goal: &Goal,
         calendar: &Calendar,
     ) -> Vec<Activity> {
-        if goal.children.is_some() || goal.filters.as_ref().is_none() {
+        if goal.filters.as_ref().is_none() {
             return vec![];
         }
         if let Some(config) = &goal.budget_config {
