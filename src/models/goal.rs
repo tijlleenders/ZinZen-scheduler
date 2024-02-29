@@ -39,7 +39,13 @@ pub struct BudgetConfig {
 }
 
 impl Goal {
-    pub fn get_adj_start_deadline(&self, calendar: &Calendar) -> (NaiveDateTime, NaiveDateTime) {
+    pub fn get_adj_start_deadline(
+        &self,
+        calendar: &Calendar,
+        parent_goal: Option<Goal>,
+    ) -> (NaiveDateTime, NaiveDateTime) {
+       
+
         let mut adjusted_goal_start = self.start;
         if self.start.year() == 1970 {
             adjusted_goal_start = calendar.start_date_time;
@@ -48,6 +54,17 @@ impl Goal {
         if self.deadline.year() == 1970 {
             adjusted_goal_deadline = calendar.end_date_time;
         }
+
+        // Make sure child goal not fall outside of parent goal start and deadline
+        if let Some(parent_goal) = parent_goal { // means this is a child goal
+            if adjusted_goal_start < parent_goal.start {
+                adjusted_goal_start = parent_goal.start;
+            }
+            if adjusted_goal_deadline > parent_goal.deadline {
+                adjusted_goal_deadline = parent_goal.deadline;
+            }
+        }
+
         if self.filters.is_none() {
             return (adjusted_goal_start, adjusted_goal_deadline);
         }
@@ -70,5 +87,19 @@ impl Goal {
             ));
         }
         (adjusted_goal_start, adjusted_goal_deadline)
+    }
+
+    /// Get parent goal of this goal based in provided list of goals
+    pub fn get_parent_goal(&self, goals: &Vec<Goal>) -> Option<Goal> {
+        let parent_goal = goals.iter().find(|goal| {
+            if let Some(childs) = &goal.children {
+                childs.contains(&self.id)
+            }
+            else {
+                false
+            }
+        });
+
+        parent_goal.cloned()
     }
 }

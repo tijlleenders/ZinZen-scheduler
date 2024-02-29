@@ -46,6 +46,7 @@ impl Calendar {
         for _ in 0..hours.capacity() {
             hours.push(Rc::new(Hour::Free));
         }
+        println!("DEBUG::hours: {:?}", hours);
         Self {
             start_date_time,
             end_date_time,

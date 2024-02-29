@@ -189,6 +189,7 @@ impl Activity {
     pub(crate) fn get_activities_from_budget_goal(
         goal: &Goal,
         calendar: &Calendar,
+        parent_goal: Option<Goal>,
     ) -> Vec<Activity> {
         if goal.children.is_some() || goal.filters.as_ref().is_none() {
             return vec![];
@@ -196,7 +197,8 @@ impl Activity {
         if goal.budget_config.as_ref().unwrap().min_per_day == 0 {
             return vec![];
         }
-        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
+        let (adjusted_goal_start, adjusted_goal_deadline) =
+            goal.get_adj_start_deadline(calendar, parent_goal);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
         let filter_option = goal.filters.clone().unwrap();
 
@@ -249,11 +251,13 @@ impl Activity {
     pub(crate) fn get_activities_from_simple_goal(
         goal: &Goal,
         calendar: &Calendar,
+        parent_goal: Option<Goal>,
     ) -> Vec<Activity> {
-        if goal.children.is_some() || goal.filters.as_ref().is_some() {
+        if goal.filters.as_ref().is_some() {
             return vec![];
         }
-        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
+        let (adjusted_goal_start, adjusted_goal_deadline) =
+            goal.get_adj_start_deadline(calendar, parent_goal);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
         let activity_total_duration = goal.min_duration.unwrap();
