@@ -260,7 +260,7 @@ impl Activity {
             goal.get_adj_start_deadline(calendar, parent_goal);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
-        let activity_total_duration = goal.min_duration.unwrap();
+        let activity_total_duration = goal.min_duration.unwrap_or(1);
         let mut min_block_size = activity_total_duration;
         if activity_total_duration > 8 {
             min_block_size = 1;
