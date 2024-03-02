@@ -189,7 +189,6 @@ impl Activity {
     pub(crate) fn get_activities_from_budget_goal(
         goal: &Goal,
         calendar: &Calendar,
-        parent_goal: Option<Goal>,
     ) -> Vec<Activity> {
         if goal.children.is_some() || goal.filters.as_ref().is_none() {
             return vec![];
@@ -198,7 +197,7 @@ impl Activity {
             return vec![];
         }
         let (adjusted_goal_start, adjusted_goal_deadline) =
-            goal.get_adj_start_deadline(calendar, parent_goal);
+            goal.get_adj_start_deadline(calendar, None);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
         let filter_option = goal.filters.clone().unwrap();
 
