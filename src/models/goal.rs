@@ -44,8 +44,6 @@ impl Goal {
         calendar: &Calendar,
         parent_goal: Option<Goal>,
     ) -> (NaiveDateTime, NaiveDateTime) {
-       
-
         let mut adjusted_goal_start = self.start;
         if self.start.year() == 1970 {
             adjusted_goal_start = calendar.start_date_time;
@@ -56,7 +54,8 @@ impl Goal {
         }
 
         // Make sure child goal not fall outside of parent goal start and deadline
-        if let Some(parent_goal) = parent_goal { // means this is a child goal
+        if let Some(parent_goal) = parent_goal {
+            // means this is a child goal
             if adjusted_goal_start < parent_goal.start {
                 adjusted_goal_start = parent_goal.start;
             }
@@ -90,12 +89,11 @@ impl Goal {
     }
 
     /// Get parent goal of this goal based in provided list of goals
-    pub fn get_parent_goal(&self, goals: &Vec<Goal>) -> Option<Goal> {
+    pub fn get_parent_goal(&self, goals: &[Goal]) -> Option<Goal> {
         let parent_goal = goals.iter().find(|goal| {
             if let Some(childs) = &goal.children {
                 childs.contains(&self.id)
-            }
-            else {
+            } else {
                 false
             }
         });

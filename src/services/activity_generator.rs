@@ -3,7 +3,7 @@ use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calend
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &Vec<Goal>) -> Vec<Activity> {
     let mut activities: Vec<Activity> = Vec::with_capacity(goals.capacity());
     for goal in goals {
-        let parent_goal = goal.get_parent_goal(&goals);
+        let parent_goal = goal.get_parent_goal(goals);
 
         let mut goal_activities =
             Activity::get_activities_from_simple_goal(goal, calendar, parent_goal);
@@ -91,7 +91,7 @@ pub fn generate_top_up_week_budget_activities(
     top_up_activities
 }
 
-pub fn adjust_parent_activities(activities: &Vec<Activity>, goals: &Vec<Goal>) -> Vec<Activity> {
+pub fn adjust_parent_activities(activities: &[Activity], goals: &[Goal]) -> Vec<Activity> {
     let mut activities_to_return = vec![];
     // >>>
 
@@ -121,11 +121,11 @@ pub fn adjust_parent_activities(activities: &Vec<Activity>, goals: &Vec<Goal>) -
             }
             None
         })
-        .flat_map(|activities| activities)
+        .flatten()
         .collect();
 
     if parent_activities.is_empty() {
-        return activities.clone();
+        return activities.to_owned();
     }
 
     // For each parent_activity
@@ -146,8 +146,8 @@ pub fn adjust_parent_activities(activities: &Vec<Activity>, goals: &Vec<Goal>) -
     });
 
     // Unify parent_activities and child_activities based on Activity.id into single list which is activities_to_return
-    activities_to_return.extend(parent_activities.into_iter());
-    activities_to_return.extend(child_activities.into_iter());
+    activities_to_return.extend(parent_activities);
+    activities_to_return.extend(child_activities);
 
     // Sort activities_to_return like the incoming parameter activities
     // activities_to_return.sort_by_key(|activity| activities.iter().position(|&x| x == activity));
