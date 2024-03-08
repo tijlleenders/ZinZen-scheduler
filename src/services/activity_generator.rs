@@ -115,15 +115,11 @@ pub fn adjust_parent_activities(activities: &Vec<Activity>, goals: &Vec<Goal>) -
                     .collect();
                 let child_activities_for_parent: Vec<Activity> = children
                     .iter()
-                    .map(|child_id| {
-                        if let Some(child_activity) = activities
+                    .filter_map(|child_id| {
+                        activities
                             .iter()
                             .find(|activity| activity.goal_id == *child_id)
-                        {
-                            child_activity.clone()
-                        } else {
-                            panic!("Could not find child activity with goal id {}", child_id);
-                        }
+                            .cloned()
                     })
                     .collect();
                 child_activities.extend(child_activities_for_parent);
