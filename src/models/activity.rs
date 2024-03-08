@@ -241,7 +241,6 @@ impl Activity {
                 duration_left: goal.budget_config.as_ref().unwrap().min_per_day,
                 status: Status::Unprocessed,
             };
-            dbg!(&activity);
             activities.push(activity);
         }
         activities
@@ -295,7 +294,6 @@ impl Activity {
             duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
             status: Status::Unprocessed,
         };
-        dbg!(&activity);
         activities.push(activity);
 
         activities

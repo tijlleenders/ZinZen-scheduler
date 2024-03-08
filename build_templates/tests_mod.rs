@@ -45,15 +45,12 @@ mod TEST_MODULE_NAME {
         //generate and place simple goal activities
         let simple_goal_activities =
             activity_generator::generate_simple_goal_activities(&calendar, &input.goals);
-        dbg!(&simple_goal_activities);
         let simple_goal_activities = adjust_parent_activities(&simple_goal_activities, &input.goals);
-        dbg!(&simple_goal_activities);
         activity_placer::place(&mut calendar, simple_goal_activities);
 
         //generate and place budget goal activities
         let budget_goal_activities: Vec<Activity> =
             activity_generator::generate_budget_goal_activities(&calendar, &input.goals);
-        dbg!(&calendar);
         activity_placer::place(&mut calendar, budget_goal_activities);
 
         calendar.log_impossible_min_day_budgets();

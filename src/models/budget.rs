@@ -157,6 +157,5 @@ pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget
             start_pointer = hour_index
         }
     }
-    dbg!(&time_budgets);
     time_budgets
 }

@@ -1,25 +1,21 @@
 use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calendar, goal::Goal};
 
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &Vec<Goal>) -> Vec<Activity> {
-    dbg!(&goals);
     let mut activities: Vec<Activity> = Vec::with_capacity(goals.capacity());
     for goal in goals {
         let parent_goal = goal.get_parent_goal(&goals);
 
         let mut goal_activities =
             Activity::get_activities_from_simple_goal(goal, calendar, parent_goal);
-        dbg!(&goal_activities);
         activities.append(&mut goal_activities);
     }
     activities
 }
 
 pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &Vec<Goal>) -> Vec<Activity> {
-    dbg!(&goals);
     let mut activities: Vec<Activity> = Vec::with_capacity(goals.capacity());
     for goal in goals {
         let mut goal_activities = Activity::get_activities_from_budget_goal(goal, calendar);
-        dbg!(&goal_activities);
         activities.append(&mut goal_activities);
     }
     activities
@@ -66,7 +62,6 @@ pub fn generate_get_to_week_min_budget_activities(
             }
         }
     }
-    dbg!(&get_to_week_min_budget_activities);
     get_to_week_min_budget_activities
 }
 
@@ -93,7 +88,6 @@ pub fn generate_top_up_week_budget_activities(
             }
         }
     }
-    dbg!(&top_up_activities);
     top_up_activities
 }
 

@@ -75,10 +75,7 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) {
             activities[act_index_to_schedule.unwrap()].status = Status::Scheduled;
             (activities[act_index_to_schedule.unwrap()]).release_claims();
         }
-
-        dbg!(&calendar);
     }
-    dbg!(&calendar);
 }
 
 fn find_act_index_to_schedule(activities: &[Activity]) -> Option<usize> {
