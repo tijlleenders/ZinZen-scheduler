@@ -10,7 +10,6 @@ fn main() {
     let file = fs::File::open(path).expect("file should open read only");
     let json: Value = serde_json::from_reader(file).expect("file should be proper JSON");
     let input: Input = serde_json::from_value(json).unwrap();
-    dbg!(&input);
     run_scheduler(input.start_date, input.end_date, &input.goals);
 }
 

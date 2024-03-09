@@ -76,7 +76,6 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Option<(
             (activities[act_index_to_schedule?]).release_claims();
         }
     }
-    dbg!(&calendar);
     Some(())
 }
 

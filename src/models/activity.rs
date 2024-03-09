@@ -224,7 +224,6 @@ impl Activity {
                 duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
                 status: Status::Unprocessed,
             };
-            dbg!(&activity);
             activities.push(activity);
         }
 
@@ -290,7 +289,6 @@ impl Activity {
                         duration_left: config.min_per_day,
                         status: Status::Unprocessed,
                     };
-                    dbg!(&activity);
                     activities.push(activity);
                 }
             }

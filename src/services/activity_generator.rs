@@ -56,7 +56,6 @@ pub fn generate_get_to_week_min_budget_activities(
             }
         }
     }
-    dbg!(&get_to_week_min_budget_activities);
     Some(get_to_week_min_budget_activities)
 }
 
@@ -81,7 +80,6 @@ pub fn generate_top_up_week_budget_activities(
             }
         }
     }
-    dbg!(&top_up_activities);
     top_up_activities
 }
 
