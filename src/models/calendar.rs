@@ -79,8 +79,12 @@ impl Calendar {
                 "can't request an index more than 1 day outside of calendar bounds for date {:?}\nCalendar starts at {:?} and ends at {:?}", date_time, self.start_date_time, self.end_date_time
             )
         }
-        (date_time - self.start_date_time.checked_sub_days(Days::new(1)).unwrap()).num_hours()
-            as usize
+        (date_time
+            - self
+                .start_date_time
+                .checked_sub_days(Days::new(1))
+                .unwrap_or_default())
+        .num_hours() as usize
     }
 
     pub fn print(&self) -> FinalTasks {
@@ -190,35 +194,37 @@ impl Calendar {
         }
     }
 
-    pub fn add_budgets_from(&mut self, goals: &Vec<Goal>) {
+    pub fn add_budgets_from(&mut self, goals: &[Goal]) {
         //fill goal_map and budget_ids
         let mut goal_map: HashMap<String, Goal> = HashMap::new();
         let mut budget_ids: Vec<String> = vec![];
         for goal in goals {
             goal_map.insert(goal.id.clone(), goal.clone());
-            match goal.budget_config.as_ref() {
-                Some(budget_config) => {
-                    //Check if budget_config is realistic
+            if let Some(budget_config) = &goal.budget_config {
+                //Check if budget_config is realistic
 
-                    //check 1
-                    let mut min_per_day_sum = 0;
-                    for _ in goal.filters.clone().unwrap().on_days {
+                //check 1
+                let mut min_per_day_sum = 0;
+                if let Some(filters) = &goal.filters {
+                    for _ in &filters.on_days {
                         min_per_day_sum += budget_config.min_per_day;
                     }
-                    if min_per_day_sum > budget_config.min_per_week {
-                        panic!("Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}", min_per_day_sum,budget_config.min_per_week, goal.title);
-                    }
-
-                    //check 2
-                    if budget_config.max_per_day > budget_config.max_per_week {
-                        panic!(
-                            "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
-                            budget_config.max_per_day, budget_config.max_per_week, goal.title
-                        );
-                    }
-                    budget_ids.push(goal.id.clone());
                 }
-                None => continue,
+                if min_per_day_sum > budget_config.min_per_week {
+                    panic!(
+                        "Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}",
+                        min_per_day_sum, budget_config.min_per_week, goal.title
+                    );
+                }
+
+                //check 2
+                if budget_config.max_per_day > budget_config.max_per_week {
+                    panic!(
+                        "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
+                        budget_config.max_per_day, budget_config.max_per_week, goal.title
+                    );
+                }
+                budget_ids.push(goal.id.clone());
             }
         }
 
@@ -228,47 +234,44 @@ impl Calendar {
             let mut descendants_added: Vec<String> = vec![budget_id.clone()];
             //get the first children if any
             let mut descendants: Vec<String> = vec![];
-            match goal_map.get(&budget_id).as_ref().unwrap().children.as_ref() {
-                Some(children) => {
-                    descendants.append(children.clone().as_mut());
-                }
-                None => {
-                    self.budgets.push(Budget {
-                        originating_goal_id: budget_id.clone(),
-                        participating_goals: descendants_added,
-                        time_budgets: get_time_budgets_from(
-                            self,
-                            goal_map.get(&budget_id).as_ref().unwrap(),
-                        ),
-                    });
-                    continue;
+            if let Some(goal) = goal_map.get(&budget_id) {
+                match &goal.children {
+                    Some(children) => {
+                        descendants.append(children.clone().as_mut());
+                    }
+                    None => {
+                        self.budgets.push(Budget {
+                            originating_goal_id: budget_id.clone(),
+                            participating_goals: descendants_added,
+                            time_budgets: get_time_budgets_from(self, goal),
+                            time_filters: goal.filters.clone().unwrap(),
+                        });
+                        continue;
+                    }
                 }
             }
 
             loop {
                 //add children of each descendant until no more found
                 if descendants.is_empty() {
-                    self.budgets.push(Budget {
-                        originating_goal_id: budget_id.clone(),
-                        participating_goals: descendants_added,
-                        time_budgets: get_time_budgets_from(
-                            self,
-                            goal_map.get(&budget_id).as_ref().unwrap(),
-                        ),
-                    });
-                    break;
+                    if let Some(goal) = goal_map.get(&budget_id) {
+                        self.budgets.push(Budget {
+                            originating_goal_id: budget_id.clone(),
+                            participating_goals: descendants_added,
+                            time_budgets: get_time_budgets_from(self, goal),
+                            time_filters: goal.filters.clone().unwrap(),
+                        });
+                        break;
+                    }
                 }
-                let descendant_of_which_to_add_children = descendants.pop().unwrap();
-                descendants.extend(
-                    goal_map
-                        .get(&descendant_of_which_to_add_children)
-                        .unwrap()
-                        .children
-                        .as_ref()
-                        .unwrap()
-                        .clone(),
-                );
-                descendants_added.push(descendant_of_which_to_add_children);
+                if let Some(descendant_of_which_to_add_children) = descendants.pop() {
+                    if let Some(goal) = goal_map.get(&descendant_of_which_to_add_children) {
+                        if let Some(children) = &goal.children {
+                            descendants.extend(children.clone());
+                        }
+                        descendants_added.push(descendant_of_which_to_add_children);
+                    }
+                }
             }
         }
     }
@@ -281,6 +284,17 @@ impl Calendar {
     }
 
     pub fn log_impossible_min_day_budgets(&mut self) {
+        let impossible_activities = self.impossible_activities();
+        self.impossible_activities.extend(impossible_activities);
+    }
+
+    pub fn log_impossible_min_week_budgets(&mut self) {
+        //TODO: merge with log_imossible_min_day_budgets, passing budget type as param
+        let impossible_activities = self.impossible_activities();
+        self.impossible_activities.extend(impossible_activities);
+    }
+
+    fn impossible_activities(&mut self) -> Vec<ImpossibleActivity> {
         let mut impossible_activities = vec![];
         for budget in &self.budgets {
             for time_budget in &budget.time_budgets {
@@ -303,69 +317,49 @@ impl Calendar {
                 }
             }
         }
-        self.impossible_activities.extend(impossible_activities);
+        impossible_activities
     }
 
-    pub fn log_impossible_min_week_budgets(&mut self) {
-        //TODO: merge with log_imossible_min_day_budgets, passing budget type as param
-        let mut impossible_activities = vec![];
-        for budget in &self.budgets {
-            for time_budget in &budget.time_budgets {
-                if time_budget.time_budget_type == TimeBudgetType::Week {
-                    // Good
-                } else {
-                    continue;
-                }
-                if time_budget.scheduled < time_budget.min_scheduled {
-                    impossible_activities.push(ImpossibleActivity {
-                        id: budget.originating_goal_id.clone(),
-                        hours_missing: time_budget.min_scheduled - time_budget.scheduled,
-                        period_start_date_time: self
-                            .start_date_time
-                            .add(Duration::hours(time_budget.calendar_start_index as i64)),
-                        period_end_date_time: self
-                            .start_date_time
-                            .add(Duration::hours(time_budget.calendar_end_index as i64)),
-                    });
-                }
+    pub(crate) fn get_filters_for(&self, id: String) -> Option<super::goal::Filters> {
+        for budget in self.budgets.iter() {
+            if budget.participating_goals.contains(&id) {
+                return Some(budget.time_filters.clone());
             }
         }
-        self.impossible_activities.extend(impossible_activities);
+        None
     }
 }
 impl Debug for Calendar {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
-        writeln!(f).unwrap();
+        writeln!(f)?;
         for index in 0..self.hours.capacity() {
-            write!(f, "{:?} ", self.get_week_day_of(index)).unwrap();
+            write!(f, "{:?} ", self.get_week_day_of(index))?;
             let mut index_string = index.to_string();
             if index > 23 {
                 index_string = index.to_string() + " " + &(index % 24).to_string();
             }
             if self.hours[index] == Rc::new(Hour::Free) {
                 if Rc::weak_count(&self.hours[index]) == 0 {
-                    writeln!(f, "{} -", index_string).unwrap();
+                    writeln!(f, "{} -", index_string)?;
                 } else {
                     writeln!(
                         f,
                         "{} {:?} claims",
                         index_string,
                         Rc::weak_count(&self.hours[index])
-                    )
-                    .unwrap();
+                    )?;
                 }
             } else {
-                writeln!(f, "{} {:?}", index_string, self.hours[index]).unwrap();
+                writeln!(f, "{} {:?}", index_string, self.hours[index])?;
             }
         }
         writeln!(
             f,
             "{:?} impossible activities",
             self.impossible_activities.len()
-        )
-        .unwrap();
+        )?;
         for budget in &self.budgets {
-            writeln!(f, "{:?}", &budget).unwrap();
+            writeln!(f, "{:?}", &budget)?;
         }
         Ok(())
     }

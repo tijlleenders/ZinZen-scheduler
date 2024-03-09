@@ -2,7 +2,7 @@
 name = "zinzen"
 version = "0.2.0"
 edition = "2021"
-license = "AGPL-3.0"
+license = "AGPL-3.0-or-later"
 keywords = ["zinzen", "scheduler", "todo"]
 description = "Algorithm for auto-scheduling time-constrained tasks on a timeline"
 homepage = "https://github.com/tijlleenders/ZinZen-scheduler"
@@ -24,10 +24,6 @@ default = ["new-tests", "with-logging"]
 crate-type = ['cdylib', 'lib']
 name = 'scheduler'
 path = "src/lib.rs"
-
-[[bin]]
-name = "flamegraph"
-path = "src/bin/flamegraph-bin.rs"
 
 
 [profile.release]

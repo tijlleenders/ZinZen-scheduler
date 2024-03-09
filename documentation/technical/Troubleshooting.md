@@ -43,13 +43,3 @@ Caused by:
 * solution: add the flag '--features skip-test-generation' to the publish command. For more information see [ADR-001: Generation of end-to-end tests happens with a feature flag
   ](../ADR/001-skip-generation-of-tests-feature-flag.md).
 
-
-### Running flamegraph
-* issue: flamegraph fails when running on MacOS with message `dtrace: failed to initialize dtrace: DTrace requires additional privileges 
-failed to sample program`
-* analysis: according to this link: https://github.com/flamegraph-rs/flamegraph/issues/31 flamegraph only works on MacOS by disabling 
-SIP as described in https://developer.apple.com/library/archive/documentation/Security/Conceptual/System_Integrity_Protection_Guide/ConfiguringSystemIntegrityProtection/ConfiguringSystemIntegrityProtection.html#//apple_ref/doc/uid/TP40016462-CH5-SW1
-This seems like not a recommended thing to do
-* solution: let someone not on MacOS run flamegraph ;) (workaround to be decided)
-
-
