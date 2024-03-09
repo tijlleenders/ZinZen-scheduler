@@ -183,9 +183,13 @@ impl Activity {
         calendar: &Calendar,
         parent_goal: Option<Goal>,
     ) -> Vec<Activity> {
-        if goal.children.is_some() || goal.filters.as_ref().is_some() {
+        if goal.filters.as_ref().is_some() {
             return vec![];
         }
+        if goal.children.is_some() && goal.min_duration.is_none() {
+            return vec![];
+        }
+
         let (adjusted_goal_start, adjusted_goal_deadline) =
             goal.get_adj_start_deadline(calendar, parent_goal);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
