@@ -254,7 +254,6 @@ impl Activity {
         if goal.filters.as_ref().is_some() {
             return vec![];
         }
-        // Avoid goals which have children and have no start or deadline and have no min duration
         if goal.children.is_some()
             && goal.start.year() == 1970
             && goal.deadline.year() == 1970
