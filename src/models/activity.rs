@@ -254,11 +254,7 @@ impl Activity {
         if goal.filters.as_ref().is_some() {
             return vec![];
         }
-        if goal.children.is_some()
-            && goal.start.year() == 1970
-            && goal.deadline.year() == 1970
-            && goal.min_duration.is_none()
-        {
+        if goal.children.is_some() && goal.min_duration.is_none() {
             return vec![];
         }
 
