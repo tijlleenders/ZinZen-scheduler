@@ -56,6 +56,7 @@ pub fn generate_get_to_week_min_budget_activities(
             }
         }
     }
+    dbg!(&get_to_week_min_budget_activities);
     Some(get_to_week_min_budget_activities)
 }
 
