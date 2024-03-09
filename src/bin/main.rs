@@ -1,6 +1,6 @@
 use chrono::NaiveDateTime;
 use serde::Deserialize;
-use serde_json::{self, Value};
+use serde_json::Value;
 use std::{fs, path::Path};
 extern crate scheduler;
 use scheduler::{models::goal::Goal, run_scheduler};
