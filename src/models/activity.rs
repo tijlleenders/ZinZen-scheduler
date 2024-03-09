@@ -196,7 +196,8 @@ impl Activity {
         if goal.budget_config.as_ref().unwrap().min_per_day == 0 {
             return vec![];
         }
-        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
+        let (adjusted_goal_start, adjusted_goal_deadline) =
+            goal.get_adj_start_deadline(calendar, None);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
         let filter_option = goal.filters.clone().unwrap();
 
@@ -240,7 +241,6 @@ impl Activity {
                 duration_left: goal.budget_config.as_ref().unwrap().min_per_day,
                 status: Status::Unprocessed,
             };
-            dbg!(&activity);
             activities.push(activity);
         }
         activities
@@ -249,14 +249,25 @@ impl Activity {
     pub(crate) fn get_activities_from_simple_goal(
         goal: &Goal,
         calendar: &Calendar,
+        parent_goal: Option<Goal>,
     ) -> Vec<Activity> {
-        if goal.children.is_some() || goal.filters.as_ref().is_some() {
+        if goal.filters.as_ref().is_some() {
             return vec![];
         }
-        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
+        // Avoid goals which have children and have no start or deadline and have no min duration
+        if goal.children.is_some()
+            && goal.start.year() == 1970
+            && goal.deadline.year() == 1970
+            && goal.min_duration.is_none()
+        {
+            return vec![];
+        }
+
+        let (adjusted_goal_start, adjusted_goal_deadline) =
+            goal.get_adj_start_deadline(calendar, parent_goal);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
-        let activity_total_duration = goal.min_duration.unwrap();
+        let activity_total_duration = goal.min_duration.unwrap_or(1);
         let mut min_block_size = activity_total_duration;
         if activity_total_duration > 8 {
             min_block_size = 1;
@@ -283,7 +294,6 @@ impl Activity {
             duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
             status: Status::Unprocessed,
         };
-        dbg!(&activity);
         activities.push(activity);
 
         activities
