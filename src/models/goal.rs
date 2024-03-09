@@ -66,7 +66,8 @@ impl Goal {
             if adjusted_goal_start < parent_goal.start {
                 adjusted_goal_start = parent_goal.start;
             }
-            if adjusted_goal_deadline > parent_goal.deadline {
+            if adjusted_goal_deadline > parent_goal.deadline && parent_goal.deadline.year() != 1970
+            {
                 adjusted_goal_deadline = parent_goal.deadline;
             }
         }
