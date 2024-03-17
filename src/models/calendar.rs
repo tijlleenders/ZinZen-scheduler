@@ -169,7 +169,7 @@ impl Calendar {
                         }
                         current_task.duration = 1;
                         current_task.goalid = activity_goalid.clone();
-                        current_task.title = activity_title.clone();
+                        current_task.title.clone_from(activity_title);
                         current_task.start = self
                             .start_date_time
                             .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
