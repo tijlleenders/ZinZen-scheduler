@@ -7,7 +7,7 @@
           "taskid": 0,
           "goalid": "1",
           "title": "do something",
-          "duration": 10,
+          "duration": 1,
           "start": "2022-01-01T00:00:00",
           "deadline": "2022-01-01T01:00:00"
         },
