@@ -1,0 +1,26 @@
+{
+  "scheduled": [
+    {
+      "day": "2022-01-01",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "1",
+          "title": "do something",
+          "duration": 10,
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-01T01:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 23,
+          "start": "2022-01-01T01:00:00",
+          "deadline": "2022-01-02T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": []
+}
