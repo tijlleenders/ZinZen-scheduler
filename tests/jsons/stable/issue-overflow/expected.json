@@ -1,0 +1,26 @@
+{
+  "scheduled": [
+    {
+      "day": "2022-01-01",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "b331f3c5-40da-49f8-8228-2fadcea1d0ff",
+          "title": "A New Kind of Science",
+          "duration": 20,
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-01T20:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "free",
+          "title": "free",
+          "duration": 4,
+          "start": "2022-01-01T20:00:00",
+          "deadline": "2022-01-02T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": []
+}
