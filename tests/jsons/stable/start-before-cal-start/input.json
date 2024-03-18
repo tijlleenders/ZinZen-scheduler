@@ -1,0 +1,13 @@
+  {
+    "startDate": "2022-01-01T00:00:00",
+    "endDate": "2022-01-02T00:00:00",
+    "goals": [
+      {
+        "id": "1",
+        "title": "do something",
+        "minDuration": 1,
+        "start": "2000-01-01T00:00:00",
+        "deadline": "2022-01-01T13:00:00"
+      }
+    ]
+  }

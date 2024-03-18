@@ -39,7 +39,7 @@ chrono = { version = "0.4.31", features = ["wasmbind", "serde"] }
 lazy_static = "1.4.0"
 
 # simple WASM codegen
-wasm-bindgen = { version = "0.2.84" }
+wasm-bindgen = { version = "0.2.92" }
 # instead of wasm-bindgen::serde-serialize feature that may lead to a cyclic package dependency 
 serde-wasm-bindgen = "0.5.0"
 
