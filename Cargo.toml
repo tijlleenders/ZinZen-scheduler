@@ -2,7 +2,7 @@
 name = "zinzen"
 version = "0.2.0"
 edition = "2021"
-license = "AGPL-3.0"
+license = "AGPL-3.0-or-later"
 keywords = ["zinzen", "scheduler", "todo"]
 description = "Algorithm for auto-scheduling time-constrained tasks on a timeline"
 homepage = "https://github.com/tijlleenders/ZinZen-scheduler"
@@ -39,7 +39,7 @@ chrono = { version = "0.4.31", features = ["wasmbind", "serde"] }
 lazy_static = "1.4.0"
 
 # simple WASM codegen
-wasm-bindgen = { version = "0.2.84" }
+wasm-bindgen = { version = "0.2.92" }
 # instead of wasm-bindgen::serde-serialize feature that may lead to a cyclic package dependency 
 serde-wasm-bindgen = "0.5.0"
 
