@@ -215,7 +215,7 @@ impl Activity {
                 calendar_overlay: compatible_hours_overlay,
                 time_budgets: vec![],
                 total_duration: activity_total_duration,
-                duration_left: min_block_size, //TODO: Correct this - is it even necessary to have duration_left?
+                duration_left: activity_total_duration,
                 status: Status::Unprocessed,
             };
             dbg!(&activity);
