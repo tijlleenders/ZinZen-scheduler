@@ -56,7 +56,6 @@ use chrono::NaiveDateTime;
 use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
 use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
-use services::activity_generator::adjust_parent_activities;
 use services::activity_placer;
 use technical::input_output::Input;
 use wasm_bindgen::prelude::*;
