@@ -1,12 +1,13 @@
 use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calendar, goal::Goal};
 
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
-    goals
+    let simple_goal_activities = goals
         .iter()
         .flat_map(|goal| {
             Activity::get_activities_from_simple_goal(goal, calendar, goal.get_parent_goal(goals))
         })
-        .collect::<Vec<_>>()
+        .collect::<Vec<_>>();
+    adjust_parent_activities(&simple_goal_activities, goals)
 }
 
 pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {

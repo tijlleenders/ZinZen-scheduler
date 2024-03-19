@@ -97,7 +97,6 @@ pub fn run_scheduler(
     //generate and place simple goal activities
     let simple_goal_activities =
         activity_generator::generate_simple_goal_activities(&calendar, goals);
-    let simple_goal_activities = adjust_parent_activities(&simple_goal_activities, goals);
 
     //generate and place budget goal activities
     let budget_goal_activities: Vec<Activity> =
