@@ -19,6 +19,13 @@ pub struct Goal {
     pub min_duration: Option<usize>,
     pub title: String,
     pub children: Option<Vec<String>>,
+    pub not_on: Option<Vec<Slot>>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Slot {
+    pub start: NaiveDateTime,
+    pub end: NaiveDateTime,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -41,7 +48,7 @@ pub struct BudgetConfig {
 impl Goal {
     pub fn get_adj_start_deadline(&self, calendar: &Calendar) -> (NaiveDateTime, NaiveDateTime) {
         let mut adjusted_goal_start = self.start;
-        if self.start.year() == 1970 {
+        if self.start.year() == 1970 || self.start < calendar.start_date_time {
             adjusted_goal_start = calendar.start_date_time;
         }
         let mut adjusted_goal_deadline = self.deadline;

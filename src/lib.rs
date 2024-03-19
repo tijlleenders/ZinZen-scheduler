@@ -80,36 +80,38 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     console_error_panic_hook::set_once();
     // JsError implements From<Error>, so we can just use `?` on any Error
     let input: Input = from_value(input.clone())?;
-    let final_tasks = run_scheduler(input.start_date, input.end_date, input.goals);
+    let final_tasks = run_scheduler(input.start_date, input.end_date, &input.goals);
     Ok(to_value(&final_tasks)?)
 }
 
 pub fn run_scheduler(
     start_date: NaiveDateTime,
     end_date: NaiveDateTime,
-    goals: Vec<Goal>,
+    goals: &[Goal],
 ) -> FinalTasks {
     let mut calendar = Calendar::new(start_date, end_date);
     dbg!(&calendar);
 
-    calendar.add_budgets_from(&goals);
+    calendar.add_budgets_from(goals);
 
     //generate and place simple goal activities
     let simple_goal_activities =
-        activity_generator::generate_simple_goal_activities(&calendar, &goals);
+        activity_generator::generate_simple_goal_activities(&calendar, goals);
     dbg!(&simple_goal_activities);
-    activity_placer::place(&mut calendar, simple_goal_activities);
 
     //generate and place budget goal activities
     let budget_goal_activities: Vec<Activity> =
-        activity_generator::generate_budget_goal_activities(&calendar, &goals);
+        activity_generator::generate_budget_goal_activities(&calendar, goals);
+    dbg!(&budget_goal_activities);
     dbg!(&calendar);
+
+    activity_placer::place(&mut calendar, simple_goal_activities);
     activity_placer::place(&mut calendar, budget_goal_activities);
 
     calendar.log_impossible_min_day_budgets();
 
     if let Some(get_to_week_min_budget_activities) =
-        activity_generator::generate_get_to_week_min_budget_activities(&calendar, &goals)
+        activity_generator::generate_get_to_week_min_budget_activities(&calendar, goals)
     {
         activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
     }
@@ -118,7 +120,7 @@ pub fn run_scheduler(
     calendar.log_impossible_min_week_budgets();
 
     let top_up_week_budget_activities =
-        activity_generator::generate_top_up_week_budget_activities(&calendar, &goals);
+        activity_generator::generate_top_up_week_budget_activities(&calendar, goals);
     activity_placer::place(&mut calendar, top_up_week_budget_activities);
     //TODO: Test that day stays below min or max when week max being reachd
 
