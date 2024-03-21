@@ -105,8 +105,8 @@ pub fn run_scheduler(
     dbg!(&budget_goal_activities);
     dbg!(&calendar);
 
-    activity_placer::place(&mut calendar, simple_goal_activities);
-    activity_placer::place(&mut calendar, budget_goal_activities);
+    let activities: Vec<Activity> = [simple_goal_activities, budget_goal_activities].concat();
+    activity_placer::place(&mut calendar, activities);
 
     calendar.log_impossible_min_day_budgets();
 
