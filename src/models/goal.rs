@@ -52,7 +52,7 @@ impl Goal {
         parent_goal: Option<Goal>,
     ) -> (NaiveDateTime, NaiveDateTime) {
         let mut adjusted_goal_start = self.start;
-        if self.start.year() == 1970 {
+        if self.start.year() == 1970 || self.start < calendar.start_date_time {
             adjusted_goal_start = calendar.start_date_time;
         }
         let mut adjusted_goal_deadline = self.deadline;
