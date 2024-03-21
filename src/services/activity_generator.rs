@@ -7,6 +7,31 @@ pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &[Goal]) -> V
         .collect::<Vec<_>>()
 }
 
+pub fn generate_simple_filler_goal_activities(
+    calendar: &Calendar,
+    goals: &[Goal],
+) -> Vec<Activity> {
+    let mut activities = goals
+        .iter()
+        .flat_map(|goal| Activity::get_filler_activities_from_simple_goal(goal, calendar))
+        .collect::<Vec<_>>();
+    for activity in &mut activities {
+        if let Some(goal) = goals.iter().find(|g| g.id == activity.goal_id) {
+            let children: Vec<&Goal> = goals
+                .iter()
+                .filter(|child| goal.children.clone().unwrap().contains(&child.id))
+                .collect();
+            for c in children {
+                activity.min_block_size -= c.min_duration.unwrap();
+                activity.max_block_size -= c.min_duration.unwrap();
+                activity.total_duration -= c.min_duration.unwrap();
+                activity.duration_left -= c.min_duration.unwrap();
+            }
+        }
+    }
+    activities
+}
+
 pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     goals
         .iter()

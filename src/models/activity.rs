@@ -472,6 +472,53 @@ impl Activity {
         }
         self.calendar_overlay = empty_overlay;
     }
+
+    pub(crate) fn get_filler_activities_from_simple_goal(
+        goal: &Goal,
+        calendar: &Calendar,
+    ) -> Vec<Activity> {
+        if goal.children.is_none() || goal.filters.as_ref().is_some() {
+            return vec![];
+        }
+        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
+        let mut activities: Vec<Activity> = Vec::with_capacity(1);
+
+        if let Some(activity_total_duration) = goal.min_duration {
+            let mut min_block_size = activity_total_duration;
+            if activity_total_duration > 8 {
+                min_block_size = 1;
+                //todo!() //split into multiple activities so flexibilities are correct??
+                // or yield flex 1 or maximum of the set from activity.flex()?
+            };
+
+            let filters_option: Option<Filters> = calendar.get_filters_for(goal.id.clone());
+
+            let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
+                calendar,
+                filters_option,
+                adjusted_goal_start,
+                adjusted_goal_deadline,
+                goal.not_on.clone(),
+            );
+
+            let activity = Activity {
+                goal_id: goal.id.clone(),
+                activity_type: ActivityType::SimpleGoal,
+                title: goal.title.clone(),
+                min_block_size,
+                max_block_size: min_block_size,
+                calendar_overlay: compatible_hours_overlay,
+                time_budgets: vec![],
+                total_duration: activity_total_duration,
+                duration_left: activity_total_duration,
+                status: Status::Unprocessed,
+            };
+            dbg!(&activity);
+            activities.push(activity);
+        }
+
+        activities
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Deserialize)]

@@ -99,13 +99,22 @@ pub fn run_scheduler(
         activity_generator::generate_simple_goal_activities(&calendar, goals);
     dbg!(&simple_goal_activities);
 
+    let simple_filler_activities =
+        activity_generator::generate_simple_filler_goal_activities(&calendar, goals);
+    dbg!(&simple_filler_activities);
+
     //generate and place budget goal activities
     let budget_goal_activities: Vec<Activity> =
         activity_generator::generate_budget_goal_activities(&calendar, goals);
     dbg!(&budget_goal_activities);
     dbg!(&calendar);
 
-    let activities: Vec<Activity> = [simple_goal_activities, budget_goal_activities].concat();
+    let activities: Vec<Activity> = [
+        simple_goal_activities,
+        simple_filler_activities,
+        budget_goal_activities,
+    ]
+    .concat();
     activity_placer::place(&mut calendar, activities);
 
     calendar.log_impossible_min_day_budgets();
