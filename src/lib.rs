@@ -52,6 +52,7 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
+use chrono::Datelike;
 use chrono::NaiveDateTime;
 use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
 use serde_wasm_bindgen::{from_value, to_value};
@@ -95,9 +96,17 @@ pub fn run_scheduler(
     calendar.add_budgets_from(goals);
 
     //generate and place simple goal activities
-    let simple_goal_activities =
+    let mut simple_goal_activities =
         activity_generator::generate_simple_goal_activities(&calendar, goals);
     dbg!(&simple_goal_activities);
+
+    let mut simple_goal_activities_without_deadline: Vec<Activity> = vec![];
+    for activity in simple_goal_activities.iter() {
+        if activity.deadline.year() == 1970 {
+            simple_goal_activities_without_deadline.push(activity.clone());
+        }
+    }
+    simple_goal_activities.retain(|a| a.deadline.year() != 1970);
 
     let simple_filler_activities =
         activity_generator::generate_simple_filler_goal_activities(&calendar, goals);
@@ -135,6 +144,8 @@ pub fn run_scheduler(
     //TODO: Test that day stays below min or max when week max being reachd
 
     calendar.log_impossible_simple_activities(activities);
+
+    _ = activity_placer::place(&mut calendar, simple_goal_activities_without_deadline);
 
     calendar.print()
 }
