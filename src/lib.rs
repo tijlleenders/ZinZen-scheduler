@@ -143,9 +143,9 @@ pub fn run_scheduler(
     activity_placer::place(&mut calendar, top_up_week_budget_activities);
     //TODO: Test that day stays below min or max when week max being reachd
 
-    calendar.log_impossible_simple_activities(activities);
-
     _ = activity_placer::place(&mut calendar, simple_goal_activities_without_deadline);
+
+    calendar.log_impossible_simple_activities(activities);
 
     calendar.print()
 }
