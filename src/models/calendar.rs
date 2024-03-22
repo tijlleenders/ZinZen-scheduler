@@ -1,3 +1,4 @@
+use super::activity::Activity;
 use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
 use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
@@ -292,6 +293,21 @@ impl Calendar {
         //TODO: merge with log_imossible_min_day_budgets, passing budget type as param
         let impossible_activities = self.impossible_activities();
         self.impossible_activities.extend(impossible_activities);
+    }
+
+    pub fn log_impossible_simple_activities(&mut self, activities: Vec<Activity>) {
+        for activity in activities {
+            if activity.status == super::activity::Status::Impossible
+                && activity.deadline.year() != 1970
+            {
+                self.impossible_activities.push(ImpossibleActivity {
+                    id: activity.goal_id.clone(),
+                    hours_missing: activity.duration_left,
+                    period_start_date_time: self.start_date_time,
+                    period_end_date_time: self.end_date_time,
+                })
+            }
+        }
     }
 
     fn impossible_activities(&mut self) -> Vec<ImpossibleActivity> {

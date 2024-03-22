@@ -25,6 +25,7 @@ pub struct Activity {
     pub total_duration: usize,
     pub duration_left: usize,
     pub status: Status,
+    pub deadline: NaiveDateTime,
 }
 impl Activity {
     pub fn get_compatible_hours_overlay(
@@ -220,6 +221,7 @@ impl Activity {
                 total_duration: activity_total_duration,
                 duration_left: activity_total_duration,
                 status: Status::Unprocessed,
+                deadline: goal.deadline,
             };
             dbg!(&activity);
             activities.push(activity);
@@ -286,6 +288,7 @@ impl Activity {
                         total_duration: adjusted_min_block_size,
                         duration_left: config.min_per_day,
                         status: Status::Unprocessed,
+                        deadline: goal.deadline,
                     };
                     dbg!(&activity);
                     activities.push(activity);
@@ -328,6 +331,7 @@ impl Activity {
             total_duration: max_hours,
             duration_left: max_hours,
             status: Status::Unprocessed,
+            deadline: goal_to_use.deadline,
         });
 
         activities
@@ -367,6 +371,7 @@ impl Activity {
             total_duration: max_hours,
             duration_left: max_hours,
             status: Status::Unprocessed,
+            deadline: goal_to_use.deadline,
         });
 
         activities
@@ -518,6 +523,7 @@ impl Activity {
                 total_duration: activity_total_duration,
                 duration_left: activity_total_duration,
                 status: Status::Unprocessed,
+                deadline: goal.deadline,
             };
             dbg!(&activity);
             activities.push(activity);

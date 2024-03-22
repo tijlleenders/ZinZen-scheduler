@@ -22,5 +22,12 @@
       ]
     }
   ],
-  "impossible": []
+  "impossible": [
+    {
+      "id": "3",
+      "hoursMissing": 1,
+      "periodStartDateTime": "2022-01-01T00:00:00",
+      "periodEndDateTime": "2022-01-02T00:00:00"
+    }
+  ]
 }

@@ -109,13 +109,14 @@ pub fn run_scheduler(
     dbg!(&budget_goal_activities);
     dbg!(&calendar);
 
-    let activities: Vec<Activity> = [
+    let mut activities: Vec<Activity> = [
         simple_goal_activities,
         simple_filler_activities,
         budget_goal_activities,
     ]
     .concat();
-    activity_placer::place(&mut calendar, activities);
+    activities = activity_placer::place(&mut calendar, activities)
+        .expect("should get activities back from placer");
 
     calendar.log_impossible_min_day_budgets();
 
@@ -132,6 +133,8 @@ pub fn run_scheduler(
         activity_generator::generate_top_up_week_budget_activities(&calendar, goals);
     activity_placer::place(&mut calendar, top_up_week_budget_activities);
     //TODO: Test that day stays below min or max when week max being reachd
+
+    calendar.log_impossible_simple_activities(activities);
 
     calendar.print()
 }

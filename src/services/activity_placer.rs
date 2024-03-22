@@ -5,7 +5,7 @@ use crate::models::{
     calendar::{Calendar, Hour, ImpossibleActivity},
 };
 
-pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Option<()> {
+pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Option<Vec<Activity>> {
     loop {
         for activity in activities.iter_mut() {
             activity.update_overlay_with(&calendar.budgets);
@@ -79,7 +79,7 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Option<(
         dbg!(&calendar);
     }
     dbg!(&calendar);
-    Some(())
+    Some(activities)
 }
 
 fn find_act_index_to_schedule(activities: &[Activity]) -> Option<usize> {
