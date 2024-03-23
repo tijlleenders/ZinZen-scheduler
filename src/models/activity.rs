@@ -180,10 +180,7 @@ impl Activity {
         best_scheduling_index_and_conflicts.map(|(best_index, _, size)| (best_index, size))
     }
 
-    pub(crate) fn get_activities_from_simple_goal(
-        goal: &Goal,
-        calendar: &Calendar,
-    ) -> Vec<Activity> {
+    pub(crate) fn get_simple_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
         if goal.children.is_some()
             || goal.filters.as_ref().is_some()
             || calendar.is_budget(goal.id.clone())
@@ -232,10 +229,7 @@ impl Activity {
         activities
     }
 
-    pub(crate) fn get_activities_from_budget_goal(
-        goal: &Goal,
-        calendar: &Calendar,
-    ) -> Vec<Activity> {
+    pub(crate) fn get_budget_min_day_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
         if goal.filters.as_ref().is_none() {
             return vec![];
         }
@@ -483,10 +477,7 @@ impl Activity {
         self.calendar_overlay = empty_overlay;
     }
 
-    pub(crate) fn get_filler_activities_from_simple_goal(
-        goal: &Goal,
-        calendar: &Calendar,
-    ) -> Vec<Activity> {
+    pub(crate) fn get_simple_filler_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
         if goal.children.is_none() || goal.filters.as_ref().is_some() {
             return vec![];
         }

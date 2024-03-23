@@ -4,7 +4,7 @@ use chrono::Datelike;
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     goals
         .iter()
-        .flat_map(|goal| Activity::get_activities_from_simple_goal(goal, calendar))
+        .flat_map(|goal| Activity::get_simple_activities(goal, calendar))
         .collect::<Vec<_>>()
 }
 
@@ -14,7 +14,7 @@ pub fn generate_simple_filler_goal_activities(
 ) -> Vec<Activity> {
     let mut activities = goals
         .iter()
-        .flat_map(|goal| Activity::get_filler_activities_from_simple_goal(goal, calendar))
+        .flat_map(|goal| Activity::get_simple_filler_activities(goal, calendar))
         .collect::<Vec<_>>();
     for activity in &mut activities {
         if let Some(goal) = goals.iter().find(|g| g.id == activity.goal_id) {
@@ -36,7 +36,7 @@ pub fn generate_simple_filler_goal_activities(
 pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     goals
         .iter()
-        .flat_map(|goal| Activity::get_activities_from_budget_goal(goal, calendar))
+        .flat_map(|goal| Activity::get_budget_min_day_activities(goal, calendar))
         .collect::<Vec<_>>()
 }
 
@@ -112,17 +112,12 @@ pub(crate) fn get_base_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Ac
     for goal in goals {
         if goal.children.is_none() {
             if goal.budget_config.is_some() {
-                activities.append(&mut Activity::get_activities_from_budget_goal(
-                    goal, calendar,
-                ));
+                activities.append(&mut Activity::get_budget_min_day_activities(goal, calendar));
             } else {
-                activities.append(&mut Activity::get_activities_from_simple_goal(
-                    goal, calendar,
-                ));
+                activities.append(&mut Activity::get_simple_activities(goal, calendar));
             }
         } else if goal.budget_config.is_none() {
-            let mut temp_activities =
-                Activity::get_filler_activities_from_simple_goal(goal, calendar);
+            let mut temp_activities = Activity::get_simple_filler_activities(goal, calendar);
             for activity in &mut temp_activities {
                 let children: Vec<&Goal> = goals
                     .iter()
