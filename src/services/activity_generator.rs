@@ -118,6 +118,24 @@ pub fn generate_top_up_week_budget_activities(
     top_up_activities
 }
 
+pub(crate) fn gen_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
+    let mut activities: Vec<Activity> = vec![];
+    // for goal in goals {
+    //     if goal.children.is_none() {
+    //         if goal.budget_config.is_some() {
+    //             activities.append(&mut Activity::get_activities_from_budget_goal(
+    //                 goal, calendar,
+    //             ));
+    //         } else {
+    //             activities.append(&mut Activity::get_activities_from_simple_goal(
+    //                 goal, calendar,
+    //             ));
+    //         }
+    //     }
+    // }
+    activities
+}
+
 pub(crate) fn generate_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     //generate and place simple goal activities
     let mut simple_goal_activities = generate_simple_goal_activities(calendar, goals);
