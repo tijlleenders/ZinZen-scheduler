@@ -46,11 +46,7 @@ pub struct BudgetConfig {
 }
 
 impl Goal {
-    pub fn get_adj_start_deadline(
-        &self,
-        calendar: &Calendar,
-        parent_goal: Option<Goal>,
-    ) -> (NaiveDateTime, NaiveDateTime) {
+    pub fn get_adj_start_deadline(&self, calendar: &Calendar) -> (NaiveDateTime, NaiveDateTime) {
         let mut adjusted_goal_start = self.start;
         if self.start.year() == 1970 || self.start < calendar.start_date_time {
             adjusted_goal_start = calendar.start_date_time;
@@ -58,18 +54,6 @@ impl Goal {
         let mut adjusted_goal_deadline = self.deadline;
         if self.deadline.year() == 1970 {
             adjusted_goal_deadline = calendar.end_date_time;
-        }
-
-        // Make sure child goal not fall outside of parent goal start and deadline
-        if let Some(parent_goal) = parent_goal {
-            // means this is a child goal
-            if adjusted_goal_start < parent_goal.start {
-                adjusted_goal_start = parent_goal.start;
-            }
-            if adjusted_goal_deadline > parent_goal.deadline && parent_goal.deadline.year() != 1970
-            {
-                adjusted_goal_deadline = parent_goal.deadline;
-            }
         }
 
         if self.filters.is_none() {

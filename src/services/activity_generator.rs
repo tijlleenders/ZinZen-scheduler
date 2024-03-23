@@ -4,9 +4,7 @@ use chrono::Datelike;
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     goals
         .iter()
-        .flat_map(|goal| {
-            Activity::get_activities_from_simple_goal(goal, calendar, goal.get_parent_goal(goals))
-        })
+        .flat_map(|goal| Activity::get_activities_from_simple_goal(goal, calendar))
         .collect::<Vec<_>>()
 }
 
@@ -16,13 +14,7 @@ pub fn generate_simple_filler_goal_activities(
 ) -> Vec<Activity> {
     let mut activities = goals
         .iter()
-        .flat_map(|goal| {
-            Activity::get_filler_activities_from_simple_goal(
-                goal,
-                calendar,
-                goal.get_parent_goal(goals),
-            )
-        })
+        .flat_map(|goal| Activity::get_filler_activities_from_simple_goal(goal, calendar))
         .collect::<Vec<_>>();
     for activity in &mut activities {
         if let Some(goal) = goals.iter().find(|g| g.id == activity.goal_id) {
