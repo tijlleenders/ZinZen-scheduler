@@ -1,3 +1,4 @@
+use super::activity::Activity;
 use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
 use super::goal::Goal;
 use super::task::{DayTasks, FinalTasks, Task};
@@ -68,6 +69,15 @@ impl Calendar {
             .sub(Days::new(1))
             .add(Duration::hours(index_to_test as i64));
         date_time_of_index_to_test.weekday()
+    }
+
+    pub fn is_budget(&self, goal_id: String) -> bool {
+        for budget in self.budgets.iter() {
+            if budget.participating_goals.contains(&goal_id) {
+                return true;
+            }
+        }
+        false
     }
 
     pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
@@ -292,6 +302,21 @@ impl Calendar {
         //TODO: merge with log_imossible_min_day_budgets, passing budget type as param
         let impossible_activities = self.impossible_activities();
         self.impossible_activities.extend(impossible_activities);
+    }
+
+    pub fn log_impossible_base_activities(&mut self, activities: Vec<Activity>) {
+        for activity in activities {
+            if activity.status == super::activity::Status::Impossible
+                && activity.deadline.year() != 1970
+            {
+                self.impossible_activities.push(ImpossibleActivity {
+                    id: activity.goal_id.clone(),
+                    hours_missing: activity.duration_left,
+                    period_start_date_time: self.start_date_time,
+                    period_end_date_time: self.end_date_time,
+                })
+            }
+        }
     }
 
     fn impossible_activities(&mut self) -> Vec<ImpossibleActivity> {

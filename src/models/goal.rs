@@ -55,6 +55,7 @@ impl Goal {
         if self.deadline.year() == 1970 {
             adjusted_goal_deadline = calendar.end_date_time;
         }
+
         if self.filters.is_none() {
             return (adjusted_goal_start, adjusted_goal_deadline);
         }
@@ -77,5 +78,18 @@ impl Goal {
             ));
         }
         (adjusted_goal_start, adjusted_goal_deadline)
+    }
+
+    /// Get parent goal of this goal based in provided list of goals
+    pub fn get_parent_goal(&self, goals: &[Goal]) -> Option<Goal> {
+        let parent_goal = goals.iter().find(|goal| {
+            if let Some(childs) = &goal.children {
+                childs.contains(&self.id)
+            } else {
+                false
+            }
+        });
+
+        parent_goal.cloned()
     }
 }

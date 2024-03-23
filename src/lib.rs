@@ -53,7 +53,7 @@
 //! quality perception of the ZinZen&reg; projects.
 
 use chrono::NaiveDateTime;
-use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
+use models::{calendar::Calendar, goal::Goal, task::FinalTasks};
 use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
 use services::activity_placer;
@@ -94,35 +94,31 @@ pub fn run_scheduler(
 
     calendar.add_budgets_from(goals);
 
-    //generate and place simple goal activities
-    let simple_goal_activities =
-        activity_generator::generate_simple_goal_activities(&calendar, goals);
-    dbg!(&simple_goal_activities);
+    let mut base_activities = activity_generator::get_base_activities(&calendar, goals);
 
-    //generate and place budget goal activities
-    let budget_goal_activities: Vec<Activity> =
-        activity_generator::generate_budget_goal_activities(&calendar, goals);
-    dbg!(&budget_goal_activities);
-    dbg!(&calendar);
-
-    activity_placer::place(&mut calendar, simple_goal_activities);
-    activity_placer::place(&mut calendar, budget_goal_activities);
+    base_activities = activity_placer::place(&mut calendar, base_activities);
 
     calendar.log_impossible_min_day_budgets();
 
-    if let Some(get_to_week_min_budget_activities) =
-        activity_generator::generate_get_to_week_min_budget_activities(&calendar, goals)
-    {
-        activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
-    }
+    let get_to_week_min_budget_activities =
+        activity_generator::get_budget_min_week_activities(&calendar, goals);
+    activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
     //TODO: Test that day stays below min when week min being reached so other goals can get to the week min too
 
     calendar.log_impossible_min_week_budgets();
 
     let top_up_week_budget_activities =
-        activity_generator::generate_top_up_week_budget_activities(&calendar, goals);
+        activity_generator::get_budget_top_up_week_activities(&calendar, goals);
     activity_placer::place(&mut calendar, top_up_week_budget_activities);
     //TODO: Test that day stays below min or max when week max being reachd
+
+    //TODO: Fit simple budget activities into scheduled budgets?
+    //      No need, as simple budget activities will share the same overlay, but with less hours
+    //      Thus, the flex will always be higher than (or equal to?) the MinDayBudget activities
+    //      So MinDayBudget will get chosen last unless flex is equal and order happens to favor MinDayBudget
+    //          => TODO: order activities before placing?
+
+    calendar.log_impossible_base_activities(base_activities);
 
     calendar.print()
 }
