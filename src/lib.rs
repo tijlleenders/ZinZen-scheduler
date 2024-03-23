@@ -52,9 +52,8 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
-use chrono::Datelike;
 use chrono::NaiveDateTime;
-use models::{activity::Activity, calendar::Calendar, goal::Goal, task::FinalTasks};
+use models::{calendar::Calendar, goal::Goal, task::FinalTasks};
 use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
 use services::activity_placer;
@@ -95,35 +94,8 @@ pub fn run_scheduler(
 
     calendar.add_budgets_from(goals);
 
-    //generate and place simple goal activities
-    let mut simple_goal_activities =
-        activity_generator::generate_simple_goal_activities(&calendar, goals);
-    dbg!(&simple_goal_activities);
+    let mut activities = activity_generator::generate_activities(&calendar, goals);
 
-    let mut simple_goal_activities_without_deadline: Vec<Activity> = vec![];
-    for activity in simple_goal_activities.iter() {
-        if activity.deadline.year() == 1970 {
-            simple_goal_activities_without_deadline.push(activity.clone());
-        }
-    }
-    simple_goal_activities.retain(|a| a.deadline.year() != 1970);
-
-    let simple_filler_activities =
-        activity_generator::generate_simple_filler_goal_activities(&calendar, goals);
-    dbg!(&simple_filler_activities);
-
-    //generate and place budget goal activities
-    let budget_goal_activities: Vec<Activity> =
-        activity_generator::generate_budget_goal_activities(&calendar, goals);
-    dbg!(&budget_goal_activities);
-    dbg!(&calendar);
-
-    let mut activities: Vec<Activity> = [
-        simple_goal_activities,
-        simple_filler_activities,
-        budget_goal_activities,
-    ]
-    .concat();
     activities = activity_placer::place(&mut calendar, activities)
         .expect("should get activities back from placer");
 
@@ -142,8 +114,6 @@ pub fn run_scheduler(
         activity_generator::generate_top_up_week_budget_activities(&calendar, goals);
     activity_placer::place(&mut calendar, top_up_week_budget_activities);
     //TODO: Test that day stays below min or max when week max being reachd
-
-    _ = activity_placer::place(&mut calendar, simple_goal_activities_without_deadline);
 
     calendar.log_impossible_simple_activities(activities);
 

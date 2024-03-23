@@ -1,4 +1,5 @@
 use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calendar, goal::Goal};
+use chrono::Datelike;
 
 pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     goals
@@ -114,4 +115,34 @@ pub fn generate_top_up_week_budget_activities(
     }
     dbg!(&top_up_activities);
     top_up_activities
+}
+
+pub(crate) fn generate_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
+    //generate and place simple goal activities
+    let mut simple_goal_activities = generate_simple_goal_activities(&calendar, goals);
+    dbg!(&simple_goal_activities);
+
+    let mut simple_goal_activities_without_deadline: Vec<Activity> = vec![];
+    for activity in simple_goal_activities.iter() {
+        if activity.deadline.year() == 1970 {
+            simple_goal_activities_without_deadline.push(activity.clone());
+        }
+    }
+    simple_goal_activities.retain(|a| a.deadline.year() != 1970);
+
+    let simple_filler_activities = generate_simple_filler_goal_activities(&calendar, goals);
+    dbg!(&simple_filler_activities);
+
+    //generate and place budget goal activities
+    let budget_goal_activities: Vec<Activity> = generate_budget_goal_activities(&calendar, goals);
+    dbg!(&budget_goal_activities);
+    dbg!(&calendar);
+
+    [
+        simple_goal_activities,
+        simple_filler_activities,
+        budget_goal_activities,
+        simple_goal_activities_without_deadline,
+    ]
+    .concat()
 }
