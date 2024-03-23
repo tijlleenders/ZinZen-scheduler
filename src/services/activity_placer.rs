@@ -61,7 +61,6 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
                     activity_title: activities[act_index_to_schedule].title.clone(),
                     activity_goalid: activities[act_index_to_schedule].goal_id.clone(),
                 });
-                //TODO: activity doesn't need to know about time_budets => remove completely
                 calendar.update_budgets_for(
                     &activities[act_index_to_schedule].goal_id.clone(),
                     best_hour_index + duration_offset,
