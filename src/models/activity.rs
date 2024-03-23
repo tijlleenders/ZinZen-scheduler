@@ -180,13 +180,6 @@ impl Activity {
     }
 
     pub(crate) fn get_simple_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
-        if goal.children.is_some()
-            || goal.filters.as_ref().is_some()
-            || calendar.is_budget(goal.id.clone())
-        {
-            return vec![];
-        }
-
         let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
