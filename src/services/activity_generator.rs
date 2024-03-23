@@ -106,13 +106,24 @@ pub fn get_budget_top_up_week_activities(calendar: &Calendar, goals: &[Goal]) ->
 pub(crate) fn get_base_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     let mut activities: Vec<Activity> = vec![];
     for goal in goals {
-        if goal.children.is_none() {
-            if goal.budget_config.is_some() {
-                activities.append(&mut Activity::get_budget_min_day_activities(goal, calendar));
-            } else {
-                activities.append(&mut Activity::get_simple_activities(goal, calendar));
-            }
-        } else if goal.budget_config.is_none() {
+        //budget leaf
+        if goal.budget_config.is_some() && goal.children.is_none() {
+            activities.append(&mut Activity::get_budget_min_day_activities(goal, calendar));
+        }
+
+        //budget node => minDay
+        //TODO: or filler budget if children also budget??
+        if goal.budget_config.is_some() && goal.children.is_some() {
+            activities.append(&mut Activity::get_budget_min_day_activities(goal, calendar));
+        }
+
+        //simple leaf
+        if goal.budget_config.is_none() && goal.children.is_none() {
+            activities.append(&mut Activity::get_simple_activities(goal, calendar));
+        }
+
+        //simple node => simple filler
+        if goal.budget_config.is_none() && goal.children.is_some() {
             let mut temp_activities = Activity::get_simple_filler_activities(goal, calendar);
             for activity in &mut temp_activities {
                 let children: Vec<&Goal> = goals
@@ -127,8 +138,6 @@ pub(crate) fn get_base_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Ac
                 }
             }
             activities.append(&mut temp_activities);
-        } else {
-            activities.append(&mut Activity::get_budget_min_day_activities(goal, calendar));
         }
     }
     activities
