@@ -120,7 +120,7 @@ pub fn generate_top_up_week_budget_activities(
 
 pub(crate) fn generate_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     //generate and place simple goal activities
-    let mut simple_goal_activities = generate_simple_goal_activities(&calendar, goals);
+    let mut simple_goal_activities = generate_simple_goal_activities(calendar, goals);
     dbg!(&simple_goal_activities);
 
     let mut simple_goal_activities_without_deadline: Vec<Activity> = vec![];
@@ -131,11 +131,11 @@ pub(crate) fn generate_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Ac
     }
     simple_goal_activities.retain(|a| a.deadline.year() != 1970);
 
-    let simple_filler_activities = generate_simple_filler_goal_activities(&calendar, goals);
+    let simple_filler_activities = generate_simple_filler_goal_activities(calendar, goals);
     dbg!(&simple_filler_activities);
 
     //generate and place budget goal activities
-    let budget_goal_activities: Vec<Activity> = generate_budget_goal_activities(&calendar, goals);
+    let budget_goal_activities: Vec<Activity> = generate_budget_goal_activities(calendar, goals);
     dbg!(&budget_goal_activities);
     dbg!(&calendar);
 
