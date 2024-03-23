@@ -46,7 +46,7 @@ impl Budget {
                 ActivityType::SimpleGoal => {
                     budget_cut_off_number = time_budget.min_scheduled;
                 }
-                ActivityType::Budget => {
+                ActivityType::BudgetMinDay => {
                     budget_cut_off_number = time_budget.min_scheduled;
                 }
                 ActivityType::GetToMinWeekBudget => {
@@ -61,6 +61,7 @@ impl Budget {
                 ActivityType::TopUpWeekBudget => {
                     budget_cut_off_number = time_budget.max_scheduled;
                 }
+                ActivityType::SimpleFiller => budget_cut_off_number = time_budget.min_scheduled,
             }
             //figure out how many of the hours in hour_index till hour_index + offset are in the time_budget window
             let mut hours_in_time_budget_window = 0;

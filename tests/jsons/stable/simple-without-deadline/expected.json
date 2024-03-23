@@ -1,0 +1,33 @@
+{
+  "scheduled": [
+    {
+      "day": "2022-01-01",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 23,
+          "start": "2022-01-01T00:00:00",
+          "deadline": "2022-01-01T23:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "1",
+          "title": "watch the stars",
+          "duration": 1,
+          "start": "2022-01-01T23:00:00",
+          "deadline": "2022-01-02T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": [
+    {
+      "id": "3",
+      "hoursMissing": 1,
+      "periodStartDateTime": "2022-01-01T00:00:00",
+      "periodEndDateTime": "2022-01-02T00:00:00"
+    }
+  ]
+}

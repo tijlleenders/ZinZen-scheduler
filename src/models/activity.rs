@@ -21,10 +21,10 @@ pub struct Activity {
     pub min_block_size: usize,
     pub max_block_size: usize,
     pub calendar_overlay: Vec<Option<Weak<Hour>>>,
-    pub time_budgets: Vec<TimeBudget>,
     pub total_duration: usize,
     pub duration_left: usize,
     pub status: Status,
+    pub deadline: NaiveDateTime,
 }
 impl Activity {
     pub fn get_compatible_hours_overlay(
@@ -138,9 +138,10 @@ impl Activity {
                 //TODO: shouldn't this logic be in creating the activity and then set to min_block_size so we can just use that here?
                 let offset_size: usize = match self.activity_type {
                     ActivityType::SimpleGoal => self.total_duration,
-                    ActivityType::Budget => self.min_block_size,
+                    ActivityType::BudgetMinDay => self.min_block_size,
                     ActivityType::GetToMinWeekBudget => 1,
                     ActivityType::TopUpWeekBudget => 1,
+                    ActivityType::SimpleFiller => self.total_duration,
                 };
                 for offset in 0..offset_size {
                     match &self.calendar_overlay[hour_index + offset] {
@@ -178,17 +179,8 @@ impl Activity {
         best_scheduling_index_and_conflicts.map(|(best_index, _, size)| (best_index, size))
     }
 
-    pub(crate) fn get_activities_from_simple_goal(
-        goal: &Goal,
-        calendar: &Calendar,
-        parent_goal: Option<Goal>,
-    ) -> Vec<Activity> {
-        if goal.children.is_some() || goal.filters.as_ref().is_some() {
-            return vec![];
-        }
-
-        let (adjusted_goal_start, adjusted_goal_deadline) =
-            goal.get_adj_start_deadline(calendar, parent_goal);
+    pub(crate) fn get_simple_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
+        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
         if let Some(activity_total_duration) = goal.min_duration {
@@ -216,10 +208,10 @@ impl Activity {
                 min_block_size,
                 max_block_size: min_block_size,
                 calendar_overlay: compatible_hours_overlay,
-                time_budgets: vec![],
                 total_duration: activity_total_duration,
                 duration_left: activity_total_duration,
                 status: Status::Unprocessed,
+                deadline: goal.deadline,
             };
             dbg!(&activity);
             activities.push(activity);
@@ -228,10 +220,7 @@ impl Activity {
         activities
     }
 
-    pub(crate) fn get_activities_from_budget_goal(
-        goal: &Goal,
-        calendar: &Calendar,
-    ) -> Vec<Activity> {
+    pub(crate) fn get_budget_min_day_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
         if goal.filters.as_ref().is_none() {
             return vec![];
         }
@@ -240,8 +229,7 @@ impl Activity {
                 return vec![];
             }
         }
-        let (adjusted_goal_start, adjusted_goal_deadline) =
-            goal.get_adj_start_deadline(calendar, None);
+        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
         for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
@@ -277,15 +265,15 @@ impl Activity {
 
                     let activity = Activity {
                         goal_id: goal.id.clone(),
-                        activity_type: ActivityType::Budget,
+                        activity_type: ActivityType::BudgetMinDay,
                         title: goal.title.clone(),
                         min_block_size: adjusted_min_block_size,
                         max_block_size: config.max_per_day,
                         calendar_overlay: compatible_hours_overlay,
-                        time_budgets: vec![],
                         total_duration: adjusted_min_block_size,
                         duration_left: config.min_per_day,
                         status: Status::Unprocessed,
+                        deadline: goal.deadline,
                     };
                     dbg!(&activity);
                     activities.push(activity);
@@ -324,10 +312,10 @@ impl Activity {
             min_block_size: 1,
             max_block_size: max_hours,
             calendar_overlay: compatible_hours_overlay,
-            time_budgets: vec![],
             total_duration: max_hours,
             duration_left: max_hours,
             status: Status::Unprocessed,
+            deadline: goal_to_use.deadline,
         });
 
         activities
@@ -363,10 +351,10 @@ impl Activity {
             min_block_size: 1,
             max_block_size: max_hours,
             calendar_overlay: compatible_hours_overlay,
-            time_budgets: vec![],
             total_duration: max_hours,
             duration_left: max_hours,
             status: Status::Unprocessed,
+            deadline: goal_to_use.deadline,
         });
 
         activities
@@ -468,6 +456,7 @@ impl Activity {
             self.status = Status::Impossible;
         }
     }
+
     pub(crate) fn release_claims(&mut self) {
         let mut empty_overlay: Vec<Option<Weak<Hour>>> =
             Vec::with_capacity(self.calendar_overlay.capacity());
@@ -477,16 +466,11 @@ impl Activity {
         self.calendar_overlay = empty_overlay;
     }
 
-    pub(crate) fn get_filler_activities_from_simple_goal(
-        goal: &Goal,
-        calendar: &Calendar,
-        parent_goal: Option<Goal>,
-    ) -> Vec<Activity> {
+    pub(crate) fn get_simple_filler_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
         if goal.children.is_none() || goal.filters.as_ref().is_some() {
             return vec![];
         }
-        let (adjusted_goal_start, adjusted_goal_deadline) =
-            goal.get_adj_start_deadline(calendar, parent_goal);
+        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
         if let Some(activity_total_duration) = goal.min_duration {
@@ -509,15 +493,15 @@ impl Activity {
 
             let activity = Activity {
                 goal_id: goal.id.clone(),
-                activity_type: ActivityType::SimpleGoal,
+                activity_type: ActivityType::SimpleFiller,
                 title: goal.title.clone(),
                 min_block_size,
                 max_block_size: min_block_size,
                 calendar_overlay: compatible_hours_overlay,
-                time_budgets: vec![],
                 total_duration: activity_total_duration,
                 duration_left: activity_total_duration,
                 status: Status::Unprocessed,
+                deadline: goal.deadline,
             };
             dbg!(&activity);
             activities.push(activity);
@@ -538,9 +522,10 @@ pub enum Status {
 #[derive(Clone, Debug, PartialEq)]
 pub enum ActivityType {
     SimpleGoal,
-    Budget,
+    BudgetMinDay,
     GetToMinWeekBudget,
     TopUpWeekBudget,
+    SimpleFiller,
 }
 
 impl fmt::Debug for Activity {
