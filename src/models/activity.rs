@@ -468,6 +468,7 @@ impl Activity {
             self.status = Status::Impossible;
         }
     }
+
     pub(crate) fn release_claims(&mut self) {
         let mut empty_overlay: Vec<Option<Weak<Hour>>> =
             Vec::with_capacity(self.calendar_overlay.capacity());
