@@ -304,7 +304,7 @@ impl Calendar {
         self.impossible_activities.extend(impossible_activities);
     }
 
-    pub fn log_impossible_simple_activities(&mut self, activities: Vec<Activity>) {
+    pub fn log_impossible_base_activities(&mut self, activities: Vec<Activity>) {
         for activity in activities {
             if activity.status == super::activity::Status::Impossible
                 && activity.deadline.year() != 1970

@@ -82,10 +82,7 @@ pub fn get_budget_min_week_activities(calendar: &Calendar, goals: &[Goal]) -> Ve
     get_to_week_min_budget_activities
 }
 
-pub fn generate_top_up_week_budget_activities(
-    calendar: &Calendar,
-    goals: &[Goal],
-) -> Vec<Activity> {
+pub fn get_budget_top_up_week_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     let mut top_up_activities = vec![];
     for budget in &calendar.budgets {
         if let Some(goal_to_use) = goals.iter().find(|g| g.id.eq(&budget.originating_goal_id)) {
