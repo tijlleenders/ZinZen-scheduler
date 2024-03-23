@@ -112,7 +112,11 @@ pub fn run_scheduler(
     activity_placer::place(&mut calendar, top_up_week_budget_activities);
     //TODO: Test that day stays below min or max when week max being reachd
 
-    //TODO: Fit simple budget activities into scheduled budgets
+    //TODO: Fit simple budget activities into scheduled budgets?
+    //      No need, as simple budget activities will share the same overlay, but with less hours
+    //      Thus, the flex will always be higher than (or equal to?) the MinDayBudget activities
+    //      So MinDayBudget will get chosen last unless flex is equal and order happens to favor MinDayBudget
+    //          => TODO: order activities before placing?
 
     calendar.log_impossible_base_activities(base_activities);
 
