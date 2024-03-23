@@ -16,12 +16,16 @@
       {
         "id": "2",
         "title": "Buy stuff",
-        "minDuration": 1
+        "minDuration": 1,
+        "start": "2022-01-01T10:00:00",
+        "deadline": "2022-01-01T18:00:00"
       },
       {
         "id": "3",
         "title": "Invite friends",
-        "minDuration": 1
+        "minDuration": 1,
+        "start": "2022-01-01T10:00:00",
+        "deadline": "2022-01-01T18:00:00"
       }
     ]
   }
