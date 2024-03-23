@@ -112,19 +112,37 @@ pub fn generate_top_up_week_budget_activities(
 
 pub(crate) fn gen_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     let mut activities: Vec<Activity> = vec![];
-    // for goal in goals {
-    //     if goal.children.is_none() {
-    //         if goal.budget_config.is_some() {
-    //             activities.append(&mut Activity::get_activities_from_budget_goal(
-    //                 goal, calendar,
-    //             ));
-    //         } else {
-    //             activities.append(&mut Activity::get_activities_from_simple_goal(
-    //                 goal, calendar,
-    //             ));
-    //         }
-    //     }
-    // }
+    for goal in goals {
+        if goal.children.is_none() {
+            if goal.budget_config.is_some() {
+                activities.append(&mut Activity::get_activities_from_budget_goal(
+                    goal, calendar,
+                ));
+            } else {
+                activities.append(&mut Activity::get_activities_from_simple_goal(
+                    goal, calendar,
+                ));
+            }
+        } else if goal.budget_config.is_none() {
+            let mut temp_activities =
+                Activity::get_filler_activities_from_simple_goal(goal, calendar);
+            for activity in &mut temp_activities {
+                if let Some(goal) = goals.iter().find(|g| g.id == activity.goal_id) {
+                    let children: Vec<&Goal> = goals
+                        .iter()
+                        .filter(|child| goal.children.clone().unwrap().contains(&child.id))
+                        .collect();
+                    for c in children {
+                        activity.min_block_size -= c.min_duration.unwrap();
+                        activity.max_block_size -= c.min_duration.unwrap();
+                        activity.total_duration -= c.min_duration.unwrap();
+                        activity.duration_left -= c.min_duration.unwrap();
+                    }
+                }
+            }
+            activities.append(&mut temp_activities);
+        }
+    }
     activities
 }
 
