@@ -127,6 +127,8 @@ pub(crate) fn get_base_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Ac
                 }
             }
             activities.append(&mut temp_activities);
+        } else {
+            activities.append(&mut Activity::get_budget_min_day_activities(goal, calendar));
         }
     }
     activities
