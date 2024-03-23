@@ -127,17 +127,15 @@ pub(crate) fn gen_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activit
             let mut temp_activities =
                 Activity::get_filler_activities_from_simple_goal(goal, calendar);
             for activity in &mut temp_activities {
-                if let Some(goal) = goals.iter().find(|g| g.id == activity.goal_id) {
-                    let children: Vec<&Goal> = goals
-                        .iter()
-                        .filter(|child| goal.children.clone().unwrap().contains(&child.id))
-                        .collect();
-                    for c in children {
-                        activity.min_block_size -= c.min_duration.unwrap();
-                        activity.max_block_size -= c.min_duration.unwrap();
-                        activity.total_duration -= c.min_duration.unwrap();
-                        activity.duration_left -= c.min_duration.unwrap();
-                    }
+                let children: Vec<&Goal> = goals
+                    .iter()
+                    .filter(|child| goal.children.clone().unwrap().contains(&child.id))
+                    .collect();
+                for c in children {
+                    activity.min_block_size -= c.min_duration.unwrap();
+                    activity.max_block_size -= c.min_duration.unwrap();
+                    activity.total_duration -= c.min_duration.unwrap();
+                    activity.duration_left -= c.min_duration.unwrap();
                 }
             }
             activities.append(&mut temp_activities);
