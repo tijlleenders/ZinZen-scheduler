@@ -96,8 +96,7 @@ pub fn run_scheduler(
 
     let mut activities = activity_generator::gen_activities(&calendar, goals);
 
-    activities = activity_placer::place(&mut calendar, activities)
-        .expect("should get activities back from placer");
+    activities = activity_placer::place(&mut calendar, activities);
 
     calendar.log_impossible_min_day_budgets();
 
