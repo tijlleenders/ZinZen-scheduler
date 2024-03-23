@@ -51,7 +51,7 @@ pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &[Goal]) -> V
 pub fn generate_get_to_week_min_budget_activities(
     calendar: &Calendar,
     goals: &[Goal],
-) -> Option<Vec<Activity>> {
+) -> Vec<Activity> {
     let mut get_to_week_min_budget_activities = vec![];
     for budget in &calendar.budgets {
         let mut is_min_week_reached = true;
@@ -71,7 +71,8 @@ pub fn generate_get_to_week_min_budget_activities(
         } else {
             let goal_to_use: &Goal = goals
                 .iter()
-                .find(|g| g.id.eq(&budget.originating_goal_id))?;
+                .find(|g| g.id.eq(&budget.originating_goal_id))
+                .unwrap();
             for time_budget in &budget.time_budgets {
                 if time_budget.time_budget_type == TimeBudgetType::Day
                     && time_budget.scheduled == time_budget.min_scheduled
@@ -89,7 +90,7 @@ pub fn generate_get_to_week_min_budget_activities(
         }
     }
     dbg!(&get_to_week_min_budget_activities);
-    Some(get_to_week_min_budget_activities)
+    get_to_week_min_budget_activities
 }
 
 pub fn generate_top_up_week_budget_activities(

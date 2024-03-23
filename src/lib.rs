@@ -101,11 +101,9 @@ pub fn run_scheduler(
 
     calendar.log_impossible_min_day_budgets();
 
-    if let Some(get_to_week_min_budget_activities) =
-        activity_generator::generate_get_to_week_min_budget_activities(&calendar, goals)
-    {
-        activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
-    }
+    let get_to_week_min_budget_activities =
+        activity_generator::generate_get_to_week_min_budget_activities(&calendar, goals);
+    activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
     //TODO: Test that day stays below min when week min being reached so other goals can get to the week min too
 
     calendar.log_impossible_min_week_budgets();
