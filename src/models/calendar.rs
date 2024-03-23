@@ -71,6 +71,15 @@ impl Calendar {
         date_time_of_index_to_test.weekday()
     }
 
+    pub fn is_budget(&self, goal_id: String) -> bool {
+        for budget in self.budgets.iter() {
+            if budget.participating_goals.contains(&goal_id) {
+                return true;
+            }
+        }
+        false
+    }
+
     pub fn get_index_of(&self, date_time: NaiveDateTime) -> usize {
         if date_time < self.start_date_time.sub(Duration::days(1))
             || date_time > self.end_date_time.add(Duration::days(1))

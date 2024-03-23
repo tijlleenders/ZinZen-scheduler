@@ -142,6 +142,7 @@ impl Activity {
                     ActivityType::Budget => self.min_block_size,
                     ActivityType::GetToMinWeekBudget => 1,
                     ActivityType::TopUpWeekBudget => 1,
+                    ActivityType::SimpleFiller => self.total_duration,
                 };
                 for offset in 0..offset_size {
                     match &self.calendar_overlay[hour_index + offset] {
@@ -184,7 +185,10 @@ impl Activity {
         calendar: &Calendar,
         parent_goal: Option<Goal>,
     ) -> Vec<Activity> {
-        if goal.children.is_some() || goal.filters.as_ref().is_some() {
+        if goal.children.is_some()
+            || goal.filters.as_ref().is_some()
+            || calendar.is_budget(goal.id.clone())
+        {
             return vec![];
         }
 
@@ -514,7 +518,7 @@ impl Activity {
 
             let activity = Activity {
                 goal_id: goal.id.clone(),
-                activity_type: ActivityType::SimpleGoal,
+                activity_type: ActivityType::SimpleFiller,
                 title: goal.title.clone(),
                 min_block_size,
                 max_block_size: min_block_size,
@@ -547,6 +551,7 @@ pub enum ActivityType {
     Budget,
     GetToMinWeekBudget,
     TopUpWeekBudget,
+    SimpleFiller,
 }
 
 impl fmt::Debug for Activity {
