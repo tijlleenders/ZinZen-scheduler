@@ -46,7 +46,7 @@ impl Budget {
                 ActivityType::SimpleGoal => {
                     budget_cut_off_number = time_budget.min_scheduled;
                 }
-                ActivityType::Budget => {
+                ActivityType::BudgetMinDay => {
                     budget_cut_off_number = time_budget.min_scheduled;
                 }
                 ActivityType::GetToMinWeekBudget => {

@@ -41,7 +41,7 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Option<V
             );
         } else {
             activities[act_index_to_schedule?].release_claims();
-            if activities[act_index_to_schedule?].activity_type == ActivityType::Budget {
+            if activities[act_index_to_schedule?].activity_type == ActivityType::BudgetMinDay {
                 activities[act_index_to_schedule?].status = Status::Processed;
                 continue;
             } else {

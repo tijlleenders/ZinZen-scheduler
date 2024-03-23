@@ -139,7 +139,7 @@ impl Activity {
                 //TODO: shouldn't this logic be in creating the activity and then set to min_block_size so we can just use that here?
                 let offset_size: usize = match self.activity_type {
                     ActivityType::SimpleGoal => self.total_duration,
-                    ActivityType::Budget => self.min_block_size,
+                    ActivityType::BudgetMinDay => self.min_block_size,
                     ActivityType::GetToMinWeekBudget => 1,
                     ActivityType::TopUpWeekBudget => 1,
                     ActivityType::SimpleFiller => self.total_duration,
@@ -283,7 +283,7 @@ impl Activity {
 
                     let activity = Activity {
                         goal_id: goal.id.clone(),
-                        activity_type: ActivityType::Budget,
+                        activity_type: ActivityType::BudgetMinDay,
                         title: goal.title.clone(),
                         min_block_size: adjusted_min_block_size,
                         max_block_size: config.max_per_day,
@@ -548,7 +548,7 @@ pub enum Status {
 #[derive(Clone, Debug, PartialEq)]
 pub enum ActivityType {
     SimpleGoal,
-    Budget,
+    BudgetMinDay,
     GetToMinWeekBudget,
     TopUpWeekBudget,
     SimpleFiller,
