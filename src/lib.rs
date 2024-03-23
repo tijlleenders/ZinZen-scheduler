@@ -94,14 +94,14 @@ pub fn run_scheduler(
 
     calendar.add_budgets_from(goals);
 
-    let mut activities = activity_generator::gen_activities(&calendar, goals);
+    let mut base_activities = activity_generator::get_base_activities(&calendar, goals);
 
-    activities = activity_placer::place(&mut calendar, activities);
+    base_activities = activity_placer::place(&mut calendar, base_activities);
 
     calendar.log_impossible_min_day_budgets();
 
     let get_to_week_min_budget_activities =
-        activity_generator::generate_get_to_week_min_budget_activities(&calendar, goals);
+        activity_generator::get_budget_min_week_activities(&calendar, goals);
     activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
     //TODO: Test that day stays below min when week min being reached so other goals can get to the week min too
 
@@ -112,7 +112,7 @@ pub fn run_scheduler(
     activity_placer::place(&mut calendar, top_up_week_budget_activities);
     //TODO: Test that day stays below min or max when week max being reachd
 
-    calendar.log_impossible_simple_activities(activities);
+    calendar.log_impossible_simple_activities(base_activities);
 
     calendar.print()
 }

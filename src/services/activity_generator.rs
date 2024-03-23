@@ -40,10 +40,7 @@ pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &[Goal]) -> V
         .collect::<Vec<_>>()
 }
 
-pub fn generate_get_to_week_min_budget_activities(
-    calendar: &Calendar,
-    goals: &[Goal],
-) -> Vec<Activity> {
+pub fn get_budget_min_week_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     let mut get_to_week_min_budget_activities = vec![];
     for budget in &calendar.budgets {
         let mut is_min_week_reached = true;
@@ -110,7 +107,7 @@ pub fn generate_top_up_week_budget_activities(
     top_up_activities
 }
 
-pub(crate) fn gen_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
+pub(crate) fn get_base_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     let mut activities: Vec<Activity> = vec![];
     for goal in goals {
         if goal.children.is_none() {
