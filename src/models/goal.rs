@@ -12,7 +12,7 @@ pub struct Goal {
     #[serde(default)]
     pub start: NaiveDateTime,
     #[serde(default)]
-    pub deadline: NaiveDateTime,
+    pub deadline: Option<NaiveDateTime>,
     #[serde(rename = "budget")]
     pub budget_config: Option<BudgetConfig>,
     pub filters: Option<Filters>,
@@ -46,14 +46,17 @@ pub struct BudgetConfig {
 }
 
 impl Goal {
-    pub fn get_adj_start_deadline(&self, calendar: &Calendar) -> (NaiveDateTime, NaiveDateTime) {
+    pub fn get_adj_start_deadline(
+        &self,
+        calendar: &Calendar,
+    ) -> (NaiveDateTime, Option<NaiveDateTime>) {
         let mut adjusted_goal_start = self.start;
         if self.start.year() == 1970 || self.start < calendar.start_date_time {
             adjusted_goal_start = calendar.start_date_time;
         }
         let mut adjusted_goal_deadline = self.deadline;
-        if self.deadline.year() == 1970 {
-            adjusted_goal_deadline = calendar.end_date_time;
+        if self.deadline.is_none() {
+            adjusted_goal_deadline = None;
         }
 
         if self.filters.is_none() {
@@ -73,9 +76,9 @@ impl Goal {
                 .sub(Duration::hours(24))
                 .add(Duration::hours(filter_option.after_time as i64));
             println!("... to {:?}", &adjusted_goal_start);
-            adjusted_goal_deadline = adjusted_goal_start.add(Duration::days(
-                (adjusted_goal_deadline - adjusted_goal_start).num_days() + 1,
-            ));
+            adjusted_goal_deadline = Some(adjusted_goal_start.add(Duration::days(
+                (adjusted_goal_deadline.unwrap() - adjusted_goal_start).num_days() + 1,
+            )));
         }
         (adjusted_goal_start, adjusted_goal_deadline)
     }

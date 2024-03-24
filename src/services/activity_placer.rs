@@ -1,9 +1,8 @@
-use std::rc::Rc;
-
 use crate::models::{
     activity::{Activity, ActivityType, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
 };
+use std::rc::Rc;
 
 pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Activity> {
     loop {
@@ -37,7 +36,9 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
                 );
             } else {
                 activities[act_index_to_schedule].release_claims();
-                if activities[act_index_to_schedule].activity_type == ActivityType::BudgetMinDay {
+                if activities[act_index_to_schedule].activity_type == ActivityType::BudgetMinDay
+                    || activities[act_index_to_schedule].deadline.is_none()
+                {
                     activities[act_index_to_schedule].status = Status::Processed;
                     continue;
                 } else {
@@ -75,6 +76,12 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
             dbg!(&calendar);
         } else {
             println!("Tried to schedule activity index None");
+            for activity in activities.iter_mut() {
+                if activity.status == Status::Unprocessed && activity.deadline.is_none() {
+                    activity.release_claims();
+                    activity.status = Status::Processed;
+                }
+            }
             break;
         }
     }

@@ -24,14 +24,14 @@ pub struct Activity {
     pub total_duration: usize,
     pub duration_left: usize,
     pub status: Status,
-    pub deadline: NaiveDateTime,
+    pub deadline: Option<NaiveDateTime>,
 }
 impl Activity {
     pub fn get_compatible_hours_overlay(
         calendar: &Calendar,
         filter_option: Option<Filters>,
         adjusted_goal_start: NaiveDateTime,
-        adjusted_goal_deadline: NaiveDateTime,
+        adjusted_activity_deadline: NaiveDateTime,
         not_on: Option<Vec<Slot>>,
     ) -> Vec<Option<Weak<Hour>>> {
         let mut compatible_hours_overlay: Vec<Option<Weak<Hour>>> =
@@ -81,7 +81,7 @@ impl Activity {
             if hour_index < calendar.get_index_of(adjusted_goal_start) {
                 compatible = false;
             }
-            if hour_index >= calendar.get_index_of(adjusted_goal_deadline) {
+            if hour_index >= calendar.get_index_of(adjusted_activity_deadline) {
                 compatible = false;
             }
 
@@ -193,11 +193,14 @@ impl Activity {
 
             let filters_option: Option<Filters> = calendar.get_filters_for(goal.id.clone());
 
+            let adjusted_activity_deadline =
+                adjusted_goal_deadline.unwrap_or(calendar.end_date_time);
+
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
                 calendar,
                 filters_option,
                 adjusted_goal_start,
-                adjusted_goal_deadline,
+                adjusted_activity_deadline,
                 goal.not_on.clone(),
             );
 
@@ -232,7 +235,10 @@ impl Activity {
         let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
-        for day in 0..(adjusted_goal_deadline - adjusted_goal_start).num_days() as u64 {
+        for day in 0..(adjusted_goal_deadline.unwrap_or(calendar.end_date_time)
+            - adjusted_goal_start)
+            .num_days() as u64
+        {
             if let Some(filter_option) = &goal.filters {
                 if filter_option
                     .on_days
@@ -453,7 +459,12 @@ impl Activity {
         }
 
         if self.flex() == 0 {
-            self.status = Status::Impossible;
+            if self.deadline.is_none() {
+                self.status = Status::Processed;
+                self.release_claims();
+            } else {
+                self.status = Status::Impossible;
+            }
         }
     }
 
@@ -483,11 +494,14 @@ impl Activity {
 
             let filters_option: Option<Filters> = calendar.get_filters_for(goal.id.clone());
 
+            let adjusted_activity_deadline =
+                adjusted_goal_deadline.unwrap_or(calendar.end_date_time);
+
             let compatible_hours_overlay = Activity::get_compatible_hours_overlay(
                 calendar,
                 filters_option,
                 adjusted_goal_start,
-                adjusted_goal_deadline,
+                adjusted_activity_deadline,
                 goal.not_on.clone(),
             );
 
