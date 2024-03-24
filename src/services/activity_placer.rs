@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::{cmp, rc::Rc};
 
 use crate::models::{
     activity::{Activity, ActivityType, Status},
@@ -11,19 +11,12 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
             activity.update_overlay_with(&calendar.budgets);
         }
         if let Some(act_index_to_schedule) = find_act_index_to_schedule(&activities) {
-            if activities[act_index_to_schedule].goal_id.len() > 5 {
-                println!(
-                    "Next to schedule: {:?} {:?}",
-                    &activities[act_index_to_schedule].title,
-                    &activities[act_index_to_schedule].goal_id[0..5]
-                );
-            } else {
-                println!(
-                    "Next to schedule: {:?} {:?}",
-                    &activities[act_index_to_schedule].title,
-                    &activities[act_index_to_schedule].goal_id
-                );
-            }
+            println!(
+                "Next to schedule: {:?} {:?}",
+                &activities[act_index_to_schedule].title,
+                &activities[act_index_to_schedule].goal_id
+                    [0..cmp::min(activities[act_index_to_schedule].goal_id.len(), 5)]
+            );
             let best_hour_index_and_size: Option<(usize, usize)> =
                 activities[act_index_to_schedule].get_best_scheduling_index_and_length();
             let best_hour_index: usize;
