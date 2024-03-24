@@ -25,6 +25,7 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
                 );
                 if conflicts > 0
                     && activities[act_index_to_schedule].deadline.is_none()
+                    && !calendar.is_budget(activities[act_index_to_schedule].goal_id.clone())
                     && activities[act_index_to_schedule].status != Status::BestEffort
                 {
                     println!(
