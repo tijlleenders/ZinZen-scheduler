@@ -25,7 +25,7 @@ pub struct ImpossibleActivity {
     pub id: String,
     pub hours_missing: usize,
     pub period_start_date_time: NaiveDateTime,
-    pub period_end_date_time: NaiveDateTime,
+    pub period_end_date_time: Option<NaiveDateTime>,
 }
 
 pub struct Calendar {
@@ -306,13 +306,13 @@ impl Calendar {
 
     pub fn log_impossible_base_activities(&mut self, activities: Vec<Activity>) {
         for activity in activities {
-            if activity.status == super::activity::Status::Impossible && activity.deadline.is_none()
+            if activity.status == super::activity::Status::Impossible && activity.deadline.is_some()
             {
                 self.impossible_activities.push(ImpossibleActivity {
                     id: activity.goal_id.clone(),
                     hours_missing: activity.duration_left,
                     period_start_date_time: self.start_date_time,
-                    period_end_date_time: self.end_date_time,
+                    period_end_date_time: activity.deadline,
                 })
             }
         }
@@ -334,9 +334,10 @@ impl Calendar {
                         period_start_date_time: self
                             .start_date_time
                             .add(Duration::hours(time_budget.calendar_start_index as i64)),
-                        period_end_date_time: self
-                            .start_date_time
-                            .add(Duration::hours(time_budget.calendar_end_index as i64)),
+                        period_end_date_time: Some(
+                            self.start_date_time
+                                .add(Duration::hours(time_budget.calendar_end_index as i64)),
+                        ),
                     });
                 }
             }

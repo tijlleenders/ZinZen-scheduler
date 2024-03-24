@@ -459,12 +459,8 @@ impl Activity {
         }
 
         if self.flex() == 0 {
-            if self.deadline.is_none() {
-                self.status = Status::Processed;
-                self.release_claims();
-            } else {
-                self.status = Status::Impossible;
-            }
+            self.status = Status::Impossible;
+            self.release_claims();
         }
     }
 

@@ -36,9 +36,7 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
                 );
             } else {
                 activities[act_index_to_schedule].release_claims();
-                if activities[act_index_to_schedule].activity_type == ActivityType::BudgetMinDay
-                    || activities[act_index_to_schedule].deadline.is_none()
-                {
+                if activities[act_index_to_schedule].activity_type == ActivityType::BudgetMinDay {
                     activities[act_index_to_schedule].status = Status::Processed;
                     continue;
                 } else {
@@ -48,7 +46,7 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
                     id: activities[act_index_to_schedule].goal_id.clone(),
                     hours_missing: activities[act_index_to_schedule].duration_left,
                     period_start_date_time: calendar.start_date_time,
-                    period_end_date_time: calendar.end_date_time,
+                    period_end_date_time: Some(calendar.end_date_time),
                 };
                 calendar.impossible_activities.push(impossible_activity);
                 continue;
@@ -76,12 +74,6 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
             dbg!(&calendar);
         } else {
             println!("Tried to schedule activity index None");
-            for activity in activities.iter_mut() {
-                if activity.status == Status::Unprocessed && activity.deadline.is_none() {
-                    activity.release_claims();
-                    activity.status = Status::Processed;
-                }
-            }
             break;
         }
     }
