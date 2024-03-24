@@ -1,5 +1,5 @@
 use crate::models::{
-    activity::{self, Activity, ActivityType, Status},
+    activity::{Activity, ActivityType, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
 };
 use std::{cmp, rc::Rc};
