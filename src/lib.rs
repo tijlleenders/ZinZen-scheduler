@@ -118,6 +118,9 @@ pub fn run_scheduler(
     //      So MinDayBudget will get chosen last unless flex is equal and order happens to favor MinDayBudget
     //          => TODO: order activities before placing?
 
+    base_activities = activity_placer::reset_postponed(base_activities);
+    base_activities = activity_placer::place(&mut calendar, base_activities);
+
     calendar.log_impossible_base_activities(base_activities);
 
     calendar.print()
