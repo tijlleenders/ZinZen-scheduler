@@ -1,9 +1,8 @@
-use std::{cmp, rc::Rc};
-
 use crate::models::{
     activity::{Activity, ActivityType, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
 };
+use std::{cmp, rc::Rc};
 
 pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Activity> {
     loop {
@@ -55,8 +54,8 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
                 let impossible_activity = ImpossibleActivity {
                     id: activities[act_index_to_schedule].goal_id.clone(),
                     hours_missing: activities[act_index_to_schedule].duration_left,
-                    period_start_date_time: calendar.start_date_time,
-                    period_end_date_time: calendar.end_date_time,
+                    period_start_date_time: activities[act_index_to_schedule].start,
+                    period_end_date_time: activities[act_index_to_schedule].deadline,
                 };
                 calendar.impossible_activities.push(impossible_activity);
                 continue;
