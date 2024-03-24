@@ -311,7 +311,7 @@ impl Calendar {
                 self.impossible_activities.push(ImpossibleActivity {
                     id: activity.goal_id.clone(),
                     hours_missing: activity.duration_left,
-                    period_start_date_time: self.start_date_time,
+                    period_start_date_time: activity.start,
                     period_end_date_time: activity.deadline,
                 })
             }

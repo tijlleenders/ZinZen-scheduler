@@ -24,6 +24,7 @@ pub struct Activity {
     pub total_duration: usize,
     pub duration_left: usize,
     pub status: Status,
+    pub start: NaiveDateTime,
     pub deadline: Option<NaiveDateTime>,
 }
 impl Activity {
@@ -214,6 +215,7 @@ impl Activity {
                 total_duration: activity_total_duration,
                 duration_left: activity_total_duration,
                 status: Status::Unprocessed,
+                start: adjusted_goal_start,
                 deadline: goal.deadline,
             };
             dbg!(&activity);
@@ -279,6 +281,7 @@ impl Activity {
                         total_duration: adjusted_min_block_size,
                         duration_left: config.min_per_day,
                         status: Status::Unprocessed,
+                        start: adjusted_goal_start,
                         deadline: goal.deadline,
                     };
                     dbg!(&activity);
@@ -321,6 +324,7 @@ impl Activity {
             total_duration: max_hours,
             duration_left: max_hours,
             status: Status::Unprocessed,
+            start: goal_to_use.start,
             deadline: goal_to_use.deadline,
         });
 
@@ -360,6 +364,7 @@ impl Activity {
             total_duration: max_hours,
             duration_left: max_hours,
             status: Status::Unprocessed,
+            start: goal_to_use.start,
             deadline: goal_to_use.deadline,
         });
 
@@ -511,6 +516,7 @@ impl Activity {
                 total_duration: activity_total_duration,
                 duration_left: activity_total_duration,
                 status: Status::Unprocessed,
+                start: adjusted_goal_start,
                 deadline: goal.deadline,
             };
             dbg!(&activity);
