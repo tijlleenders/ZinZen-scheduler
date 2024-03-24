@@ -533,6 +533,8 @@ pub enum Status {
     Processed,
     Scheduled,
     Impossible,
+    Postponed,
+    BestEffort,
 }
 
 #[derive(Clone, Debug, PartialEq)]

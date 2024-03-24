@@ -23,6 +23,17 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
                     "Best index:{:?}, size {:?}, best conflicts {:?}",
                     &best_hour_index, &best_size, &conflicts
                 );
+                if conflicts > 0
+                    && activities[act_index_to_schedule].deadline.is_none()
+                    && activities[act_index_to_schedule].status != Status::BestEffort
+                {
+                    println!(
+                        "Postponing placement of {:?} - since no deadline and conflicts > 0...\n",
+                        activities[act_index_to_schedule].title
+                    );
+                    activities[act_index_to_schedule].status = Status::Postponed;
+                    continue;
+                }
                 println!("reserving {:?} hours...", best_size);
                 for duration_offset in 0..best_size {
                     Rc::make_mut(&mut calendar.hours[best_hour_index + duration_offset]);
@@ -75,6 +86,7 @@ fn find_act_index_to_schedule(activities: &[Activity]) -> Option<usize> {
         if activities[index].status == Status::Scheduled
             || activities[index].status == Status::Impossible
             || activities[index].status == Status::Processed
+            || activities[index].status == Status::Postponed
         {
             continue;
         }
@@ -107,4 +119,13 @@ fn find_act_index_to_schedule(activities: &[Activity]) -> Option<usize> {
         }
     }
     act_index_to_schedule
+}
+
+pub(crate) fn reset_postponed(mut base_activities: Vec<Activity>) -> Vec<Activity> {
+    for activity in base_activities.iter_mut() {
+        if activity.status == Status::Postponed {
+            activity.status = Status::BestEffort;
+        }
+    }
+    base_activities
 }
