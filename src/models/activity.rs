@@ -164,7 +164,7 @@ impl Activity {
                                         best_scheduling_index_length_conflicts =
                                             Some((hour_index, offset_size, conflicts));
                                     }
-                                    Some((_, best_conflicts, _)) => {
+                                    Some((_, _, best_conflicts)) => {
                                         if conflicts < best_conflicts || conflicts == 0 {
                                             best_scheduling_index_length_conflicts =
                                                 Some((hour_index, offset_size, conflicts));
