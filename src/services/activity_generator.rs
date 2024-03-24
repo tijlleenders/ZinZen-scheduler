@@ -1,44 +1,5 @@
 use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calendar, goal::Goal};
 
-pub fn generate_simple_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
-    goals
-        .iter()
-        .flat_map(|goal| Activity::get_simple_activities(goal, calendar))
-        .collect::<Vec<_>>()
-}
-
-pub fn generate_simple_filler_goal_activities(
-    calendar: &Calendar,
-    goals: &[Goal],
-) -> Vec<Activity> {
-    let mut activities = goals
-        .iter()
-        .flat_map(|goal| Activity::get_simple_filler_activities(goal, calendar))
-        .collect::<Vec<_>>();
-    for activity in &mut activities {
-        if let Some(goal) = goals.iter().find(|g| g.id == activity.goal_id) {
-            let children: Vec<&Goal> = goals
-                .iter()
-                .filter(|child| goal.children.clone().unwrap().contains(&child.id))
-                .collect();
-            for c in children {
-                activity.min_block_size -= c.min_duration.unwrap();
-                activity.max_block_size -= c.min_duration.unwrap();
-                activity.total_duration -= c.min_duration.unwrap();
-                activity.duration_left -= c.min_duration.unwrap();
-            }
-        }
-    }
-    activities
-}
-
-pub fn generate_budget_goal_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
-    goals
-        .iter()
-        .flat_map(|goal| Activity::get_budget_min_day_activities(goal, calendar))
-        .collect::<Vec<_>>()
-}
-
 pub fn get_budget_min_week_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Activity> {
     let mut get_to_week_min_budget_activities = vec![];
     for budget in &calendar.budgets {
