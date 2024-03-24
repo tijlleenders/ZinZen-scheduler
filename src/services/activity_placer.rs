@@ -11,17 +11,17 @@ pub fn place(calendar: &mut Calendar, mut activities: Vec<Activity>) -> Vec<Acti
         }
         if let Some(act_index_to_schedule) = find_act_index_to_schedule(&activities) {
             println!(
-                "Next to schedule: {:?} {:?}",
+                "Next to schedule: {:?}, id {:?}\n",
                 &activities[act_index_to_schedule].title,
                 &activities[act_index_to_schedule].goal_id
                     [0..cmp::min(activities[act_index_to_schedule].goal_id.len(), 5)]
             );
-            if let Some((best_hour_index, best_size)) =
-                activities[act_index_to_schedule].get_best_scheduling_index_and_length()
+            if let Some((best_hour_index, best_size, conflicts)) =
+                activities[act_index_to_schedule].get_best_scheduling_index_length_conflicts()
             {
                 println!(
-                    "Best index:{:?} and size {:?}",
-                    &best_hour_index, &best_size
+                    "Best index:{:?}, size {:?}, best conflicts {:?}",
+                    &best_hour_index, &best_size, &conflicts
                 );
                 println!("reserving {:?} hours...", best_size);
                 for duration_offset in 0..best_size {
@@ -78,9 +78,14 @@ fn find_act_index_to_schedule(activities: &[Activity]) -> Option<usize> {
         {
             continue;
         }
+        let current_act_flex = activities[index].flex();
+        println!(
+            "Flex {:?} for {:?}",
+            current_act_flex, activities[index].title
+        );
         match act_index_to_schedule {
             None => act_index_to_schedule = Some(index),
-            Some(_) => match activities[index].flex() {
+            Some(_) => match current_act_flex {
                 0 => {
                     println!("Found activity index {:?} with flex 0...", &index);
                     continue;
@@ -94,7 +99,7 @@ fn find_act_index_to_schedule(activities: &[Activity]) -> Option<usize> {
                     }
                 }
                 _ => {
-                    if activities[act_index_to_schedule?].flex() < activities[index].flex() {
+                    if activities[act_index_to_schedule?].flex() < current_act_flex {
                         act_index_to_schedule = Some(index);
                     }
                 }

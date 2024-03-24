@@ -131,8 +131,8 @@ impl Activity {
         flex
     }
 
-    pub fn get_best_scheduling_index_and_length(&self) -> Option<(usize, usize)> {
-        let mut best_scheduling_index_and_conflicts: Option<(usize, usize, usize)> = None;
+    pub fn get_best_scheduling_index_length_conflicts(&self) -> Option<(usize, usize, usize)> {
+        let mut best_scheduling_index_length_conflicts: Option<(usize, usize, usize)> = None;
         for hour_index in 0..self.calendar_overlay.len() {
             let mut conflicts = 0;
             if self.calendar_overlay[hour_index].is_some() {
@@ -159,15 +159,15 @@ impl Activity {
                             conflicts += weak.weak_count();
                             //if last position check if best so far - or so little we can break
                             if offset == offset_size - 1 {
-                                match best_scheduling_index_and_conflicts {
+                                match best_scheduling_index_length_conflicts {
                                     None => {
-                                        best_scheduling_index_and_conflicts =
-                                            Some((hour_index, conflicts, offset_size));
+                                        best_scheduling_index_length_conflicts =
+                                            Some((hour_index, offset_size, conflicts));
                                     }
                                     Some((_, best_conflicts, _)) => {
                                         if conflicts < best_conflicts || conflicts == 0 {
-                                            best_scheduling_index_and_conflicts =
-                                                Some((hour_index, conflicts, offset_size));
+                                            best_scheduling_index_length_conflicts =
+                                                Some((hour_index, offset_size, conflicts));
                                         }
                                     }
                                 }
@@ -177,7 +177,7 @@ impl Activity {
                 }
             }
         }
-        best_scheduling_index_and_conflicts.map(|(best_index, _, size)| (best_index, size))
+        best_scheduling_index_length_conflicts
     }
 
     pub(crate) fn get_simple_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
