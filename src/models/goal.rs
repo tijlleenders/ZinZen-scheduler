@@ -76,9 +76,14 @@ impl Goal {
                 .sub(Duration::hours(24))
                 .add(Duration::hours(filter_option.after_time as i64));
             println!("... to {:?}", &adjusted_goal_start);
-            adjusted_goal_deadline = Some(adjusted_goal_start.add(Duration::days(
-                (adjusted_goal_deadline.unwrap() - adjusted_goal_start).num_days() + 1,
-            )));
+            adjusted_goal_deadline = Some(
+                adjusted_goal_start.add(Duration::days(
+                    (adjusted_goal_deadline.unwrap_or(calendar.end_date_time)
+                        - adjusted_goal_start)
+                        .num_days()
+                        + 1,
+                )),
+            );
         }
         (adjusted_goal_start, adjusted_goal_deadline)
     }
