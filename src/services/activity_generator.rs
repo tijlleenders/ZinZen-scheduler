@@ -92,10 +92,12 @@ pub(crate) fn get_base_activities(calendar: &Calendar, goals: &[Goal]) -> Vec<Ac
                     .filter(|child| goal.children.clone().unwrap().contains(&child.id))
                     .collect();
                 for c in children {
-                    activity.min_block_size -= c.min_duration.unwrap();
-                    activity.max_block_size -= c.min_duration.unwrap();
-                    activity.total_duration -= c.min_duration.unwrap();
-                    activity.duration_left -= c.min_duration.unwrap();
+                    if let Some(child_duration) = c.min_duration {
+                        activity.min_block_size -= child_duration;
+                        activity.max_block_size -= child_duration;
+                        activity.total_duration -= child_duration;
+                        activity.duration_left -= child_duration;
+                    }
                 }
             }
             activities.append(&mut temp_activities);
