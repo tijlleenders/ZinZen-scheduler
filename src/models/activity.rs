@@ -145,6 +145,9 @@ impl Activity {
                     ActivityType::SimpleFiller => self.total_duration,
                 };
                 for offset in 0..offset_size {
+                    if hour_index + offset == self.calendar_overlay.len() {
+                        break;
+                    }
                     match &self.calendar_overlay[hour_index + offset] {
                         None => {
                             // panic!("Does this ever happen?");
