@@ -1,6 +1,7 @@
 use crate::models::{
     activity::{Activity, ActivityType, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
+    task::TaskCompletedToday,
 };
 use std::{cmp, rc::Rc};
 
@@ -131,4 +132,12 @@ pub(crate) fn reset_postponed(mut base_activities: Vec<Activity>) -> Vec<Activit
         }
     }
     base_activities
+}
+
+pub(crate) fn place_tasks_completed_today(
+    calendar: &mut Calendar,
+    mut base_activities: Vec<Activity>,
+    tasks_completed_today: &[TaskCompletedToday],
+) -> Vec<Activity> {
+    todo!()
 }

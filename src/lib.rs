@@ -103,6 +103,12 @@ pub fn run_scheduler(
 
     let mut base_activities = activity_generator::get_base_activities(&calendar, goals);
 
+    base_activities = activity_placer::place_tasks_completed_today(
+        &mut calendar,
+        base_activities,
+        tasks_completed_today,
+    );
+
     base_activities = activity_placer::place(&mut calendar, base_activities);
 
     calendar.log_impossible_min_day_budgets();
