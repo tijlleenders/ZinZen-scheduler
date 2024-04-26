@@ -29,7 +29,12 @@ mod TEST_MODULE_NAME {
         let input: Input = input_output::get_input_from_json(input_path).unwrap();
         let desired_output: String = input_output::get_output_string_from_json(output_path);
 
-        let output = scheduler::run_scheduler(input.start_date, input.end_date, &input.goals);
+        let output = scheduler::run_scheduler(
+            input.start_date,
+            input.end_date,
+            &input.goals,
+            &input.tasks_completed_today,
+        );
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();
 

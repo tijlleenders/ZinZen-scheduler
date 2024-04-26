@@ -53,6 +53,7 @@
 //! quality perception of the ZinZen&reg; projects.
 
 use chrono::NaiveDateTime;
+use models::task::TaskCompletedToday;
 use models::{calendar::Calendar, goal::Goal, task::FinalTasks};
 use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
@@ -80,7 +81,12 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
     console_error_panic_hook::set_once();
     // JsError implements From<Error>, so we can just use `?` on any Error
     let input: Input = from_value(input.clone())?;
-    let final_tasks = run_scheduler(input.start_date, input.end_date, &input.goals);
+    let final_tasks = run_scheduler(
+        input.start_date,
+        input.end_date,
+        &input.goals,
+        &input.tasks_completed_today,
+    );
     Ok(to_value(&final_tasks)?)
 }
 
@@ -88,6 +94,7 @@ pub fn run_scheduler(
     start_date: NaiveDateTime,
     end_date: NaiveDateTime,
     goals: &[Goal],
+    tasks_completed_today: &[TaskCompletedToday],
 ) -> FinalTasks {
     let mut calendar = Calendar::new(start_date, end_date);
     dbg!(&calendar);
