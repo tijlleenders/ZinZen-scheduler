@@ -286,10 +286,10 @@ impl Calendar {
         }
     }
 
-    pub fn update_budgets_for(&mut self, goal: &str, duration_offset: usize) {
+    pub fn update_budgets_for(&mut self, goal: &str, cal_index: usize) {
         let iterator = self.budgets.iter_mut();
         for budget in iterator {
-            budget.reduce_for_(goal, duration_offset);
+            budget.reduce_for_(goal, cal_index);
         }
     }
 
