@@ -3,7 +3,10 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::{fs, path::Path};
 extern crate scheduler;
-use scheduler::{models::goal::Goal, run_scheduler};
+use scheduler::{
+    models::{goal::Goal, task::TaskCompletedToday},
+    run_scheduler,
+};
 fn main() {
     println!("Running!");
     let path = Path::new("./tests/jsons/stable/algorithm-challenge/input.json");
@@ -12,7 +15,12 @@ fn main() {
     dbg!(&json);
     let input: Input = serde_json::from_value(json).unwrap();
     dbg!(&input);
-    run_scheduler(input.start_date, input.end_date, &input.goals);
+    run_scheduler(
+        input.start_date,
+        input.end_date,
+        &input.goals,
+        &input.tasks_completed_today,
+    );
 }
 
 #[derive(Deserialize, Debug)]
@@ -21,4 +29,5 @@ struct Input {
     start_date: NaiveDateTime,
     end_date: NaiveDateTime,
     goals: Vec<Goal>,
+    tasks_completed_today: Vec<TaskCompletedToday>,
 }

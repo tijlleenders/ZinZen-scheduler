@@ -1,4 +1,5 @@
 use crate::models::goal::Goal;
+use crate::models::task::TaskCompletedToday;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 use std::error::Error;
@@ -14,6 +15,7 @@ pub struct Input {
     pub start_date: NaiveDateTime,
     pub end_date: NaiveDateTime,
     pub goals: Vec<Goal>,
+    pub tasks_completed_today: Vec<TaskCompletedToday>,
 }
 
 pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Error>> {

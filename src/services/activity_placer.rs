@@ -1,6 +1,7 @@
 use crate::models::{
     activity::{Activity, ActivityType, Status},
     calendar::{Calendar, Hour, ImpossibleActivity},
+    task::TaskCompletedToday,
 };
 use std::{cmp, rc::Rc};
 
@@ -130,5 +131,61 @@ pub(crate) fn reset_postponed(mut base_activities: Vec<Activity>) -> Vec<Activit
             activity.status = Status::BestEffort;
         }
     }
+    base_activities
+}
+
+pub(crate) fn place_tasks_completed_today(
+    calendar: &mut Calendar,
+    mut base_activities: Vec<Activity>,
+    tasks_completed_today: &[TaskCompletedToday],
+) -> Vec<Activity> {
+    dbg!(&calendar);
+    for task in tasks_completed_today.iter() {
+        let start_index = calendar.get_index_of(task.start);
+        let end_index = calendar.get_index_of(task.deadline);
+
+        for hour_index in start_index..end_index {
+            let mut act_index_to_schedule: Option<usize> = None;
+            for (act_index, activity) in base_activities.iter().enumerate() {
+                if activity.goal_id == task.goalid
+                //by default, just pick the first
+                //but if you find one that has is claiming the index - use that
+                {
+                    if act_index_to_schedule.is_none() {
+                        act_index_to_schedule = Some(act_index);
+                    }
+                    if activity.calendar_overlay[hour_index].is_some() {
+                        //check if hour is claimed and if so - override and break
+                        act_index_to_schedule = Some(act_index);
+                        break;
+                    }
+                }
+            }
+
+            //hardcode hours in calendar per hour:
+            if let Some(act_index_to_schedule) = act_index_to_schedule {
+                println!("hardcoding {:?} hours...", end_index - start_index);
+                Rc::make_mut(&mut calendar.hours[hour_index]);
+                calendar.hours[hour_index] = Rc::new(Hour::Occupied {
+                    activity_index: act_index_to_schedule,
+                    activity_title: base_activities[act_index_to_schedule].title.clone(),
+                    activity_goalid: base_activities[act_index_to_schedule].goal_id.clone(),
+                });
+                calendar.update_budgets_for(
+                    &base_activities[act_index_to_schedule].goal_id.clone(),
+                    hour_index,
+                );
+                if base_activities[act_index_to_schedule].duration_left > 0 {
+                    base_activities[act_index_to_schedule].duration_left -= 1;
+                };
+                if base_activities[act_index_to_schedule].duration_left == 0 {
+                    base_activities[act_index_to_schedule].status = Status::Scheduled;
+                    (base_activities[act_index_to_schedule]).release_claims();
+                }
+            }
+        }
+    }
+    dbg!(&calendar);
+
     base_activities
 }

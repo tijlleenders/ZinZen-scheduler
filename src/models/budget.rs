@@ -20,12 +20,12 @@ pub struct Budget {
     pub time_filters: Filters,
 }
 impl Budget {
-    pub fn reduce_for_(&mut self, goal: &str, duration_offset: usize) {
+    pub fn reduce_for_(&mut self, goal: &str, cal_index: usize) {
         if self.participating_goals.contains(&goal.to_string()) {
             let iterator = self.time_budgets.iter_mut().enumerate();
             for (_, time_budget) in iterator {
-                if duration_offset >= time_budget.calendar_start_index
-                    && duration_offset < time_budget.calendar_end_index
+                if cal_index >= time_budget.calendar_start_index
+                    && cal_index < time_budget.calendar_end_index
                 {
                     time_budget.scheduled += 1
                 }

@@ -1,6 +1,6 @@
 ///Tasks are only used for outputting
 use chrono::{NaiveDate, NaiveDateTime};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use super::calendar::ImpossibleActivity;
 
@@ -25,4 +25,11 @@ pub struct Task {
 pub struct DayTasks {
     pub day: NaiveDate,
     pub tasks: Vec<Task>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct TaskCompletedToday {
+    pub goalid: String,
+    pub start: NaiveDateTime,
+    pub deadline: NaiveDateTime,
 }
