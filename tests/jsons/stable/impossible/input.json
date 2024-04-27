@@ -29,5 +29,6 @@
         "minDuration": 3,
         "start": "2022-01-01T23:00:00"
       }
-    ]
+    ],
+    "tasksCompletedToday": []
   }
