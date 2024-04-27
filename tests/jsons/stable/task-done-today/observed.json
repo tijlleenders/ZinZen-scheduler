@@ -1,573 +1,792 @@
 {
   "scheduled": [
     {
-      "day": "2022-10-01",
+      "day": "2024-04-26",
       "tasks": [
         {
           "taskid": 0,
-          "goalid": "1",
-          "title": "study french",
-          "duration": 2,
-          "start": "2022-10-01T00:00:00",
-          "deadline": "2022-10-01T02:00:00"
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 5,
+          "start": "2024-04-26T00:00:00",
+          "deadline": "2024-04-26T05:00:00"
         },
         {
           "taskid": 1,
-          "goalid": "free",
-          "title": "free",
-          "duration": 22,
-          "start": "2022-10-01T02:00:00",
-          "deadline": "2022-10-02T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-02",
-      "tasks": [
+          "goalid": "543db004-39c5-479c-bc8d-b3824c82d2f7",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-04-26T05:00:00",
+          "deadline": "2024-04-26T06:00:00"
+        },
         {
           "taskid": 2,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-02T00:00:00",
-          "deadline": "2022-10-03T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-03",
-      "tasks": [
+          "goalid": "a818bc5c-e4ac-4156-b2ab-bb3a887664ac",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-04-26T06:00:00",
+          "deadline": "2024-04-26T07:00:00"
+        },
         {
           "taskid": 3,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-03T00:00:00",
-          "deadline": "2022-10-04T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-04",
-      "tasks": [
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 5,
+          "start": "2024-04-26T07:00:00",
+          "deadline": "2024-04-26T12:00:00"
+        },
         {
           "taskid": 4,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-04T00:00:00",
-          "deadline": "2022-10-05T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-05",
-      "tasks": [
+          "goalid": "6cba6d14-36e5-4a67-adcb-baa7dc7f3bb4",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-04-26T12:00:00",
+          "deadline": "2024-04-26T13:00:00"
+        },
         {
           "taskid": 5,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
-          "start": "2022-10-05T00:00:00",
-          "deadline": "2022-10-06T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-06",
-      "tasks": [
+          "duration": 1,
+          "start": "2024-04-26T13:00:00",
+          "deadline": "2024-04-26T14:00:00"
+        },
         {
           "taskid": 6,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-06T00:00:00",
-          "deadline": "2022-10-07T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-07",
-      "tasks": [
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 3,
+          "start": "2024-04-26T14:00:00",
+          "deadline": "2024-04-26T17:00:00"
+        },
         {
           "taskid": 7,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-07T00:00:00",
-          "deadline": "2022-10-08T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-08",
-      "tasks": [
+          "goalid": "db64fa8f-b04d-4c19-ae84-947482dba09f",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-04-26T17:00:00",
+          "deadline": "2024-04-26T18:00:00"
+        },
         {
           "taskid": 8,
-          "goalid": "1",
-          "title": "study french",
-          "duration": 2,
-          "start": "2022-10-08T00:00:00",
-          "deadline": "2022-10-08T02:00:00"
+          "goalid": "72b3d9e1-430e-453b-b7b1-58d8132c4f93",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-04-26T18:00:00",
+          "deadline": "2024-04-26T19:00:00"
         },
         {
           "taskid": 9,
           "goalid": "free",
           "title": "free",
-          "duration": 22,
-          "start": "2022-10-08T02:00:00",
-          "deadline": "2022-10-09T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-09",
-      "tasks": [
+          "duration": 2,
+          "start": "2024-04-26T19:00:00",
+          "deadline": "2024-04-26T21:00:00"
+        },
         {
           "taskid": 10,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-09T00:00:00",
-          "deadline": "2022-10-10T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-10",
-      "tasks": [
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-04-26T21:00:00",
+          "deadline": "2024-04-26T22:00:00"
+        },
         {
           "taskid": 11,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-10T00:00:00",
-          "deadline": "2022-10-11T00:00:00"
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 2,
+          "start": "2024-04-26T22:00:00",
+          "deadline": "2024-04-27T00:00:00"
         }
       ]
     },
     {
-      "day": "2022-10-11",
+      "day": "2024-04-27",
       "tasks": [
         {
           "taskid": 12,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-11T00:00:00",
-          "deadline": "2022-10-12T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-12",
-      "tasks": [
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 5,
+          "start": "2024-04-27T00:00:00",
+          "deadline": "2024-04-27T05:00:00"
+        },
         {
           "taskid": 13,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-12T00:00:00",
-          "deadline": "2022-10-13T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-13",
-      "tasks": [
+          "goalid": "543db004-39c5-479c-bc8d-b3824c82d2f7",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-04-27T05:00:00",
+          "deadline": "2024-04-27T06:00:00"
+        },
         {
           "taskid": 14,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-13T00:00:00",
-          "deadline": "2022-10-14T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-14",
-      "tasks": [
+          "goalid": "db64fa8f-b04d-4c19-ae84-947482dba09f",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-04-27T06:00:00",
+          "deadline": "2024-04-27T07:00:00"
+        },
         {
           "taskid": 15,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-14T00:00:00",
-          "deadline": "2022-10-15T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-15",
-      "tasks": [
+          "goalid": "a818bc5c-e4ac-4156-b2ab-bb3a887664ac",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-04-27T07:00:00",
+          "deadline": "2024-04-27T08:00:00"
+        },
         {
           "taskid": 16,
-          "goalid": "1",
-          "title": "study french",
-          "duration": 2,
-          "start": "2022-10-15T00:00:00",
-          "deadline": "2022-10-15T02:00:00"
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-04-27T08:00:00",
+          "deadline": "2024-04-27T09:00:00"
         },
         {
           "taskid": 17,
-          "goalid": "free",
-          "title": "free",
-          "duration": 22,
-          "start": "2022-10-15T02:00:00",
-          "deadline": "2022-10-16T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-16",
-      "tasks": [
+          "goalid": "a4da5446-8064-4f79-bbf2-973f59fe9294",
+          "title": "House chores 🏡🧹🛠️",
+          "duration": 1,
+          "start": "2024-04-27T09:00:00",
+          "deadline": "2024-04-27T10:00:00"
+        },
         {
           "taskid": 18,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-16T00:00:00",
-          "deadline": "2022-10-17T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-17",
-      "tasks": [
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 2,
+          "start": "2024-04-27T10:00:00",
+          "deadline": "2024-04-27T12:00:00"
+        },
         {
           "taskid": 19,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-17T00:00:00",
-          "deadline": "2022-10-18T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-18",
-      "tasks": [
+          "goalid": "6cba6d14-36e5-4a67-adcb-baa7dc7f3bb4",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-04-27T12:00:00",
+          "deadline": "2024-04-27T13:00:00"
+        },
         {
           "taskid": 20,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-18T00:00:00",
-          "deadline": "2022-10-19T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-19",
-      "tasks": [
+          "goalid": "a4da5446-8064-4f79-bbf2-973f59fe9294",
+          "title": "House chores 🏡🧹🛠️",
+          "duration": 1,
+          "start": "2024-04-27T13:00:00",
+          "deadline": "2024-04-27T14:00:00"
+        },
         {
           "taskid": 21,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-19T00:00:00",
-          "deadline": "2022-10-20T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-20",
-      "tasks": [
+          "goalid": "2e3e5fee-dcd7-456e-a6ca-994caea9b82b",
+          "title": "Hobby project 🚂🚋",
+          "duration": 1,
+          "start": "2024-04-27T14:00:00",
+          "deadline": "2024-04-27T15:00:00"
+        },
         {
           "taskid": 22,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
-          "start": "2022-10-20T00:00:00",
-          "deadline": "2022-10-21T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-21",
-      "tasks": [
+          "duration": 3,
+          "start": "2024-04-27T15:00:00",
+          "deadline": "2024-04-27T18:00:00"
+        },
         {
           "taskid": 23,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-21T00:00:00",
-          "deadline": "2022-10-22T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-22",
-      "tasks": [
+          "goalid": "72b3d9e1-430e-453b-b7b1-58d8132c4f93",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-04-27T18:00:00",
+          "deadline": "2024-04-27T19:00:00"
+        },
         {
           "taskid": 24,
-          "goalid": "1",
-          "title": "study french",
+          "goalid": "free",
+          "title": "free",
           "duration": 2,
-          "start": "2022-10-22T00:00:00",
-          "deadline": "2022-10-22T02:00:00"
+          "start": "2024-04-27T19:00:00",
+          "deadline": "2024-04-27T21:00:00"
         },
         {
           "taskid": 25,
-          "goalid": "free",
-          "title": "free",
-          "duration": 22,
-          "start": "2022-10-22T02:00:00",
-          "deadline": "2022-10-23T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-23",
-      "tasks": [
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-04-27T21:00:00",
+          "deadline": "2024-04-27T22:00:00"
+        },
         {
           "taskid": 26,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-23T00:00:00",
-          "deadline": "2022-10-24T00:00:00"
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 2,
+          "start": "2024-04-27T22:00:00",
+          "deadline": "2024-04-28T00:00:00"
         }
       ]
     },
     {
-      "day": "2022-10-24",
+      "day": "2024-04-28",
       "tasks": [
         {
           "taskid": 27,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-24T00:00:00",
-          "deadline": "2022-10-25T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-25",
-      "tasks": [
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 5,
+          "start": "2024-04-28T00:00:00",
+          "deadline": "2024-04-28T05:00:00"
+        },
         {
           "taskid": 28,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-25T00:00:00",
-          "deadline": "2022-10-26T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-26",
-      "tasks": [
+          "goalid": "543db004-39c5-479c-bc8d-b3824c82d2f7",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-04-28T05:00:00",
+          "deadline": "2024-04-28T06:00:00"
+        },
         {
           "taskid": 29,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-26T00:00:00",
-          "deadline": "2022-10-27T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-27",
-      "tasks": [
+          "goalid": "db64fa8f-b04d-4c19-ae84-947482dba09f",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-04-28T06:00:00",
+          "deadline": "2024-04-28T07:00:00"
+        },
         {
           "taskid": 30,
-          "goalid": "free",
-          "title": "free",
-          "duration": 24,
-          "start": "2022-10-27T00:00:00",
-          "deadline": "2022-10-28T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-28",
-      "tasks": [
+          "goalid": "a818bc5c-e4ac-4156-b2ab-bb3a887664ac",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-04-28T07:00:00",
+          "deadline": "2024-04-28T08:00:00"
+        },
         {
           "taskid": 31,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
-          "start": "2022-10-28T00:00:00",
-          "deadline": "2022-10-29T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-29",
-      "tasks": [
+          "duration": 1,
+          "start": "2024-04-28T08:00:00",
+          "deadline": "2024-04-28T09:00:00"
+        },
         {
           "taskid": 32,
-          "goalid": "1",
-          "title": "study french",
-          "duration": 2,
-          "start": "2022-10-29T00:00:00",
-          "deadline": "2022-10-29T02:00:00"
+          "goalid": "a4da5446-8064-4f79-bbf2-973f59fe9294",
+          "title": "House chores 🏡🧹🛠️",
+          "duration": 1,
+          "start": "2024-04-28T09:00:00",
+          "deadline": "2024-04-28T10:00:00"
         },
         {
           "taskid": 33,
-          "goalid": "free",
-          "title": "free",
-          "duration": 22,
-          "start": "2022-10-29T02:00:00",
-          "deadline": "2022-10-30T00:00:00"
-        }
-      ]
-    },
-    {
-      "day": "2022-10-30",
-      "tasks": [
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-04-28T10:00:00",
+          "deadline": "2024-04-28T11:00:00"
+        },
         {
           "taskid": 34,
+          "goalid": "2e3e5fee-dcd7-456e-a6ca-994caea9b82b",
+          "title": "Hobby project 🚂🚋",
+          "duration": 1,
+          "start": "2024-04-28T11:00:00",
+          "deadline": "2024-04-28T12:00:00"
+        },
+        {
+          "taskid": 35,
+          "goalid": "6cba6d14-36e5-4a67-adcb-baa7dc7f3bb4",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-04-28T12:00:00",
+          "deadline": "2024-04-28T13:00:00"
+        },
+        {
+          "taskid": 36,
+          "goalid": "2e3e5fee-dcd7-456e-a6ca-994caea9b82b",
+          "title": "Hobby project 🚂🚋",
+          "duration": 2,
+          "start": "2024-04-28T13:00:00",
+          "deadline": "2024-04-28T15:00:00"
+        },
+        {
+          "taskid": 37,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
-          "start": "2022-10-30T00:00:00",
-          "deadline": "2022-10-31T00:00:00"
+          "duration": 3,
+          "start": "2024-04-28T15:00:00",
+          "deadline": "2024-04-28T18:00:00"
+        },
+        {
+          "taskid": 38,
+          "goalid": "72b3d9e1-430e-453b-b7b1-58d8132c4f93",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-04-28T18:00:00",
+          "deadline": "2024-04-28T19:00:00"
+        },
+        {
+          "taskid": 39,
+          "goalid": "free",
+          "title": "free",
+          "duration": 2,
+          "start": "2024-04-28T19:00:00",
+          "deadline": "2024-04-28T21:00:00"
+        },
+        {
+          "taskid": 40,
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-04-28T21:00:00",
+          "deadline": "2024-04-28T22:00:00"
+        },
+        {
+          "taskid": 41,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 2,
+          "start": "2024-04-28T22:00:00",
+          "deadline": "2024-04-29T00:00:00"
         }
       ]
     },
     {
-      "day": "2022-10-31",
+      "day": "2024-04-29",
       "tasks": [
         {
-          "taskid": 35,
+          "taskid": 42,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 5,
+          "start": "2024-04-29T00:00:00",
+          "deadline": "2024-04-29T05:00:00"
+        },
+        {
+          "taskid": 43,
+          "goalid": "543db004-39c5-479c-bc8d-b3824c82d2f7",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-04-29T05:00:00",
+          "deadline": "2024-04-29T06:00:00"
+        },
+        {
+          "taskid": 44,
+          "goalid": "a818bc5c-e4ac-4156-b2ab-bb3a887664ac",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-04-29T06:00:00",
+          "deadline": "2024-04-29T07:00:00"
+        },
+        {
+          "taskid": 45,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 5,
+          "start": "2024-04-29T07:00:00",
+          "deadline": "2024-04-29T12:00:00"
+        },
+        {
+          "taskid": 46,
+          "goalid": "6cba6d14-36e5-4a67-adcb-baa7dc7f3bb4",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-04-29T12:00:00",
+          "deadline": "2024-04-29T13:00:00"
+        },
+        {
+          "taskid": 47,
           "goalid": "free",
           "title": "free",
-          "duration": 24,
-          "start": "2022-10-31T00:00:00",
-          "deadline": "2022-11-01T00:00:00"
+          "duration": 1,
+          "start": "2024-04-29T13:00:00",
+          "deadline": "2024-04-29T14:00:00"
+        },
+        {
+          "taskid": 48,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 3,
+          "start": "2024-04-29T14:00:00",
+          "deadline": "2024-04-29T17:00:00"
+        },
+        {
+          "taskid": 49,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-04-29T17:00:00",
+          "deadline": "2024-04-29T18:00:00"
+        },
+        {
+          "taskid": 50,
+          "goalid": "72b3d9e1-430e-453b-b7b1-58d8132c4f93",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-04-29T18:00:00",
+          "deadline": "2024-04-29T19:00:00"
+        },
+        {
+          "taskid": 51,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-04-29T19:00:00",
+          "deadline": "2024-04-29T20:00:00"
+        },
+        {
+          "taskid": 52,
+          "goalid": "db64fa8f-b04d-4c19-ae84-947482dba09f",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-04-29T20:00:00",
+          "deadline": "2024-04-29T21:00:00"
+        },
+        {
+          "taskid": 53,
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-04-29T21:00:00",
+          "deadline": "2024-04-29T22:00:00"
+        },
+        {
+          "taskid": 54,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 2,
+          "start": "2024-04-29T22:00:00",
+          "deadline": "2024-04-30T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-04-30",
+      "tasks": [
+        {
+          "taskid": 55,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 5,
+          "start": "2024-04-30T00:00:00",
+          "deadline": "2024-04-30T05:00:00"
+        },
+        {
+          "taskid": 56,
+          "goalid": "543db004-39c5-479c-bc8d-b3824c82d2f7",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-04-30T05:00:00",
+          "deadline": "2024-04-30T06:00:00"
+        },
+        {
+          "taskid": 57,
+          "goalid": "a818bc5c-e4ac-4156-b2ab-bb3a887664ac",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-04-30T06:00:00",
+          "deadline": "2024-04-30T07:00:00"
+        },
+        {
+          "taskid": 58,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 5,
+          "start": "2024-04-30T07:00:00",
+          "deadline": "2024-04-30T12:00:00"
+        },
+        {
+          "taskid": 59,
+          "goalid": "6cba6d14-36e5-4a67-adcb-baa7dc7f3bb4",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-04-30T12:00:00",
+          "deadline": "2024-04-30T13:00:00"
+        },
+        {
+          "taskid": 60,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-04-30T13:00:00",
+          "deadline": "2024-04-30T14:00:00"
+        },
+        {
+          "taskid": 61,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 3,
+          "start": "2024-04-30T14:00:00",
+          "deadline": "2024-04-30T17:00:00"
+        },
+        {
+          "taskid": 62,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-04-30T17:00:00",
+          "deadline": "2024-04-30T18:00:00"
+        },
+        {
+          "taskid": 63,
+          "goalid": "72b3d9e1-430e-453b-b7b1-58d8132c4f93",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-04-30T18:00:00",
+          "deadline": "2024-04-30T19:00:00"
+        },
+        {
+          "taskid": 64,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-04-30T19:00:00",
+          "deadline": "2024-04-30T20:00:00"
+        },
+        {
+          "taskid": 65,
+          "goalid": "db64fa8f-b04d-4c19-ae84-947482dba09f",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-04-30T20:00:00",
+          "deadline": "2024-04-30T21:00:00"
+        },
+        {
+          "taskid": 66,
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-04-30T21:00:00",
+          "deadline": "2024-04-30T22:00:00"
+        },
+        {
+          "taskid": 67,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 2,
+          "start": "2024-04-30T22:00:00",
+          "deadline": "2024-05-01T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-05-01",
+      "tasks": [
+        {
+          "taskid": 68,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 5,
+          "start": "2024-05-01T00:00:00",
+          "deadline": "2024-05-01T05:00:00"
+        },
+        {
+          "taskid": 69,
+          "goalid": "543db004-39c5-479c-bc8d-b3824c82d2f7",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-05-01T05:00:00",
+          "deadline": "2024-05-01T06:00:00"
+        },
+        {
+          "taskid": 70,
+          "goalid": "a818bc5c-e4ac-4156-b2ab-bb3a887664ac",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-05-01T06:00:00",
+          "deadline": "2024-05-01T07:00:00"
+        },
+        {
+          "taskid": 71,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 5,
+          "start": "2024-05-01T07:00:00",
+          "deadline": "2024-05-01T12:00:00"
+        },
+        {
+          "taskid": 72,
+          "goalid": "6cba6d14-36e5-4a67-adcb-baa7dc7f3bb4",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-05-01T12:00:00",
+          "deadline": "2024-05-01T13:00:00"
+        },
+        {
+          "taskid": 73,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-05-01T13:00:00",
+          "deadline": "2024-05-01T14:00:00"
+        },
+        {
+          "taskid": 74,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 3,
+          "start": "2024-05-01T14:00:00",
+          "deadline": "2024-05-01T17:00:00"
+        },
+        {
+          "taskid": 75,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-05-01T17:00:00",
+          "deadline": "2024-05-01T18:00:00"
+        },
+        {
+          "taskid": 76,
+          "goalid": "72b3d9e1-430e-453b-b7b1-58d8132c4f93",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-05-01T18:00:00",
+          "deadline": "2024-05-01T19:00:00"
+        },
+        {
+          "taskid": 77,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-05-01T19:00:00",
+          "deadline": "2024-05-01T20:00:00"
+        },
+        {
+          "taskid": 78,
+          "goalid": "db64fa8f-b04d-4c19-ae84-947482dba09f",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-05-01T20:00:00",
+          "deadline": "2024-05-01T21:00:00"
+        },
+        {
+          "taskid": 79,
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-05-01T21:00:00",
+          "deadline": "2024-05-01T22:00:00"
+        },
+        {
+          "taskid": 80,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 2,
+          "start": "2024-05-01T22:00:00",
+          "deadline": "2024-05-02T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-05-02",
+      "tasks": [
+        {
+          "taskid": 81,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 5,
+          "start": "2024-05-02T00:00:00",
+          "deadline": "2024-05-02T05:00:00"
+        },
+        {
+          "taskid": 82,
+          "goalid": "543db004-39c5-479c-bc8d-b3824c82d2f7",
+          "title": "Me time 🧘🏽😌",
+          "duration": 1,
+          "start": "2024-05-02T05:00:00",
+          "deadline": "2024-05-02T06:00:00"
+        },
+        {
+          "taskid": 83,
+          "goalid": "a818bc5c-e4ac-4156-b2ab-bb3a887664ac",
+          "title": "Breakfast 🥐🥣",
+          "duration": 1,
+          "start": "2024-05-02T06:00:00",
+          "deadline": "2024-05-02T07:00:00"
+        },
+        {
+          "taskid": 84,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 5,
+          "start": "2024-05-02T07:00:00",
+          "deadline": "2024-05-02T12:00:00"
+        },
+        {
+          "taskid": 85,
+          "goalid": "6cba6d14-36e5-4a67-adcb-baa7dc7f3bb4",
+          "title": "Lunch 🥪",
+          "duration": 1,
+          "start": "2024-05-02T12:00:00",
+          "deadline": "2024-05-02T13:00:00"
+        },
+        {
+          "taskid": 86,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-05-02T13:00:00",
+          "deadline": "2024-05-02T14:00:00"
+        },
+        {
+          "taskid": 87,
+          "goalid": "c49713e8-0799-448a-b87b-e614218f6e42",
+          "title": "Work 💪🏽",
+          "duration": 3,
+          "start": "2024-05-02T14:00:00",
+          "deadline": "2024-05-02T17:00:00"
+        },
+        {
+          "taskid": 88,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-05-02T17:00:00",
+          "deadline": "2024-05-02T18:00:00"
+        },
+        {
+          "taskid": 89,
+          "goalid": "72b3d9e1-430e-453b-b7b1-58d8132c4f93",
+          "title": "Dinner 🍽️",
+          "duration": 1,
+          "start": "2024-05-02T18:00:00",
+          "deadline": "2024-05-02T19:00:00"
+        },
+        {
+          "taskid": 90,
+          "goalid": "free",
+          "title": "free",
+          "duration": 1,
+          "start": "2024-05-02T19:00:00",
+          "deadline": "2024-05-02T20:00:00"
+        },
+        {
+          "taskid": 91,
+          "goalid": "db64fa8f-b04d-4c19-ae84-947482dba09f",
+          "title": "Walk 🚶🏽",
+          "duration": 1,
+          "start": "2024-05-02T20:00:00",
+          "deadline": "2024-05-02T21:00:00"
+        },
+        {
+          "taskid": 92,
+          "goalid": "e8cb3f40-d704-4194-9d02-c40f867d9082",
+          "title": "Family time 🥰",
+          "duration": 1,
+          "start": "2024-05-02T21:00:00",
+          "deadline": "2024-05-02T22:00:00"
+        },
+        {
+          "taskid": 93,
+          "goalid": "a3ced7de-ec61-42c8-aec8-ecc8c1e5dd98",
+          "title": "Sleep 😴🌙",
+          "duration": 2,
+          "start": "2024-05-02T22:00:00",
+          "deadline": "2024-05-03T00:00:00"
         }
       ]
     }
   ],
-  "impossible": [
-    {
-      "day": "2022-10-01",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-02",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-03",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-04",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-05",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-06",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-07",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-08",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-09",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-10",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-11",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-12",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-13",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-14",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-15",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-16",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-17",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-18",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-19",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-20",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-21",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-22",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-23",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-24",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-25",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-26",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-27",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-28",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-29",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-30",
-      "tasks": []
-    },
-    {
-      "day": "2022-10-31",
-      "tasks": []
-    }
-  ]
+  "impossible": []
 }
