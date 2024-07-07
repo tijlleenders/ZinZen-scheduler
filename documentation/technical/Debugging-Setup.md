@@ -18,6 +18,10 @@ A similar solution should also work for GDB-based debuggers: https://github.com/
 Rust introduced debugger visualization attributes in 1.71.0: https://doc.rust-lang.org/nightly/reference/attributes/debugger.html#the-debugger_visualizer-attribute. This should also work, but is not yet tested in the context of this codebase.
 
 #### A.3) VSCode
+Install the required extensions for debugging Rust.
+- C/C++ for VSCode if you're running Windows
+- CodeLLDB if you're running Linux
+
 To debug tests with better `NaiveDateTime` formatter, kindly add custom configuration inside `launch.json` as below:
 ```json
 {
