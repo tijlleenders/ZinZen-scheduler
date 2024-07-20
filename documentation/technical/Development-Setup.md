@@ -24,11 +24,12 @@
    cargo install wasm-bindgen-cli 
    ```
     - Or [Install wasm-bindgen command line interface](https://rustwasm.github.io/wasm-bindgen/reference/cli.html) with any dependencies
-    - If it fails (openssl, pkg-config) or
+    - If it fails with openssl or pkg-config error message do
    ```shell
    sudo apt-get install wabt binaryen
    # [... or DIY](https://github.com/WebAssembly/wabt)
    ```
+   - If it fails with `linker 'cc' not found` do `sudo apt install build-essential` and retry
 
 5. (Optional) [Install deno](https://deno.land/manual/getting_started/installation). Only necessary if you want to run the deno tests that test the usage of the WASM module in JavaScript context.
 
