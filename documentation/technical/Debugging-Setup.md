@@ -53,6 +53,8 @@ To debug tests with better `NaiveDateTime` formatter, kindly add custom configur
 }
 ```
 
+If you get an error `no rust_tests found` do a `cargo build` and try again.
+
 To debug a single, specific test, from the rust_tests:  
 add the test name to the root args (not the cargo args) as such:
 ```
