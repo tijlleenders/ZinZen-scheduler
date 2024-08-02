@@ -15,16 +15,16 @@
           "taskid": 1,
           "goalid": "208360a4-fb71-44c6-b22d-4053100b389e",
           "title": "Work 💪🏽",
-          "duration": 7,
+          "duration": 6,
           "start": "2024-08-01T07:00:00",
-          "deadline": "2024-08-01T14:00:00"
+          "deadline": "2024-08-01T13:00:00"
         },
         {
           "taskid": 2,
           "goalid": "free",
           "title": "free",
-          "duration": 10,
-          "start": "2024-08-01T14:00:00",
+          "duration": 11,
+          "start": "2024-08-01T13:00:00",
           "deadline": "2024-08-02T00:00:00"
         }
       ]
@@ -99,16 +99,16 @@
           "taskid": 9,
           "goalid": "208360a4-fb71-44c6-b22d-4053100b389e",
           "title": "Work 💪🏽",
-          "duration": 6,
+          "duration": 7,
           "start": "2024-08-05T06:00:00",
-          "deadline": "2024-08-05T12:00:00"
+          "deadline": "2024-08-05T13:00:00"
         },
         {
           "taskid": 10,
           "goalid": "free",
           "title": "free",
-          "duration": 12,
-          "start": "2024-08-05T12:00:00",
+          "duration": 11,
+          "start": "2024-08-05T13:00:00",
           "deadline": "2024-08-06T00:00:00"
         }
       ]
