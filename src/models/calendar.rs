@@ -1,6 +1,6 @@
 use super::activity::Activity;
 use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
-use super::goal::Goal;
+use super::goal::{Goal, Slot};
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
 use serde::{Deserialize, Serialize};
@@ -17,6 +17,7 @@ pub enum Hour {
         activity_title: String,
         activity_goalid: String,
     }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
+    Blocked,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -141,6 +142,26 @@ impl Calendar {
                 current_task.duration = 0;
             }
             match self.hours[hour_offset].clone().deref() {
+                Hour::Blocked => {
+                    if current_task.title.eq(&"free".to_string()) {
+                        current_task.duration += 1;
+                    } else {
+                        current_task.deadline = current_task
+                            .start
+                            .add(Duration::hours(current_task.duration as i64));
+                        if current_task.duration > 0 {
+                            day_tasks.tasks.push(current_task.clone());
+                            task_counter += 1;
+                        }
+                        current_task.title = "free".to_string();
+                        current_task.goalid = "free".to_string();
+                        current_task.duration = 1;
+                        current_task.start = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
+                        current_task.taskid = task_counter;
+                    }
+                }
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
@@ -201,6 +222,18 @@ impl Calendar {
         FinalTasks {
             scheduled,
             impossible: self.impossible_activities.clone(),
+        }
+    }
+
+    pub fn remove_blocked_hours_from(&mut self, global_not_on: Option<Vec<Slot>>) {
+        if let Some(slots) = global_not_on {
+            for slot in slots {
+                let start_block_index = self.get_index_of(slot.start);
+                let stop_block_index = self.get_index_of(slot.end);
+                for hour_index in start_block_index..stop_block_index {
+                    self.hours[hour_index] = Hour::Blocked.into();
+                }
+            }
         }
     }
 

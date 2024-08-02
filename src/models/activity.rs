@@ -88,6 +88,9 @@ impl Activity {
 
             //check if hour is already occupied by some other activity (for later rounds of scheduling partly occupied calendar)
             match &*calendar.hours[hour_index] {
+                Hour::Blocked => {
+                    compatible = false;
+                }
                 Hour::Free => {}
                 Hour::Occupied {
                     activity_index: _,

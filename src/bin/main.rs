@@ -4,7 +4,10 @@ use serde_json::Value;
 use std::{fs, path::Path};
 extern crate scheduler;
 use scheduler::{
-    models::{goal::Goal, task::TaskCompletedToday},
+    models::{
+        goal::{Goal, Slot},
+        task::TaskCompletedToday,
+    },
     run_scheduler,
 };
 fn main() {
@@ -20,6 +23,7 @@ fn main() {
         input.end_date,
         &input.goals,
         &input.tasks_completed_today,
+        input.global_not_on,
     );
 }
 
@@ -30,4 +34,5 @@ struct Input {
     end_date: NaiveDateTime,
     goals: Vec<Goal>,
     tasks_completed_today: Vec<TaskCompletedToday>,
+    global_not_on: Option<Vec<Slot>>,
 }

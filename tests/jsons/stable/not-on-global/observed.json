@@ -1,0 +1,176 @@
+{
+  "scheduled": [
+    {
+      "day": "2024-08-01",
+      "tasks": [
+        {
+          "taskid": 0,
+          "goalid": "free",
+          "title": "free",
+          "duration": 7,
+          "start": "2024-08-01T00:00:00",
+          "deadline": "2024-08-01T07:00:00"
+        },
+        {
+          "taskid": 1,
+          "goalid": "208360a4-fb71-44c6-b22d-4053100b389e",
+          "title": "Work 💪🏽",
+          "duration": 6,
+          "start": "2024-08-01T07:00:00",
+          "deadline": "2024-08-01T13:00:00"
+        },
+        {
+          "taskid": 2,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2024-08-01T13:00:00",
+          "deadline": "2024-08-02T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-08-02",
+      "tasks": [
+        {
+          "taskid": 3,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2024-08-02T00:00:00",
+          "deadline": "2024-08-02T06:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "208360a4-fb71-44c6-b22d-4053100b389e",
+          "title": "Work 💪🏽",
+          "duration": 7,
+          "start": "2024-08-02T06:00:00",
+          "deadline": "2024-08-02T13:00:00"
+        },
+        {
+          "taskid": 5,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2024-08-02T13:00:00",
+          "deadline": "2024-08-03T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-08-03",
+      "tasks": [
+        {
+          "taskid": 6,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2024-08-03T00:00:00",
+          "deadline": "2024-08-04T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-08-04",
+      "tasks": [
+        {
+          "taskid": 7,
+          "goalid": "free",
+          "title": "free",
+          "duration": 24,
+          "start": "2024-08-04T00:00:00",
+          "deadline": "2024-08-05T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-08-05",
+      "tasks": [
+        {
+          "taskid": 8,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2024-08-05T00:00:00",
+          "deadline": "2024-08-05T06:00:00"
+        },
+        {
+          "taskid": 9,
+          "goalid": "208360a4-fb71-44c6-b22d-4053100b389e",
+          "title": "Work 💪🏽",
+          "duration": 7,
+          "start": "2024-08-05T06:00:00",
+          "deadline": "2024-08-05T13:00:00"
+        },
+        {
+          "taskid": 10,
+          "goalid": "free",
+          "title": "free",
+          "duration": 11,
+          "start": "2024-08-05T13:00:00",
+          "deadline": "2024-08-06T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-08-06",
+      "tasks": [
+        {
+          "taskid": 11,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2024-08-06T00:00:00",
+          "deadline": "2024-08-06T06:00:00"
+        },
+        {
+          "taskid": 12,
+          "goalid": "208360a4-fb71-44c6-b22d-4053100b389e",
+          "title": "Work 💪🏽",
+          "duration": 6,
+          "start": "2024-08-06T06:00:00",
+          "deadline": "2024-08-06T12:00:00"
+        },
+        {
+          "taskid": 13,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2024-08-06T12:00:00",
+          "deadline": "2024-08-07T00:00:00"
+        }
+      ]
+    },
+    {
+      "day": "2024-08-07",
+      "tasks": [
+        {
+          "taskid": 14,
+          "goalid": "free",
+          "title": "free",
+          "duration": 6,
+          "start": "2024-08-07T00:00:00",
+          "deadline": "2024-08-07T06:00:00"
+        },
+        {
+          "taskid": 15,
+          "goalid": "208360a4-fb71-44c6-b22d-4053100b389e",
+          "title": "Work 💪🏽",
+          "duration": 6,
+          "start": "2024-08-07T06:00:00",
+          "deadline": "2024-08-07T12:00:00"
+        },
+        {
+          "taskid": 16,
+          "goalid": "free",
+          "title": "free",
+          "duration": 12,
+          "start": "2024-08-07T12:00:00",
+          "deadline": "2024-08-08T00:00:00"
+        }
+      ]
+    }
+  ],
+  "impossible": []
+}
