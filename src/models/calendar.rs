@@ -17,7 +17,7 @@ pub enum Hour {
         activity_title: String,
         activity_goalid: String,
     }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
-    Blocked
+    Blocked,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -226,7 +226,7 @@ impl Calendar {
     }
 
     pub fn remove_blocked_hours_from(&mut self, global_not_on: Option<Vec<Slot>>) {
-        if let Some(slots)= global_not_on {
+        if let Some(slots) = global_not_on {
             for slot in slots {
                 let start_block_index = self.get_index_of(slot.start);
                 let stop_block_index = self.get_index_of(slot.end);

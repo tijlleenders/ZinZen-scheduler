@@ -4,7 +4,10 @@ use serde_json::Value;
 use std::{fs, path::Path};
 extern crate scheduler;
 use scheduler::{
-    models::{goal::{Goal, Slot}, task::TaskCompletedToday},
+    models::{
+        goal::{Goal, Slot},
+        task::TaskCompletedToday,
+    },
     run_scheduler,
 };
 fn main() {

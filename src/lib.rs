@@ -97,7 +97,7 @@ pub fn run_scheduler(
     end_date: NaiveDateTime,
     goals: &[Goal],
     tasks_completed_today: &[TaskCompletedToday],
-    global_not_on: Option<Vec<Slot>>
+    global_not_on: Option<Vec<Slot>>,
 ) -> FinalTasks {
     let mut calendar = Calendar::new(start_date, end_date);
     calendar.remove_blocked_hours_from(global_not_on);

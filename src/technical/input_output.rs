@@ -1,4 +1,5 @@
 use crate::models::goal::Goal;
+use crate::models::goal::Slot;
 use crate::models::task::TaskCompletedToday;
 use chrono::NaiveDateTime;
 use serde::Deserialize;
@@ -8,7 +9,6 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::path::Path;
-use crate::models::goal::Slot;
 
 #[derive(Deserialize, Debug)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
@@ -23,7 +23,7 @@ pub struct Input {
 pub fn get_input_from_json<P: AsRef<Path>>(path: P) -> Result<Input, Box<dyn Error>> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
-    let input= serde_json::from_reader(reader)?;
+    let input = serde_json::from_reader(reader)?;
     Ok(input)
 }
 

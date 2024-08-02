@@ -90,7 +90,6 @@ impl Activity {
             match &*calendar.hours[hour_index] {
                 Hour::Blocked => {
                     compatible = false;
-                    
                 }
                 Hour::Free => {}
                 Hour::Occupied {
