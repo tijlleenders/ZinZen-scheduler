@@ -53,6 +53,7 @@
 //! quality perception of the ZinZen&reg; projects.
 
 use chrono::NaiveDateTime;
+use models::goal::Slot;
 use models::task::TaskCompletedToday;
 use models::{calendar::Calendar, goal::Goal, task::FinalTasks};
 use serde_wasm_bindgen::{from_value, to_value};
@@ -86,6 +87,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
         input.end_date,
         &input.goals,
         &input.tasks_completed_today,
+        input.global_not_on,
     );
     Ok(to_value(&final_tasks)?)
 }
@@ -95,8 +97,10 @@ pub fn run_scheduler(
     end_date: NaiveDateTime,
     goals: &[Goal],
     tasks_completed_today: &[TaskCompletedToday],
+    global_not_on: Option<Vec<Slot>>
 ) -> FinalTasks {
     let mut calendar = Calendar::new(start_date, end_date);
+    calendar.remove_blocked_hours_from(global_not_on);
     dbg!(&calendar);
 
     calendar.add_budgets_from(goals);

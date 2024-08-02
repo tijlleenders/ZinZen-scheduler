@@ -1,6 +1,6 @@
 use super::activity::Activity;
 use super::budget::{get_time_budgets_from, Budget, TimeBudgetType};
-use super::goal::Goal;
+use super::goal::{Goal, Slot};
 use super::task::{DayTasks, FinalTasks, Task};
 use chrono::{Datelike, Days, Duration, NaiveDateTime, Weekday};
 use serde::{Deserialize, Serialize};
@@ -222,6 +222,18 @@ impl Calendar {
         FinalTasks {
             scheduled,
             impossible: self.impossible_activities.clone(),
+        }
+    }
+
+    pub fn remove_blocked_hours_from(&mut self, global_not_on: Option<Vec<Slot>>) {
+        if let Some(slots)= global_not_on {
+            for slot in slots {
+                let start_block_index = self.get_index_of(slot.start);
+                let stop_block_index = self.get_index_of(slot.end);
+                for hour_index in start_block_index..stop_block_index {
+                    self.hours[hour_index] = Hour::Blocked.into();
+                }
+            }
         }
     }
 
