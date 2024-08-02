@@ -17,6 +17,7 @@ pub enum Hour {
         activity_title: String,
         activity_goalid: String,
     }, //TODO: add goal id and budget id to occupied registration so budget object is not necessary anymore!
+    Blocked
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -141,6 +142,26 @@ impl Calendar {
                 current_task.duration = 0;
             }
             match self.hours[hour_offset].clone().deref() {
+                Hour::Blocked => {
+                    if current_task.title.eq(&"free".to_string()) {
+                        current_task.duration += 1;
+                    } else {
+                        current_task.deadline = current_task
+                            .start
+                            .add(Duration::hours(current_task.duration as i64));
+                        if current_task.duration > 0 {
+                            day_tasks.tasks.push(current_task.clone());
+                            task_counter += 1;
+                        }
+                        current_task.title = "free".to_string();
+                        current_task.goalid = "free".to_string();
+                        current_task.duration = 1;
+                        current_task.start = self
+                            .start_date_time
+                            .add(Duration::hours(hour_offset as i64 - 24)); // TODO: Fix magic number offset everywhere in code
+                        current_task.taskid = task_counter;
+                    }
+                }
                 Hour::Free => {
                     if current_task.title.eq(&"free".to_string()) {
                         current_task.duration += 1;
