@@ -6,3 +6,4 @@ tests/rust_tests.rs
 _logs/
 js-api/
 tests/jsons/stable/tijl-goals
+.idea
