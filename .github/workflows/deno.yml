@@ -22,22 +22,20 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Install wabt
-        run: |
-          set -e
-          curl -L https://github.com/WebAssembly/wabt/releases/download/1.0.13/wabt-1.0.13-linux.tar.gz | tar xzf -
-          echo "`pwd`/wabt-1.0.13" > $GITHUB_PATH
-      - name: Install binaryen
-        run: |
-          set -e
-          curl -L https://github.com/WebAssembly/binaryen/releases/download/1.39.1/binaryen-1.39.1-x86_64-linux.tar.gz | tar xzf -
-          echo "`pwd`/binaryen-1.39.1" > $GITHUB_PATH
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
 
       - name: Install wasm-bindgen
         run: cargo install wasm-bindgen-cli
 
       - name: Add wasm target
         run: rustup target add wasm32-unknown-unknown
+
+      - name: Pin wasm-bindgen version
+        run: cargo update -p wasm-bindgen --precise 0.2.95
 
       - name: Run tests
         run: ./scripts/deno_test.sh
