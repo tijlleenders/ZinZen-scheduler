@@ -29,14 +29,16 @@ debug = false
 # Tell `rustc` to optimize for small code size s or speed 2 / 3.
 opt-level = 3
 
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-O4", "--enable-bulk-memory"]
+
 [dependencies]
 serde_json = "1.0.132"
 serde = { version = "1.0.213", features = ["derive"] }
 chrono = { version = "0.4.38", features = ["wasmbind", "serde"] }
 lazy_static = "1.5.0"
 
-# simple WASM codegen
-wasm-bindgen = { version = "0.2.92" }
+wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
 # instead of wasm-bindgen::serde-serialize feature that may lead to a cyclic package dependency 
 serde-wasm-bindgen = "0.6.5"
 
