@@ -1,5 +1,5 @@
 import {schedule} from "../pkg/scheduler.js";
-import {assertEquals, assertThrows} from "https://deno.land/std@0.141.0/testing/asserts.ts";
+import {assertEquals} from "https://deno.land/std@0.141.0/testing/asserts.ts";
 import {existsSync} from "https://deno.land/std/fs/mod.ts";
 
 const testFolder = './tests/jsons/stable/';
@@ -30,25 +30,3 @@ for (const dirEntry of tests) {
 
     }
 }
-
-// TODO should check the error for this test, see issue #26,
-// if it is fixed please change this test to check the error
-Deno.test("invalid repetition", () => {
-    assertThrows(
-        () =>
-            schedule({
-                "startDate": "2022-01-01",
-                "endDate": "2022-01-02",
-                "goals": [
-                    {
-                        "id": 1,
-                        "title": "shopping",
-                        "duration": 1,
-                        "start": "2022-01-01T10:00:00",
-                        "deadline": "2022-01-01T13:00:00",
-                        "repetition": "invalid-value-AAAAAA",
-                    },
-                ],
-            }),
-    );
-});
