@@ -23,6 +23,7 @@
             toolchain
             pkgs.wasm-pack
             pkgs.rust-analyzer
+            pkgs.deno
           ] ++ (with pkgs; [
             pkg-config
             openssl
