@@ -16,6 +16,7 @@ skip-test-generation = []
 with-logging = []
 new-tests = []
 default = ["new-tests", "with-logging"]
+dhat-heap = []
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095
@@ -25,7 +26,7 @@ path = "src/lib.rs"
 
 [profile.release]
 lto = true
-debug = false
+debug = 1
 # Tell `rustc` to optimize for small code size s or speed 2 / 3.
 opt-level = 3
 
@@ -37,6 +38,7 @@ serde_json = "1.0.132"
 serde = { version = "1.0.213", features = ["derive"] }
 chrono = { version = "0.4.38", features = ["wasmbind", "serde"] }
 lazy_static = "1.5.0"
+dhat = "0.3.3"
 
 wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
 # instead of wasm-bindgen::serde-serialize feature that may lead to a cyclic package dependency 

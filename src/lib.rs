@@ -53,14 +53,16 @@
 //! quality perception of the ZinZen&reg; projects.
 
 use chrono::NaiveDateTime;
+use serde_wasm_bindgen::{from_value, to_value};
+use wasm_bindgen::prelude::*;
+
 use models::goal::Slot;
 use models::task::TaskCompletedToday;
 use models::{calendar::Calendar, goal::Goal, task::FinalTasks};
-use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
 use services::activity_placer;
 use technical::input_output::Input;
-use wasm_bindgen::prelude::*;
+
 pub mod models;
 pub mod services;
 /// The data structures
@@ -106,6 +108,7 @@ pub fn run_scheduler(
     calendar.add_budgets_from(goals);
 
     let mut base_activities = activity_generator::get_base_activities(&calendar, goals);
+    dbg!(&base_activities);
 
     base_activities = activity_placer::place_tasks_completed_today(
         &mut calendar,

@@ -2,6 +2,11 @@
 
 extern crate scheduler;
 
+#[cfg(feature = "dhat-heap")]
+
+#[global_allocator]
+static ALLOC: dhat::Alloc = dhat::Alloc;
+
 /// AUTO-GENERATED FILE. Do not change.
 /// Will be overwritten on build. Edit the file in build_templates or change test generation in build.rs
 
