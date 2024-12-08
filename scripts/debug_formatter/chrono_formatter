@@ -1,5 +1,5 @@
-command script import ./scripts/debug_formatter/simd.py
+command script import ./scripts/debug_formatter/chrono.py
 
-type summary add -F simd.ChronoNaiveDateTimeProvider chrono::naive::datetime::NaiveDateTime
-type summary add -F simd.ChronoNaiveDateProvider chrono::naive::date::NaiveDate
-type summary add -F simd.ChronoNaiveTimeProvider chrono::naive::time::NaiveTime
+type summary add -F chrono.ChronoNaiveDateTimeProvider chrono::naive::datetime::NaiveDateTime
+type summary add -F chrono.ChronoNaiveDateProvider chrono::naive::date::NaiveDate
+type summary add -F chrono.ChronoNaiveTimeProvider chrono::naive::time::NaiveTime
