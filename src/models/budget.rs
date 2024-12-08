@@ -7,7 +7,6 @@ use chrono::{Datelike, Duration};
 use serde::Deserialize;
 
 use super::{
-    activity::ActivityType,
     calendar::Calendar,
     goal::{Filters, Goal},
 };
@@ -20,66 +19,19 @@ pub struct Budget {
     pub time_filters: Filters,
 }
 impl Budget {
-    pub fn reduce_for_(&mut self, goal: &str, cal_index: usize) {
+    pub fn reduce_for_(&mut self, goal: &str, cal_index: usize, cal_index_end: usize) {
         if self.participating_goals.contains(&goal.to_string()) {
             let iterator = self.time_budgets.iter_mut().enumerate();
             for (_, time_budget) in iterator {
-                if cal_index >= time_budget.calendar_start_index
-                    && cal_index < time_budget.calendar_end_index
-                {
-                    time_budget.scheduled += 1
-                }
-            }
-        }
-    }
-
-    pub(crate) fn is_within_budget(
-        &self,
-        hour_index: usize,
-        offset: usize,
-        activity_type: ActivityType,
-    ) -> bool {
-        let mut budget_cut_off_number: usize;
-        let mut is_allowed = true;
-        for time_budget in &self.time_budgets {
-            match activity_type {
-                ActivityType::SimpleGoal => {
-                    budget_cut_off_number = time_budget.min_scheduled;
-                }
-                ActivityType::BudgetMinDay => {
-                    budget_cut_off_number = time_budget.min_scheduled;
-                }
-                ActivityType::GetToMinWeekBudget => {
-                    if time_budget.calendar_end_index - time_budget.calendar_start_index > 24 {
-                        //Week time_budget
-                        budget_cut_off_number = time_budget.min_scheduled; // this allows leaving room for other goals to get to min before topping up
-                    } else {
-                        //Day time_budget
-                        budget_cut_off_number = time_budget.max_scheduled;
+                for offset in 0..(cal_index_end - cal_index) {
+                    if cal_index + offset >= time_budget.calendar_start_index
+                        && cal_index + offset < time_budget.calendar_end_index
+                    {
+                        time_budget.scheduled += 1;
                     }
                 }
-                ActivityType::TopUpWeekBudget => {
-                    budget_cut_off_number = time_budget.max_scheduled;
-                }
-                ActivityType::SimpleFiller => budget_cut_off_number = time_budget.min_scheduled,
-            }
-            //figure out how many of the hours in hour_index till hour_index + offset are in the time_budget window
-            let mut hours_in_time_budget_window = 0;
-            for local_offset in 0..offset {
-                if (hour_index + local_offset) >= time_budget.calendar_start_index
-                    && (hour_index + local_offset) < time_budget.calendar_end_index
-                {
-                    hours_in_time_budget_window += 1;
-                }
-            }
-            if (hour_index + offset) >= time_budget.calendar_start_index
-                && (hour_index + offset) < time_budget.calendar_end_index
-                && time_budget.scheduled + hours_in_time_budget_window > budget_cut_off_number
-            {
-                is_allowed = false;
             }
         }
-        is_allowed
     }
 }
 
@@ -115,9 +67,11 @@ impl Debug for TimeBudget {
 }
 
 pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget> {
+    println!("Getting time budgets from goal {}", goal.title);
+
     let mut time_budgets: Vec<TimeBudget> = vec![];
     //get a time_budget for each day
-    for hour_index in 24..calendar.hours.capacity() - 24 {
+    for hour_index in 24..calendar.hours() - 24 {
         if (hour_index) % 24 == 0 {
             println!("Day boundary detected at hour_index {:?}", &hour_index);
             if let Some(config) = &goal.budget_config {
@@ -151,7 +105,7 @@ pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget
 
     let mut start_pointer = 24;
     //get a time_budget for each week
-    for hour_index in 24..calendar.hours.capacity() {
+    for hour_index in 24..calendar.hours() {
         if (hour_index - 24) % (24 * 7) == 0 && hour_index > 24 {
             println!("Week boundary detected at hour_index {:?}", &hour_index);
             if let Some(config) = &goal.budget_config {
@@ -164,7 +118,7 @@ pub fn get_time_budgets_from(calendar: &Calendar, goal: &Goal) -> Vec<TimeBudget
                     max_scheduled: config.max_per_week,
                 });
             }
-            start_pointer = hour_index
+            start_pointer = hour_index;
         }
     }
     dbg!(&time_budgets);

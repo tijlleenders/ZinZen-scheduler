@@ -52,16 +52,21 @@
 //! ZinZen&reg; trademark is a tool to protect the ZinZen&reg; identity and the
 //! quality perception of the ZinZen&reg; projects.
 
+use crate::models::activity::Activity;
+use activity_generator::{
+    add_budget_min_day_activities, add_budget_min_week_activities,
+    add_budget_top_up_week_activities, add_simple_activities,
+};
+use activity_placer::{place, place_postponed_as_best_effort};
 use chrono::NaiveDateTime;
-use serde_wasm_bindgen::{from_value, to_value};
-use wasm_bindgen::prelude::*;
-
-use models::goal::Slot;
 use models::task::TaskCompletedToday;
 use models::{calendar::Calendar, goal::Goal, task::FinalTasks};
+use serde_wasm_bindgen::{from_value, to_value};
 use services::activity_generator;
 use services::activity_placer;
+use std::collections::BTreeMap;
 use technical::input_output::Input;
+use wasm_bindgen::prelude::*;
 
 pub mod models;
 pub mod services;
@@ -89,59 +94,50 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
         input.end_date,
         &input.goals,
         &input.tasks_completed_today,
-        input.global_not_on,
     );
     Ok(to_value(&final_tasks)?)
 }
 
+#[must_use]
 pub fn run_scheduler(
     start_date: NaiveDateTime,
     end_date: NaiveDateTime,
     goals: &[Goal],
     tasks_completed_today: &[TaskCompletedToday],
-    global_not_on: Option<Vec<Slot>>,
 ) -> FinalTasks {
     let mut calendar = Calendar::new(start_date, end_date);
-    calendar.remove_blocked_hours_from(global_not_on);
-    dbg!(&calendar);
+    let mut activities: Vec<Activity> = vec![];
+    let mut goal_map: BTreeMap<String, Goal> = BTreeMap::new(); //Don't use hashmap as that doesn't guarantee ordering - messing up determinacy of tests
+    for goal in goals {
+        //optimize this out if frontend already has a map? - probably won't have any significant effect => measure
+        goal_map.insert(goal.id.clone(), goal.clone());
+    }
 
-    calendar.add_budgets_from(goals);
+    calendar.add_budgets_from(&mut goal_map);
 
-    let mut base_activities = activity_generator::get_base_activities(&calendar, goals);
-    dbg!(&base_activities);
+    dbg!(&calendar); //before simple
+    add_simple_activities(&calendar, &goal_map, &mut activities);
+    add_budget_min_day_activities(&calendar, &goal_map, &mut activities);
+    place(&mut calendar, &mut activities);
 
-    base_activities = activity_placer::place_tasks_completed_today(
-        &mut calendar,
-        base_activities,
-        tasks_completed_today,
-    );
+    dbg!(&calendar); //before get_budget_min
+    add_budget_min_week_activities(&calendar, &goal_map, &mut activities);
+    place(&mut calendar, &mut activities);
 
-    base_activities = activity_placer::place(&mut calendar, base_activities);
+    dbg!(&calendar); //before get_budget_top_up_week
+    add_budget_top_up_week_activities(&calendar, &goal_map, &mut activities);
+    place(&mut calendar, &mut activities);
 
-    calendar.log_impossible_min_day_budgets();
-
-    let get_to_week_min_budget_activities =
-        activity_generator::get_budget_min_week_activities(&calendar, goals);
-    activity_placer::place(&mut calendar, get_to_week_min_budget_activities);
-    //TODO: Test that day stays below min when week min being reached so other goals can get to the week min too
-
-    calendar.log_impossible_min_week_budgets();
-
-    let top_up_week_budget_activities =
-        activity_generator::get_budget_top_up_week_activities(&calendar, goals);
-    activity_placer::place(&mut calendar, top_up_week_budget_activities);
-    //TODO: Test that day stays below min or max when week max being reachd
+    dbg!(&calendar); //before BestEffort
+    place_postponed_as_best_effort(&mut calendar, &mut activities);
 
     //TODO: Fit simple budget activities into scheduled budgets?
     //      No need, as simple budget activities will share the same overlay, but with less hours
     //      Thus, the flex will always be higher than (or equal to?) the MinDayBudget activities
     //      So MinDayBudget will get chosen last unless flex is equal and order happens to favor MinDayBudget
     //          => TODO: order activities before placing?
+    dbg!(&calendar); //final result
 
-    base_activities = activity_placer::reset_postponed(base_activities);
-    base_activities = activity_placer::place(&mut calendar, base_activities);
-
-    calendar.log_impossible_base_activities(base_activities);
-
-    calendar.print()
+    calendar.log_impossible_activities(&activities);
+    calendar.print_new(&activities)
 }

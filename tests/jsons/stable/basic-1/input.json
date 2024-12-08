@@ -1,28 +1,28 @@
-  {
-    "startDate": "2022-01-01T00:00:00",
-    "endDate": "2022-01-02T00:00:00",
-    "goals": [
-      {
-        "id": "1",
-        "title": "shopping",
-        "minDuration": 1,
-        "start": "2022-01-01T10:00:00",
-        "deadline": "2022-01-01T13:00:00"
-      },
-      {
-        "id": "2",
-        "title": "dentist",
-        "minDuration": 1,
-        "start": "2022-01-01T10:00:00",
-        "deadline": "2022-01-01T11:00:00"
-      },
-      {
-        "id": "3",
-        "title": "exercise",
-        "minDuration": 1,
-        "start": "2022-01-01T13:00:00",
-        "deadline": "2022-01-01T18:00:00"
-      }
-    ],
-    "tasksCompletedToday": []
-  }
+{
+  "startDate": "2022-01-01T00:00:00",
+  "endDate": "2022-01-08T00:00:00",
+  "goals": [
+    {
+      "id": "1",
+      "title": "shopping",
+      "minDuration": 1,
+      "start": "2022-01-01T10:00:00",
+      "deadline": "2022-01-01T13:00:00"
+    },
+    {
+      "id": "2",
+      "title": "dentist",
+      "minDuration": 1,
+      "start": "2022-01-01T10:00:00",
+      "deadline": "2022-01-01T11:00:00"
+    },
+    {
+      "id": "3",
+      "title": "exercise",
+      "minDuration": 1,
+      "start": "2022-01-01T13:00:00",
+      "deadline": "2022-01-01T18:00:00"
+    }
+  ],
+  "tasksCompletedToday": []
+}

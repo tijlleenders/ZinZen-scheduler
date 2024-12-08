@@ -1,15 +1,16 @@
+extern crate scheduler;
+
+use std::{fs, path::Path};
+
 use chrono::NaiveDateTime;
 use serde::Deserialize;
 use serde_json::Value;
-use std::{fs, path::Path};
-extern crate scheduler;
+
 use scheduler::{
-    models::{
-        goal::{Goal, Slot},
-        task::TaskCompletedToday,
-    },
+    models::{goal::Goal, task::TaskCompletedToday},
     run_scheduler,
 };
+
 fn main() {
     println!("Running!");
     let path = Path::new("./tests/jsons/stable/algorithm-challenge/input.json");
@@ -23,7 +24,6 @@ fn main() {
         input.end_date,
         &input.goals,
         &input.tasks_completed_today,
-        input.global_not_on,
     );
 }
 
@@ -34,5 +34,4 @@ struct Input {
     end_date: NaiveDateTime,
     goals: Vec<Goal>,
     tasks_completed_today: Vec<TaskCompletedToday>,
-    global_not_on: Option<Vec<Slot>>,
 }

@@ -69,7 +69,7 @@ impl Goal {
         } else {
             // special case where we know that compatible times cross the midnight boundary
             println!(
-                "Special case adjusting start from {:?}",
+                "Special case adjusting activity start from {:?}",
                 &adjusted_goal_start
             );
             adjusted_goal_start = adjusted_goal_start

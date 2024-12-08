@@ -31,8 +31,16 @@
           "taskid": 3,
           "goalid": "free",
           "title": "free",
-          "duration": 12,
+          "duration": 11,
           "start": "2022-01-01T12:00:00",
+          "deadline": "2022-01-01T23:00:00"
+        },
+        {
+          "taskid": 4,
+          "goalid": "4",
+          "title": "someday-but-not-impossible-since-no-deadline",
+          "duration": 1,
+          "start": "2022-01-01T23:00:00",
           "deadline": "2022-01-02T00:00:00"
         }
       ]

@@ -7,3 +7,4 @@ _logs/
 js-api/
 tests/jsons/stable/tijl-goals
 .idea
+/dhat-heap.json
