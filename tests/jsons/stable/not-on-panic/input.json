@@ -1,0 +1,23 @@
+{
+  "startDate": "2024-07-20T00:00:00",
+  "endDate": "2024-07-27T00:00:00",
+  "goals": [
+    {
+      "id": "da66aeab-4d6d-46d7-8117-4240895e7044",
+      "title": "A Goal for which Tasks were postponed",
+      "createdAt": 1711689651172,
+      "minDuration": 1,
+      "notOn": [
+        {
+          "start": "2024-05-28T09:00:00",
+          "end": "2024-05-29T09:00:00"
+        },
+        {
+          "start": "2024-05-29T09:00:00",
+          "end": "2024-05-30T09:00:00"
+        }
+      ]
+    }
+  ],
+  "tasksCompletedToday": []
+}
