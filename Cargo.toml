@@ -16,7 +16,7 @@ skip-test-generation = []
 with-logging = []
 new-tests = []
 default = ["new-tests", "with-logging"]
-dhat-heap = []
+dhat-heap = ["dhat"]
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095
@@ -26,7 +26,7 @@ path = "src/lib.rs"
 
 [profile.release]
 lto = true
-debug = 1
+debug = false
 # Tell `rustc` to optimize for small code size s or speed 2 / 3.
 opt-level = 3
 
@@ -37,8 +37,7 @@ wasm-opt = ["-O4", "--enable-bulk-memory"]
 serde_json = "1.0.132"
 serde = { version = "1.0.213", features = ["derive"] }
 chrono = { version = "0.4.38", features = ["wasmbind", "serde"] }
-lazy_static = "1.5.0"
-dhat = "0.3.3"
+dhat = { version = "0.3.2", optional = true }
 
 wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
 # instead of wasm-bindgen::serde-serialize feature that may lead to a cyclic package dependency 
@@ -47,20 +46,6 @@ serde-wasm-bindgen = "0.6.5"
 # display Rust panics as console.error()
 console_error_panic_hook = "0.1.7"
 
-# display logs
-log = "0.4.22"
-env_logger = "0.11.5"
-
-# random number generator for tests
-rand = "0.9.0-alpha.2"
-# getrandom with js features should be included to make sure the wasm-unknown build target can use the crate in js context (even though we only use this crate in test code)
-getrandom = { version = "0.2", features = ["js"] }
-
-
 [dev-dependencies]
-pretty_assertions = "1.4.1"
-wasm-bindgen-test = "0.3.45"
-
 
 [build-dependencies]
-cc = "1.1.31"
