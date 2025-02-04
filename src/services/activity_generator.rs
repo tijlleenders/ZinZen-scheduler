@@ -1,3 +1,6 @@
+use crate::models::activity::{ActivityStatus, ActivityType};
+use crate::models::interval::Interval;
+use crate::models::task::TaskCompletedToday;
 use crate::models::{activity::Activity, budget::TimeBudgetType, calendar::Calendar, goal::Goal};
 use std::collections::BTreeMap;
 
@@ -83,7 +86,7 @@ pub fn add_budget_top_up_week_activities(
 }
 
 pub(crate) fn add_simple_activities(
-    calendar: &Calendar,
+    calendar: &mut Calendar,
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
@@ -120,7 +123,7 @@ pub(crate) fn add_simple_activities(
 }
 
 pub(crate) fn add_budget_min_day_activities(
-    calendar: &Calendar,
+    calendar: &mut Calendar,
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
@@ -129,4 +132,40 @@ pub(crate) fn add_budget_min_day_activities(
         min_day_activities.extend(Activity::get_budget_min_day_activities(goal, calendar));
     }
     activities.extend(min_day_activities);
+}
+
+pub(crate) fn add_tasks_completed_today(
+    calendar: &Calendar,
+    goals: &BTreeMap<String, Goal>,
+    tasks_completed_today: &[TaskCompletedToday],
+    activities: &mut Vec<Activity>,
+) {
+    for task in tasks_completed_today {
+        //use scheduled datetimes for recreating activities
+
+        //Todo: What ActivityType to use? Does it matter?
+        //Yes, if it's a (child of) budget then it should reduce budgets
+        let activity_start_index = calendar.get_index_of(task.start);
+        let activity_end_index = calendar.get_index_of(task.deadline);
+        if let Some(matching_goal) = goals.values().find(|g| g.id.eq(&task.goalid)) {
+            activities.push(Activity {
+                goal_id: task.goalid.clone(),
+                activity_type: ActivityType::SimpleGoal,
+                title: matching_goal.title.clone(),
+                min_block_size: activity_end_index - activity_start_index,
+                max_block_size: activity_end_index - activity_start_index,
+                total_duration: activity_end_index - activity_start_index,
+                duration_left: activity_end_index - activity_start_index,
+                status: ActivityStatus::Unprocessed,
+                start: task.start.clone(),
+                deadline: Some(task.deadline.clone()),
+                compatible_intervals: vec![Interval {
+                    start: activity_start_index,
+                    end: activity_end_index,
+                }],
+                incompatible_intervals: vec![],
+                flex: Some(1),
+            });
+        }
+    }
 }

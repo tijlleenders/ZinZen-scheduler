@@ -23,7 +23,7 @@ fn main() {
         input.start_date,
         input.end_date,
         &input.goals,
-        &input.tasks_completed_today,
+        input.tasks_completed_today,
     );
 }
 

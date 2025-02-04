@@ -55,7 +55,7 @@
 use crate::models::activity::Activity;
 use activity_generator::{
     add_budget_min_day_activities, add_budget_min_week_activities,
-    add_budget_top_up_week_activities, add_simple_activities,
+    add_budget_top_up_week_activities, add_simple_activities, add_tasks_completed_today,
 };
 use activity_placer::{place, place_postponed_as_best_effort};
 use chrono::NaiveDateTime;
@@ -93,7 +93,7 @@ pub fn schedule(input: &JsValue) -> Result<JsValue, JsError> {
         input.start_date,
         input.end_date,
         &input.goals,
-        &input.tasks_completed_today,
+        input.tasks_completed_today,
     );
     Ok(to_value(&final_tasks)?)
 }
@@ -103,7 +103,7 @@ pub fn run_scheduler(
     start_date: NaiveDateTime,
     end_date: NaiveDateTime,
     goals: &[Goal],
-    tasks_completed_today: &[TaskCompletedToday],
+    tasks_completed_today: Vec<TaskCompletedToday>,
 ) -> FinalTasks {
     let mut calendar = Calendar::new(start_date, end_date);
     let mut activities: Vec<Activity> = vec![];
@@ -115,13 +115,26 @@ pub fn run_scheduler(
 
     calendar.add_budgets_from(&mut goal_map);
 
+    dbg!(&calendar); //before tasks_completed_today
+    add_tasks_completed_today(
+        &calendar,
+        &goal_map,
+        &*tasks_completed_today,
+        &mut activities,
+    );
+    calendar.add_tasks_completed(tasks_completed_today);
+    place(&mut calendar, &mut activities);
+
     dbg!(&calendar); //before simple
-    add_simple_activities(&calendar, &goal_map, &mut activities);
-    add_budget_min_day_activities(&calendar, &goal_map, &mut activities);
+    add_simple_activities(&mut calendar, &goal_map, &mut activities);
+    add_budget_min_day_activities(&mut calendar, &goal_map, &mut activities);
+    //Todo: do we need a different treatment of Activities if they are part of budget or not ?
+    //If not, simplify the code! Also for generating activities?
+
     place(&mut calendar, &mut activities);
 
     dbg!(&calendar); //before get_budget_min
-    add_budget_min_week_activities(&calendar, &goal_map, &mut activities);
+    add_budget_min_week_activities(&mut calendar, &goal_map, &mut activities);
     place(&mut calendar, &mut activities);
 
     dbg!(&calendar); //before get_budget_top_up_week

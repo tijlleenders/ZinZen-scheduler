@@ -772,5 +772,12 @@
       ]
     }
   ],
-  "impossible": []
+  "impossible": [
+    {
+      "id": "c49713e8-0799-448a-b87b-e614218f6e42",
+      "hoursMissing": 4,
+      "periodStartDateTime": "2024-04-26T00:00:00",
+      "periodEndDateTime": "2024-04-27T00:00:00"
+    }
+  ]
 }

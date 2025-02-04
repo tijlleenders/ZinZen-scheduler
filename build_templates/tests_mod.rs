@@ -34,7 +34,7 @@ mod TEST_MODULE_NAME {
             input.start_date,
             input.end_date,
             &input.goals,
-            &input.tasks_completed_today,
+            input.tasks_completed_today,
         );
 
         let actual_output = serde_json::to_string_pretty(&output).unwrap();

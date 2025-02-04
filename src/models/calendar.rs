@@ -17,7 +17,7 @@ use crate::models::interval::Interval;
 use super::activity::{Activity, ActivityStatus};
 use super::budget::{get_time_budgets_from, Budget};
 use super::goal::Goal;
-use super::task::{DayTasks, FinalTasks, Task};
+use super::task::{DayTasks, FinalTasks, Task, TaskCompletedToday};
 
 #[derive(Debug, PartialEq, Clone, Hash)]
 pub enum Hour {
@@ -45,6 +45,13 @@ pub struct Calendar {
     pub budgets: Vec<Budget>,
     pub intervals: Vec<CalendarInterval>,
     registered_act_index: usize,
+    pub tasks_completed_today: Vec<TaskCompletedToday>,
+}
+
+impl Calendar {
+    pub(crate) fn add_tasks_completed(&mut self, tasks_completed_today: Vec<TaskCompletedToday>) {
+        self.tasks_completed_today = tasks_completed_today;
+    }
 }
 
 impl Calendar {
@@ -376,6 +383,7 @@ impl Calendar {
             budgets: vec![],
             intervals,
             registered_act_index: 0,
+            tasks_completed_today: vec![],
         }
     }
 
@@ -564,7 +572,7 @@ impl Calendar {
         }
     }
 
-    pub(crate) fn get_filters_for(&self, id: &str) -> Option<super::goal::Filters> {
+    pub(crate) fn get_filters_for(&self, id: &str) -> Option<super::goal::Filter> {
         for budget in &self.budgets {
             if budget.participating_goals.iter().any(|s| s == id) {
                 return Some(budget.time_filters.clone());

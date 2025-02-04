@@ -8,7 +8,7 @@ use serde::Deserialize;
 
 use super::{
     calendar::Calendar,
-    goal::{Filters, Goal},
+    goal::{Filter, Goal},
 };
 
 #[derive(Debug, Clone, Deserialize)]
@@ -16,7 +16,7 @@ pub struct Budget {
     pub originating_goal_id: String,
     pub participating_goals: Vec<String>,
     pub time_budgets: Vec<TimeBudget>,
-    pub time_filters: Filters,
+    pub time_filters: Filter,
 }
 impl Budget {
     pub fn reduce_for_(&mut self, goal: &str, cal_index: usize, cal_index_end: usize) {

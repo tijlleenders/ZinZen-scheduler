@@ -49,15 +49,16 @@ pub(crate) fn place(calendar: &mut Calendar, activities: &mut [Activity]) {
                 if calendar.is_participating_in_a_budget(&activities[act_index].goal_id) {
                     calendar.reduce_budgets_for(
                         &activities[act_index].goal_id,
-                        least_conflict_position.start,
-                        least_conflict_position.end,
+                        interval_to_use.start,
+                        interval_to_use.end,
                     );
                 }
                 //Adjust activity internals
+                //Todo: Simplify mess below
                 match activities[act_index].activity_type {
                     ActivityType::SimpleGoal => {
                         activities[act_index].duration_left -=
-                            least_conflict_position.end - least_conflict_position.start;
+                            interval_to_use.end - interval_to_use.start;
                         if activities[act_index].duration_left == 0 {
                             activities[act_index].status = Scheduled; //all at once, not per hour scheduling like before
                             activities[act_index].reset_compatible_intervals();
