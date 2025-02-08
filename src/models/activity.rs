@@ -205,7 +205,7 @@ impl Activity {
                 min_block_size = 1;
             };
 
-            let filters_option: Option<Filter> = calendar.get_filters_for(&goal.id);
+            let filters_option: Option<&Filter> = goal.filters.as_ref();
 
             let mut adjusted_activity_deadline =
                 adjusted_goal_deadline.unwrap_or(calendar.end_date_time); //regular case
@@ -218,7 +218,7 @@ impl Activity {
 
             let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
                 calendar,
-                &filters_option,
+                filters_option,
                 adjusted_goal_start,
                 adjusted_activity_deadline,
                 &goal.not_on.clone(),
@@ -278,7 +278,7 @@ impl Activity {
 
         let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
             calendar,
-            &goal_to_use.filters.clone(),
+            goal_to_use.filters.as_ref(),
             adjusted_goal_start,
             adjusted_goal_deadline.unwrap_or(adjusted_goal_start.add(Duration::hours(24))),
             &goal_to_use.not_on.clone(),
@@ -317,7 +317,7 @@ impl Activity {
 
         let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
             calendar,
-            &goal_to_use.filters.clone(),
+            goal_to_use.filters.as_ref(),
             adjusted_goal_start,
             adjusted_goal_start.add(Duration::days(7)),
             &goal_to_use.not_on.clone(),
@@ -368,7 +368,7 @@ impl Activity {
 
         let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
             calendar,
-            &goal_to_use.filters.clone(),
+            goal_to_use.filters.as_ref(),
             adjusted_start,
             adjusted_end,
             &goal_to_use.not_on.clone(),

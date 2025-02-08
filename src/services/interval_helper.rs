@@ -84,7 +84,7 @@ fn subtract_intervals(a: Vec<Interval>, b: &Vec<Interval>) -> Vec<Interval> {
 
 pub(crate) fn get_compatible_intervals(
     calendar: &Calendar,
-    filter: &Option<Filter>,
+    filter: Option<&Filter>,
     start: NaiveDateTime,
     end: NaiveDateTime,
     not_on: &Option<Vec<Slot>>,
