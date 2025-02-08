@@ -428,7 +428,8 @@ impl Calendar {
                 "can't request an index more than 1 day outside of calendar bounds for date {:?}\nCalendar starts at {:?} and ends at {:?}", date_time, self.start_date_time, self.end_date_time
             )
         }
-        let index = (date_time - self.start_date_time).num_hours() as usize + 24;
+        let index =
+            (date_time.add(Duration::hours(24)) - self.start_date_time).num_hours() as usize;
         // println!("got index of {}: {}", date_time, index);
         index
     }
