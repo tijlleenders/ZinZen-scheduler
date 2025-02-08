@@ -1,5 +1,3 @@
-use std::cmp::{max, min};
-
 use crate::models::activity::ActivityStatus::{BestEffort, Postponed, Scheduled, Unprocessed};
 use crate::models::activity::ActivityType;
 use crate::models::activity::ActivityType::{
@@ -10,12 +8,29 @@ use crate::models::calendar_interval::CalIntStatus;
 use crate::models::calendar_interval::CalIntStatus::Claimable;
 use crate::models::interval::Interval;
 use crate::models::{activity::Activity, calendar::Calendar};
+use std::cmp::{max, min};
+use std::fmt::{Debug, Formatter};
 
-#[derive(Debug)]
 struct LeastConflict {
     start: usize,
     end: usize,
     claims: usize,
+}
+
+impl Debug for LeastConflict {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        writeln!(
+            f,
+            "{:?} claims on {:?}-{:?} ({:?}:00-{:?}:00) day {:?}",
+            self.claims,
+            self.start,
+            self.end,
+            self.start % 24,
+            self.end % 24,
+            self.start / 24
+        );
+        Ok(())
+    }
 }
 pub(crate) fn place(calendar: &mut Calendar, activities: &mut [Activity]) {
     println!("Starting placing...");
