@@ -189,14 +189,16 @@ impl Activity {
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
         if let Some(mut activity_total_duration) = goal.min_duration {
-            if activity_total_duration > duration_of_children {
-                //then the activity from this goal is a filler activity
-                activity_total_duration -= duration_of_children;
-            } else {
-                panic!(
-                    "duration of children goals ({}) exceeds duration {} of goal {} ",
-                    duration_of_children, activity_total_duration, goal.title
-                );
+            if goal.children.is_some() {
+                if activity_total_duration > duration_of_children {
+                    //then the activity from this goal is a filler activity
+                    activity_total_duration -= duration_of_children;
+                } else {
+                    panic!(
+                        "duration of children goals ({}) exceeds duration {} of goal {} ",
+                        duration_of_children, activity_total_duration, goal.title
+                    );
+                }
             }
             let mut min_block_size = activity_total_duration;
             if activity_total_duration > 8 {
