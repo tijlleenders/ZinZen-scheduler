@@ -246,7 +246,7 @@ impl Activity {
             activity_total_duration -= already_placed_for_goal_id;
 
             dbg!(&compatible_intervals);
-            let mut activity = Activity {
+            let activity = Activity {
                 goal_id: goal.id.clone(),
                 activity_type: ActivityType::SimpleGoal,
                 title: goal.title.clone(),
