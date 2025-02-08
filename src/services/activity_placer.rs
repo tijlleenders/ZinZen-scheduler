@@ -2,7 +2,9 @@ use std::cmp::{max, min};
 
 use crate::models::activity::ActivityStatus::{BestEffort, Postponed, Scheduled, Unprocessed};
 use crate::models::activity::ActivityType;
-use crate::models::activity::ActivityType::{BudgetMinDay, GetToMinWeekBudget, TopUpWeekBudget};
+use crate::models::activity::ActivityType::{
+    GetToMinDayBudget, GetToMinWeekBudget, TopUpWeekBudget,
+};
 use crate::models::budget::TimeBudgetType::Week;
 use crate::models::calendar_interval::CalIntStatus;
 use crate::models::calendar_interval::CalIntStatus::Claimable;
@@ -64,7 +66,7 @@ pub(crate) fn place(calendar: &mut Calendar, activities: &mut [Activity]) {
                             activities[act_index].reset_compatible_intervals();
                         }
                     }
-                    BudgetMinDay => {
+                    GetToMinDayBudget => {
                         activities[act_index].duration_left -=
                             interval_to_use.end - interval_to_use.start;
                         if activities[act_index].duration_left == 0 {
@@ -104,7 +106,6 @@ pub(crate) fn place(calendar: &mut Calendar, activities: &mut [Activity]) {
                             activities[act_index].reset_compatible_intervals();
                         }
                     }
-                    ActivityType::SimpleFiller => {}
                 }
                 //Now we know if the activity has been scheduled - even if it is a budget_min_week
                 //This helps us in de decision to let go of other claims inside occupy function
@@ -121,7 +122,7 @@ fn postpone(calendar: &mut Calendar, activities: &mut [Activity]) {
     for activity in activities.iter_mut() {
         if activity.deadline.is_none()
             && activity.status != BestEffort
-            && activity.activity_type != BudgetMinDay
+            && activity.activity_type != GetToMinDayBudget
             && activity.activity_type != GetToMinWeekBudget
             && activity.activity_type != TopUpWeekBudget
             && !calendar.is_participating_in_a_budget(&activity.goal_id.clone())

@@ -9,6 +9,10 @@ pub fn add_budget_min_week_activities(
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
+    //min per week is not the same as sum(min per day) - it can be higher
+    //i.e. I want to exercise min 1h per day,
+    // but have at least 1 day per week on which I exercise for 2 hours (long session)
+
     let mut get_to_week_min_budget_activities = vec![];
     for budget in &calendar.budgets {
         //TODO Simplify this loop - don't need the if/else
@@ -97,6 +101,7 @@ pub(crate) fn add_simple_activities(
             continue;
         };
 
+        //this is to determine if this goal will create a filler activity
         let mut duration_of_children: usize = 0;
         match &goal.children {
             None => {}
@@ -127,10 +132,30 @@ pub(crate) fn add_budget_min_day_activities(
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
+    // we can use the budgets as a basis to generate this, instead of the goals
     let mut min_day_activities = vec![];
-    for goal in goals.values() {
-        min_day_activities.extend(Activity::get_budget_min_day_activities(goal, calendar));
+    for budget in &calendar.budgets {
+        //TODO Simplify this loop - don't need the if/else
+        for time_budget in &budget.time_budgets {
+            if time_budget.time_budget_type == TimeBudgetType::Week {
+                continue;
+            }
+            if time_budget.scheduled < time_budget.min_scheduled {
+                let goal_to_use: &Goal = goals
+                    .values()
+                    .find(|g| g.id.eq(&budget.originating_goal_id))
+                    .unwrap();
+                if time_budget.scheduled < time_budget.min_scheduled {
+                    min_day_activities.extend(Activity::get_activities_to_get_to_min_day_budget(
+                        goal_to_use,
+                        calendar,
+                        time_budget,
+                    ));
+                }
+            }
+        }
     }
+    dbg!(&min_day_activities);
     activities.extend(min_day_activities);
 }
 

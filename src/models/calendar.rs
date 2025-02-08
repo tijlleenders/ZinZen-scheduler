@@ -17,7 +17,7 @@ use crate::models::interval::Interval;
 use super::activity::{Activity, ActivityStatus};
 use super::budget::{get_time_budgets_from, Budget};
 use super::goal::Goal;
-use super::task::{DayTasks, FinalTasks, Task, TaskCompletedToday};
+use super::task::{DayTasks, FinalTasks, Task};
 
 #[derive(Debug, PartialEq, Clone, Hash)]
 pub enum Hour {
@@ -45,12 +45,11 @@ pub struct Calendar {
     pub budgets: Vec<Budget>,
     pub intervals: Vec<CalendarInterval>,
     registered_act_index: usize,
-    pub tasks_completed_today: Vec<TaskCompletedToday>,
 }
 
 impl Calendar {
-    pub(crate) fn add_tasks_completed(&mut self, tasks_completed_today: Vec<TaskCompletedToday>) {
-        self.tasks_completed_today = tasks_completed_today;
+    pub(crate) fn get_datetime_of(&self, index: usize) -> NaiveDateTime {
+        self.start_date_time.add(Duration::hours(index as i64 - 24))
     }
 }
 
@@ -363,8 +362,12 @@ impl Calendar {
     pub fn new(start_date_time: NaiveDateTime, end_date_time: NaiveDateTime) -> Self {
         let number_of_days = (end_date_time - start_date_time).num_days(); //Todo use this later to stop limiting compatible
         println!(
-            "Calendar of {:?} days, from {:?} to {:?}",
-            &number_of_days, &start_date_time, &end_date_time
+            "Calendar of {:?} days, from {:?} to {:?} - index 0/24-{:?}/{:?}",
+            &number_of_days,
+            &start_date_time,
+            &end_date_time,
+            (end_date_time - start_date_time).num_hours(),
+            (end_date_time - start_date_time).num_hours() + 24
         );
         let number_of_hours_for_extended_calendar = 48 + number_of_days as usize * 24; // 48 extra for one day of buffer at front and back
         let intervals = vec![CalendarInterval {
@@ -383,7 +386,6 @@ impl Calendar {
             budgets: vec![],
             intervals,
             registered_act_index: 0,
-            tasks_completed_today: vec![],
         }
     }
 
@@ -542,7 +544,10 @@ impl Calendar {
                     // not good
                     continue;
                 }
-                if time_budget.scheduled < time_budget.min_scheduled {
+                if time_budget.scheduled < time_budget.min_scheduled
+                    && time_budget.calendar_end_index < self.get_index_of(self.end_date_time)
+                // exempt budgets that run over edge of calendar
+                {
                     self.impossible_activities.push(ImpossibleActivity {
                         id: budget.originating_goal_id.clone(),
                         hours_missing: time_budget.min_scheduled - time_budget.scheduled,
@@ -561,6 +566,8 @@ impl Calendar {
             if activity.status == Impossible
                 && activity.deadline.is_some()
                 && activity.activity_type != TopUpWeekBudget
+                && activity.deadline.unwrap() < self.end_date_time
+            // exempt activities that run over edge of calendar
             {
                 self.impossible_activities.push(ImpossibleActivity {
                     id: activity.goal_id.clone(),

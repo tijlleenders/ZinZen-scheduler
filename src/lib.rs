@@ -122,7 +122,6 @@ pub fn run_scheduler(
         &*tasks_completed_today,
         &mut activities,
     );
-    calendar.add_tasks_completed(tasks_completed_today);
     place(&mut calendar, &mut activities);
 
     dbg!(&calendar); //before simple
