@@ -205,7 +205,10 @@ impl Activity {
                 min_block_size = 1;
             };
 
-            let filters_option: Option<&Filter> = goal.filters.as_ref();
+            let mut filters_option: Option<&Filter> = goal.filters.as_ref();
+            if calendar.is_participating_in_a_budget(&goal.id) {
+                filters_option = calendar.get_filters_for(&goal.id);
+            }
 
             let mut adjusted_activity_deadline =
                 adjusted_goal_deadline.unwrap_or(calendar.end_date_time); //regular case
@@ -271,8 +274,8 @@ impl Activity {
         time_budget: &TimeBudget,
     ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
-        let (adjusted_goal_start, adjusted_goal_deadline) =
-            goal_to_use.get_adj_start_deadline(calendar);
+        let adjusted_goal_start = calendar.get_datetime_of(time_budget.calendar_start_index);
+        let adjusted_goal_deadline = calendar.get_datetime_of(time_budget.calendar_end_index);
 
         let hours_to_schedule = time_budget.min_scheduled - time_budget.scheduled;
 
@@ -280,7 +283,7 @@ impl Activity {
             calendar,
             goal_to_use.filters.as_ref(),
             adjusted_goal_start,
-            adjusted_goal_deadline.unwrap_or(adjusted_goal_start.add(Duration::hours(24))),
+            adjusted_goal_deadline,
             &goal_to_use.not_on.clone(),
         );
 
@@ -294,7 +297,7 @@ impl Activity {
             duration_left: hours_to_schedule,
             status: ActivityStatus::Unprocessed,
             start: adjusted_goal_start,
-            deadline: adjusted_goal_deadline,
+            deadline: Some(adjusted_goal_deadline),
             compatible_intervals,
             incompatible_intervals: vec![],
             flex: None,

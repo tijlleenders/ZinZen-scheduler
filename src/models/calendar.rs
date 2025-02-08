@@ -366,8 +366,8 @@ impl Calendar {
             &number_of_days,
             &start_date_time,
             &end_date_time,
-            (end_date_time - start_date_time).num_hours(),
-            (end_date_time - start_date_time).num_hours() + 24
+            (end_date_time - start_date_time).num_hours() + 24,
+            (end_date_time - start_date_time).num_hours() + 48
         );
         let number_of_hours_for_extended_calendar = 48 + number_of_days as usize * 24; // 48 extra for one day of buffer at front and back
         let intervals = vec![CalendarInterval {
@@ -428,12 +428,7 @@ impl Calendar {
                 "can't request an index more than 1 day outside of calendar bounds for date {:?}\nCalendar starts at {:?} and ends at {:?}", date_time, self.start_date_time, self.end_date_time
             )
         }
-        let index = (date_time
-            - self
-                .start_date_time
-                .checked_sub_days(Days::new(1))
-                .unwrap_or_default())
-        .num_hours() as usize;
+        let index = (date_time - self.start_date_time).num_hours() as usize + 24;
         // println!("got index of {}: {}", date_time, index);
         index
     }
@@ -580,10 +575,10 @@ impl Calendar {
         }
     }
 
-    pub(crate) fn get_filters_for(&self, id: &str) -> Option<super::goal::Filter> {
+    pub(crate) fn get_filters_for(&self, id: &str) -> Option<&super::goal::Filter> {
         for budget in &self.budgets {
             if budget.participating_goals.iter().any(|s| s == id) {
-                return Some(budget.time_filters.clone());
+                return Some(&budget.time_filters);
             }
         }
         None
