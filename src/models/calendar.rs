@@ -566,7 +566,7 @@ impl Calendar {
             if activity.status == Impossible
                 && activity.deadline.is_some()
                 && activity.activity_type != TopUpWeekBudget
-                && activity.deadline.unwrap() < self.end_date_time
+                && activity.deadline.unwrap() <= self.end_date_time
             // exempt activities that run over edge of calendar
             {
                 self.impossible_activities.push(ImpossibleActivity {
