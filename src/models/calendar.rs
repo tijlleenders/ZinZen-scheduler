@@ -48,6 +48,12 @@ pub struct Calendar {
 }
 
 impl Calendar {
+    pub(crate) fn get_datetime_of(&self, index: usize) -> NaiveDateTime {
+        self.start_date_time.add(Duration::hours(index as i64 - 24))
+    }
+}
+
+impl Calendar {
     pub(crate) fn unregister(&mut self, interval: &Interval, act_index: usize) {
         for cal_int in &mut self.intervals {
             //occupied interval could be using multiple cal_ints
@@ -356,8 +362,12 @@ impl Calendar {
     pub fn new(start_date_time: NaiveDateTime, end_date_time: NaiveDateTime) -> Self {
         let number_of_days = (end_date_time - start_date_time).num_days(); //Todo use this later to stop limiting compatible
         println!(
-            "Calendar of {:?} days, from {:?} to {:?}",
-            &number_of_days, &start_date_time, &end_date_time
+            "Calendar of {:?} days, from {:?} to {:?} - index 0/24-{:?}/{:?}",
+            &number_of_days,
+            &start_date_time,
+            &end_date_time,
+            (end_date_time - start_date_time).num_hours() + 24,
+            (end_date_time - start_date_time).num_hours() + 48
         );
         let number_of_hours_for_extended_calendar = 48 + number_of_days as usize * 24; // 48 extra for one day of buffer at front and back
         let intervals = vec![CalendarInterval {
@@ -418,12 +428,8 @@ impl Calendar {
                 "can't request an index more than 1 day outside of calendar bounds for date {:?}\nCalendar starts at {:?} and ends at {:?}", date_time, self.start_date_time, self.end_date_time
             )
         }
-        let index = (date_time
-            - self
-                .start_date_time
-                .checked_sub_days(Days::new(1))
-                .unwrap_or_default())
-        .num_hours() as usize;
+        let index =
+            (date_time.add(Duration::hours(24)) - self.start_date_time).num_hours() as usize;
         // println!("got index of {}: {}", date_time, index);
         index
     }
@@ -447,6 +453,7 @@ impl Calendar {
     }
 
     pub fn add_budgets_from(&mut self, goal_map: &mut BTreeMap<String, Goal>) {
+        println!("Adding budgets (not activities) to calendar...");
         //fill goal_map and budget_ids
         let mut budget_ids: Vec<String> = vec![];
         for goal in goal_map.values() {
@@ -534,7 +541,10 @@ impl Calendar {
                     // not good
                     continue;
                 }
-                if time_budget.scheduled < time_budget.min_scheduled {
+                if time_budget.scheduled < time_budget.min_scheduled
+                    && time_budget.calendar_end_index < self.get_index_of(self.end_date_time)
+                // exempt budgets that run over edge of calendar
+                {
                     self.impossible_activities.push(ImpossibleActivity {
                         id: budget.originating_goal_id.clone(),
                         hours_missing: time_budget.min_scheduled - time_budget.scheduled,
@@ -553,6 +563,8 @@ impl Calendar {
             if activity.status == Impossible
                 && activity.deadline.is_some()
                 && activity.activity_type != TopUpWeekBudget
+                && activity.deadline.unwrap() <= self.end_date_time
+            // exempt activities that run over edge of calendar
             {
                 self.impossible_activities.push(ImpossibleActivity {
                     id: activity.goal_id.clone(),
@@ -564,10 +576,10 @@ impl Calendar {
         }
     }
 
-    pub(crate) fn get_filters_for(&self, id: &str) -> Option<super::goal::Filters> {
+    pub(crate) fn get_filters_for(&self, id: &str) -> Option<&super::goal::Filter> {
         for budget in &self.budgets {
             if budget.participating_goals.iter().any(|s| s == id) {
-                return Some(budget.time_filters.clone());
+                return Some(&budget.time_filters);
             }
         }
         None

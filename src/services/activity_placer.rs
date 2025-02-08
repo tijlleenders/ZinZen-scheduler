@@ -1,19 +1,36 @@
-use std::cmp::{max, min};
-
 use crate::models::activity::ActivityStatus::{BestEffort, Postponed, Scheduled, Unprocessed};
 use crate::models::activity::ActivityType;
-use crate::models::activity::ActivityType::{BudgetMinDay, GetToMinWeekBudget, TopUpWeekBudget};
+use crate::models::activity::ActivityType::{
+    GetToMinDayBudget, GetToMinWeekBudget, TopUpWeekBudget,
+};
 use crate::models::budget::TimeBudgetType::Week;
 use crate::models::calendar_interval::CalIntStatus;
 use crate::models::calendar_interval::CalIntStatus::Claimable;
 use crate::models::interval::Interval;
 use crate::models::{activity::Activity, calendar::Calendar};
+use std::cmp::{max, min};
+use std::fmt::{Debug, Formatter};
 
-#[derive(Debug)]
 struct LeastConflict {
     start: usize,
     end: usize,
     claims: usize,
+}
+
+impl Debug for LeastConflict {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        writeln!(
+            f,
+            "{:?} claims on {:?}-{:?} ({:?}:00-{:?}:00) day {:?}",
+            self.claims,
+            self.start,
+            self.end,
+            self.start % 24,
+            self.end % 24,
+            self.start / 24
+        );
+        Ok(())
+    }
 }
 pub(crate) fn place(calendar: &mut Calendar, activities: &mut [Activity]) {
     println!("Starting placing...");
@@ -49,21 +66,22 @@ pub(crate) fn place(calendar: &mut Calendar, activities: &mut [Activity]) {
                 if calendar.is_participating_in_a_budget(&activities[act_index].goal_id) {
                     calendar.reduce_budgets_for(
                         &activities[act_index].goal_id,
-                        least_conflict_position.start,
-                        least_conflict_position.end,
+                        interval_to_use.start,
+                        interval_to_use.end,
                     );
                 }
                 //Adjust activity internals
+                //Todo: Simplify mess below
                 match activities[act_index].activity_type {
                     ActivityType::SimpleGoal => {
                         activities[act_index].duration_left -=
-                            least_conflict_position.end - least_conflict_position.start;
+                            interval_to_use.end - interval_to_use.start;
                         if activities[act_index].duration_left == 0 {
                             activities[act_index].status = Scheduled; //all at once, not per hour scheduling like before
                             activities[act_index].reset_compatible_intervals();
                         }
                     }
-                    BudgetMinDay => {
+                    GetToMinDayBudget => {
                         activities[act_index].duration_left -=
                             interval_to_use.end - interval_to_use.start;
                         if activities[act_index].duration_left == 0 {
@@ -103,7 +121,6 @@ pub(crate) fn place(calendar: &mut Calendar, activities: &mut [Activity]) {
                             activities[act_index].reset_compatible_intervals();
                         }
                     }
-                    ActivityType::SimpleFiller => {}
                 }
                 //Now we know if the activity has been scheduled - even if it is a budget_min_week
                 //This helps us in de decision to let go of other claims inside occupy function
@@ -120,7 +137,7 @@ fn postpone(calendar: &mut Calendar, activities: &mut [Activity]) {
     for activity in activities.iter_mut() {
         if activity.deadline.is_none()
             && activity.status != BestEffort
-            && activity.activity_type != BudgetMinDay
+            && activity.activity_type != GetToMinDayBudget
             && activity.activity_type != GetToMinWeekBudget
             && activity.activity_type != TopUpWeekBudget
             && !calendar.is_participating_in_a_budget(&activity.goal_id.clone())
@@ -254,6 +271,7 @@ fn get_best_index_for(calendar: &Calendar, activity: &Activity) -> Option<LeastC
 }
 
 pub(crate) fn place_postponed_as_best_effort(calendar: &mut Calendar, activities: &mut [Activity]) {
+    println!("Placing postponed activities best effort...");
     for activity in activities.iter_mut() {
         if activity.status == Postponed {
             println!(

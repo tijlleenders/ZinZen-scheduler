@@ -2,17 +2,17 @@ use std::cmp::{max, min};
 use std::vec;
 use std::{fmt, ops::Add};
 
-use chrono::{Datelike, Days, Duration, NaiveDateTime};
+use chrono::{Duration, NaiveDateTime};
 use serde::Deserialize;
 
 use crate::models::activity::ActivityStatus::Impossible;
 use crate::models::budget::TimeBudget;
 use crate::models::calendar_interval::CalIntStatus;
 use crate::models::interval::Interval;
-use crate::services::interval_generator;
+use crate::services::interval_helper;
 
-use super::goal::{Goal, Slot};
-use super::{calendar::Calendar, goal::Filters};
+use super::goal::Goal;
+use super::{calendar::Calendar, goal::Filter};
 
 #[derive(Clone)]
 pub struct Activity {
@@ -30,7 +30,6 @@ pub struct Activity {
     pub incompatible_intervals: Vec<Interval>,
     pub flex: Option<usize>,
 }
-
 impl Activity {
     pub(crate) fn reset_compatible_intervals(&mut self) {
         self.compatible_intervals = vec![];
@@ -153,84 +152,6 @@ impl Activity {
 }
 
 impl Activity {
-    #[must_use]
-    pub fn get_compatible_hours(
-        calendar: &Calendar,
-        filter_option: &Option<Filters>,
-        adjusted_goal_start: NaiveDateTime,
-        adjusted_activity_deadline: NaiveDateTime,
-        not_on: &Option<Vec<Slot>>,
-    ) -> Vec<bool> {
-        let mut compatible_hours_overlay: Vec<bool> = Vec::with_capacity(calendar.hours());
-        for hour_index in 0..calendar.hours() {
-            let mut compatible = true;
-
-            if filter_option.is_some() {
-                if let Some(filter_option) = filter_option.clone() {
-                    let hour_of_day = hour_index % 24;
-                    if filter_option.after_time < filter_option.before_time {
-                        //normal case
-                        if hour_of_day < filter_option.after_time {
-                            compatible = false;
-                        }
-                        if hour_of_day >= filter_option.before_time {
-                            compatible = false;
-                        }
-                    } else {
-                        // special case where we know that compatible times cross the midnight boundary
-                        if hour_of_day >= filter_option.before_time
-                            && hour_of_day < filter_option.after_time
-                        {
-                            compatible = false;
-                        }
-                    }
-                    if filter_option
-                        .on_days
-                        .contains(&calendar.get_week_day_of(hour_index))
-                    {
-                        // OK
-                    } else {
-                        compatible = false;
-                    }
-                }
-            }
-
-            let not_on = not_on.clone().unwrap_or_default();
-            for slot in &not_on {
-                if hour_index >= calendar.get_index_of(slot.start)
-                    && hour_index < calendar.get_index_of(slot.end)
-                {
-                    compatible = false;
-                }
-            }
-
-            if hour_index < calendar.get_index_of(adjusted_goal_start) {
-                compatible = false;
-            }
-            if hour_index >= calendar.get_index_of(adjusted_activity_deadline) {
-                compatible = false;
-            }
-
-            //check if hour is already occupied by some other activity (for later rounds of scheduling partly occupied calendar)
-            //Todo does this need optimization?
-            for cal_int in &calendar.intervals {
-                if hour_index >= cal_int.interval.start && hour_index < cal_int.interval.end {
-                    match cal_int.status {
-                        CalIntStatus::Claimable(_) => {
-                            break;
-                        }
-                        CalIntStatus::Occupied(_, _) => {
-                            compatible = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            compatible_hours_overlay.push(compatible);
-        }
-        compatible_hours_overlay
-    }
-
     pub fn mark_impossible(&mut self) {
         self.status = Impossible;
     }
@@ -261,27 +182,33 @@ impl Activity {
 
     pub(crate) fn get_simple_activities(
         goal: &Goal,
-        calendar: &Calendar,
+        calendar: &mut Calendar,
         duration_of_children: usize,
     ) -> Vec<Activity> {
         let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
 
         if let Some(mut activity_total_duration) = goal.min_duration {
-            if activity_total_duration > duration_of_children {
-                activity_total_duration -= duration_of_children;
-            } else {
-                panic!(
-                    "duration of children goals ({}) exceeds duration {} of goal {} ",
-                    duration_of_children, activity_total_duration, goal.title
-                );
+            if goal.children.is_some() {
+                if activity_total_duration > duration_of_children {
+                    //then the activity from this goal is a filler activity
+                    activity_total_duration -= duration_of_children;
+                } else {
+                    panic!(
+                        "duration of children goals ({}) exceeds duration {} of goal {} ",
+                        duration_of_children, activity_total_duration, goal.title
+                    );
+                }
             }
             let mut min_block_size = activity_total_duration;
             if activity_total_duration > 8 {
                 min_block_size = 1;
             };
 
-            let filters_option: Option<Filters> = calendar.get_filters_for(&goal.id);
+            let mut filters_option: Option<&Filter> = goal.filters.as_ref();
+            if calendar.is_participating_in_a_budget(&goal.id) {
+                filters_option = calendar.get_filters_for(&goal.id);
+            }
 
             let mut adjusted_activity_deadline =
                 adjusted_goal_deadline.unwrap_or(calendar.end_date_time); //regular case
@@ -292,17 +219,33 @@ impl Activity {
                     .unwrap_or(calendar.end_date_time.add(Duration::hours(24)));
             };
 
-            let compatible_hours = Activity::get_compatible_hours(
+            let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
                 calendar,
-                &filters_option,
+                filters_option,
                 adjusted_goal_start,
                 adjusted_activity_deadline,
                 &goal.not_on.clone(),
             );
 
-            let compatible_intervals: Vec<Interval> =
-                interval_generator::reduce(compatible_hours.as_ref());
+            let mut already_placed_for_goal_id: usize = 0;
+            for cal_interval in &calendar.intervals {
+                match &cal_interval.status {
+                    CalIntStatus::Claimable(_) => {}
+                    CalIntStatus::Occupied(_, goal_id) => {
+                        if goal.id.eq(goal_id) {
+                            already_placed_for_goal_id +=
+                                cal_interval.interval.end - cal_interval.interval.start;
+                        }
+                    }
+                }
+            }
 
+            if already_placed_for_goal_id >= activity_total_duration {
+                return vec![];
+            }
+            activity_total_duration -= already_placed_for_goal_id;
+
+            dbg!(&compatible_intervals);
             let activity = Activity {
                 goal_id: goal.id.clone(),
                 activity_type: ActivityType::SimpleGoal,
@@ -325,81 +268,41 @@ impl Activity {
         activities
     }
 
-    pub(crate) fn get_budget_min_day_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
-        if goal.filters.as_ref().is_none() {
-            return vec![];
-        }
-        if let Some(config) = &goal.budget_config {
-            if config.min_per_day == 0 {
-                return vec![];
-            }
-        }
-        let (adjusted_goal_start, adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
+    pub(crate) fn get_activities_to_get_to_min_day_budget(
+        goal_to_use: &Goal,
+        calendar: &Calendar,
+        time_budget: &TimeBudget,
+    ) -> Vec<Activity> {
         let mut activities: Vec<Activity> = Vec::with_capacity(1);
+        let adjusted_goal_start = calendar.get_datetime_of(time_budget.calendar_start_index);
+        let adjusted_goal_deadline = calendar.get_datetime_of(time_budget.calendar_end_index);
 
-        for day in 0..(adjusted_goal_deadline.unwrap_or(calendar.end_date_time)
-            - adjusted_goal_start)
-            .num_days() as u64
-        {
-            if let Some(filter_option) = &goal.filters {
-                if filter_option
-                    .on_days
-                    .contains(&adjusted_goal_start.add(Days::new(day)).weekday())
-                {
-                    // OK
-                } else {
-                    // This day is not allowed
-                    continue;
-                }
-                let activity_start = adjusted_goal_start.add(Days::new(day));
-                let activity_deadline = adjusted_goal_start.add(Days::new(day + 1));
+        let hours_to_schedule = time_budget.min_scheduled - time_budget.scheduled;
 
-                let compatible_hours = Activity::get_compatible_hours(
-                    calendar,
-                    &Some(filter_option.clone()),
-                    activity_start,
-                    activity_deadline,
-                    &goal.not_on.clone(),
-                );
+        let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
+            calendar,
+            goal_to_use.filters.as_ref(),
+            adjusted_goal_start,
+            adjusted_goal_deadline,
+            &goal_to_use.not_on.clone(),
+        );
 
-                let compatible_intervals: Vec<Interval> =
-                    interval_generator::reduce(compatible_hours.as_ref());
+        activities.push(Activity {
+            goal_id: goal_to_use.id.clone(),
+            activity_type: ActivityType::GetToMinDayBudget,
+            title: goal_to_use.title.clone(),
+            min_block_size: 1,
+            max_block_size: hours_to_schedule,
+            total_duration: hours_to_schedule,
+            duration_left: hours_to_schedule,
+            status: ActivityStatus::Unprocessed,
+            start: adjusted_goal_start,
+            deadline: Some(adjusted_goal_deadline),
+            compatible_intervals,
+            incompatible_intervals: vec![],
+            flex: None,
+        });
 
-                if let Some(config) = &goal.budget_config {
-                    //TODO: This is cutting something like Sleep into pieces
-                    //Replace by an if on title == 'sleep' / "Sleep" / "Sleep 😴🌙"?
-                    //Yes ... but what about translations? => better to match on goal_id
-                    let mut adjusted_min_block_size = 1;
-                    if goal.title.contains("leep") {
-                        adjusted_min_block_size = config.min_per_day;
-                    }
-
-                    #[cfg(debug_assertions)]
-                    assert!(
-                        adjusted_min_block_size <= config.max_per_day,
-                        "Assumption broken: We don't check budgets when constructing activities as we assume at starting time budgets will not impact the activities' compatible intervals. This assumption is broken if min_block_size > max_per_day"
-                    );
-
-                    let activity = Activity {
-                        goal_id: goal.id.clone(),
-                        activity_type: ActivityType::BudgetMinDay,
-                        title: goal.title.clone(),
-                        min_block_size: adjusted_min_block_size,
-                        max_block_size: config.max_per_day,
-                        total_duration: adjusted_min_block_size,
-                        duration_left: config.min_per_day,
-                        status: ActivityStatus::Unprocessed,
-                        start: adjusted_goal_start.add(Duration::days(day as i64)),
-                        deadline: Some(adjusted_goal_start.add(Duration::days(day as i64 + 1))),
-                        compatible_intervals,
-                        incompatible_intervals: vec![],
-                        flex: None,
-                    };
-                    dbg!(&activity);
-                    activities.push(activity);
-                }
-            }
-        }
         activities
     }
 
@@ -412,18 +315,16 @@ impl Activity {
 
         let (adjusted_goal_start, adjusted_goal_deadline) =
             goal_to_use.get_adj_start_deadline(calendar);
+        //The time_budget is of type day - so we need to find room left till max_scheduled for that day
         let max_hours = time_budget.max_scheduled - time_budget.scheduled;
 
-        let compatible_hours = Activity::get_compatible_hours(
+        let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
             calendar,
-            &goal_to_use.filters.clone(),
+            goal_to_use.filters.as_ref(),
             adjusted_goal_start,
             adjusted_goal_start.add(Duration::days(7)),
             &goal_to_use.not_on.clone(),
         );
-
-        let compatible_intervals: Vec<Interval> =
-            interval_generator::reduce(compatible_hours.as_ref());
 
         activities.push(Activity {
             goal_id: goal_to_use.id.clone(),
@@ -468,16 +369,13 @@ impl Activity {
             .start_date_time
             .add(Duration::hours(time_budget.calendar_start_index as i64));
 
-        let compatible_hours = Activity::get_compatible_hours(
+        let compatible_intervals: Vec<Interval> = interval_helper::get_compatible_intervals(
             calendar,
-            &goal_to_use.filters.clone(),
+            goal_to_use.filters.as_ref(),
             adjusted_start,
             adjusted_end,
             &goal_to_use.not_on.clone(),
         );
-
-        let compatible_intervals: Vec<Interval> =
-            interval_generator::reduce(compatible_hours.as_ref());
 
         activities.push(Activity {
             goal_id: goal_to_use.id.clone(),
@@ -497,44 +395,6 @@ impl Activity {
 
         activities
     }
-
-    pub(crate) fn get_simple_filler_activities(goal: &Goal, calendar: &Calendar) -> Vec<Activity> {
-        //TODO figure out if simple_filler works now - function is not used
-        if goal.children.is_none() || goal.filters.as_ref().is_some() {
-            return vec![];
-        }
-        let (adjusted_goal_start, _adjusted_goal_deadline) = goal.get_adj_start_deadline(calendar);
-        let mut activities: Vec<Activity> = Vec::with_capacity(1);
-
-        if let Some(activity_total_duration) = goal.min_duration {
-            let mut min_block_size = activity_total_duration;
-            if activity_total_duration > 8 {
-                min_block_size = 1;
-                //todo!() //split into multiple activities so flexibilities are correct??
-                // or yield flex 1 or maximum of the set from activity.flex()?
-            };
-
-            let activity = Activity {
-                goal_id: goal.id.clone(),
-                activity_type: ActivityType::SimpleFiller,
-                title: goal.title.clone(),
-                min_block_size,
-                max_block_size: min_block_size,
-                total_duration: activity_total_duration,
-                duration_left: activity_total_duration,
-                status: ActivityStatus::Unprocessed,
-                start: adjusted_goal_start,
-                deadline: goal.deadline,
-                compatible_intervals: vec![],
-                incompatible_intervals: vec![],
-                flex: None,
-            };
-            dbg!(&activity);
-            activities.push(activity);
-        }
-
-        activities
-    }
 }
 
 #[derive(Debug, PartialEq, Clone, Deserialize, Hash)]
@@ -550,10 +410,9 @@ pub enum ActivityStatus {
 #[derive(Clone, Debug, PartialEq, Hash)]
 pub enum ActivityType {
     SimpleGoal,
-    BudgetMinDay,
+    GetToMinDayBudget,
     GetToMinWeekBudget,
     TopUpWeekBudget,
-    SimpleFiller,
 }
 
 impl fmt::Debug for Activity {

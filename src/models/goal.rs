@@ -15,7 +15,7 @@ pub struct Goal {
     pub deadline: Option<NaiveDateTime>,
     #[serde(rename = "budget")]
     pub budget_config: Option<BudgetConfig>,
-    pub filters: Option<Filters>,
+    pub filters: Option<Filter>,
     pub min_duration: Option<usize>,
     pub title: String,
     pub children: Option<Vec<String>>,
@@ -30,7 +30,7 @@ pub struct Slot {
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct Filters {
+pub struct Filter {
     pub after_time: usize,
     pub before_time: usize,
     pub on_days: Vec<Weekday>,
