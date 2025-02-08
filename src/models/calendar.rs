@@ -457,6 +457,7 @@ impl Calendar {
     }
 
     pub fn add_budgets_from(&mut self, goal_map: &mut BTreeMap<String, Goal>) {
+        println!("Adding budgets (not activities) to calendar...");
         //fill goal_map and budget_ids
         let mut budget_ids: Vec<String> = vec![];
         for goal in goal_map.values() {

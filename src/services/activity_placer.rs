@@ -256,6 +256,7 @@ fn get_best_index_for(calendar: &Calendar, activity: &Activity) -> Option<LeastC
 }
 
 pub(crate) fn place_postponed_as_best_effort(calendar: &mut Calendar, activities: &mut [Activity]) {
+    println!("Placing postponed activities best effort...");
     for activity in activities.iter_mut() {
         if activity.status == Postponed {
             println!(

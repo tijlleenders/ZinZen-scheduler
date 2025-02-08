@@ -9,6 +9,7 @@ pub fn add_budget_min_week_activities(
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
+    println!("Adding budget min week activities...");
     //min per week is not the same as sum(min per day) - it can be higher
     //i.e. I want to exercise min 1h per day,
     // but have at least 1 day per week on which I exercise for 2 hours (long session)
@@ -56,6 +57,7 @@ pub fn add_budget_top_up_week_activities(
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
+    println!("Adding budget top up week activities...");
     let mut top_up_activities = vec![];
     for budget in &calendar.budgets {
         if let Some(goal_to_use) = goals
@@ -94,6 +96,7 @@ pub(crate) fn add_simple_activities(
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
+    println!("Adding simple activities...");
     let mut simple_activities = vec![];
     for goal in goals.values() {
         let activity_duration = goal.min_duration;
@@ -132,6 +135,7 @@ pub(crate) fn add_budget_min_day_activities(
     goals: &BTreeMap<String, Goal>,
     activities: &mut Vec<Activity>,
 ) {
+    println!("Adding budget min day activities...");
     // we can use the budgets as a basis to generate this, instead of the goals
     let mut min_day_activities = vec![];
     for budget in &calendar.budgets {
@@ -165,6 +169,7 @@ pub(crate) fn add_tasks_completed_today(
     tasks_completed_today: &[TaskCompletedToday],
     activities: &mut Vec<Activity>,
 ) {
+    println!("Adding tasks completed today...");
     for task in tasks_completed_today {
         //use scheduled datetimes for recreating activities
 
