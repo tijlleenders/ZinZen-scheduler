@@ -428,10 +428,11 @@ impl Calendar {
                 "can't request an index more than 1 day outside of calendar bounds for date {:?}\nCalendar starts at {:?} and ends at {:?}", date_time, self.start_date_time, self.end_date_time
             )
         }
-        let index =
-            (date_time.add(Duration::hours(24)) - self.start_date_time).num_hours() as usize;
+        // let index =
+        //     (date_time.add(Duration::hours(24)) - self.start_date_time).num_hours() as usize;
         // println!("got index of {}: {}", date_time, index);
-        index
+        // index
+        (date_time.add(Duration::hours(24)) - self.start_date_time).num_hours() as usize
     }
     pub fn print_new(&mut self, activities: &Vec<Activity>) -> FinalTasks {
         println!("Printing new calendar:");
@@ -457,34 +458,38 @@ impl Calendar {
         //fill goal_map and budget_ids
         let mut budget_ids: Vec<String> = vec![];
         for goal in goal_map.values() {
-            if let Some(budget_config) = &goal.budget_config {
-                //Check if budget_config is realistic
+            #[cfg(debug_assertions)]
+            {
+                if let Some(budget_config) = &goal.budget_config {
+                    //Check if budget_config is realistic
 
-                //check 1
-                let mut min_per_day_sum = 0;
-                if let Some(filters) = &goal.filters {
-                    for _ in &filters.on_days {
-                        min_per_day_sum += budget_config.min_per_day;
+                    //check 1
+                    let mut min_per_day_sum = 0;
+                    if let Some(filters) = &goal.filters {
+                        for _ in &filters.on_days {
+                            min_per_day_sum += budget_config.min_per_day;
+                        }
                     }
-                }
-                #[cfg(debug_assertions)]
-                assert!(
-                    min_per_day_sum <= budget_config.min_per_week,
-                    "Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}",
-                    min_per_day_sum,
-                    budget_config.min_per_week,
-                    goal.title
-                );
+                    assert!(
+                        min_per_day_sum <= budget_config.min_per_week,
+                        "Sum of min_per_day {:?} is higher than min_per_week {:?} for goal {:?}",
+                        min_per_day_sum,
+                        budget_config.min_per_week,
+                        goal.title
+                    );
 
-                //check 2
-                #[cfg(debug_assertions)]
-                assert!(
-                    budget_config.max_per_day <= budget_config.max_per_week,
-                    "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
-                    budget_config.max_per_day,
-                    budget_config.max_per_week,
-                    goal.title
-                );
+                    //check 2
+                    #[cfg(debug_assertions)]
+                    assert!(
+                        budget_config.max_per_day <= budget_config.max_per_week,
+                        "max_per_day {:?} is higher than max_per_week {:?} for goal {:?}",
+                        budget_config.max_per_day,
+                        budget_config.max_per_week,
+                        goal.title
+                    );
+                }
+            }
+            if let Some(_budget_config) = &goal.budget_config {
                 budget_ids.push(goal.id.clone());
             }
         }
