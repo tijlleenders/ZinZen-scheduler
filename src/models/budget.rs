@@ -3,7 +3,10 @@ use std::{
     ops::{Add, Sub},
 };
 
-use chrono::{Datelike, Duration, NaiveTime};
+#[cfg(debug_assertions)]
+use chrono::NaiveTime;
+use chrono::{Datelike, Duration};
+
 use serde::Deserialize;
 
 use super::{

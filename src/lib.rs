@@ -119,7 +119,7 @@ pub fn run_scheduler(
     add_tasks_completed_today(
         &calendar,
         &goal_map,
-        &*tasks_completed_today,
+        &tasks_completed_today,
         &mut activities,
     );
     place(&mut calendar, &mut activities);
@@ -133,7 +133,7 @@ pub fn run_scheduler(
     place(&mut calendar, &mut activities);
 
     dbg!(&calendar); //before get_budget_min
-    add_budget_min_week_activities(&mut calendar, &goal_map, &mut activities);
+    add_budget_min_week_activities(&calendar, &goal_map, &mut activities);
     place(&mut calendar, &mut activities);
 
     dbg!(&calendar); //before get_budget_top_up_week

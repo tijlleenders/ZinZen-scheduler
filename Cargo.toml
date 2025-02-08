@@ -20,9 +20,12 @@ dhat-heap = ["dhat"]
 
 [lib]
 #see https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095
-crate-type = ['cdylib', 'lib']
+crate-type = ['cdylib', 'rlib']
 name = 'scheduler'
 path = "src/lib.rs"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(wasm_bindgen_unstable_test_coverage)'] }
 
 [profile.release]
 lto = true
