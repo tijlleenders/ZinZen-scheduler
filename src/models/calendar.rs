@@ -635,7 +635,7 @@ fn split_intervals_on_day_boundaries(intervals: &mut Vec<CalendarInterval>) {
     while i < intervals.len() {
         let start = intervals[i].interval.start;
         let end = intervals[i].interval.end;
-        let first_multiple = start.div_ceil(24);
+        let first_multiple = start.div_ceil(24) * 24;
 
         if first_multiple < end {
             // Split needed
