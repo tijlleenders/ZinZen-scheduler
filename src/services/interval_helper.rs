@@ -31,30 +31,6 @@ pub fn reduce(compatible_hours: &[bool]) -> Vec<Interval> {
     result
 }
 
-fn normalize(intervals: &mut Vec<Interval>) {
-    intervals.sort_by_key(|i| i.start);
-    let mut result = Vec::new();
-    if let Some(first) = intervals.first().cloned() {
-        let mut current = first;
-        for interval in intervals.iter().skip(1) {
-            if interval.start <= current.end {
-                current.end = current.end.max(interval.end);
-            } else {
-                result.push(current);
-                current = interval.clone();
-            }
-        }
-        result.push(current);
-    }
-    *intervals = result;
-}
-
-fn add_intervals(mut a: Vec<Interval>, b: Vec<Interval>) -> Vec<Interval> {
-    a.extend(b);
-    normalize(&mut a);
-    a
-}
-
 fn subtract_intervals(a: Vec<Interval>, b: &Vec<Interval>) -> Vec<Interval> {
     let mut result = Vec::new();
     for interval in a {
@@ -110,7 +86,7 @@ pub(crate) fn get_compatible_intervals(
     let mut intervals_to_remove: Vec<Interval> = vec![];
     if let Some(filter) = filter {
         let end = calendar.end_date_time;
-        let mut current = calendar.start_date_time.sub(Duration::days(1)).clone();
+        let mut current = calendar.start_date_time.sub(Duration::days(1));
         let mut current_index_offset: usize = 0;
 
         while current <= end {

@@ -187,8 +187,8 @@ pub(crate) fn add_tasks_completed_today(
                 total_duration: activity_end_index - activity_start_index,
                 duration_left: activity_end_index - activity_start_index,
                 status: ActivityStatus::Unprocessed,
-                start: task.start.clone(),
-                deadline: Some(task.deadline.clone()),
+                start: task.start,
+                deadline: Some(task.deadline),
                 compatible_intervals: vec![Interval {
                     start: activity_start_index,
                     end: activity_end_index,

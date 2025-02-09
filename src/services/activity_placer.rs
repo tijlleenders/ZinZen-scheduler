@@ -19,7 +19,7 @@ struct LeastConflict {
 
 impl Debug for LeastConflict {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        writeln!(
+        let _ = writeln!(
             f,
             "{:?} claims on {:?}-{:?} ({:?}:00-{:?}:00) day {:?}",
             self.claims,

@@ -2,11 +2,11 @@ name: Build-Front-End
 
 on:
   pull_request:
-    branches: 
+    branches:
       - 'main'
     paths:
-        - 'src/*'
-        - 'Cargo.toml'
+      - 'src/*'
+      - 'Cargo.toml'
 
 jobs:
   build-front-end:
@@ -22,7 +22,7 @@ jobs:
       - name: Run wasm-pack build
         run: wasm-pack build --dev --target web
       - name: Archive wasm build pkg
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wasm-build-pkg
           path: pkg/

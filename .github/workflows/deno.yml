@@ -37,5 +37,8 @@ jobs:
       - name: Pin wasm-bindgen version
         run: cargo update -p wasm-bindgen --precise 0.2.95
 
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
+
       - name: Run tests
         run: ./scripts/deno_test.sh
